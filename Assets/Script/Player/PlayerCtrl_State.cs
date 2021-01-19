@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class PlayerCtrl_State : MonoBehaviour
 {
@@ -25,9 +26,7 @@ public class PlayerCtrl_State : MonoBehaviour
     [SerializeField] private float runSpeed = 25.0f;
     [SerializeField] private float rollingSpeed = 10.0f;
     [SerializeField] private float currentSpeed;
-    [SerializeField] private float jumpFromWallSpeed = 3f;
     [SerializeField] private float prevSpeed;
-    [SerializeField] private float climbingSpeed = 3f;
     [Range(0, 5)] [SerializeField] private float fallingControlSenstive = 1f;
 
     [Header("Jump Value")]
@@ -47,15 +46,12 @@ public class PlayerCtrl_State : MonoBehaviour
     [SerializeField] private bool isEnoughGround;
     [SerializeField] private bool isSideDetect;
     [SerializeField] private bool isUpDetect;
-    [SerializeField] private bool isRopeClimbing;
-    [SerializeField] private bool isReadyRolling;
     [SerializeField] private bool SuperMode;
     [SerializeField] private bool isCanInputClimbing = true;
-    [SerializeField] private bool isSideClimbing;
     [SerializeField] private bool isLedgeSideMove;
     [SerializeField] private bool isCanAbsorb;
     [SerializeField] private bool isActiveSlidingCheck = false;
-    [SerializeField] private float stamina;
+    [SerializeField] public ReactiveProperty<float> stamina { get; private set; } = new ReactiveProperty<float>(100);
     [SerializeField] private float hp = 100f;
     [SerializeField] private float fallingTime = 0.0f;
     [SerializeField] private bool nonStaminaMode;
@@ -83,7 +79,7 @@ public class PlayerCtrl_State : MonoBehaviour
     [SerializeField] private RopeBuiltIn currentHangingRope = null;
     [SerializeField] private float ropeClimbingSpeed = 3f;
     [SerializeField] private float ropeDetectRange = 4f;
-    [SerializeField] private bool ropeHandLeft;
+    [SerializeField] private bool ropeHandLeft; //로프 짚는 손이 왼손 차례 여부
 
     [Header("Collision Layer")]
     [SerializeField] private LayerMask climbingLayer;
@@ -113,8 +109,6 @@ public class PlayerCtrl_State : MonoBehaviour
     [SerializeField] private float currentHorizontalValue = 0.0f;
     [SerializeField] private float inputVertical;
     [SerializeField] private float inputHorizontal;
-    [SerializeField] private float prevInputVertical;
-    [SerializeField] private float prevInputHorizontal;
 
     [Header("Balance")]
     [SerializeField] private float balanceLimitMinAngle = 40f;
@@ -124,14 +118,8 @@ public class PlayerCtrl_State : MonoBehaviour
     [SerializeField] private float currentSlidingSpeed = 0.0f;
     [SerializeField] private float maxSlidingSpeed = 10.0f;
 
-    [Header("Move Velocity")]
-    [SerializeField] private float gapPerFrame = 0.0f;
-    [Range(0.0f, 5.0f)] [SerializeField] private float impactDesired = 4f;
-    private Vector3 prevFramePos;
-
     [Header("Move Direction")]
     [SerializeField] private Vector3 moveDir;
-    private Vector3 jumpDir;
     private Vector3 prevDir;
     private Vector3 slidingDir;
     private Vector3 prevSlidingDir;
@@ -139,7 +127,6 @@ public class PlayerCtrl_State : MonoBehaviour
     private Vector3 camRight;
     private Quaternion climbingPrevRot;
     private Vector3 prevForward;
-    private Vector3 prevCalcDir;
 
     [Header("Damage")]
     [SerializeField] private float damage = 25f;
@@ -147,8 +134,6 @@ public class PlayerCtrl_State : MonoBehaviour
     private float rollingTime;
 
     private Rigidbody rigidbody;
-    private CharacterController controller;
-
     private CapsuleCollider collider;
     private float colliderRadius;
     private float colliderHeight;
@@ -161,13 +146,7 @@ public class PlayerCtrl_State : MonoBehaviour
     private EnergyCore currentDetectEnergyCore;
     private PlayerAnimCtrl playerAnimCtrl;
 
-    [SerializeField] private bool leftCount;
-
-    [SerializeField] private float parentGapAdjustValue = 10.0f;
     [SerializeField] private float offsetDist;
-
-    private RigidbodyConstraints defaultConstrains = RigidbodyConstraints.FreezeRotation;
-    private RigidbodyConstraints ropeHangingConstrains = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
 
     private float groundAngle;
 
@@ -192,8 +171,6 @@ public class PlayerCtrl_State : MonoBehaviour
         ikCtrl = GetComponent<IKCtrl>();
         handIKCtrl = GetComponent<HandIKCtrl>();
 
-        leftCount = true;
-        stamina = 100f;
     }
     // Start is called before the first frame update
     void Start()
@@ -223,7 +200,6 @@ public class PlayerCtrl_State : MonoBehaviour
         currentSpeed = walkSpeed;
         mainCameraTrasform = Camera.main.transform;
         cameraCtrl = mainCameraTrasform.parent.GetComponent<CameraCtrl>();
-        prevFramePos = transform.position;
         playerAnimCtrl = GetComponent<PlayerAnimCtrl>();
 
         colliderRadius = collider.radius;
@@ -239,9 +215,9 @@ public class PlayerCtrl_State : MonoBehaviour
 
         if (nonStaminaMode == false)
         {
-            //StartCoroutine(StaminaTick());
+            StartCoroutine(StaminaTick());
         }
-        //StartCoroutine(StaminaCheck());
+        StartCoroutine(StaminaCheck());
     }
 
     // Update is called once per frame
@@ -1076,12 +1052,12 @@ public class PlayerCtrl_State : MonoBehaviour
             currentRot.x = 0.0f;
             currentRot.z = 0.0f;
             transform.rotation = Quaternion.Euler(currentRot);
-            animator.SetBool("IsGrab", false);
-            animator.SetBool("IsLedgeHanging", false);
-            animator.SetBool("IsLedgeMoving", false);
-            animator.SetBool("IsLedgeMoveLeft", false);
-            animator.SetBool("IsLedgeMoveRight", false);
-            animator.SetBool("IsSideClimbing", false);
+            //animator.SetBool("IsGrab", false);
+            //animator.SetBool("IsLedgeHanging", false);
+            //animator.SetBool("IsLedgeMoving", false);
+            //animator.SetBool("IsLedgeMoveLeft", false);
+            //animator.SetBool("IsLedgeMoveRight", false);
+            //animator.SetBool("IsSideClimbing", false);
 
             groundCheck.RequestDetach();
             //rigidbody.useGravity = true;
@@ -1115,7 +1091,6 @@ public class PlayerCtrl_State : MonoBehaviour
             moveDir *= runSpeed;
             currentJumpPower = jumpPower;
             transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
-            prevSpeed = jumpFromWallSpeed;
 
             animator.SetBool("IsGrab", false);
             groundCheck.RequestDetach();
@@ -1443,19 +1418,12 @@ public class PlayerCtrl_State : MonoBehaviour
         isCanInputClimbing = result;
     }
 
-    public void SetIsSideClimbing(bool result)
-    {
-        isSideClimbing = result;
-    }
-
     public void SetIsLedgeSideMove(bool result)
     {
         isLedgeSideMove = result;
     }
  
     public void SetRopeHandInfo(bool isLeft) { ropeHandLeft = isLeft; }
-
-    public void SetIsRopeClimbing(bool value) { isRopeClimbing = value; }
 
     public void StartRolling()
     {
@@ -1731,6 +1699,13 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             case PlayerState.Jump:
                 {
+                    animator.SetBool("IsGrab", false);
+                    animator.SetBool("IsLedgeHanging", false);
+                    animator.SetBool("IsLedgeMoving", false);
+                    animator.SetBool("IsLedgeMoveLeft", false);
+                    animator.SetBool("IsLedgeMoveRight", false);
+                    animator.SetBool("IsSideClimbing", false);
+
                     animator.SetBool("IsJump", true);
                 }
                 break;
@@ -1778,7 +1753,7 @@ public class PlayerCtrl_State : MonoBehaviour
     public void ClearAllCore() { isCanEquipSpeicalSpear = true; OnAbsorbAllCore?.Invoke(); }
 
     #region 겟터
-    public float GetStamina() { return stamina; }
+    public float GetStamina() { return stamina.Value; }
 
     public float GetHp() { return hp; }
 
@@ -1817,4 +1792,60 @@ public class PlayerCtrl_State : MonoBehaviour
 
     #endregion
 
+    IEnumerator StaminaTick()
+    {
+        while (true)
+        {
+            if (state == PlayerState.Grab || state == PlayerState.HangLedge || state == PlayerState.HangRope)
+            {
+                stamina.Value -= 4f;
+            }
+            else
+            {
+                stamina.Value += 25f;
+            }
+
+            stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, 100.0f);
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    IEnumerator StaminaCheck()
+    {
+        while (true)
+        {
+            if (stamina.Value == 0.0f)
+            {
+                if ((state == PlayerState.Grab))
+                {                                 
+                    isLedgeSideMove = false;
+               
+                    groundCheck.RequestDetach();
+                    handIKCtrl.DisableLeftHandIk();
+                    handIKCtrl.DisableRightHandIk();
+
+                    ColliderInit();
+
+                    ChangeState(PlayerState.Jump);
+                }
+                else if (state == PlayerState.HangRope)
+                {
+                    rigidbody.isKinematic = false;
+                    transform.parent = null;
+                  
+
+                    moveDir = Vector3.zero;
+                    currentJumpPower = 0.0f;
+
+                    ChangeState(PlayerState.Jump);
+                }
+                else if(state == PlayerState.HangLedge)
+                {
+                    ChangeState(PlayerState.Jump);
+                }
+            }
+
+            yield return null;
+        }
+    }
 }

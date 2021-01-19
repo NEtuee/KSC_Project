@@ -347,6 +347,11 @@ PrefabInstance:
       objectReference: {fileID: 1178649346}
     - target: {fileID: 8444996396748561060, guid: 931504618dcfa5644850df8d5c9eff8d,
         type: 3}
+      propertyPath: nonStaminaMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444996396748561060, guid: 931504618dcfa5644850df8d5c9eff8d,
+        type: 3}
       propertyPath: floorLayer.m_Bits
       value: 192
       objectReference: {fileID: 0}
@@ -368,6 +373,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 910559611, guid: 931504618dcfa5644850df8d5c9eff8d, type: 3}
     - {fileID: 910559612, guid: 931504618dcfa5644850df8d5c9eff8d, type: 3}
+    - {fileID: 3497475954252709429, guid: 931504618dcfa5644850df8d5c9eff8d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 931504618dcfa5644850df8d5c9eff8d, type: 3}
 --- !u!1 &955074345 stripped
 GameObject:
@@ -555,32 +561,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1664590766}
   - component: {fileID: 1664590767}
-  - component: {fileID: 1664590765}
   m_Layer: 0
-  m_Name: Input
+  m_Name: InputManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1664590765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664590764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3db047625b7b70047bd4ffc8966931ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseX: 0
-  mouseY: 0
-  input_X: 0
-  input_Y: 0
-  l2: 0
-  r2: 0
 --- !u!4 &1664590766
 Transform:
   m_ObjectHideFlags: 0
@@ -608,7 +595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyBindings: {fileID: 11400000, guid: 29ce426e60411f44297520c4afa1b0f2, type: 2}
-  controlMode: 1
+  controlMode: 0
   joystickSenstive: 6
 --- !u!1 &1751167659
 GameObject:

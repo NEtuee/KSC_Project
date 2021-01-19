@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UniRx;
 
 public enum GameState
 {
@@ -32,7 +33,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Stamina Bar")]
     [SerializeField] private GameObject staminaPanel;
-    [SerializeField] private Image staminaBar;
+    [SerializeField] private GageBarUI staminaBar;
     [SerializeField] private Text staminaValue;
 
     [Header("Hp Bar")]
@@ -78,7 +79,13 @@ public class UIManager : MonoBehaviour
     }
     void Start()
     {
-        InitGame();
+        //InitGame();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_State>();
+        player.stamina.SubscribeToText(staminaValue);
+        player.stamina.Subscribe(value => 
+        {
+            staminaBar.SetValue(value/100f);
+        });
     }
 
     private void InitGame()
@@ -96,7 +103,7 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.CameraRootSetWorldPosition(titleCameraPosition.position);
         GameManager.Instance.PausePlayerControl();
 
-        ActiveMouse();
+        //ActiveMouse();
 
         if(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl>() != null)
         {
@@ -133,7 +140,7 @@ public class UIManager : MonoBehaviour
 
         if(gameState == GameState.Game)
         {
-            UpdateStaminaValue();
+            //UpdateStaminaValue();
         }
     }
 
@@ -327,7 +334,7 @@ public class UIManager : MonoBehaviour
         float currentHp = player.GetHp();
         hpValue.text = currentHp.ToString();
 
-        staminaBar.fillAmount = Mathf.SmoothStep(staminaBar.fillAmount, currentStamina / 100f, 4f * Time.deltaTime);
+        //staminaBar.fillAmount = Mathf.SmoothStep(staminaBar.fillAmount, currentStamina / 100f, 4f * Time.deltaTime);
         hpBar.fillAmount = Mathf.SmoothStep(hpBar.fillAmount, currentHp / 100f, 4f * Time.deltaTime);
     }
 

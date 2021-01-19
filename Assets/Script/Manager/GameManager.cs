@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
 
     public void PausePlayerControl()
     {
-        if(camRoot == null || mainCam == null || player == null)
+        if (camRoot == null || mainCam == null || player == null)
         {
             Debug.LogWarning("Not Set PlayerControl Elements");
             return; 
