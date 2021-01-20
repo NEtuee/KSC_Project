@@ -41,6 +41,12 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if(mainCam== null)
+        {
+            mainCam = Camera.main.GetComponent<CameraCollision>();
+            camRoot = mainCam.transform.parent.GetComponent<CameraCtrl>();
+        }
+
         mainCameraStartPosition = mainCam.transform.position;
         mainCameraStartLocalPosition = mainCam.transform.localPosition;
         camRootStartPosition = camRoot.transform.position;
@@ -282,6 +288,11 @@ public class GameManager : MonoBehaviour
     public GameObject GetPlayerObject()
     {
         return player.gameObject;
+    }
+
+    public void SetPlayer(PlayerCtrl_State player)
+    {
+        this.player = player;
     }
 
     public void ClearAllCore()

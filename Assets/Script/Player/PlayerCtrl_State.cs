@@ -51,8 +51,8 @@ public class PlayerCtrl_State : MonoBehaviour
     [SerializeField] private bool isLedgeSideMove;
     [SerializeField] private bool isCanAbsorb;
     [SerializeField] private bool isActiveSlidingCheck = false;
-    [SerializeField] public ReactiveProperty<float> stamina { get; private set; } = new ReactiveProperty<float>(100);
-    [SerializeField] private float hp = 100f;
+    public FloatReactiveProperty stamina = new FloatReactiveProperty(100);
+    public FloatReactiveProperty hp = new FloatReactiveProperty(100f);
     [SerializeField] private float fallingTime = 0.0f;
     [SerializeField] private bool nonStaminaMode;
     [SerializeField] private float climbingUpAngle;
@@ -170,6 +170,8 @@ public class PlayerCtrl_State : MonoBehaviour
         collider = GetComponent<CapsuleCollider>();
         ikCtrl = GetComponent<IKCtrl>();
         handIKCtrl = GetComponent<HandIKCtrl>();
+
+        GameManager.Instance.SetPlayer(this);
 
     }
     // Start is called before the first frame update
@@ -1641,8 +1643,8 @@ public class PlayerCtrl_State : MonoBehaviour
     private void TakeDamage()
     {
         Debug.Log("데미지!");
-        hp -= damage;
-        if (hp <= 0f)
+        hp.Value -= damage;
+        if (hp.Value <= 0f)
         {
             OnDead?.Invoke();
         }
@@ -1754,8 +1756,6 @@ public class PlayerCtrl_State : MonoBehaviour
 
     #region 겟터
     public float GetStamina() { return stamina.Value; }
-
-    public float GetHp() { return hp; }
 
     public int GetCurrentSpearNum() { return currentSpearNum; }
 

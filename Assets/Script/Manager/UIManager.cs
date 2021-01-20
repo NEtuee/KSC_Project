@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text staminaValue;
 
     [Header("Hp Bar")]
-    [SerializeField] private Image hpBar;
+    [SerializeField] private GageBarUI hpBar;
     [SerializeField] private Text hpValue;
 
     [Header("Spear")]
@@ -76,15 +76,23 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.uiManager = this;
     }
     void Start()
     {
         //InitGame();
+
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_State>();
         player.stamina.SubscribeToText(staminaValue);
         player.stamina.Subscribe(value => 
         {
             staminaBar.SetValue(value/100f);
+        });
+
+        player.hp.SubscribeToText(hpValue);
+        player.hp.Subscribe(value =>
+        {
+            hpBar.SetValue(value / 100f);
         });
     }
 
@@ -161,6 +169,7 @@ public class UIManager : MonoBehaviour
 
     public void OnSoundButton()
     {
+        Debug.Log("OnSoundButton");
         if (gameState == GameState.Title)
         {
             prevState = gameState;
@@ -253,6 +262,7 @@ public class UIManager : MonoBehaviour
         {
             gameState = GameState.Pause;
             pauseMenu.SetActive(true);
+            ActiveMouse();
             GameManager.Instance.PausePlayerControl();
             GameManager.Instance.timeManager.PauseTime();
         }
@@ -324,18 +334,6 @@ public class UIManager : MonoBehaviour
     private void DisableCrossHair()
     {
         crossHairPanel.SetActive(false);
-    }
-
-    private void UpdateStaminaValue()
-    {
-        float currentStamina = player.GetStamina();
-        staminaValue.text = currentStamina.ToString();
-
-        float currentHp = player.GetHp();
-        hpValue.text = currentHp.ToString();
-
-        //staminaBar.fillAmount = Mathf.SmoothStep(staminaBar.fillAmount, currentStamina / 100f, 4f * Time.deltaTime);
-        hpBar.fillAmount = Mathf.SmoothStep(hpBar.fillAmount, currentHp / 100f, 4f * Time.deltaTime);
     }
 
     private void GameOver()

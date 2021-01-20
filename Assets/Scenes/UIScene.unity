@@ -1515,6 +1515,7 @@ GameObject:
   - component: {fileID: 698208396}
   - component: {fileID: 698208398}
   - component: {fileID: 698208397}
+  - component: {fileID: 698208399}
   m_Layer: 5
   m_Name: HpBar
   m_TagString: Untagged
@@ -1581,6 +1582,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 698208395}
   m_CullTransparentMesh: 0
+--- !u!114 &698208399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 698208395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a3d69b624c7391499b5818b30f40954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gageImage: {fileID: 698208397}
+  updateType: 1
+  updateSpeed: 4
+  updateValue: 0
 --- !u!1 &700308378
 GameObject:
   m_ObjectHideFlags: 0
@@ -2839,7 +2856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5298adb66747e049835842bace711dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: 0
+  gameState: 1
   titleCameraPosition: {fileID: 860549586}
   titleMenu: {fileID: 1914420051}
   pauseMenu: {fileID: 1038968612}
@@ -2851,7 +2868,7 @@ MonoBehaviour:
   staminaPanel: {fileID: 755763547}
   staminaBar: {fileID: 563950064}
   staminaValue: {fileID: 272931427}
-  hpBar: {fileID: 698208397}
+  hpBar: {fileID: 698208399}
   hpValue: {fileID: 311221974}
   spearCount: {fileID: 1281301329}
   gameOverPanel: {fileID: 2133401927}
@@ -3042,7 +3059,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5fcdc8d88900447cbacc2451e4e54427, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ba1f7341217acee4e9d2e5a52213ff17, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
