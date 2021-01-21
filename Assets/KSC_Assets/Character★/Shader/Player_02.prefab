@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 109791244}
   - component: {fileID: 109791243}
   - component: {fileID: 109791242}
-  m_Layer: 15
+  m_Layer: 10
   m_Name: LedgeCheck (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 1204948664}
   - component: {fileID: 1204948663}
   - component: {fileID: 1204948662}
-  m_Layer: 15
+  m_Layer: 10
   m_Name: SideCheck (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 1903406130}
   - component: {fileID: 1903406134}
   - component: {fileID: 1903406133}
-  m_Layer: 15
+  m_Layer: 10
   m_Name: LedgeCheckPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,6 +244,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -268,6 +269,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!135 &1903406130
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -323,7 +325,7 @@ GameObject:
   - component: {fileID: 1967853762}
   - component: {fileID: 1967853761}
   - component: {fileID: 1967853760}
-  m_Layer: 15
+  m_Layer: 10
   m_Name: GroundCheck (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,7 +366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6be1000587fffe4c8f54781fd7c5dcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 2903221608307702866}
+  owner: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -411,7 +413,7 @@ GameObject:
   - component: {fileID: 2009500181}
   - component: {fileID: 2009500180}
   - component: {fileID: 2009500179}
-  m_Layer: 15
+  m_Layer: 10
   m_Name: EnoughGroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -615,6 +617,7 @@ SkinnedMeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -840,6 +843,7 @@ SkinnedMeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1192,6 +1196,7 @@ SkinnedMeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1333,6 +1338,7 @@ SkinnedMeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2737,6 +2743,7 @@ MonoBehaviour:
   minJumpPower: -10
   jumpPower: 10
   gravity: 20
+  isPause: 0
   isRun: 0
   isGrab: 0
   isMustClimbing: 0
@@ -2764,17 +2771,32 @@ MonoBehaviour:
   isStagger: 0
   isQuake: 0
   isMustHoldOut: 0
+  isNuckBack: 0
   playerBehaviorState: 0
   stamina: 0
+  hp: 100
+  fallingTime: 0
   nonStaminaMode: 1
   climbingUpAngle: 0
+  isSpearDetect: 0
+  abosrbCount: 0
   spearPrefab: {fileID: -2204502557081431267, guid: 066d82cfffae9a34388977b67f6426e8,
     type: 3}
+  specialSpearPrefab: {fileID: 0}
+  specialSpearVisualPrefab: {fileID: 0}
   launchPos: {fileID: 0}
+  isSpacialSpearMode: 0
+  isCanEquipSpeicalSpear: 0
+  currentSpearNum: 6
+  rightHandBone: {fileID: 0}
+  specialSpearVisualObject: {fileID: 0}
+  specialSpearVisualFloat: {fileID: 0}
+  specialSpearDissolve: {fileID: 0}
   ropePrefab: {fileID: 971649759948085277, guid: 4981c24888d819d40a3229b2e346de8b,
     type: 3}
   currentHangingRope: {fileID: 0}
   ropeClimbingSpeed: 3
+  ropeDetectRange: 4
   ropeHandLeft: 0
   climbingLayer:
     serializedVersion: 2
@@ -2783,16 +2805,21 @@ MonoBehaviour:
   floorLayer:
     serializedVersion: 2
     m_Bits: 768
+  spacialSpearShotCheckLayer:
+    serializedVersion: 2
+    m_Bits: 0
   groundCheck: {fileID: 1967853762}
   sideCheck: {fileID: 1204948663}
   upCheck: {fileID: 1903406133}
   enoughGroundCheck: {fileID: 2009500179}
+  spearDetect: {fileID: 0}
   ledgeDetectPoint: {fileID: 1903406129}
   handOffset: {fileID: 7196379910559428086}
   upPoint: {fileID: 8640378521427655967}
   downPoint: {fileID: 6224092827655852133}
   leftPoint: {fileID: 3964419572451695329}
   rightPoint: {fileID: 8034530224100044742}
+  centerPoint: {fileID: 0}
   currentVerticalValue: 0
   currentHorizontalValue: 0
   inputVertical: 0
@@ -2808,6 +2835,7 @@ MonoBehaviour:
   gapPerFrame: 0
   impactDesired: 4
   moveDir: {x: 0, y: 0, z: 0}
+  damage: 25
   leftCount: 0
   parentGapAdjustValue: 30
   offsetDist: 0
@@ -2823,7 +2851,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f75a582e809ccf4db0b4115e03d9755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 2903221608307702866}
+  owner: {fileID: 0}
+  leftFoot: {fileID: 0}
+  rightFoot: {fileID: 0}
+  runSoundStringList: []
+  walkSoundStringList: []
 --- !u!54 &1385394296
 Rigidbody:
   m_ObjectHideFlags: 0
