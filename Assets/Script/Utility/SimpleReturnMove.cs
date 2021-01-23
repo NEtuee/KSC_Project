@@ -11,10 +11,28 @@ public class SimpleReturnMove : MonoBehaviour
     [SerializeField] private float speed = 5.0f;
     private Rigidbody rigidbody;
 
+    [SerializeField] MoveType type;
+
+    public enum MoveType
+    {
+        Horizontal,
+        Vertical
+    }
+
+    [SerializeField]
     private void Start()
     {
         startPos = transform.position;
-        endPos = transform.position + Vector3.right * dist;
+
+        switch (type)
+        {
+            case MoveType.Horizontal:
+                 endPos = transform.position + Vector3.right * dist;
+                break;
+            case MoveType.Vertical:
+                endPos = transform.position + Vector3.up * dist;
+                break;
+        }
         target = endPos;
 
         rigidbody = GetComponent<Rigidbody>();

@@ -7,6 +7,9 @@ public class FIxedTest : MonoBehaviour
     [SerializeField] Transform fixedTr;
     [SerializeField] Transform fixedBone;
 
+    [SerializeField] Transform fixedTr2;
+    [SerializeField] Transform fixedBone2;
+
     Vector3 originalPos;
     Quaternion originalRot;
 
@@ -20,5 +23,8 @@ public class FIxedTest : MonoBehaviour
     {
         fixedBone.position = fixedTr.position;
         fixedBone.rotation = fixedTr.rotation;
+
+        fixedBone2.position = fixedTr2.position;
+        fixedBone2.rotation = fixedTr2.rotation;
     }
 }
