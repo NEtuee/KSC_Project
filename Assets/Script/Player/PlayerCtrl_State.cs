@@ -146,6 +146,8 @@ public class PlayerCtrl_State : MonoBehaviour
     private EnergyCore currentDetectEnergyCore;
     private PlayerAnimCtrl playerAnimCtrl;
 
+    private PlayerRagdoll ragdoll;
+
     [SerializeField] private float offsetDist;
 
     private float groundAngle;
@@ -170,6 +172,8 @@ public class PlayerCtrl_State : MonoBehaviour
         collider = GetComponent<CapsuleCollider>();
         ikCtrl = GetComponent<IKCtrl>();
         handIKCtrl = GetComponent<HandIKCtrl>();
+
+        ragdoll = GetComponent<PlayerRagdoll>();
 
         GameManager.Instance.SetPlayer(this);
 

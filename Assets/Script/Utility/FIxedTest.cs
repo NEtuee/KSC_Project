@@ -21,10 +21,17 @@ public class FIxedTest : MonoBehaviour
 
     private void Update()
     {
-        fixedBone.position = fixedTr.position;
-        fixedBone.rotation = fixedTr.rotation;
+        if (fixedTr != null)
+        {
+            fixedBone.position = fixedTr.position;
+            fixedBone.rotation = fixedTr.rotation;
+        }
 
-        fixedBone2.position = fixedTr2.position;
-        fixedBone2.rotation = fixedTr2.rotation;
+
+        if (fixedTr2 != null)
+        {
+            fixedBone2.position = fixedTr2.position;
+            fixedBone2.rotation = fixedTr2.rotation;
+        }
     }
 }
