@@ -15,6 +15,12 @@ public class BoneStructViewer : EditorWindow
     private ChildObjectItem lootObject;
 
     private Vector2 childScrollviewPos;
+    private Vector2 structureScrollviewPos;
+
+    private float viewScale = 1f;
+
+    private Vector2 objectSize = new Vector2(10f,10f);
+
 
     [MenuItem("CustomWindow/ChildStructureViewer")]
 
@@ -33,8 +39,20 @@ public class BoneStructViewer : EditorWindow
         HorizontalLine(new Vector2(20f, 20f));
 
         EditorGUILayout.EndVertical();
-        GUILayout.Space(5f);
-        DrawTest();
+
+        GUI.Box(new Rect(5,100,position.width - 15, position.height * .5f),"");
+        structureScrollviewPos = GUI.BeginScrollView(new Rect(5, 100, position.width - 15, position.height * .5f), 
+                                                structureScrollviewPos, new Rect(0, 0, 300, 200));
+        GUI.Button(new Rect(0, 0, 100, 20), "Top-left");
+        GUI.Button(new Rect(200, 0, 100, 20), "Top-right");
+        GUI.Button(new Rect(0, 180, 100, 20), "Bottom-left");
+        GUI.Button(new Rect(120, 180, 100, 20), "Bottom-right");
+        GUI.EndScrollView();
+
+        //GUILayout.EndVertical();
+
+        // GUILayout.Space(5f);
+        // DrawTest();
 
     }
 
@@ -55,7 +73,7 @@ public class BoneStructViewer : EditorWindow
 
     private void DrawTest()
     {
-        GUILayout.BeginVertical();
+        GUILayout.BeginVertical("box");
         childScrollviewPos = GUILayout.BeginScrollView(childScrollviewPos);
 
         if(lootObject != null)
@@ -82,6 +100,7 @@ public class BoneStructViewer : EditorWindow
         Rect drop_area = GUILayoutUtility.GetRect(0, 20.0f,GUILayout.ExpandWidth (true));
         GUIStyle style = new GUIStyle(GUI.skin.box);
         style.alignment = TextAnchor.MiddleLeft;
+        style.normal.textColor = Color.white;
         GUI.Box (drop_area, name, style);
 
         GUILayout.EndHorizontal();
@@ -121,19 +140,19 @@ public class BoneStructViewer : EditorWindow
     private void Dispose()
     {
         if(lootObject != null)
-            Dispose(lootObject);
+            ClearList(lootObject);
         
         objCache.Clear();
         objCache = null;
     }
 
-    private void Dispose(ChildObjectItem item)
+    private void ClearList(ChildObjectItem item)
     {
         if(item.childs.Count != 0)
         {
             foreach(var child in item.childs)
             {
-                Dispose(child);
+                ClearList(child);
             }
         }
 
@@ -184,11 +203,9 @@ public class BoneStructViewer : EditorWindow
                 DragAndDrop.AcceptDrag ();
              
                 var transform = ((GameObject)DragAndDrop.objectReferences[0]).GetComponent<Transform>();
+                if(lootObject != null)
+                    ClearList(lootObject);
                 SetItems(transform);
-
-                // foreach (Object dragged_object in DragAndDrop.objectReferences) {
-                //     // Do On Drag Stuff here
-                // }
             }
             break;
         }
