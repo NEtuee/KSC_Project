@@ -37,14 +37,12 @@ public class SimpleReturnMove : MonoBehaviour
 
         rigidbody = GetComponent<Rigidbody>();
 
-        StartCoroutine(Move());
+        //StartCoroutine(Move());
     }
 
-    IEnumerator Move()
+    private void FixedUpdate()
     {
-        while(true)
-        {
-            if(transform.position != target)
+        if(transform.position != target)
             {
                 transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
     
@@ -60,8 +58,30 @@ public class SimpleReturnMove : MonoBehaviour
                     target = startPos;
                 }
             }
-
-            yield return null;
-        }
     }
+
+    // IEnumerator Move()
+    // {
+    //     while(true)
+    //     {
+    //         if(transform.position != target)
+    //         {
+    //             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+    
+    //         }
+    //         else
+    //         {
+    //             if(target == startPos)
+    //             {
+    //                 target = endPos;
+    //             }
+    //             else
+    //             {
+    //                 target = startPos;
+    //             }
+    //         }
+
+    //         yield return null;
+    //     }
+    // }
 }
