@@ -23,10 +23,13 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private Transform rightHandPoint;
 
     [SerializeField] private string prevPlayAnimation;
+    private Transform bip;
     [SerializeField] private Transform pelvis;
     private Vector3 prevPelvisPosition;
 
     private bool isFixedHand;
+    private bool isLeftHandFix;
+    private bool isRightHandFix;
 
     [SerializeField]private Transform hipTransform;
 
@@ -43,6 +46,8 @@ public class PlayerRagdoll : MonoBehaviour
     private const float ragdollToAnimBlendTime = 0.5f;
 
     private Vector3 storedPos;
+
+    private Vector3 storedRootPosition;
 
     [SerializeField]private Transform prevParent;
 
@@ -63,6 +68,8 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private Animator ragdollAnim;
     [SerializeField] private List<Rigidbody> ragdollObjectRigids = new List<Rigidbody>();
 
+    private GameObject _ragdollContainer;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -70,11 +77,12 @@ public class PlayerRagdoll : MonoBehaviour
         collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
 
-        Rigidbody[] rigidBodies = transform.Find("Bip001").GetComponentsInChildren<Rigidbody>();
+        bip = transform.Find("Bip001");
+        Rigidbody[] rigidBodies = bip.GetComponentsInChildren<Rigidbody>();
 
-        foreach(Rigidbody rigid in rigidBodies)
+        foreach (Rigidbody rigid in rigidBodies)
         {
-            if(rigid.transform == transform)
+            if (rigid.transform == transform)
             {
                 continue;
             }
@@ -82,7 +90,7 @@ public class PlayerRagdoll : MonoBehaviour
             ragdollRigids.Add(rigid);
         }
 
-        foreach(var t in pelvis.GetComponentsInChildren<Transform>())
+        foreach (var t in pelvis.GetComponentsInChildren<Transform>())
         {
             var trComp = new TransformComponent(t);
             transforms.Add(trComp);
@@ -106,6 +114,8 @@ public class PlayerRagdoll : MonoBehaviour
         }
 
         prevPos = transform.position;
+
+        _ragdollContainer = new GameObject("RagdollContainer " + gameObject.name);
     }
 
     private void FixedUpdate()
@@ -119,31 +129,57 @@ public class PlayerRagdoll : MonoBehaviour
 
         //    }
         //}
+
+        if (state == RagdollState.Ragdoll)
+        {
+            transform.position = hipTransform.position;
+        }
     }
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            hipTransform.GetComponent<Rigidbody>().AddForce(transform.forward * 10000.0f);
+        }
+
+        //if(Input.GetKeyDown(KeyCode.X))
+        //{
+        //    //Debug.Log(anim.rootPosition);
+        //    anim.rootPosition = transform.position;
+        //    //anim.applyRootMotion = true;
+        //}
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             switch (state)
             {
                 case RagdollState.Animated:
                     //prevPelvisPosition = pelvis.position;
-                    FixeHand(true);
+                    //FixeHand(true);
+
+                    hipTransform.SetParent(_ragdollContainer.transform);
+
                     ActiveRagdoll(true);
-
+                    //GameManager.Instance.PausePlayerControl();
+                    
+                    //ragdollObject.SetParent(transform.parent);
+                    //ragdollObject.SetPositionAndRotation(transform.position, transform.rotation);
                     //CopyAnimCharacterTransformToRagdoll(hipTransform, ragdollHip);
-
-                    ragdollObject.gameObject.SetActive(true);
+                    //ragdollObject.gameObject.SetActive(true);
 
                     //FixeHand(true);
                     //ConvertRagdoll();
                     //state = RagdollState.Ragdoll;
                     break;
                 case RagdollState.Ragdoll:
-                    FixeHand(false);
+                    //FixeHand(false);
                     //ActiveRagdoll(false);
+
+                    hipTransform.SetParent(bip);
+
                     ReturnAnimated();
+                    ragdollObject.gameObject.SetActive(false);
 
                     //FixeHand(false);
                     //StartRagdollBlend();
@@ -169,14 +205,22 @@ public class PlayerRagdoll : MonoBehaviour
             ragdollRightHand.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
         }
 
+        if(isLeftHandFix)
+        {
+            ragdollLeftHand.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
+        }
+        if (isRightHandFix)
+        {
+            ragdollRightHand.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
+        }
+
         if (state == RagdollState.Ragdoll)
         {
-            for (int i = 0; i < ragdollRigids.Count; i++)
-            {
-                //ragdollRigids[i].velocity = -ragdollObjectRigids[i].velocity;
-                ragdollRigids[i].transform.SetPositionAndRotation(ragdollObjectRigids[i].transform.position, ragdollObjectRigids[i].transform.rotation);
-
-            }
+            //for (int i = 0; i < ragdollRigids.Count; i++)
+            //{
+            //    //ragdollRigids[i].velocity = -ragdollObjectRigids[i].velocity;
+            //    ragdollRigids[i].transform.SetPositionAndRotation(ragdollObjectRigids[i].transform.position, ragdollObjectRigids[i].transform.rotation);
+            //}
         }
     }
 
@@ -292,7 +336,7 @@ public class PlayerRagdoll : MonoBehaviour
         else
         {
             //state = RagdollState.Animated;
-            transform.localPosition = prevLocalPosition;
+            //transform.localPosition = prevLocalPosition;
         }
     }
 
@@ -384,9 +428,32 @@ public class PlayerRagdoll : MonoBehaviour
             leftHandPoint.SetParent(transform.parent);
             rightHandPoint.SetParent(transform.parent);
         }
-
     }
-    
+
+    private void FixLeftHand(bool value)
+    {
+        isLeftHandFix = value;
+
+        if (isLeftHandFix)
+        {
+            ragdollLeftHand.GetComponent<Rigidbody>().isKinematic = value;
+            leftHandPoint.SetPositionAndRotation(leftHandTransform.position, leftHandTransform.rotation);
+            leftHandPoint.SetParent(transform.parent);
+        }
+    }
+
+    private void FixRightHand(bool value)
+    {
+        isRightHandFix = value;
+
+        if (isRightHandFix)
+        {
+            ragdollRightHand.GetComponent<Rigidbody>().isKinematic = value;
+            rightHandPoint.SetPositionAndRotation(rightHandTransform.position, rightHandTransform.rotation);
+            rightHandPoint.SetParent(transform.parent);
+        }
+    }
+
     private void ReturnAnimated()
     {
         //ResetTransform();
@@ -399,7 +466,10 @@ public class PlayerRagdoll : MonoBehaviour
 
         storedHipsPosition = hipTransform.position;
 
-        anim.Play(prevPlayAnimation,0,0);
+        Vector3 shiftPos = hipTransform.position - transform.position;
+        shiftPos.y = GetDistanceToFloor(shiftPos.y);
+
+        MoveNodeWithoutChildren(shiftPos);
 
         foreach(TransformComponent trComp in transforms)
         {
@@ -410,6 +480,7 @@ public class PlayerRagdoll : MonoBehaviour
             trComp.PrivRotation = trComp.Transform.localRotation;
         }
 
+        anim.Play(prevPlayAnimation, 0, 0);
         ActiveRagdoll(false);
         //ActiveRagdollParts(false);
     }
@@ -417,7 +488,7 @@ public class PlayerRagdoll : MonoBehaviour
     IEnumerator Defferd()
     {
         yield return null;
-        ReturnAnimated();
+        //ReturnAnimated();
     }
 
     private void CopyAnimCharacterTransformToRagdoll(Transform origin, Transform rag)
@@ -432,6 +503,81 @@ public class PlayerRagdoll : MonoBehaviour
             rag.transform.GetChild(i).localRotation = origin.transform.GetChild(i).localRotation;
         }
     }
+
+    private bool CheckIfLieOnBack()
+    {
+        var left = anim.GetBoneTransform(HumanBodyBones.LeftUpperLeg).position;
+        var right = anim.GetBoneTransform(HumanBodyBones.RightUpperLeg).position;
+        var hipsPos = hipTransform.position;
+
+        left -= hipsPos;
+        left.y = 0f;
+        right -= hipsPos;
+        right.y = 0f;
+
+        var q = Quaternion.FromToRotation(left, Vector3.right);
+        var t = q * right;
+
+        return t.z < 0f;
+    }
+
+    private Vector3 GetRagdollDirection()
+    {
+        Vector3 ragdolledFeetPosition = (
+            anim.GetBoneTransform(HumanBodyBones.Hips).position);// +
+                                                                  //_anim.GetBoneTransform(HumanBodyBones.RightToes).position) * 0.5f;
+        Vector3 ragdolledHeadPosition = anim.GetBoneTransform(HumanBodyBones.Head).position;
+        Vector3 ragdollDirection = ragdolledFeetPosition - ragdolledHeadPosition;
+        ragdollDirection.y = 0;
+        ragdollDirection = ragdollDirection.normalized;
+
+        if (CheckIfLieOnBack())
+            return ragdollDirection;
+        else
+            return -ragdollDirection;
+    }
+
+    private float GetDistanceToFloor(float currentY)
+    {
+        RaycastHit[] hits = Physics.RaycastAll(new Ray(hipTransform.position, Vector3.down));
+        float distFromFloor = float.MinValue;
+
+        foreach (RaycastHit hit in hits)
+            if (!hit.transform.IsChildOf(transform))
+                distFromFloor = Mathf.Max(distFromFloor, hit.point.y);
+
+        if (Mathf.Abs(distFromFloor - float.MinValue) > Mathf.Epsilon)
+            currentY = distFromFloor - transform.position.y;
+
+        return currentY;
+    }
+
+    private void MoveNodeWithoutChildren(Vector3 shiftPos)
+    {
+        Vector3 ragdollDirection = GetRagdollDirection();
+
+        //Debug.Log(transform.position);
+
+        // shift character node position without children
+        hipTransform.position -= shiftPos;
+        transform.position += shiftPos;
+
+        //Debug.Log(transform.position);
+
+        anim.rootPosition = transform.position;
+        //Debug.Log(anim.rootPosition);
+        storedRootPosition = transform.position;
+
+        // rotate character node without children
+        Vector3 forward = transform.forward;
+        transform.rotation = Quaternion.FromToRotation(forward, ragdollDirection) * transform.rotation;
+        hipTransform.rotation = Quaternion.FromToRotation(ragdollDirection, forward) * hipTransform.rotation;
+    }
+
+    //private void OnAnimatorMove()
+    //{
+        
+    //}
 }
 
 [Serializable]
