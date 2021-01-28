@@ -119,6 +119,24 @@ public class PlayerRagdoll : MonoBehaviour
 
         //    }
         //}
+
+        if (isFixedHand)
+        {
+            //leftHandRigidBody.transform.SetPositionAndRotation(leftHandFixedPosition, leftHandFixedRotation);
+            //rightHandRigidBody.transform.SetPositionAndRotation(rightHandFixedPosition, rightHandFixedRotation);
+            //leftHandRigidBody.transform.position = leftHandFixedPosition;
+            //rightHandRigidBody.transform.position = rightHandFixedPosition;
+
+            //leftHandTransform.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
+            //rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
+
+            //rigidbody.Sleep();
+            //Debug.Log(rigidbody.centerOfMass);
+            //transform.position = prevWorldPosition;
+
+            //ragdollLeftHand.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
+            ragdollRightHand.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
+        }
     }
 
     void Update()
@@ -141,7 +159,7 @@ public class PlayerRagdoll : MonoBehaviour
                     //state = RagdollState.Ragdoll;
                     break;
                 case RagdollState.Ragdoll:
-                    FixeHand(false);
+                    //FixeHand(false);
                     //ActiveRagdoll(false);
                     ReturnAnimated();
 
@@ -149,24 +167,6 @@ public class PlayerRagdoll : MonoBehaviour
                     //StartRagdollBlend();
                     break;
             }
-        }
-
-        if (isFixedHand)
-        {
-            //leftHandRigidBody.transform.SetPositionAndRotation(leftHandFixedPosition, leftHandFixedRotation);
-            //rightHandRigidBody.transform.SetPositionAndRotation(rightHandFixedPosition, rightHandFixedRotation);
-            //leftHandRigidBody.transform.position = leftHandFixedPosition;
-            //rightHandRigidBody.transform.position = rightHandFixedPosition;
-
-            //leftHandTransform.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
-            //rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
-
-            //rigidbody.Sleep();
-            //Debug.Log(rigidbody.centerOfMass);
-            //transform.position = prevWorldPosition;
-
-            //ragdollLeftHand.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
-            ragdollRightHand.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
         }
 
         if (state == RagdollState.Ragdoll)
