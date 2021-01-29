@@ -279,4 +279,9 @@ public class CameraCtrl : MonoBehaviour
 
     public void Pause() { isPause = true; }
     public void Resume() { isPause = false; }
+
+    public void SetTarget(Transform target)
+    {
+        player = target;
+    }
 }

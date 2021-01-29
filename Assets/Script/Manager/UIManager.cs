@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UniRx;
 
 public enum GameState
 {
@@ -32,11 +33,11 @@ public class UIManager : MonoBehaviour
 
     [Header("Stamina Bar")]
     [SerializeField] private GameObject staminaPanel;
-    [SerializeField] private Image staminaBar;
+    [SerializeField] private GageBarUI staminaBar;
     [SerializeField] private Text staminaValue;
 
     [Header("Hp Bar")]
-    [SerializeField] private Image hpBar;
+    [SerializeField] private GageBarUI hpBar;
     [SerializeField] private Text hpValue;
 
     [Header("Spear")]
@@ -75,10 +76,24 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.uiManager = this;
     }
     void Start()
     {
-        InitGame();
+        //InitGame();
+
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_State>();
+        player.stamina.SubscribeToText(staminaValue);
+        player.stamina.Subscribe(value => 
+        {
+            staminaBar.SetValue(value/100f);
+        });
+
+        player.hp.SubscribeToText(hpValue);
+        player.hp.Subscribe(value =>
+        {
+            hpBar.SetValue(value / 100f);
+        });
     }
 
     private void InitGame()
@@ -94,9 +109,9 @@ public class UIManager : MonoBehaviour
         soundSettingPanel.SetActive(false);
 
         GameManager.Instance.CameraRootSetWorldPosition(titleCameraPosition.position);
-        GameManager.Instance.PausePlayerControl();
+        GameManager.Instance.PausePlayer();
 
-        ActiveMouse();
+        //ActiveMouse();
 
         if(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl>() != null)
         {
@@ -133,7 +148,7 @@ public class UIManager : MonoBehaviour
 
         if(gameState == GameState.Game)
         {
-            UpdateStaminaValue();
+            //UpdateStaminaValue();
         }
     }
 
@@ -154,6 +169,7 @@ public class UIManager : MonoBehaviour
 
     public void OnSoundButton()
     {
+        Debug.Log("OnSoundButton");
         if (gameState == GameState.Title)
         {
             prevState = gameState;
@@ -246,7 +262,8 @@ public class UIManager : MonoBehaviour
         {
             gameState = GameState.Pause;
             pauseMenu.SetActive(true);
-            GameManager.Instance.PausePlayerControl();
+            ActiveMouse();
+            GameManager.Instance.PausePlayer();
             GameManager.Instance.timeManager.PauseTime();
         }
         else if (gameState == GameState.Pause)
@@ -319,18 +336,6 @@ public class UIManager : MonoBehaviour
         crossHairPanel.SetActive(false);
     }
 
-    private void UpdateStaminaValue()
-    {
-        float currentStamina = player.GetStamina();
-        staminaValue.text = currentStamina.ToString();
-
-        float currentHp = player.GetHp();
-        hpValue.text = currentHp.ToString();
-
-        staminaBar.fillAmount = Mathf.SmoothStep(staminaBar.fillAmount, currentStamina / 100f, 4f * Time.deltaTime);
-        hpBar.fillAmount = Mathf.SmoothStep(hpBar.fillAmount, currentHp / 100f, 4f * Time.deltaTime);
-    }
-
     private void GameOver()
     {
         StartCoroutine(GameOverProgress());
@@ -342,7 +347,7 @@ public class UIManager : MonoBehaviour
         crossHairPanel.SetActive(false);
 
         gameOverPanel.gameObject.SetActive(true);
-        GameManager.Instance.PausePlayerControl();
+        GameManager.Instance.PausePlayer();
 
         GameManager.Instance.timeManager.PauseTime();
 

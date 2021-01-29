@@ -108,7 +108,6 @@ public class PlayerAnimCtrl : MonoBehaviour
         animator.applyRootMotion = true;
         owner.SetIsMustClimbing(true);
         owner.SetIsCanInputClimbing(false);
-        owner.SetIsSideClimbing(true);
 
         animator.SetBool("IsClimbing", false);
         animator.SetBool("IsReverseClimbing", false);
@@ -123,7 +122,6 @@ public class PlayerAnimCtrl : MonoBehaviour
         animator.applyRootMotion = false;
         owner.SetIsMustClimbing(false);
         owner.SetIsCanInputClimbing(true);
-        owner.SetIsSideClimbing(false);
     }
 
     private void StartUpClimbing()
@@ -294,7 +292,6 @@ public class PlayerAnimCtrl : MonoBehaviour
     private void EndRopeClimbing()
     {
         owner.SetIsCanInputClimbing(true);
-        owner.SetIsRopeClimbing(false);
     }
 
     public void BindPierceEvent( UnityEvent pierceEvent)
@@ -324,5 +321,11 @@ public class PlayerAnimCtrl : MonoBehaviour
         int randResult = Random.Range(0, walkSoundStringList.Count);
         if (AudioManager.instance != null)
             AudioManager.instance.Play(walkSoundStringList[randResult], transform.position);
+    }
+
+    private void EndGetUp()
+    {
+        GameManager.Instance.PauseControl(false);
+
     }
 }

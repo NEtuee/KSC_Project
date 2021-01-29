@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public BulletTimeManager timeManager;
     public float killEventFov = 66f;
-    [SerializeField] private CameraCtrl camRoot;
+    public CameraCtrl camCtrl;
     [SerializeField] private CameraCollision mainCam;
     //[SerializeField] private PlayerCtrl player;
     [SerializeField] private PlayerCtrl_State player;
@@ -41,10 +41,16 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if(mainCam== null)
+        {
+            mainCam = Camera.main.GetComponent<CameraCollision>();
+            camCtrl = mainCam.transform.parent.GetComponent<CameraCtrl>();
+        }
+
         mainCameraStartPosition = mainCam.transform.position;
         mainCameraStartLocalPosition = mainCam.transform.localPosition;
-        camRootStartPosition = camRoot.transform.position;
-        camRootStartRot = camRoot.transform.rotation;
+        camRootStartPosition = camCtrl.transform.position;
+        camRootStartRot = camCtrl.transform.rotation;
 
         if(GameObject.FindGameObjectWithTag("Boss") != null)
         {
@@ -60,29 +66,36 @@ public class GameManager : MonoBehaviour
         //}
     }
 
-    public void PausePlayerControl()
+    public void PausePlayer()
     {
-        if(camRoot == null || mainCam == null || player == null)
+        if (camCtrl == null || mainCam == null || player == null)
         {
             Debug.LogWarning("Not Set PlayerControl Elements");
             return; 
         }
 
         player.Pause();
-        camRoot.Pause();
+        camCtrl.Pause();
         mainCam.Pause();
     }
 
+    public void PauseControl(bool result)
+    {
+        player.PauseControl(result);
+    }
+
+   
+
     public void ResumePlayerControl()
     {
-        if (camRoot == null || mainCam == null || player == null)
+        if (camCtrl == null || mainCam == null || player == null)
         {
             Debug.LogWarning("Not Set PlayerControl Elements");
             return;
         }
 
         player.Resume();
-        camRoot.Resume();
+        camCtrl.Resume();
         mainCam.Resume();
     }
 
@@ -98,24 +111,24 @@ public class GameManager : MonoBehaviour
 
     public void CameraRootSetWorldPosition(Vector3 pos)
     {
-        camRoot.transform.position = pos;
+        camCtrl.transform.position = pos;
     }
 
     public IEnumerator GameStartCameraMove()
     {
         Vector3 targetPosition = mainCameraStartPosition;
 
-        camRoot.transform.rotation = camRootStartRot;
-        camRoot.SetFollowSmooth(0.8f);
+        camCtrl.transform.rotation = camRootStartRot;
+        camCtrl.SetFollowSmooth(0.8f);
 
-        while ((camRoot.transform.position - player.transform.position).magnitude > 5f)
+        while ((camCtrl.transform.position - player.transform.position).magnitude > 5f)
         {
             //mainCam.transform.position = Vector3.MoveTowards(mainCam.transform.position, targetPosition, 25f * Time.deltaTime);
             //camRoot.transform.rotation = camRootStartRot;
             yield return null;
         }
 
-        camRoot.ResetFollowSmooth();
+        camCtrl.ResetFollowSmooth();
         //mainCam.transform.position = mainCameraStartPosition;
     }
 
@@ -132,7 +145,7 @@ public class GameManager : MonoBehaviour
     IEnumerator CameraMoveEvent(Transform eventTransform)
     {
         player.Pause();
-        camRoot.Pause();
+        camCtrl.Pause();
         mainCam.Pause();
 
         isCurrentCameraEvent = true;
@@ -153,14 +166,14 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(uiManager.FadeOut(1f));
 
         player.Resume();
-        camRoot.Resume();
+        camCtrl.Resume();
         mainCam.Resume();
         isCurrentCameraEvent = false;
     }
 
     public void SetCameraFov()
     {
-        camRoot.GetCurrentCamera().fieldOfView = killEventFov;
+        camCtrl.GetCurrentCamera().fieldOfView = killEventFov;
     }
 
     public void CameraEventIntroduction_Immediate(Transform eventTransform)
@@ -198,7 +211,7 @@ public class GameManager : MonoBehaviour
     IEnumerator CameraMoveEvent_Introdution(Transform eventTransform)
     {
         player.Pause();
-        camRoot.Pause();
+        camCtrl.Pause();
         mainCam.Pause();
 
         prevPos = mainCam.transform.position;
@@ -225,7 +238,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(uiManager.FadeOut(1f));
 
         player.Resume();
-        camRoot.Resume();
+        camCtrl.Resume();
         mainCam.Resume();
     }
 
@@ -282,6 +295,11 @@ public class GameManager : MonoBehaviour
     public GameObject GetPlayerObject()
     {
         return player.gameObject;
+    }
+
+    public void SetPlayer(PlayerCtrl_State player)
+    {
+        this.player = player;
     }
 
     public void ClearAllCore()

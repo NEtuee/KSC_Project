@@ -6,6 +6,7 @@ public class HandIKCtrl : MonoBehaviour
 {
     private Animator animator;
     [SerializeField]private Vector3 rightHand_Effetor;
+    [SerializeField] private Quaternion rightRot;
     [SerializeField]private Vector3 leftHand_Effetor;
 
     [SerializeField]private Vector3 leftHandPosition, rightHandPosition;
@@ -18,6 +19,11 @@ public class HandIKCtrl : MonoBehaviour
     [SerializeField] private bool rightTrace;
 
     [SerializeField]private LayerMask climbingLayer;
+
+    [SerializeField] private Transform rightHandObj;
+    [SerializeField] private Transform rightHand;
+
+    [SerializeField] private GameObject sphere;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -26,10 +32,22 @@ public class HandIKCtrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         AdjustHandTarget(ref leftHandPosition, HumanBodyBones.LeftHand);
         AdjustHandTarget(ref rightHandPosition, HumanBodyBones.RightHand);
 
-        if(enableHandIK == false)
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            //rightHand_Effetor = animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+            rightHand_Effetor = rightHand.position;
+            //rightRot = animator.GetBoneTransform(HumanBodyBones.RightHand).rotation;
+            rightRot = rightHand.rotation;
+            enableRightHandIk = true;
+            Instantiate(sphere, rightHand_Effetor, rightRot);
+        }
+
+        if (enableHandIK == false)
         {
             return;
         }
@@ -49,14 +67,26 @@ public class HandIKCtrl : MonoBehaviour
     {
         if(enableLeftHandIk == true)
         {
-            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
-            animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHand_Effetor);
+            //animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+            //animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHand_Effetor);
+
+            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+            animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandObj.position);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+            animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandObj.rotation);
         }
 
         if (enableRightHandIk == true)
         {
             animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
             animator.SetIKPosition(AvatarIKGoal.RightHand, rightHand_Effetor);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+            animator.SetIKRotation(AvatarIKGoal.RightHand, rightRot);
+
+            //animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+            //animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandObj.position);
+            //animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+            //animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandObj.rotation);
         }
     }
 

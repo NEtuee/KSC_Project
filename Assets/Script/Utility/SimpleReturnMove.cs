@@ -11,22 +11,38 @@ public class SimpleReturnMove : MonoBehaviour
     [SerializeField] private float speed = 5.0f;
     private Rigidbody rigidbody;
 
+    [SerializeField] MoveType type;
+
+    public enum MoveType
+    {
+        Horizontal,
+        Vertical
+    }
+
+    [SerializeField]
     private void Start()
     {
         startPos = transform.position;
-        endPos = transform.position + Vector3.right * dist;
+
+        switch (type)
+        {
+            case MoveType.Horizontal:
+                 endPos = transform.position + Vector3.right * dist;
+                break;
+            case MoveType.Vertical:
+                endPos = transform.position + Vector3.up * dist;
+                break;
+        }
         target = endPos;
 
         rigidbody = GetComponent<Rigidbody>();
 
-        StartCoroutine(Move());
+        //StartCoroutine(Move());
     }
 
-    IEnumerator Move()
+    private void FixedUpdate()
     {
-        while(true)
-        {
-            if(transform.position != target)
+        if(transform.position != target)
             {
                 transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
     
@@ -42,8 +58,30 @@ public class SimpleReturnMove : MonoBehaviour
                     target = startPos;
                 }
             }
-
-            yield return null;
-        }
     }
+
+    // IEnumerator Move()
+    // {
+    //     while(true)
+    //     {
+    //         if(transform.position != target)
+    //         {
+    //             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+    
+    //         }
+    //         else
+    //         {
+    //             if(target == startPos)
+    //             {
+    //                 target = endPos;
+    //             }
+    //             else
+    //             {
+    //                 target = startPos;
+    //             }
+    //         }
+
+    //         yield return null;
+    //     }
+    // }
 }
