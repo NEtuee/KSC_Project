@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using UnityEditorInternal;
 using System.Collections.Generic;
 
 public class BoneStructViewer : EditorWindow
@@ -8,7 +9,14 @@ public class BoneStructViewer : EditorWindow
     private class ChildObjectItem
     {
         public Transform transform;
+        public ChildObjectItem parent;
         public List<ChildObjectItem> childs = new List<ChildObjectItem>();
+        public Rect currentRect;
+
+        public bool ContainsChild(ChildObjectItem item)
+        {
+            return childs.Find((value)=> value == item) != null;
+        }
     }
 
     private enum ViewType
@@ -34,10 +42,19 @@ public class BoneStructViewer : EditorWindow
     private Queue<ChildObjectItem> objCache = new Queue<ChildObjectItem>();
     private ChildObjectItem rootObject;
 
+    private MultiSelectPopupWindow tagSelectWindow;
+
     private Vector2 childScrollviewPos;
     private Vector2 structureScrollviewPos;
 
     private static Dictionary<ViewType,Vector2> scrollPositionDic = new Dictionary<ViewType, Vector2>();
+    //private static Dictionary<string, bool> tagSelect = new Dictionary<string, bool>();
+
+    private static string[] tagArray;
+    private static string[] layerArray;
+
+    private int selectedTag = ~0;
+    private int selectedLayer = ~0;
 
     private float viewScale = 100f;
 
@@ -53,19 +70,45 @@ public class BoneStructViewer : EditorWindow
         scrollPositionDic.Add(ViewType.XAxis,new Vector2());
         scrollPositionDic.Add(ViewType.YAxis,new Vector2());
         scrollPositionDic.Add(ViewType.ZAxis,new Vector2());
+
+        tagArray = InternalEditorUtility.tags;
+        layerArray = InternalEditorUtility.layers;
+
+        // if(tagSelect.Count == 0)
+        // {
+        //     var tags = UnityEditorInternal.InternalEditorUtility.tags;
+
+        //     foreach(var tag in tags)
+        //     {
+        //         tagSelect.Add(tag,true);
+        //     }
+        // }
+        
     }
 
+    Rect buttonRect;
     void OnGUI()
     {
         EditorGUILayout.Space ();
         DropAreaGUI ();
+
         EditorGUILayout.BeginVertical();
-
         HorizontalLine(new Vector2(20f, 20f));
-
         EditorGUILayout.EndVertical();
 
+        EditorGUILayout.BeginHorizontal("box");
+
+        if(GUILayout.Button("Reload"))
+        {
+            Reload();
+        }
+        selectedTag = EditorGUILayout.MaskField(selectedTag, tagArray);
+        selectedLayer = EditorGUILayout.MaskField(selectedLayer, layerArray);
+
         viewScale = EditorGUILayout.Slider(viewScale,1f,500f);
+
+        EditorGUILayout.EndHorizontal();
+
         DrawStructure("X Foward", new Vector2(5,130),ViewType.XAxis);
         DrawStructure("Y Foward", new Vector2(5 + position.width * .33f,130),ViewType.YAxis);
         DrawStructure("Z Foward", new Vector2(5 + position.width * .66f,130),ViewType.ZAxis);
@@ -79,6 +122,7 @@ public class BoneStructViewer : EditorWindow
     {
         Dispose();
         scrollPositionDic.Clear();
+        //tagSelect.Clear();
     }
 
     private void DrawStructure(string targetName, Vector2 pos, ViewType view)
@@ -94,7 +138,7 @@ public class BoneStructViewer : EditorWindow
                                                 scrollPositionDic[view], viewRect);
 
         if(rootObject != null)
-            DrawStructureItem(rootObject,rect,ConvertToCenterCoordinate(rect,Vector3.zero),view);
+            DrawStructureItem(rootObject,rect,ConvertToCenterCoordinate(rect,Vector3.zero),view,false);
 
         GUI.EndScrollView();
     }
@@ -135,7 +179,7 @@ public class BoneStructViewer : EditorWindow
         }
     }
 
-    private void DrawStructureItem(ChildObjectItem item, Rect viewArea, Vector2 parent, ViewType view)
+    private void DrawStructureItem(ChildObjectItem item, Rect viewArea, Vector2 parent, ViewType view, bool unMask)
     {
         Vector3 rootPosition = rootObject.transform.position - item.transform.position;
         Vector2 pos = Vector2.zero;
@@ -146,16 +190,54 @@ public class BoneStructViewer : EditorWindow
 
         Rect rect = new Rect(pos.x,pos.y,10f,10f);
 
-        if(GUI.Button(GetAlignmentRect(rect,4),new GUIContent("",item.transform.name)))
-        {
-            Selection.activeTransform = item.transform;
-        }
+        bool tagMask = ((1 << FindTag(item.transform.tag)) & selectedTag) != 0;
+        bool layerMask = ((1 << item.transform.gameObject.layer) & (selectedLayer)) != 0;
 
-        UnityEditor.Handles.DrawLine(parent,pos);
+        if(tagMask && layerMask)
+        {
+            if(GUI.Button(GetAlignmentRect(rect,4),new GUIContent("",item.transform.name)))
+            {
+                EditorGUIUtility.PingObject(item.transform.gameObject);
+                Selection.activeGameObject = item.transform.gameObject;
+            }
+            
+            if(Event.current.type == EventType.Repaint)
+            {
+                item.currentRect = GUILayoutUtility.GetLastRect();
+            }
+
+            if(unMask)
+                UnityEditor.Handles.DrawLine(parent,pos);
+        }
 
         foreach(var child in item.childs)
         {
-            DrawStructureItem(child,viewArea,pos,view);
+            DrawStructureItem(child,viewArea,pos,view, tagMask && layerMask);
+        }
+
+        GUIStyle style = new GUIStyle();
+
+        Event evt = Event.current;
+
+        if(evt.type == EventType.DragUpdated || evt.type == EventType.DragPerform)
+        {
+            if (!GetAlignmentRect(rect,4).Contains (evt.mousePosition))
+                return;
+
+            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+
+            if (evt.type == EventType.DragPerform) 
+            {
+                DragAndDrop.AcceptDrag ();
+
+                foreach(var obj in DragAndDrop.objectReferences)
+                {
+                    var transform = ((GameObject)obj).GetComponent<Transform>();
+                    item.childs.Add(SetItems(transform,item));
+                    transform.parent = item.transform;
+                }
+                
+            }
         }
     }
 
@@ -242,24 +324,39 @@ public class BoneStructViewer : EditorWindow
         GUILayout.Space(5f);
     }
 
-    private void SetItems(Transform loot)
+    private ChildObjectItem SetItems(Transform root, ChildObjectItem parent)
     {
         ChildObjectItem item = GetChildObjectItemCache();
-        item.transform = loot;
+        item.transform = root;
+        item.parent = parent;
         item.childs = GetChildItems(item);
 
-        rootObject = item;
+        if(parent == null)
+            rootObject = item;
+        
+        return item;
     }
 
-    private List<ChildObjectItem> GetChildItems(ChildObjectItem loot)
+    private int FindTag(string tag)
+    {
+        for(int i = 0; i < tagArray.Length; ++i)
+        {
+            if(tagArray[i] == tag)
+                return i;
+        }
+
+        return -2;
+    }
+
+    private List<ChildObjectItem> GetChildItems(ChildObjectItem root)
     {
         List<ChildObjectItem> list = new List<ChildObjectItem>();
 
-        int count = loot.transform.childCount;
+        int count = root.transform.childCount;
         for(int i = 0; i < count; ++i)
         {
             var item = GetChildObjectItemCache();
-            item.transform = loot.transform.GetChild(i);
+            item.transform = root.transform.GetChild(i);
             if(item.transform.childCount != 0)
             {
                 item.childs = GetChildItems(item);
@@ -321,11 +418,21 @@ public class BoneStructViewer : EditorWindow
         }
     }
 
+    private void Reload()
+    {
+        if(rootObject == null)
+            return;
+        
+        var temp = rootObject.transform;
+        ClearList(rootObject);
+        SetItems(temp, null);
+    }
+
     private void DropAreaGUI ()
     {
         Event evt = Event.current;
         Rect drop_area = GUILayoutUtility.GetRect (0.0f, 50.0f, GUILayout.ExpandWidth (true));
-        GUI.Box (drop_area, "Add Trigger");
+        GUI.Box (drop_area, "Object Drop");
      
         switch (evt.type) {
         case EventType.DragUpdated:
@@ -341,7 +448,7 @@ public class BoneStructViewer : EditorWindow
                 var transform = ((GameObject)DragAndDrop.objectReferences[0]).GetComponent<Transform>();
                 if(rootObject != null)
                     ClearList(rootObject);
-                SetItems(transform);
+                SetItems(transform, null);
             }
             break;
         }
