@@ -322,4 +322,10 @@ public class PlayerAnimCtrl : MonoBehaviour
         if (AudioManager.instance != null)
             AudioManager.instance.Play(walkSoundStringList[randResult], transform.position);
     }
+
+    private void EndGetUp()
+    {
+        GameManager.Instance.PauseControl(false);
+
+    }
 }

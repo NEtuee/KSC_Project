@@ -38,6 +38,7 @@ public class PlayerCtrl_State : MonoBehaviour
     [Header("State Conditions")]
     [SerializeField] private PlayerState state;
     [SerializeField] private bool isPause;
+    [SerializeField] private bool isPauseControl;
     [SerializeField] private bool isRun;
     [SerializeField] private bool isMustClimbing;
     [SerializeField] private bool isAim;
@@ -256,6 +257,9 @@ public class PlayerCtrl_State : MonoBehaviour
 
         inputVertical = InputManager.Instance.GetMoveAxisVertical();
         inputHorizontal = InputManager.Instance.GetMoveAxisHorizontal();
+
+        if (isPauseControl == true)
+            return;
 
         UpdateInputValue(inputVertical, inputHorizontal);
 
@@ -1755,6 +1759,8 @@ public class PlayerCtrl_State : MonoBehaviour
     }
 
     public void Pause() { isPause = true; }
+
+    public void PauseControl(bool result) { isPause = result; }
     public void Resume() { isPause = false; }
     public void ClearAllCore() { isCanEquipSpeicalSpear = true; OnAbsorbAllCore?.Invoke(); }
 

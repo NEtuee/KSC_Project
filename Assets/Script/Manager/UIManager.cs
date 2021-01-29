@@ -109,7 +109,7 @@ public class UIManager : MonoBehaviour
         soundSettingPanel.SetActive(false);
 
         GameManager.Instance.CameraRootSetWorldPosition(titleCameraPosition.position);
-        GameManager.Instance.PausePlayerControl();
+        GameManager.Instance.PausePlayer();
 
         //ActiveMouse();
 
@@ -263,7 +263,7 @@ public class UIManager : MonoBehaviour
             gameState = GameState.Pause;
             pauseMenu.SetActive(true);
             ActiveMouse();
-            GameManager.Instance.PausePlayerControl();
+            GameManager.Instance.PausePlayer();
             GameManager.Instance.timeManager.PauseTime();
         }
         else if (gameState == GameState.Pause)
@@ -347,7 +347,7 @@ public class UIManager : MonoBehaviour
         crossHairPanel.SetActive(false);
 
         gameOverPanel.gameObject.SetActive(true);
-        GameManager.Instance.PausePlayerControl();
+        GameManager.Instance.PausePlayer();
 
         GameManager.Instance.timeManager.PauseTime();
 

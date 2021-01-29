@@ -23,50 +23,29 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private Transform rightHandPoint;
 
     [SerializeField] private string prevPlayAnimation;
+    [SerializeField] private string standUpBackAnimation;
+    [SerializeField] private string standUpBallyAnimation;
     private Transform bip;
     [SerializeField] private Transform pelvis;
-    private Vector3 prevPelvisPosition;
 
-    private bool isFixedHand;
     private bool isLeftHandFix;
     private bool isRightHandFix;
+    private bool isFlyRagdoll;
 
     [SerializeField]private Transform hipTransform;
-
-    private Vector3 prevLocalPosition;
-    private Vector3 prevWorldPosition;
-    private Quaternion prevRotation;
 
     private Vector3 storedHipsPosition;
     private Vector3 storedHipsPositionPrivAnim;
     private Vector3 storedHipsPositionPrivBlend;
 
     private float ragdollEndTime;
-
     private const float ragdollToAnimBlendTime = 0.5f;
-
-    private Vector3 storedPos;
-
-    private Vector3 storedRootPosition;
-
-    [SerializeField]private Transform prevParent;
 
     [Header("Velocity")]
     [SerializeField] private Vector3 velocity;
     [SerializeField] private float speed;
     private Vector3 prevPos;
     [Range(0, 10000)] public float fource = 0.0f;
-
-    [Header("Ragdoll Object")]
-    [SerializeField] private Transform ragdollObject;
-    [SerializeField] private Transform ragdollHip;
-    [SerializeField] private Transform ragdollLeftHand;
-    [SerializeField] private Transform ragdollRightHand;
-    [SerializeField] private List<GameObject> visual = new List<GameObject>();
-    [SerializeField] private List<TransformComponent> ragDollTransforms = new List<TransformComponent>();
-    [SerializeField] private string blendAnimation;
-    [SerializeField] private Animator ragdollAnim;
-    [SerializeField] private List<Rigidbody> ragdollObjectRigids = new List<Rigidbody>();
 
     private GameObject _ragdollContainer;
 
@@ -95,44 +74,30 @@ public class PlayerRagdoll : MonoBehaviour
             var trComp = new TransformComponent(t);
             transforms.Add(trComp);
         }
-        //transforms.RemoveAt(transforms.Count-1);
-
-        rigidBodies = ragdollObject.GetComponentsInChildren<Rigidbody>();
-
-        foreach (Rigidbody rigid in rigidBodies)
-        {
-            ragdollObjectRigids.Add(rigid);
-        }
-
-
-        ragdollObject.gameObject.SetActive(false);
-
-        foreach (var t in ragdollHip.GetComponentsInChildren<Transform>())
-        {
-            var trComp = new TransformComponent(t);
-            ragDollTransforms.Add(trComp);
-        }
-
-        prevPos = transform.position;
 
         _ragdollContainer = new GameObject("RagdollContainer " + gameObject.name);
     }
 
     private void FixedUpdate()
     {
-        //if(state == RagdollState.Ragdoll)
-        //{
-        //    for(int i = 0; i<ragdollRigids.Count;i++)
-        //    {
-        //        //ragdollRigids[i].velocity = -ragdollObjectRigids[i].velocity;
-        //        ragdollRigids[i].transform.SetPositionAndRotation(ragdollObjectRigids[i].transform.position, ragdollObjectRigids[i].transform.rotation);
+        if(isFlyRagdoll == true && hipTransform.GetComponent<Rigidbody>().velocity.magnitude < 0.1f)
+        {
+            ReturnAnimated();
+        }
 
-        //    }
-        //}
-
-        if (state == RagdollState.Ragdoll)
+        if (state == RagdollState.Ragdoll && isLeftHandFix == false && isRightHandFix == false)
         {
             transform.position = hipTransform.position;
+        }
+
+
+        if (isLeftHandFix)
+        {
+            leftHandTransform.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
+        }
+        if (isRightHandFix)
+        {
+            rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
         }
     }
 
@@ -143,99 +108,28 @@ public class PlayerRagdoll : MonoBehaviour
             hipTransform.GetComponent<Rigidbody>().AddForce(transform.forward * 10000.0f);
         }
 
-        //if(Input.GetKeyDown(KeyCode.X))
-        //{
-        //    //Debug.Log(anim.rootPosition);
-        //    anim.rootPosition = transform.position;
-        //    //anim.applyRootMotion = true;
-        //}
-
         if (Input.GetKeyDown(KeyCode.R))
         {
             switch (state)
             {
                 case RagdollState.Animated:
-                    //prevPelvisPosition = pelvis.position;
-                    //FixeHand(true);
 
-                    hipTransform.SetParent(_ragdollContainer.transform);
+                    ActiveRightHandFixRagdoll();
 
-                    ActiveRagdoll(true);
-                    //GameManager.Instance.PausePlayerControl();
-                    
-                    //ragdollObject.SetParent(transform.parent);
-                    //ragdollObject.SetPositionAndRotation(transform.position, transform.rotation);
-                    //CopyAnimCharacterTransformToRagdoll(hipTransform, ragdollHip);
-                    //ragdollObject.gameObject.SetActive(true);
-
-                    //FixeHand(true);
-                    //ConvertRagdoll();
-                    //state = RagdollState.Ragdoll;
                     break;
                 case RagdollState.Ragdoll:
-                    //FixeHand(false);
-                    //ActiveRagdoll(false);
 
-                    hipTransform.SetParent(bip);
+                    DisableFixRagdoll();
 
-                    ReturnAnimated();
-                    ragdollObject.gameObject.SetActive(false);
-
-                    //FixeHand(false);
-                    //StartRagdollBlend();
                     break;
             }
-        }
-
-        if (isFixedHand)
-        {
-            //leftHandRigidBody.transform.SetPositionAndRotation(leftHandFixedPosition, leftHandFixedRotation);
-            //rightHandRigidBody.transform.SetPositionAndRotation(rightHandFixedPosition, rightHandFixedRotation);
-            //leftHandRigidBody.transform.position = leftHandFixedPosition;
-            //rightHandRigidBody.transform.position = rightHandFixedPosition;
-
-            //leftHandTransform.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
-            //rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
-
-            //rigidbody.Sleep();
-            //Debug.Log(rigidbody.centerOfMass);
-            //transform.position = prevWorldPosition;
-
-            //ragdollLeftHand.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
-            ragdollRightHand.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
-        }
-
-        if(isLeftHandFix)
-        {
-            ragdollLeftHand.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
-        }
-        if (isRightHandFix)
-        {
-            ragdollRightHand.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
-        }
-
-        if (state == RagdollState.Ragdoll)
-        {
-            //for (int i = 0; i < ragdollRigids.Count; i++)
-            //{
-            //    //ragdollRigids[i].velocity = -ragdollObjectRigids[i].velocity;
-            //    ragdollRigids[i].transform.SetPositionAndRotation(ragdollObjectRigids[i].transform.position, ragdollObjectRigids[i].transform.rotation);
-            //}
         }
     }
 
     private void LateUpdate()
     {
-        if (isFixedHand)
-        {
-            //transform.position = prevWorldPosition;
-            //transform.rotation = prevRotation;
-        }
-
         if (state == RagdollState.BlendToAnim)
         {
-            //pelvis.position = prevPelvisPosition;
-
             float ragdollBlendAmount = 1f - Mathf.InverseLerp(ragdollEndTime, ragdollEndTime + ragdollToAnimBlendTime, Time.time);
 
             //if (storedHipsPositionPrivBlend != hipTransform.position)
@@ -264,56 +158,91 @@ public class PlayerRagdoll : MonoBehaviour
             {
                 state = RagdollState.Animated;
             }
-
-            //float ragdollBlendAmount = 1f - Mathf.InverseLerp(ragdollEndTime, ragdollEndTime + ragdollToAnimBlendTime, Time.time);
-
-            //if (storedHipsPositionPrivBlend != ragdollHip.position)
-            //{
-            //    storedHipsPositionPrivAnim = ragdollHip.position;
-            //}
-            //storedHipsPositionPrivBlend = Vector3.Lerp(storedHipsPositionPrivAnim, storedHipsPosition, ragdollBlendAmount);
-            //ragdollHip.position = storedHipsPositionPrivBlend;
-
-            //foreach (TransformComponent trComp in ragDollTransforms)
-            //{
-            //    if (trComp.PrivRotation != trComp.Transform.localRotation)
-            //    {
-            //        trComp.PrivRotation = Quaternion.Slerp(trComp.Transform.localRotation, trComp.StoredRotation, ragdollBlendAmount);
-            //        trComp.Transform.localRotation = trComp.PrivRotation;
-            //    }
-
-            //    if (trComp.PrivPosition != trComp.Transform.localPosition)
-            //    {
-            //        trComp.PrivPosition = Vector3.Slerp(trComp.Transform.localPosition, trComp.StoredPosition, ragdollBlendAmount);
-            //        trComp.Transform.localPosition = trComp.PrivPosition;
-            //    }
-            //}
-
-            //if (Mathf.Abs(ragdollBlendAmount) < Mathf.Epsilon)
-            //{
-            //    ragdollObject.gameObject.SetActive(false);
-
-            //    transform.SetPositionAndRotation(ragdollObject.position, ragdollObject.rotation);
-
-            //    foreach (var visualObject in visual)
-            //    {
-            //        visualObject.SetActive(true);
-            //    }
-
-            //    collider.enabled = true;
-
-
-
-            //    state = RagdollState.Animated;
-            //}
         }
+    }
+
+    public void ActiveLeftHandFixRagdoll()
+    {
+        GameManager.Instance.PauseControl(true);
+        FixLeftHand(true);
+        ActiveRagdoll(true);
+        SetRagdollContainer(true);
+    }
+
+    public void ActiveRightHandFixRagdoll()
+    {
+        GameManager.Instance.PauseControl(true);
+        FixRightHand(true);
+        ActiveRagdoll(true);
+        SetRagdollContainer(true);
+    }
+
+    public void ReleaseFix()
+    {
+        FixRightHand(false);
+        FixLeftHand(false);
+    }
+
+    public void ActiveBothHandFixRagdoll()
+    {
+        GameManager.Instance.PauseControl(true);
+        FixLeftHand(true);
+        FixRightHand(true);
+        ActiveRagdoll(true);
+        SetRagdollContainer(true);
+    }
+
+    public void DisableFixRagdoll()
+    {
+        ReturnAnimated();
+        FixRightHand(false);
+        FixLeftHand(false);
+        GameManager.Instance.PauseControl(false);
+    }
+
+    public void FlyRagdoll()
+    {
+        GameManager.Instance.PauseControl(true);
+        isFlyRagdoll = true;
+        ActiveRagdoll(true);
+        SetRagdollContainer(true);
+    }
+
+    public void ExplosionRagdoll(float power,Vector3 exlosionPos, float radius)
+    {
+        GameManager.Instance.PauseControl(true);
+        isFlyRagdoll = true;
+        ActiveRagdoll(true);
+        SetRagdollContainer(true);
+        hipTransform.GetComponent<Rigidbody>().velocity = (hipTransform.position - exlosionPos).normalized;
+        hipTransform.GetComponent<Rigidbody>().AddForce(((hipTransform.position - exlosionPos).normalized+Vector3.up ).normalized*power,ForceMode.Impulse);
+        //hipTransform.GetComponent<Rigidbody>().AddExplosionForce(power, exlosionPos, radius,100.0f);
+    }
+
+    private void SetRagdollContainer(bool result)
+    {
+        if (_ragdollContainer == null)
+            CreateRagdollContainer();
+
+        if(result)
+        {
+            hipTransform.SetParent(_ragdollContainer.transform);
+        }
+        else
+        {
+            hipTransform.SetParent(bip);
+        }
+    }
+
+    private void CreateRagdollContainer()
+    {
+        _ragdollContainer = new GameObject("RagdollContainer " + gameObject.name);
     }
 
     private void ActiveRagdoll(bool active)
     {
         anim.enabled = !active;
         collider.enabled = !active;
-        //collider.isTrigger = active;
 
         foreach (Rigidbody rigid in ragdollRigids)
         {
@@ -323,120 +252,27 @@ public class PlayerRagdoll : MonoBehaviour
             rigid.isKinematic = !active;
         }
 
-        //leftHandRigidBody.isKinematic = true;
-        //rightHandRigidBody.isKinematic = true;
+        if(isLeftHandFix == true)
+        {
+            leftHandRigidBody.isKinematic = true;
+        }
+        if(isRightHandFix == true)
+        {
+            rightHandRigidBody.isKinematic = true;
+        }
 
         if (active)
         {
             state = RagdollState.Ragdoll;
-            prevLocalPosition = transform.localPosition;
-            prevWorldPosition = transform.position;
-            prevRotation = transform.rotation;
-        }
-        else
-        {
-            //state = RagdollState.Animated;
-            //transform.localPosition = prevLocalPosition;
         }
     }
-
-    private void ActiveRagdollParts(bool active)
-    {
-        anim.enabled = !active;
-        collider.isTrigger = active;
-
-        foreach (Rigidbody rigid in ragdollRigids)
-        {
-            Collider collider = rigid.transform.GetComponent<Collider>();
-
-            collider.isTrigger = !active;
-            rigid.isKinematic = !active;
-        }
-
-        leftHandRigidBody.isKinematic = true;
-        rightHandRigidBody.isKinematic = true;
-
-        if (active)
-        {
-            state = RagdollState.Ragdoll;
-            prevLocalPosition = transform.localPosition;
-            prevWorldPosition = transform.position;
-        }
-    }
-
-    private void ConvertRagdoll()
-    {
-        collider.enabled = false;
-        CopyAnimCharacterTransformToRagdoll(hipTransform, ragdollHip);
-        ragdollObject.SetParent(transform.parent);
-        ragdollObject.SetPositionAndRotation(transform.position, transform.rotation);
-        ragdollObject.gameObject.SetActive(true);
-        ragdollAnim.enabled = false;
-
-        foreach(var visualObject in visual)
-        {
-            visualObject.SetActive(false);
-        }
-
-        GameManager.Instance.camCtrl.SetTarget(ragdollObject);
-    }
-
-    private void StartRagdollBlend()
-    {
-        ragdollEndTime = Time.time;
-        ragdollAnim.enabled = true;
-        state = RagdollState.BlendToAnim;
-        storedHipsPositionPrivAnim = Vector3.zero;
-        storedHipsPositionPrivBlend = Vector3.zero;
-
-        storedHipsPosition = ragdollHip.position;
-
-        ragdollAnim.Play(blendAnimation, 0, 0);
-
-        foreach (TransformComponent trComp in ragDollTransforms)
-        {
-            trComp.StoredPosition = trComp.Transform.localPosition;
-            trComp.PrivPosition = trComp.Transform.localPosition;
-
-            trComp.StoredRotation = trComp.Transform.localRotation;
-            trComp.PrivRotation = trComp.Transform.localRotation;
-        }
-
-        GameManager.Instance.camCtrl.SetTarget(transform);
-
-        //ActiveRagdoll(false);
-    }
-
-    private void ResetTransform()
-    {
-        transform.localPosition = prevLocalPosition;
-    }
-
-    private void FixeHand(bool value)
-    {
-        isFixedHand = value;
-        if(value)
-        {
-            //leftHandFixedPosition = leftHandRigidBody.transform.position;
-            //leftHandFixedRotation = leftHandRigidBody.transform.rotation;
-            //rightHandFixedPosition = rightHandRigidBody.transform.position;
-            //rightHandFixedRotation = rightHandRigidBody.transform.rotation;
-            leftHandPoint.SetPositionAndRotation(leftHandTransform.position, leftHandTransform.rotation);
-          
-            rightHandPoint.SetPositionAndRotation(rightHandTransform.position, rightHandTransform.rotation);
- 
-            leftHandPoint.SetParent(transform.parent);
-            rightHandPoint.SetParent(transform.parent);
-        }
-    }
-
     private void FixLeftHand(bool value)
     {
         isLeftHandFix = value;
 
         if (isLeftHandFix)
         {
-            ragdollLeftHand.GetComponent<Rigidbody>().isKinematic = value;
+            leftHandRigidBody.isKinematic = value;
             leftHandPoint.SetPositionAndRotation(leftHandTransform.position, leftHandTransform.rotation);
             leftHandPoint.SetParent(transform.parent);
         }
@@ -448,7 +284,7 @@ public class PlayerRagdoll : MonoBehaviour
 
         if (isRightHandFix)
         {
-            ragdollRightHand.GetComponent<Rigidbody>().isKinematic = value;
+            rightHandRigidBody.isKinematic = value;
             rightHandPoint.SetPositionAndRotation(rightHandTransform.position, rightHandTransform.rotation);
             rightHandPoint.SetParent(transform.parent);
         }
@@ -456,7 +292,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     private void ReturnAnimated()
     {
-        //ResetTransform();
+        SetRagdollContainer(false);
 
         ragdollEndTime = Time.time;
         anim.enabled = true;
@@ -466,10 +302,13 @@ public class PlayerRagdoll : MonoBehaviour
 
         storedHipsPosition = hipTransform.position;
 
-        Vector3 shiftPos = hipTransform.position - transform.position;
-        shiftPos.y = GetDistanceToFloor(shiftPos.y);
+        if (isLeftHandFix == false && isRightHandFix == false)
+        {
+            Vector3 shiftPos = hipTransform.position - transform.position;
+            shiftPos.y = GetDistanceToFloor(shiftPos.y);
 
-        MoveNodeWithoutChildren(shiftPos);
+            MoveNodeWithoutChildren(shiftPos);
+        }
 
         foreach(TransformComponent trComp in transforms)
         {
@@ -480,15 +319,17 @@ public class PlayerRagdoll : MonoBehaviour
             trComp.PrivRotation = trComp.Transform.localRotation;
         }
 
-        anim.Play(prevPlayAnimation, 0, 0);
+        if (isFlyRagdoll == false)
+        {
+            anim.Play(prevPlayAnimation, 0, 0);
+        }
+        else
+        {
+            isFlyRagdoll = false;
+            string getUpAnimation = CheckIfLieOnBack() ? standUpBackAnimation : standUpBallyAnimation;
+            anim.Play(getUpAnimation, 0, 0);
+        }
         ActiveRagdoll(false);
-        //ActiveRagdollParts(false);
-    }
-
-    IEnumerator Defferd()
-    {
-        yield return null;
-        //ReturnAnimated();
     }
 
     private void CopyAnimCharacterTransformToRagdoll(Transform origin, Transform rag)
@@ -556,28 +397,13 @@ public class PlayerRagdoll : MonoBehaviour
     {
         Vector3 ragdollDirection = GetRagdollDirection();
 
-        //Debug.Log(transform.position);
-
-        // shift character node position without children
         hipTransform.position -= shiftPos;
         transform.position += shiftPos;
 
-        //Debug.Log(transform.position);
-
-        anim.rootPosition = transform.position;
-        //Debug.Log(anim.rootPosition);
-        storedRootPosition = transform.position;
-
-        // rotate character node without children
         Vector3 forward = transform.forward;
         transform.rotation = Quaternion.FromToRotation(forward, ragdollDirection) * transform.rotation;
         hipTransform.rotation = Quaternion.FromToRotation(ragdollDirection, forward) * hipTransform.rotation;
     }
-
-    //private void OnAnimatorMove()
-    //{
-        
-    //}
 }
 
 [Serializable]

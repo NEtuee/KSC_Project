@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         //}
     }
 
-    public void PausePlayerControl()
+    public void PausePlayer()
     {
         if (camCtrl == null || mainCam == null || player == null)
         {
@@ -78,6 +78,13 @@ public class GameManager : MonoBehaviour
         camCtrl.Pause();
         mainCam.Pause();
     }
+
+    public void PauseControl(bool result)
+    {
+        player.PauseControl(result);
+    }
+
+   
 
     public void ResumePlayerControl()
     {
