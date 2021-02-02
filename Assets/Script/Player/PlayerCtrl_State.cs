@@ -1291,8 +1291,9 @@ public class PlayerCtrl_State : MonoBehaviour
         if (InputManager.Instance.GetKeyDown(KeybindingActions.Aiming) && currentSpearNum != 0)
         {
             isAim = true;
-            cameraCtrl.SetCamMode(CamMode.Aim);
-            GameManager.Instance.timeManager.OnBulletTime();
+            //cameraCtrl.SetCamMode(CamMode.Aim);
+            GameManager.Instance.cameraManger.ActiveAimCamera(() => { GameManager.Instance.timeManager.OnBulletTime(); });
+            //GameManager.Instance.timeManager.OnBulletTime();
 
             OnAim?.Invoke();
         }
@@ -1300,7 +1301,8 @@ public class PlayerCtrl_State : MonoBehaviour
         if (InputManager.Instance.GetKeyDown(KeybindingActions.AimingCancle) && isAim == true)
         {
             isAim = false;
-            cameraCtrl.SetCamMode(CamMode.Default);
+            //cameraCtrl.SetCamMode(CamMode.Default);
+            GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
             GameManager.Instance.timeManager.OffBulletTime();
             OnAimOff?.Invoke();
         }
@@ -1345,7 +1347,8 @@ public class PlayerCtrl_State : MonoBehaviour
     public void ReleaseAim()
     {
         isAim = false;
-        cameraCtrl.SetCamMode(CamMode.Default);
+        //cameraCtrl.SetCamMode(CamMode.Default);
+        GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
         GameManager.Instance.timeManager.OffBulletTime();
 
         OnAimOff?.Invoke();
