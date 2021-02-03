@@ -25,6 +25,9 @@ public class FollowTargetCtrl : MonoBehaviour
         currentRot = transform.localRotation.eulerAngles;
         targetRot = currentRot;
 
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
     }
@@ -34,6 +37,19 @@ public class FollowTargetCtrl : MonoBehaviour
         if (isPause == true)
         {
             return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, Time.unscaledDeltaTime * followSmooth);

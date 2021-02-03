@@ -134,10 +134,10 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private float rollingTime;
 
-    private Rigidbody rigidbody;
-    private CapsuleCollider collider;
-    private float colliderRadius;
-    private float colliderHeight;
+    [SerializeField]private Rigidbody rigidbody;
+    [SerializeField]private CapsuleCollider collider;
+    [SerializeField]private float colliderRadius;
+    [SerializeField]private float colliderHeight;
 
     private Transform mainCameraTrasform;
     private Animator animator;
@@ -170,10 +170,9 @@ public class PlayerCtrl_State : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rigidbody = GetComponent<Rigidbody>();
-        collider = GetComponent<CapsuleCollider>();
         ikCtrl = GetComponent<IKCtrl>();
         handIKCtrl = GetComponent<HandIKCtrl>();
-
+        collider = GetComponent<CapsuleCollider>();
         ragdoll = GetComponent<PlayerRagdoll>();
 
         GameManager.Instance.SetPlayer(this);
@@ -206,7 +205,7 @@ public class PlayerCtrl_State : MonoBehaviour
         moveDir = Vector3.zero;
         currentSpeed = walkSpeed;
         mainCameraTrasform = Camera.main.transform;
-        cameraCtrl = mainCameraTrasform.parent.GetComponent<CameraCtrl>();
+        //cameraCtrl = mainCameraTrasform.parent.GetComponent<CameraCtrl>();
         playerAnimCtrl = GetComponent<PlayerAnimCtrl>();
 
         colliderRadius = collider.radius;
@@ -263,7 +262,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
         UpdateInputValue(inputVertical, inputHorizontal);
 
-        if (InputManager.Instance.GetKey(KeybindingActions.RunToggle))
+        if (InputManager.Instance.GetAction(KeybindingActions.RunToggle))
         {
             isRun = true;
         }
@@ -277,7 +276,7 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             case PlayerState.Default:
                 {
-                    if(InputManager.Instance.GetKeyDown(KeybindingActions.Jump))
+                    if(InputManager.Instance.GetAction(KeybindingActions.Jump))
                     {
                         currentJumpPower = jumpPower;
                         isGround = false;
@@ -955,13 +954,13 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private bool InputRolling()
     {
-        if (InputManager.Instance.GetKeyDown(KeybindingActions.RunToggle))
+        if (InputManager.Instance.GetAction(KeybindingActions.RollingStart))
         {
             rollingTime = Time.time;
             return true;
         }
 
-        if (InputManager.Instance.GetKeyUp(KeybindingActions.RunToggle))
+        if (InputManager.Instance.GetAction(KeybindingActions.Rolling))
         {
             if (Time.time - rollingTime < 0.2f)
             {
@@ -981,7 +980,7 @@ public class PlayerCtrl_State : MonoBehaviour
     private bool InputTryGrab()
     {
         Vector3 startPos;
-        if (InputManager.Instance.GetKeyDown(KeybindingActions.Grab))
+        if (InputManager.Instance.GetAction(KeybindingActions.Grab))
         {
             startPos = transform.position + transform.up * collider.height * 0.5f;
             Collider[] colliders = Physics.OverlapCapsule(startPos, startPos + transform.forward * 0.5f, 0.4f, climbingLayer);
@@ -1054,7 +1053,7 @@ public class PlayerCtrl_State : MonoBehaviour
     }
     private bool InputRelaseGrab()
     {
-        if (InputManager.Instance.GetKeyUp(KeybindingActions.Grab))
+        if (InputManager.Instance.GetAction(KeybindingActions.ReleaseGrab))
         {
             isMustClimbing = false;
 
@@ -1088,7 +1087,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private bool InputJumpFromWall()
     {
-        if (InputManager.Instance.GetKeyDown(KeybindingActions.Jump))
+        if (InputManager.Instance.GetAction(KeybindingActions.Jump))
         {
             isMustClimbing = false;
 
@@ -1119,7 +1118,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private bool InputClimbingLedge()
     {
-        if (InputManager.Instance.GetKeyDown(KeybindingActions.Jump) && isLedgeSideMove == false)
+        if (InputManager.Instance.GetAction(KeybindingActions.Jump) && isLedgeSideMove == false)
         {
             if (climbingUpAngle > 22.5f)
             {
@@ -1152,7 +1151,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private bool InputHangingRope()
     {
-        if (InputManager.Instance.GetKeyDown(KeybindingActions.Interaction))
+        if (InputManager.Instance.GetAction(KeybindingActions.Interaction))
         {
             Vector3 startPos = transform.position + transform.up * (colliderHeight * 0.5f);
 
@@ -1199,7 +1198,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private bool InputReleaseRope()
     {
-        if (InputManager.Instance.GetKeyDown(KeybindingActions.Interaction))
+        if (InputManager.Instance.GetAction(KeybindingActions.Interaction))
         {
             rigidbody.isKinematic = false;
             //rigidbody.constraints = defaultConstrains;
@@ -1237,7 +1236,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private bool InputAbsorb()
     {
-        if (InputManager.Instance.GetKeyDown(KeybindingActions.Interaction) && isCanAbsorb == true)
+        if (InputManager.Instance.GetAction(KeybindingActions.Interaction) && isCanAbsorb == true)
         {
             animator.SetTrigger("Absorb");
 
@@ -1288,7 +1287,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private void InputShot()
     {
-        if (InputManager.Instance.GetKeyDown(KeybindingActions.Aiming) && currentSpearNum != 0)
+        if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && currentSpearNum != 0)
         {
             isAim = true;
             //cameraCtrl.SetCamMode(CamMode.Aim);
@@ -1299,7 +1298,7 @@ public class PlayerCtrl_State : MonoBehaviour
             OnAim?.Invoke();
         }
 
-        if (InputManager.Instance.GetKeyDown(KeybindingActions.AimingCancle) && isAim == true)
+        if (isAim == true && InputManager.Instance.GetAction(KeybindingActions.AimingCancle))
         {
             isAim = false;
             //cameraCtrl.SetCamMode(CamMode.Default);
@@ -1308,7 +1307,7 @@ public class PlayerCtrl_State : MonoBehaviour
             OnAimOff?.Invoke();
         }
 
-        if (InputManager.Instance.GetKeyUp(KeybindingActions.Aiming) && isAim == true && currentSpearNum != 0)
+        if (isAim == true && InputManager.Instance.GetAction(KeybindingActions.Shot) && currentSpearNum != 0)
         {
             if (isSpacialSpearMode == false)
             {
@@ -1368,7 +1367,7 @@ public class PlayerCtrl_State : MonoBehaviour
         }
 
 
-        if (isSpearDetect == true && InputManager.Instance.GetKeyDown(KeybindingActions.Interaction) && isCanAbsorb == false)
+        if (isSpearDetect == true && InputManager.Instance.GetAction(KeybindingActions.Interaction) && isCanAbsorb == false)
         {
             Collider[] spears = Physics.OverlapSphere(spearDetect.transform.position, 2f, spearLayer);
             if (spears.Length != 0)
@@ -1536,8 +1535,8 @@ public class PlayerCtrl_State : MonoBehaviour
    
     private void ColliderInit()
     {
-        collider.height = colliderHeight;
-        collider.radius = colliderRadius;
+        //collider.height = colliderHeight;
+        //collider.radius = colliderRadius;
     }
 
     IEnumerator SlidingCheck()

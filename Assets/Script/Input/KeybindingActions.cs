@@ -6,5 +6,8 @@ public enum KeybindingActions
     AimingCancle,
     Shot,
     Interaction,
-    Grab
+    Grab,
+    Rolling,
+    ReleaseGrab,
+    RollingStart
 }
