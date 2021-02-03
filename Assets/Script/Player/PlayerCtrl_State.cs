@@ -1292,7 +1292,8 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             isAim = true;
             //cameraCtrl.SetCamMode(CamMode.Aim);
-            GameManager.Instance.cameraManger.ActiveAimCamera(() => { GameManager.Instance.timeManager.OnBulletTime(); });
+            //GameManager.Instance.cameraManger.ActiveAimCamera(() => { GameManager.Instance.timeManager.OnBulletTime(); });
+            GameManager.Instance.cameraManger.ActiveAimCamera();
             //GameManager.Instance.timeManager.OnBulletTime();
 
             OnAim?.Invoke();

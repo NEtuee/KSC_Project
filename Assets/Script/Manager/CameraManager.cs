@@ -11,7 +11,8 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private CinemachineVirtualCameraBase playerFollowCam;
     [SerializeField] private CinemachineVirtualCameraBase playerAimCam;
     [SerializeField] private List<CinemachineVirtualCameraBase> otherCameras = new List<CinemachineVirtualCameraBase>();
-    [SerializeField] private bool isBlend; 
+    [SerializeField] private bool isBlend;
+    private bool isRunningCallBackCoroutine;
     private CinemachineVirtualCameraBase currentActiveCam = null;
     private CinemachineVirtualCameraBase prevActiveCam = null;
 
@@ -69,6 +70,10 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerFollowCam;
         currentActiveCam.gameObject.SetActive(true);
+        if (isRunningCallBackCoroutine)
+        {
+            StopAllCoroutines();
+        }
         StartCoroutine(BlendingCallBack(doneBlendCall));
         return true;
     }
@@ -97,6 +102,10 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerAimCam;
         currentActiveCam.gameObject.SetActive(true);
+        if (isRunningCallBackCoroutine)
+        {
+            StopAllCoroutines();
+        }
         StartCoroutine(BlendingCallBack(doneBlendCall));
         return true;
     }
@@ -137,6 +146,10 @@ public class CameraManager : MonoBehaviour
         currentActiveCam = prevActiveCam;
         prevActiveCam = temp;
         currentActiveCam.gameObject.SetActive(true);
+        if (isRunningCallBackCoroutine)
+        {
+            StopAllCoroutines();
+        }
         StartCoroutine(BlendingCallBack(doneBlendCall));
         return true;
     }
@@ -166,6 +179,10 @@ public class CameraManager : MonoBehaviour
         prevActiveCam = currentActiveCam;
         currentActiveCam = activeCamera;
         currentActiveCam.gameObject.SetActive(true);
+        if(isRunningCallBackCoroutine)
+        {
+            StopAllCoroutines();
+        }
         StartCoroutine(BlendingCallBack(doneBlendCall));
         return true;
     }
@@ -201,6 +218,10 @@ public class CameraManager : MonoBehaviour
         prevActiveCam = currentActiveCam;
         currentActiveCam = cameraDictionary[cameraKey];
         currentActiveCam.gameObject.SetActive(true);
+        if (isRunningCallBackCoroutine)
+        {
+            StopAllCoroutines();
+        }
         StartCoroutine(BlendingCallBack(doneBlendCall));
         return true;
     }
@@ -225,11 +246,13 @@ public class CameraManager : MonoBehaviour
 
     IEnumerator BlendingCallBack(Action action)
     {
+        isRunningCallBackCoroutine = true;
         yield return null;
         while(brain.IsBlending)
         {
             yield return null;
         }
         action();
+        isRunningCallBackCoroutine = false;
     }
 }
