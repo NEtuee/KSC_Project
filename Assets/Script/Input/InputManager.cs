@@ -25,6 +25,8 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    public delegate bool ActionResult(KeybindingActions action);
+
     private static InputManager instance;
     [SerializeField] public KeyBindings keyBindings;
     [SerializeField] private ControlMode controlMode;
@@ -32,15 +34,19 @@ public class InputManager : MonoBehaviour
     private Dictionary<KeybindingActions, KeyCode> pc_keyDict = new Dictionary<KeybindingActions, KeyCode>();
     private Dictionary<KeybindingActions, GamepadControlSet> gamepad_keyDict = new Dictionary<KeybindingActions, GamepadControlSet>();
 
+    private Dictionary<KeybindingActions, KeybindingCheck> actionData = new Dictionary<KeybindingActions, KeybindingCheck>();
+    private Dictionary<KeybindingActions, ActionResult> actionBinding = new Dictionary<KeybindingActions, ActionResult>();
     private void Awake()
     {
-        if(null == instance)
+        if (null == instance)
         {
-            for (int count = 0; count < keyBindings.keybindingChecks.Length; count++)
-            {
-                pc_keyDict.Add(keyBindings.keybindingChecks[count].action, keyBindings.keybindingChecks[count].pc);
-                gamepad_keyDict.Add(keyBindings.keybindingChecks[count].action, new GamepadControlSet(keyBindings.keybindingChecks[count].isAxis, keyBindings.keybindingChecks[count].gamepad, keyBindings.keybindingChecks[count].axisName));
-            }
+            //for (int count = 0; count < keyBindings.keybindingChecks.Length; count++)
+            //{
+            //    pc_keyDict.Add(keyBindings.keybindingChecks[count].action, keyBindings.keybindingChecks[count].pc);
+            //    gamepad_keyDict.Add(keyBindings.keybindingChecks[count].action, new GamepadControlSet(keyBindings.keybindingChecks[count].isAxis, keyBindings.keybindingChecks[count].gamepad, keyBindings.keybindingChecks[count].axisName));
+            //}
+
+            InitializeKeyBind();
 
             instance = this;
 
@@ -63,6 +69,86 @@ public class InputManager : MonoBehaviour
             return instance;
         }
     }
+
+    public bool GetAction(KeybindingActions action)
+    {
+        return actionBinding[action](action);
+    }
+
+    public void InitializeKeyBind()
+    {
+        actionData.Clear();
+        actionBinding.Clear();
+
+        for(int count = 0; count < keyBindings.keybindingChecks.Length; count++)
+        {
+            actionData.Add(keyBindings.keybindingChecks[count].action, keyBindings.keybindingChecks[count]);
+            
+            switch(controlMode)
+            {
+                case ControlMode.Keyboard:
+                    {
+                        switch(keyBindings.keybindingChecks[count].keyboard.buttonType)
+                        {
+                            case ButtonType.GetKey:
+                                actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKey);
+                                break;
+                            case ButtonType.GetKeyDown:
+                                actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKeyDown);
+                                break;
+                            case ButtonType.GetKeyUp:
+                                actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKeyUp);
+                                break;
+                        }
+                    }
+                    break;
+                case ControlMode.Gamepad:
+                    {
+                        switch (keyBindings.keybindingChecks[count].dualshock.valueType)
+                        {
+                            case PadValueType.Button:
+                                {
+                                    switch(keyBindings.keybindingChecks[count].dualshock.buttonType)
+                                    {
+                                        case ButtonType.GetKeyDown:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKeyDown);
+                                            break;
+                                        case ButtonType.GetKey:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKey);
+                                            break;
+                                        case ButtonType.GetKeyUp:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKeyUp);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case PadValueType.Axis:
+                                {
+                                    switch (keyBindings.keybindingChecks[count].dualshock.condition)
+                                    {
+                                        case AxisCondition.Equal:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisEqual);
+                                            break;
+                                        case AxisCondition.NotEqual:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisNotEqual);
+                                            break;
+                                        case AxisCondition.Greater:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisGreater);
+                                            break;
+                                        case AxisCondition.Less:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisLess);
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+
     public bool GetKeyDown(KeybindingActions action)
     {
         switch(controlMode)
@@ -169,4 +255,59 @@ public class InputManager : MonoBehaviour
                 return Input.GetAxis("Mouse Y");
         }
     }
+
+    #region 키보드 바인딩
+    private bool BindKeyboard_GetKeyDown(KeybindingActions action)
+    {
+        return Input.GetKeyDown(actionData[action].keyboard.key);
+    }
+
+    private bool BindKeyboard_GetKey(KeybindingActions action)
+    {
+        return Input.GetKey(actionData[action].keyboard.key);
+    }
+
+    private bool BindKeyboard_GetKeyUp(KeybindingActions action)
+    {
+        return Input.GetKeyUp(actionData[action].keyboard.key);
+    }
+    #endregion
+
+    #region 듀얼쇼크 바인딩
+    private bool BindDualShock_GetKeyDown(KeybindingActions action)
+    {
+        return Input.GetKeyDown(actionData[action].dualshock.key);
+    }
+
+    private bool BindDualShock_GetKey(KeybindingActions action)
+    {
+        return Input.GetKey(actionData[action].dualshock.key);
+    }
+
+    private bool BindDualShock_GetKeyUp(KeybindingActions action)
+    {
+        return Input.GetKeyUp(actionData[action].dualshock.key);
+    }
+
+    private bool BindDualShock_AxisEqual(KeybindingActions action)
+    {
+        return (Input.GetAxis(actionData[action].dualshock.axisName) == actionData[action].dualshock.value);
+    }
+
+    private bool BindDualShock_AxisNotEqual(KeybindingActions action)
+    {
+        return (Input.GetAxis(actionData[action].dualshock.axisName) != actionData[action].dualshock.value);
+    }
+
+    private bool BindDualShock_AxisGreater(KeybindingActions action)
+    {
+        return (Input.GetAxis(actionData[action].dualshock.axisName) > actionData[action].dualshock.value);
+    }
+
+    private bool BindDualShock_AxisLess(KeybindingActions action)
+    {
+        return (Input.GetAxis(actionData[action].dualshock.axisName) < actionData[action].dualshock.value);
+    }
+    #endregion
+
 }

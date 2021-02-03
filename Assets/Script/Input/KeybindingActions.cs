@@ -4,6 +4,7 @@ public enum KeybindingActions
     RunToggle,
     Aiming,
     AimingCancle,
+    Shot,
     Interaction,
     Grab
 }
