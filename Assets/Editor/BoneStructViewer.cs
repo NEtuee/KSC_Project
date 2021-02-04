@@ -59,7 +59,9 @@ public class BoneStructViewer : EditorWindow
     private float viewScale = 100f;
 
     private Vector2 objectSize = new Vector2(10f,10f);
+    private Vector3 objectRotation = new Vector3();
 
+    private Vector2 prevMousePos = new Vector2();
 
 
     [MenuItem("CustomWindow/ChildStructureViewer")]
@@ -92,6 +94,22 @@ public class BoneStructViewer : EditorWindow
         EditorGUILayout.Space ();
         DropAreaGUI ();
 
+        Event e = Event.current;
+ 
+        if(e.type == EventType.MouseDown && e.button == 1)
+        {
+            prevMousePos = e.mousePosition;
+        }
+        if(e.type == EventType.MouseDrag && e.button == 1)
+        {
+            var factor = e.mousePosition - prevMousePos;
+
+            AddRotation(new Vector3(0f,factor.x * 0.6f,0f));
+
+            prevMousePos = e.mousePosition;
+            e.Use();
+        }
+
         EditorGUILayout.BeginVertical();
         HorizontalLine(new Vector2(20f, 20f));
         EditorGUILayout.EndVertical();
@@ -106,16 +124,16 @@ public class BoneStructViewer : EditorWindow
         selectedLayer = EditorGUILayout.MaskField(selectedLayer, layerArray);
 
         viewScale = EditorGUILayout.Slider(viewScale,1f,500f);
+        objectRotation.y = EditorGUILayout.Slider(objectRotation.y,0f,360f);
 
         EditorGUILayout.EndHorizontal();
 
-        DrawStructure("X Foward", new Vector2(5,130),ViewType.XAxis);
-        DrawStructure("Y Foward", new Vector2(5 + position.width * .33f,130),ViewType.YAxis);
-        DrawStructure("Z Foward", new Vector2(5 + position.width * .66f,130),ViewType.ZAxis);
+        DrawStructure("X Foward",new Vector2(1f,0.5f), new Vector2(5,130),objectRotation,ViewType.XAxis);
+        // DrawStructure("Y Foward", new Vector2(5 + position.width * .33f,130),ViewType.YAxis);
+        // DrawStructure("Z Foward", new Vector2(5 + position.width * .66f,130),ViewType.ZAxis);
 
         GUILayout.Space(position.height * .5f + 15f);
         DrawList();
-
     }
 
     void OnDestroy()
@@ -123,6 +141,32 @@ public class BoneStructViewer : EditorWindow
         Dispose();
         scrollPositionDic.Clear();
         //tagSelect.Clear();
+    }
+
+    private void AddRotation(Vector3 euler)
+    {
+        objectRotation += euler;
+        objectRotation.x = MathEx.clamp360Degree(objectRotation.x);
+        objectRotation.y = MathEx.clamp360Degree(objectRotation.y);
+        objectRotation.z = MathEx.clamp360Degree(objectRotation.z);
+    }
+
+    private void DrawStructure(string targetName, Vector2 ratio, Vector2 pos,Vector3 euler, ViewType view)
+    {
+        Rect rect = new Rect(pos.x,pos.y,position.width * ratio.x - 5f, position.height * ratio.y);
+        Rect viewRect = Rect.zero;
+        if(rootObject != null)
+        {
+            viewRect = CalcBound(view,30f,rect);
+        }
+        GUI.Box(rect,targetName);
+        scrollPositionDic[view] = GUI.BeginScrollView(new Rect(pos.x, pos.y, position.width * ratio.x - 5f, position.height * ratio.y), 
+                                                scrollPositionDic[view], viewRect);
+
+        if(rootObject != null)
+            DrawStructureItem(rootObject,rect,ConvertToCenterCoordinate(rect,Vector3.zero),euler,view,false);
+
+        GUI.EndScrollView();
     }
 
     private void DrawStructure(string targetName, Vector2 pos, ViewType view)
@@ -143,6 +187,21 @@ public class BoneStructViewer : EditorWindow
         GUI.EndScrollView();
     }
 
+    private Rect CalcBound(ViewType view, Vector3 euler,float margin, Rect rect)
+    {
+        Vector2 leftTop = Vector3.zero;
+        Vector2 rightBottom = Vector3.zero;
+
+        FindEdge(ref leftTop,ref rightBottom,rootObject,euler,view);
+        leftTop *= viewScale;
+        rightBottom *= viewScale;
+
+        leftTop = ConvertToCenterCoordinate(rect,leftTop);
+        rightBottom = ConvertToCenterCoordinate(rect,rightBottom);
+
+        return new Rect(leftTop.x - margin,leftTop.y - margin,rightBottom.x - leftTop.x + margin * 2f, rightBottom.y - leftTop.y + margin * 2f);
+    }
+
     private Rect CalcBound(ViewType view,float margin, Rect rect)
     {
         Vector2 leftTop = Vector3.zero;
@@ -156,6 +215,28 @@ public class BoneStructViewer : EditorWindow
         rightBottom = ConvertToCenterCoordinate(rect,rightBottom);
 
         return new Rect(leftTop.x - margin,leftTop.y - margin,rightBottom.x - leftTop.x + margin * 2f, rightBottom.y - leftTop.y + margin * 2f);
+    }
+
+    private void FindEdge(ref Vector2 leftTop, ref Vector2 rightBottom, ChildObjectItem item, Vector3 euler, ViewType view)
+    {
+        Vector3 pos = rootObject.transform.position - item.transform.position;
+        pos = RotateVector(pos,Quaternion.Euler(euler));
+        pos = ConvertToViewPlane(view,pos);
+
+        if(pos.x < leftTop.x)
+            leftTop.x = pos.x;
+        else if(pos.x > rightBottom.x)
+            rightBottom.x = pos.x;
+
+        if(pos.y < leftTop.y)
+            leftTop.y = pos.y;
+        else if(pos.y > rightBottom.y)
+            rightBottom.y = pos.y;
+
+        foreach(var child in item.childs)
+        {
+            FindEdge(ref leftTop, ref rightBottom, child,view);
+        }
     }
 
     private void FindEdge(ref Vector2 leftTop, ref Vector2 rightBottom, ChildObjectItem item, ViewType view)
@@ -239,6 +320,75 @@ public class BoneStructViewer : EditorWindow
                 
             }
         }
+    }
+
+    private void DrawStructureItem(ChildObjectItem item, Rect viewArea, Vector2 parent,Vector3 euler, ViewType view, bool unMask)
+    {
+        Vector3 rootPosition = rootObject.transform.position - item.transform.position;
+        Vector2 pos = Vector2.zero;
+
+        pos = ConvertToViewPlane(view,RotateVector(rootPosition,Quaternion.Euler(euler)));
+        pos *= viewScale;
+        pos = ConvertToCenterCoordinate(viewArea,pos);
+
+        var scale = Mathf.Clamp((viewScale * 0.01f) * 0.5f, 1f, 5f) * 10f;
+
+        Rect rect = new Rect(pos.x,pos.y,scale,scale);
+
+        bool tagMask = ((1 << FindTag(item.transform.tag)) & selectedTag) != 0;
+        bool layerMask = ((1 << item.transform.gameObject.layer) & (selectedLayer)) != 0;
+
+        if(tagMask && layerMask)
+        {
+            if(GUI.Button(GetAlignmentRect(rect,4),new GUIContent("",item.transform.name)))
+            {
+                EditorGUIUtility.PingObject(item.transform.gameObject);
+                Selection.activeGameObject = item.transform.gameObject;
+            }
+            
+            if(Event.current.type == EventType.Repaint)
+            {
+                item.currentRect = GUILayoutUtility.GetLastRect();
+            }
+
+            if(unMask)
+                UnityEditor.Handles.DrawLine(parent,pos);
+        }
+
+        foreach(var child in item.childs)
+        {
+            DrawStructureItem(child,viewArea,pos,euler,view, tagMask && layerMask);
+        }
+
+        GUIStyle style = new GUIStyle();
+
+        Event evt = Event.current;
+
+        if(evt.type == EventType.DragUpdated || evt.type == EventType.DragPerform)
+        {
+            if (!GetAlignmentRect(rect,4).Contains (evt.mousePosition))
+                return;
+
+            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+
+            if (evt.type == EventType.DragPerform) 
+            {
+                DragAndDrop.AcceptDrag ();
+
+                foreach(var obj in DragAndDrop.objectReferences)
+                {
+                    var transform = ((GameObject)obj).GetComponent<Transform>();
+                    item.childs.Add(SetItems(transform,item));
+                    transform.parent = item.transform;
+                }
+                
+            }
+        }
+    }
+
+    private Vector3 RotateVector(Vector3 vector, Quaternion quat)
+    {
+        return quat * vector;
     }
 
     private Vector2 ConvertToViewPlane(ViewType view, Vector3 target)
