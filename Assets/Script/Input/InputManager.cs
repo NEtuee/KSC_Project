@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using XInputDotNetPure;
 
 public class InputManager : MonoBehaviour
 {
     public enum ControlMode
     {
         Keyboard,
-        Gamepad
+        DualShock,
+        XboxPad
     }
 
     public class GamepadControlSet
@@ -31,6 +32,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] public KeyBindings keyBindings;
     [SerializeField] private ControlMode controlMode;
     [SerializeField] private float joystickSenstive = 10f;
+    [SerializeField] private float DebugAxis;
     private Dictionary<KeybindingActions, KeyCode> pc_keyDict = new Dictionary<KeybindingActions, KeyCode>();
     private Dictionary<KeybindingActions, GamepadControlSet> gamepad_keyDict = new Dictionary<KeybindingActions, GamepadControlSet>();
 
@@ -56,6 +58,11 @@ public class InputManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    private void Update()
+    {
+        DebugAxis = Input.GetAxis("RightTrigger_Xbox");
     }
 
     public static InputManager Instance
@@ -102,7 +109,7 @@ public class InputManager : MonoBehaviour
                         }
                     }
                     break;
-                case ControlMode.Gamepad:
+                case ControlMode.DualShock:
                     {
                         switch (keyBindings.keybindingChecks[count].dualshock.valueType)
                         {
@@ -144,6 +151,48 @@ public class InputManager : MonoBehaviour
                         }
                     }
                     break;
+                case ControlMode.XboxPad:
+                    {
+                        switch (keyBindings.keybindingChecks[count].xbox.valueType)
+                        {
+                            case PadValueType.Button:
+                                {
+                                    switch (keyBindings.keybindingChecks[count].xbox.buttonType)
+                                    {
+                                        case ButtonType.GetKeyDown:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKeyDown);
+                                            break;
+                                        case ButtonType.GetKey:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKey);
+                                            break;
+                                        case ButtonType.GetKeyUp:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKeyUp);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case PadValueType.Axis:
+                                {
+                                    switch (keyBindings.keybindingChecks[count].xbox.condition)
+                                    {
+                                        case AxisCondition.Equal:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisEqual);
+                                            break;
+                                        case AxisCondition.NotEqual:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisNotEqual);
+                                            break;
+                                        case AxisCondition.Greater:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisGreater);
+                                            break;
+                                        case AxisCondition.Less:
+                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisLess);
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    break;
             }
         }
     }
@@ -155,7 +204,7 @@ public class InputManager : MonoBehaviour
         {
             case ControlMode.Keyboard:
                 return Input.GetKeyDown(pc_keyDict[action]);
-            case ControlMode.Gamepad:
+            case ControlMode.DualShock:
                 if(gamepad_keyDict[action].isAxis == true)
                 {
                     if(Input.GetAxis(gamepad_keyDict[action].axisName) > 0.0f && Input.GetAxis(gamepad_keyDict[action].axisName) < 0.1f)
@@ -178,7 +227,7 @@ public class InputManager : MonoBehaviour
         {
             case ControlMode.Keyboard:
                 return Input.GetKey(pc_keyDict[action]);
-            case ControlMode.Gamepad:
+            case ControlMode.DualShock:
                 if (gamepad_keyDict[action].isAxis == true)
                 {
                     if (Input.GetAxis(gamepad_keyDict[action].axisName) != -0.1f)
@@ -201,7 +250,7 @@ public class InputManager : MonoBehaviour
         {
             case ControlMode.Keyboard:
                 return Input.GetKeyUp(pc_keyDict[action]);
-            case ControlMode.Gamepad:
+            case ControlMode.DualShock:
                 if (gamepad_keyDict[action].isAxis == true)
                 {
                     if (Input.GetAxis(gamepad_keyDict[action].axisName) < 0.0f && Input.GetAxis(gamepad_keyDict[action].axisName) > -0.1f)
@@ -234,9 +283,10 @@ public class InputManager : MonoBehaviour
         {
             case ControlMode.Keyboard:
                 return Input.GetAxis("Mouse X");
-            case ControlMode.Gamepad:
-                float result = Input.GetAxis("RightStickX");
-                return (Mathf.Abs(result)<0.01f ? 0.0f : result) * joystickSenstive;
+            case ControlMode.DualShock:
+                return Input.GetAxis("RightStickX_DualShock");
+            case ControlMode.XboxPad:
+                return Input.GetAxis("RightStickX_Xbox");
             default:
                 return Input.GetAxis("Mouse X");
         }
@@ -248,9 +298,10 @@ public class InputManager : MonoBehaviour
         {
             case ControlMode.Keyboard:
                 return Input.GetAxis("Mouse Y");
-            case ControlMode.Gamepad:
-                float result = Input.GetAxis("RightStickY");
-                return (Mathf.Abs(result) < 0.01f ? 0.0f : result) * joystickSenstive;
+            case ControlMode.DualShock:
+                return Input.GetAxis("RightStickY_DualShock");
+            case ControlMode.XboxPad:
+                return Input.GetAxis("RightStickY_Xbox");
             default:
                 return Input.GetAxis("Mouse Y");
         }
@@ -310,4 +361,62 @@ public class InputManager : MonoBehaviour
     }
     #endregion
 
+    #region 엑스박스 패드 바인딩
+    private bool BindXbox_GetKeyDown(KeybindingActions action)
+    {
+        return Input.GetKeyDown(actionData[action].xbox.key);
+    }
+
+    private bool BindXbox_GetKey(KeybindingActions action)
+    {
+        return Input.GetKey(actionData[action].xbox.key);
+    }
+
+    private bool BindXbox_GetKeyUp(KeybindingActions action)
+    {
+        return Input.GetKeyUp(actionData[action].xbox.key);
+    }
+    
+    private bool BindXbox_AxisEqual(KeybindingActions action)
+    {
+        return (Input.GetAxis(actionData[action].xbox.axisName) == actionData[action].xbox.value);
+    }
+
+    private bool BindXbox_AxisNotEqual(KeybindingActions action)
+    {
+        return (Input.GetAxis(actionData[action].xbox.axisName) != actionData[action].xbox.value);
+    }
+
+    private bool BindXbox_AxisGreater(KeybindingActions action)
+    {
+        return (Input.GetAxis(actionData[action].xbox.axisName) > actionData[action].xbox.value);
+    }
+
+    private bool BindXbox_AxisLess(KeybindingActions action)
+    {
+        return (Input.GetAxis(actionData[action].xbox.axisName) < actionData[action].xbox.value);
+    }
+    #endregion
+
+    #region 엑박 패드 진동
+    public void GamePadSetVibrate(float time, float power)
+    {
+        if (controlMode != ControlMode.XboxPad)
+            return;
+
+        StartCoroutine(GamePadVibrate(time,power));
+    }
+
+    IEnumerator GamePadVibrate(float time,float power)
+    {
+        float currentTime = 0.0f;
+        GamePad.SetVibration(0, power, power);
+        while (currentTime < time)
+        {
+            currentTime += Time.fixedUnscaledDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        GamePad.SetVibration(0, 0, 0);
+    }
+    #endregion
 }

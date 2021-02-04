@@ -47,6 +47,7 @@ public class KeybindingCheck
     public KeybindingActions action;
     public KeyboardType keyboard;
     public GamePadType dualshock;
+    public GamePadType xbox;
 }
 
 [CreateAssetMenu(fileName = "Keybindings", menuName = "Keybindings")]

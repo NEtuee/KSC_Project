@@ -217,6 +217,7 @@ public class PlayerRagdoll : MonoBehaviour
         hipTransform.GetComponent<Rigidbody>().velocity = (hipTransform.position - exlosionPos).normalized;
         hipTransform.GetComponent<Rigidbody>().AddForce(((hipTransform.position - exlosionPos).normalized+Vector3.up ).normalized*power,ForceMode.Impulse);
         //hipTransform.GetComponent<Rigidbody>().AddExplosionForce(power, exlosionPos, radius,100.0f);
+        InputManager.Instance.GamePadSetVibrate(0.5f, 0.8f);
     }
 
     private void SetRagdollContainer(bool result)
