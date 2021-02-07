@@ -14,11 +14,11 @@ public class CannonBall : MonoBehaviour
 
     private GameObject child;
 
-    public void Shot(Vector3 position, Vector3 target)
+    public void Shot(Vector3 position, Vector3 target, Vector3 randomness)
     {
         _timer = 0f;
         _startPosition = position;
-        _targetPosition = target;
+        _targetPosition = target + MathEx.RandomVector3(-randomness,randomness);
 
         child = transform.GetChild(0).gameObject;
     }
@@ -42,5 +42,20 @@ public class CannonBall : MonoBehaviour
         var pos = Vector3.Lerp(_startPosition,_targetPosition,_timer);
         pos.y += height * Mathf.Sin(_timer * Mathf.PI);
         transform.position = pos;
+    }
+
+    private void OnTriggerEnter(Collider coll)
+    {
+        PortalProgress portal = null;
+        if(coll.gameObject.TryGetComponent<PortalProgress>(out portal))
+        {
+            Debug.Log("deleted");
+
+            portal.WhenHit();
+
+            Destroy(Instantiate(explosionParticle,transform.position,Quaternion.identity),3.5f);
+            Destroy(child,1f);
+            Destroy(this.gameObject);
+        }
     }
 }
