@@ -665,7 +665,7 @@ public class PlayerCtrl_State : MonoBehaviour
     {
         if (state == PlayerState.Stagger)
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 6.0f);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 12.0f);
             return;
         }
 
@@ -673,16 +673,16 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             if (isRun == true)
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * 4.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * 8.0f);
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * 4.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * 8.0f);
             }
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 8.0f);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 16.0f);
         }
     }
     public void SaveHandPosition()
