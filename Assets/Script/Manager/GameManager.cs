@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
         if(mainCam== null)
         {
             mainCam = Camera.main.GetComponent<CameraCollision>();
-            camCtrl = mainCam.transform.parent.GetComponent<CameraCtrl>();
+            //camCtrl = mainCam.transform.parent.GetComponent<CameraCtrl>();
         }
 
         mainCameraStartPosition = mainCam.transform.position;
