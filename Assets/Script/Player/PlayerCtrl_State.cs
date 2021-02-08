@@ -1311,9 +1311,11 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             if (isSpacialSpearMode == false)
             {
-                SpearCtrl spear = Instantiate(spearPrefab, launchPos.position, launchPos.rotation);
-                spear.Launch(launchPos.position);
-
+                if (spearPrefab != null && launchPos != null)
+                {
+                    SpearCtrl spear = Instantiate(spearPrefab, launchPos.position, launchPos.rotation);
+                    spear.Launch(launchPos.position);
+                }
                 ReleaseAim();
 
                 currentSpearNum -= 1;
