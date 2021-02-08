@@ -42,16 +42,16 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if(mainCam== null)
+        if (mainCam == null)
         {
             mainCam = Camera.main.GetComponent<CameraCollision>();
             //camCtrl = mainCam.transform.parent.GetComponent<CameraCtrl>();
-        }
 
-        mainCameraStartPosition = mainCam.transform.position;
-        mainCameraStartLocalPosition = mainCam.transform.localPosition;
-        camRootStartPosition = camCtrl.transform.position;
-        camRootStartRot = camCtrl.transform.rotation;
+            mainCameraStartPosition = mainCam.transform.position;
+            mainCameraStartLocalPosition = mainCam.transform.localPosition;
+            camRootStartPosition = camCtrl.transform.position;
+            camRootStartRot = camCtrl.transform.rotation;
+        }
 
         if(GameObject.FindGameObjectWithTag("Boss") != null)
         {
