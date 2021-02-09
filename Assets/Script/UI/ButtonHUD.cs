@@ -13,10 +13,12 @@ public class ButtonHUD : MonoBehaviour
     [SerializeField] private Image buttonImage;
     [SerializeField] private TextMeshProUGUI buttonText;
     [SerializeField] private bool visible;
-    [SerializeField] private Vector3 targetSize;
+    [SerializeField] private Vector2 targetSize;
 
+    [SerializeField] private TweenUI inUi;
     
-    private Vector2 startSize;
+    [SerializeField]private Vector2 startSize;
+    [SerializeField] private CircleGage gage;
     private Color startColor;
     private Color buttonAlphaColor;
     private Color startTextColor;
@@ -29,7 +31,7 @@ public class ButtonHUD : MonoBehaviour
             rectTransform = GetComponent<RectTransform>();
         }
 
-        startSize = rectTransform.sizeDelta;
+        //startSize = rectTransform.sizeDelta;
 
         startColor = buttonImage.color;
         buttonAlphaColor = startColor;
@@ -51,9 +53,11 @@ public class ButtonHUD : MonoBehaviour
     {
         canvas.enabled = true;
 
+        rectTransform.sizeDelta = startSize;
+
         rectTransform.DOSizeDelta(targetSize, duration);
-        buttonImage.DOFade(startColor.a, duration);
-        if(buttonText != null)
+        buttonImage.DOFade(startColor.a, duration).OnComplete(() => { inUi.Appear(0.5f);gage.Active(); });
+        if (buttonText != null)
         {
             buttonText.DOFade(startTextColor.a, duration);
         }
@@ -63,8 +67,10 @@ public class ButtonHUD : MonoBehaviour
     {
         canvas.enabled = true;
 
+        rectTransform.sizeDelta = startSize;
+
         rectTransform.DOSizeDelta(targetSize, duration).OnComplete(tweenCallback);
-        buttonImage.DOFade(startColor.a, duration);
+        buttonImage.DOFade(startColor.a, duration).OnComplete(() => { inUi.Appear(0.5f); gage.Active(); });
         if (buttonText != null)
         {
             buttonText.DOFade(startTextColor.a, duration);
@@ -73,6 +79,29 @@ public class ButtonHUD : MonoBehaviour
 
     public void Disappear(float duration)
     {
+        rectTransform.DOSizeDelta(startSize, duration);
+        buttonImage.DOFade(buttonAlphaColor.a, duration).OnComplete(()=> { canvas.enabled = false; });
+        if (buttonText != null)
+        {
+            buttonText.DOFade(textAlphaColor.a, duration);
+        }
 
+        inUi.Disapper(duration);
+        gage.Disapper();
     }
+
+    public void Disappear(float duration, TweenCallback tweenCallback)
+    {
+        rectTransform.DOSizeDelta(startSize, duration).OnComplete(tweenCallback);
+        buttonImage.DOFade(buttonAlphaColor.a, duration).OnComplete(() => { canvas.enabled = false; });
+        if (buttonText != null)
+        {
+            buttonText.DOFade(textAlphaColor.a, duration);
+        }
+
+        inUi.Disapper(duration);
+        gage.Disapper();
+    }
+
+
 }
