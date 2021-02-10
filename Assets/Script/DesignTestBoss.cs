@@ -10,6 +10,7 @@ public class DesignTestBoss : MonoBehaviour
 
     public CannonShot mouseCannon;
     public List<CannonShot> cannons = new List<CannonShot>();
+    public BulletShot bullet;
 
     public LayerMask rayMask;
 
@@ -19,19 +20,27 @@ public class DesignTestBoss : MonoBehaviour
     public float shotDistanceMin = 10f;
     public float shotDistanceMax = 100f;
     public float hitGrogy = 10f;
+    public int scrapStack = 2;
 
+    public float scrapAOECast = 0f;
     public int scrapFindCount = 1;
+
+    public float scrapCannonCast = 3f;
+    public float bulletSpeed = 5f;
+
 
     private float _targetAngle;
     private float _spinTimer = 0.1f;
 
     private bool _rush = false;
     private bool _hit = false;
+    private bool _scrapAOE = false;
     private bool _mouseCannon = false;
     public bool _progress = true;
 
     private int _scrapEatCount = 0;
     private int _scrapFindCount = 0;
+    private int _scrapStackCount = 0;
 
     private int _destroyedCannonCount = 0;
 
@@ -47,7 +56,7 @@ public class DesignTestBoss : MonoBehaviour
 
     private void Start()
     {
-        headRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),2f,.5f,rayMask);
+        headRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),1f,1f,rayMask);
 
         _animator = GetComponent<Animator>();
 
@@ -119,11 +128,32 @@ public class DesignTestBoss : MonoBehaviour
             if(headRay.Cast(rayPoint.position,out hit))
             {
                 ScrapObject scrap = null;
+                _spinTimer = 5f;
+
                 if(hit.transform.TryGetComponent<ScrapObject>(out scrap))
                 {
-                    _animator.SetBool("Eat",true);
                     scrap.Eat();
                     _scrapEatCount++;
+                    if(++_scrapStackCount >= scrapStack)
+                    {
+                        if(_mouseCannon)
+                        {
+                            _animator.SetBool("HeadCast",true);
+                            _spinTimer = scrapCannonCast;
+                        }
+                        else
+                        {
+                            _animator.SetBool("AOECast",true);
+                            _spinTimer = scrapAOECast;
+                        }
+
+                        _scrapAOE = true;
+                        scrapStack = 0;
+                    }
+                    else
+                    {
+                        _animator.SetBool("Eat",true);
+                    }
                 }
                 else
                 {
@@ -132,9 +162,46 @@ public class DesignTestBoss : MonoBehaviour
                 }
                 
                 _animator.SetBool("Move",false);
-
-                _spinTimer = 5f;
                 _rush = false;
+            }
+        }
+        else if(_scrapAOE)
+        {
+            _spinTimer -= Time.deltaTime;
+            if(_spinTimer <= 0f)
+            {
+                _spinTimer = 3f;
+
+                if(_mouseCannon)
+                {
+                    _animator.SetBool("HeadCast",false);
+                    _animator.SetBool("HeadShot",true);
+                }
+                else
+                {
+                    _animator.SetBool("AOECast",false);
+                    _animator.SetBool("AOE",true);
+                }
+
+                _scrapAOE = false;
+                _rush = false;
+            }
+            else if(_mouseCannon)
+            {
+                var direction = player.position - transform.position;
+                var forward = -Vector3.Cross(transform.forward,Vector3.up).normalized;
+                direction.y = 0f;
+
+                var angle = Vector3.Angle(direction.normalized,forward);
+
+                if(angle > 5f)
+                {
+                    var rotate = Quaternion.LookRotation(direction.normalized,Vector3.up);
+                    rotate.eulerAngles += new Vector3(0f,90f,0f);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation,rotate,-Time.deltaTime * turnSpeed);
+                }
+                
+                
             }
         }
         else
@@ -148,6 +215,8 @@ public class DesignTestBoss : MonoBehaviour
                     _spinTimer = 0f;
                     _animator.SetBool("Crash",false);
                     _animator.SetBool("Eat",false);
+                    _animator.SetBool("AOE",false);
+                    _animator.SetBool("HeadShot",false);
                     _animator.SetBool("Move",true);
 
                     _animator.SetLayerWeight(1,1f);
@@ -230,6 +299,12 @@ public class DesignTestBoss : MonoBehaviour
         {
             Explosion(root.GetChild(i));
         }
+    }
+
+    public void MouseBulletShot()
+    {
+        var forward = -Vector3.Cross(transform.forward,Vector3.up).normalized;
+        bullet.Shot(forward,bulletSpeed);
     }
 
     public void MouseCannonShot()
