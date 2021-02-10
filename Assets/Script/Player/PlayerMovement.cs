@@ -7,13 +7,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Vector3 velocity;
     [SerializeField] private float speed;
     [SerializeField] private float trueSpeed;
-    [SerializeField] private float groundDistance;
 
     [Header("Ground")]
+    [SerializeField] private float groundDistance;
     public float groundMinDistance = 0.1f;
     public float groundMaxDistance = 0.5f;
     public LayerMask groundLayer;
     public bool isGrounded;
+    public bool isJumping;
+    public float jumpMinTime = 0.5f;
+    private float jumpTime;
 
     private Vector3 prevPosition;
 
@@ -43,6 +46,13 @@ public class PlayerMovement : MonoBehaviour
     public void Move(Vector3 direction)
     {
         transform.position += direction * Time.deltaTime;
+    }
+
+    public void Jump()
+    {
+        isJumping = true;
+        isGrounded = false;
+        jumpTime = Time.time;
     }
 
     private void FixedUpdate()
@@ -87,11 +97,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckGround()
     {
+        if(isJumping == true &&(Time.time - jumpTime < jumpMinTime))
+        {
+            return;
+        }
+
         CheckGroundDistance();
 
         if(groundDistance <= groundMinDistance)
         {
             isGrounded = true;
+            isJumping = false;
         }
         else
         {

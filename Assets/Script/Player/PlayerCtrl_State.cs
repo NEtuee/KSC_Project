@@ -280,6 +280,7 @@ public class PlayerCtrl_State : MonoBehaviour
                     if(InputManager.Instance.GetAction(KeybindingActions.Jump))
                     {
                         currentJumpPower = jumpPower;
+                        movement.Jump();
                         isGround = false;
                         groundCheck.Lock();
                         prevSpeed = currentSpeed;
@@ -406,7 +407,7 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             case PlayerState.Default:
                 {
-                    if (isGround == false && isEnoughGround == false)
+                    if (movement.isGrounded == false)
                     {
                         ChangeState(PlayerState.Jump);
                         return;
@@ -462,7 +463,7 @@ public class PlayerCtrl_State : MonoBehaviour
                 break;
             case PlayerState.Jump:
                 {
-                    if (isGround == true)
+                    if (movement.isGrounded == true)
                     {
                         state = PlayerState.Default;
                         animator.SetBool("IsJump", false);
@@ -657,7 +658,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private void UpdateFallingTime()
     {
-        if (isGround == true || state == PlayerState.Grab || state == PlayerState.HangRope || state == PlayerState.HangLedge)
+        if (movement.isGrounded == true || state == PlayerState.Grab || state == PlayerState.HangRope || state == PlayerState.HangLedge)
         {
             fallingTime = 0.0f;
         }
@@ -937,7 +938,7 @@ public class PlayerCtrl_State : MonoBehaviour
             }
             else
             {
-                if (isGround == false)
+                if (movement.isGrounded == false)
                 {
                     currentVerticalValue = -1.0f;
                     //animator.SetBool("IsClimbing", false);

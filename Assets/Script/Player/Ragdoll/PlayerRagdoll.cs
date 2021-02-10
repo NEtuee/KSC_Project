@@ -76,6 +76,7 @@ public class PlayerRagdoll : MonoBehaviour
         }
 
         _ragdollContainer = new GameObject("RagdollContainer " + gameObject.name);
+        CreateHandPoint();
     }
 
     private void FixedUpdate()
@@ -238,6 +239,14 @@ public class PlayerRagdoll : MonoBehaviour
     private void CreateRagdollContainer()
     {
         _ragdollContainer = new GameObject("RagdollContainer " + gameObject.name);
+    }
+
+    private void CreateHandPoint()
+    {
+        GameObject leftHandPointObject = new GameObject("LeftHandPoint");
+        GameObject rightHandPointObject = new GameObject("RightHandPoint");
+        leftHandPoint = leftHandPointObject.transform;
+        rightHandPoint = rightHandPointObject.transform;
     }
 
     private void ActiveRagdoll(bool active)
