@@ -24,6 +24,26 @@ public class MathEx : MonoBehaviour {
 		return new Vector3(Mathf.LerpAngle(start.x,end.x,time),Mathf.LerpAngle(start.y,end.y,time),Mathf.LerpAngle(start.z,end.z,time));
 	}
 
+	public static float PlaneAngle(Vector3 one, Vector3 two, Vector3 axis)
+	{
+		var o = Vector3ToVector2(one,axis);
+		var t = Vector3ToVector2(two,axis);
+
+		return Vector2.Angle(o,t);
+	}
+
+	public static Vector3 Vector3ToVector2(Vector3 value, Vector3 axis)
+	{
+		if(axis.x == 1f)
+			return new Vector3(value.z,value.y);
+		else if(axis.y == 1f)
+			return new Vector3(value.x,value.z);
+		else if(axis.z == 1f)
+			return new Vector3(value.x,value.y);
+		
+		return value;
+	}
+
 	public static Vector2 Vector3ToVector2(Vector3 value)
 	{
 		return new Vector2(value.x,value.z);
@@ -126,6 +146,8 @@ public class MathEx : MonoBehaviour {
 		return clamp360Degree(val);
 	}
 	public static Vector3 angleToDirection(float angle) {return new Vector3(Mathf.Cos(angle),Mathf.Sin(angle));}
+	public static Vector3 clampOverZero(Vector3 value) {return new Vector3(clampOverZero(value.x),clampOverZero(value.y),clampOverZero(value.z));}
+ 	public static float clampOverZero(float value) {return value < 0 ? 0f : value;}
 	public static float clamp360Degree(float eulerAngle)
     {
         //  float val = eulerAngle - Mathf.CeilToInt(eulerAngle / 360f) * 360f;
