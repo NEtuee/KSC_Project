@@ -312,7 +312,7 @@ public class DesignTestBoss : MonoBehaviour
 
     public void AOEExplosion()
     {
-        aoeExplosion.Exlposion(transform.position,aoeExplosionRadius);
+        aoeExplosion.Exlposion(transform.position + new Vector3(0f,10f,0f),aoeExplosionRadius);
     }
 
     public void MouseBulletShot()

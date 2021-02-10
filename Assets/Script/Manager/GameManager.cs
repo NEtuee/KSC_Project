@@ -73,22 +73,22 @@ public class GameManager : MonoBehaviour
         //    mainCam.RequstChangePP(2f);
         //}
 
-        if(Input.GetKeyDown(KeyCode.Escape) && isMenuBlending ==false)
-        {
-            switch(menuState)
-            {
-                case MenuState.MenuOff:
-                    menuState = MenuState.MenuOn;
-                    isMenuBlending = true;
-                    cameraManger.ActiveAimCamera(() => hudTest.HUDActive());
-                    break;
-                case MenuState.MenuOn:
-                    menuState = MenuState.MenuOff;
-                    isMenuBlending = true;
-                    hudTest.HUDDissable(() => cameraManger.ActivePlayerFollowCamera());
-                    break;
-            }
-        }
+        // if(Input.GetKeyDown(KeyCode.Escape) && isMenuBlending ==false)
+        // {
+        //     switch(menuState)
+        //     {
+        //         case MenuState.MenuOff:
+        //             menuState = MenuState.MenuOn;
+        //             isMenuBlending = true;
+        //             cameraManger.ActiveAimCamera(() => hudTest.HUDActive());
+        //             break;
+        //         case MenuState.MenuOn:
+        //             menuState = MenuState.MenuOff;
+        //             isMenuBlending = true;
+        //             hudTest.HUDDissable(() => cameraManger.ActivePlayerFollowCamera());
+        //             break;
+        //     }
+        // }
     }
 
     public void SwitchMenuDone()

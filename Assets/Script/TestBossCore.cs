@@ -16,7 +16,7 @@ public class TestBossCore : MonoBehaviour
     {
         if(coll.tag == "Player" && !boss._progress)
         {
-            if(Input.GetKeyDown(KeyCode.F))
+            if(InputManager.Instance.GetAction(KeybindingActions.Interaction))
             {
                 _explosion.Exlposion(transform.position);
                 boss.Explosion();
