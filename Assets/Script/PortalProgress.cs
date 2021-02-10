@@ -6,6 +6,8 @@ public class PortalProgress : MonoBehaviour
 {
     public delegate void Delegate();
 
+    public Transform portalPosition;
+    public Transform groundPortalPoint;
     public Transform drone;
     public ScrapObject targetObject;
 
@@ -37,6 +39,8 @@ public class PortalProgress : MonoBehaviour
 
     private void Update()
     {
+        transform.position = Vector3.Lerp(transform.position,portalPosition.position,0.2f);
+        _startPoint = transform.position;
         if(!_progress)
         {
             return;
@@ -84,6 +88,11 @@ public class PortalProgress : MonoBehaviour
     public void WhenHit()
     {
         whenHit();
+    }
+
+    public void SetPortalToGround()
+    {
+        portalPosition = groundPortalPoint;
     }
 
     public void DroneLaunch()

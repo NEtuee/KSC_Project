@@ -15,10 +15,10 @@ public class ExplosionTest : MonoBehaviour
 
     }
 
-    public void Exlposion(Vector3 position)
+    public void Exlposion(Vector3 position, float radius = 30f)
     {
         Instantiate(explosionPrefab, position, Quaternion.identity);
-        Collider[] coll = Physics.OverlapSphere(position, 30.0f);
+        Collider[] coll = Physics.OverlapSphere(position, radius);
         
         if(coll.Length != 0)
         {

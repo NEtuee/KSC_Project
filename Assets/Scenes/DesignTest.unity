@@ -1416,6 +1416,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d1ec3a7116dde42a2af09fafe664ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portalPosition: {fileID: 343346199}
+  groundPortalPoint: {fileID: 385298729}
   drone: {fileID: 365802652}
   targetObject: {fileID: 2099348426}
   droneObjectPoint: {fileID: 1111415230}
@@ -1436,7 +1438,6 @@ Transform:
   m_Children:
   - {fileID: 484424687}
   - {fileID: 365802652}
-  - {fileID: 1715525930}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 200.252, z: 0}
@@ -1484,6 +1485,36 @@ Transform:
   - {fileID: 1111415230}
   m_Father: {fileID: 343346199}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &385298728
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 385298729}
+  m_Layer: 0
+  m_Name: GroundPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &385298729
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385298728}
+  m_LocalRotation: {x: -0, y: 0.98442334, z: -0, w: -0.17581439}
+  m_LocalPosition: {x: 0, y: 6.2700005, z: 56.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &408529663
 GameObject:
@@ -3670,6 +3701,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d1ec3a7116dde42a2af09fafe664ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portalPosition: {fileID: 1218213822}
+  groundPortalPoint: {fileID: 2050053108}
   drone: {fileID: 1735740495}
   targetObject: {fileID: 1609024145}
   droneObjectPoint: {fileID: 625903464}
@@ -3690,7 +3723,6 @@ Transform:
   m_Children:
   - {fileID: 326652140}
   - {fileID: 1735740495}
-  - {fileID: 1933181233}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: -49.045, z: 0}
@@ -4320,7 +4352,7 @@ GameObject:
   - component: {fileID: 1609024145}
   m_Layer: 6
   m_Name: Scrap
-  m_TagString: Enviroment
+  m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4611,12 +4643,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1715525929}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -39.3, y: -29.55, z: 96.3}
+  m_LocalRotation: {x: -0, y: 0.98442334, z: -0, w: -0.17581439}
+  m_LocalPosition: {x: 3.5360184, y: 3.1500015, z: -47.650364}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 343346199}
-  m_RootOrder: 2
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1724206621
 GameObject:
@@ -4938,6 +4970,7 @@ GameObject:
   - component: {fileID: 1772902393}
   - component: {fileID: 1772902394}
   - component: {fileID: 1772902395}
+  - component: {fileID: 1772902396}
   m_Layer: 6
   m_Name: BossDummy
   m_TagString: Enviroment
@@ -5020,6 +5053,7 @@ MonoBehaviour:
   - {fileID: 629814920}
   - {fileID: 1702412194}
   bullet: {fileID: 1667196817}
+  aoeExplosion: {fileID: 1772902396}
   rayMask:
     serializedVersion: 2
     m_Bits: 192
@@ -5031,10 +5065,25 @@ MonoBehaviour:
   hitGrogy: 20
   scrapStack: 1
   scrapAOECast: 8
+  aoeExplosionRadius: 30
   scrapFindCount: 0
   scrapCannonCast: 7
   bulletSpeed: 60
   _progress: 1
+--- !u!114 &1772902396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772902391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 142929242e1d5f1418b2320c0542f3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionPrefab: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
+    type: 3}
 --- !u!1 &1797942697
 GameObject:
   m_ObjectHideFlags: 0
@@ -5592,12 +5641,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1933181232}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.9, y: -41.3, z: 126.7}
+  m_LocalRotation: {x: -0, y: -0.41505003, z: -0, w: 0.9097986}
+  m_LocalPosition: {x: -59.810265, y: 4.1000023, z: 54.607964}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1218213822}
-  m_RootOrder: 2
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1940975483
 PrefabInstance:
@@ -5880,6 +5929,36 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 6.703, y: 8.176791, z: 4.4307694}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2050053107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2050053108}
+  m_Layer: 0
+  m_Name: GroundPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2050053108
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050053107}
+  m_LocalRotation: {x: -0, y: -0.41505003, z: -0, w: 0.9097986}
+  m_LocalPosition: {x: 18.9, y: 7.010002, z: -48}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2077636748
 GameObject:
   m_ObjectHideFlags: 0
@@ -5991,7 +6070,7 @@ GameObject:
   - component: {fileID: 2099348426}
   m_Layer: 6
   m_Name: Scrap
-  m_TagString: Enviroment
+  m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

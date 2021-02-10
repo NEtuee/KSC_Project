@@ -11,6 +11,7 @@ public class DesignTestBoss : MonoBehaviour
     public CannonShot mouseCannon;
     public List<CannonShot> cannons = new List<CannonShot>();
     public BulletShot bullet;
+    public ExplosionTest aoeExplosion;
 
     public LayerMask rayMask;
 
@@ -23,6 +24,7 @@ public class DesignTestBoss : MonoBehaviour
     public int scrapStack = 2;
 
     public float scrapAOECast = 0f;
+    public float aoeExplosionRadius = 30f;
     public int scrapFindCount = 1;
 
     public float scrapCannonCast = 3f;
@@ -54,6 +56,8 @@ public class DesignTestBoss : MonoBehaviour
 
     private SphereRayEx headRay;
 
+    private PortalProgress _firstPortal = null;
+
     private void Start()
     {
         headRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),1f,1f,rayMask);
@@ -65,6 +69,8 @@ public class DesignTestBoss : MonoBehaviour
         var portals = GameObject.FindObjectsOfType(typeof(PortalProgress)) as PortalProgress[];
         foreach(var portal in portals)
         {
+            if(_firstPortal == null)
+                _firstPortal = portal;
             portal.whenHit += Hit;
         }
 
@@ -139,11 +145,13 @@ public class DesignTestBoss : MonoBehaviour
                         if(_mouseCannon)
                         {
                             _animator.SetBool("HeadCast",true);
+                            _animator.SetLayerWeight(2,0f);
                             _spinTimer = scrapCannonCast;
                         }
                         else
                         {
                             _animator.SetBool("AOECast",true);
+                            _animator.SetLayerWeight(2,0f);
                             _spinTimer = scrapAOECast;
                         }
 
@@ -220,6 +228,7 @@ public class DesignTestBoss : MonoBehaviour
                     _animator.SetBool("Move",true);
 
                     _animator.SetLayerWeight(1,1f);
+                    _animator.SetLayerWeight(2,1f);
 
                     if(_scrapFindCount++ >= scrapFindCount)
                     {
@@ -301,6 +310,11 @@ public class DesignTestBoss : MonoBehaviour
         }
     }
 
+    public void AOEExplosion()
+    {
+        aoeExplosion.Exlposion(transform.position,aoeExplosionRadius);
+    }
+
     public void MouseBulletShot()
     {
         var forward = -Vector3.Cross(transform.forward,Vector3.up).normalized;
@@ -329,6 +343,8 @@ public class DesignTestBoss : MonoBehaviour
         if(_destroyedCannonCount >= cannons.Count)
         {
             _mouseCannon = true;
+
+            _firstPortal.SetPortalToGround();
             shell.gameObject.SetActive(false);
         }
     }
