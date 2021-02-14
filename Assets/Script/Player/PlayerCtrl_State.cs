@@ -146,8 +146,8 @@ public class PlayerCtrl_State : MonoBehaviour
     private HandIKCtrl handIKCtrl;
     private EnergyCore currentDetectEnergyCore;
     private PlayerAnimCtrl playerAnimCtrl;
-
     private PlayerRagdoll ragdoll;
+    private PlayerMovement movement;
 
     [SerializeField] private float offsetDist;
 
@@ -174,6 +174,7 @@ public class PlayerCtrl_State : MonoBehaviour
         handIKCtrl = GetComponent<HandIKCtrl>();
         collider = GetComponent<CapsuleCollider>();
         ragdoll = GetComponent<PlayerRagdoll>();
+        movement = GetComponent<PlayerMovement>();
 
         GameManager.Instance.SetPlayer(this);
 
@@ -436,11 +437,25 @@ public class PlayerCtrl_State : MonoBehaviour
 
                     if (CheckMoveCollision(moveDir) == true)
                     {
-                        transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                        if(movement != null)
+                        {
+                            movement.Move((moveDir + (Vector3.up * currentJumpPower)));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                        }
                     }
                     else
                     {
-                        transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.deltaTime;
+                        if (movement != null)
+                        {
+                            movement.Move((moveDir + (Vector3.up * currentJumpPower)));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.deltaTime;
+                        }
                     }
                     animator.SetFloat("Speed", currentSpeed);
                 }
@@ -455,7 +470,15 @@ public class PlayerCtrl_State : MonoBehaviour
                     }
 
                     Vector3 plusDir = ((camForward * inputVertical) + (camRight * inputHorizontal));
-                    transform.position += plusDir * fallingControlSenstive * Time.deltaTime;
+
+                    if (movement != null)
+                    {
+                        movement.Move(plusDir * fallingControlSenstive);
+                    }
+                    else
+                    {
+                        transform.position += plusDir * fallingControlSenstive * Time.deltaTime;
+                    }
 
                     Vector3 lookDir = ((camForward * inputVertical) + (camRight * inputHorizontal)).normalized;
                     if (lookDir != Vector3.zero)
@@ -465,11 +488,25 @@ public class PlayerCtrl_State : MonoBehaviour
 
                     if (CheckMoveCollision(moveDir) == true)
                     {
-                        transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                        if (movement != null)
+                        {
+                            movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                        }
                     }
                     else
                     {
-                        transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.deltaTime;
+                        if (movement != null)
+                        {
+                            movement.Move(Vector3.up * currentJumpPower);
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.deltaTime;
+                        }
                     }
                 }
                 break;
@@ -497,11 +534,25 @@ public class PlayerCtrl_State : MonoBehaviour
 
                     if (CheckMoveCollision(moveDir) == true)
                     {
-                        transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                        if (movement != null)
+                        {
+                            movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                        }
                     }
                     else
                     {
-                        transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.deltaTime;
+                        if (movement != null)
+                        {
+                            movement.Move(Vector3.up * currentJumpPower);
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.deltaTime;
+                        }
                     }
                 }
                 break;
@@ -531,7 +582,15 @@ public class PlayerCtrl_State : MonoBehaviour
                     prevSlidingDir.y = 0;
                     //ikCtrl.DisableFeetIk();
 
-                    transform.position = transform.position + slidingDir * currentSlidingSpeed * Time.deltaTime;
+                    if (movement != null)
+                    {
+                        movement.Move(slidingDir * currentSlidingSpeed);
+                    }
+                    else
+                    {
+                        transform.position = transform.position + slidingDir * currentSlidingSpeed * Time.deltaTime;
+                    }
+
                     if (groundAngle < balanceLimitMinAngle)
                     {
                         currentSlidingSpeed = 0.0f;
@@ -557,17 +616,38 @@ public class PlayerCtrl_State : MonoBehaviour
                     moveDir = prevDir;
                     if (CheckMoveCollision(moveDir) == true)
                     {
-                        transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                        if (movement != null)
+                        {
+                            movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                        }
                     }
                     else
                     {
-                        transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.deltaTime;
+                        if (movement != null)
+                        {
+                            movement.Move(Vector3.up * currentJumpPower);
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.deltaTime;
+                        }
                     }
                 }
                 break;
             case PlayerState.Nuckback:
                 {
-                    transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                    if (movement != null)
+                    {
+                        movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                    }
+                    else
+                    {
+                        transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                    }
                 }
                 break;
         }
@@ -665,7 +745,7 @@ public class PlayerCtrl_State : MonoBehaviour
     {
         if (state == PlayerState.Stagger)
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 6.0f);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 12.0f);
             return;
         }
 
@@ -673,16 +753,16 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             if (isRun == true)
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * 4.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * 8.0f);
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * 4.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * 8.0f);
             }
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 8.0f);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 16.0f);
         }
     }
     public void SaveHandPosition()
@@ -1311,9 +1391,11 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             if (isSpacialSpearMode == false)
             {
-                SpearCtrl spear = Instantiate(spearPrefab, launchPos.position, launchPos.rotation);
-                spear.Launch(launchPos.position);
-
+                if (spearPrefab != null && launchPos != null)
+                {
+                    SpearCtrl spear = Instantiate(spearPrefab, launchPos.position, launchPos.rotation);
+                    spear.Launch(launchPos.position);
+                }
                 ReleaseAim();
 
                 currentSpearNum -= 1;

@@ -108,22 +108,22 @@ public class PlayerRagdoll : MonoBehaviour
             hipTransform.GetComponent<Rigidbody>().AddForce(transform.forward * 10000.0f);
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            switch (state)
-            {
-                case RagdollState.Animated:
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    switch (state)
+        //    {
+        //        case RagdollState.Animated:
 
-                    ActiveRightHandFixRagdoll();
+        //            ActiveRightHandFixRagdoll();
 
-                    break;
-                case RagdollState.Ragdoll:
+        //            break;
+        //        case RagdollState.Ragdoll:
 
-                    DisableFixRagdoll();
+        //            DisableFixRagdoll();
 
-                    break;
-            }
-        }
+        //            break;
+        //    }
+        //}
     }
 
     private void LateUpdate()
