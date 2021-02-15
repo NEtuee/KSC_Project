@@ -18,7 +18,7 @@ public class HingeEx : MonoBehaviour
     private Vector3 _forwardOrigin;
     private Vector3 _rightOrigin;
     private Vector3 _upOrigin;
-
+    private Vector3 _eulerOrigin;
 
     public void Start()
     {
@@ -26,13 +26,17 @@ public class HingeEx : MonoBehaviour
         _forwardOrigin = _transform.forward;
         _rightOrigin = _transform.right;
         _upOrigin = _transform.up;
+
+        _eulerOrigin = _transform.localRotation.eulerAngles;
     }
 
-    public void LateUpdate()
+    public void Update()
     {
         if(CheckOutOfRange(out Vector3 outAngle))
         {
-//            Debug.Log(outAngle.x + "," + outAngle.y + "," + outAngle.z);
+            var euler =_transform.localRotation.eulerAngles;
+            euler += outAngle;
+            _transform.localRotation = Quaternion.Euler(euler);
         }
     }
 
@@ -41,19 +45,17 @@ public class HingeEx : MonoBehaviour
 
     }
 
-    
-
     public bool CheckOutOfRange(out Vector3 outAngle)
     {
-        var forward = transform.eulerAngles - 
-        var right = MathEx.PlaneAngle(_transform.right,_rightOrigin,new Vector3(0f,1f,0f));
-        var up = MathEx.PlaneAngle(_transform.up,_upOrigin,new Vector3(0f,0f,1f));
-        
-        outAngle = (new Vector3(forward,right,up) - (hingeAngle * 0.5f));
-        Debug.Log(outAngle.x + "," + outAngle.y + "," + outAngle.z);
+        var euler = _transform.localRotation.eulerAngles;
+        var hinge = hingeAngle * .5f;
+        outAngle.x = MathEx.tiltZero(Mathf.DeltaAngle(euler.x,_eulerOrigin.x),hinge.x);
+        outAngle.y = MathEx.tiltZero(Mathf.DeltaAngle(euler.y,_eulerOrigin.y),hinge.y);
+        outAngle.z = MathEx.tiltZero(Mathf.DeltaAngle(euler.z,_eulerOrigin.z),hinge.z);
 
         return outAngle.sqrMagnitude > 0f;
     }
+
 
 
     #if UNITY_EDITOR

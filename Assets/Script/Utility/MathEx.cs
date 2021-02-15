@@ -120,7 +120,12 @@ public class MathEx : MonoBehaviour {
 	public static int abs(int value) {return value < 0 ? - value : value;}
 	public static float abs(float value) {return value < 0 ? -value : value;}
 	public static float normalize(float value) {return value < 0 ? -1 : (value == 0 ? 0 : 1);}
-	public static float limitMinus(float value, float factor) {return value - factor < 0 ? 0 : value - factor;}
+	public static float tiltZero(float value, float factor)
+	{
+		var sign = normalize(value);
+		var result = clampOverZero(abs(value) - factor);
+		return result * sign;
+	}
 	public static float nearZero(float value) {return abs(value) < 0.0001f ? 0 : value;}
 	public static float distance(float x1, float x2) {return abs(x1 - x2);}
 	public static float vectorScale(Vector3 v) {return (abs(v.x) + abs(v.y));}
