@@ -25,6 +25,7 @@ public class DesignTestBoss : MonoBehaviour
 
     public float scrapAOECast = 0f;
     public float aoeExplosionRadius = 30f;
+    public float aoeExplosionHeight = 10f;
     public int scrapFindCount = 1;
 
     public float scrapCannonCast = 3f;
@@ -153,6 +154,7 @@ public class DesignTestBoss : MonoBehaviour
                             _animator.SetBool("AOECast",true);
                             _animator.SetLayerWeight(2,0f);
                             _spinTimer = scrapAOECast;
+                            _scrapStackCount = 0;
                         }
 
                         _scrapAOE = true;
@@ -312,7 +314,11 @@ public class DesignTestBoss : MonoBehaviour
 
     public void AOEExplosion()
     {
-        aoeExplosion.Exlposion(transform.position + new Vector3(0f,10f,0f),aoeExplosionRadius);
+        if(player.transform.position.y < transform.position.y + aoeExplosionHeight)
+        {
+            Debug.Log("Check");
+            aoeExplosion.Exlposion(transform.position + new Vector3(0f,10f,0f),aoeExplosionRadius);
+        }
     }
 
     public void MouseBulletShot()
