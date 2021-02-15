@@ -27,16 +27,16 @@ public class HingeEx : MonoBehaviour
         _rightOrigin = _transform.right;
         _upOrigin = _transform.up;
 
-        _eulerOrigin = _transform.localRotation.eulerAngles;
+        _eulerOrigin = _transform.rotation.eulerAngles;
     }
 
     public void Update()
     {
         if(CheckOutOfRange(out Vector3 outAngle))
         {
-            var euler =_transform.localRotation.eulerAngles;
+            var euler =_transform.rotation.eulerAngles;
             euler += outAngle;
-            _transform.localRotation = Quaternion.Euler(euler);
+            _transform.rotation = Quaternion.Euler(euler);
         }
     }
 
@@ -47,7 +47,7 @@ public class HingeEx : MonoBehaviour
 
     public bool CheckOutOfRange(out Vector3 outAngle)
     {
-        var euler = _transform.localRotation.eulerAngles;
+        var euler = _transform.rotation.eulerAngles;
         var hinge = hingeAngle * .5f;
         outAngle.x = MathEx.tiltZero(Mathf.DeltaAngle(euler.x,_eulerOrigin.x),hinge.x);
         outAngle.y = MathEx.tiltZero(Mathf.DeltaAngle(euler.y,_eulerOrigin.y),hinge.y);

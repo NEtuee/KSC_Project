@@ -42,9 +42,14 @@ public class BoneConnectorEx : MonoBehaviour
         var IkDirection = (point.position - hinge.transform.position).normalized;
 
         var look = Quaternion.FromToRotation(direction,IkDirection);
-        var angle = hinge.transform.localRotation;
+        var angle = hinge.transform.rotation;
 
-        hinge.transform.localRotation = angle * look;
+        if(MathEx.abs(Mathf.DeltaAngle(0f,angle.eulerAngles.y)) >= 90f)
+        {
+            look = Quaternion.Inverse(look);
+        }
+
+        hinge.transform.rotation = angle * look;
     }
 
 #if UNITY_EDITOR
