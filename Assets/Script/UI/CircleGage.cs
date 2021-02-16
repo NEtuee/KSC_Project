@@ -49,6 +49,7 @@ public class CircleGage : MonoBehaviour
 
     public void Disapper()
     {
+        StopAllCoroutines();
         valueText.DOFade(0f, 0.05f).OnComplete(()=> { gage.fillAmount = 0.0f; valueText.text = ""; valueText.color = originTextColor; gage.color = origincolor; });
         gage.DOFade(0f, 0.05f);
     }
