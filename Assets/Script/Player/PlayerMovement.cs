@@ -7,16 +7,26 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Vector3 velocity;
     [SerializeField] private float speed;
     [SerializeField] private float trueSpeed;
+    public LayerMask fowardCheckLayer;
 
     [Header("Ground")]
     [SerializeField] private float groundDistance;
     public float groundMinDistance = 0.1f;
     public float groundMaxDistance = 0.5f;
+    public float groundSlopMinDistanc = 0.6f;
     public LayerMask groundLayer;
     public bool isGrounded;
     public bool isJumping;
     public float jumpMinTime = 0.5f;
     private float jumpTime;
+
+    [Header("Slide")]
+    [SerializeField] private float groundAngle = 0.0f;
+    [SerializeField] private float currentJumpPower = 0.0f;
+    [SerializeField] private float minJumpPower = -10.0f;
+    [SerializeField] private float jumpPower = 10f;
+    [SerializeField] private float gravity = 20.0f;
+    private Vector3 slidingVector = Vector3.zero;
 
     private Vector3 prevPosition;
 
@@ -45,6 +55,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
+        Vector3 p1 = transform.position + capsuleCollider.center + Vector3.up * -capsuleCollider.height * 0.5f;
+        Vector3 p2 = p1 + Vector3.up * capsuleCollider.height;
+
+        if (Physics.CapsuleCast(p1, p2, capsuleCollider.radius * 1.5f, transform.forward, 0.0f, fowardCheckLayer))
+            return;
+
         transform.position += direction * Time.deltaTime;
     }
 
@@ -53,6 +69,21 @@ public class PlayerMovement : MonoBehaviour
         isJumping = true;
         isGrounded = false;
         jumpTime = Time.time;
+    }
+
+    private void Update()
+    {
+        if(isGrounded == true && groundAngle >= 70f)
+        {
+            currentJumpPower -= gravity * Time.deltaTime;
+            currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
+
+            transform.position += slidingVector * currentJumpPower * Time.deltaTime;
+        }
+        else
+        {
+            currentJumpPower = 0.0f;
+        }
     }
 
     private void FixedUpdate()
@@ -76,6 +107,9 @@ public class PlayerMovement : MonoBehaviour
             if (Physics.Raycast(ray2, out groundHit, (colliderHeight / 2) + dist, groundLayer) && !groundHit.collider.isTrigger)
             {
                 dist = transform.position.y - groundHit.point.y;
+
+                groundAngle = Mathf.Acos(Vector3.Dot(groundHit.normal, Vector3.up)) * Mathf.Rad2Deg;
+                slidingVector = (Vector3.Project(Vector3.down, groundHit.normal) - Vector3.down).normalized;
             }
             if (dist >= groundMinDistance)
             {
@@ -89,11 +123,15 @@ public class PlayerMovement : MonoBehaviour
                     {
                         dist = newDist;
                     }
+
+                    groundAngle = Mathf.Acos(Vector3.Dot(groundHit.normal, Vector3.up)) * Mathf.Rad2Deg;
+                    slidingVector = (Vector3.Project(Vector3.down, groundHit.normal)- Vector3.down).normalized;
                 }
             }
             groundDistance = (float)System.Math.Round(dist, 2);
         }
     }
+
 
     private void CheckGround()
     {

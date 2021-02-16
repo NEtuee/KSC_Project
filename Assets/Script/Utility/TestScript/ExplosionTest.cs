@@ -8,10 +8,10 @@ public class ExplosionTest : MonoBehaviour
 
     private void Update()
     {
-        // if(Input.GetKeyDown(KeyCode.B))
-        // {
-        //     Exlposion();
-        // }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Exlposion(transform.position);
+        }
 
     }
 
@@ -27,7 +27,6 @@ public class ExplosionTest : MonoBehaviour
                 PlayerRagdoll ragdoll = coll[i].GetComponent<PlayerRagdoll>();
                 if(ragdoll != null)
                 {
-                    Debug.Log("?");
                     ragdoll.ExplosionRagdoll(750.0f, position, 10000.0f);
                 }
             }

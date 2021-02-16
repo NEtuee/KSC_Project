@@ -221,6 +221,8 @@ public class PlayerRagdoll : MonoBehaviour
         InputManager.Instance.GamePadSetVibrate(0.5f, 0.8f);
     }
 
+    public RagdollState GetRagdollState() { return state; }
+
     private void SetRagdollContainer(bool result)
     {
         if (_ragdollContainer == null)

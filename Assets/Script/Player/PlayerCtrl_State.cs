@@ -387,7 +387,7 @@ public class PlayerCtrl_State : MonoBehaviour
             rigidbody.velocity = Vector3.zero;
         }
 
-        if (state == PlayerState.Jump)
+        if (state == PlayerState.Jump && ragdoll.GetRagdollState() != PlayerRagdoll.RagdollState.Ragdoll)
         {
             currentJumpPower -= gravity * Time.deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
