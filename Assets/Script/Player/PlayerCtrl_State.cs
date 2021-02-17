@@ -110,6 +110,8 @@ public class PlayerCtrl_State : MonoBehaviour
     [SerializeField] private float currentHorizontalValue = 0.0f;
     [SerializeField] private float inputVertical;
     [SerializeField] private float inputHorizontal;
+    [SerializeField] private AnimationCurve bandCurve;
+    private float horizonInputTime = 0.0f;
 
     [Header("Balance")]
     [SerializeField] private float balanceLimitMinAngle = 40f;
@@ -237,7 +239,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
         InputUpdate();
 
-        ProcessUpdate();
+        //ProcessUpdate();
     }
 
     private void FixedUpdate()
@@ -246,6 +248,8 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             CheckLedge();
         }
+
+        ProcessFixedUpdate();
     }
 
     private void InputUpdate()
@@ -654,6 +658,282 @@ public class PlayerCtrl_State : MonoBehaviour
         }
     }
 
+    private void ProcessFixedUpdate()
+    {
+        if (rigidbody.velocity != Vector3.zero)
+        {
+            rigidbody.velocity = Vector3.zero;
+        }
+
+        if (state == PlayerState.Jump && ragdoll.GetRagdollState() != PlayerRagdoll.RagdollState.Ragdoll)
+        {
+            currentJumpPower -= gravity * Time.fixedDeltaTime;
+            currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
+        }
+        else
+        {
+            currentJumpPower = 0f;
+        }
+
+        UpdateFallingTime();
+
+        UpdateCurrentSpeed();
+
+        UpdateDetect();
+
+        switch (state)
+        {
+            case PlayerState.Default:
+                {
+                    if (movement.isGrounded == false)
+                    {
+                        ChangeState(PlayerState.Jump);
+                        return;
+                    }
+
+                    UpdateSliding();
+                    UpdateBandWeight();
+
+                    currentJumpPower = 0.0f;
+
+                    if (inputVertical != 0.0f || inputHorizontal != 0.0f)
+                    {
+                        moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
+                        moveDir.Normalize();
+                        prevDir = moveDir;
+                    }
+                    else
+                    {
+                        moveDir = prevDir;
+                        moveDir.Normalize();
+                    }
+
+                    moveDir *= currentSpeed;
+
+                    if (moveDir != Vector3.zero)
+                    {
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.fixedDeltaTime * 6.0f);
+                    }
+
+                    if (CheckMoveCollision(moveDir) == true)
+                    {
+                        if (movement != null)
+                        {
+                            movement.Move((moveDir + (Vector3.up * currentJumpPower)));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.fixedDeltaTime;
+                        }
+                    }
+                    else
+                    {
+                        if (movement != null)
+                        {
+                            movement.Move((moveDir + (Vector3.up * currentJumpPower)));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.fixedDeltaTime;
+                        }
+                    }
+                    animator.SetFloat("Speed", currentSpeed);
+                }
+                break;
+            case PlayerState.Jump:
+                {
+                    if (movement.isGrounded == true)
+                    {
+                        state = PlayerState.Default;
+                        animator.SetBool("IsJump", false);
+                        return;
+                    }
+
+                    Vector3 plusDir = ((camForward * inputVertical) + (camRight * inputHorizontal));
+
+                    if (movement != null)
+                    {
+                        movement.Move(plusDir * fallingControlSenstive);
+                    }
+                    else
+                    {
+                        transform.position += plusDir * fallingControlSenstive * Time.fixedDeltaTime;
+                    }
+
+                    Vector3 lookDir = ((camForward * inputVertical) + (camRight * inputHorizontal)).normalized;
+                    if (lookDir != Vector3.zero)
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir, transform.up), Time.deltaTime * 1.0f);
+                    }
+
+                    if (CheckMoveCollision(moveDir) == true)
+                    {
+                        if (movement != null)
+                        {
+                            movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.fixedDeltaTime;
+                        }
+                    }
+                    else
+                    {
+                        if (movement != null)
+                        {
+                            movement.Move(Vector3.up * currentJumpPower);
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.fixedDeltaTime;
+                        }
+                    }
+                }
+                break;
+            case PlayerState.Rolling:
+                {
+                    if (isRollingReady == true)
+                    {
+                        moveDir.Normalize();
+                    }
+                    else
+                    {
+                        moveDir *= currentSpeed;
+                    }
+
+                    if (moveDir == Vector3.zero)
+                    {
+                        moveDir = prevDir;
+                    }
+
+                    moveDir.Normalize();
+                    currentSpeed = Mathf.Lerp(currentSpeed, rollingSpeed, 15f * Time.fixedDeltaTime);
+                    moveDir *= currentSpeed;
+                    Vector3 targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.fixedDeltaTime * 5.0f).eulerAngles;
+                    transform.rotation = Quaternion.Euler(0.0f, targetRot.y, 0.0f);
+
+                    if (CheckMoveCollision(moveDir) == true)
+                    {
+                        if (movement != null)
+                        {
+                            movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.fixedDeltaTime;
+                        }
+                    }
+                    else
+                    {
+                        if (movement != null)
+                        {
+                            movement.Move(Vector3.up * currentJumpPower);
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.fixedDeltaTime;
+                        }
+                    }
+                }
+                break;
+            case PlayerState.Grab:
+                {
+                    //CheckLedge();
+
+                    UpdateGrab();
+                }
+                break;
+            case PlayerState.HangLedge:
+                {
+                    UpdateGrab();
+                }
+                break;
+            case PlayerState.ClimbingLedge:
+                break;
+            case PlayerState.HangRope:
+                break;
+            case PlayerState.Absorb:
+                break;
+            case PlayerState.Sliding:
+                {
+                    currentSlidingSpeed = Mathf.MoveTowards(currentSlidingSpeed, maxSlidingSpeed, 5f * Time.fixedDeltaTime);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(new Vector3(slidingDir.x, 0, slidingDir.z), Vector3.up), 5f * Time.deltaTime);
+                    prevSlidingDir = slidingDir;
+                    prevSlidingDir.y = 0;
+                    //ikCtrl.DisableFeetIk();
+
+                    if (movement != null)
+                    {
+                        movement.Move(slidingDir * currentSlidingSpeed);
+                    }
+                    else
+                    {
+                        transform.position = transform.position + slidingDir * currentSlidingSpeed * Time.fixedDeltaTime;
+                    }
+
+                    if (groundAngle < balanceLimitMinAngle)
+                    {
+                        currentSlidingSpeed = 0.0f;
+                        prevDir = prevSlidingDir;
+                        animator.SetTrigger("EndSliding");
+
+                        state = PlayerState.Default;
+                        //ikCtrl.EnableFeetIk();
+                    }
+
+                    if (!Physics.Raycast(transform.position, -transform.up, 6f))
+                    {
+                        currentSlidingSpeed = 0.0f;
+                        prevDir = prevSlidingDir;
+                        animator.SetTrigger("EndSliding");
+
+                        ChangeState(PlayerState.Jump);
+                    }
+                }
+                break;
+            case PlayerState.Stagger:
+                {
+                    moveDir = prevDir;
+                    if (CheckMoveCollision(moveDir) == true)
+                    {
+                        if (movement != null)
+                        {
+                            movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.fixedDeltaTime;
+                        }
+                    }
+                    else
+                    {
+                        if (movement != null)
+                        {
+                            movement.Move(Vector3.up * currentJumpPower);
+                        }
+                        else
+                        {
+                            transform.position = transform.position + (Vector3.up * currentJumpPower) * Time.fixedDeltaTime;
+                        }
+                    }
+                }
+                break;
+            case PlayerState.Nuckback:
+                {
+                    if (movement != null)
+                    {
+                        movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                    }
+                    else
+                    {
+                        transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.fixedDeltaTime;
+                    }
+                }
+                break;
+        }
+    }
+
+
     #region 매 프레임 처리 함수(ProcessUpdate에서 매 프레임 호출되는 함수들)
 
     private void UpdateFallingTime()
@@ -664,7 +944,7 @@ public class PlayerCtrl_State : MonoBehaviour
         }
         else
         {
-            fallingTime += Time.deltaTime;
+            fallingTime += Time.fixedDeltaTime;
         }
     }
     private void UpdateSliding()
@@ -746,7 +1026,7 @@ public class PlayerCtrl_State : MonoBehaviour
     {
         if (state == PlayerState.Stagger)
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 12.0f);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.fixedDeltaTime * 12.0f);
             return;
         }
 
@@ -754,16 +1034,16 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             if (isRun == true)
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * 8.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.fixedDeltaTime * 8.0f);
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * 8.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.fixedDeltaTime * 8.0f);
             }
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * 16.0f);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.fixedDeltaTime * 16.0f);
         }
     }
     public void SaveHandPosition()
@@ -786,6 +1066,21 @@ public class PlayerCtrl_State : MonoBehaviour
                 transform.position += transform.forward * gap;
             }
         }
+    }
+
+    private void UpdateBandWeight()
+    {
+        if(inputHorizontal != 0f)
+        {
+            horizonInputTime += Time.fixedDeltaTime * 0.5f;
+        }
+        else
+        {
+            horizonInputTime = 0.0f;
+        }
+
+        float weightValue = bandCurve.Evaluate(horizonInputTime) * Mathf.Sign(inputHorizontal);
+        animator.SetFloat("Weight", weightValue);
     }
 
     #endregion
@@ -1864,6 +2159,10 @@ public class PlayerCtrl_State : MonoBehaviour
 
         return false;
     }
+
+    public float GetInputVertical() { return inputVertical; }
+    public float GetInputHorizontal() { return inputHorizontal; }
+
 
     #endregion
 

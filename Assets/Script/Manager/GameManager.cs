@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform coreTransfrom;
     [SerializeField] private Transform killEventTransform;
     [SerializeField] private HudTest hudTest;
+    public Transform bossTransform;
 
     private Vector3 mainCameraStartPosition;
     private Vector3 mainCameraStartLocalPosition;
@@ -360,5 +361,19 @@ public class GameManager : MonoBehaviour
         return isCurrentCameraEvent;
     }
 
-    
+    public float GetInputVertical()
+    {
+        if (player == null)
+            return 0.0f;
+
+        return player.GetInputVertical();
+    }
+
+    public float GetInputHorizontal()
+    {
+        if (player == null)
+            return 0.0f;
+
+        return player.GetInputHorizontal();
+    }
 }

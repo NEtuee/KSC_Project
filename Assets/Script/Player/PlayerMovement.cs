@@ -34,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
     private float colliderHeight;
 
     private RaycastHit groundHit;
+    private Rigidbody rigidbody;
 
     public Vector3 Velocity { get { return velocity; } protected set { velocity = value; } }
     public float Speed { get { return speed; } protected set { speed = value; } }
@@ -45,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
         velocity = Vector3.zero;
         speed = 0.0f;
         trueSpeed = 0.0f;
+        rigidbody = GetComponent<Rigidbody>();
 
         capsuleCollider = GetComponent<CapsuleCollider>();
         if(capsuleCollider != null)
@@ -61,7 +63,9 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.CapsuleCast(p1, p2, capsuleCollider.radius * 1.5f, transform.forward, 0.0f, fowardCheckLayer))
             return;
 
-        transform.position += direction * Time.deltaTime;
+        transform.position += direction * Time.fixedDeltaTime;
+        //rigidbody.MovePosition(transform.position+direction * Time.fixedDeltaTime);
+        //rigidbody.position = transform.position + direction * Time.fixedDeltaTime;
     }
 
     public void Jump()
