@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+// 디버그용 기즈모 그리는 클래스, 다른 프로젝트에서 가져온거임
 public class GizmoHelper : MonoBehaviour
 {
     public enum DrawType
