@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class CannonBall : MonoBehaviour
 {
+    public GameObject DamageObject;
     public GameObject explosionParticle;
+
+    public float damage;
     public float speed;
     public float height;
     private float _timer = 0f;
@@ -34,6 +37,8 @@ public class CannonBall : MonoBehaviour
             Destroy(Instantiate(explosionParticle,transform.position,Quaternion.identity),3.5f);
             Destroy(child,1f);
             Destroy(this.gameObject);
+
+            Instantiate(DamageObject,transform.position,Quaternion.identity).GetComponent<Damage>().factor = damage;
         }
     }
 
@@ -52,6 +57,8 @@ public class CannonBall : MonoBehaviour
             Debug.Log("deleted");
 
             portal.WhenHit();
+
+            Instantiate(DamageObject,transform.position,Quaternion.identity).GetComponent<Damage>().factor = damage;
 
             Destroy(Instantiate(explosionParticle,transform.position,Quaternion.identity),3.5f);
             Destroy(child,1f);

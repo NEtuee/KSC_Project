@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class BulletBall : MonoBehaviour
 {
+    public GameObject damageObject;
     public GameObject explosionEffect;
     public Vector3 direction;
+
+    public float damage = 10f;
     public float speed = 1f;
 
     private Vector3 moveFactor;
@@ -37,6 +40,7 @@ public class BulletBall : MonoBehaviour
 
         if(coll.tag == "Enviroment" || coll.tag == "Player")
         {
+            Instantiate(damageObject,transform.position,Quaternion.identity).GetComponent<Damage>().factor = damage;
             Destroy(Instantiate(explosionEffect,transform.position,Quaternion.identity),5f);
             Destroy(this.gameObject);
         }
