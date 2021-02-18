@@ -303,6 +303,11 @@ public class PlayerAnimCtrl : MonoBehaviour
         owner.SetIsCanInputClimbing(true);
     }
 
+    private void EndTurnBack()
+    {
+        owner.ChangeState(PlayerCtrl_State.PlayerState.Default);
+    }
+
     public void BindPierceEvent( UnityEvent pierceEvent)
     {
         this.pierceEvent = pierceEvent;

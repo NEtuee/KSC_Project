@@ -8,6 +8,7 @@ public class PlayerCtrl_State : MonoBehaviour
     public enum PlayerState
     {
         Default,
+        TurnBack,
         Jump,
         Rolling,
         Grab,
@@ -425,7 +426,7 @@ public class PlayerCtrl_State : MonoBehaviour
                     {
                         moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
                         moveDir.Normalize();
-                        prevDir = moveDir;
+                        //prevDir = moveDir;
                     }
                     else
                     {
@@ -677,8 +678,6 @@ public class PlayerCtrl_State : MonoBehaviour
 
         UpdateFallingTime();
 
-        UpdateCurrentSpeed();
-
         UpdateDetect();
 
         switch (state)
@@ -700,7 +699,7 @@ public class PlayerCtrl_State : MonoBehaviour
                     {
                         moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
                         moveDir.Normalize();
-                        prevDir = moveDir;
+                        //prevDir = moveDir;
                     }
                     else
                     {
@@ -931,6 +930,9 @@ public class PlayerCtrl_State : MonoBehaviour
                 }
                 break;
         }
+
+        UpdateCurrentSpeed();
+        prevDir = moveDir.normalized;
     }
 
 
@@ -1024,9 +1026,30 @@ public class PlayerCtrl_State : MonoBehaviour
     }
     private void UpdateCurrentSpeed()
     {
+        if(state == PlayerState.TurnBack)
+        {
+            return;
+        }
+
         if (state == PlayerState.Stagger)
         {
             currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.fixedDeltaTime * 12.0f);
+            return;
+        }
+
+        Vector3 moveForward = moveDir;
+        Vector3 prevForward = prevDir;
+        moveForward.y = prevForward.y = 0.0f;
+        moveForward.Normalize();
+        prevForward.Normalize();
+        //Debug.Log(Vector3.Dot(moveForward, prevForward));
+        if(currentSpeed > 0.0f && Vector3.Dot(moveForward, prevForward) < -0.8f)
+        {
+            if (currentSpeed > walkSpeed)
+            {
+                ChangeState(PlayerState.TurnBack);
+            }
+            currentSpeed = 0.0f;
             return;
         }
 
@@ -1034,16 +1057,16 @@ public class PlayerCtrl_State : MonoBehaviour
         {
             if (isRun == true)
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.fixedDeltaTime * 8.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.fixedDeltaTime * 20.0f);
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.fixedDeltaTime * 8.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.fixedDeltaTime * 20.0f);
             }
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.fixedDeltaTime * 16.0f);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.fixedDeltaTime * 40.0f);
         }
     }
     public void SaveHandPosition()
@@ -2083,11 +2106,17 @@ public class PlayerCtrl_State : MonoBehaviour
         }
     }
 
-    private void ChangeState(PlayerState changeState)
+    public void ChangeState(PlayerState changeState)
     {
         state = changeState;
         switch(state)
         {
+            case PlayerState.Default:
+                {
+                    transform.rotation = Quaternion.LookRotation(moveDir);
+                    //animator.applyRootMotion = false;
+                }
+                break;
             case PlayerState.Jump:
                 {
                     animator.SetBool("IsGrab", false);
@@ -2098,6 +2127,12 @@ public class PlayerCtrl_State : MonoBehaviour
                     animator.SetBool("IsSideClimbing", false);
 
                     animator.SetBool("IsJump", true);
+                }
+                break;
+            case PlayerState.TurnBack:
+                {
+                    //animator.applyRootMotion = true;
+                    animator.SetTrigger("TurnBack");
                 }
                 break;
         }
