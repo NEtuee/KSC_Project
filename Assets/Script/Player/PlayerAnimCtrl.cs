@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Cinemachine;
 
 public class PlayerAnimCtrl : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlayerAnimCtrl : MonoBehaviour
     private UnityEvent pierceEvent;
     private UnityEvent pullEvent;
     private UnityEvent absorbEndEvent;
+
+    private CinemachineImpulseSource impulseSource;
 
     [SerializeField] private Transform leftFoot;
     [SerializeField] private Transform rightFoot;
@@ -28,6 +31,7 @@ public class PlayerAnimCtrl : MonoBehaviour
         handIKCtrl = GetComponent<HandIKCtrl>();
         //owner = GetComponent<PlayerCtrl>();
         owner = GetComponent<PlayerCtrl_State>();
+        impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     private void StartClimbing()
@@ -202,11 +206,13 @@ public class PlayerAnimCtrl : MonoBehaviour
     private void LeftWalkFootStep()
     {
         RandomWalkSoundPlay(leftFoot);
+        //impulseSource.GenerateImpulse();
     }
 
     private void RightWalkFootStep()
     {
         RandomWalkSoundPlay(rightFoot);
+        //impulseSource.GenerateImpulse();
     }
 
     private void LeftFootStep()
@@ -216,6 +222,8 @@ public class PlayerAnimCtrl : MonoBehaviour
             effectCtrl.PlayLeftFootStep();
         }
         RandomRunSoundPlay(leftFoot);
+
+        //impulseSource.GenerateImpulse();
     }
 
     private void RightFootStep()
@@ -225,6 +233,7 @@ public class PlayerAnimCtrl : MonoBehaviour
             effectCtrl.PlayRightFootStep();
         }
         RandomRunSoundPlay(rightFoot);
+        //impulseSource.GenerateImpulse();
     }
 
     private void StartAbsorb()

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public enum MenuState { MenuOn,MenuOff}
+
     public BulletTimeManager timeManager;
     public float killEventFov = 66f;
     public CameraCtrl camCtrl;
@@ -15,6 +17,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public LevelEdit_BehaviorControll bossControll;
     [SerializeField] private Transform coreTransfrom;
     [SerializeField] private Transform killEventTransform;
+    [SerializeField] private HudTest hudTest;
+    public Transform bossTransform;
 
     private Vector3 mainCameraStartPosition;
     private Vector3 mainCameraStartLocalPosition;
@@ -24,6 +28,8 @@ public class GameManager : MonoBehaviour
 
     private bool isCurrentCameraEvent;
 
+    private bool isMenuBlending = false;
+
     private static GameManager instance;
     public static GameManager Instance { get { if (null == instance) { return null; } return instance; } }
 
@@ -31,6 +37,8 @@ public class GameManager : MonoBehaviour
     Vector3 prevPos;
     Quaternion prevRot;
     Transform originalParent;
+
+    private MenuState menuState = MenuState.MenuOff;
 
     private void Awake()
     {
@@ -42,16 +50,16 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if(mainCam== null)
+        if (mainCam != null)
         {
             mainCam = Camera.main.GetComponent<CameraCollision>();
-            camCtrl = mainCam.transform.parent.GetComponent<CameraCtrl>();
-        }
+            //camCtrl = mainCam.transform.parent.GetComponent<CameraCtrl>();
 
-        mainCameraStartPosition = mainCam.transform.position;
-        mainCameraStartLocalPosition = mainCam.transform.localPosition;
-        camRootStartPosition = camCtrl.transform.position;
-        camRootStartRot = camCtrl.transform.rotation;
+            mainCameraStartPosition = mainCam.transform.position;
+            mainCameraStartLocalPosition = mainCam.transform.localPosition;
+            camRootStartPosition = camCtrl.transform.position;
+            camRootStartRot = camCtrl.transform.rotation;
+        }
 
         if(GameObject.FindGameObjectWithTag("Boss") != null)
         {
@@ -65,6 +73,28 @@ public class GameManager : MonoBehaviour
         //{
         //    mainCam.RequstChangePP(2f);
         //}
+
+        if (Input.GetKeyDown(KeyCode.Escape) && isMenuBlending == false)
+        {
+            switch (menuState)
+            {
+                case MenuState.MenuOff:
+                    menuState = MenuState.MenuOn;
+                    isMenuBlending = true;
+                    cameraManger.ActiveAimCamera(() => hudTest.HUDActive());
+                    break;
+                case MenuState.MenuOn:
+                    menuState = MenuState.MenuOff;
+                    isMenuBlending = true;
+                    hudTest.HUDDissable(() => cameraManger.ActivePlayerFollowCamera());
+                    break;
+            }
+        }
+    }
+
+    public void SwitchMenuDone()
+    {
+        isMenuBlending = false;
     }
 
     public void PausePlayer()
@@ -331,5 +361,19 @@ public class GameManager : MonoBehaviour
         return isCurrentCameraEvent;
     }
 
-    
+    public float GetInputVertical()
+    {
+        if (player == null)
+            return 0.0f;
+
+        return player.GetInputVertical();
+    }
+
+    public float GetInputHorizontal()
+    {
+        if (player == null)
+            return 0.0f;
+
+        return player.GetInputHorizontal();
+    }
 }

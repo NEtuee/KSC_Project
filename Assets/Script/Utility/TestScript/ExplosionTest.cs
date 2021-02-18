@@ -8,17 +8,17 @@ public class ExplosionTest : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B))
         {
-            Exlposion();
+            Exlposion(transform.position);
         }
 
     }
 
-    private void Exlposion()
+    public void Exlposion(Vector3 position, float radius = 30f)
     {
-        Instantiate(explosionPrefab, transform.position, transform.rotation);
-        Collider[] coll = Physics.OverlapSphere(transform.position, 10.0f);
+        Instantiate(explosionPrefab, position, Quaternion.identity);
+        Collider[] coll = Physics.OverlapSphere(position, radius);
         
         if(coll.Length != 0)
         {
@@ -27,7 +27,7 @@ public class ExplosionTest : MonoBehaviour
                 PlayerRagdoll ragdoll = coll[i].GetComponent<PlayerRagdoll>();
                 if(ragdoll != null)
                 {
-                    ragdoll.ExplosionRagdoll(750.0f, transform.position, 10000.0f);
+                    ragdoll.ExplosionRagdoll(750.0f, position, 10000.0f);
                 }
             }
         }

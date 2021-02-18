@@ -19,6 +19,7 @@ public class FollowTargetCtrl : MonoBehaviour
     private float currentYawRotVelocity;
     private float currentPitchRotVelocity;
 
+    private Vector3 smoothVelocity;
 
     void Start()
     {
@@ -52,8 +53,11 @@ public class FollowTargetCtrl : MonoBehaviour
             Cursor.visible = false;
         }
 
+        //transform.position = Vector3.SmoothDamp(transform.position, target.position + Vector3.up, ref smoothVelocity, 3.0f * Time.deltaTime);
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, Time.unscaledDeltaTime * followSmooth);
-        transform.position = target.position + Vector3.up;
+        //transform.position = target.position + Vector3.up;
+        //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
+
 
         float mouseX = InputManager.Instance.GetCameraAxisX();
         float mouseY = InputManager.Instance.GetCameraAxisY();
@@ -71,6 +75,21 @@ public class FollowTargetCtrl : MonoBehaviour
 
         Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
         transform.rotation = localRotation;
+    }
+
+    private void FixedUpdate()
+    {
+        transform.position = target.position + Vector3.up;
+        //transform.position = Vector3.SmoothDamp(transform.position, target.position + Vector3.up, ref smoothVelocity,5.0f*Time.fixedDeltaTime);
+        //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.fixedDeltaTime);
+        //transform.position = Vector3.MoveTowards(transform.position, target.position + Vector3.up, 8.0f * Time.fixedDeltaTime);
+    }
+
+    private void LateUpdate()
+    {
+        //transform.position = target.position + Vector3.up;
+        //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
+        //transform.position = Vector3.MoveTowards(transform.position, target.position + Vector3.up, 8.0f * Time.deltaTime);
     }
 
     public void Pause(){ isPause = true; }
