@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class DesignTestBoss : MonoBehaviour
 {
+    public GameObject damage;
+    public Transform headDamagePoint;
+    public Transform leftLegDamagePoint;
+    public Transform rightLegDamagePoint;
+
     public Transform player;
     public Transform rayPoint;
     public Transform shell;
@@ -27,6 +32,9 @@ public class DesignTestBoss : MonoBehaviour
     public float aoeExplosionRadius = 30f;
     public float aoeExplosionHeight = 10f;
     public int scrapFindCount = 1;
+
+    public float headDamage = 10f;
+    public float legDamage = 10f;
 
     public float scrapCannonCast = 3f;
     public float bulletSpeed = 5f;
@@ -61,7 +69,7 @@ public class DesignTestBoss : MonoBehaviour
 
     private void Start()
     {
-        headRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),1f,1f,rayMask);
+        headRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),1f,10f,rayMask);
 
         _animator = GetComponent<Animator>();
 
@@ -135,7 +143,6 @@ public class DesignTestBoss : MonoBehaviour
             if(headRay.Cast(rayPoint.position,out hit))
             {
                 ScrapObject scrap = null;
-                _spinTimer = 5f;
 
                 if(hit.transform.TryGetComponent<ScrapObject>(out scrap))
                 {
@@ -162,12 +169,14 @@ public class DesignTestBoss : MonoBehaviour
                     }
                     else
                     {
-                        _animator.SetBool("Eat",true);
+                        _spinTimer = 0f;
+                        //_animator.SetBool("Eat",true);
                     }
                 }
                 else
                 {
-                    _animator.SetBool("Crash",true);
+                    _spinTimer = 0f;
+                    //_animator.SetBool("Crash",true);
                     _animator.SetLayerWeight(1,0f);
                 }
                 
@@ -275,6 +284,24 @@ public class DesignTestBoss : MonoBehaviour
     {
         transform.position += _moveFactor * Time.deltaTime;
         _moveFactor = Vector3.zero;
+    }
+
+    public void CreateHeadDamage()
+    {
+        if(_rush)
+            Instantiate(damage,headDamagePoint.position,Quaternion.identity).GetComponent<Damage>().factor = headDamage;
+    }
+
+    public void CreateLeftLegDamage()
+    {
+        if(_rush)
+            Instantiate(damage,leftLegDamagePoint.position,Quaternion.identity).GetComponent<Damage>().factor = legDamage;
+    }
+
+    public void CreateRightLeftDamage()
+    {
+        if(_rush)
+            Instantiate(damage,rightLegDamagePoint.position,Quaternion.identity).GetComponent<Damage>().factor = legDamage;
     }
 
     public void Explosion()
