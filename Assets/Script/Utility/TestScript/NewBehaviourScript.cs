@@ -15,6 +15,6 @@ public class NewBehaviourScript : MonoBehaviour
     void FixedUpdate()
     {
         //GamePad.SetVibration(0, 1, 1);
-        Handheld.Vibrate();
+        //Handheld.Vibrate();
     }
 }
