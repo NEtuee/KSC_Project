@@ -35,7 +35,7 @@ MonoBehaviour:
   Path: "Assets/KSC_Assets/Audio\u2605/FMODBank/Sample.bank"
   Name: Sample
   StudioPath: bank:/Sample
-  lastModified: 637492616178529878
+  lastModified: 637492887197520347
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -52,6 +52,26 @@ MonoBehaviour:
   m_Name: parameter:/Amb_Sample_03_Location/Location
   m_EditorClassIdentifier: 
   Name: Location
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
+--- !u!114 &-8737962245537013984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Amb_Sample_02_Reverb/Reverb
+  m_EditorClassIdentifier: 
+  Name: Reverb
   Min: 0
   Max: 1
   Default: 0
@@ -251,6 +271,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1274
+--- !u!114 &-7206072506914296124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Footage/State
+  m_EditorClassIdentifier: 
+  Name: State
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-7091053135739444646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,6 +422,26 @@ MonoBehaviour:
   Name: RPM
   Min: 0
   Max: 10000
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
+--- !u!114 &-6122888676746056625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Amb_Sample_03_Location/Location
+  m_EditorClassIdentifier: 
+  Name: Location
+  Min: 0
+  Max: 1
   Default: 0
   ID:
     data1: 0
@@ -804,7 +864,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &-2524119346654291378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -904,7 +964,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &-1868033498243315292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1010,7 +1070,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: -2029909593640729347}
+  - {fileID: -6122888676746056625}
   MinDistance: 1
   MaxDistance: 20
   Length: 13776
@@ -1057,7 +1117,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 1672358705828133899}
+  - {fileID: -8737962245537013984}
   MinDistance: 1
   MaxDistance: 20
   Length: 5928
@@ -1239,7 +1299,7 @@ MonoBehaviour:
   - {fileID: 7583344162479364046}
   StringsBanks:
   - {fileID: 3740130961771165491}
-  stringsBankWriteTime: 637492616178419841
+  stringsBankWriteTime: 637492887197420323
   cacheVersion: 6
 --- !u!114 &223832682738462648
 MonoBehaviour:
@@ -1383,7 +1443,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &1864958055731772418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1546,7 +1606,7 @@ MonoBehaviour:
   Path: "Assets/KSC_Assets/Audio\u2605/FMODBank/Master.strings.bank"
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637492616178419841
+  lastModified: 637492887197420323
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -2021,7 +2081,7 @@ MonoBehaviour:
   Path: "Assets/KSC_Assets/Audio\u2605/FMODBank/Master.bank"
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637492616178419841
+  lastModified: 637492887197410320
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2194,7 +2254,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters:
-  - {fileID: -2715484068144631733}
+  - {fileID: -7206072506914296124}
   MinDistance: 1
   MaxDistance: 20
   Length: 0
