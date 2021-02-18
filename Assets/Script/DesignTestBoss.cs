@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class DesignTestBoss : MonoBehaviour
 {
+    public GameObject damage;
+    public Transform headDamagePoint;
+    public Transform leftLegDamagePoint;
+    public Transform rightLegDamagePoint;
+
     public Transform player;
     public Transform rayPoint;
     public Transform shell;
 
     public CannonShot mouseCannon;
     public List<CannonShot> cannons = new List<CannonShot>();
+    public BulletShot bullet;
+    public ExplosionTest aoeExplosion;
 
     public LayerMask rayMask;
 
@@ -19,19 +26,32 @@ public class DesignTestBoss : MonoBehaviour
     public float shotDistanceMin = 10f;
     public float shotDistanceMax = 100f;
     public float hitGrogy = 10f;
+    public int scrapStack = 2;
 
+    public float scrapAOECast = 0f;
+    public float aoeExplosionRadius = 30f;
+    public float aoeExplosionHeight = 10f;
     public int scrapFindCount = 1;
+
+    public float headDamage = 10f;
+    public float legDamage = 10f;
+
+    public float scrapCannonCast = 3f;
+    public float bulletSpeed = 5f;
+
 
     private float _targetAngle;
     private float _spinTimer = 0.1f;
 
     private bool _rush = false;
     private bool _hit = false;
+    private bool _scrapAOE = false;
     private bool _mouseCannon = false;
     public bool _progress = true;
 
     private int _scrapEatCount = 0;
     private int _scrapFindCount = 0;
+    private int _scrapStackCount = 0;
 
     private int _destroyedCannonCount = 0;
 
@@ -45,9 +65,11 @@ public class DesignTestBoss : MonoBehaviour
 
     private SphereRayEx headRay;
 
+    private PortalProgress _firstPortal = null;
+
     private void Start()
     {
-        headRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),2f,.5f,rayMask);
+        headRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),1f,10f,rayMask);
 
         _animator = GetComponent<Animator>();
 
@@ -56,6 +78,8 @@ public class DesignTestBoss : MonoBehaviour
         var portals = GameObject.FindObjectsOfType(typeof(PortalProgress)) as PortalProgress[];
         foreach(var portal in portals)
         {
+            if(_firstPortal == null)
+                _firstPortal = portal;
             portal.whenHit += Hit;
         }
 
@@ -119,22 +143,84 @@ public class DesignTestBoss : MonoBehaviour
             if(headRay.Cast(rayPoint.position,out hit))
             {
                 ScrapObject scrap = null;
+
                 if(hit.transform.TryGetComponent<ScrapObject>(out scrap))
                 {
-                    _animator.SetBool("Eat",true);
                     scrap.Eat();
                     _scrapEatCount++;
+                    if(++_scrapStackCount >= scrapStack)
+                    {
+                        if(_mouseCannon)
+                        {
+                            _animator.SetBool("HeadCast",true);
+                            _animator.SetLayerWeight(2,0f);
+                            _spinTimer = scrapCannonCast;
+                        }
+                        else
+                        {
+                            _animator.SetBool("AOECast",true);
+                            _animator.SetLayerWeight(2,0f);
+                            _spinTimer = scrapAOECast;
+                            _scrapStackCount = 0;
+                        }
+
+                        _scrapAOE = true;
+                        scrapStack = 0;
+                    }
+                    else
+                    {
+                        _spinTimer = 0f;
+                        //_animator.SetBool("Eat",true);
+                    }
                 }
                 else
                 {
-                    _animator.SetBool("Crash",true);
+                    _spinTimer = 0f;
+                    //_animator.SetBool("Crash",true);
                     _animator.SetLayerWeight(1,0f);
                 }
                 
                 _animator.SetBool("Move",false);
-
-                _spinTimer = 5f;
                 _rush = false;
+            }
+        }
+        else if(_scrapAOE)
+        {
+            _spinTimer -= Time.deltaTime;
+            if(_spinTimer <= 0f)
+            {
+                _spinTimer = 3f;
+
+                if(_mouseCannon)
+                {
+                    _animator.SetBool("HeadCast",false);
+                    _animator.SetBool("HeadShot",true);
+                }
+                else
+                {
+                    _animator.SetBool("AOECast",false);
+                    _animator.SetBool("AOE",true);
+                }
+
+                _scrapAOE = false;
+                _rush = false;
+            }
+            else if(_mouseCannon)
+            {
+                var direction = player.position - transform.position;
+                var forward = -Vector3.Cross(transform.forward,Vector3.up).normalized;
+                direction.y = 0f;
+
+                var angle = Vector3.Angle(direction.normalized,forward);
+
+                if(angle > 5f)
+                {
+                    var rotate = Quaternion.LookRotation(direction.normalized,Vector3.up);
+                    rotate.eulerAngles += new Vector3(0f,90f,0f);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation,rotate,-Time.deltaTime * turnSpeed);
+                }
+                
+                
             }
         }
         else
@@ -148,9 +234,12 @@ public class DesignTestBoss : MonoBehaviour
                     _spinTimer = 0f;
                     _animator.SetBool("Crash",false);
                     _animator.SetBool("Eat",false);
+                    _animator.SetBool("AOE",false);
+                    _animator.SetBool("HeadShot",false);
                     _animator.SetBool("Move",true);
 
                     _animator.SetLayerWeight(1,1f);
+                    _animator.SetLayerWeight(2,1f);
 
                     if(_scrapFindCount++ >= scrapFindCount)
                     {
@@ -197,6 +286,24 @@ public class DesignTestBoss : MonoBehaviour
         _moveFactor = Vector3.zero;
     }
 
+    public void CreateHeadDamage()
+    {
+        if(_rush)
+            Instantiate(damage,headDamagePoint.position,Quaternion.identity).GetComponent<Damage>().factor = headDamage;
+    }
+
+    public void CreateLeftLegDamage()
+    {
+        if(_rush)
+            Instantiate(damage,leftLegDamagePoint.position,Quaternion.identity).GetComponent<Damage>().factor = legDamage;
+    }
+
+    public void CreateRightLeftDamage()
+    {
+        if(_rush)
+            Instantiate(damage,rightLegDamagePoint.position,Quaternion.identity).GetComponent<Damage>().factor = legDamage;
+    }
+
     public void Explosion()
     {
         _animator.enabled = false;
@@ -232,6 +339,21 @@ public class DesignTestBoss : MonoBehaviour
         }
     }
 
+    public void AOEExplosion()
+    {
+        if(player.transform.position.y < transform.position.y + aoeExplosionHeight)
+        {
+            Debug.Log("Check");
+            aoeExplosion.Exlposion(transform.position + new Vector3(0f,10f,0f),aoeExplosionRadius);
+        }
+    }
+
+    public void MouseBulletShot()
+    {
+        var forward = -Vector3.Cross(transform.forward,Vector3.up).normalized;
+        bullet.Shot(forward,bulletSpeed);
+    }
+
     public void MouseCannonShot()
     {
         if(_mouseCannon)
@@ -254,6 +376,8 @@ public class DesignTestBoss : MonoBehaviour
         if(_destroyedCannonCount >= cannons.Count)
         {
             _mouseCannon = true;
+
+            _firstPortal.SetPortalToGround();
             shell.gameObject.SetActive(false);
         }
     }

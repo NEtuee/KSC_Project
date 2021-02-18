@@ -68,7 +68,9 @@ public class CannonShot : MonoBehaviour
     {
         if(coll.gameObject.tag == "Player" && canDestroy)
         {
-            if(Input.GetKeyDown(KeyCode.F))
+            Debug.Log("CC");
+            if(InputManager.Instance.GetAction(KeybindingActions.Interaction))
+            //if(Input.GetKeyDown(KeyCode.F))
             {
                 coll.transform.parent = null;
 

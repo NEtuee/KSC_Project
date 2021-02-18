@@ -9,14 +9,19 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private CinemachineBrain brain;
     private Transform brainCameraTransfrom;
     [SerializeField] private CinemachineVirtualCameraBase playerFollowCam;
+    [SerializeField] private Cinemachine3rdPersonFollow playerFollowCam3rdPersonComponent;
     [SerializeField] private CinemachineVirtualCameraBase playerAimCam;
     [SerializeField] private List<CinemachineVirtualCameraBase> otherCameras = new List<CinemachineVirtualCameraBase>();
+    [SerializeField] private Transform spearLunchPos;
     [SerializeField] private bool isBlend;
+    [SerializeField] private bool isAttentionCamera;
     private bool isRunningCallBackCoroutine;
     private CinemachineVirtualCameraBase currentActiveCam = null;
     private CinemachineVirtualCameraBase prevActiveCam = null;
 
     private Dictionary<string, CinemachineVirtualCameraBase> cameraDictionary = new Dictionary<string, CinemachineVirtualCameraBase>();
+
+    private float cameraSideSmoothVelocity;
 
     private void Start()
     {
@@ -28,6 +33,50 @@ public class CameraManager : MonoBehaviour
         otherCameras.Add(playerAimCam);
 
         InitializeCameraAtGameStart();
+    }
+
+    private void Update()
+    {
+        //UpdateCameraSide((GameManager.Instance.GetInputHorizontal() + 1f) * 0.5f);
+        if(isAttentionCamera)
+        {
+            Vector3 camForward = brainCameraTransfrom.forward;
+            camForward.y = 0;
+            camForward.Normalize();
+            Vector3 toBossDir = (GameManager.Instance.bossTransform.position - brainCameraTransfrom.position);
+            toBossDir.y = 0f;
+            toBossDir.Normalize();
+
+            float targetFactor;
+            float angle = Vector3.Dot(camForward, toBossDir);
+            float min = 0.8f;
+            float max = 1.0f;
+
+            if(angle >= min && angle <= max)
+            {
+                float factor = max - angle;
+                targetFactor = factor / (1f-min);
+            }
+            else if(angle< min && angle >=-0.2f)
+            {
+                targetFactor = 1.0f;
+            }
+            else 
+            {
+                targetFactor = 0.0f;
+            }
+
+            if(Vector3.Cross(camForward, toBossDir).y < 0)
+            {
+                targetFactor *= -0.5f;
+            }
+            else
+            {
+                targetFactor *= 0.5f;
+            }
+
+            UpdateCameraSide(0.5f + targetFactor);
+        }
     }
 
     /// <summary>
@@ -44,6 +93,8 @@ public class CameraManager : MonoBehaviour
         playerFollowCam.gameObject.SetActive(true);
 
         currentActiveCam = playerFollowCam;
+
+        playerFollowCam3rdPersonComponent = playerFollowCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<Cinemachine3rdPersonFollow>();
     }
 
     /// <summary>
@@ -254,5 +305,18 @@ public class CameraManager : MonoBehaviour
         }
         action();
         isRunningCallBackCoroutine = false;
+    }
+
+    public Transform GetSpearLunchTransform()
+    {
+        if (spearLunchPos != null)
+            return spearLunchPos;
+        else
+            return null;
+    }
+
+    public void UpdateCameraSide(float value)
+    {
+        playerFollowCam3rdPersonComponent.CameraSide = Mathf.SmoothDamp(playerFollowCam3rdPersonComponent.CameraSide, value, ref cameraSideSmoothVelocity, 300f*Time.deltaTime);
     }
 }

@@ -6,6 +6,8 @@ public class PortalProgress : MonoBehaviour
 {
     public delegate void Delegate();
 
+    public Transform portalPosition;
+    public Transform groundPortalPoint;
     public Transform drone;
     public ScrapObject targetObject;
 
@@ -19,6 +21,8 @@ public class PortalProgress : MonoBehaviour
 
     public Delegate whenHit = ()=>{};
 
+    private Transform _targetPosition;
+
     private Vector3 _startPoint;
     private Vector3 _endPoint;
 
@@ -28,16 +32,20 @@ public class PortalProgress : MonoBehaviour
     private bool _refilling = false;
     private bool _progress = false;
     private bool _end = false;
+    private bool _launch = false;
 
     private void Start()
     {
         targetObject.whenEat = DroneLaunch;
-        DroneLaunch();
+        //DroneLaunch();
+        SetPortalToGround();
     }
 
     private void Update()
     {
-        if(!_progress)
+        transform.position = Vector3.Lerp(transform.position,_targetPosition.position,0.2f);
+        _startPoint = transform.position;
+        if(!_progress || !_launch)
         {
             return;
         }
@@ -83,7 +91,13 @@ public class PortalProgress : MonoBehaviour
 
     public void WhenHit()
     {
-        whenHit();
+        if(_launch)
+            whenHit();
+    }
+
+    public void SetPortalToGround()
+    {
+        _targetPosition = groundPortalPoint;
     }
 
     public void DroneLaunch()
@@ -105,6 +119,27 @@ public class PortalProgress : MonoBehaviour
         _refilling = true;
         _progress = true;
         _end = false;
+    }
+
+    public void OnTriggerStay(Collider coll)
+    {
+        if(coll.tag == "Player")
+        {
+            if(Input.GetKeyDown(KeyCode.F))
+            {
+                var con = coll.GetComponent<TestPortalBatteryScript>();
+
+                if(con.battery > 0)
+                {
+                    con.battery--;
+                    _launch = _progress = true;
+
+                    _targetPosition = portalPosition;
+
+                    DroneLaunch();
+                }
+            }
+        }
     }
 
 }

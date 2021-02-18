@@ -24,6 +24,26 @@ public class MathEx : MonoBehaviour {
 		return new Vector3(Mathf.LerpAngle(start.x,end.x,time),Mathf.LerpAngle(start.y,end.y,time),Mathf.LerpAngle(start.z,end.z,time));
 	}
 
+	public static float PlaneAngle(Vector3 one, Vector3 two, Vector3 axis)
+	{
+		var o = Vector3ToVector2(one,axis);
+		var t = Vector3ToVector2(two,axis);
+
+		return Vector2.Angle(o,t);
+	}
+
+	public static Vector3 Vector3ToVector2(Vector3 value, Vector3 axis)
+	{
+		if(axis.x == 1f)
+			return new Vector3(value.z,value.y);
+		else if(axis.y == 1f)
+			return new Vector3(value.x,value.z);
+		else if(axis.z == 1f)
+			return new Vector3(value.x,value.y);
+		
+		return value;
+	}
+
 	public static Vector2 Vector3ToVector2(Vector3 value)
 	{
 		return new Vector2(value.x,value.z);
@@ -100,7 +120,12 @@ public class MathEx : MonoBehaviour {
 	public static int abs(int value) {return value < 0 ? - value : value;}
 	public static float abs(float value) {return value < 0 ? -value : value;}
 	public static float normalize(float value) {return value < 0 ? -1 : (value == 0 ? 0 : 1);}
-	public static float limitMinus(float value, float factor) {return value - factor < 0 ? 0 : value - factor;}
+	public static float tiltZero(float value, float factor)
+	{
+		var sign = normalize(value);
+		var result = clampOverZero(abs(value) - factor);
+		return result * sign;
+	}
 	public static float nearZero(float value) {return abs(value) < 0.0001f ? 0 : value;}
 	public static float distance(float x1, float x2) {return abs(x1 - x2);}
 	public static float vectorScale(Vector3 v) {return (abs(v.x) + abs(v.y));}
@@ -126,6 +151,8 @@ public class MathEx : MonoBehaviour {
 		return clamp360Degree(val);
 	}
 	public static Vector3 angleToDirection(float angle) {return new Vector3(Mathf.Cos(angle),Mathf.Sin(angle));}
+	public static Vector3 clampOverZero(Vector3 value) {return new Vector3(clampOverZero(value.x),clampOverZero(value.y),clampOverZero(value.z));}
+ 	public static float clampOverZero(float value) {return value < 0 ? 0f : value;}
 	public static float clamp360Degree(float eulerAngle)
     {
         //  float val = eulerAngle - Mathf.CeilToInt(eulerAngle / 360f) * 360f;

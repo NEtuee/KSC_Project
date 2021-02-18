@@ -28,6 +28,7 @@ public class IKCtrl : MonoBehaviour
     public bool useProIkFeature = false;
     public bool showSolverDebug = true;
 
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -67,7 +68,8 @@ public class IKCtrl : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        if(enableFeetIk == false)
+
+        if (enableFeetIk == false)
         {
             return;
         }
