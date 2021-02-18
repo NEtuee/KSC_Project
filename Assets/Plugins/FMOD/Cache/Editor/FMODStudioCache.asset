@@ -35,7 +35,7 @@ MonoBehaviour:
   Path: "Assets/KSC_Assets/Audio\u2605/FMODBank/Sample.bank"
   Name: Sample
   StudioPath: bank:/Sample
-  lastModified: 637486789660000000
+  lastModified: 637492616178529878
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -672,8 +672,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
+  MinDistance: 10000
+  MaxDistance: 10000
   Length: 9686
 --- !u!114 &-4036123128176497306
 MonoBehaviour:
@@ -785,6 +785,26 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &-2715484068144631733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Footage/State
+  m_EditorClassIdentifier: 
+  Name: State
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-2524119346654291378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,6 +878,26 @@ MonoBehaviour:
   m_Name: parameter:/Forest/Wind
   m_EditorClassIdentifier: 
   Name: Wind
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
+--- !u!114 &-2029909593640729347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Amb_Sample_03_Location/Location
+  m_EditorClassIdentifier: 
+  Name: Location
   Min: 0
   Max: 1
   Default: 0
@@ -970,7 +1010,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: -8750196097304815767}
+  - {fileID: -2029909593640729347}
   MinDistance: 1
   MaxDistance: 20
   Length: 13776
@@ -1017,7 +1057,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: -4280026064544438358}
+  - {fileID: 1672358705828133899}
   MinDistance: 1
   MaxDistance: 20
   Length: 5928
@@ -1199,7 +1239,7 @@ MonoBehaviour:
   - {fileID: 7583344162479364046}
   StringsBanks:
   - {fileID: 3740130961771165491}
-  stringsBankWriteTime: 637486789640000000
+  stringsBankWriteTime: 637492616178419841
   cacheVersion: 6
 --- !u!114 &223832682738462648
 MonoBehaviour:
@@ -1319,6 +1359,26 @@ MonoBehaviour:
   Name: Surface
   Min: 0
   Max: 2
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
+--- !u!114 &1672358705828133899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Amb_Sample_02_Reverb/Reverb
+  m_EditorClassIdentifier: 
+  Name: Reverb
+  Min: 0
+  Max: 1
   Default: 0
   ID:
     data1: 0
@@ -1486,7 +1546,7 @@ MonoBehaviour:
   Path: "Assets/KSC_Assets/Audio\u2605/FMODBank/Master.strings.bank"
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637486789640000000
+  lastModified: 637492616178419841
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -1961,7 +2021,7 @@ MonoBehaviour:
   Path: "Assets/KSC_Assets/Audio\u2605/FMODBank/Master.bank"
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637486789640000000
+  lastModified: 637492616178419841
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2134,7 +2194,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters:
-  - {fileID: -4998839920717058956}
+  - {fileID: -2715484068144631733}
   MinDistance: 1
   MaxDistance: 20
   Length: 0
