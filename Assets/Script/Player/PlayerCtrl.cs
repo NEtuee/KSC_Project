@@ -994,11 +994,11 @@ public class PlayerCtrl : MonoBehaviour
                     specialSpear.Launch(GameManager.Instance.GetCoreTransform());
                     specialSpear.AddListener(GameManager.Instance.bossControll.ExplosionProgress);
 
-                    GameManager.Instance.CameraEventIntroduction_Immediate(GameManager.Instance.GetKillEventTransform());
-                    GameManager.Instance.LookingEvent_CameraCollision(specialSpear.transform);
+                    //GameManager.Instance.CameraEventIntroduction_Immediate(GameManager.Instance.GetKillEventTransform());
+                    //GameManager.Instance.LookingEvent_CameraCollision(specialSpear.transform);
 
 
-                    GameManager.Instance.SetCameraFov();
+                    //GameManager.Instance.SetCameraFov();
 
                     ReleaseAim();
                 }

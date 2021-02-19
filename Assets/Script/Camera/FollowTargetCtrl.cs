@@ -79,6 +79,11 @@ public class FollowTargetCtrl : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isPause == true)
+        {
+            return;
+        }
+
         transform.position = target.position + Vector3.up;
         //transform.position = Vector3.SmoothDamp(transform.position, target.position + Vector3.up, ref smoothVelocity,5.0f*Time.fixedDeltaTime);
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.fixedDeltaTime);

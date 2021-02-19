@@ -7,6 +7,11 @@ public class IKCtrl : MonoBehaviour
 {
     protected Animator animator;
 
+    [Header("New")]
+    [Range(0f, 1f)] public float distanceToGround;
+    public LayerMask layerMask;
+
+    [Header("Regacy")]
     private Vector3 rightFoot_Effetor;
     private Vector3 LeftFoot_Effetor;
 
@@ -36,69 +41,104 @@ public class IKCtrl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        AnimatorClipInfo[] clipInfos= animator.GetCurrentAnimatorClipInfo(0);
-        foreach(var clipInfo in clipInfos)
-        {
-            if(clipInfo.clip.name.Equals("Ani_Character_Idle"))
-            {
-                enableFeetIk = true;
-            }
-            else
-            {
-                enableFeetIk = false;
-            }
-        }
+        //AnimatorClipInfo[] clipInfos= animator.GetCurrentAnimatorClipInfo(0);
+        //foreach(var clipInfo in clipInfos)
+        //{
+        //    if(clipInfo.clip.name.Equals("Ani_Character_Idle"))
+        //    {
+        //        enableFeetIk = true;
+        //    }
+        //    else
+        //    {
+        //        enableFeetIk = false;
+        //    }
+        //}
 
-        if (enableFeetIk == false)
-        {
-            return;
-        }
+        //if (enableFeetIk == false)
+        //{
+        //    return;
+        //}
 
-        if (animator == null)
-        {
-            return;
-        }
+        //if (animator == null)
+        //{
+        //    return;
+        //}
 
-        AdjustFeetTarget(ref rightFootPosition, HumanBodyBones.RightFoot);
-        AdjustFeetTarget(ref leftFootPosition, HumanBodyBones.LeftFoot);
+        //AdjustFeetTarget(ref rightFootPosition, HumanBodyBones.RightFoot);
+        //AdjustFeetTarget(ref leftFootPosition, HumanBodyBones.LeftFoot);
 
-        FeetPositionSolver(rightFootPosition, ref rightFootIkPosition, ref rightFootIkRotation);
-        FeetPositionSolver(leftFootPosition, ref leftFootIkPosition, ref leftFootIkRotation);
+        //FeetPositionSolver(rightFootPosition, ref rightFootIkPosition, ref rightFootIkRotation);
+        //FeetPositionSolver(leftFootPosition, ref leftFootIkPosition, ref leftFootIkRotation);
     }
 
     private void OnAnimatorIK(int layerIndex)
     {
 
-        if (enableFeetIk == false)
+        //if (enableFeetIk == false)
+        //{
+        //    return;
+        //}
+        //if(animator == null)
+        //{
+        //    return;
+        //}
+
+        ////MovePelvisHeight();
+
+        //animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
+
+        //if(useProIkFeature)
+        //{
+        //    //animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,animator.GetFloat(rightFootAnimVariableName));
+        //    animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0.5f);
+        //}
+
+        //MoveFeetToIkPoint(AvatarIKGoal.RightFoot, rightFootIkPosition,rightFootIkRotation,ref lastRightFootPositionY);
+
+        //animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
+
+        //if (useProIkFeature)
+        //{
+        //    //animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, animator.GetFloat(leftFootAnimVariableName));
+        //    animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0.5f);
+        //}
+
+        //MoveFeetToIkPoint(AvatarIKGoal.LeftFoot, leftFootIkPosition, leftFootIkRotation, ref lastLeftFootPositionY);
+
+        if(animator)
         {
-            return;
+            float leftWeight = animator.GetFloat("LeftIkWeight");
+            float rightWeight = animator.GetFloat("RightIkWeight");
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, leftWeight);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, leftWeight);
+            animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, rightWeight);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, rightWeight);
+
+            RaycastHit hit;
+            Ray ray = new Ray(animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up,Vector3.down);
+            if(Physics.Raycast(ray,out hit, distanceToGround + 1f, layerMask))
+            {
+                if(hit.transform.tag == "Enviroment")
+                {
+                    Vector3 footPosition = hit.point;
+                    footPosition.y += distanceToGround;
+                    animator.SetIKPosition(AvatarIKGoal.LeftFoot, footPosition);
+                    animator.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+                }
+            }
+
+            ray = new Ray(animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down);
+            if (Physics.Raycast(ray, out hit, distanceToGround + 1f, layerMask))
+            {
+                if (hit.transform.tag == "Enviroment")
+                {
+                    Vector3 footPosition = hit.point;
+                    footPosition.y += distanceToGround;
+                    animator.SetIKPosition(AvatarIKGoal.RightFoot, footPosition);
+                    animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+                }
+            }
         }
-        if(animator == null)
-        {
-            return;
-        }
-
-        //MovePelvisHeight();
-
-        animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
-
-        if(useProIkFeature)
-        {
-            //animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,animator.GetFloat(rightFootAnimVariableName));
-            animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0.5f);
-        }
-
-        MoveFeetToIkPoint(AvatarIKGoal.RightFoot, rightFootIkPosition,rightFootIkRotation,ref lastRightFootPositionY);
-
-        animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
-
-        if (useProIkFeature)
-        {
-            //animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, animator.GetFloat(leftFootAnimVariableName));
-            animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0.5f);
-        }
-
-        MoveFeetToIkPoint(AvatarIKGoal.LeftFoot, leftFootIkPosition, leftFootIkRotation, ref lastLeftFootPositionY);
     }
 
     public void EnableFeetIk() { enableFeetIk = true; }

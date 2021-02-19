@@ -245,7 +245,12 @@ public class PlayerCtrl_State : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(state == PlayerState.Grab)
+        if (isPause == true)
+        {
+            return;
+        }
+
+        if (state == PlayerState.Grab)
         {
             CheckLedge();
         }
@@ -1733,11 +1738,11 @@ public class PlayerCtrl_State : MonoBehaviour
                     specialSpear.Launch(GameManager.Instance.GetCoreTransform());
                     specialSpear.AddListener(GameManager.Instance.bossControll.ExplosionProgress);
 
-                    GameManager.Instance.CameraEventIntroduction_Immediate(GameManager.Instance.GetKillEventTransform());
-                    GameManager.Instance.LookingEvent_CameraCollision(specialSpear.transform);
+                    //GameManager.Instance.CameraEventIntroduction_Immediate(GameManager.Instance.GetKillEventTransform());
+                    //GameManager.Instance.LookingEvent_CameraCollision(specialSpear.transform);
 
 
-                    GameManager.Instance.SetCameraFov();
+                    //GameManager.Instance.SetCameraFov();
 
                     ReleaseAim();
                 }
@@ -2052,7 +2057,17 @@ public class PlayerCtrl_State : MonoBehaviour
         state = PlayerState.Default;
     }
 
-    private void TakeDamage()
+    public void TakeDamage()
+    {
+        Debug.Log("데미지!");
+        hp.Value -= damage;
+        if (hp.Value <= 0f)
+        {
+            OnDead?.Invoke();
+        }
+    }
+
+    public void TakeDamage(float damage)
     {
         Debug.Log("데미지!");
         hp.Value -= damage;
