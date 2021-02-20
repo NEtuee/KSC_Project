@@ -40,42 +40,7 @@ public class CameraManager : MonoBehaviour
         //UpdateCameraSide((GameManager.Instance.GetInputHorizontal() + 1f) * 0.5f);
         if(isAttentionCamera)
         {
-            Vector3 camForward = brainCameraTransfrom.forward;
-            camForward.y = 0;
-            camForward.Normalize();
-            Vector3 toBossDir = (GameManager.Instance.bossTransform.position - brainCameraTransfrom.position);
-            toBossDir.y = 0f;
-            toBossDir.Normalize();
-
-            float targetFactor;
-            float angle = Vector3.Dot(camForward, toBossDir);
-            float min = 0.8f;
-            float max = 1.0f;
-
-            if(angle >= min && angle <= max)
-            {
-                float factor = max - angle;
-                targetFactor = factor / (1f-min);
-            }
-            else if(angle< min && angle >=-0.2f)
-            {
-                targetFactor = 1.0f;
-            }
-            else 
-            {
-                targetFactor = 0.0f;
-            }
-
-            if(Vector3.Cross(camForward, toBossDir).y < 0)
-            {
-                targetFactor *= -0.5f;
-            }
-            else
-            {
-                targetFactor *= 0.5f;
-            }
-
-            UpdateCameraSide(0.5f + targetFactor);
+            UpdateCameraSide();
         }
     }
 
@@ -315,8 +280,46 @@ public class CameraManager : MonoBehaviour
             return null;
     }
 
-    public void UpdateCameraSide(float value)
+    public void UpdateCameraSide()
     {
-        playerFollowCam3rdPersonComponent.CameraSide = Mathf.SmoothDamp(playerFollowCam3rdPersonComponent.CameraSide, value, ref cameraSideSmoothVelocity, 300f*Time.deltaTime);
+        if (GameManager.Instance.bossTransform == null)
+            return;
+
+        Vector3 camForward = brainCameraTransfrom.forward;
+        camForward.y = 0;
+        camForward.Normalize();
+        Vector3 toBossDir = (GameManager.Instance.bossTransform.position - brainCameraTransfrom.position);
+        toBossDir.y = 0f;
+        toBossDir.Normalize();
+
+        float targetFactor;
+        float angle = Vector3.Dot(camForward, toBossDir);
+        float min = 0.8f;
+        float max = 1.0f;
+
+        if (angle >= min && angle <= max)
+        {
+            float factor = max - angle;
+            targetFactor = factor / (1f - min);
+        }
+        else if (angle < min && angle >= -0.2f)
+        {
+            targetFactor = 1.0f;
+        }
+        else
+        {
+            targetFactor = 0.0f;
+        }
+
+        if (Vector3.Cross(camForward, toBossDir).y < 0)
+        {
+            targetFactor *= -0.5f;
+        }
+        else
+        {
+            targetFactor *= 0.5f;
+        }
+
+        playerFollowCam3rdPersonComponent.CameraSide = Mathf.SmoothDamp(playerFollowCam3rdPersonComponent.CameraSide, 0.5f + targetFactor, ref cameraSideSmoothVelocity, 300f*Time.deltaTime);
     }
 }
