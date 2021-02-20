@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform coreTransfrom;
     [SerializeField] private Transform killEventTransform;
     [SerializeField] private HudTest hudTest;
+    [SerializeField] private EscMainMenu escMainMenu;
     public Transform bossTransform;
 
     private Vector3 mainCameraStartPosition;
@@ -69,14 +70,20 @@ public class GameManager : MonoBehaviour
                     followTarget.Pause();
                     menuState = MenuState.MenuOn;
                     isMenuBlending = true;
-                    cameraManger.ActiveAimCamera(() => hudTest.HUDActive());
+                    //cameraManger.ActiveAimCamera(() => hudTest.HUDActive());
+                    cameraManger.ActiveAimCamera(() => escMainMenu.Appear(0.2f, () => SwitchMenuDone()));
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
                     break;
                 case MenuState.MenuOn:
                     player.Resume();
                     followTarget.Resume();
                     menuState = MenuState.MenuOff;
                     isMenuBlending = true;
-                    hudTest.HUDDissable(() => cameraManger.ActivePlayerFollowCamera());
+                    //hudTest.HUDDissable(() => cameraManger.ActivePlayerFollowCamera());
+                    cameraManger.ActiveAimCamera(() => escMainMenu.Disappear(0.2f, () => { SwitchMenuDone();cameraManger.ActivePlayerFollowCamera(); }));
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
                     break;
             }
         }
