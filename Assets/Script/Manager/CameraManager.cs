@@ -80,7 +80,7 @@ public class CameraManager : MonoBehaviour
     }
 
     /// <summary>
-    /// °ÔÀÓ ½ÃÀÛ½Ã ÇÃ·¹ÀÌ¾î Ä· »©°í ÀüºÎ ºñÈ°¼ºÈ­ ÇÕ´Ï´Ù.
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ä· ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ ï¿½Õ´Ï´ï¿½.
     /// </summary>
     private void InitializeCameraAtGameStart()
     { 
@@ -98,7 +98,7 @@ public class CameraManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Ä«¸Þ¶ó¸¦ ÇÃ·¹ÀÌ¾î Ä·À¸·Î ¹Ù²ß´Ï´Ù.
+    /// Ä«ï¿½Þ¶ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ä·ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ß´Ï´ï¿½.
     /// </summary>
     public bool ActivePlayerFollowCamera()
     {
@@ -130,7 +130,7 @@ public class CameraManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Ä«¸Þ¶ó¸¦ Á¶ÁØ Ä«¸Þ¶ó·Î ¹Ù²ß´Ï´Ù.
+    /// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ï¿½ ï¿½Ù²ß´Ï´ï¿½.
     /// </summary>
     public bool ActiveAimCamera()
     {
@@ -163,11 +163,11 @@ public class CameraManager : MonoBehaviour
 
 
     /// <summary>
-    /// ÀÌÀü¿¡ »ç¿ëÇÑ Ä«¸Þ¶ó·Î ÀüÈ¯ÇÕ´Ï´Ù.
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
     /// </summary>
     public bool BackToPrevCamera()
     {
-        //ÀÌÀü Ä«¸Þ¶ó°¡ ¾øÀ¸¸é ¹ÝÈ¯
+        //ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
         if(prevActiveCam == null)
         {
             return false;
@@ -185,7 +185,8 @@ public class CameraManager : MonoBehaviour
 
     public bool BackToPrevCamera(Action doneBlendCall)
     {
-        //ÀÌÀü Ä«¸Þ¶ó°¡ ¾øÀ¸¸é ¹ÝÈ¯
+        //ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+
         if (prevActiveCam == null)
         {
             return false;
@@ -206,7 +207,7 @@ public class CameraManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ³Ñ°ÜÁØ ¹öÃß¾ó Ä«¸Þ¶ó¸¦ ÇöÀç Ä«¸Þ¶ó·Î ¼³Á¤ÇÕ´Ï´Ù. 
+    /// ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¾ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½. 
     /// </summary>
     /// <param name="activeCamera"></param>
     public bool ActiveCamera(CinemachineVirtualCameraBase activeCamera)
@@ -239,7 +240,7 @@ public class CameraManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇØ´çÇÏ´Â Å°ÀÇ Ä«¸Þ¶ó¸¦ ÇöÀç Ä«¸Þ¶ó·Î ¼³Á¤ÇÕ´Ï´Ù.
+    /// ï¿½Ø´ï¿½ï¿½Ï´ï¿½ Å°ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
     /// </summary>
     /// <param name="cameraKey"></param>
     public bool ActiveCamera(string cameraKey)
@@ -278,7 +279,7 @@ public class CameraManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Ä«¸Þ¶ó¸¦ Å°·Î µî·ÏÇÕ´Ï´Ù.
+    /// Ä«ï¿½Þ¶ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
     /// </summary>
     /// <param name="key"></param>
     /// <param name="camera"></param>
