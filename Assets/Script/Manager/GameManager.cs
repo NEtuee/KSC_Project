@@ -8,8 +8,8 @@ public class GameManager : MonoBehaviour
 
     public BulletTimeManager timeManager;
     public float killEventFov = 66f;
-    [SerializeField] private PlayerCtrl_State player;
-    [SerializeField] private FollowTargetCtrl followTarget;
+    [SerializeField] public PlayerCtrl_State player;
+    [SerializeField] public FollowTargetCtrl followTarget;
     [SerializeField] public UIManager uiManager;
     [SerializeField] public CameraManager cameraManger;
     [SerializeField] public LevelEdit_BehaviorControll bossControll;
@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HudTest hudTest;
     [SerializeField] private EscMainMenu escMainMenu;
     [SerializeField] private InputMenu inputMenu;
+    [SerializeField] private EscMenu soundMenu;
     public Transform bossTransform;
 
     private Vector3 mainCameraStartPosition;
@@ -62,34 +63,36 @@ public class GameManager : MonoBehaviour
         //    mainCam.RequstChangePP(2f);
         //}
 
-        if (Input.GetKeyDown(KeyCode.Escape)&&hudTest != null && isMenuBlending == false)
-        {
-            switch (menuState)
-            {
-                case MenuState.MenuOff:
-                    player.Pause();
-                    followTarget.Pause();
-                    menuState = MenuState.MenuOn;
-                    isMenuBlending = true;
-                    //cameraManger.ActiveAimCamera(() => hudTest.HUDActive());
-                    //cameraManger.ActiveAimCamera(() => escMainMenu.Appear(0.2f, () => SwitchMenuDone()));
-                    cameraManger.ActiveAimCamera(() => inputMenu.Appear(0.08f, () => SwitchMenuDone()));
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                    break;
-                case MenuState.MenuOn:
-                    player.Resume();
-                    followTarget.Resume();
-                    menuState = MenuState.MenuOff;
-                    isMenuBlending = true;
-                    //hudTest.HUDDissable(() => cameraManger.ActivePlayerFollowCamera());
-                    //cameraManger.ActiveAimCamera(() => escMainMenu.Disappear(0.2f, () => { SwitchMenuDone();cameraManger.ActivePlayerFollowCamera(); }));
-                    cameraManger.ActiveAimCamera(() => inputMenu.Disappear(0.08f, () => { SwitchMenuDone(); cameraManger.ActivePlayerFollowCamera(); }));
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                    break;
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape)&&hudTest != null && isMenuBlending == false)
+        //{
+        //    switch (menuState)
+        //    {
+        //        case MenuState.MenuOff:
+        //            player.Pause();
+        //            followTarget.Pause();
+        //            menuState = MenuState.MenuOn;
+        //            isMenuBlending = true;
+        //            //cameraManger.ActiveAimCamera(() => hudTest.HUDActive());
+        //            //cameraManger.ActiveAimCamera(() => escMainMenu.Appear(0.2f, () => SwitchMenuDone()));
+        //            //cameraManger.ActiveAimCamera(() => inputMenu.Appear(0.08f, () => SwitchMenuDone()));
+        //            cameraManger.ActiveAimCamera(() => soundMenu.Appear(0.5f, () => SwitchMenuDone()));
+        //            Cursor.lockState = CursorLockMode.None;
+        //            Cursor.visible = true;
+        //            break;
+        //        case MenuState.MenuOn:
+        //            player.Resume();
+        //            followTarget.Resume();
+        //            menuState = MenuState.MenuOff;
+        //            isMenuBlending = true;
+        //            //hudTest.HUDDissable(() => cameraManger.ActivePlayerFollowCamera());
+        //            //cameraManger.ActiveAimCamera(() => escMainMenu.Disappear(0.2f, () => { SwitchMenuDone();cameraManger.ActivePlayerFollowCamera(); }));
+        //            //cameraManger.ActiveAimCamera(() => inputMenu.Disappear(0.08f, () => { SwitchMenuDone(); cameraManger.ActivePlayerFollowCamera(); }));
+        //            cameraManger.ActiveAimCamera(() => soundMenu.Disappear(0.5f, () => { SwitchMenuDone(); cameraManger.ActivePlayerFollowCamera(); }));
+        //            Cursor.lockState = CursorLockMode.Locked;
+        //            Cursor.visible = false;
+        //            break;
+        //    }
+        //}
     }
 
     public void SwitchMenuDone()
