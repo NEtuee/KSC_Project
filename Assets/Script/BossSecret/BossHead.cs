@@ -16,12 +16,14 @@ public class BossHead : MonoBehaviour
             var two = allParts[i].transform.position;
             var direction = (one - two).normalized;
             var dist = Vector3.Distance(one,two);
+
             if(dist >= farDistance)
             {
                 allParts[i].transform.position = one - direction * farDistance;
             }
 
-            allParts[i].LookAt(allParts[i-1]);
+            var angle = Vector3.SignedAngle(allParts[i].forward,Vector3.ProjectOnPlane(direction,allParts[i].up),allParts[i].up);
+            allParts[i].RotateAround(allParts[i].position,allParts[i].up,angle);
         }
     }
 }

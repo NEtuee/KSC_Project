@@ -41,6 +41,7 @@ public class IKLegMovement : MonoBehaviour
 
     private void LateUpdate()
     {
+        _downRay.SetDirection(-rayPoint.up);
         if(_downRay.Cast(rayPoint.position,out RaycastHit hit))
         {
             float dist = Vector3.Distance(ik.position,hit.point);

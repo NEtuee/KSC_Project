@@ -8,6 +8,9 @@ public class LevelEdit_Editor : Editor
 {
 	LevelEdit_Controll controll;
 
+	private string currentPath;
+	private string createPath;
+
 	private string[] patternList;
 
 	void OnEnable()
@@ -19,13 +22,56 @@ public class LevelEdit_Editor : Editor
     public override void OnInspectorGUI()
     {
 		BeginV();
-		GUILayout.Label("Behavior");
-		controll.behaviorControll = EditorGUILayout.ObjectField(controll.behaviorControll,typeof(LevelEdit_BehaviorControll),true) as LevelEdit_BehaviorControll;
+
+		var path = controll.GetPointManager().movePaths;
+		string deleteTarget = "";
+
+		for(int i = 0; i < path.Count; ++i)
+		{
+			BeginH();
+			GUILayout.Label(path[i].name);
+
+			if(GUILayout.Button("Select",GUILayout.Width(100f)))
+			{
+				currentPath = path[i].name;
+			}
+			else if(GUILayout.Button("Delete",GUILayout.Width(100f)))
+			{
+				deleteTarget = path[i].name;
+				currentPath = currentPath == path[i].name ? "" : currentPath;
+			}
+
+			EndH();
+		}
+
+		if(deleteTarget != "")
+			controll.GetPointManager().DisposePath(deleteTarget);
+
 		EndV();
+
+		Space(10f);
+
+		BeginH();
+
+		createPath = GUILayout.TextField(createPath);
+		if(GUILayout.Button("CreatePath",GUILayout.Width(100f)))
+		{
+			controll.GetPointManager().CreatePath(createPath);
+			currentPath = createPath;
+			createPath = "";
+		}
+
+		EndH();
+
+		Space(20f);
+		GUILayout.Label("CurrentPath : " + currentPath);
 
 		DrawPointList();
 		Space(10f);
-		DrawControllMenu();
+		if(currentPath != "")
+			DrawControllMenu();
+
+
 
 		if(GUILayout.Button("Save"))
 		{
@@ -39,7 +85,9 @@ public class LevelEdit_Editor : Editor
 
 	public void DrawPointList()
 	{
-		var list = controll.GetPointList();
+		var list = controll.GetPointList(currentPath);
+		if(list == null)
+			return;
 
 		for(int i = 0; i < list.Count; ++i)
 		{
@@ -54,11 +102,11 @@ public class LevelEdit_Editor : Editor
 		GUILayout.Label(label);
 		if(GUILayout.Button("select",GUILayout.Width(70)))
 		{
-			Selection.activeGameObject = controll.GetPoint(pos).gameObject;
+			Selection.activeGameObject = controll.GetPoint(currentPath,pos).gameObject;
 		}
 		if(GUILayout.Button("delete",GUILayout.Width(70)))
 		{
-			controll.DeletePoint(pos);
+			controll.DeletePoint(currentPath,pos);
 		}
 
 
@@ -82,9 +130,9 @@ public class LevelEdit_Editor : Editor
 	{
 		BeginV();
 
-		if(GUILayout.Button("Add"))
+		if(GUILayout.Button("AddPoint"))
 		{
-			controll.AddPoint(CreatePoint());
+			controll.AddPoint(currentPath,CreatePoint());
 		}
 
 
