@@ -108,7 +108,7 @@ public class UIManager : MonoBehaviour
         staminaPanel.SetActive(false);
         soundSettingPanel.SetActive(false);
 
-        GameManager.Instance.CameraRootSetWorldPosition(titleCameraPosition.position);
+        //GameManager.Instance.CameraRootSetWorldPosition(titleCameraPosition.position);
         GameManager.Instance.PausePlayer();
 
         //ActiveMouse();
@@ -226,18 +226,18 @@ public class UIManager : MonoBehaviour
 
         staminaPanel.SetActive(true);
 
-        StartCoroutine(GameManager.Instance.GameStartCameraMove());
+        //StartCoroutine(GameManager.Instance.GameStartCameraMove());
 
         gameState = GameState.Game;
     }
 
-    IEnumerator GameStartCameraMove()
-    {
-        titleMenu.SetActive(false);
-        GameManager.Instance.ResumePlayerControl();
+    //IEnumerator GameStartCameraMove()
+    //{
+    //    titleMenu.SetActive(false);
+    //    GameManager.Instance.ResumePlayerControl();
 
-        yield return StartCoroutine(GameManager.Instance.GameStartCameraMove());
-    }
+    //    yield return StartCoroutine(GameManager.Instance.GameStartCameraMove());
+    //}
 
     private void ActiveMouse()
     {

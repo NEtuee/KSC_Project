@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.EventSystems;
 
-public class ButtonHUD : MonoBehaviour
+public class ButtonHUD : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Canvas canvas;
@@ -14,6 +15,7 @@ public class ButtonHUD : MonoBehaviour
     [SerializeField] private TextMeshProUGUI buttonText;
     [SerializeField] private bool visible;
     [SerializeField] private Vector2 targetSize;
+    [SerializeField] private Vector2 seletedSize;
 
     [SerializeField] private TweenUI inUi;
     
@@ -37,6 +39,7 @@ public class ButtonHUD : MonoBehaviour
         buttonAlphaColor = startColor;
         buttonAlphaColor.a = 0;
         buttonImage.color = buttonAlphaColor;
+        //textStartSize = buttonText.rectTransform.sizeDelta;
 
         if (buttonText != null)
         {
@@ -99,9 +102,19 @@ public class ButtonHUD : MonoBehaviour
             buttonText.DOFade(textAlphaColor.a, duration);
         }
 
+        if(inUi)
         inUi.Disapper(duration);
+        if(gage)
         gage.Disapper();
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        rectTransform.DOSizeDelta(seletedSize, 0.1f);
+    }
 
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        rectTransform.DOSizeDelta(targetSize, 0.1f);
+    }
 }

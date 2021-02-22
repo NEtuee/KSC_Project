@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(LevelEdit_PointManager))]
 public class LevelEdit_Controll : SingletonMono<LevelEdit_Controll>
 {
-    public LevelEdit_BehaviorControll behaviorControll;
     private LevelEdit_PointManager pointManager;
     private List<LevelEdit_Trigger> activeTriggers = new List<LevelEdit_Trigger>();
     public int currentPoint = -1;
@@ -16,46 +16,10 @@ public class LevelEdit_Controll : SingletonMono<LevelEdit_Controll>
         pointManager = GetComponent<LevelEdit_PointManager>();
     }
 
-    void Update()
-    {
-        behaviorControll.Progress();
-        if(behaviorControll.GetState() == LevelEdit_BehaviorControll.State.MoveEnd)
-        {
-            Launch();
-        }
-        else if(behaviorControll.GetState() == LevelEdit_BehaviorControll.State.StepIdle)
-        {
-            if(activeTriggers.Count > 0)
-            {
-                foreach(var trigger in activeTriggers)
-                {
-                    trigger.TriggerEventInvoke();
-                }
-
-                activeTriggers.Clear();
-            }
-            
-        }
-    }
-
-    public void SetRightFoot()
-    {
-        behaviorControll.SetStepFoot(true);
-    }
 
     public void AddActiveTrigger(LevelEdit_Trigger t)
     {
         activeTriggers.Add(t);
-    }
-
-    public void Launch()
-    {
-        behaviorControll.SetMoveInfo(pointManager.GetList());
-    }
-
-    public void SetPrevState()
-    {
-        behaviorControll.SetPrevState();
     }
     
     public void EditorSetup()
@@ -63,9 +27,11 @@ public class LevelEdit_Controll : SingletonMono<LevelEdit_Controll>
         pointManager = GetComponent<LevelEdit_PointManager>();
     }
 
-    public void AddPoint(LevelEdit_MovePoint point) {pointManager.AddPoint(point);}
-    public void DeletePoint(int pos) {pointManager.DeletePoint(pos);}
+    public LevelEdit_PointManager GetPointManager() {return pointManager;}
 
-    public LevelEdit_MovePoint GetPoint(int pos) {return pointManager.GetPoint(pos);}
-    public List<LevelEdit_MovePoint> GetPointList() {return pointManager.GetList();}
+    public void AddPoint(string path, LevelEdit_MovePoint point) {pointManager.AddPoint(path, point);}
+    public void DeletePoint(string path, int pos) {pointManager.DeletePoint(path, pos);}
+
+    public LevelEdit_MovePoint GetPoint(string path, int pos) {return pointManager.GetPoint(path, pos);}
+    public List<LevelEdit_MovePoint> GetPointList(string path) {return pointManager.GetList(path);}
 }
