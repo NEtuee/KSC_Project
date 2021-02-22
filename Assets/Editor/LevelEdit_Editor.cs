@@ -8,7 +8,6 @@ public class LevelEdit_Editor : Editor
 {
 	LevelEdit_Controll controll;
 
-	private string currentPath;
 	private string createPath;
 
 	private string[] patternList;
@@ -24,6 +23,7 @@ public class LevelEdit_Editor : Editor
 		BeginV();
 
 		var path = controll.GetPointManager().movePaths;
+		var pointManager = controll.GetPointManager();
 		string deleteTarget = "";
 
 		for(int i = 0; i < path.Count; ++i)
@@ -33,19 +33,19 @@ public class LevelEdit_Editor : Editor
 
 			if(GUILayout.Button("Select",GUILayout.Width(100f)))
 			{
-				currentPath = path[i].name;
+				pointManager.currentPath = path[i].name;
 			}
 			else if(GUILayout.Button("Delete",GUILayout.Width(100f)))
 			{
 				deleteTarget = path[i].name;
-				currentPath = currentPath == path[i].name ? "" : currentPath;
+				pointManager.currentPath = pointManager.currentPath == path[i].name ? "" : pointManager.currentPath;
 			}
 
 			EndH();
 		}
 
 		if(deleteTarget != "")
-			controll.GetPointManager().DisposePath(deleteTarget);
+			pointManager.DisposePath(deleteTarget);
 
 		EndV();
 
@@ -56,19 +56,19 @@ public class LevelEdit_Editor : Editor
 		createPath = GUILayout.TextField(createPath);
 		if(GUILayout.Button("CreatePath",GUILayout.Width(100f)))
 		{
-			controll.GetPointManager().CreatePath(createPath);
-			currentPath = createPath;
+			pointManager.CreatePath(createPath);
+			pointManager.currentPath = createPath;
 			createPath = "";
 		}
 
 		EndH();
 
 		Space(20f);
-		GUILayout.Label("CurrentPath : " + currentPath);
+		GUILayout.Label("CurrentPath : " + pointManager.currentPath);
 
 		DrawPointList();
 		Space(10f);
-		if(currentPath != "")
+		if(pointManager.currentPath != "")
 			DrawControllMenu();
 
 
@@ -85,7 +85,7 @@ public class LevelEdit_Editor : Editor
 
 	public void DrawPointList()
 	{
-		var list = controll.GetPointList(currentPath);
+		var list = controll.GetPointList(controll.GetPointManager().currentPath);
 		if(list == null)
 			return;
 
@@ -102,11 +102,11 @@ public class LevelEdit_Editor : Editor
 		GUILayout.Label(label);
 		if(GUILayout.Button("select",GUILayout.Width(70)))
 		{
-			Selection.activeGameObject = controll.GetPoint(currentPath,pos).gameObject;
+			Selection.activeGameObject = controll.GetPoint(controll.GetPointManager().currentPath,pos).gameObject;
 		}
 		if(GUILayout.Button("delete",GUILayout.Width(70)))
 		{
-			controll.DeletePoint(currentPath,pos);
+			controll.DeletePoint(controll.GetPointManager().currentPath,pos);
 		}
 
 
@@ -116,7 +116,7 @@ public class LevelEdit_Editor : Editor
 
 	private LevelEdit_MovePoint CreatePoint()
 	{
-		GameObject obj = new GameObject(currentPath + " : Point");
+		GameObject obj = new GameObject(controll.GetPointManager().currentPath + " : Point");
 		var point = obj.AddComponent<LevelEdit_MovePoint>();
 
 		obj.transform.SetParent(controll.transform);
@@ -132,12 +132,48 @@ public class LevelEdit_Editor : Editor
 
 		if(GUILayout.Button("AddPoint"))
 		{
-			controll.AddPoint(currentPath,CreatePoint());
+			controll.AddPoint(controll.GetPointManager().currentPath,CreatePoint());
 		}
 
 
 		EndV();
 	}
+
+	// [DrawGizmo(GizmoType.Selected | GizmoType.Active)]
+    // void OnDrawGizmos() 
+    // {
+	// 	if(currentPath == "")
+	// 		return;
+
+	// 	var list = controll.GetPointManager().GetPath(currentPath);
+	// 	if(list == null)
+	// 		return;
+
+    //     for(int i = 0; i < list.movePoints.Count; ++i)
+    //     {
+    //         if(i == 0)
+    //             Handles.Label(list.movePoints[i].transform.position, list.name);
+    //         else
+    //             Handles.Label(list.movePoints[i].transform.position, "p" + i);
+    
+    //         Handles.color = Color.red;
+    //         // Handles.Label(list.movePoints[i].GetBezierPoint1().position, "p" + i + " Bezier_1");
+    //         // Handles.Label(list.movePoints[i].GetBezierPoint2().position, "p" + i + " Bezier_2");
+    //         Handles.DrawLine(list.movePoints[i].GetPoint(),list.movePoints[i].GetPoint() + Vector3.up * 10f);
+    //         // Handles.DrawLine(list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint(),list.movePoints[i].GetBezierPoint2().position);
+    //     }
+
+    //     Handles.color = Color.white;
+
+    //     for(int i = 0; i < list.movePoints.Count; ++i)
+    //     {
+    //         Vector3 startPoint = list.movePoints[i].GetPoint();
+    //         Vector3 endPoint = list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint();
+
+    //         Handles.DrawLine(startPoint,endPoint);
+
+    //     }
+    // }
 
 	public void Space(float space)
 	{

@@ -18,14 +18,14 @@ public class TimeCounterEx
         }
     }
 
-    public float IncreaseTimer(string target, float limit, out bool overLimit)
+    public float IncreaseTimer(string target, float limit, out bool overLimit, float timeScale = 1f)
     {
         if(!_timerSet.ContainsKey(target))
         {
             _timerSet.Add(target,0f);
         }
 
-        var curr = _timerSet[target] += Time.deltaTime;
+        var curr = _timerSet[target] += timeScale * Time.deltaTime;
         overLimit = false;
 
         if(curr >= limit)

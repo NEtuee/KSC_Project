@@ -6,6 +6,7 @@ public class IKBossAI : MonoBehaviour
 {
     public enum Phase
     {
+        ZERO,
         ONE,
         TWO,
         THREE,
@@ -29,14 +30,17 @@ public class IKBossAI : MonoBehaviour
 
     private Transform _targetTransform;
     private int _targetPoint;
+    private int _currentPoint = 0;
 
     private float _movementSpeed;
     private float _turnAccuracy = 3f;
     private float _turnAngle;
 
     private bool _pathLoop = true;
+    private bool _pathArrived = false;
     private bool _rushToPlayer = false;
     private bool _isStunned = false;
+    private bool _fastRun = false;
 
     private Vector3 _targetDirection;
     private Vector3 _rushStartPoint;
@@ -57,7 +61,15 @@ public class IKBossAI : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.T))
         {
+            ChangePhase(Phase.ONE);
+        }
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
             ChangePhase(Phase.TWO);
+        }
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            ChangePhase(Phase.THREE);
         }
     }
 
@@ -82,6 +94,10 @@ public class IKBossAI : MonoBehaviour
         {
             Phase_Three_Progress();
         }
+        else if(currentPhase == Phase.ZERO)
+        {
+            Phase_Zero_Progress();
+        }
     }
 
     public void PhaseInitialize()
@@ -98,13 +114,32 @@ public class IKBossAI : MonoBehaviour
         {
             Phase_Three_Init();
         }
+        else if(currentPhase == Phase.ZERO)
+        {
+            Phase_Zero_Init();
+        }
+    }
+
+    public void Phase_Zero_Init()
+    {
+        _pathLoop = false;
+        _pathArrived = false;
+
+        SetSlowMovement();
+        GetPath("PhaseThree");
+    }
+
+    public void Phase_Zero_Progress()
+    {
+        FollowPath();
     }
 
     public void Phase_Three_Init()
     {
         _pathLoop = false;
+        _pathArrived = false;
 
-        SetFastMovement();
+        SetSlowMovement();
         GetPath("PhaseThree");
     }
 
@@ -130,10 +165,14 @@ public class IKBossAI : MonoBehaviour
         if(limit)
         {
             _timeCounter.InitTimer("randomTimer",Random.Range(8f,17f));
-            int path = MathEx.RandomInt(0,2);
-            GetPath("PhaseTwo_" + path.ToString());
+            if(_currentPoint == 2)
+                _fastRun = !_fastRun;
+            _currentPoint = _currentPoint == 2 ? (_fastRun ? 1 : 0) : 2;
+            
 
-            if(path == 1)
+            GetPath("PhaseTwo_" + _currentPoint.ToString());
+
+            if(_currentPoint == 1)
             {
                 SetFastMovement();
             }
@@ -147,6 +186,7 @@ public class IKBossAI : MonoBehaviour
     public void Phase_One_Init()
     {
         _pathLoop = true;
+        _pathArrived = false;
 
         SetSlowMovement();
         GetPath("PhaseOne");
@@ -210,7 +250,8 @@ public class IKBossAI : MonoBehaviour
 
         bossHead.SetHeightInOrder(6f);
 
-        SetNearestPointToTarget();
+        //SetNearestPointToTarget();
+        SetNearestPointInArc(50f);
         SetSlowMovement();
     }
 
@@ -247,13 +288,21 @@ public class IKBossAI : MonoBehaviour
 
     public bool FollowPath()
     {
+        if(_pathArrived)
+            return true;
+
         SetTarget(_targetTransform.position);
         Move(true);
         if(IsArrivedTarget())
         {
             var target = GetNextPoint(out bool isEnd).transform;
-            _targetTransform = target;
 
+            _targetTransform = target;
+            if(isEnd && !_pathLoop)
+            {
+                _pathArrived = true;
+            }
+            
             return isEnd;
         }
 
@@ -265,10 +314,52 @@ public class IKBossAI : MonoBehaviour
         _targetTransform = _currentPath.FindNearestPoint(transform.position,out _targetPoint).transform;
     }
 
+    public void SetNearestPointInArc(float angle)
+    {
+        _targetTransform = FindNearestPointInArc(angle, out _targetPoint);
+    }
+    public Transform FindNearestPointInArc(float angle,out int target)
+    {
+        var points = _currentPath.movePoints;
+        
+        int point = -1;
+        float near = 0f;
+
+        for(int i = 0; i < points.Count; ++i)
+        {
+            var pointProject = Vector3.ProjectOnPlane(points[i].GetPoint(),Vector3.up);
+            var transformProject = Vector3.ProjectOnPlane(transform.position,Vector3.up);
+            var directionProject = Vector3.ProjectOnPlane(transform.forward,Vector3.up);
+            var pointDirection = (pointProject - transformProject).normalized;
+
+            if(Vector3.Angle(directionProject,pointDirection) > angle)
+            {
+                var dist = Vector3.Distance(points[i].GetPoint(),transform.position);
+                if(point == -1 || near > dist)
+                {
+                    point = i;
+                    near = dist;
+                }
+            }
+        }
+
+        if(point == -1)
+        {
+            Debug.Log("Fucn");
+            return _currentPath.FindNearestPoint(transform.position,out target).transform;
+        }
+        else
+        {
+            target = point;
+            return points[point].transform;
+        }
+    }
+
     public void GetPath(string path)
     {
         _currentPath = controll.GetPath(path);
-        SetNearestPointToTarget();
+        SetNearestPointInArc(50f);
+        //SetNearestPointToTarget();
     }
 
     public bool IsArrivedTarget()

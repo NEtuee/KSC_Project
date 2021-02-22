@@ -17,8 +17,13 @@ public class LevelEdit_PointManager : MonoBehaviour
 
         public LevelEdit_MovePoint GetNextPoint(ref int point, out bool isEnd)
         {
-            point = point + 1 >= movePoints.Count ? 0 : point + 1;
-            isEnd = point == 0;
+            isEnd = ++point >= movePoints.Count ? true : false;
+
+            if(isEnd)
+            {
+                Debug.Log(point);
+            }
+            point = point >= movePoints.Count ? 0 : point;
             
             return movePoints[point];
         }
@@ -47,6 +52,10 @@ public class LevelEdit_PointManager : MonoBehaviour
     }
 
     public List<PathClass> movePaths = new List<PathClass>();
+
+#if UNITY_EDITOR
+    public string currentPath;
+#endif
 
     public void CreatePath(string path)
     {
@@ -113,39 +122,67 @@ public class LevelEdit_PointManager : MonoBehaviour
 #if UNITY_EDITOR
     void OnDrawGizmos() 
     {
-        foreach(var list in movePaths)
+        if(currentPath == "")
+			return;
+
+		var list = FindPath(currentPath);
+		if(list == null)
+			return;
+
+        for(int i = 0; i < list.movePoints.Count; ++i)
         {
-            for(int i = 0; i < list.movePoints.Count; ++i)
-            {
-                if(i == 0)
-                    Handles.Label(list.movePoints[i].transform.position, list.name);
-                else
-                    Handles.Label(list.movePoints[i].transform.position, "p" + i);
+            if(i == 0)
+                Handles.Label(list.movePoints[i].transform.position, list.name);
+            else
+                Handles.Label(list.movePoints[i].transform.position, "p" + i);
     
-                Handles.color = Color.red;
-                // Handles.Label(list.movePoints[i].GetBezierPoint1().position, "p" + i + " Bezier_1");
-                // Handles.Label(list.movePoints[i].GetBezierPoint2().position, "p" + i + " Bezier_2");
-                Handles.DrawLine(list.movePoints[i].GetPoint(),list.movePoints[i].GetPoint() + Vector3.up * 10f);
-                // Handles.DrawLine(list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint(),list.movePoints[i].GetBezierPoint2().position);
-            }
+            Handles.color = Color.red;
+            // Handles.Label(list.movePoints[i].GetBezierPoint1().position, "p" + i + " Bezier_1");
+            // Handles.Label(list.movePoints[i].GetBezierPoint2().position, "p" + i + " Bezier_2");
+            Handles.DrawLine(list.movePoints[i].GetPoint(),list.movePoints[i].GetPoint() + Vector3.up * 10f);
+            // Handles.DrawLine(list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint(),list.movePoints[i].GetBezierPoint2().position);
         }
-        
 
         Handles.color = Color.white;
 
-        foreach(var list in movePaths)
+        for(int i = 0; i < list.movePoints.Count; ++i)
         {
-            for(int i = 0; i < list.movePoints.Count; ++i)
-            {
-                Vector3 startPoint = list.movePoints[i].GetPoint();
-                Vector3 endPoint = list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint();
+            Vector3 startPoint = list.movePoints[i].GetPoint();
+            Vector3 endPoint = list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint();
 
-                Handles.DrawLine(startPoint,endPoint);
+            Handles.DrawLine(startPoint,endPoint);
 
-            }
         }
+    //     foreach(var list in movePaths)
+    //     {
+    //         for(int i = 0; i < list.movePoints.Count; ++i)
+    //         {
+    //             if(i == 0)
+    //                 Handles.Label(list.movePoints[i].transform.position, list.name);
+    //             else
+    //                 Handles.Label(list.movePoints[i].transform.position, "p" + i);
+    
+    //             Handles.color = Color.red;
+    //             // Handles.Label(list.movePoints[i].GetBezierPoint1().position, "p" + i + " Bezier_1");
+    //             // Handles.Label(list.movePoints[i].GetBezierPoint2().position, "p" + i + " Bezier_2");
+    //             Handles.DrawLine(list.movePoints[i].GetPoint(),list.movePoints[i].GetPoint() + Vector3.up * 10f);
+    //             // Handles.DrawLine(list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint(),list.movePoints[i].GetBezierPoint2().position);
+    //         }
+    //     }
+        
 
+    //     Handles.color = Color.white;
 
+    //     foreach(var list in movePaths)
+    //     {
+    //         for(int i = 0; i < list.movePoints.Count; ++i)
+    //         {
+    //             Vector3 startPoint = list.movePoints[i].GetPoint();
+    //             Vector3 endPoint = list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint();
+
+    //             Handles.DrawLine(startPoint,endPoint);
+
+    //         }
     }
 #endif
 }

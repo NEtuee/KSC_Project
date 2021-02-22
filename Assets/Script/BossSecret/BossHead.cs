@@ -11,18 +11,26 @@ public class BossHead : MonoBehaviour
 
     public float farDistance = 5f;
 
+    private TimeCounterEx _timeCounter = new TimeCounterEx();
+
     private float _targetHeight;
     private float _twistTimer = 0f;
     private bool _twist = false;
 
     private void Start()
     {
+        _timeCounter.InitTimer("loop");
         _targetHeight = allParts[0].baseHeight;
     }
 
     void Update()
     {
-        allParts[0].baseHeight = Mathf.Lerp(allParts[0].baseHeight,_targetHeight,0.1f);
+        var time = _timeCounter.IncreaseTimer("loop",Mathf.PI,out bool limit);
+        if(limit)
+        {
+            _timeCounter.InitTimer("loop");
+        }
+        allParts[0].baseHeight = Mathf.Lerp(allParts[0].baseHeight,_targetHeight + (Mathf.Sin(time) * .7f),0.1f);
 
         for(int i = 1; i < allParts.Count; ++i)
         {
