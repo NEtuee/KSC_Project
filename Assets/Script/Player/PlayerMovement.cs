@@ -57,11 +57,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        Vector3 p1 = transform.position + capsuleCollider.center + Vector3.up * -capsuleCollider.height * 0.5f;
-        Vector3 p2 = p1 + Vector3.up * capsuleCollider.height;
+        //Vector3 p1 = transform.position + capsuleCollider.center + Vector3.up * -capsuleCollider.height * 0.5f;
+        //Vector3 p2 = p1 + Vector3.up * capsuleCollider.height;
 
-        if (Physics.CapsuleCast(p1, p2, capsuleCollider.radius * 1.5f, transform.forward, 0.0f, fowardCheckLayer))
-            return;
+        //if (Physics.CapsuleCast(p1, p2, capsuleCollider.radius * 1.5f, transform.forward, 0.0f, fowardCheckLayer))
+        //    return;
 
         transform.position += direction * Time.fixedDeltaTime;
         //rigidbody.MovePosition(transform.position+direction * Time.fixedDeltaTime);

@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     public BulletTimeManager timeManager;
     public float killEventFov = 66f;
-    [SerializeField] public PlayerCtrl_State player;
+    [SerializeField] public PlayerCtrl player;
     [SerializeField] public FollowTargetCtrl followTarget;
     [SerializeField] public UIManager uiManager;
     [SerializeField] public CameraManager cameraManger;
@@ -159,14 +159,9 @@ public class GameManager : MonoBehaviour
         return player.gameObject;
     }
 
-    public void SetPlayer(PlayerCtrl_State player)
+    public void SetPlayer(PlayerCtrl player)
     {
         this.player = player;
-    }
-
-    public void ClearAllCore()
-    {
-        player.ClearAllCore();
     }
 
     public void RequstGameResult()
@@ -192,19 +187,19 @@ public class GameManager : MonoBehaviour
         return isCurrentCameraEvent;
     }
 
-    public float GetInputVertical()
-    {
-        if (player == null)
-            return 0.0f;
+    //public float GetInputVertical()
+    //{
+    //    if (player == null)
+    //        return 0.0f;
 
-        return player.GetInputVertical();
-    }
+    //    return player.GetInputVertical();
+    //}
 
-    public float GetInputHorizontal()
-    {
-        if (player == null)
-            return 0.0f;
+    //public float GetInputHorizontal()
+    //{
+    //    if (player == null)
+    //        return 0.0f;
 
-        return player.GetInputHorizontal();
-    }
+    //    return player.GetInputHorizontal();
+    //}
 }

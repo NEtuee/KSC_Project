@@ -74,6 +74,39 @@ public class EnterAboveUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
     }
 
+    public void Appear(float duration,float delay, TweenCallback tweenCallback)
+    {
+        canvas.enabled = true;
+
+        rectTransform.sizeDelta = startSize;
+        rectTransform.localPosition = startPos;
+
+        rectTransform.DOSizeDelta(targetSize, duration).SetDelay(delay).OnComplete(tweenCallback).SetEase(Ease.OutExpo);
+        rectTransform.DOLocalMove(targetPos, duration).SetDelay(delay).SetEase(Ease.OutExpo); ;
+        buttonImage.DOFade(startColor.a, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        if (buttonText != null)
+        {
+            buttonText.DOFade(startTextColor.a, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        }
+    }
+
+    public void Appear(float duration,float delay)
+    {
+        canvas.enabled = true;
+
+        rectTransform.sizeDelta = startSize;
+        rectTransform.localPosition = startPos;
+
+        rectTransform.DOSizeDelta(targetSize, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        rectTransform.DOLocalMove(targetPos, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        buttonImage.DOFade(startColor.a, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        if (buttonText != null)
+        {
+            buttonText.DOFade(startTextColor.a, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        }
+    }
+
+
     public void Appear(float duration)
     {
         canvas.enabled = true;
@@ -109,6 +142,28 @@ public class EnterAboveUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (buttonText != null)
         {
             buttonText.DOFade(textAlphaColor.a, duration).SetEase(Ease.OutExpo);
+        }
+    }
+
+    public void Disappear(float duration,float delay, TweenCallback tweenCallback)
+    {
+        rectTransform.DOSizeDelta(startSize, duration).SetDelay(delay).OnComplete(tweenCallback).SetEase(Ease.OutExpo);
+        rectTransform.DOLocalMove(startPos, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        buttonImage.DOFade(buttonAlphaColor.a, duration).SetDelay(delay).SetEase(Ease.OutExpo).OnComplete(() => { canvas.enabled = false; });
+        if (buttonText != null)
+        {
+            buttonText.DOFade(textAlphaColor.a, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        }
+    }
+
+    public void Disappear(float duration,float delay)
+    {
+        rectTransform.DOSizeDelta(startSize, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        rectTransform.DOLocalMove(startPos, duration).SetDelay(delay).SetEase(Ease.OutExpo);
+        buttonImage.DOFade(buttonAlphaColor.a, duration).SetDelay(delay).SetEase(Ease.OutExpo).OnComplete(() => { canvas.enabled = false; });
+        if (buttonText != null)
+        {
+            buttonText.DOFade(textAlphaColor.a, duration).SetDelay(delay).SetEase(Ease.OutExpo);
         }
     }
 
