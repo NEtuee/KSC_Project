@@ -116,12 +116,12 @@ public class LevelEdit_Editor : Editor
 
 	private LevelEdit_MovePoint CreatePoint()
 	{
-		GameObject obj = new GameObject("Point");
+		GameObject obj = new GameObject(currentPath + " : Point");
 		var point = obj.AddComponent<LevelEdit_MovePoint>();
 
 		obj.transform.SetParent(controll.transform);
 
-		point.Initialize();
+		//point.Initialize();
 
 		return point;
 	}

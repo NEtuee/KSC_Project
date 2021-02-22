@@ -9,7 +9,7 @@ public class LevelEdit_Controll : SingletonMono<LevelEdit_Controll>
     private List<LevelEdit_Trigger> activeTriggers = new List<LevelEdit_Trigger>();
     public int currentPoint = -1;
 
-    private void Start()
+    private void Awake()
     {
         SetSingleton(this);
 
@@ -34,4 +34,5 @@ public class LevelEdit_Controll : SingletonMono<LevelEdit_Controll>
 
     public LevelEdit_MovePoint GetPoint(string path, int pos) {return pointManager.GetPoint(path, pos);}
     public List<LevelEdit_MovePoint> GetPointList(string path) {return pointManager.GetList(path);}
+    public LevelEdit_PointManager.PathClass GetPath(string path) {return pointManager.FindPath(path);}
 }

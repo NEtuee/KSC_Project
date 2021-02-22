@@ -6,12 +6,39 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
+[System.Serializable]
 public class LevelEdit_PointManager : MonoBehaviour
 {
+    [System.Serializable]
     public class PathClass
     {
         public string name;
         public List<LevelEdit_MovePoint> movePoints = new List<LevelEdit_MovePoint>();
+
+        public LevelEdit_MovePoint GetNextPoint(ref int point, out bool isEnd)
+        {
+            point = point + 1 >= movePoints.Count ? 0 : point + 1;
+            isEnd = point == 0;
+            
+            return movePoints[point];
+        }
+
+        public LevelEdit_MovePoint FindNearestPoint(Vector3 position, out int target)
+        {
+            float near = Vector3.Distance(position, movePoints[0].GetPoint());
+            target = 0;
+            for(int i = 1; i < movePoints.Count; ++i)
+            {
+                float dist = Vector3.Distance(position,movePoints[i].GetPoint());
+                if(dist < near)
+                {
+                    near = dist;
+                    target = i;
+                }
+            }
+
+            return movePoints[target];
+        }
 
         public PathClass(string n)
         {
@@ -96,15 +123,13 @@ public class LevelEdit_PointManager : MonoBehaviour
                     Handles.Label(list.movePoints[i].transform.position, "p" + i);
     
                 Handles.color = Color.red;
-                Handles.Label(list.movePoints[i].GetBezierPoint1().position, "p" + i + " Bezier_1");
-                Handles.Label(list.movePoints[i].GetBezierPoint2().position, "p" + i + " Bezier_2");
-                Handles.DrawLine(list.movePoints[i].GetPoint(),list.movePoints[i].GetBezierPoint1().position);
-                Handles.DrawLine(list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint(),list.movePoints[i].GetBezierPoint2().position);
+                // Handles.Label(list.movePoints[i].GetBezierPoint1().position, "p" + i + " Bezier_1");
+                // Handles.Label(list.movePoints[i].GetBezierPoint2().position, "p" + i + " Bezier_2");
+                Handles.DrawLine(list.movePoints[i].GetPoint(),list.movePoints[i].GetPoint() + Vector3.up * 10f);
+                // Handles.DrawLine(list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint(),list.movePoints[i].GetBezierPoint2().position);
             }
         }
         
-
-        int accur = 10;
 
         Handles.color = Color.white;
 
@@ -112,21 +137,10 @@ public class LevelEdit_PointManager : MonoBehaviour
         {
             for(int i = 0; i < list.movePoints.Count; ++i)
             {
-                Vector2 startPoint = MathEx.Vector3ToVector2(list.movePoints[i].GetPoint());
-                Vector2 endPoint = MathEx.Vector3ToVector2(list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint());
+                Vector3 startPoint = list.movePoints[i].GetPoint();
+                Vector3 endPoint = list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint();
 
-                Vector2 p0 = MathEx.Vector3ToVector2(list.movePoints[i].GetBezierPoint1().position);
-                Vector2 p1 = MathEx.Vector3ToVector2(list.movePoints[i].GetBezierPoint2().position);
-
-                Vector3 currentPoint = MathEx.Vector2ToVector3(startPoint);
-
-                for(int j = 1; j <= accur; ++j)
-                {
-                    var target = MathEx.Vector2ToVector3(MathEx.GetPointOnBezierCurve(startPoint,p0,p1,endPoint,j / (float)accur));
-
-                    Handles.DrawLine(currentPoint,target);
-                    currentPoint = target;
-                }
+                Handles.DrawLine(startPoint,endPoint);
 
             }
         }

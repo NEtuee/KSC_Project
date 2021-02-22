@@ -171,6 +171,10 @@ public class MathEx : MonoBehaviour {
 	{
 		return new Vector2(easeOutCubic(start.x,end.x,time),easeOutCubic(start.y,end.y,time));
 	}
+	public static Vector3 easeOutCubicVector3(Vector3 start, Vector3 end ,float time)
+	{
+		return new Vector3(easeOutCubic(start.x,end.x,time),easeOutCubic(start.y,end.y,time),easeOutCubic(start.z,end.z,time));
+	}
 	public static float easeOutCubic(float start, float end, float value)
 	{
 		value--;
