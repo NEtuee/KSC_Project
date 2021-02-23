@@ -59,7 +59,7 @@ public class LevelEdit_Trigger : MonoBehaviour
         if(isTriggered || !collisionTrigger)
             return;
 
-        if((coll.gameObject.layer & targetLayer) != 0)
+        if((coll.gameObject.layer & targetLayer.value) != 0)
         {
             TriggerEnable();
         }

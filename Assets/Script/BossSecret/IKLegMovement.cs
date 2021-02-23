@@ -6,6 +6,8 @@ public class IKLegMovement : MonoBehaviour
 {
     public IKLegMovement oppositeLeg;
 
+    public ParticlePool particlePool;
+
     public LayerMask groundLayer;
     public AnimationCurve planeMovementCurve;
     public AnimationCurve heightMovementCurve;
@@ -68,6 +70,8 @@ public class IKLegMovement : MonoBehaviour
             {
                 _timer = 0;
                 _isMove = false;
+
+                particlePool.Active(pos,Quaternion.LookRotation(new Vector3(0f,0f,1f),hit.normal));
             }
         }
         

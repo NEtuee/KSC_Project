@@ -10,6 +10,7 @@ public class IKFootPointRotator : MonoBehaviour
     public Transform leftFootPoint;
     public Transform rightFootPoint;
 
+
     public LayerMask layerMask;
 
     public float rayDistance = 10f;

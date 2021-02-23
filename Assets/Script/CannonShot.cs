@@ -26,7 +26,7 @@ public class CannonShot : MonoBehaviour
         _explosion = GetComponent<ExplosionTest>();
     }
 
-    public void CanShot(Transform t)
+    public bool CanShot(Transform t)
     {
         target = t;
 
@@ -38,6 +38,8 @@ public class CannonShot : MonoBehaviour
 
         currentAngle = Vector3.Angle(one,two);
         _canShot = currentAngle <= shotAngle;
+
+        return _canShot;
     }
 
     public void DestroyCannon()

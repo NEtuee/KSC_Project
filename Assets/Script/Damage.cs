@@ -18,9 +18,10 @@ public class Damage : MonoBehaviour
     {
         if(coll.tag == "Player")
         {
-            var con = coll.GetComponent<TestHPScript>();
-
-            con.displayHp -= factor;
+            if(TryGetComponent<TestHPScript>(out var con))
+            {
+                con.displayHp -= factor;
+            }
 
             explosion.Exlposion(transform.position,col.radius,power);
 

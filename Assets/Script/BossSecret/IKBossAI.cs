@@ -14,6 +14,7 @@ public class IKBossAI : MonoBehaviour
 
     public LevelEdit_Controll controll;
     public BossHead bossHead;
+    public CannonShot[] cannon;
     public List<PlayerDetector> onPlayerCheck;
     public Transform player;
     public LayerMask wallLayer;
@@ -33,6 +34,7 @@ public class IKBossAI : MonoBehaviour
     private int _targetPoint;
     private int _currentPoint = 0;
     private int _isPlayerOn = 0;
+    private int _cannonCount = 3;
 
     private float _movementSpeed;
     private float _turnAccuracy = 3f;
@@ -215,6 +217,11 @@ public class IKBossAI : MonoBehaviour
         _rushToPlayer = false;
         _isStunned = false;
 
+        _cannonCount = 2;
+
+        _timeCounter.InitTimer("cannonShot",0f);
+        _timeCounter.InitTimer("cannonShotDelay",0f);
+
         SetSlowMovement();
         GetPath("PhaseOne");
     }
@@ -245,6 +252,30 @@ public class IKBossAI : MonoBehaviour
         {
             FollowPath();
             RushCheck();
+
+            _timeCounter.IncreaseTimer("cannonShot",5f, out bool limit);
+            if(limit)
+            {
+                _timeCounter.IncreaseTimer("cannonShotDelay",0.4f,out bool end);
+
+                if(end)
+                {
+                    if(cannon[_cannonCount].CanShot(player))
+                    {
+                        cannon[_cannonCount].Shot();
+                        --_cannonCount;
+
+                        _timeCounter.InitTimer("cannonShotDelay",0f);
+                        if(_cannonCount < 0)
+                        {
+                            _cannonCount = 2;
+                            _timeCounter.InitTimer("cannonShot",0f);
+                        }
+                    }
+
+                }
+                
+            }
         }
         
     }
@@ -285,6 +316,7 @@ public class IKBossAI : MonoBehaviour
         bossHead.SetHeightInOrder(6f);
 
         //SetNearestPointToTarget();
+        _timeCounter.InitTimer("cannonShot",0f);
         SetNearestPointInArc(30f);
         SetSlowMovement();
     }
