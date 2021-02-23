@@ -4,18 +4,43 @@ using UnityEngine;
 
 public class AnimCtrl_Dummy : MonoBehaviour
 {
-    private PlayerCtrl_Dummy owner;
+    private PlayerCtrl_Ver2 owner;
+    private Animator animator;
+    [SerializeField] private Vector3 rootPosition;
+
     private void Start()
     {
-        owner=GetComponent<PlayerCtrl_Dummy>();
-    }
-    private void EndTurnBack()
-    {
-        owner.ChangeState(PlayerCtrl_Dummy.DummyState.Default);
+        owner=GetComponent<PlayerCtrl_Ver2>();
+        animator = GetComponent<Animator>();
     }
 
-    private void EndRunToStop()
+    private void EndTurnBack()
     {
-        owner.ChangeState(PlayerCtrl_Dummy.DummyState.Default);
+        owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
+    }
+
+    private void StartStop()
+    {
+        animator.applyRootMotion = true;
+    }
+
+    private void EndStop()
+    {
+        owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
+    }
+
+    private void JumpTiming()
+    {
+        owner.Jump();
+    }
+
+    private void StartLandingAdditive()
+    {
+        //animator.SetLayerWeight(1, 1f);
+    }
+
+    private void EndLandingAdditive()
+    {
+       //animator.SetLayerWeight(1, 0f);
     }
 }

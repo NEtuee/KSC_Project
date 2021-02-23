@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx.Triggers;
 using UniRx;
+using DG.Tweening;
 
 /// <summary>
 /// 게이지바를 표시하는 UI 입니다.
@@ -12,7 +13,7 @@ public class GageBarUI : MonoBehaviour
 {
     public enum GageUpdateType
     {
-        Direct,Lerp,SmoothStep
+        Direct,Lerp,SmoothStep,MoveToward
     }
 
     [SerializeField] private Image gageImage;
@@ -20,6 +21,10 @@ public class GageBarUI : MonoBehaviour
     [SerializeField] private float updateSpeed = 4f;
 
     [SerializeField]private float updateValue;
+    [SerializeField] private float displayTime = 5f;
+    [SerializeField] private bool isDisplay = false;
+    [SerializeField] private float displayAlpha = 0.7f;
+    private float currentDisplayTime = 0.0f;
 
     void Start()
     {
@@ -33,7 +38,7 @@ public class GageBarUI : MonoBehaviour
             }
         }
 
-        switch(updateType)
+        switch (updateType)
         {
             case GageUpdateType.Direct:
                 {
@@ -53,11 +58,34 @@ public class GageBarUI : MonoBehaviour
                       .Subscribe(_ => gageImage.fillAmount = Mathf.SmoothStep(gageImage.fillAmount, updateValue, updateSpeed * Time.deltaTime));
                 }
                 break;
+            case GageUpdateType.MoveToward:
+                {
+                    this.UpdateAsObservable()
+                      .Subscribe(_ => 
+                      { 
+                          if(currentDisplayTime <= 0.0f && isDisplay == true)
+                          {
+                              isDisplay = false;
+                              gageImage.DOFade(0.0f, 1.0f);
+                          }
+                          gageImage.fillAmount = Mathf.MoveTowards(gageImage.fillAmount, updateValue, updateSpeed * Time.deltaTime);
+                          currentDisplayTime -= Time.deltaTime;
+                          if (currentDisplayTime <= 0.0f) currentDisplayTime = 0.0f;
+                      });
+                }
+                break;
         }
     }
 
     public void SetValue(float value)
     {
+        currentDisplayTime = displayTime;
+        if (isDisplay == false)
+        {
+            isDisplay = true;
+            gageImage.DOFade(displayAlpha, 0.5f);
+        }
+
         updateValue = value;
     }
 }

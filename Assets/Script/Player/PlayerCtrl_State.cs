@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-public class PlayerCtrl_State : MonoBehaviour
+public class PlayerCtrl_State : PlayerCtrl
 {
     public enum PlayerState
     {
@@ -38,7 +38,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
     [Header("State Conditions")]
     [SerializeField] private PlayerState state;
-    [SerializeField] private bool isPause;
+    //[SerializeField] private bool isPause;
     [SerializeField] private bool isPauseControl;
     [SerializeField] private bool isRun;
     [SerializeField] private bool isMustClimbing;
@@ -53,8 +53,8 @@ public class PlayerCtrl_State : MonoBehaviour
     [SerializeField] private bool isLedgeSideMove;
     [SerializeField] private bool isCanAbsorb;
     [SerializeField] private bool isActiveSlidingCheck = false;
-    public FloatReactiveProperty stamina = new FloatReactiveProperty(100);
-    public FloatReactiveProperty hp = new FloatReactiveProperty(100f);
+    //public FloatReactiveProperty stamina = new FloatReactiveProperty(100);
+    //public FloatReactiveProperty hp = new FloatReactiveProperty(100f);
     [SerializeField] private float fallingTime = 0.0f;
     [SerializeField] private bool nonStaminaMode;
     [SerializeField] private float climbingUpAngle;
@@ -124,6 +124,7 @@ public class PlayerCtrl_State : MonoBehaviour
 
     [Header("Move Direction")]
     [SerializeField] private Vector3 moveDir;
+    private Vector3 lookDir;
     private Vector3 prevDir;
     private Vector3 slidingDir;
     private Vector3 prevSlidingDir;
@@ -207,6 +208,7 @@ public class PlayerCtrl_State : MonoBehaviour
         }
 
         moveDir = Vector3.zero;
+        lookDir = Vector3.zero;
         currentSpeed = walkSpeed;
         mainCameraTrasform = Camera.main.transform;
         //cameraCtrl = mainCameraTrasform.parent.GetComponent<CameraCtrl>();
@@ -431,12 +433,14 @@ public class PlayerCtrl_State : MonoBehaviour
                     {
                         moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
                         moveDir.Normalize();
+                        lookDir = moveDir;
                         //prevDir = moveDir;
                     }
                     else
                     {
-                        moveDir = prevDir;
+                        moveDir = prevDir; 
                         moveDir.Normalize();
+                        lookDir = moveDir;
                     }
 
                     moveDir *= currentSpeed;
@@ -704,19 +708,29 @@ public class PlayerCtrl_State : MonoBehaviour
                     {
                         moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
                         moveDir.Normalize();
+                        lookDir = moveDir;
                         //prevDir = moveDir;
                     }
                     else
                     {
                         moveDir = prevDir;
                         moveDir.Normalize();
+                        lookDir = moveDir;
+                    }
+
+                    RaycastHit hit;
+                    //GizmoHelper.Instance.DrawLine(transform.position + Vector3.up * 2f, transform.position + Vector3.down * 2f, Color.red);
+                    if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2f, floorLayer))
+                    {
+                        //Debug.Log("ddd");
+                        moveDir = (Vector3.ProjectOnPlane(moveDir, hit.normal)).normalized;
                     }
 
                     moveDir *= currentSpeed;
 
-                    if (moveDir != Vector3.zero)
+                    if (lookDir != Vector3.zero)
                     {
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.fixedDeltaTime * 6.0f);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.fixedDeltaTime * 6.0f);
                     }
 
                     if (CheckMoveCollision(moveDir) == true)
@@ -813,7 +827,7 @@ public class PlayerCtrl_State : MonoBehaviour
                     moveDir.Normalize();
                     currentSpeed = Mathf.Lerp(currentSpeed, rollingSpeed, 15f * Time.fixedDeltaTime);
                     moveDir *= currentSpeed;
-                    Vector3 targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.fixedDeltaTime * 5.0f).eulerAngles;
+                    Vector3 targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.fixedDeltaTime * 5.0f).eulerAngles;
                     transform.rotation = Quaternion.Euler(0.0f, targetRot.y, 0.0f);
 
                     if (CheckMoveCollision(moveDir) == true)
@@ -2189,10 +2203,6 @@ public class PlayerCtrl_State : MonoBehaviour
         isSpearDissolve = false;
     }
 
-    public void Pause() { isPause = true; }
-
-    public void PauseControl(bool result) { isPause = result; }
-    public void Resume() { isPause = false; }
     public void ClearAllCore() { isCanEquipSpeicalSpear = true; OnAbsorbAllCore?.Invoke(); }
 
     #region 겟터

@@ -7,7 +7,6 @@ public class BulletTimeManager : MonoBehaviour
     bool bulletTime = false;
     private void Start()
     {
-        PlayerCtrl player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl>();
     }
 
     public void OnBulletTime()
