@@ -37,6 +37,7 @@ public class IKBossAI : MonoBehaviour
     private int _cannonCount = 3;
 
     private float _movementSpeed;
+    private float _targetMovementSpeed;
     private float _turnAccuracy = 3f;
     private float _turnAngle;
 
@@ -69,6 +70,7 @@ public class IKBossAI : MonoBehaviour
 
     public void Update()
     {
+        _movementSpeed = Mathf.Lerp(_movementSpeed,_targetMovementSpeed,0.05f);
         PhaseProgress();
 
         if(Input.GetKeyDown(KeyCode.T))
@@ -184,22 +186,28 @@ public class IKBossAI : MonoBehaviour
 
         if(limit)
         {
-            _timeCounter.InitTimer("randomTimer",Random.Range(8f,17f));
-            if(_currentPoint == 2)
-                _fastRun = !_fastRun;
-            _currentPoint = _currentPoint == 2 ? (_fastRun ? 1 : 0) : 2;
             
+            if(_currentPoint == 2)
+            {
+                _timeCounter.InitTimer("randomTimer",Random.Range(10f,17f));
+                SetFastMovement(.5f);
+                _fastRun = !_fastRun;
+            }
+            else
+            {
+                _timeCounter.InitTimer("randomTimer",Random.Range(5f,10f));
+                SetFastMovement(.7f);
+            }
+            _currentPoint = _currentPoint == 2 ? (_fastRun ? 1 : 0) : 2;
 
             GetPath("PhaseTwo_" + _currentPoint.ToString());
 
             if(_currentPoint == 1)
             {
-                SetFastMovement(.5f);
                 bossHead.SetHeightInOrder(3f);
             }
             else
             {
-                SetFastMovement(.7f);
                 bossHead.SetHeightInOrder(6f);
             }
         }
@@ -221,6 +229,8 @@ public class IKBossAI : MonoBehaviour
 
         _timeCounter.InitTimer("cannonShot",0f);
         _timeCounter.InitTimer("cannonShotDelay",0f);
+
+        bossHead.SetHeightInOrder(6f);
 
         SetSlowMovement();
         GetPath("PhaseOne");
@@ -489,7 +499,7 @@ public class IKBossAI : MonoBehaviour
         SetTurnAccuracy(fastSpeed.z);
     }
 
-    public void SetMovementSpeed(float speed) {_movementSpeed = speed;}
+    public void SetMovementSpeed(float speed) {_targetMovementSpeed = speed;}
     public void SetTurnAngle(float speed) {_turnAngle = speed;}
     public void SetTurnAccuracy(float accur) {_turnAccuracy = accur;}
 }

@@ -61,8 +61,6 @@ GameObject:
   - component: {fileID: 5016987888332514197}
   - component: {fileID: 5016987888332514196}
   - component: {fileID: 5016987888332514203}
-  - component: {fileID: 7525048124879979023}
-  - component: {fileID: 7525048124879979020}
   - component: {fileID: 7525048124879979027}
   m_Layer: 0
   m_Name: BodyBase
@@ -146,108 +144,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7525048124879979023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5016987888332514202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c466af975cdb9441864dbf659fd12e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allParts:
-  - {fileID: 7525048124879979027}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  twistCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.2
-      inSlope: -0.684375
-      outSlope: -0.684375
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.04761905
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -0.011220734
-      outSlope: -0.011220734
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.13496935
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  twistUpCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 49.30512
-      outSlope: 49.30512
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.04980384
-    - serializedVersion: 3
-      time: 0.20229746
-      value: 3.6150665
-      inSlope: -2.164662
-      outSlope: -2.164662
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.09842485
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  farDistance: 7
---- !u!114 &7525048124879979020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5016987888332514202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af4fd7820a4031a4a8b140e1e7061ca8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controll: {fileID: 0}
-  bossHead: {fileID: 7525048124879979023}
-  player: {fileID: 0}
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 16384
-  currentPhase: 0
-  distanceAccuracy: 15
-  slowSpeed: {x: 30, y: 130, z: 0}
-  fastSpeed: {x: 40, y: 180, z: 0}
 --- !u!114 &7525048124879979027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1884,6 +1780,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oppositeLeg: {fileID: 7525048123693254369}
+  particlePool: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -4448,6 +4345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oppositeLeg: {fileID: 7525048123193981873}
+  particlePool: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128

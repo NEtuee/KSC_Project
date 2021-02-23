@@ -52,7 +52,7 @@ public class IKFootPointRotator : MonoBehaviour
         var avg = (leftNormal + rightNormal).normalized;
 
         if(rotation)
-            transform.rotation = Quaternion.Lerp(transform.rotation,(Quaternion.FromToRotation(transform.up,avg) * transform.rotation),0.2f);
+            transform.rotation = Quaternion.Lerp(transform.rotation,(Quaternion.FromToRotation(transform.up,avg) * transform.rotation),0.07f);
 
         
     }
