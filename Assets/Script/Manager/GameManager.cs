@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EscMenu soundMenu;
     public Transform bossTransform;
 
+    public List<LockOnTarget> lockOnTargets = new List<LockOnTarget>();
+
     private Vector3 mainCameraStartPosition;
     private Vector3 mainCameraStartLocalPosition;
     private Vector3 camRootStartPosition;
@@ -40,6 +42,11 @@ public class GameManager : MonoBehaviour
 
     private MenuState menuState = MenuState.MenuOff;
 
+    //해상도 정보
+    private float screenWidth;
+    private float screenHeight;
+    private Vector2 screenCenter;
+
     private void Awake()
     {
         if(instance == null)
@@ -53,6 +60,15 @@ public class GameManager : MonoBehaviour
         if(GameObject.FindGameObjectWithTag("Boss") != null)
         {
             bossControll = GameObject.FindGameObjectWithTag("Boss").GetComponent<LevelEdit_BehaviorControll>();
+        }
+
+        screenWidth = Screen.width;
+        screenHeight = Screen.height;
+        screenCenter.Set(screenWidth * 0.5f, screenHeight * 0.5f);
+
+        foreach(var lockTarget in GameObject.FindGameObjectsWithTag("LockOnTarget"))
+        {
+            lockOnTargets.Add(lockTarget.GetComponent<LockOnTarget>());
         }
     }
 
@@ -202,4 +218,19 @@ public class GameManager : MonoBehaviour
 
     //    return player.GetInputHorizontal();
     //}
+
+    public Vector2 GetScreenCenter()
+    {
+        return screenCenter;
+    }
+
+    public float GetScreenWidth()
+    {
+        return screenWidth;
+    }
+
+    public float GetScreenHeight()
+    {
+        return screenHeight;
+    }
 }

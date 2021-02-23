@@ -27,7 +27,7 @@ public class ExplosionTest : MonoBehaviour
                 PlayerRagdoll ragdoll = coll[i].GetComponent<PlayerRagdoll>();
                 if(ragdoll != null)
                 {
-                    ragdoll.ExplosionRagdoll(750.0f, position, 10000.0f);
+                    ragdoll.ExplosionRagdoll(200.0f, position, 10000.0f);
                 }
             }
         }

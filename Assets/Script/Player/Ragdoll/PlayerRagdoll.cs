@@ -48,15 +48,24 @@ public class PlayerRagdoll : MonoBehaviour
     [Range(0, 10000)] public float fource = 0.0f;
 
     private GameObject _ragdollContainer;
+    private PlayerCtrl_Ver2 player;
 
     void Start()
     {
         anim = GetComponent<Animator>();
-        hipTransform = anim.GetBoneTransform(HumanBodyBones.Hips);
         collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
+        player = GetComponent<PlayerCtrl_Ver2>();
 
-        bip = transform.Find("Bip001");
+       
+        hipTransform = anim.GetBoneTransform(HumanBodyBones.Hips);
+
+        rightHandTransform = anim.GetBoneTransform(HumanBodyBones.RightHand);
+        rightHandRigidBody = rightHandTransform.GetComponent<Rigidbody>();
+        leftHandTransform = anim.GetBoneTransform(HumanBodyBones.LeftHand);
+        leftHandRigidBody = leftHandTransform.GetComponent<Rigidbody>();
+
+        bip = transform.Find("Root_001");
         Rigidbody[] rigidBodies = bip.GetComponentsInChildren<Rigidbody>();
 
         foreach (Rigidbody rigid in rigidBodies)
@@ -106,7 +115,10 @@ public class PlayerRagdoll : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Z))
         {
-            hipTransform.GetComponent<Rigidbody>().AddForce(transform.forward * 10000.0f);
+            if (state == RagdollState.Animated)
+                ActiveRightHandFixRagdoll();
+            else
+                DisableFixRagdoll();
         }
 
         //if (Input.GetKeyDown(KeyCode.R))
@@ -142,6 +154,11 @@ public class PlayerRagdoll : MonoBehaviour
 
             foreach (TransformComponent trComp in transforms)
             {
+                if(trComp.Transform == pelvis)
+                {
+                    continue;
+                }
+
                 if (trComp.PrivRotation != trComp.Transform.localRotation)
                 {
                     trComp.PrivRotation = Quaternion.Slerp(trComp.Transform.localRotation, trComp.StoredRotation, ragdollBlendAmount);
@@ -164,7 +181,8 @@ public class PlayerRagdoll : MonoBehaviour
 
     public void ActiveLeftHandFixRagdoll()
     {
-        GameManager.Instance.PauseControl(true);
+        //GameManager.Instance.PauseControl(true);
+        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         FixLeftHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
@@ -172,7 +190,8 @@ public class PlayerRagdoll : MonoBehaviour
 
     public void ActiveRightHandFixRagdoll()
     {
-        GameManager.Instance.PauseControl(true);
+        //GameManager.Instance.PauseControl(true);
+        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         FixRightHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
@@ -186,7 +205,8 @@ public class PlayerRagdoll : MonoBehaviour
 
     public void ActiveBothHandFixRagdoll()
     {
-        GameManager.Instance.PauseControl(true);
+        //GameManager.Instance.PauseControl(true);
+        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         FixLeftHand(true);
         FixRightHand(true);
         ActiveRagdoll(true);
@@ -198,20 +218,30 @@ public class PlayerRagdoll : MonoBehaviour
         ReturnAnimated();
         FixRightHand(false);
         FixLeftHand(false);
-        GameManager.Instance.PauseControl(false);
+        player.BackPrevState();
     }
 
     public void FlyRagdoll()
     {
-        GameManager.Instance.PauseControl(true);
+        //GameManager.Instance.PauseControl(true);
+        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);
     }
 
+    public void SlidingRagdoll(Vector3 dir)
+    {
+        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+        isFlyRagdoll = true;
+        ActiveRagdoll(true);
+        SetRagdollContainer(true);
+        anim.GetBoneTransform(HumanBodyBones.Head).GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+    }
+
     public void ExplosionRagdoll(float power,Vector3 exlosionPos, float radius)
     {
-        GameManager.Instance.PauseControl(true);
+        //GameManager.Instance.PauseControl(true);
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);
@@ -219,6 +249,10 @@ public class PlayerRagdoll : MonoBehaviour
         hipTransform.GetComponent<Rigidbody>().AddForce(((hipTransform.position - exlosionPos).normalized+Vector3.up ).normalized*power,ForceMode.Impulse);
         //hipTransform.GetComponent<Rigidbody>().AddExplosionForce(power, exlosionPos, radius,100.0f);
         InputManager.Instance.GamePadSetVibrate(0.5f, 0.8f);
+        if(player != null)
+        {
+            player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+        }
     }
 
     public RagdollState GetRagdollState() { return state; }
@@ -230,11 +264,11 @@ public class PlayerRagdoll : MonoBehaviour
 
         if(result)
         {
-            hipTransform.SetParent(_ragdollContainer.transform);
+            hipTransform.parent.SetParent(_ragdollContainer.transform);
         }
         else
         {
-            hipTransform.SetParent(bip);
+            hipTransform.parent.SetParent(bip);
         }
     }
 
@@ -361,7 +395,7 @@ public class PlayerRagdoll : MonoBehaviour
     {
         var left = anim.GetBoneTransform(HumanBodyBones.LeftUpperLeg).position;
         var right = anim.GetBoneTransform(HumanBodyBones.RightUpperLeg).position;
-        var hipsPos = hipTransform.position;
+        var hipsPos = hipTransform.parent.position;
 
         left -= hipsPos;
         left.y = 0f;
