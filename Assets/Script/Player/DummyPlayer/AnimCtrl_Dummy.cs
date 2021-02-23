@@ -43,4 +43,32 @@ public class AnimCtrl_Dummy : MonoBehaviour
     {
        //animator.SetLayerWeight(1, 0f);
     }
+
+    private void EndClimbMove()
+    {
+        owner.SetClimbMove(false);
+    }
+    private void Left()
+    {
+        animator.SetBool("Left",false);
+    }
+
+    private void Right()
+    {
+        animator.SetBool("Left", true);
+    }
+
+    private void CanInput()
+    {
+    }
+
+    private void EndLedgeUp()
+    {
+        owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
+    }
+
+    private void EndGetUp()
+    {
+        owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
+    }
 }

@@ -43,7 +43,16 @@ public class GageBarUI : MonoBehaviour
             case GageUpdateType.Direct:
                 {
                     this.UpdateAsObservable()
-                        .Subscribe(_ => gageImage.fillAmount = updateValue);
+                        .Subscribe(_ => {
+                            if (currentDisplayTime <= 0.0f && isDisplay == true)
+                            {
+                                isDisplay = false;
+                                gageImage.DOFade(0.0f, 1.0f);
+                            }
+                            gageImage.fillAmount = updateValue;
+                            currentDisplayTime -= Time.deltaTime;
+                            if (currentDisplayTime <= 0.0f) currentDisplayTime = 0.0f;
+                        });
                 }
                 break;
             case GageUpdateType.Lerp:

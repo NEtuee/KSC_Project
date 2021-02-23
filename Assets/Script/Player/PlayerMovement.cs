@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Slide")]
     [SerializeField] private float groundAngle = 0.0f;
+    [SerializeField] private float invalidityAngle = 70.0f;
+    [SerializeField] private float slideAngle = 50.0f;
     [SerializeField] private float currentJumpPower = 0.0f;
     [SerializeField] private float minJumpPower = -10.0f;
     [SerializeField] private float jumpPower = 10f;
@@ -34,7 +36,12 @@ public class PlayerMovement : MonoBehaviour
     private float colliderHeight;
 
     private RaycastHit groundHit;
+    private Transform detectObject;
     private Rigidbody rigidbody;
+    private PlayerRagdoll ragdoll;
+    private PlayerCtrl_Ver2 player;
+
+    [SerializeField]private float slidingTime = 0.0f;
 
     public Vector3 Velocity { get { return velocity; } protected set { velocity = value; } }
     public float Speed { get { return speed; } protected set { speed = value; } }
@@ -47,12 +54,14 @@ public class PlayerMovement : MonoBehaviour
         speed = 0.0f;
         trueSpeed = 0.0f;
         rigidbody = GetComponent<Rigidbody>();
-
         capsuleCollider = GetComponent<CapsuleCollider>();
+        player = GetComponent<PlayerCtrl_Ver2>();
         if(capsuleCollider != null)
         {
             colliderHeight = capsuleCollider.height;
         }
+
+        ragdoll = GetComponent<PlayerRagdoll>();
     }
 
     public void Move(Vector3 direction)
@@ -73,11 +82,12 @@ public class PlayerMovement : MonoBehaviour
         isJumping = true;
         isGrounded = false;
         jumpTime = Time.time;
+        transform.SetParent(null);
     }
 
     private void Update()
     {
-        if(isGrounded == true && groundAngle >= 70f)
+        if(isGrounded == true && groundAngle >= invalidityAngle)
         {
             currentJumpPower -= gravity * Time.deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
@@ -98,6 +108,28 @@ public class PlayerMovement : MonoBehaviour
         prevPosition = transform.position;
 
         CheckGround();
+
+        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Default)
+        {
+            if (groundAngle >= slideAngle && groundAngle < invalidityAngle)
+            {
+                slidingTime += Time.fixedDeltaTime;
+            }
+            else
+            {
+                slidingTime = 0;
+            }
+
+            if (slidingTime > 3.0f)
+            {
+                slidingTime = 0.0f;
+                ragdoll.SlidingRagdoll(-slidingVector*30f);
+            }
+        }
+        else
+        {
+            slidingTime = 0f;
+        }
     }
 
     private void CheckGroundDistance()
@@ -112,6 +144,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 dist = transform.position.y - groundHit.point.y;
 
+                detectObject = groundHit.collider.transform;
                 groundAngle = Mathf.Acos(Vector3.Dot(groundHit.normal, Vector3.up)) * Mathf.Rad2Deg;
                 slidingVector = (Vector3.Project(Vector3.down, groundHit.normal) - Vector3.down).normalized;
             }
@@ -150,12 +183,21 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = true;
             isJumping = false;
+
+            if (detectObject.CompareTag("Env_Props"))
+            {
+                transform.SetParent(detectObject);
+            }
         }
         else
         {
             if(groundDistance >= groundMaxDistance)
             {
                 isGrounded = false;
+                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll)
+                {
+                    transform.SetParent(null);
+                }
             }
         }
     }
