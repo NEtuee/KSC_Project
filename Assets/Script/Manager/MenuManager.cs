@@ -11,6 +11,8 @@ public class MenuManager : MonoBehaviour
     public float inputBlendingTime = 0.08f;
     public float soundBlendingTime = 0.5f;
 
+    public GameObject crossHair;
+
     private Stack<EscMenu> menuPopup = new Stack<EscMenu>();
 
     private bool isMenuBlend = false;
@@ -25,6 +27,7 @@ public class MenuManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && isMenuBlend == false)
         {
             InputEsc();
+            crossHair.SetActive(!crossHair.activeSelf);
         }
     }
 

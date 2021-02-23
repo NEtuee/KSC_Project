@@ -27,6 +27,7 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private string standUpBallyAnimation;
     private Transform bip;
     [SerializeField] private Transform pelvis;
+    private float ragdollTime;
 
     private bool isLeftHandFix;
     private bool isRightHandFix;
@@ -90,7 +91,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(isFlyRagdoll == true && hipTransform.GetComponent<Rigidbody>().velocity.magnitude < 0.1f)
+        if(isFlyRagdoll == true &&Time.time-ragdollTime>0.1f&& hipTransform.GetComponent<Rigidbody>().velocity.magnitude < 0.01f)
         {
             ReturnAnimated();
         }
@@ -113,13 +114,13 @@ public class PlayerRagdoll : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            if (state == RagdollState.Animated)
-                ActiveRightHandFixRagdoll();
-            else
-                DisableFixRagdoll();
-        }
+        //if(Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    if (state == RagdollState.Animated)
+        //        ActiveRightHandFixRagdoll();
+        //    else
+        //        DisableFixRagdoll();
+        //}
 
         //if (Input.GetKeyDown(KeyCode.R))
         //{
@@ -228,15 +229,17 @@ public class PlayerRagdoll : MonoBehaviour
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);
+        ragdollTime = Time.time;
     }
 
     public void SlidingRagdoll(Vector3 dir)
     {
-        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);
         anim.GetBoneTransform(HumanBodyBones.Head).GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+        ragdollTime = Time.time;
     }
 
     public void ExplosionRagdoll(float power,Vector3 exlosionPos, float radius)
@@ -253,6 +256,7 @@ public class PlayerRagdoll : MonoBehaviour
         {
             player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         }
+        ragdollTime = Time.time;
     }
 
     public RagdollState GetRagdollState() { return state; }

@@ -489,6 +489,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetFloat("Speed", 0.0f);
                 }
                 break;
+            case PlayerState.Ragdoll:
+                {
+                    transform.parent = null;
+                }
+                break;
         }
     }
 

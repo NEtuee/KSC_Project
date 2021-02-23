@@ -27,9 +27,10 @@ public class PlayerLockSystem : MonoBehaviour
     {
         if(InputManager.Instance.GetAction(KeybindingActions.Interaction))
         {
+            LockOnTarget prevTarget = currentTarget;
+         
             foreach(LockOnTarget target in GameManager.Instance.lockOnTargets)
             {
-                currentTarget = null;
                 if(Vector3.Distance(target.transform.position,transform.position) > lockRange)
                 {
                     continue;
@@ -58,6 +59,11 @@ public class PlayerLockSystem : MonoBehaviour
             else
             {
                 crossHairImage.DOFade(0.8f, 0.1f);
+                if (prevTarget == currentTarget)
+                {
+                    lockOn = false;
+                    currentTarget = null;
+                }
             }
         }
 
@@ -71,6 +77,11 @@ public class PlayerLockSystem : MonoBehaviour
             //}
             targetCrossHair.position = screenPos;
         }
+        else
+        {
+            targetCrossHair.position = GameManager.Instance.GetScreenCenter();
+        }
+    
 
         if (lockOn == true)
         {
@@ -84,10 +95,6 @@ public class PlayerLockSystem : MonoBehaviour
                 if (GameManager.Instance.player.charge.Value == 100.0f)
                 {
                     currentTarget.whenTriggerOn();
-                    GameManager.Instance.player.charge.Value = 0.0f;
-                }
-                else
-                {
                     GameManager.Instance.player.charge.Value = 0.0f;
                 }
             }

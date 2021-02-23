@@ -184,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = true;
             isJumping = false;
 
-            if (detectObject.CompareTag("Env_Props"))
+            if (!detectObject.CompareTag("Env_Props"))
             {
                 transform.SetParent(detectObject);
             }
