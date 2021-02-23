@@ -19,10 +19,6 @@ public class LevelEdit_PointManager : MonoBehaviour
         {
             isEnd = ++point >= movePoints.Count ? true : false;
 
-            if(isEnd)
-            {
-                Debug.Log(point);
-            }
             point = point >= movePoints.Count ? 0 : point;
             
             return movePoints[point];

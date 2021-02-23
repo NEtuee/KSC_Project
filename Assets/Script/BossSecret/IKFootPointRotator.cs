@@ -36,14 +36,10 @@ public class IKFootPointRotator : MonoBehaviour
         if(ray.Cast(leftFootPoint.position,out RaycastHit hit))
         {
             leftNormal = hit.normal;
-
-            GizmoHelper.Instance.DrawLine(hit.point, hit.point + hit.normal * 3f,Color.red);
         }
         if(ray.Cast(rightFootPoint.position,out hit))
         {
             rightNormal = hit.normal;
-
-            GizmoHelper.Instance.DrawLine(hit.point, hit.point + hit.normal * 3f,Color.red);
         }
 
         if(ray.Cast(transform.position,out hit))

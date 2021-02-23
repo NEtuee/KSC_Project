@@ -169,7 +169,7 @@ public class IKBossAI : MonoBehaviour
     {
         _pathLoop = true;
 
-        SetSlowMovement();
+        SetSlowMovement(.5f);
         GetPath("PhaseTwo_0");
         _timeCounter.InitTimer("randomTimer",0f);
         bossHead.SetHeightInOrder(6f);
@@ -192,12 +192,12 @@ public class IKBossAI : MonoBehaviour
 
             if(_currentPoint == 1)
             {
-                SetFastMovement();
+                SetFastMovement(.5f);
                 bossHead.SetHeightInOrder(3f);
             }
             else
             {
-                SetSlowMovement();
+                SetFastMovement(.7f);
                 bossHead.SetHeightInOrder(6f);
             }
         }
@@ -443,16 +443,16 @@ public class IKBossAI : MonoBehaviour
         _targetDirection = Vector3.ProjectOnPlane(direction,transform.up).normalized;
     }
 
-    public void SetFastMovement()
+    public void SetFastMovement(float scale = 1f)
     {
-        SetMovementSpeed(fastSpeed.x);
-        SetTurnAngle(fastSpeed.y);
-        SetTurnAccuracy(fastSpeed.z);
+        SetMovementSpeed(fastSpeed.x * scale);
+        SetTurnAngle(fastSpeed.y * scale);
+        SetTurnAccuracy(fastSpeed.z * scale);
     }
 
-    public void SetSlowMovement()
+    public void SetSlowMovement(float scale = 1f)
     {
-        SetMovementSpeed(slowSpeed.x);
+        SetMovementSpeed(slowSpeed.x * scale);
         SetTurnAngle(slowSpeed.y);
         SetTurnAccuracy(fastSpeed.z);
     }
