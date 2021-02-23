@@ -23,7 +23,7 @@ public class BossHead : MonoBehaviour
         _targetHeight = allParts[0].baseHeight;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         var time = _timeCounter.IncreaseTimer("loop",Mathf.PI,out bool limit);
         if(limit)

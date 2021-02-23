@@ -14,6 +14,7 @@ public class IKBossAI : MonoBehaviour
 
     public LevelEdit_Controll controll;
     public BossHead bossHead;
+    public List<PlayerDetector> onPlayerCheck;
     public Transform player;
     public LayerMask wallLayer;
     public Phase currentPhase = Phase.ONE;
@@ -31,6 +32,7 @@ public class IKBossAI : MonoBehaviour
     private Transform _targetTransform;
     private int _targetPoint;
     private int _currentPoint = 0;
+    private int _isPlayerOn = 0;
 
     private float _movementSpeed;
     private float _turnAccuracy = 3f;
@@ -44,15 +46,23 @@ public class IKBossAI : MonoBehaviour
 
     private Vector3 _targetDirection;
     private Vector3 _rushStartPoint;
+    private Vector3 _moveVector = Vector3.zero;
 
     public void Start()
     {
         PhaseInitialize();
         _timeCounter.InitTimer("rushReady",0f);
+        _timeCounter.InitTimer("rushOverTime",0f);
         _timeCounter.InitTimer("stun",0f);
         _timeCounter.InitTimer("randomTimer",0f);
 
         _frontSideCheck = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),1f,3f,wallLayer);
+
+        foreach(var detector in onPlayerCheck)
+        {
+            detector.ifPlayerIn += ()=>{_isPlayerOn++;};
+            detector.ifPlayerOut += ()=>{_isPlayerOn--;};
+        }
     }
 
     public void Update()
@@ -73,6 +83,11 @@ public class IKBossAI : MonoBehaviour
         }
     }
 
+    public void FixedUpdate()
+    {
+        transform.position += _moveVector;
+        _moveVector = Vector3.zero;
+    }
 
     public void ChangePhase(Phase phase)
     {
@@ -141,6 +156,8 @@ public class IKBossAI : MonoBehaviour
 
         SetSlowMovement();
         GetPath("PhaseThree");
+
+        bossHead.SetHeightInOrder(6f);
     }
 
     public void Phase_Three_Progress()
@@ -154,7 +171,8 @@ public class IKBossAI : MonoBehaviour
 
         SetSlowMovement();
         GetPath("PhaseTwo_0");
-        _timeCounter.InitTimer("randomTimer",Random.Range(3f,15f));
+        _timeCounter.InitTimer("randomTimer",0f);
+        bossHead.SetHeightInOrder(6f);
     }
 
     public void Phase_Two_Progress()
@@ -175,11 +193,18 @@ public class IKBossAI : MonoBehaviour
             if(_currentPoint == 1)
             {
                 SetFastMovement();
+                bossHead.SetHeightInOrder(3f);
             }
             else
             {
                 SetSlowMovement();
+                bossHead.SetHeightInOrder(6f);
             }
+        }
+
+        if(!IsPlayerOn())
+        {
+            ChangePhase(Phase.ONE);
         }
     }
 
@@ -187,6 +212,8 @@ public class IKBossAI : MonoBehaviour
     {
         _pathLoop = true;
         _pathArrived = false;
+        _rushToPlayer = false;
+        _isStunned = false;
 
         SetSlowMovement();
         GetPath("PhaseOne");
@@ -194,6 +221,11 @@ public class IKBossAI : MonoBehaviour
 
     public void Phase_One_Progress()
     {
+        if(IsPlayerOn())
+        {
+            ChangePhase(Phase.TWO);
+        }
+
         if(_isStunned)
         {
             _timeCounter.IncreaseTimer("stun",15f,out bool end);
@@ -232,11 +264,13 @@ public class IKBossAI : MonoBehaviour
 
     public void RushCheck()
     {
-        _timeCounter.IncreaseTimer("rushTimer",1f,out bool check);
+        _timeCounter.IncreaseTimer("rushTimer",10f,out bool check);
         if(check)
         {
+            _timeCounter.IncreaseTimer("rushOverTime",10f,out bool limit);
+
             float dist = Vector3.Distance(player.transform.position,transform.position);
-            if(dist >= 90f)
+            if(dist >= 90f || limit)
             {
                 InitRush();
             }
@@ -251,7 +285,7 @@ public class IKBossAI : MonoBehaviour
         bossHead.SetHeightInOrder(6f);
 
         //SetNearestPointToTarget();
-        SetNearestPointInArc(50f);
+        SetNearestPointInArc(30f);
         SetSlowMovement();
     }
 
@@ -260,6 +294,7 @@ public class IKBossAI : MonoBehaviour
         _rushStartPoint = transform.position;
         _rushToPlayer = true;
         _timeCounter.InitTimer("rushTimer");
+        _timeCounter.InitTimer("rushOverTime");
         _targetTransform = player;
 
         bossHead.SetHeightInOrder(3f);
@@ -358,8 +393,13 @@ public class IKBossAI : MonoBehaviour
     public void GetPath(string path)
     {
         _currentPath = controll.GetPath(path);
-        SetNearestPointInArc(50f);
+        SetNearestPointInArc(30f);
         //SetNearestPointToTarget();
+    }
+
+    public bool IsPlayerOn()
+    {
+        return _isPlayerOn > 0;
     }
 
     public bool IsArrivedTarget()
@@ -374,8 +414,8 @@ public class IKBossAI : MonoBehaviour
 
     public void Move(bool turn)
     {
-        transform.position += transform.forward * _movementSpeed * Time.deltaTime;
-
+        //transform.position += transform.forward * _movementSpeed * Time.deltaTime;
+        _moveVector += transform.forward * _movementSpeed * Time.deltaTime;
         var angle = Vector3.SignedAngle(transform.forward,_targetDirection,transform.up);
 
         if(MathEx.abs(angle) > _turnAccuracy && turn)
