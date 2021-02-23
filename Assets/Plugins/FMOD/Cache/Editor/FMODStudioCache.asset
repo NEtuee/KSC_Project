@@ -35,7 +35,7 @@ MonoBehaviour:
   Path: "Assets/KSC_Assets/Audio\u2605/FMODBank/Sample.bank"
   Name: Sample
   StudioPath: bank:/Sample
-  lastModified: 637492887197520347
+  lastModified: 637492950391591775
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -605,6 +605,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-4592040881814312164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Amb_Sample_02_Reverb/Reverb
+  m_EditorClassIdentifier: 
+  Name: Reverb
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-4568417938326062987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -885,6 +905,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-2520186065405760421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Amb_Sample_03_Location/Location
+  m_EditorClassIdentifier: 
+  Name: Location
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-2413242726586355727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1070,10 +1110,30 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: -6122888676746056625}
+  - {fileID: -2520186065405760421}
   MinDistance: 1
   MaxDistance: 20
   Length: 13776
+--- !u!114 &-1156203277703897485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Footage/State
+  m_EditorClassIdentifier: 
+  Name: State
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-1053295349339285640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1117,7 +1177,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: -8737962245537013984}
+  - {fileID: -4592040881814312164}
   MinDistance: 1
   MaxDistance: 20
   Length: 5928
@@ -1299,7 +1359,7 @@ MonoBehaviour:
   - {fileID: 7583344162479364046}
   StringsBanks:
   - {fileID: 3740130961771165491}
-  stringsBankWriteTime: 637492887197420323
+  stringsBankWriteTime: 637492950390963477
   cacheVersion: 6
 --- !u!114 &223832682738462648
 MonoBehaviour:
@@ -1606,7 +1666,7 @@ MonoBehaviour:
   Path: "Assets/KSC_Assets/Audio\u2605/FMODBank/Master.strings.bank"
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637492887197420323
+  lastModified: 637492950390963477
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -2081,7 +2141,7 @@ MonoBehaviour:
   Path: "Assets/KSC_Assets/Audio\u2605/FMODBank/Master.bank"
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637492887197410320
+  lastModified: 637492950390873454
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2254,7 +2314,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters:
-  - {fileID: -7206072506914296124}
+  - {fileID: -1156203277703897485}
   MinDistance: 1
   MaxDistance: 20
   Length: 0
