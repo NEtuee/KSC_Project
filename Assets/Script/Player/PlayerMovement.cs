@@ -239,10 +239,17 @@ public class PlayerMovement : MonoBehaviour
                 {
                     prevParent = transform.parent;
                     detachTime = Time.time;
+
                     if (prevParent != null)
                     {
                         prevParentPrevPos = prevParent.position;
                         keepSpeed = true;
+                    }
+
+
+                    if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab)
+                    {
+                        keepSpeed = false;
                     }
                 }
 
