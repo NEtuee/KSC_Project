@@ -15,6 +15,7 @@ public class IKBossAI : MonoBehaviour
     public LevelEdit_Controll controll;
     public BossHead bossHead;
     public CannonShot[] cannon;
+    public CoreTarget[] cores;
     public List<PlayerDetector> onPlayerCheck;
     public Transform player;
     public LayerMask wallLayer;
@@ -35,6 +36,7 @@ public class IKBossAI : MonoBehaviour
     private int _currentPoint = 0;
     private int _isPlayerOn = 0;
     private int _cannonCount = 3;
+    private int _currentCoreCount = 0;
 
     private float _movementSpeed;
     private float _targetMovementSpeed;
@@ -46,6 +48,7 @@ public class IKBossAI : MonoBehaviour
     private bool _rushToPlayer = false;
     private bool _isStunned = false;
     private bool _fastRun = false;
+    private bool _destroy = false;
 
     private Vector3 _targetDirection;
     private Vector3 _rushStartPoint;
@@ -58,6 +61,7 @@ public class IKBossAI : MonoBehaviour
         _timeCounter.InitTimer("rushOverTime",0f);
         _timeCounter.InitTimer("stun",0f);
         _timeCounter.InitTimer("randomTimer",0f);
+        _timeCounter.InitTimer("phaseTimer",0f);
 
         _frontSideCheck = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),1f,3f,wallLayer);
 
@@ -70,12 +74,28 @@ public class IKBossAI : MonoBehaviour
 
     public void Update()
     {
+        if(_destroy)
+        {
+            return;
+        }
+
         _movementSpeed = Mathf.Lerp(_movementSpeed,_targetMovementSpeed,0.05f);
         PhaseProgress();
 
+        int count = 0;
+        foreach(var core in cores)
+        {
+            count += core.check ? 1 : 0;
+        }
+        _currentCoreCount = count;
+        if(_currentCoreCount == 3)
+        {
+            Destroy();
+        }
+
         if(Input.GetKeyDown(KeyCode.T))
         {
-            ChangePhase(Phase.ONE);
+            Destroy();
         }
         if(Input.GetKeyDown(KeyCode.Y))
         {
@@ -93,8 +113,28 @@ public class IKBossAI : MonoBehaviour
         _moveVector = Vector3.zero;
     }
 
+    public void Launch()
+    {
+        ChangePhase(Phase.ONE);
+    }
+
+    public void Destroy()
+    {
+        _destroy = true;
+        foreach(var head in bossHead.allParts)
+        {
+            var body = head.gameObject.AddComponent<Rigidbody>();
+            var direction = MathEx.RandomCircle(5000f);
+            body.AddForce(direction,ForceMode.Acceleration);
+            body.AddTorque(MathEx.RandomCircle(1000f),ForceMode.Acceleration);
+            head.enabled = false;
+        }
+        bossHead.enabled = false;
+    }
+
     public void ChangePhase(Phase phase)
     {
+        Debug.Log(phase);
         currentPhase = phase;
         PhaseInitialize();
     }
@@ -195,7 +235,7 @@ public class IKBossAI : MonoBehaviour
             }
             else
             {
-                _timeCounter.InitTimer("randomTimer",Random.Range(5f,10f));
+                _timeCounter.InitTimer("randomTimer",Random.Range(10f,14f));
                 SetFastMovement(.7f);
             }
             _currentPoint = _currentPoint == 2 ? (_fastRun ? 1 : 0) : 2;
@@ -214,7 +254,17 @@ public class IKBossAI : MonoBehaviour
 
         if(!IsPlayerOn())
         {
-            ChangePhase(Phase.ONE);
+            _timeCounter.IncreaseTimer("phaseTimer",2f,out bool check);
+            if(check)
+                ChangePhase(Phase.ONE);
+        }
+        else if(_currentCoreCount >= 2)
+        {
+            ChangePhase(Phase.THREE);
+        }
+        else
+        {
+            _timeCounter.InitTimer("phaseTimer",0f);
         }
     }
 
@@ -240,7 +290,15 @@ public class IKBossAI : MonoBehaviour
     {
         if(IsPlayerOn())
         {
-            ChangePhase(Phase.TWO);
+            if(_currentCoreCount >= 2)
+            {
+                ChangePhase(Phase.THREE);
+            }
+            else
+            {
+                ChangePhase(Phase.TWO);
+            }
+            
         }
 
         if(_isStunned)
@@ -327,7 +385,7 @@ public class IKBossAI : MonoBehaviour
 
         //SetNearestPointToTarget();
         _timeCounter.InitTimer("cannonShot",0f);
-        SetNearestPointInArc(30f);
+        SetNearestPointInArc(90f);
         SetSlowMovement();
     }
 
@@ -349,6 +407,15 @@ public class IKBossAI : MonoBehaviour
         SetTarget(_targetTransform.position);
         float moveDist = Vector3.Distance(_rushStartPoint,transform.position);
         bool turn = false;
+
+        if(GetTargetDistance() < 4f)
+        {
+            PlayerRagdoll ragdoll = player.GetComponent<PlayerRagdoll>();
+            if(ragdoll != null)
+            {
+                ragdoll.ExplosionRagdoll(300.0f, transform.position, 10000.0f);
+            }
+        }
 
         if(moveDist <= 70f)
         {
