@@ -49,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerCtrl_Ver2 player;
 
     [SerializeField]private float slidingTime = 0.0f;
+    [SerializeField] private float holdTime = 1f;
 
     public Vector3 Velocity { get { return velocity; } protected set { velocity = value; } }
     public float Speed { get { return speed; } protected set { speed = value; } }
@@ -143,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
                 slidingTime = 0;
             }
 
-            if (slidingTime > 3.0f)
+            if (slidingTime > holdTime)
             {
                 slidingTime = 0.0f;
                 ragdoll.SlidingRagdoll(-slidingVector*30f);
@@ -279,5 +280,13 @@ public class PlayerMovement : MonoBehaviour
             prevParentPrevPos = prevParent.position;
             keepSpeed = true;
         }
+    }
+
+    public float GetGroundAngle()
+    {
+        if (float.IsNaN(groundAngle))
+            return 70f;
+
+        return groundAngle;
     }
 }
