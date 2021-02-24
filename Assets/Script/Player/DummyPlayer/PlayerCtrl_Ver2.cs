@@ -14,7 +14,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         HangLedge,
         ClimbingLedge,
         Ragdoll,
-        LedgeUp
+        LedgeUp,
+        HangRagdoll
     }
 
     [Header("State")]
@@ -73,6 +74,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private Transform mainCameraTrasform;
     private Animator animator;
     private PlayerMovement movement;
+    private PlayerRagdoll ragdoll;
 
     void Start()
     {
@@ -80,6 +82,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         rigidbody = GetComponent<Rigidbody>();
         collider = GetComponent<CapsuleCollider>();
         movement = GetComponent<PlayerMovement>();
+        ragdoll = GetComponent<PlayerRagdoll>();
 
         moveDir = Vector3.zero;
         currentSpeed = 0.0f;
@@ -158,6 +161,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         return;
 
                     if (InputLedgeUp())
+                        return;
+                }
+                break;
+            case PlayerState.HangRagdoll:
+                {
+                    if (InputReleaseGrab())
                         return;
                 }
                 break;
@@ -494,6 +503,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     transform.parent = null;
                 }
                 break;
+            case PlayerState.HangRagdoll:
+                {
+
+                }
+                break;
         }
     }
 
@@ -676,18 +690,33 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         if (InputManager.Instance.GetAction(KeybindingActions.ReleaseGrab))
         {
-            isClimbingMove = false;
+            switch(state)
+            {
+                case PlayerState.Grab:
+                    {
+                        isClimbingMove = false;
 
-            Vector3 currentRot = transform.rotation.eulerAngles;
-            currentRot.x = 0.0f;
-            currentRot.z = 0.0f;
-            transform.rotation = Quaternion.Euler(currentRot);
+                        Vector3 currentRot = transform.rotation.eulerAngles;
+                        currentRot.x = 0.0f;
+                        currentRot.z = 0.0f;
+                        transform.rotation = Quaternion.Euler(currentRot);
 
-            ChangeState(PlayerState.Default);
+                        ChangeState(PlayerState.Default);
 
-            //transform.SetParent(null);
-            movement.Detach();
-            return true;
+                        //transform.SetParent(null);
+                        movement.Detach();
+                        return true;
+                    }
+                    break;
+                case PlayerState.HangRagdoll:
+                    {
+                        ragdoll.ReleaseHangRagdoll();
+                        return true;
+                    }
+                    break;
+            }
+
+            
         }
         return false;
     }
