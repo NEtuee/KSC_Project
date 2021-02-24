@@ -271,6 +271,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         prevParent = transform.parent;
+        transform.SetParent(null);
         detachTime = Time.time;
 
         if (prevParent != null)
