@@ -222,6 +222,17 @@ public class PlayerRagdoll : MonoBehaviour
         player.BackPrevState();
     }
 
+    public void ReleaseHangRagdoll()
+    {
+        FixRightHand(false);
+        FixLeftHand(false);
+        isFlyRagdoll = true;
+        ActiveRagdoll(true);
+        SetRagdollContainer(true);
+        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+        ragdollTime = Time.time;
+    }
+
     public void FlyRagdoll()
     {
         //GameManager.Instance.PauseControl(true);
