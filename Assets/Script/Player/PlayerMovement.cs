@@ -99,8 +99,11 @@ public class PlayerMovement : MonoBehaviour
         keepSpeed = true;
         prevParent = transform.parent;
         detachTime = Time.time;
-        if(prevParent != null)
-        prevParentPrevPos = prevParent.position;
+        if (prevParent != null)
+        {
+            prevParentPrevPos = prevParent.position;
+            keepSpeed = true;
+        }
 
         transform.SetParent(null);
     }
@@ -151,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
             slidingTime = 0f;
         }
 
-        if(keepSpeed == true)
+        if(keepSpeed == true && prevParent != null)
         {
             amount = 1 -Mathf.InverseLerp(detachTime, detachTime + speedKeepTime, Time.time);
 
@@ -234,11 +237,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 if(isGrounded == true)
                 {
-                    keepSpeed = true;
                     prevParent = transform.parent;
                     detachTime = Time.time;
                     if (prevParent != null)
+                    {
                         prevParentPrevPos = prevParent.position;
+                        keepSpeed = true;
+                    }
                 }
 
                 isGrounded = false;
