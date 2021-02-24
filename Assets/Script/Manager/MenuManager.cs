@@ -52,13 +52,19 @@ public class MenuManager : MonoBehaviour
             GameManager.Instance.followTarget.Resume();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            GameManager.Instance.cameraManger.ActivePlayerFollowCamera(() => menuPopup.Pop().Disappear(0.2f, () => 
-            { 
+            //GameManager.Instance.cameraManger.ActivePlayerFollowCamera(() => menuPopup.Pop().Disappear(0.2f, () => 
+            //{ 
+            //    isMenuBlend = false;
+            //    GameManager.Instance.player.Resume();
+            //    GameManager.Instance.followTarget.Resume();
+            //}));
+            menuPopup.Pop().Disappear(0.2f, () =>
+            {
                 isMenuBlend = false;
                 GameManager.Instance.player.Resume();
                 GameManager.Instance.followTarget.Resume();
-            }));
-
+                GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
+            });
             return;
         }
 

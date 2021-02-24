@@ -20,6 +20,13 @@ public class PlayerMovement : MonoBehaviour
     public float jumpMinTime = 0.5f;
     private float jumpTime;
 
+    [SerializeField]private Transform prevParent;
+    [SerializeField]private float detachTime;
+    private float speedKeepTime = 5f;
+    private Vector3 prevParentPrevPos;
+    [SerializeField]private bool keepSpeed;
+    [SerializeField] private float amount;
+
     [Header("Slide")]
     [SerializeField] private float groundAngle = 0.0f;
     [SerializeField] private float invalidityAngle = 70.0f;
@@ -77,11 +84,24 @@ public class PlayerMovement : MonoBehaviour
         //rigidbody.position = transform.position + direction * Time.fixedDeltaTime;
     }
 
+    public void Move_Nodelta(Vector3 direction)
+    {
+        transform.position += direction;
+    }
+
+
     public void Jump()
     {
         isJumping = true;
         isGrounded = false;
         jumpTime = Time.time;
+
+        keepSpeed = true;
+        prevParent = transform.parent;
+        detachTime = Time.time;
+        if(prevParent != null)
+        prevParentPrevPos = prevParent.position;
+
         transform.SetParent(null);
     }
 
@@ -129,6 +149,23 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             slidingTime = 0f;
+        }
+
+        if(keepSpeed == true)
+        {
+            amount = 1 -Mathf.InverseLerp(detachTime, detachTime + speedKeepTime, Time.time);
+
+            Vector3 difference = (prevParent.position - prevParentPrevPos);
+            float velocity = difference.magnitude;
+            difference.y = 0;
+            difference.Normalize();
+            prevParentPrevPos = prevParent.position;
+            Move_Nodelta(difference * velocity * amount);
+
+            if(Mathf.Abs(amount) < Mathf.Epsilon)
+            {
+                keepSpeed = false;
+            }
         }
     }
 
@@ -188,11 +225,22 @@ public class PlayerMovement : MonoBehaviour
             {
                 transform.SetParent(detectObject);
             }
+
+            keepSpeed = false;
         }
         else
         {
             if(groundDistance >= groundMaxDistance)
             {
+                if(isGrounded == true)
+                {
+                    keepSpeed = true;
+                    prevParent = transform.parent;
+                    detachTime = Time.time;
+                    if (prevParent != null)
+                        prevParentPrevPos = prevParent.position;
+                }
+
                 isGrounded = false;
                 if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll)
                 {
