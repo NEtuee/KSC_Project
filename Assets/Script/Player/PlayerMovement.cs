@@ -261,4 +261,22 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+    public void Detach()
+    {
+        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab)
+        {
+            keepSpeed = false;
+            return;
+        }
+
+        prevParent = transform.parent;
+        detachTime = Time.time;
+
+        if (prevParent != null)
+        {
+            prevParentPrevPos = prevParent.position;
+            keepSpeed = true;
+        }
+    }
 }
