@@ -114,7 +114,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.Z))
+        //if (Input.GetKeyDown(KeyCode.Z))
         //{
         //    if (state == RagdollState.Animated)
         //        ActiveRightHandFixRagdoll();
@@ -183,7 +183,6 @@ public class PlayerRagdoll : MonoBehaviour
     public void ActiveLeftHandFixRagdoll()
     {
         //GameManager.Instance.PauseControl(true);
-        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         FixLeftHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
@@ -192,7 +191,6 @@ public class PlayerRagdoll : MonoBehaviour
     public void ActiveRightHandFixRagdoll()
     {
         //GameManager.Instance.PauseControl(true);
-        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         FixRightHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
@@ -207,7 +205,6 @@ public class PlayerRagdoll : MonoBehaviour
     public void ActiveBothHandFixRagdoll()
     {
         //GameManager.Instance.PauseControl(true);
-        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         FixLeftHand(true);
         FixRightHand(true);
         ActiveRagdoll(true);

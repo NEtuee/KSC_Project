@@ -170,6 +170,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         return;
                 }
                 break;
+            case PlayerState.RunToStop:
+                {
+                    if (InputTryGrab())
+                        return;
+                }
+                break;
         }
     }
 
@@ -227,7 +233,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     if (lookDir != Vector3.zero)
                     {
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.fixedDeltaTime * rotateSpeed);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir,Vector3.up), Time.fixedDeltaTime * rotateSpeed);
                     }
 
                     animator.SetFloat("Speed", currentSpeed);
@@ -249,7 +255,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     lookDir = ((camForward * inputVertical) + (camRight * inputHorizontal)).normalized;
                     if (lookDir != Vector3.zero)
                     {
-                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir, transform.up), Time.deltaTime * 1.0f);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), Time.deltaTime * 1.0f);
                     }
 
                     movement.Move(moveDir + (Vector3.up * currentJumpPower));
@@ -260,6 +266,19 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     CheckLedge();
 
                     UpdateGrab();
+
+                    //if (movement.GetGroundAngle() > 40.0f)
+                    //{
+                    //    ChangeState(PlayerState.HangRagdoll);
+                    //}
+                }
+                break;
+            case PlayerState.HangRagdoll:
+                {
+                    if (movement.GetGroundAngle() <= 40.0f)
+                    {
+                        ragdoll.DisableFixRagdoll();
+                    }
                 }
                 break;
         }
@@ -500,12 +519,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Ragdoll:
                 {
+                    transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
                     transform.parent = null;
                 }
                 break;
             case PlayerState.HangRagdoll:
                 {
-
+                    ragdoll.ActiveBothHandFixRagdoll();
                 }
                 break;
         }
@@ -754,10 +774,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 transform.parent = hit.collider.transform;
             }
         }
-        else
-        {
-            ChangeState(PlayerState.Default);
-        }
+        
     }
 
     private void CheckLedge()
@@ -777,6 +794,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             isLedge = false;
             animator.SetTrigger("LedgeUp");
+            animator.SetBool("IsLedge",false);
 
             Vector3 currentRot = transform.rotation.eulerAngles;
             currentRot.x = 0.0f;

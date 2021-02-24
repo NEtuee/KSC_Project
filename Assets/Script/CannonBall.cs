@@ -17,6 +17,7 @@ public class CannonBall : MonoBehaviour
 
     private GameObject child;
 
+
     public void Shot(Vector3 position, Vector3 target, Vector3 randomness)
     {
         _timer = 0f;
@@ -33,6 +34,20 @@ public class CannonBall : MonoBehaviour
         {
             child.transform.parent = null;
             child.transform.localScale = Vector3.one;
+
+            Collider[] playerColl = Physics.OverlapSphere(transform.position, 5f);
+
+            if(playerColl.Length != 0)
+            {
+                foreach(Collider curr in playerColl)
+                {
+                    PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
+                    if(ragdoll != null)
+                    {
+                        ragdoll.ExplosionRagdoll(200.0f, transform.position, 10000.0f);
+                    }
+                }
+            }
 
             Destroy(Instantiate(explosionParticle,transform.position,Quaternion.identity),3.5f);
             Destroy(child,1f);
