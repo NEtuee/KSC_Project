@@ -24,6 +24,7 @@ public class WallOpener : MonoBehaviour
         {
             _timer += speed * Time.deltaTime;
             transform.position = _startPosition + new Vector3(0f,openCurve.Evaluate(_timer),0f);
+
             if(_timer >= 1f)
             {
                 _open = false;

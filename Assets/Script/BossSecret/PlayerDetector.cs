@@ -37,13 +37,13 @@ public class PlayerDetector : MonoBehaviour
 
     public void OnTriggerEnter(Collider coll)
     {
-        if(coll.TryGetComponent<PlayerCtrl_State>(out var comp))
+        if(coll.TryGetComponent<PlayerCtrl_Ver2>(out var comp))
             ifPlayerIn();
     }
 
     public void OnTriggerExit(Collider coll)
     {
-        if(coll.TryGetComponent<PlayerCtrl_State>(out var comp))
+        if(coll.TryGetComponent<PlayerCtrl_Ver2>(out var comp))
             ifPlayerOut();
     }
 }

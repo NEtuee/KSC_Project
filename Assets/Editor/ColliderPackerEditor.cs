@@ -13,5 +13,10 @@ public class ColliderPackerEditor : Editor
         {
             coll.Pack();
         }
+
+        if (GUILayout.Button("Normalize"))
+        {
+            coll.Normalize();
+        }
     }
 }

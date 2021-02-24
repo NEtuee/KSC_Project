@@ -7,6 +7,42 @@ public class ColliderPacker : MonoBehaviour
     public List<Collider> targetObjects = new List<Collider>();
     public bool deleteTarget = false;
 
+    public void Normalize()
+    {
+        foreach(var obj in targetObjects)
+        {
+            var scale = obj.transform.localScale;
+
+            if(obj.GetType() == typeof(BoxCollider))
+            {
+                var boxs = obj.GetComponents<BoxCollider>();
+
+                foreach(var box in boxs)
+                {
+                    var center = box.center;
+                    var size = box.size;
+    
+                    center.x *= scale.x;
+                    center.y *= scale.y;
+                    center.z *= scale.z;
+    
+                    size.x *= scale.x;
+                    size.y *= scale.y;
+                    size.z *= scale.z;
+    
+                    box.center = center;
+                    box.size = size;
+                }
+
+            }
+
+            obj.transform.localScale = Vector3.one;
+        }
+
+        if(deleteTarget)
+            targetObjects.Clear();
+    }
+
     public void Pack()
     {
         for(int i = 0; i < targetObjects.Count; ++i)
