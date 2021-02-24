@@ -537,36 +537,46 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.TurnBack:
                 {
-                    var p = transform.localPosition;
+                    //var p = transform.localPosition;
+                    //p += animator.deltaPosition;
+                    //transform.localPosition = p;
+                    //var r = transform.localRotation;
+                    //r *= animator.deltaRotation;
+                    //transform.localRotation = r;
+
+                    var p = transform.position;
                     p += animator.deltaPosition;
-                    transform.localPosition = p;
-                    var r = transform.localRotation;
+                    transform.position = p;
+                    var r = transform.rotation;
                     r *= animator.deltaRotation;
-                    transform.localRotation = r;
+                    transform.rotation = r;
                 }
                 break;
             case PlayerState.RunToStop:
                 {
                     if (Physics.Raycast(transform.position + Vector3.up + moveDir.normalized*0.5f, Vector3.down, 1.5f, groundLayer))
                     {
-                        var p = transform.localPosition;
+                        //var p = transform.localPosition;
+                        //p += animator.deltaPosition.magnitude * moveDir.normalized;
+                        //transform.localPosition = p;
+                        var p = transform.position;
                         p += animator.deltaPosition.magnitude * moveDir.normalized;
-                        transform.localPosition = p;
+                        transform.position = p;
                     }
                 }
                 break;
             case PlayerState.Grab:
                 {
-                    var p = transform.localPosition;
+                    var p = transform.position;
                     p += animator.deltaPosition;
-                    transform.localPosition = p;
+                    transform.position = p;
                 }
                 break;
             case PlayerState.LedgeUp:
                 {
-                    var p = transform.localPosition ;
+                    var p = transform.position;
                     p += animator.deltaPosition;
-                    transform.localPosition = p;
+                    transform.position = p;
                 }
                 break;
         }
@@ -677,7 +687,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             ChangeState(PlayerState.Default);
 
-            transform.SetParent(null);
+            //transform.SetParent(null);
+            movement.Detach();
             return true;
         }
         return false;
