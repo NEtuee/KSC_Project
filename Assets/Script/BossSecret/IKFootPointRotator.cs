@@ -26,7 +26,7 @@ public class IKFootPointRotator : MonoBehaviour
         ray = new RayEx(new Ray(Vector3.zero,Vector3.zero),rayDistance,layerMask);
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         var down = -transform.up;
 

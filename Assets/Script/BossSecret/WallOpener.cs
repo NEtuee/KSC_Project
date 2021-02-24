@@ -5,6 +5,8 @@ using UnityEngine;
 public class WallOpener : MonoBehaviour
 {
     public AnimationCurve openCurve;
+    public LockOnTarget target;
+
     public float speed = 1f;
 
 
@@ -16,6 +18,7 @@ public class WallOpener : MonoBehaviour
     private void Start()
     {
         _startPosition = transform.position;
+        target.whenTriggerOn += Open;
     }
 
     private void Update()

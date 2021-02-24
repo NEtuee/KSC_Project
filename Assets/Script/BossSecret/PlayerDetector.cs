@@ -14,7 +14,7 @@ public class PlayerDetector : MonoBehaviour
     {
         for(int i = 0; i < transform.childCount; ++i)
         {
-            if(transform.GetChild(i).TryGetComponent<PlayerCtrl_State>(out var comp))
+            if(transform.GetChild(i).TryGetComponent<PlayerCtrl_Ver2>(out var comp))
             {
                 if(!_isPlayerChild)
                 {
