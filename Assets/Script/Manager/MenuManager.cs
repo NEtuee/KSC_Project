@@ -11,6 +11,8 @@ public class MenuManager : MonoBehaviour
     public float inputBlendingTime = 0.08f;
     public float soundBlendingTime = 0.5f;
 
+    public GameObject crossHair;
+
     private Stack<EscMenu> menuPopup = new Stack<EscMenu>();
 
     private bool isMenuBlend = false;
@@ -25,6 +27,7 @@ public class MenuManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && isMenuBlend == false)
         {
             InputEsc();
+            crossHair.SetActive(!crossHair.activeSelf);
         }
     }
 
@@ -49,13 +52,19 @@ public class MenuManager : MonoBehaviour
             GameManager.Instance.followTarget.Resume();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            GameManager.Instance.cameraManger.ActivePlayerFollowCamera(() => menuPopup.Pop().Disappear(0.2f, () => 
-            { 
+            //GameManager.Instance.cameraManger.ActivePlayerFollowCamera(() => menuPopup.Pop().Disappear(0.2f, () => 
+            //{ 
+            //    isMenuBlend = false;
+            //    GameManager.Instance.player.Resume();
+            //    GameManager.Instance.followTarget.Resume();
+            //}));
+            menuPopup.Pop().Disappear(0.2f, () =>
+            {
                 isMenuBlend = false;
                 GameManager.Instance.player.Resume();
                 GameManager.Instance.followTarget.Resume();
-            }));
-
+                GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
+            });
             return;
         }
 

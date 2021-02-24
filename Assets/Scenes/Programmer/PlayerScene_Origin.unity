@@ -5563,6 +5563,7 @@ MonoBehaviour:
   sound: {fileID: 1158078375}
   inputBlendingTime: 0.2
   soundBlendingTime: 0.5
+  crossHair: {fileID: 323259142}
 --- !u!4 &1052993831
 Transform:
   m_ObjectHideFlags: 0
@@ -8063,7 +8064,7 @@ MonoBehaviour:
   rollingSpeed: 12
   currentSpeed: 0
   prevSpeed: 0
-  rotateSpeed: 5
+  rotateSpeed: 6
   fallingControlSenstive: 1.55
   currentJumpPower: 0
   minJumpPower: -20
@@ -8126,7 +8127,7 @@ MonoBehaviour:
     m_Bits: 192
   groundDistance: 0
   groundMinDistance: 0
-  groundMaxDistance: 0.05
+  groundMaxDistance: 0.1
   groundSlopMinDistanc: 0.7
   groundLayer:
     serializedVersion: 2
@@ -8134,6 +8135,10 @@ MonoBehaviour:
   isGrounded: 0
   isJumping: 0
   jumpMinTime: 0.5
+  prevParent: {fileID: 0}
+  detachTime: 0
+  keepSpeed: 0
+  amount: 0
   groundAngle: 0
   invalidityAngle: 70
   slideAngle: 45

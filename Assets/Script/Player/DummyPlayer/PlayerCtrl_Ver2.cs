@@ -489,6 +489,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetFloat("Speed", 0.0f);
                 }
                 break;
+            case PlayerState.Ragdoll:
+                {
+                    transform.parent = null;
+                }
+                break;
         }
     }
 
@@ -601,7 +606,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private bool LedgeDetection()
     {
         RaycastHit hit;
-        Vector3 point1 = headTransfrom.position + transform.up * 0.1f;
+        Vector3 point1 = headTransfrom.position;
         if (Physics.Raycast(point1,transform.forward, out hit, 2f, detectionLayer))
         {
             return true;
