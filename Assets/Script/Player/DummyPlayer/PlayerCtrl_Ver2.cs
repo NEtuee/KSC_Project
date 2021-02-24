@@ -683,8 +683,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             currentRot.z = 0.0f;
             transform.rotation = Quaternion.Euler(currentRot);
 
-            transform.parent = null;
-
             ChangeState(PlayerState.Default);
 
             //transform.SetParent(null);
