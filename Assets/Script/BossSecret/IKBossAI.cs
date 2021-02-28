@@ -12,6 +12,9 @@ public class IKBossAI : MonoBehaviour
         THREE,
     }
 
+    public GameObject explosionObject;
+    public GameObject shotObject;
+
     public LevelEdit_Controll controll;
     public BossHead bossHead;
     public CannonShot[] cannon;
@@ -330,7 +333,9 @@ public class IKBossAI : MonoBehaviour
                 {
                     if(cannon[_cannonCount].CanShot(player))
                     {
-                        //cannon[_cannonCount].Shot();
+                        cannon[_cannonCount].Shot(explosionObject);
+                        Destroy(Instantiate(shotObject,cannon[_cannonCount].transform.position,Quaternion.identity),10f);
+
                         --_cannonCount;
 
                         _timeCounter.InitTimer("cannonShotDelay",0f);
