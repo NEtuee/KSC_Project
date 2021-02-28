@@ -55,12 +55,13 @@ public class CannonShot : MonoBehaviour
         DestroyCannon();
     }
 
-    public void Shot()
+    public void Shot(GameObject explosion)
     {
         if(!_canShot)
             return;
 
         var obj = Instantiate(cannonBall,transform.position,Quaternion.identity).GetComponent<CannonBall>();
+        obj.explosionParticle = explosion;
         obj.Shot(transform.position,target.position,cannonRandomness);
 
         //_explosion.Exlposion(root.transform.position);

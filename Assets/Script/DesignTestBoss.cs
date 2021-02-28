@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DesignTestBoss : MonoBehaviour
 {
+    public GameObject shotVfx;
+    public GameObject explosionVfx;
+
     public GameObject damage;
     public Transform headDamagePoint;
     public Transform leftLegDamagePoint;
@@ -357,7 +360,7 @@ public class DesignTestBoss : MonoBehaviour
     public void MouseCannonShot()
     {
         if(_mouseCannon)
-            mouseCannon.Shot();
+            mouseCannon.Shot(explosionVfx);
     }
 
     public void CannonDestroy()
@@ -476,7 +479,8 @@ public class DesignTestBoss : MonoBehaviour
 
         if(distance <= shotDistanceMax && distance >= shotDistanceMin)
         {
-            cannons[point].Shot();
+            Destroy(Instantiate(shotVfx,cannons[point].transform.position,Quaternion.identity),10f);
+            cannons[point].Shot(explosionVfx);
         }
     }
 }

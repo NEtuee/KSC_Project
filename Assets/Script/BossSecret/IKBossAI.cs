@@ -330,7 +330,7 @@ public class IKBossAI : MonoBehaviour
                 {
                     if(cannon[_cannonCount].CanShot(player))
                     {
-                        cannon[_cannonCount].Shot();
+                        //cannon[_cannonCount].Shot();
                         --_cannonCount;
 
                         _timeCounter.InitTimer("cannonShotDelay",0f);
