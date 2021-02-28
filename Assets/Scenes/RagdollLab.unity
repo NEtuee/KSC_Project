@@ -1731,21 +1731,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8611312562067794397}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &112632220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 112632216}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8048bc9851dd70840a1d346c211b649f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loadScenes:
-  - ProgramerEnviorment
-  loadWhenAwake: 0
 --- !u!114 &112632221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19670,7 +19655,7 @@ MonoBehaviour:
     - {fileID: 345796415}
     - {fileID: 243254078}
     - {fileID: 1996441683}
-  currentPath: PhaseTwo_2
+  currentPath: PhaseOne
 --- !u!4 &753788336
 Transform:
   m_ObjectHideFlags: 0
@@ -38285,6 +38270,7 @@ MonoBehaviour:
   jumpPower: 10
   gravity: 20
   slidingTime: 0
+  holdTime: 1
 --- !u!136 &1459259137
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -54265,7 +54251,7 @@ PrefabInstance:
     - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
         type: 3}
       propertyPath: isAttentionCamera
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3497379424530874560, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
         type: 3}
@@ -134414,7 +134400,7 @@ PrefabInstance:
         type: 3}
       propertyPath: bossTransform
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 826547143}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9419146eeb5b164487363a6b9a3b978, type: 3}
 --- !u!4 &8611312562067794398 stripped
