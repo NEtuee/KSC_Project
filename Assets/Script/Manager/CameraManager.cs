@@ -33,6 +33,17 @@ public class CameraManager : MonoBehaviour
         otherCameras.Add(playerAimCam);
 
         InitializeCameraAtGameStart();
+
+        if(((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod == UpdateMethod.FixedUpdate)
+        {
+            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
+            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+        }
+        else
+        {
+            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
+            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
+        }
     }
 
     private void Update()

@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum UpdateMethod
+{
+    FixedUpdate, Update
+}
+
+
 public class PlayerCtrl_Ver2 : PlayerCtrl
 {
     public enum PlayerState
@@ -17,6 +23,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         LedgeUp,
         HangRagdoll
     }
+
+    public UpdateMethod updateMethod;
 
     [Header("State")]
     [SerializeField] private bool isRun = false;
@@ -101,6 +109,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //GizmoHelper.Instance.DrawLine(headTransfrom.position + transform.up * 0.2f, headTransfrom.position + transform.up * 0.2f + transform.forward * 2f, Color.red);
 
         InputUpdate();
+
+        if (updateMethod == UpdateMethod.Update)
+        {
+            ProcessUpdate(Time.deltaTime);
+        }
     }
 
     private void FixedUpdate()
@@ -110,7 +123,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             return;
         }
 
-        ProcessFixedUpdate();
+        if (updateMethod == UpdateMethod.FixedUpdate)
+        {
+            ProcessUpdate(Time.fixedDeltaTime);
+        }
     }
 
     private void InputUpdate()
@@ -179,8 +195,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
-    private void ProcessFixedUpdate()
-    {
+    private void ProcessUpdate(float deltaTime)
+    {        
         if (rigidbody.velocity != Vector3.zero)
         {
             rigidbody.velocity = Vector3.zero;
@@ -190,7 +206,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (state != PlayerState.Grab &&movement.isGrounded == false)
         {
-            currentJumpPower -= gravity * Time.fixedDeltaTime;
+            currentJumpPower -= gravity * deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
         }
         else
@@ -229,12 +245,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
                     }
 
-                    moveDir *= currentSpeed;
 
-                    if (lookDir != Vector3.zero)
-                    {
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir,Vector3.up), Time.fixedDeltaTime * rotateSpeed);
-                    }
+
+                    //if (lookDir != Vector3.zero)
+                    //{
+                    //    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
+                    //}
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
+
+                    moveDir *= currentSpeed;
 
                     animator.SetFloat("Speed", currentSpeed);
                     movement.Move(moveDir);
@@ -255,7 +274,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     lookDir = ((camForward * inputVertical) + (camRight * inputHorizontal)).normalized;
                     if (lookDir != Vector3.zero)
                     {
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), Time.deltaTime * 1.0f);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * 1.0f);
                     }
 
                     movement.Move(moveDir + (Vector3.up * currentJumpPower));
@@ -275,15 +294,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.HangRagdoll:
                 {
-                    if (movement.GetGroundAngle() <= 40.0f)
-                    {
-                        ragdoll.DisableFixRagdoll();
-                    }
+                    //if (movement.GetGroundAngle() <= 40.0f)
+                    //{
+                    //    ragdoll.DisableFixRagdoll();
+                    //}
                 }
                 break;
         }
 
-        UpdateCurrentSpeed();
+        UpdateCurrentSpeed(deltaTime);
         //prevDir = moveDir.normalized;
         prevDir = lookDir;
     }
@@ -415,7 +434,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
-    private void UpdateCurrentSpeed()
+    private void UpdateCurrentSpeed(float deltaTime)
     {
         //if (state != PlayerState.Default)
         //{
@@ -448,16 +467,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             if (isRun == true)
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.fixedDeltaTime * 20.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, deltaTime * 20.0f);
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.fixedDeltaTime * 20.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, deltaTime * 20.0f);
             }
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.fixedDeltaTime * 40.0f);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, deltaTime * 40.0f);
             //currentSpeed = 0.0f;
         }
     }
@@ -525,7 +544,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.HangRagdoll:
                 {
-                    ragdoll.ActiveBothHandFixRagdoll();
+                    ragdoll.ActiveRightHandFixRagdoll();
                 }
                 break;
         }

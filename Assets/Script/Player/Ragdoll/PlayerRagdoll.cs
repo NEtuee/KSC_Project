@@ -114,13 +114,17 @@ public class PlayerRagdoll : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Z))
-        //{
-        //    if (state == RagdollState.Animated)
-        //        ActiveRightHandFixRagdoll();
-        //    else
-        //        DisableFixRagdoll();
-        //}
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if (state == RagdollState.Animated)
+            {
+                //ActiveRightHandFixRagdoll();
+                player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangRagdoll);
+                //ActiveBothHandFixRagdoll();
+            }
+            else
+                DisableFixRagdoll();
+        }
 
         //if (Input.GetKeyDown(KeyCode.R))
         //{
