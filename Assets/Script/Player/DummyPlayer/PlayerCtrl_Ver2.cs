@@ -21,7 +21,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ClimbingLedge,
         Ragdoll,
         LedgeUp,
-        HangRagdoll
+        HangRagdoll,
+        Aiming
     }
 
     public UpdateMethod updateMethod;
@@ -76,13 +77,23 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private Vector3 prevForward;
     private Vector3 ledgeOffsetPosition;
 
-    [SerializeField] private Rigidbody rigidbody;
-    [SerializeField] private CapsuleCollider collider;
+    [Header("EMP Lunacher")]
+    [SerializeField]private float restoreValuePerSecond = 10f;
+    [SerializeField] private float costValue = 25f;
+    [SerializeField] private float chargeNecessryTime = 1f;
+    private float chargeTime = 0.0f;
+    [SerializeField] private Transform launchPos;
+    [SerializeField] private GameObject bulletPrefab;
+
+    private Rigidbody rigidbody;
+    private CapsuleCollider collider;
 
     private Transform mainCameraTrasform;
     private Animator animator;
     private PlayerMovement movement;
     private PlayerRagdoll ragdoll;
+
+    private RaycastHit wallHit;
 
     void Start()
     {
@@ -91,6 +102,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         collider = GetComponent<CapsuleCollider>();
         movement = GetComponent<PlayerMovement>();
         ragdoll = GetComponent<PlayerRagdoll>();
+        launchPos = transform.Find("LunchPos");
 
         moveDir = Vector3.zero;
         currentSpeed = 0.0f;
@@ -163,6 +175,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     if (InputTryGrab())
                         return;
+
+                    //if (InputAiming())
+                    //    return;
                 }
                 break;
             case PlayerState.Jump:
@@ -192,6 +207,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         return;
                 }
                 break;
+            case PlayerState.Aiming:
+                {
+                    //InputChargeShot();
+
+                    //if (InputAimingRelease())
+                    //    return;
+                }
+                break;
         }
     }
 
@@ -218,6 +241,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
+                    RestoreEnergy(deltaTime);
+
                     if(movement.isGrounded == false)
                     {
                         ChangeState(PlayerState.Jump);
@@ -247,11 +272,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
 
 
-                    //if (lookDir != Vector3.zero)
-                    //{
-                    //    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
-                    //}
-                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
+                    if (lookDir != Vector3.zero)
+                    {
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
+                    }
+                    else
+                    {
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * rotateSpeed);
+                    }
+                    //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
 
                     moveDir *= currentSpeed;
 
@@ -276,6 +305,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * 1.0f);
                     }
+                    else
+                    {
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * 1.0f);
+                    }
 
                     movement.Move(moveDir + (Vector3.up * currentJumpPower));
                 }
@@ -298,6 +331,46 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     //{
                     //    ragdoll.DisableFixRagdoll();
                     //}
+                }
+                break;
+            case PlayerState.Aiming:
+                {
+                    RaycastHit hit;
+                    if(Physics.Raycast(mainCameraTrasform.position,mainCameraTrasform.forward,out hit,150f))
+                    {
+                        launchPos.LookAt(hit.point);
+                    }
+                    else
+                    {
+                        launchPos.LookAt(mainCameraTrasform.position + mainCameraTrasform.forward * 150.0f);
+                    }
+
+
+                    if (inputVertical != 0.0f || inputHorizontal != 0.0f)
+                    {
+                        moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
+                        moveDir.Normalize();
+                    }
+                    else
+                    {
+                        moveDir = prevDir;
+                        moveDir.Normalize();
+                    }
+
+                    Vector3 aimDir = camForward;
+                    lookDir = aimDir;
+
+                    //RaycastHit hit;
+                    //if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2f, groundLayer))
+                    //{
+                    //    moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
+                    //}
+
+                    transform.rotation = Quaternion.Lerp(transform.rotation,Quaternion.LookRotation(aimDir, Vector3.up),30.0f * deltaTime);
+                    moveDir *= currentSpeed;
+
+                    animator.SetFloat("Speed", currentSpeed);
+                    movement.Move(moveDir);
                 }
                 break;
         }
@@ -465,9 +538,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (inputVertical != 0 || inputHorizontal != 0)
         {
-            if (isRun == true)
+            if (state != PlayerState.Aiming)
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, deltaTime * 20.0f);
+                if (isRun == true)
+                {
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, deltaTime * 20.0f);
+                }
+                else
+                {
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, deltaTime * 20.0f);
+                }
             }
             else
             {
@@ -493,6 +573,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         prevState = state;
         state = changeState;
+
+        switch (prevState)
+        {
+            case PlayerState.Aiming:
+                {
+                    GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
+                }
+                break;
+        }
+
         switch (state)
         {
             case PlayerState.Default:
@@ -545,6 +635,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.HangRagdoll:
                 {
                     ragdoll.ActiveRightHandFixRagdoll();
+                }
+                break;
+            case PlayerState.Aiming:
+                {
+                    GameManager.Instance.cameraManger.ActiveAimCamera();
                 }
                 break;
         }
@@ -620,6 +715,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Grab:
                 {
+                    //Debug.Log(Vector3.Angle(transform.up,Vector3.up));
+
+                    if(isClimbingMove == true)
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-wallHit.normal, Vector3.up),5f*Time.deltaTime);
+
+
                     var p = transform.position;
                     p += animator.deltaPosition;
                     transform.position = p;
@@ -760,6 +861,51 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         return false;
     }
 
+    private bool InputAiming()
+    {
+        if (InputManager.Instance.GetAction(KeybindingActions.Grab))
+        {
+            ChangeState(PlayerState.Aiming);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool InputAimingRelease()
+    {
+        if (InputManager.Instance.GetAction(KeybindingActions.ReleaseGrab))
+        {
+            ChangeState(PlayerState.Default);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void InputChargeShot()
+    {
+        if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && energy.Value >= 25f)
+        {
+            chargeTime += Time.deltaTime;
+
+            if(chargeTime >= chargeNecessryTime)
+            {
+                chargeTime = 0.0f;
+                energy.Value -= 25f;
+
+                if(bulletPrefab != null)
+                {
+                    Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
+                }
+            }
+        }
+        else
+        {
+            chargeTime = 0.0f;
+        }
+    }
+
     private void UpdateGrab()
     {
         //RaycastHit hit;
@@ -775,22 +921,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //    ChangeState(PlayerState.Default);
         //}
         
-        RaycastHit hit;
         Vector3 startPos = transform.position + transform.up * (collider.height * 0.5f) + (-transform.forward * 1f);
 
-        if (Physics.SphereCast(startPos, collider.radius, transform.forward, out hit, 3.0f, detectionLayer))
+        if (Physics.SphereCast(startPos, collider.radius, transform.forward, out wallHit, 3.0f, detectionLayer))
         {
-            float distToWall = (hit.point - (transform.position + transform.up * (collider.height * 0.5f))).magnitude;
-            if (distToWall > 0.6f || distToWall < 0.5f)
+            float distToWall = (wallHit.point - (transform.position + transform.up * (collider.height * 0.5f))).magnitude;
+            if (distToWall > 0.6f)
             {
-                transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + hit.normal * 0.5f;
+                transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.5f;
             }
 
-            transform.rotation = Quaternion.LookRotation(-hit.normal, transform.up);
+            transform.rotation = Quaternion.LookRotation(-wallHit.normal, transform.up);
+            //transform.rotation *= Quaternion.FromToRotation(transform.up, Vector3.up);
 
-            if (hit.collider.transform != transform.parent)
+            if (wallHit.collider.transform != transform.parent)
             {
-                transform.parent = hit.collider.transform;
+                transform.parent = wallHit.collider.transform;
             }
         }
         
@@ -828,4 +974,24 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
 
     public void SetClimbMove(bool move) { isClimbingMove = move;}
+
+    private void LateUpdate()
+    {
+        //if(state == PlayerState.Aiming)
+        //{
+        //    Vector3 chestDir = mainCameraTrasform.right;
+        //    Transform chestTransform = animator.GetBoneTransform(HumanBodyBones.Chest);
+        //    //chestTransform.LookAt(chestTransform.position + chestDir * 5f);
+        //    chestTransform.localRotation = Quaternion.LookRotation(chestTransform.position + (chestDir * 5f),chestTransform.right);
+        //}
+    }
+
+    private void RestoreEnergy(float deltaTime)
+    {
+        if (energy.Value != 100.0f)
+        {
+            energy.Value += restoreValuePerSecond * deltaTime;
+            energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+        }
+    }
 }
