@@ -41,6 +41,11 @@ public class LevelEdit_PointManager : MonoBehaviour
             return movePoints[target];
         }
 
+        public LevelEdit_MovePoint GetPoint(int point)
+        {
+            return movePoints[point];
+        }
+
         public PathClass(string n)
         {
             name = n;

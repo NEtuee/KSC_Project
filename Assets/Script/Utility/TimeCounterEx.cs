@@ -6,7 +6,7 @@ public class TimeCounterEx
 {
     private Dictionary<string, float> _timerSet = new Dictionary<string, float>();
 
-    public void InitTimer(string target, float time = 0f)
+    public float InitTimer(string target, float time = 0f)
     {
         if(!_timerSet.ContainsKey(target))
         {
@@ -16,6 +16,27 @@ public class TimeCounterEx
         {
             _timerSet[target] = time;
         }
+
+        return time;
+    }
+
+    public float IncreaseTimerSelf(string target, float limit, out bool overLimit, float factor)
+    {
+        if(!_timerSet.ContainsKey(target))
+        {
+            _timerSet.Add(target,0f);
+        }
+
+        var curr = _timerSet[target] += factor;
+        overLimit = false;
+
+        if(curr >= limit)
+        {
+            curr = limit;
+            overLimit = true;
+        }
+
+        return curr;
     }
 
     public float IncreaseTimer(string target, float limit, out bool overLimit, float timeScale = 1f)
