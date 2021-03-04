@@ -5,13 +5,17 @@ using UnityEngine;
 public class AntiStretching : MonoBehaviour
 {
     private Vector3 startPosition;
+    [SerializeField] private bool isHand = false;
     void Start()
     {
-        startPosition = transform.position;
+        startPosition = transform.localPosition;
     }
 
     void LateUpdate()
     {
-        transform.localPosition = startPosition;
+        if (isHand == false)
+        {
+            transform.localPosition = startPosition;
+        }
     }
 }
