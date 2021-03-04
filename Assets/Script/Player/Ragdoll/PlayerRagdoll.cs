@@ -21,6 +21,8 @@ public class PlayerRagdoll : MonoBehaviour
 
     [SerializeField] private Transform leftHandPoint;
     [SerializeField] private Transform rightHandPoint;
+    [SerializeField] private GameObject fixObject;
+
 
     [SerializeField] private string prevPlayAnimation;
     [SerializeField] private string standUpBackAnimation;
@@ -297,6 +299,7 @@ public class PlayerRagdoll : MonoBehaviour
     {
         GameObject leftHandPointObject = new GameObject("LeftHandPoint");
         GameObject rightHandPointObject = new GameObject("RightHandPoint");
+        
         leftHandPoint = leftHandPointObject.transform;
         rightHandPoint = rightHandPointObject.transform;
     }

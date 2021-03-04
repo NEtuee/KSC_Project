@@ -743,12 +743,29 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool UpDetection()
     {
+        //RaycastHit hit;
+        //Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
+        //Vector3 point2 = point1 + transform.forward * 1f;
+        //if(Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
+        //{
+        //    return true;
+        //}
+
         RaycastHit hit;
         Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
         Vector3 point2 = point1 + transform.forward * 1f;
-        if(Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
+        if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
         {
-            return true;
+            MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
+            int[] triangles = wallMesh.mesh.triangles;
+            Color[] vertexColors = wallMesh.mesh.colors;
+
+            if(vertexColors[triangles[hit.triangleIndex*3+0]] != Color.red
+                && vertexColors[triangles[hit.triangleIndex * 3 + 1]] != Color.red
+                && vertexColors[triangles[hit.triangleIndex * 3 + 2]] != Color.red)
+            {
+                return true;
+            }
         }
 
         return false;
