@@ -6,6 +6,7 @@ using UnityEngine;
 public class IKCtrl : MonoBehaviour
 {
     protected Animator animator;
+    private PlayerCtrl_Ver2 player;
 
     [Header("New")]
     [Range(0f, 1f)] public float distanceToGround;
@@ -37,6 +38,7 @@ public class IKCtrl : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        player = GetComponent<PlayerCtrl_Ver2>();
     }
 
     private void FixedUpdate()
@@ -105,8 +107,28 @@ public class IKCtrl : MonoBehaviour
 
         //MoveFeetToIkPoint(AvatarIKGoal.LeftFoot, leftFootIkPosition, leftFootIkRotation, ref lastLeftFootPositionY);
 
+
+
         if(animator)
         {
+            if (player.GetState() == PlayerCtrl_Ver2.PlayerState.RunToStop)
+            {
+                animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1.0f);
+                animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1.0f);
+                animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1.0f);
+                animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1.0f);
+                return;
+            }
+
+            if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Default)
+            {
+                animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 0.0f);
+                animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0.0f);
+                animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 0.0f);
+                animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0.0f);
+                return;
+            }
+
             float leftWeight = animator.GetFloat("LeftIkWeight");
             float rightWeight = animator.GetFloat("RightIkWeight");
             animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, leftWeight);
@@ -118,24 +140,29 @@ public class IKCtrl : MonoBehaviour
             Ray ray = new Ray(animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up,Vector3.down);
             if(Physics.Raycast(ray,out hit, distanceToGround + 1f, layerMask))
             {
-                if(hit.transform.tag == "Enviroment")
+                //if(hit.transform.tag == "Enviroment")
                 {
                     Vector3 footPosition = hit.point;
                     footPosition.y += distanceToGround;
                     animator.SetIKPosition(AvatarIKGoal.LeftFoot, footPosition);
-                    animator.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+                    Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * animator.GetIKRotation(AvatarIKGoal.LeftFoot);
+                    //animator.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+                    animator.SetIKRotation(AvatarIKGoal.LeftFoot, targetRotation);
                 }
             }
 
             ray = new Ray(animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down);
             if (Physics.Raycast(ray, out hit, distanceToGround + 1f, layerMask))
             {
-                if (hit.transform.tag == "Enviroment")
+                //if (hit.transform.tag == "Enviroment")
                 {
                     Vector3 footPosition = hit.point;
                     footPosition.y += distanceToGround;
                     animator.SetIKPosition(AvatarIKGoal.RightFoot, footPosition);
-                    animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+                    Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * animator.GetIKRotation(AvatarIKGoal.RightFoot);
+                    //animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+                    animator.SetIKRotation(AvatarIKGoal.LeftFoot, targetRotation);
+
                 }
             }
         }

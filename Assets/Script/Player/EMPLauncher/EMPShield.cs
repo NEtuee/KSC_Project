@@ -33,13 +33,18 @@ public class EMPShield : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("EMP"))
         {
-            hp -= 30f;
-            shakeTime = 0.1f;
-            if (hp <= 0f)
-            {
-                Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-                Destroy(gameObject);
-            }
+            Hit();
+        }
+    }
+
+    public void Hit()
+    {
+        hp -= 30f;
+        shakeTime = 0.1f;
+        if (hp <= 0f)
+        {
+            Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
+            Destroy(gameObject);
         }
     }
 }

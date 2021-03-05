@@ -1026,11 +1026,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             RaycastHit hit;
             if(Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward,out hit,100f))
             {
-                line.Active(launchPos.position, hit.point, 0.2f, 0.3f);
+                line.Active(launchPos.position, hit.point,0.1f, 0.1f, 0.15f);
+                EMPShield shield;
+                if(hit.collider.TryGetComponent<EMPShield>(out shield))
+                {
+                    shield.Hit();
+                }
             }
             else
             {
-                line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f, 0.2f, 0.3f);
+                line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f,0.1f, 0.1f, 0.15f);
             }
         }
     }
@@ -1069,9 +1074,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (Physics.SphereCast(startPos, collider.radius, transform.forward, out wallHit, 3.0f, detectionLayer))
         {
             float distToWall = (wallHit.point - (transform.position + transform.up * (collider.height * 0.5f))).magnitude;
-            if (distToWall > 0.6f)
+            if (distToWall > 0.6f || distToWall < 0.35f)
             {
-                transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.5f;
+                transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.45f;
             }
 
             transform.rotation = Quaternion.LookRotation(-wallHit.normal, transform.up);
