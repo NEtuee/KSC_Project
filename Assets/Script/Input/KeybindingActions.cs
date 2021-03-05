@@ -9,5 +9,7 @@ public enum KeybindingActions
     Grab,
     Rolling,
     ReleaseGrab,
-    RollingStart
+    RollingStart,
+    EMPAim,
+    EMPAimRelease
 }

@@ -1,6 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+
+public enum UpdateMethod
+{
+    FixedUpdate, Update
+}
+
+
+
 
 public class PlayerCtrl_Ver2 : PlayerCtrl
 {
@@ -15,8 +24,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ClimbingLedge,
         Ragdoll,
         LedgeUp,
-        HangRagdoll
+        HangRagdoll,
+        Aiming
     }
+
+    public enum EMPLaunchType
+    {
+        ButtonDiff,Switching
+    }
+
+    public UpdateMethod updateMethod;
 
     [Header("State")]
     [SerializeField] private bool isRun = false;
@@ -68,13 +85,30 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private Vector3 prevForward;
     private Vector3 ledgeOffsetPosition;
 
-    [SerializeField] private Rigidbody rigidbody;
-    [SerializeField] private CapsuleCollider collider;
+    [Header("EMP Lunacher")]
+    [SerializeField]private float restoreValuePerSecond = 10f;
+    [SerializeField] private float costValue = 25f;
+    [SerializeField] private float chargeNecessryTime = 1f;
+    private float chargeTime = 0.0f;
+    [SerializeField] private Transform launchPos;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private float impectPower = 50.0f;
+    [SerializeField] private ParticleSystem impectEffect;
+    [SerializeField] private GameObject destroyEffect;
+    public IntReactiveProperty launcherMode = new IntReactiveProperty(1);
+    [SerializeField] private EMPLaunchType type;
+    [SerializeField] private bool isLayser;
+    [SerializeField] private LayserRender line;
+
+    private Rigidbody rigidbody;
+    private CapsuleCollider collider;
 
     private Transform mainCameraTrasform;
     private Animator animator;
     private PlayerMovement movement;
     private PlayerRagdoll ragdoll;
+
+    private RaycastHit wallHit;
 
     void Start()
     {
@@ -83,10 +117,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         collider = GetComponent<CapsuleCollider>();
         movement = GetComponent<PlayerMovement>();
         ragdoll = GetComponent<PlayerRagdoll>();
+        launchPos = transform.Find("LunchPos");
 
         moveDir = Vector3.zero;
         currentSpeed = 0.0f;
         mainCameraTrasform = Camera.main.transform;
+
+        launcherMode.Value = 1;
+
+        line = GetComponent<LayserRender>();
 
         StartCoroutine(StopCheck());
     }
@@ -101,6 +140,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //GizmoHelper.Instance.DrawLine(headTransfrom.position + transform.up * 0.2f, headTransfrom.position + transform.up * 0.2f + transform.forward * 2f, Color.red);
 
         InputUpdate();
+
+        if (updateMethod == UpdateMethod.Update)
+        {
+            ProcessUpdate(Time.deltaTime);
+        }
     }
 
     private void FixedUpdate()
@@ -110,7 +154,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             return;
         }
 
-        ProcessFixedUpdate();
+        if (updateMethod == UpdateMethod.FixedUpdate)
+        {
+            ProcessUpdate(Time.fixedDeltaTime);
+        }
     }
 
     private void InputUpdate()
@@ -147,6 +194,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     if (InputTryGrab())
                         return;
+
+                    if (InputAiming())
+                        return;
                 }
                 break;
             case PlayerState.Jump:
@@ -176,11 +226,21 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         return;
                 }
                 break;
+            case PlayerState.Aiming:
+                {
+                    InputChargeShot();
+
+                    if (InputAimingRelease())
+                        return;
+                }
+                break;
         }
+
+        InputChangeLauncherMode();
     }
 
-    private void ProcessFixedUpdate()
-    {
+    private void ProcessUpdate(float deltaTime)
+    {        
         if (rigidbody.velocity != Vector3.zero)
         {
             rigidbody.velocity = Vector3.zero;
@@ -190,7 +250,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (state != PlayerState.Grab &&movement.isGrounded == false)
         {
-            currentJumpPower -= gravity * Time.fixedDeltaTime;
+            currentJumpPower -= gravity * deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
         }
         else
@@ -202,6 +262,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
+                    RestoreEnergy(deltaTime);
+
                     if(movement.isGrounded == false)
                     {
                         ChangeState(PlayerState.Jump);
@@ -229,16 +291,26 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
                     }
 
-                    moveDir *= currentSpeed;
+
 
                     if (lookDir != Vector3.zero)
                     {
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir,Vector3.up), Time.fixedDeltaTime * rotateSpeed);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
                     }
+                    else
+                    {
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * rotateSpeed);
+                    }
+                    //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
+
+                    moveDir *= currentSpeed;
 
                     animator.SetFloat("Speed", currentSpeed);
                     movement.Move(moveDir);
                 }
+                break;
+            case PlayerState.RunToStop:
+                RestoreEnergy(deltaTime);
                 break;
             case PlayerState.Jump:
                 {
@@ -255,7 +327,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     lookDir = ((camForward * inputVertical) + (camRight * inputHorizontal)).normalized;
                     if (lookDir != Vector3.zero)
                     {
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), Time.deltaTime * 1.0f);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * 1.0f);
+                    }
+                    else
+                    {
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * 1.0f);
                     }
 
                     movement.Move(moveDir + (Vector3.up * currentJumpPower));
@@ -275,15 +351,55 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.HangRagdoll:
                 {
-                    if (movement.GetGroundAngle() <= 40.0f)
+                    //if (movement.GetGroundAngle() <= 40.0f)
+                    //{
+                    //    ragdoll.DisableFixRagdoll();
+                    //}
+                }
+                break;
+            case PlayerState.Aiming:
+                {
+                    RaycastHit hit;
+                    if(Physics.Raycast(mainCameraTrasform.position,mainCameraTrasform.forward,out hit,150f))
                     {
-                        ragdoll.DisableFixRagdoll();
+                        launchPos.LookAt(hit.point);
                     }
+                    else
+                    {
+                        launchPos.LookAt(mainCameraTrasform.position + mainCameraTrasform.forward * 150.0f);
+                    }
+
+
+                    if (inputVertical != 0.0f || inputHorizontal != 0.0f)
+                    {
+                        moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
+                        moveDir.Normalize();
+                    }
+                    else
+                    {
+                        moveDir = prevDir;
+                        moveDir.Normalize();
+                    }
+
+                    Vector3 aimDir = camForward;
+                    lookDir = aimDir;
+
+                    //RaycastHit hit;
+                    //if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2f, groundLayer))
+                    //{
+                    //    moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
+                    //}
+
+                    transform.rotation = Quaternion.Lerp(transform.rotation,Quaternion.LookRotation(aimDir, Vector3.up),30.0f * deltaTime);
+                    moveDir *= currentSpeed;
+
+                    animator.SetFloat("Speed", currentSpeed);
+                    movement.Move(moveDir);
                 }
                 break;
         }
 
-        UpdateCurrentSpeed();
+        UpdateCurrentSpeed(deltaTime);
         //prevDir = moveDir.normalized;
         prevDir = lookDir;
     }
@@ -415,7 +531,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
-    private void UpdateCurrentSpeed()
+    private void UpdateCurrentSpeed(float deltaTime)
     {
         //if (state != PlayerState.Default)
         //{
@@ -446,18 +562,25 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (inputVertical != 0 || inputHorizontal != 0)
         {
-            if (isRun == true)
+            if (state != PlayerState.Aiming)
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.fixedDeltaTime * 20.0f);
+                if (isRun == true)
+                {
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, deltaTime * 20.0f);
+                }
+                else
+                {
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, deltaTime * 20.0f);
+                }
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.fixedDeltaTime * 20.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, deltaTime * 20.0f);
             }
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.fixedDeltaTime * 40.0f);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, deltaTime * 40.0f);
             //currentSpeed = 0.0f;
         }
     }
@@ -474,6 +597,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         prevState = state;
         state = changeState;
+
+        switch (prevState)
+        {
+            case PlayerState.Aiming:
+                {
+                    GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
+                }
+                break;
+        }
+
         switch (state)
         {
             case PlayerState.Default:
@@ -525,7 +658,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.HangRagdoll:
                 {
-                    ragdoll.ActiveBothHandFixRagdoll();
+                    ragdoll.ActiveRightHandFixRagdoll();
+                }
+                break;
+            case PlayerState.Aiming:
+                {
+                    GameManager.Instance.cameraManger.ActiveAimCamera();
                 }
                 break;
         }
@@ -601,6 +739,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Grab:
                 {
+                    //Debug.Log(Vector3.Angle(transform.up,Vector3.up));
+
+                    if(isClimbingMove == true)
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-wallHit.normal, Vector3.up),5f*Time.deltaTime);
+
+
                     var p = transform.position;
                     p += animator.deltaPosition;
                     transform.position = p;
@@ -626,10 +770,27 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         RaycastHit hit;
         Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
         Vector3 point2 = point1 + transform.forward * 1f;
-        if(Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
+        if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
         {
             return true;
         }
+
+        //RaycastHit hit;
+        //Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
+        //Vector3 point2 = point1 + transform.forward * 1f;
+        //if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
+        //{
+        //    MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
+        //    int[] triangles = wallMesh.mesh.triangles;
+        //    Color[] vertexColors = wallMesh.mesh.colors;
+
+        //    if(vertexColors[triangles[hit.triangleIndex*3+0]] != Color.red
+        //        && vertexColors[triangles[hit.triangleIndex * 3 + 1]] != Color.red
+        //        && vertexColors[triangles[hit.triangleIndex * 3 + 2]] != Color.red)
+        //    {
+        //        return true;
+        //    }
+        //}
 
         return false;
     }
@@ -741,6 +902,153 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         return false;
     }
 
+    private bool InputAiming()
+    {
+        if (InputManager.Instance.GetAction(KeybindingActions.EMPAim))
+        {
+            ChangeState(PlayerState.Aiming);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool InputAimingRelease()
+    {
+        if (InputManager.Instance.GetAction(KeybindingActions.EMPAimRelease))
+        {
+            ChangeState(PlayerState.Default);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void InputChargeShot()
+    {
+        if (type == EMPLaunchType.ButtonDiff)
+        {
+            if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && energy.Value >= 25f)
+            {
+                chargeTime += Time.deltaTime;
+
+                if (chargeTime >= chargeNecessryTime)
+                {
+                    chargeTime = 0.0f;
+                    energy.Value -= 25f;
+
+                    if (bulletPrefab != null)
+                    {
+                        if (isLayser)
+                            LaunchLayser();
+                        else
+                            Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
+                    }
+                }
+
+                return;
+            }
+            else
+            {
+                chargeTime = 0.0f;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Mouse1) && energy.Value >= 50f)
+            {
+                LaunchImpect();
+            }
+        }
+        else
+        {
+            if (InputManager.Instance.GetAction(KeybindingActions.Aiming))
+            {
+                if (launcherMode.Value == 1 && energy.Value < 25f)
+                    return;
+
+                if (launcherMode.Value == 2 && energy.Value < 50f)
+                    return;
+
+                    chargeTime += Time.deltaTime;
+
+                if (chargeTime >= chargeNecessryTime)
+                {
+                    chargeTime = 0.0f;
+                    energy.Value -= 25f;
+
+                    if (launcherMode.Value == 1)
+                    {
+                        if (bulletPrefab != null)
+                        {
+                            if (isLayser)
+                                LaunchLayser();
+                            else
+                                Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
+                        }
+                    }
+                    else
+                    {
+                        LaunchImpect();
+                    }
+                }
+
+                return;
+            }
+            else
+            {
+                chargeTime = 0.0f;
+            }
+        }
+    }
+
+    private void LaunchImpect()
+    {
+        energy.Value -= 50.0f;
+        impectEffect.Play();
+        Collider[] coll = Physics.OverlapSphere(transform.position + transform.forward * 3f, 3f);
+        for (int i = 0; i < coll.Length; i++)
+        {
+            if (coll[i].CompareTag("Moveable"))
+            {
+                coll[i].GetComponent<Rigidbody>().AddForce(transform.forward * impectPower, ForceMode.Impulse);
+            }
+            else if (coll[i].CompareTag("Destroyable"))
+            {
+                Instantiate(destroyEffect, coll[i].transform.position, Quaternion.identity);
+                Destroy(coll[i].gameObject);
+            }
+        }
+    }
+
+    private void LaunchLayser()
+    {
+        if(line != null)
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward,out hit,100f))
+            {
+                line.Active(launchPos.position, hit.point, 0.2f, 0.3f);
+            }
+            else
+            {
+                line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f, 0.2f, 0.3f);
+            }
+        }
+    }
+
+    private void InputChangeLauncherMode()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            launcherMode.Value = 1;
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            launcherMode.Value = 2;
+        }
+    }
+
+    
+
     private void UpdateGrab()
     {
         //RaycastHit hit;
@@ -756,22 +1064,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //    ChangeState(PlayerState.Default);
         //}
         
-        RaycastHit hit;
         Vector3 startPos = transform.position + transform.up * (collider.height * 0.5f) + (-transform.forward * 1f);
 
-        if (Physics.SphereCast(startPos, collider.radius, transform.forward, out hit, 3.0f, detectionLayer))
+        if (Physics.SphereCast(startPos, collider.radius, transform.forward, out wallHit, 3.0f, detectionLayer))
         {
-            float distToWall = (hit.point - (transform.position + transform.up * (collider.height * 0.5f))).magnitude;
-            if (distToWall > 0.6f || distToWall < 0.5f)
+            float distToWall = (wallHit.point - (transform.position + transform.up * (collider.height * 0.5f))).magnitude;
+            if (distToWall > 0.6f)
             {
-                transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + hit.normal * 0.5f;
+                transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.5f;
             }
 
-            transform.rotation = Quaternion.LookRotation(-hit.normal, transform.up);
+            transform.rotation = Quaternion.LookRotation(-wallHit.normal, transform.up);
+            //transform.rotation *= Quaternion.FromToRotation(transform.up, Vector3.up);
 
-            if (hit.collider.transform != transform.parent)
+            if (wallHit.collider.transform != transform.parent)
             {
-                transform.parent = hit.collider.transform;
+                transform.parent = wallHit.collider.transform;
             }
         }
         
@@ -809,4 +1117,24 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
 
     public void SetClimbMove(bool move) { isClimbingMove = move;}
+
+    private void LateUpdate()
+    {
+        //if(state == PlayerState.Aiming)
+        //{
+        //    Vector3 chestDir = mainCameraTrasform.right;
+        //    Transform chestTransform = animator.GetBoneTransform(HumanBodyBones.Chest);
+        //    //chestTransform.LookAt(chestTransform.position + chestDir * 5f);
+        //    chestTransform.localRotation = Quaternion.LookRotation(chestTransform.position + (chestDir * 5f),chestTransform.right);
+        //}
+    }
+
+    private void RestoreEnergy(float deltaTime)
+    {
+        if (energy.Value != 100.0f)
+        {
+            energy.Value += restoreValuePerSecond * deltaTime;
+            energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+        }
+    }
 }

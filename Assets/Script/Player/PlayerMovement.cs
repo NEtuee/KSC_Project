@@ -80,9 +80,11 @@ public class PlayerMovement : MonoBehaviour
         //if (Physics.CapsuleCast(p1, p2, capsuleCollider.radius * 1.5f, transform.forward, 0.0f, fowardCheckLayer))
         //    return;
 
-        transform.position += direction * Time.fixedDeltaTime;
         //rigidbody.MovePosition(transform.position+direction * Time.fixedDeltaTime);
         //rigidbody.position = transform.position + direction * Time.fixedDeltaTime;
+
+        float deltaTime = player.updateMethod == UpdateMethod.FixedUpdate ? Time.fixedDeltaTime : Time.deltaTime;
+        transform.position += direction * deltaTime;
     }
 
     public void Move_Nodelta(Vector3 direction)
@@ -111,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if(isGrounded == true && groundAngle >= invalidityAngle)
+        if(groundAngle >= invalidityAngle)
         {
             currentJumpPower -= gravity * Time.deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
@@ -222,15 +224,18 @@ public class PlayerMovement : MonoBehaviour
 
         if(groundDistance <= groundMinDistance)
         {
-            isGrounded = true;
-            isJumping = false;
-
-            if (!detectObject.CompareTag("Env_Props"))
+            if (groundAngle < invalidityAngle)
             {
-                transform.SetParent(detectObject);
-            }
+                isGrounded = true;
+                isJumping = false;
 
-            keepSpeed = false;
+                if (!detectObject.CompareTag("Env_Props"))
+                {
+                    transform.SetParent(detectObject);
+                }
+
+                keepSpeed = false;
+            }
         }
         else
         {
@@ -255,7 +260,7 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 isGrounded = false;
-                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll)
+                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll)
                 {
                     transform.SetParent(null);
                 }
