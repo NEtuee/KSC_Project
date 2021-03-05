@@ -8,6 +8,7 @@ public class LayserRender : MonoBehaviour
     private float activeTime = 0.0f;
     private bool active = false;
     private float duration;
+    private float fadeDuration;
     private float currentWidth;
 
     void Start()
@@ -19,26 +20,34 @@ public class LayserRender : MonoBehaviour
     {
         if(active)
         {
-            float amount = 1f-Mathf.InverseLerp(activeTime, activeTime + duration, Time.time);
-            lineRenderer.startWidth = currentWidth * amount;
-            lineRenderer.endWidth = currentWidth * amount;
-
-            if(amount <= Mathf.Epsilon)
+            if(duration > 0.0f)
             {
-                active = false;
+                duration -= Time.deltaTime;
+            }
+            else
+            {
+                float amount = 1f - Mathf.InverseLerp(activeTime, activeTime + fadeDuration, Time.time);
+                lineRenderer.startWidth = currentWidth * amount;
+                lineRenderer.endWidth = currentWidth * amount;
+
+                if (amount <= Mathf.Epsilon)
+                {
+                    active = false;
+                }
             }
         }
     }
 
-    public void Active(Vector3 start, Vector3 end, float time, float width)
+    public void Active(Vector3 start, Vector3 end, float duration, float fadetime, float width)
     {
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
         currentWidth = width;
-        duration = time;
-        activeTime = Time.time;
+        this.duration = duration;
+        fadeDuration = fadetime;
+        activeTime = Time.time + duration;
         active = true;
     }
 }
