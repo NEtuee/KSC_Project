@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/SoundInfoItem", order = 1)]
 public class SoundInfoItem : ScriptableObject
@@ -39,10 +42,17 @@ public class SoundInfoItem : ScriptableObject
     [SerializeField]
     public List<SoundInfo> soundData;
 
+    public SoundInfo FindSound(int id)
+    {
+        return soundData.Find(x => x.id == id);
+    }
+
+#if UNITY_EDITOR
     public void CreateInfoFromCSV()
     {
         CreateInfoFromCSV(csvData);
     }
+
 
     public void CreateInfoFromCSV(TextAsset csv)
     {
@@ -96,5 +106,11 @@ public class SoundInfoItem : ScriptableObject
         {
             Debug.Log("file error");
         }
+
+        soundData.Sort((x,y)=>{return x.id > y.id ? 1 : (x.id < y.id ? -1 : 0);});
+
+        EditorUtility.SetDirty(this);
     }
+#endif
+
 }
