@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public enum UpdateMethod
 {
     FixedUpdate, Update
 }
+
+
 
 
 public class PlayerCtrl_Ver2 : PlayerCtrl
@@ -23,6 +26,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         LedgeUp,
         HangRagdoll,
         Aiming
+    }
+
+    public enum EMPLaunchType
+    {
+        ButtonDiff,Switching
     }
 
     public UpdateMethod updateMethod;
@@ -84,6 +92,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private float chargeTime = 0.0f;
     [SerializeField] private Transform launchPos;
     [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private float impectPower = 50.0f;
+    [SerializeField] private ParticleSystem impectEffect;
+    [SerializeField] private GameObject destroyEffect;
+    public IntReactiveProperty launcherMode = new IntReactiveProperty(1);
+    [SerializeField] private EMPLaunchType type;
+    [SerializeField] private bool isLayser;
+    [SerializeField] private LayserRender line;
 
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
@@ -107,6 +122,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         moveDir = Vector3.zero;
         currentSpeed = 0.0f;
         mainCameraTrasform = Camera.main.transform;
+
+        launcherMode.Value = 1;
+
+        line = GetComponent<LayserRender>();
 
         StartCoroutine(StopCheck());
     }
@@ -176,8 +195,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if (InputTryGrab())
                         return;
 
-                    //if (InputAiming())
-                    //    return;
+                    if (InputAiming())
+                        return;
                 }
                 break;
             case PlayerState.Jump:
@@ -209,13 +228,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Aiming:
                 {
-                    //InputChargeShot();
+                    InputChargeShot();
 
-                    //if (InputAimingRelease())
-                    //    return;
+                    if (InputAimingRelease())
+                        return;
                 }
                 break;
         }
+
+        InputChangeLauncherMode();
     }
 
     private void ProcessUpdate(float deltaTime)
@@ -287,6 +308,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetFloat("Speed", currentSpeed);
                     movement.Move(moveDir);
                 }
+                break;
+            case PlayerState.RunToStop:
+                RestoreEnergy(deltaTime);
                 break;
             case PlayerState.Jump:
                 {
@@ -743,30 +767,30 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool UpDetection()
     {
-        //RaycastHit hit;
-        //Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
-        //Vector3 point2 = point1 + transform.forward * 1f;
-        //if(Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
-        //{
-        //    return true;
-        //}
-
         RaycastHit hit;
         Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
         Vector3 point2 = point1 + transform.forward * 1f;
         if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
         {
-            MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
-            int[] triangles = wallMesh.mesh.triangles;
-            Color[] vertexColors = wallMesh.mesh.colors;
-
-            if(vertexColors[triangles[hit.triangleIndex*3+0]] != Color.red
-                && vertexColors[triangles[hit.triangleIndex * 3 + 1]] != Color.red
-                && vertexColors[triangles[hit.triangleIndex * 3 + 2]] != Color.red)
-            {
-                return true;
-            }
+            return true;
         }
+
+        //RaycastHit hit;
+        //Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
+        //Vector3 point2 = point1 + transform.forward * 1f;
+        //if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
+        //{
+        //    MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
+        //    int[] triangles = wallMesh.mesh.triangles;
+        //    Color[] vertexColors = wallMesh.mesh.colors;
+
+        //    if(vertexColors[triangles[hit.triangleIndex*3+0]] != Color.red
+        //        && vertexColors[triangles[hit.triangleIndex * 3 + 1]] != Color.red
+        //        && vertexColors[triangles[hit.triangleIndex * 3 + 2]] != Color.red)
+        //    {
+        //        return true;
+        //    }
+        //}
 
         return false;
     }
@@ -880,7 +904,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputAiming()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.Grab))
+        if (InputManager.Instance.GetAction(KeybindingActions.EMPAim))
         {
             ChangeState(PlayerState.Aiming);
             return true;
@@ -891,7 +915,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputAimingRelease()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.ReleaseGrab))
+        if (InputManager.Instance.GetAction(KeybindingActions.EMPAimRelease))
         {
             ChangeState(PlayerState.Default);
             return true;
@@ -902,26 +926,128 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputChargeShot()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && energy.Value >= 25f)
+        if (type == EMPLaunchType.ButtonDiff)
         {
-            chargeTime += Time.deltaTime;
+            if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && energy.Value >= 25f)
+            {
+                chargeTime += Time.deltaTime;
 
-            if(chargeTime >= chargeNecessryTime)
+                if (chargeTime >= chargeNecessryTime)
+                {
+                    chargeTime = 0.0f;
+                    energy.Value -= 25f;
+
+                    if (bulletPrefab != null)
+                    {
+                        if (isLayser)
+                            LaunchLayser();
+                        else
+                            Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
+                    }
+                }
+
+                return;
+            }
+            else
             {
                 chargeTime = 0.0f;
-                energy.Value -= 25f;
+            }
 
-                if(bulletPrefab != null)
-                {
-                    Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
-                }
+            if (Input.GetKeyDown(KeyCode.Mouse1) && energy.Value >= 50f)
+            {
+                LaunchImpect();
             }
         }
         else
         {
-            chargeTime = 0.0f;
+            if (InputManager.Instance.GetAction(KeybindingActions.Aiming))
+            {
+                if (launcherMode.Value == 1 && energy.Value < 25f)
+                    return;
+
+                if (launcherMode.Value == 2 && energy.Value < 50f)
+                    return;
+
+                    chargeTime += Time.deltaTime;
+
+                if (chargeTime >= chargeNecessryTime)
+                {
+                    chargeTime = 0.0f;
+                    energy.Value -= 25f;
+
+                    if (launcherMode.Value == 1)
+                    {
+                        if (bulletPrefab != null)
+                        {
+                            if (isLayser)
+                                LaunchLayser();
+                            else
+                                Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
+                        }
+                    }
+                    else
+                    {
+                        LaunchImpect();
+                    }
+                }
+
+                return;
+            }
+            else
+            {
+                chargeTime = 0.0f;
+            }
         }
     }
+
+    private void LaunchImpect()
+    {
+        energy.Value -= 50.0f;
+        impectEffect.Play();
+        Collider[] coll = Physics.OverlapSphere(transform.position + transform.forward * 3f, 3f);
+        for (int i = 0; i < coll.Length; i++)
+        {
+            if (coll[i].CompareTag("Moveable"))
+            {
+                coll[i].GetComponent<Rigidbody>().AddForce(transform.forward * impectPower, ForceMode.Impulse);
+            }
+            else if (coll[i].CompareTag("Destroyable"))
+            {
+                Instantiate(destroyEffect, coll[i].transform.position, Quaternion.identity);
+                Destroy(coll[i].gameObject);
+            }
+        }
+    }
+
+    private void LaunchLayser()
+    {
+        if(line != null)
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward,out hit,100f))
+            {
+                line.Active(launchPos.position, hit.point, 0.2f, 0.3f);
+            }
+            else
+            {
+                line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f, 0.2f, 0.3f);
+            }
+        }
+    }
+
+    private void InputChangeLauncherMode()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            launcherMode.Value = 1;
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            launcherMode.Value = 2;
+        }
+    }
+
+    
 
     private void UpdateGrab()
     {

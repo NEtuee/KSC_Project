@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class MenuManager : MonoBehaviour
 {
     public EscMenu main;
     public EscMenu input;
     public EscMenu sound;
+
+    public Canvas launcherStateText;
+    public Canvas impectStateText;
 
     public float inputBlendingTime = 0.08f;
     public float soundBlendingTime = 0.5f;
@@ -18,7 +22,20 @@ public class MenuManager : MonoBehaviour
     private bool isMenuBlend = false;
     void Start()
     {
-        
+        ((PlayerCtrl_Ver2)GameManager.Instance.player).launcherMode.Subscribe(
+            value => { 
+                switch(value)
+                {
+                    case 1:
+                        launcherStateText.enabled = true;
+                        impectStateText.enabled = false;
+                        break;
+                    case 2:
+                        launcherStateText.enabled = false;
+                        impectStateText.enabled = true;
+                        break;
+                }
+            });
     }
 
     // Update is called once per frame
