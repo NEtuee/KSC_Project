@@ -8,9 +8,6 @@ public enum UpdateMethod
     FixedUpdate, Update
 }
 
-
-
-
 public class PlayerCtrl_Ver2 : PlayerCtrl
 {
     public enum PlayerState
@@ -309,8 +306,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     movement.Move(moveDir);
                 }
                 break;
+            case PlayerState.TurnBack:
             case PlayerState.RunToStop:
-                RestoreEnergy(deltaTime);
+                {
+                    RestoreEnergy(deltaTime);
+
+                    RaycastHit hit;
+                    if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2f, groundLayer))
+                    {
+                        //moveDir = (Vector3.ProjectOnPlane(moveDir, hit.normal)).normalized;
+                        moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
+                    }
+                }
                 break;
             case PlayerState.Jump:
                 {
@@ -716,9 +723,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     //r *= animator.deltaRotation;
                     //transform.localRotation = r;
 
-                    var p = transform.position;
-                    p += animator.deltaPosition;
-                    transform.position = p;
+                    //var p = transform.position;
+                    //p += animator.deltaPosition;
+                    transform.position += moveDir.normalized * animator.deltaPosition.magnitude;
                     var r = transform.rotation;
                     r *= animator.deltaRotation;
                     transform.rotation = r;
@@ -731,9 +738,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         //var p = transform.localPosition;
                         //p += animator.deltaPosition.magnitude * moveDir.normalized;
                         //transform.localPosition = p;
-                        var p = transform.position;
-                        p += animator.deltaPosition.magnitude * moveDir.normalized;
-                        transform.position = p;
+                        //var p = transform.position;
+                        //p += moveDir.normalized * animator.deltaPosition.magnitude;
+                        transform.position += moveDir.normalized * animator.deltaPosition.magnitude;
                     }
                 }
                 break;
