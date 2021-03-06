@@ -56,116 +56,127 @@ public class IKCtrl : MonoBehaviour
         //    }
         //}
 
-        //if (enableFeetIk == false)
-        //{
-        //    return;
-        //}
+        if (enableFeetIk == false)
+        {
+            return;
+        }
 
-        //if (animator == null)
-        //{
-        //    return;
-        //}
+        if (animator == null)
+        {
+            return;
+        }
 
-        //AdjustFeetTarget(ref rightFootPosition, HumanBodyBones.RightFoot);
-        //AdjustFeetTarget(ref leftFootPosition, HumanBodyBones.LeftFoot);
+        AdjustFeetTarget(ref rightFootPosition, HumanBodyBones.RightFoot);
+        AdjustFeetTarget(ref leftFootPosition, HumanBodyBones.LeftFoot);
 
-        //FeetPositionSolver(rightFootPosition, ref rightFootIkPosition, ref rightFootIkRotation);
-        //FeetPositionSolver(leftFootPosition, ref leftFootIkPosition, ref leftFootIkRotation);
+        FeetPositionSolver(rightFootPosition, ref rightFootIkPosition, ref rightFootIkRotation);
+        FeetPositionSolver(leftFootPosition, ref leftFootIkPosition, ref leftFootIkRotation);
     }
 
     private void OnAnimatorIK(int layerIndex)
     {
 
-        //if (enableFeetIk == false)
-        //{
-        //    return;
-        //}
-        //if(animator == null)
-        //{
-        //    return;
-        //}
-
-        ////MovePelvisHeight();
-
-        //animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
-
-        //if(useProIkFeature)
-        //{
-        //    //animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,animator.GetFloat(rightFootAnimVariableName));
-        //    animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0.5f);
-        //}
-
-        //MoveFeetToIkPoint(AvatarIKGoal.RightFoot, rightFootIkPosition,rightFootIkRotation,ref lastRightFootPositionY);
-
-        //animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
-
-        //if (useProIkFeature)
-        //{
-        //    //animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, animator.GetFloat(leftFootAnimVariableName));
-        //    animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0.5f);
-        //}
-
-        //MoveFeetToIkPoint(AvatarIKGoal.LeftFoot, leftFootIkPosition, leftFootIkRotation, ref lastLeftFootPositionY);
-
-
-
-        if(animator)
+        if (enableFeetIk == false)
         {
-            if (player.GetState() == PlayerCtrl_Ver2.PlayerState.RunToStop)
-            {
-                animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1.0f);
-                animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1.0f);
-                animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1.0f);
-                animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1.0f);
-                return;
-            }
-
-            if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Default)
-            {
-                animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 0.0f);
-                animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0.0f);
-                animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 0.0f);
-                animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0.0f);
-                return;
-            }
-
-            float leftWeight = animator.GetFloat("LeftIkWeight");
-            float rightWeight = animator.GetFloat("RightIkWeight");
-            animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, leftWeight);
-            animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, leftWeight);
-            animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, rightWeight);
-            animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, rightWeight);
-
-            RaycastHit hit;
-            Ray ray = new Ray(animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up,Vector3.down);
-            if(Physics.Raycast(ray,out hit, distanceToGround + 1f, layerMask))
-            {
-                //if(hit.transform.tag == "Enviroment")
-                {
-                    Vector3 footPosition = hit.point;
-                    footPosition.y += distanceToGround;
-                    animator.SetIKPosition(AvatarIKGoal.LeftFoot, footPosition);
-                    Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * animator.GetIKRotation(AvatarIKGoal.LeftFoot);
-                    //animator.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, hit.normal));
-                    animator.SetIKRotation(AvatarIKGoal.LeftFoot, targetRotation);
-                }
-            }
-
-            ray = new Ray(animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down);
-            if (Physics.Raycast(ray, out hit, distanceToGround + 1f, layerMask))
-            {
-                //if (hit.transform.tag == "Enviroment")
-                {
-                    Vector3 footPosition = hit.point;
-                    footPosition.y += distanceToGround;
-                    animator.SetIKPosition(AvatarIKGoal.RightFoot, footPosition);
-                    Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * animator.GetIKRotation(AvatarIKGoal.RightFoot);
-                    //animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, hit.normal));
-                    animator.SetIKRotation(AvatarIKGoal.LeftFoot, targetRotation);
-
-                }
-            }
+            return;
         }
+        if (animator == null)
+        {
+            return;
+        }
+
+        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump)
+            return;
+        
+        MovePelvisHeight();
+
+
+        float leftWeight = animator.GetFloat("LeftIkWeight");
+        float rightWeight = animator.GetFloat("RightIkWeight");
+        float leftRotWeight = animator.GetFloat("LeftRotationWeight");
+        float rightRotWeight = animator.GetFloat("RightRotationWeight");
+
+        animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1.0f);
+
+        if (useProIkFeature)
+        {
+            //animator.SetIKRotationWeight(AvatarIKGoal.RightFoot,animator.GetFloat(rightFootAnimVariableName));
+            animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, rightRotWeight);
+        }
+
+        MoveFeetToIkPoint(AvatarIKGoal.RightFoot, rightFootIkPosition, rightFootIkRotation, ref lastRightFootPositionY);
+
+        animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1.0f);
+
+        if (useProIkFeature)
+        {
+            //animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, animator.GetFloat(leftFootAnimVariableName));
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, leftRotWeight);
+        }
+
+        MoveFeetToIkPoint(AvatarIKGoal.LeftFoot, leftFootIkPosition, leftFootIkRotation, ref lastLeftFootPositionY);
+
+
+
+        //if(animator)
+        //{
+        //    if (player.GetState() == PlayerCtrl_Ver2.PlayerState.RunToStop)
+        //    {
+        //        animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1.0f);
+        //        animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1.0f);
+        //        animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1.0f);
+        //        animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1.0f);
+        //        return;
+        //    }
+
+        //    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Default)
+        //    {
+        //        animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 0.0f);
+        //        animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0.0f);
+        //        animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 0.0f);
+        //        animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0.0f);
+        //        return;
+        //    }
+
+        //    float leftWeight = animator.GetFloat("LeftIkWeight");
+        //    float rightWeight = animator.GetFloat("RightIkWeight");
+        //    animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, leftWeight);
+        //    animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, leftWeight);
+        //    animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, rightWeight);
+        //    animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, rightWeight);
+
+        //    RaycastHit hit;
+        //    Ray ray = new Ray(animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up,Vector3.down);
+        //    if(Physics.Raycast(ray,out hit, distanceToGround + 1f, layerMask))
+        //    {
+        //        Debug.Log("left");
+        //        //if(hit.transform.tag == "Enviroment")
+        //        {
+        //            Vector3 footPosition = hit.point;
+        //            footPosition.y += distanceToGround;
+        //            animator.SetIKPosition(AvatarIKGoal.LeftFoot, footPosition);
+        //            Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * animator.GetIKRotation(AvatarIKGoal.LeftFoot);
+        //            //animator.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+        //            animator.SetIKRotation(AvatarIKGoal.LeftFoot, targetRotation);
+        //        }
+        //    }
+
+        //    ray = new Ray(animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down);
+        //    if (Physics.Raycast(ray, out hit, distanceToGround + 1f, layerMask))
+        //    {
+        //        Debug.Log("right");
+        //        //if (hit.transform.tag == "Enviroment")
+        //        {
+        //            Vector3 footPosition = hit.point;
+        //            footPosition.y += distanceToGround;
+        //            animator.SetIKPosition(AvatarIKGoal.RightFoot, footPosition);
+        //            Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * animator.GetIKRotation(AvatarIKGoal.RightFoot);
+        //            //animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+        //            animator.SetIKRotation(AvatarIKGoal.LeftFoot, targetRotation);
+
+        //        }
+        //    }
+        //}
     }
 
     public void EnableFeetIk() { enableFeetIk = true; }
