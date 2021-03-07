@@ -11,5 +11,7 @@ public enum KeybindingActions
     ReleaseGrab,
     RollingStart,
     EMPAim,
-    EMPAimRelease
+    EMPAimRelease,
+    Equiment1th,
+    Equiment2th
 }

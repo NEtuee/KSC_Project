@@ -1049,11 +1049,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputChangeLauncherMode()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if(InputManager.Instance.GetAction(KeybindingActions.Equiment1th))
         {
             launcherMode.Value = 1;
         }
-        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        else if(InputManager.Instance.GetAction(KeybindingActions.Equiment2th))
         {
             launcherMode.Value = 2;
         }
