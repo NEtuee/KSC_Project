@@ -34,6 +34,7 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private void JumpTiming()
     {
         owner.Jump();
+        GameManager.Instance.soundManager.Play(16, Vector3.zero,transform);
     }
 
     private void StartLandingAdditive()
@@ -64,6 +65,12 @@ public class AnimCtrl_Dummy : MonoBehaviour
     {
     }
 
+    private void StartLedgeUp()
+    {
+        handIk.DisableLeftHandIk();
+        handIk.DisableRightHandIk();
+    }
+
     private void EndLedgeUp()
     {
         owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
@@ -87,14 +94,25 @@ public class AnimCtrl_Dummy : MonoBehaviour
         handIk.DisableRightHandIk();
     }
 
+    private void StartHandClimbing()
+    {
+        handIk.DisableLeftHandIk();
+        handIk.DisableRightHandIk();
+    }
+
     private void TraceLeftHand()
     {
         handIk.EnableLeftTrace();
-        handIk.EnableRightTrace();
     }
 
     private void TraceRightHand()
     {
+        handIk.EnableRightTrace();
+    }
+
+    private void TraceBothHand()
+    {
+        handIk.EnableLeftTrace();
         handIk.EnableRightTrace();
     }
 
@@ -104,4 +122,30 @@ public class AnimCtrl_Dummy : MonoBehaviour
         handIk.DisableRightTrace();
     }
 
+    private void JogFootStep(int left)
+    {
+        Vector3 footStepPosition;
+        if (left == 0)
+            footStepPosition = animator.GetBoneTransform(HumanBodyBones.LeftFoot).position;
+        else
+            footStepPosition = animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
+
+        GameManager.Instance.soundManager.Play(12, footStepPosition);
+    }
+
+    private void RunFootStep(int left)
+    {
+        Vector3 footStepPosition;
+        if (left == 0)
+            footStepPosition = animator.GetBoneTransform(HumanBodyBones.LeftFoot).position;
+        else
+            footStepPosition = animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
+
+        GameManager.Instance.soundManager.Play(13, footStepPosition);
+    }
+
+    private void StartJumpEnd()
+    {
+        //GameManager.Instance.soundManager.Play(18, transform.position);
+    }
 }

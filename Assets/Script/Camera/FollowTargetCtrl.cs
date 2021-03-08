@@ -21,6 +21,8 @@ public class FollowTargetCtrl : MonoBehaviour
 
     private Vector3 smoothVelocity;
 
+    [SerializeField]private bool updateMode = false;
+
     void Start()
     {
         currentRot = transform.localRotation.eulerAngles;
@@ -31,6 +33,15 @@ public class FollowTargetCtrl : MonoBehaviour
 
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
+
+        if(((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod == UpdateMethod.Update)
+        {
+            updateMode = true;
+        }
+        else
+        {
+            updateMode = false;
+        }
     }
 
     void Update()
@@ -66,12 +77,15 @@ public class FollowTargetCtrl : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (updateMode == true)
+            return;
+
         if (isPause == true)
         {
             return;
         }
 
-        transform.position = target.position + Vector3.up;
+        //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, followSmooth * Time.fixedDeltaTime);
         //transform.position = Vector3.SmoothDamp(transform.position, target.position + Vector3.up, ref smoothVelocity,5.0f*Time.fixedDeltaTime);
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.fixedDeltaTime);
         //transform.position = Vector3.MoveTowards(transform.position, target.position + Vector3.up, 8.0f * Time.fixedDeltaTime);
@@ -79,6 +93,16 @@ public class FollowTargetCtrl : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (updateMode == false)
+            return;
+
+        if (isPause == true)
+        {
+            return;
+        }
+
+        //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, followSmooth * Time.deltaTime);
+        transform.position = target.position + Vector3.up;
         //transform.position = target.position + Vector3.up;
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
         //transform.position = Vector3.MoveTowards(transform.position, target.position + Vector3.up, 8.0f * Time.deltaTime);

@@ -40,7 +40,7 @@ public class SimpleReturnMove : MonoBehaviour
         //StartCoroutine(Move());
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if(transform.position != target)
             {

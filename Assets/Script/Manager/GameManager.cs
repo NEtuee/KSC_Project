@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EscMainMenu escMainMenu;
     [SerializeField] private InputMenu inputMenu;
     [SerializeField] private EscMenu soundMenu;
+    [SerializeField] public FMODSoundManager soundManager;
     public Transform bossTransform;
 
     public List<LockOnTarget> lockOnTargets = new List<LockOnTarget>();
