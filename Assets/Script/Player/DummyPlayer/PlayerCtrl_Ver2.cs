@@ -557,7 +557,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         prevForward.Normalize();
         //Debug.Log(Vector3.Dot(moveForward, prevForward));
 
-        if(state == PlayerState.Grab)
+        if(state == PlayerState.Grab || state == PlayerState.RunToStop)
         {
             return;
         }
@@ -627,6 +627,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetBool("IsGrab", false);
                     //transform.rotation = Quaternion.LookRotation(moveDir);
                     //footIK.EnableFeetIk();
+                    GameManager.Instance.soundManager.Play(18, Vector3.zero,transform);
                 }
                 break;
             case PlayerState.Grab:

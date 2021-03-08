@@ -113,11 +113,13 @@ public class PlayerRagdoll : MonoBehaviour
 
         if (isLeftHandFix)
         {
-            leftHandTransform.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
+            //leftHandTransform.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
+            leftHandRigidBody.MovePosition(leftHandPoint.position);
         }
         if (isRightHandFix)
         {
-            rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
+            //rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
+            rightHandRigidBody.MovePosition(rightHandPoint.position);
         }
     }
 
@@ -152,14 +154,14 @@ public class PlayerRagdoll : MonoBehaviour
         //    }
         //}
 
-        if (isLeftHandFix)
-        {
-            leftHandTransform.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
-        }
-        if (isRightHandFix)
-        {
-            rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
-        }
+        //if (isLeftHandFix)
+        //{
+        //    leftHandTransform.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
+        //}
+        //if (isRightHandFix)
+        //{
+        //    rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
+        //}
     }
 
     private void LateUpdate()

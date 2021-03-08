@@ -19,13 +19,14 @@ public class IKCtrl : MonoBehaviour
 
     private Vector3 rightFootPosition, leftFootPosition, leftFootIkPosition, rightFootIkPosition;
     private Quaternion leftFootIkRotation, rightFootIkRotation;
-    [SerializeField]private float lastPelvisPositionY, lastRightFootPositionY, lastLeftFootPositionY;
+    [SerializeField] private float lastPelvisPositionY, lastRightFootPositionY, lastLeftFootPositionY;
 
     public bool enableFeetIk = true;
-    [Range(0,2)][SerializeField]private float heightFromGroundRaycast = 1.14f;
+    [Range(0, 2)] [SerializeField] private float heightFromGroundRaycast = 1.14f;
     [Range(0, 2)] [SerializeField] private float raycastDownDistance = 1.5f;
     [SerializeField] private LayerMask enviormentLayer;
     [SerializeField] private float pelvisOffset = 0f;
+    [SerializeField] private float newPelvisOffset = 0f;
     [Range(0, 1)] [SerializeField] private float pelvisUpAndDownSpeed = 0.28f;
     [Range(0, 1)] [SerializeField] private float feetToIkPositionSpeed = 0.5f;
 
@@ -88,13 +89,13 @@ public class IKCtrl : MonoBehaviour
             return;
         }
 
-        
 
-       
+
+
         MovePelvisHeight();
 
-        
-        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump)
+
+        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab)
             return;
 
         float leftWeight = animator.GetFloat("LeftIkWeight");
