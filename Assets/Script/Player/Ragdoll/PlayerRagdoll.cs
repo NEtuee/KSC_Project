@@ -352,10 +352,10 @@ public class PlayerRagdoll : MonoBehaviour
             ragdollRigids[i].isKinematic = !active;
         }
 
-        foreach (var anti in rigidBodyAntiStrechs)
-        {
-            anti.enabled = active;
-        }
+        //foreach (var anti in rigidBodyAntiStrechs)
+        //{
+        //    anti.enabled = active;
+        //}
 
         if (isLeftHandFix == true)
         {

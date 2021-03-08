@@ -7,6 +7,7 @@ public class IKCtrl : MonoBehaviour
 {
     protected Animator animator;
     private PlayerCtrl_Ver2 player;
+    private PlayerMovement movement;
 
     [Header("New")]
     [Range(0f, 1f)] public float distanceToGround;
@@ -18,7 +19,7 @@ public class IKCtrl : MonoBehaviour
 
     private Vector3 rightFootPosition, leftFootPosition, leftFootIkPosition, rightFootIkPosition;
     private Quaternion leftFootIkRotation, rightFootIkRotation;
-    private float lastPelvisPositionY, lastRightFootPositionY, lastLeftFootPositionY;
+    [SerializeField]private float lastPelvisPositionY, lastRightFootPositionY, lastLeftFootPositionY;
 
     public bool enableFeetIk = true;
     [Range(0,2)][SerializeField]private float heightFromGroundRaycast = 1.14f;
@@ -39,6 +40,7 @@ public class IKCtrl : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         player = GetComponent<PlayerCtrl_Ver2>();
+        movement = GetComponent<PlayerMovement>();
     }
 
     private void FixedUpdate()
@@ -80,16 +82,20 @@ public class IKCtrl : MonoBehaviour
         {
             return;
         }
+
         if (animator == null)
         {
             return;
         }
 
-        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump)
-            return;
         
+
+       
         MovePelvisHeight();
 
+        
+        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump)
+            return;
 
         float leftWeight = animator.GetFloat("LeftIkWeight");
         float rightWeight = animator.GetFloat("RightIkWeight");
@@ -206,6 +212,12 @@ public class IKCtrl : MonoBehaviour
 
     private void MovePelvisHeight()
     {
+        if (movement.isGrounded == false || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab)
+        {
+            lastPelvisPositionY = animator.bodyPosition.y;
+            return;
+        }
+
         if(rightFootIkPosition == Vector3.zero || leftFootIkPosition == Vector3.zero || lastPelvisPositionY == 0)
         {
             lastPelvisPositionY = animator.bodyPosition.y;

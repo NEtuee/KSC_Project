@@ -82,6 +82,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private Vector3 prevForward;
     private Vector3 ledgeOffsetPosition;
 
+    [Header("Detection")]
+    [SerializeField] private LedgeChecker ledgeChecker;
+
     [Header("EMP Lunacher")]
     [SerializeField]private float restoreValuePerSecond = 10f;
     [SerializeField] private float costValue = 25f;
@@ -104,6 +107,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private Animator animator;
     private PlayerMovement movement;
     private PlayerRagdoll ragdoll;
+    private IKCtrl footIK;
 
     private RaycastHit wallHit;
 
@@ -114,6 +118,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         collider = GetComponent<CapsuleCollider>();
         movement = GetComponent<PlayerMovement>();
         ragdoll = GetComponent<PlayerRagdoll>();
+        footIK = GetComponent<IKCtrl>();
         launchPos = transform.Find("LunchPos");
 
         moveDir = Vector3.zero;
@@ -621,6 +626,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.applyRootMotion = false;
                     animator.SetBool("IsGrab", false);
                     //transform.rotation = Quaternion.LookRotation(moveDir);
+                    //footIK.EnableFeetIk();
                 }
                 break;
             case PlayerState.Grab:
@@ -628,6 +634,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetBool("IsGrab", true);
                     currentJumpPower = 0.0f;
                     currentSpeed = 0.0f;
+
+                    //footIK.DisableFeetIk();
                 }
                 break;
             case PlayerState.Jump:
@@ -1086,6 +1094,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.45f;
             }
 
+            if(ledgeChecker.IsDetectedLedge() == false)
             transform.rotation = Quaternion.LookRotation(-wallHit.normal, transform.up);
             //transform.rotation *= Quaternion.FromToRotation(transform.up, Vector3.up);
 
@@ -1099,7 +1108,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void CheckLedge()
     {
-        if (isClimbingMove == true && currentVerticalValue == 1.0f && LedgeDetection() == false)
+        if (isClimbingMove == true && currentVerticalValue == 1.0f && ledgeChecker.IsDetectedLedge() == true)
         {
             isClimbingMove = false;
             isLedge = true;

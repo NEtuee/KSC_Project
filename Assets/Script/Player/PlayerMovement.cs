@@ -149,7 +149,7 @@ public class PlayerMovement : MonoBehaviour
             if (slidingTime > holdTime)
             {
                 slidingTime = 0.0f;
-                ragdoll.SlidingRagdoll(-slidingVector*30f);
+                //ragdoll.SlidingRagdoll(-slidingVector*30f);
             }
         }
         else
