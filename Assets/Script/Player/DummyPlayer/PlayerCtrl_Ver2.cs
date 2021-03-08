@@ -628,6 +628,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     //transform.rotation = Quaternion.LookRotation(moveDir);
                     //footIK.EnableFeetIk();
                     GameManager.Instance.soundManager.Play(18, Vector3.zero,transform);
+                    GameManager.Instance.stateManager.Visible(false);
                 }
                 break;
             case PlayerState.Grab:
@@ -680,6 +681,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Aiming:
                 {
                     GameManager.Instance.cameraManger.ActiveAimCamera();
+                    GameManager.Instance.stateManager.Visible(true);
                 }
                 break;
         }

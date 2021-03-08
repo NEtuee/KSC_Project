@@ -26,8 +26,10 @@ public class StateManager : MonoBehaviour
         });
     }
 
-    void Update()
+    public void Visible(bool result)
     {
-        
+        hpUI.Visible(result);
+        staminaUI.Visible(result);
+        energyUI.Visible(result);
     }
 }

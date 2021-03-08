@@ -24,6 +24,7 @@ public class GageBarUI : MonoBehaviour
     [SerializeField] private float displayTime = 5f;
     [SerializeField] private bool isDisplay = false;
     [SerializeField] private float displayAlpha = 0.7f;
+    [SerializeField] private bool visible = false;
     private float currentDisplayTime = 0.0f;
 
     public UnityEvent appearChain;
@@ -97,10 +98,29 @@ public class GageBarUI : MonoBehaviour
         if (isDisplay == false)
         {
             isDisplay = true;
-            gageImage.DOFade(displayAlpha, 0.5f);
-            appearChain?.Invoke();
+            if (visible == false)
+            {
+                gageImage.DOFade(displayAlpha, 0.5f);
+                appearChain?.Invoke();
+            }
         }
 
         updateValue = value;
+    }
+
+    public void Visible(bool result)
+    {
+        visible = result;
+        if (result == true)
+        {
+            gageImage.DOKill();
+            gageImage.DOFade(displayAlpha, 0.5f);
+            appearChain?.Invoke();
+        }
+        else
+        {
+            isDisplay = true;
+            currentDisplayTime = displayTime;
+        }
     }
 }
