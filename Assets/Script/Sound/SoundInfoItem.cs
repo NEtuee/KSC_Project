@@ -59,6 +59,13 @@ public class SoundInfoItem : ScriptableObject
         soundData = new List<SoundInfo>();
         IOManager.ReadRangeFromCSV(csv.text,1,-1,0,2,out var data);
         IOManager.ReadRangeFromCSV(csv.text,1,-1,4,8,out var param);
+
+        var globalData = new SoundInfo();
+        globalData.id = 0;
+        globalData.path = "global data";
+        globalData.type = "Global";
+
+        soundData.Add(globalData);
         
         if(data != null && param != null)
         {
@@ -90,6 +97,7 @@ public class SoundInfoItem : ScriptableObject
                 if(find == null)
                 {
                     Debug.Log("parameter group id not found");
+                    Debug.Log("group id : " + group + " name : " + p[2]);
                     break;
                 }
 

@@ -331,7 +331,7 @@ MonoBehaviour:
   HasSourceProject: 0
   HasPlatforms: 0
   sourceProjectPath: C:/Users/LeeUmin/Documents/FMOD Studio/examples/Examples.fspro
-  sourceBankPath: "Assets/====Legacy====/Old_KSC_Assets/Audio\u2605/FMODBank"
+  sourceBankPath: Assets/KSC_Assets/08_Audio/Bank
   SourceBankPathUnformatted: 
   AutomaticEventLoading: 1
   BankLoadType: 0
@@ -353,7 +353,12 @@ MonoBehaviour:
   MasterBanks:
   - Master
   Banks:
-  - Sample
+  - Ambient
+  - BGM
+  - Drone
+  - Mob
+  - PC
+  - SFX
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
@@ -476,10 +481,12 @@ MonoBehaviour:
       Value: 0
       HasValue: 1
     Plugins:
-      Value: []
+      Value:
+      - phonon_fmod
       HasValue: 1
     StaticPlugins:
-      Value: []
+      Value:
+      - phonon_fmod
       HasValue: 1
     CallbackHandler:
       Value: {fileID: 0}
