@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
+  m_Name: SoundInfo
+  m_EditorClassIdentifier: 
+  csvData: {fileID: 4900000, guid: 7c6b5ef66e6a6384893791f9ea67e9e6, type: 3}
+  soundData:
+  - path: global data
+    id: 0
+    type: Global
+    parameters:
+    - name: G_Mob_Ground
+      id: 2
+      min: 0
+      max: 5
+    - name: G_PC_Ground
+      id: 3
+      min: 0
+      max: 5
+  - path: event:/Ambient/Global/Dusty_Wind
+    id: 1
+    type: Amb
+    parameters: []
+  - path: event:/Ambient/Global/Worker
+    id: 2
+    type: Amb
+    parameters: []
+  - path: event:/Ambient/Local/Burnning_Trash
+    id: 3
+    type: Amb
+    parameters: []
+  - path: event:/Ambient/Local/Incinerator_Dam
+    id: 4
+    type: Amb
+    parameters:
+    - name: Distance
+      id: 1
+      min: 0
+      max: 5000
+  - path: event:/Mob/Mob_Creaking
+    id: 5
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Mob_Step
+    id: 6
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Mob_BreathFire
+    id: 7
+    type: SFX
+    parameters:
+    - name: BreathEnd
+      id: 4
+      min: 0
+      max: 1
+  - path: event:/Mob/Mob_Groggy
+    id: 8
+    type: SFX
+    parameters: []
+  - path: event:/SFX/Fire
+    id: 9
+    type: SFX
+    parameters: []
+  - path: event:/SFX/Woosh
+    id: 10
+    type: SFX
+    parameters: []
+  - path: event:/SFX/Boom
+    id: 11
+    type: SFX
+    parameters: []
+  - path: event:/PC/PC_Walk
+    id: 12
+    type: SFX
+    parameters: []
+  - path: event:/PC/PC_Run
+    id: 13
+    type: SFX
+    parameters: []
+  - path: event:/PC/PC_Running_Turn
+    id: 14
+    type: SFX
+    parameters: []
+  - path: event:/PC/PC_Running_Stop
+    id: 15
+    type: SFX
+    parameters: []
+  - path: event:/PC/PC_Jump
+    id: 16
+    type: SFX
+    parameters: []
+  - path: event:/PC/PC_Climing
+    id: 17
+    type: SFX
+    parameters: []
+  - path: event:/PC/PC_Land
+    id: 18
+    type: SFX
+    parameters: []
