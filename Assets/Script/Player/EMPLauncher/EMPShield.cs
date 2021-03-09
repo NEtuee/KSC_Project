@@ -39,7 +39,7 @@ public class EMPShield : MonoBehaviour
 
     public void Hit()
     {
-        hp -= 30f;
+        hp -= 100f;
         shakeTime = 0.1f;
         if (hp <= 0f)
         {
