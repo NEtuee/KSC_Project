@@ -118,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
             currentJumpPower -= gravity * Time.deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
 
-            transform.position += slidingVector * currentJumpPower * Time.deltaTime;
+            //transform.position += slidingVector * currentJumpPower * Time.deltaTime;
         }
         else
         {
@@ -209,6 +209,10 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
             groundDistance = (float)System.Math.Round(dist, 2);
+            if(float.IsNaN(groundAngle) == true)
+            {
+                groundAngle = 0.0f;
+            }
         }
     }
 
@@ -287,11 +291,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void Attach()
+    {
+        keepSpeed = false;
+    }
+
     public float GetGroundAngle()
     {
-        if (float.IsNaN(groundAngle))
-            return 70f;
-
         return groundAngle;
     }
 }

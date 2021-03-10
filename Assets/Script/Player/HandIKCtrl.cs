@@ -24,6 +24,12 @@ public class HandIKCtrl : MonoBehaviour
     [SerializeField] private Transform rightHand;
 
     [SerializeField] private GameObject sphere;
+
+    [Header("NewType")]
+    [SerializeField] private Transform right_r;
+    [SerializeField] private Transform right_l;
+    [SerializeField] private Transform left_l;
+    [SerializeField] private Transform left_r;
     void Start()
     {
         animator = GetComponent<Animator>();

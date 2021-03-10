@@ -4,27 +4,47 @@ using UnityEngine;
 
 public class LedgeChecker : MonoBehaviour
 {
+    private Transform root;
+    [SerializeField] Transform head;
     [SerializeField] private LedgeCollider collider1;
     [SerializeField] private LedgeCollider collider2;
+    private bool preValue;
+    private int checkCount;
     [SerializeField] private bool isDetectLedge;
+
+    private void Start()
+    {
+        root = transform.parent;
+        head = root.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head);
+        transform.parent = head;
+    }
+
+    private void Update()
+    {
+    }
 
     private void FixedUpdate()
     {
-        foreach(GameObject obj in collider1.collidedObjects)
+        transform.rotation = Quaternion.LookRotation(root.forward, root.up);
+
+        foreach (GameObject obj in collider1.collidedObjects)
         {
             if(collider2.collidedObjects.Contains(obj) == false)
             {
                 isDetectLedge = true;
+                //ChangeValue(true);
                 break;
             }
             else
             {
                 isDetectLedge = false;
+                //ChangeValue(false);
             }
         }
 
         if(collider1.collidedObjects.Count == 0)
         {
+            //ChangeValue(true);
             isDetectLedge = true;
         }
     }
@@ -32,6 +52,23 @@ public class LedgeChecker : MonoBehaviour
     public bool IsDetectedLedge()
     {
         return isDetectLedge;
+    }
+
+    private void ChangeValue(bool value)
+    {
+        if(isDetectLedge != value)
+        {
+            if(checkCount > 5)
+            {
+                checkCount = 0;
+                isDetectLedge = value;
+            }
+            checkCount++;
+        }
+        else
+        {
+            checkCount = 0;
+        }
     }
 }
 

@@ -89,11 +89,7 @@ public class IKCtrl : MonoBehaviour
             return;
         }
 
-
-
-
         MovePelvisHeight();
-
 
         if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab)
             return;

@@ -48,15 +48,23 @@ public class GageBarUI : MonoBehaviour
                 {
                     this.UpdateAsObservable()
                         .Subscribe(_ => {
+
+                            gageImage.fillAmount = updateValue;
+                            currentDisplayTime -= Time.deltaTime;
+                            if (currentDisplayTime <= 0.0f) currentDisplayTime = 0.0f;
+
+                            if (visible)
+                            {
+                                return;
+                            }
+
                             if (currentDisplayTime <= 0.0f && isDisplay == true)
                             {
                                 isDisplay = false;
                                 gageImage.DOFade(0.0f, 1.0f);
                                 disappearChain?.Invoke();
                             }
-                            gageImage.fillAmount = updateValue;
-                            currentDisplayTime -= Time.deltaTime;
-                            if (currentDisplayTime <= 0.0f) currentDisplayTime = 0.0f;
+                            
                         });
                 }
                 break;
@@ -76,16 +84,23 @@ public class GageBarUI : MonoBehaviour
                 {
                     this.UpdateAsObservable()
                       .Subscribe(_ => 
-                      { 
+                      {
+                          gageImage.fillAmount = Mathf.MoveTowards(gageImage.fillAmount, updateValue, updateSpeed * Time.deltaTime);
+                          currentDisplayTime -= Time.deltaTime;
+                          if (currentDisplayTime <= 0.0f) currentDisplayTime = 0.0f;
+
+                          if (visible)
+                          {
+                              return;
+                          }
+
                           if(currentDisplayTime <= 0.0f && isDisplay == true)
                           {
                               isDisplay = false;
                               gageImage.DOFade(0.0f, 1.0f);
                               disappearChain?.Invoke();
                           }
-                          gageImage.fillAmount = Mathf.MoveTowards(gageImage.fillAmount, updateValue, updateSpeed * Time.deltaTime);
-                          currentDisplayTime -= Time.deltaTime;
-                          if (currentDisplayTime <= 0.0f) currentDisplayTime = 0.0f;
+                         
                       });
                 }
                 break;
