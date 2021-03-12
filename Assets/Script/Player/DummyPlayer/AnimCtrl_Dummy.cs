@@ -83,15 +83,15 @@ public class AnimCtrl_Dummy : MonoBehaviour
 
     private void StartLeftHandClimbing()
     {
-        handIk.DisableLeftHandIk();
-        handIk.DisableRightHandIk();
+        //handIk.DisableLeftHandIk();
+        //handIk.DisableRightHandIk();
 
     }
 
     private void StartrightHandClimbing()
     {
-        handIk.DisableLeftHandIk();
-        handIk.DisableRightHandIk();
+        //handIk.DisableLeftHandIk();
+        //handIk.DisableRightHandIk();
     }
 
     private void StartHandClimbing()
@@ -147,5 +147,15 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private void StartJumpEnd()
     {
         //GameManager.Instance.soundManager.Play(18, transform.position);
+    }
+
+    private void MoveLeftHand()
+    {
+        //handIk.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0.0f);
+    }
+
+    private void MoveRightHand()
+    {
+        //handIk.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.0f);
     }
 }

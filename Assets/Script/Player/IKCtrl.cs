@@ -91,7 +91,7 @@ public class IKCtrl : MonoBehaviour
 
         MovePelvisHeight();
 
-        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab)
+        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab || player.GetState() == PlayerCtrl_Ver2.PlayerState.HangLedge)
             return;
 
         float leftWeight = animator.GetFloat("LeftIkWeight");

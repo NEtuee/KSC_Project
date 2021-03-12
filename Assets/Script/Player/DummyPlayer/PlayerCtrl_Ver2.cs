@@ -113,6 +113,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private PlayerMovement movement;
     private PlayerRagdoll ragdoll;
     private IKCtrl footIK;
+    private HandIKCtrl handIK;
 
     private RaycastHit wallHit;
 
@@ -124,6 +125,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         movement = GetComponent<PlayerMovement>();
         ragdoll = GetComponent<PlayerRagdoll>();
         footIK = GetComponent<IKCtrl>();
+        handIK = GetComponent<HandIKCtrl>();
         launchPos = transform.Find("LunchPos");
 
         moveDir = Vector3.zero;
@@ -145,7 +147,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             return;
         }
         //GizmoHelper.Instance.DrawLine(headTransfrom.position + transform.up * 0.2f, headTransfrom.position + transform.up * 0.2f + transform.forward * 2f, Color.red);
-
         InputUpdate();
 
         if (updateMethod == UpdateMethod.Update)
@@ -375,11 +376,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     if (isClimbingMove == true)
                     {
-                        //CheckLedge();
+                        CheckLedge();
                     }
 
                     
-                    UpdateGrab();
+                    //UpdateGrab();
 
                     //if (movement.GetGroundAngle() > 40.0f)
                     //{
@@ -402,7 +403,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     //{
                     //    ChangeState(PlayerState.Grab);
                     //}
-                    UpdateGrab();
+                    //UpdateGrab();
                 }
                 break;
             case PlayerState.Aiming:
@@ -471,8 +472,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         switch(state)
         {
             case PlayerState.Grab:
+            case PlayerState.HangLedge:
                 {
-                    CheckLedge();
+                    UpdateGrab();
+                    //CheckLedge();
                 }
                 break;
         }
@@ -692,6 +695,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     animator.SetBool("IsLedge", false);
                     isLedge = false;
+                    
                 }
                 break;
         }
@@ -769,6 +773,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     isLedge = true;
                     isClimbingMove = false;
                     animator.SetBool("IsLedge", true);
+                    handIK.ActiveLedgeIK();
                     AdjustLedgeOffset();
                 }
                 break;
@@ -1262,7 +1267,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             float distToWall = (wallHit.point - (transform.position + transform.up * (collider.height * 0.5f))).magnitude;
             if (distToWall > 0.6f || distToWall < 0.35f)
             {
-                transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.45f;
+                transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.35f;
             }
 
             if (isClimbingMove == true)
@@ -1344,12 +1349,52 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private void AdjustLedgeOffset()
     {
         Vector3 start = transform.position + transform.up * collider.height * 2;
-        Vector3 offsetPoint = transform.position-Vector3.Lerp(animator.GetBoneTransform(HumanBodyBones.LeftHand).position, animator.GetBoneTransform(HumanBodyBones.RightHand).position,0.5f);
-        
-        RaycastHit hit;
-        if(Physics.SphereCast(start,collider.radius*2f,-transform.up,out hit, collider.height * 2,climbingLayer))
+        //Vector3 offsetPoint = transform.position-Vector3.Lerp(animator.GetBoneTransform(HumanBodyBones.LeftHand).position, animator.GetBoneTransform(HumanBodyBones.RightHand).position,0.5f);
+
+        //RaycastHit hit;
+        //if (Physics.SphereCast(start, collider.radius * 2f, -transform.up, out hit, collider.height * 2, climbingLayer))
+        //{
+        //    Debug.Log("Adjust");
+        //    transform.position = hit.point + offsetPoint + (transform.forward * dectionOffset.z) + (transform.right * dectionOffset.x) + (transform.up * dectionOffset.y);
+        //}
+
+        RaycastHit upHit;
+        RaycastHit forwardHit;
+        Vector3 finalPosition;
+        if (Physics.SphereCast(start, collider.radius * 2f, -transform.up, out upHit, collider.height * 2, climbingLayer))
         {
-            transform.position = hit.point + offsetPoint + (transform.forward * dectionOffset.z) + (transform.right * dectionOffset.x)+(transform.up * dectionOffset.y);
+            if (Physics.Raycast(transform.position,transform.forward,out forwardHit,1.5f,climbingLayer))
+            {
+                finalPosition = upHit.point + (transform.up * dectionOffset.y);
+                finalPosition += forwardHit.normal * dectionOffset.z;
+                transform.position = finalPosition;
+            }
+        }
+
+    }
+
+    private void OnDrawGizmos()
+    {
+        DebugDraw();
+    }
+
+    private void DebugDraw()
+    {
+        if (collider == null)
+            return;
+
+        RaycastHit hit;
+        Vector3 start = transform.position + transform.up * collider.height * 2;
+        bool isHit = Physics.SphereCast(start, collider.radius * 2f, -transform.up, out hit, collider.height * 2, climbingLayer);
+        Gizmos.color = Color.red;
+        if(isHit)
+        {
+            Gizmos.DrawRay(start, -transform.up * hit.distance);
+            Gizmos.DrawWireSphere(start + -transform.up * hit.distance, collider.radius * 2f);
+        }
+        else
+        {
+            Gizmos.DrawRay(start, -transform.up * collider.height * 2);
         }
     }
 }
