@@ -709,6 +709,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetBool("IsLedge", false);
                     //transform.rotation = Quaternion.LookRotation(moveDir);
                     //footIK.EnableFeetIk();
+                    handIK.ActiveHandIK(false);
                     GameManager.Instance.stateManager.Visible(false);
                 }
                 break;
@@ -720,6 +721,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     currentVerticalValue = 0.0f;
                     currentHorizontalValue = 0.0f;
+
+                    handIK.ActiveHandIK(true);
                     //footIK.DisableFeetIk();
                 }
                 break;
@@ -755,10 +758,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
                     transform.parent = null;
+                    handIK.ActiveHandIK(false);
                 }
                 break;
             case PlayerState.HangRagdoll:
                 {
+                    handIK.ActiveHandIK(false);
                     ragdoll.ActiveRightHandFixRagdoll();
                 }
                 break;
@@ -773,8 +778,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     isLedge = true;
                     isClimbingMove = false;
                     animator.SetBool("IsLedge", true);
-                    handIK.ActiveLedgeIK();
+                    handIK.ActiveLedgeIK(true);
                     AdjustLedgeOffset();
+                }
+                break;
+            case PlayerState.LedgeUp:
+                {
+                    handIK.ActiveHandIK(false);
                 }
                 break;
         }

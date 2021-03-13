@@ -85,19 +85,12 @@ public class AnimCtrl_Dummy : MonoBehaviour
     {
         //handIk.DisableLeftHandIk();
         //handIk.DisableRightHandIk();
-
     }
 
     private void StartrightHandClimbing()
     {
         //handIk.DisableLeftHandIk();
         //handIk.DisableRightHandIk();
-    }
-
-    private void StartHandClimbing()
-    {
-        handIk.DisableLeftHandIk();
-        handIk.DisableRightHandIk();
     }
 
     private void TraceLeftHand()
