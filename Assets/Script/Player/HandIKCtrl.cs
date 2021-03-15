@@ -177,8 +177,8 @@ public class HandIKCtrl : MonoBehaviour
                 //leftWeight = downClimbingRightHandCurve.Evaluate(normalizedTime);
                 //rightWeight = downClimbingLeftHandCurve.Evaluate(normalizedTime);
 
-                leftWeight = downClimbingLeftHandCurve.Evaluate(normalizedTime);
-                rightWeight = downClimbingRightHandCurve.Evaluate(normalizedTime);
+                leftWeight = downClimbingRightHandCurve.Evaluate(normalizedTime);
+                rightWeight = downClimbingLeftHandCurve.Evaluate(normalizedTime);
             }
             else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Climbing.Down_RtoL"))
             {
@@ -697,12 +697,12 @@ public class HandIKCtrl : MonoBehaviour
         climbingMove = true;
         if(left == 1)
         {
-            leftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextLeftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
             nextRightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
         else
         {
-            rightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextRightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
             nextLeftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
     }
