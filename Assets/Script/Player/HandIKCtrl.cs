@@ -108,15 +108,6 @@ public class HandIKCtrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.N))
-        //{
-        //    //rightHand_Effetor = animator.GetBoneTransform(HumanBodyBones.RightHand).position;
-        //    rightHand_Effetor = rightHand.position;
-        //    //rightRot = animator.GetBoneTransform(HumanBodyBones.RightHand).rotation;
-        //    rightRot = rightHand.rotation;
-        //    enableRightHandIk = true;
-        //    Instantiate(sphere, rightHand_Effetor, rightRot);
-        //}
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.6f)), transform.TransformDirection(new Vector3(-0.5f, -1.0f, 0.0f)), Color.green);
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.6f)), transform.TransformDirection(new Vector3(0.5f, -1.0f, 0.0f)), Color.green);
 
@@ -174,17 +165,11 @@ public class HandIKCtrl : MonoBehaviour
             }
             else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Climbing.Down_LtoR"))
             {
-                //leftWeight = downClimbingRightHandCurve.Evaluate(normalizedTime);
-                //rightWeight = downClimbingLeftHandCurve.Evaluate(normalizedTime);
-
                 leftWeight = downClimbingRightHandCurve.Evaluate(normalizedTime);
                 rightWeight = downClimbingLeftHandCurve.Evaluate(normalizedTime);
             }
             else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Climbing.Down_RtoL"))
             {
-                //leftWeight = downClimbingLeftHandCurve.Evaluate(normalizedTime);
-                //rightWeight = downClimbingRightHandCurve.Evaluate(normalizedTime);
-
                 leftWeight = downClimbingLeftHandCurve.Evaluate(normalizedTime);
                 rightWeight = downClimbingRightHandCurve.Evaluate(normalizedTime);
             }
@@ -230,16 +215,6 @@ public class HandIKCtrl : MonoBehaviour
             }
 
         }
-
-        if (leftTrace == true)
-        {
-            //LeftHandIKTrace();
-        }
-
-        if (rightTrace == true)
-        {
-            //RightHandIKTrace();
-        }
     }
 
     public void ActiveLedgeIK(bool result)
@@ -265,24 +240,6 @@ public class HandIKCtrl : MonoBehaviour
         if (enableHandIK == false)
             return;
 
-        //if(ledgeIK == true)
-        //{
-        //        if (enableLeftHandIk)
-        //        {
-        //            animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPos);
-        //            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftWeight);
-        //        }
-
-        //        if (enableRightHandIk)
-        //        {
-        //            animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPos);
-        //            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rightWeight);
-        //        }
-            
-
-        //    return;
-        //}
-
         if (enableLeftHandIk)
         {
             animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPos);
@@ -294,26 +251,6 @@ public class HandIKCtrl : MonoBehaviour
             animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPos);
             animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rightWeight);
         }
-
-        //if(enableLeftHandIk == true)
-        //{
-        //    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftWeight);
-        //    animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHand_Effetor);
-        //}
-        //else
-        //{
-        //    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0f);
-        //}
-
-        //if (enableRightHandIk == true)
-        //{
-        //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rightWeight);
-        //    animator.SetIKPosition(AvatarIKGoal.RightHand, rightHand_Effetor);
-        //}
-        //else
-        //{
-        //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0f);
-        //}
     }
 
     private void LeftTrace()
@@ -322,8 +259,6 @@ public class HandIKCtrl : MonoBehaviour
         ledgeDetection = false;
         leftHandPos = llHit.point - transform.TransformDirection(hangLedgeOffset);
         nextRightHandPos = lrHit.point - transform.TransformDirection(hangLedgeOffset);
-        //leftHandPos = llHit.point;
-        //nextRightHandPos = lrHit.point;
     }
 
     private void UpdateLeftHandPos()
@@ -337,8 +272,6 @@ public class HandIKCtrl : MonoBehaviour
         ledgeDetection = false;
         rightHandPos = rrHit.point - transform.TransformDirection(hangLedgeOffset);
         nextLeftHandPos = rlHit.point - transform.TransformDirection(hangLedgeOffset);
-        //rightHandPos = rrHit.point;
-        //nextLeftHandPos = rlHit.point;
     }
 
     private void UpdateRightHandPos()
@@ -346,66 +279,11 @@ public class HandIKCtrl : MonoBehaviour
         rightHandPos = nextRightHandPos;
     }
 
-    private void AdjustHandTarget(ref Transform handPosition, HumanBodyBones hand)
-    {
-        handPosition = animator.GetBoneTransform(hand);
-    }
-
-
     public void DisableIK()
     {
         enableLeftHandIk = false;
         enableRightHandIk = false;
     }
-
-    public void LeftEnd()
-    {
-        RaycastHit hit;
-        leftWeight = 0.0f;
-        leftTrace = false;
-        if (Physics.Raycast(leftHandTr.position, transform.forward, out hit, 1f, climbingLayer))
-        {
-            leftHand_Effetor = hit.point;
-            leftWeightMove = true;
-        }
-    }
-
-    public void RightEnd()
-    {
-        RaycastHit hit;
-        rightWeight = 0.0f;
-        rightTrace = false;
-        if (Physics.Raycast(leftHandTr.position, transform.forward, out hit, 1f, climbingLayer))
-        {
-            rightHand_Effetor = hit.point;
-            rightWeightMove = true;
-        }
-    }
-
-    public void WeigtZero()
-    {
-        animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0.0f);
-        animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.0f);
-    }
-
-    public void SetIKPositionWeight(AvatarIKGoal goal, float weight)
-    {
-        switch(goal)
-        {
-            case AvatarIKGoal.LeftHand:
-                {
-                    leftWeight = weight;
-
-                }
-                break;
-            case AvatarIKGoal.RightHand:
-                {
-                    rightWeight = weight;
-                }
-                break;
-        }
-    }
-
     
 
     public void Maker(bool left)
@@ -430,7 +308,7 @@ public class HandIKCtrl : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        DebugSphere();
+        DebugDetection();
 
         Gizmos.color = Color.red;
         if(leftHandTr != null)
@@ -439,58 +317,12 @@ public class HandIKCtrl : MonoBehaviour
             Gizmos.DrawWireSphere(rightHandTr.position, sphereRadius);
     }
 
-    private void DebugSphere()
+    private void DebugDetection()
     {
-        RaycastHit hit;
         Vector3 start;
         Vector3 dir;
         bool isHit;
-        //Vector3 start = rightHandPos + transform.right * 0.5f + transform.forward * 0.0f + transform.up * 0.1f;
-        ////Vector3 start = rightHandPos + transform.TransformDirection(new Vector3(0.5f, 0.1f, 0.1f));
-        //Vector3 dir = -transform.right;
-        //bool isHit = Physics.SphereCast(start, 0.3f, dir, out hit, 0.5f, climbingLayer);
-        //Gizmos.color = Color.red;
-        //if (isHit)
-        //{
-        //    Gizmos.DrawRay(start, dir * hit.distance);
-        //    Gizmos.DrawWireSphere(start + dir * hit.distance, 0.3f);
-        //}
-        //else
-        //{
-        //    Gizmos.DrawRay(start, dir * 0.5f);
-        //}
-
-        //start = leftHandPos + transform.right * -0.5f + transform.forward * 0.0f + transform.up * 0.1f;
-        ////Vector3 start = rightHandPos + transform.TransformDirection(new Vector3(0.5f, 0.1f, 0.1f));
-        //dir = transform.right;
-        //isHit = Physics.SphereCast(start, 0.3f, dir, out hit, 0.5f, climbingLayer);
-        //Gizmos.color = Color.red;
-        //if (isHit)
-        //{
-        //    Gizmos.DrawRay(start, dir * hit.distance);
-        //    Gizmos.DrawWireSphere(start + dir * hit.distance, 0.3f);
-        //}
-        //else
-        //{
-        //    Gizmos.DrawRay(start, dir * 0.5f);
-        //}
-
-
-        //start =  transform.position + transform.up * 1.0f;
-        ////Vector3 start = rightHandPos + transform.TransformDirection(new Vector3(0.5f, 0.1f, 0.1f));
-        //dir = transform.forward;
-        //isHit = Physics.SphereCast(start, 0.3f, dir, out hit, 0.3f, climbingLayer);
-        //Gizmos.color = Color.red;
-        //if (isHit)
-        //{
-        //    Gizmos.DrawRay(start, dir * hit.distance);
-        //    Gizmos.DrawWireSphere(start + dir * hit.distance, 0.3f);
-        //}
-        //else
-        //{
-        //    Gizmos.DrawRay(start, dir * 0.5f);
-        //}
-
+       
         /////////////////DetectLedgeIKPosition//////////////////////////////
 
         if (ledgeIK == true)
@@ -559,31 +391,10 @@ public class HandIKCtrl : MonoBehaviour
         if (climbingMove == true)
             return;
 
-        Vector3 rightNormal = transform.forward;
-        Vector3 leftNormal = transform.forward;
-
         Vector3 start;
         Vector3 dir;
 
-        //start = transform.position + transform.forward * -0.5f + transform.up * 1.0f + transform.right * centerDetectionOffset;
-        //dir = transform.forward;
-        //if(Physics.SphereCast(start, centerDetectRadius, dir, out forwardRightHit, 1.0f, climbingLayer))
-        //{
-        //    rightNormal = forwardRightHit.normal;
-        //    rightNormal.y = 0;
-        //    rightNormal.Normalize();
-        //}
-
-        //start = transform.position + transform.forward * -0.5f + transform.up * 1.0f + transform.right * -centerDetectionOffset;
-        //dir = transform.forward;
-        //if(Physics.SphereCast(start, centerDetectRadius, dir, out forwardLeftHit, 1.0f, climbingLayer))
-        //{
-        //    leftNormal = forwardLeftHit.normal;
-        //    leftNormal.y = 0;
-        //    leftNormal.Normalize();
-        //}
-
-
+       
         /////////////////////////LdegeMoveDetect/////////////////////////////////////////////////////////////
 
         if (ledgeIK== true)

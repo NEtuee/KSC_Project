@@ -58,4 +58,17 @@ public class EMPShield : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void Hit(float damage, out bool isDestroy)
+    {
+        hp -= damage;
+        shakeTime = 0.1f;
+        isDestroy = false;
+        if (hp <= 0f)
+        {
+            isDestroy = true;
+            Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
+            Destroy(gameObject);
+        }
+    }
 }

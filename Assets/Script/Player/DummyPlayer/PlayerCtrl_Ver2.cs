@@ -104,6 +104,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float loadTerm = 2f;
     [SerializeField] private float loadTime = 0f;
     [SerializeField] private bool loading = false;
+    [SerializeField] private Drone drone;
 
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
@@ -243,7 +244,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Aiming:
                 {
-                    if(type == EMPLaunchType.Load)
+                    if(type == EMPLaunchType.ButtonDiff)
                     {
                         if(loading == false && loadCount.Value < 3 && Input.GetKeyDown(KeyCode.LeftControl))
                         {
@@ -408,7 +409,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Aiming:
                 {
-                    if (type == EMPLaunchType.Load)
+                    if (type == EMPLaunchType.ButtonDiff)
                     {
                         if (loading == true)
                         {
@@ -1073,7 +1074,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             if (bulletPrefab != null)
                             {
                                 if (isLayser)
-                                    LaunchLayser();
+                                    LaunchLayser(loadCount.Value);
                                 else
                                     Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
                             }
@@ -1228,9 +1229,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 line.Active(launchPos.position, hit.point, 0.1f, 0.1f, 0.15f * loadCount);
                 EMPShield shield;
+                bool destroy;
                 if (hit.collider.TryGetComponent<EMPShield>(out shield))
                 {
-                    shield.Hit(loadCount*40f);
+                    shield.Hit(loadCount * 40f, out destroy);
+                    if(destroy == true && drone != null)
+                    {
+                        drone.OrderApproch(hit.collider.transform.position);
+                    }
                 }
             }
             else

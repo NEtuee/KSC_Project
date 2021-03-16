@@ -237,6 +237,10 @@ public class PlayerMovement : MonoBehaviour
                 {
                     transform.SetParent(detectObject);
                 }
+                else
+                {
+                    transform.SetParent(null);
+                }
 
                 keepSpeed = false;
             }
