@@ -33,7 +33,7 @@ public class Drone : MonoBehaviour
         UpdateDrone(Time.fixedDeltaTime);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.Update)
             return;

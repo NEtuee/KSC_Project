@@ -48,6 +48,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float prevSpeed;
     [SerializeField] private float rotateSpeed = 6.0f;
     [Range(0, 5)] [SerializeField] private float fallingControlSenstive = 1f;
+    [SerializeField] private float horizonWeight = 0.0f;
+    [SerializeField] private float rotAngle = 0.0f;
+    [SerializeField] private float animationNormalizeTime = 0.0f;
+    [SerializeField] private AnimationCurve walkCurve;
+    [SerializeField] private AnimationCurve runCurve;
 
     [Header("Jump Value")]
     [SerializeField] private float currentJumpPower = 0f;
@@ -102,9 +107,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private LayserRender line;
     [SerializeField] public IntReactiveProperty loadCount = new IntReactiveProperty(0);
     [SerializeField] private float loadTerm = 2f;
+    [SerializeField] private float impactTerm = 2.5f;
     [SerializeField] private float loadTime = 0f;
     [SerializeField] private bool loading = false;
+    private bool impactLoading = false;
+    [SerializeField] private GameObject gunObject;
     [SerializeField] private Drone drone;
+    [SerializeField] private AnimationCurve reloadWeightCurve;
 
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
@@ -115,6 +124,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private PlayerRagdoll ragdoll;
     private IKCtrl footIK;
     private HandIKCtrl handIK;
+    private RigCtrl rigCtrl;
 
     private RaycastHit wallHit;
 
@@ -127,7 +137,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ragdoll = GetComponent<PlayerRagdoll>();
         footIK = GetComponent<IKCtrl>();
         handIK = GetComponent<HandIKCtrl>();
-        launchPos = transform.Find("LunchPos");
+        if (launchPos == null)
+        {
+            launchPos = transform.Find("LunchPos");
+        }
+        rigCtrl = GetComponent<RigCtrl>();
+        if(gunObject != null)
+        {
+            gunObject.SetActive(false);
+        }
 
         moveDir = Vector3.zero;
         currentSpeed = 0.0f;
@@ -246,7 +264,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     if(type == EMPLaunchType.ButtonDiff)
                     {
-                        if(loading == false && loadCount.Value < 3 && Input.GetKeyDown(KeyCode.LeftControl))
+                        if(loading == false && impactLoading == false && loadCount.Value < 3 && Input.GetKeyDown(KeyCode.LeftControl))
                         {
                             loading = true;
                             loadTime = 0f;
@@ -284,6 +302,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             currentJumpPower = 0.0f;
         }
 
+        animationNormalizeTime = animator.GetCurrentAnimatorStateInfo(0).normalizedTime % 1f;
+
         switch (state)
         {
             case PlayerState.Default:
@@ -317,21 +337,41 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
                     }
 
-
-
-                    if (lookDir != Vector3.zero)
+                    Quaternion targetRotation = Quaternion.identity;
+                    if (currentSpeed != 0.0f &&lookDir != Vector3.zero)
                     {
+                        targetRotation = Quaternion.LookRotation(lookDir, Vector3.up);
                         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
                     }
                     else
                     {
+                        targetRotation = Quaternion.LookRotation(transform.forward, Vector3.up);
                         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * rotateSpeed);
                     }
-                    //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
 
+                    if(currentSpeed > 0.0f&&targetRotation != Quaternion.identity)
+                    {
+                        rotAngle = (int)Quaternion.Angle(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up));
+                        if (Vector3.Dot(Vector3.Cross(transform.forward, lookDir), transform.up) < 0)
+                        {
+                            rotAngle = -rotAngle;
+                        }
+
+                        horizonWeight = Mathf.MoveTowards(horizonWeight, rotAngle, 25.0f * deltaTime);
+                    }
+                    
                     moveDir *= currentSpeed;
 
                     animator.SetFloat("Speed", currentSpeed);
+                    if (currentSpeed > 5.5f)
+                    {
+                        animator.SetFloat("HorizonWeight", horizonWeight);
+                    }
+                    else
+                    {
+                        horizonWeight = 0.0f;
+                        animator.SetFloat("HorizonWeight", 0.0f);
+                    }
                     movement.Move(moveDir);
                 }
                 break;
@@ -413,17 +453,31 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         if (loading == true)
                         {
+                            rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime/loadTerm));
                             loadTime += deltaTime;
                             if(loadTime > loadTerm)
                             {
+                                rigCtrl.SetAimingWeight(1f);
                                 loadCount.Value++;
                                 loadTime = 0;
                                 loading = false;
                             }
                         }
+
+                        if(impactLoading == true)
+                        {
+                            rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime / impactTerm));
+                            loadTime += deltaTime;
+                            if (loadTime > impactTerm)
+                            {
+                                rigCtrl.SetAimingWeight(1f);
+                                loadTime = 0;
+                                impactLoading = false;
+                            }
+                        }
                     }
 
-                        RaycastHit hit;
+                    RaycastHit hit;
                     if(Physics.Raycast(mainCameraTrasform.position,mainCameraTrasform.forward,out hit,150f))
                     {
                         launchPos.LookAt(hit.point);
@@ -433,32 +487,53 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         launchPos.LookAt(mainCameraTrasform.position + mainCameraTrasform.forward * 150.0f);
                     }
 
-
-                    if (inputVertical != 0.0f || inputHorizontal != 0.0f)
+                    if (movement.isGrounded == true)
                     {
-                        moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
-                        moveDir.Normalize();
+                        if (inputVertical != 0.0f || inputHorizontal != 0.0f)
+                        {
+                            moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
+                            moveDir.Normalize();
+                        }
+                        else
+                        {
+                            moveDir = prevDir;
+                            moveDir.Normalize();
+                        }
+
+                        Vector3 aimDir = camForward;
+                        lookDir = aimDir;
+
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(aimDir, Vector3.up), 30.0f * deltaTime);
+                        
+                        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2f, groundLayer))
+                        {
+                            moveDir = (Vector3.ProjectOnPlane(moveDir, hit.normal)).normalized;
+                        }
+
+                        moveDir *= currentSpeed;
+
+                        animator.SetFloat("Speed", currentSpeed);
+                        movement.Move(moveDir);
                     }
                     else
                     {
-                        moveDir = prevDir;
-                        moveDir.Normalize();
+                        moveDir = transform.forward * currentSpeed;
+
+                        Vector3 plusDir = ((camForward * inputVertical) + (camRight * inputHorizontal));
+                        movement.Move(plusDir * fallingControlSenstive);
+
+                        lookDir = ((camForward * inputVertical) + (camRight * inputHorizontal)).normalized;
+                        if (lookDir != Vector3.zero)
+                        {
+                            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * 1.0f);
+                        }
+                        else
+                        {
+                            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * 1.0f);
+                        }
+
+                        movement.Move(moveDir + (Vector3.up * currentJumpPower));
                     }
-
-                    Vector3 aimDir = camForward;
-                    lookDir = aimDir;
-
-                    //RaycastHit hit;
-                    //if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2f, groundLayer))
-                    //{
-                    //    moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
-                    //}
-
-                    transform.rotation = Quaternion.Lerp(transform.rotation,Quaternion.LookRotation(aimDir, Vector3.up),30.0f * deltaTime);
-                    moveDir *= currentSpeed;
-
-                    animator.SetFloat("Speed", currentSpeed);
-                    movement.Move(moveDir);
                 }
                 break;
         }
@@ -724,6 +799,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     currentHorizontalValue = 0.0f;
 
                     handIK.ActiveHandIK(true);
+                    handIK.ActiveLedgeIK(false);
                     //footIK.DisableFeetIk();
                 }
                 break;
@@ -1038,6 +1114,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             ChangeState(PlayerState.Aiming);
             loadCount.Value = 1;
+            if (rigCtrl != null)
+            {
+                rigCtrl.Active();
+                gunObject.SetActive(true);
+                animator.SetLayerWeight(2, 1.0f);
+            }
             return true;
         }
 
@@ -1050,6 +1132,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             ChangeState(PlayerState.Default);
             loadCount.Value = 0;
+            if (rigCtrl != null)
+            {
+                rigCtrl.Disable();
+                gunObject.SetActive(false);
+                animator.SetLayerWeight(2, 0.0f);
+            }
             return true;
         }
 
@@ -1091,6 +1179,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         LaunchImpect();
                     }
+
                 }
                 break;
             case EMPLaunchType.Switching:
@@ -1184,6 +1273,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         energy.Value -= 50.0f;
         impectEffect.Play();
+        impactLoading = true;
+        loadTime = 0f;
         Collider[] coll = Physics.OverlapSphere(transform.position + transform.forward * 3f, 3f);
         for (int i = 0; i < coll.Length; i++)
         {
@@ -1244,7 +1335,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 line.Active(launchPos.position, mainCameraTrasform.position + mainCameraTrasform.forward * 100f, 0.1f, 0.1f, 0.15f * loadCount);
             }
         }
-        this.loadCount.Value = 0;
+        this.loadCount.Value = 1;
     }
 
     private void InputChangeLauncherMode()
@@ -1387,6 +1478,25 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             }
         }
 
+    }
+
+    public float GetFootStepOffset()
+    {
+        if (state != PlayerState.Default)
+            return 0.0f;
+
+        if(currentSpeed == 9.0f)
+        {
+            return runCurve.Evaluate(animationNormalizeTime);
+        }
+        else if(currentSpeed >= 5.5f)
+        {
+            return walkCurve.Evaluate(animationNormalizeTime);
+        }
+        else
+        {
+            return 0.0f;
+        }
     }
 
     private void OnDrawGizmos()

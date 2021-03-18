@@ -388,8 +388,8 @@ public class HandIKCtrl : MonoBehaviour
 
     private void LedgeIKPosDetection()
     {
-        if (climbingMove == true)
-            return;
+        //if (climbingMove == true)
+        //    return;
 
         Vector3 start;
         Vector3 dir;
