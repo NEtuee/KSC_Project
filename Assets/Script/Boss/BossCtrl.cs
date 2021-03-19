@@ -32,10 +32,12 @@ public class BossCtrl : MonoBehaviour
 
 
     private Vector3 targetDir;
+    private Animator anim;
 
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
     }
 
     private void Start()
@@ -63,6 +65,15 @@ public class BossCtrl : MonoBehaviour
                     {
                         elapsedTime = 0.0f;
                         state = BossState.Turn;
+                        
+                        if(Vector3.Dot(Vector3.Cross(transform.forward,target.position - transform.position),transform.up) < 0)
+                        {
+                            anim.SetTrigger("TurnLeft");
+                        }
+                        else
+                        {
+                            anim.SetTrigger("TurnRight");
+                        }
                     }
                 }
                 break;
@@ -78,6 +89,7 @@ public class BossCtrl : MonoBehaviour
                     {
                         elapsedTime = 0.0f;
                         state = BossState.Rush;
+                        anim.SetTrigger("Rush");
                     }
                 }
                 break;
@@ -96,6 +108,7 @@ public class BossCtrl : MonoBehaviour
                     {
                         state = BossState.Wait;
                         elapsedTime = 0.0f;
+                        anim.SetTrigger("Return");
                     }
                 }
                 break;
@@ -113,10 +126,12 @@ public class BossCtrl : MonoBehaviour
                     {
                         state = BossState.Groggy;
                         elapsedTime = 0.0f;
+                        anim.SetTrigger("Groggy");
                         return;
                     }
 
                     state = BossState.Wait;
+                    anim.SetTrigger("Hit");
                 }
                 break;
         }
