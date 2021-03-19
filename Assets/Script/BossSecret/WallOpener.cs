@@ -5,7 +5,7 @@ using UnityEngine;
 public class WallOpener : MonoBehaviour
 {
     public AnimationCurve openCurve;
-    public LockOnTarget target;
+    public ImpactTarget target;
 
     public float speed = 1f;
 

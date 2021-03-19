@@ -349,7 +349,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * rotateSpeed);
                     }
 
-                    if(currentSpeed > 0.0f&&targetRotation != Quaternion.identity)
+                    if(currentSpeed > 5.5f&&targetRotation != Quaternion.identity)
                     {
                         rotAngle = (int)Quaternion.Angle(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up));
                         if (Vector3.Dot(Vector3.Cross(transform.forward, lookDir), transform.up) < 0)
@@ -359,19 +359,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                         horizonWeight = Mathf.MoveTowards(horizonWeight, rotAngle, 25.0f * deltaTime);
                     }
-                    
-                    moveDir *= currentSpeed;
-
-                    animator.SetFloat("Speed", currentSpeed);
-                    if (currentSpeed > 5.5f)
-                    {
-                        animator.SetFloat("HorizonWeight", horizonWeight);
-                    }
                     else
                     {
-                        horizonWeight = 0.0f;
-                        animator.SetFloat("HorizonWeight", 0.0f);
+                        horizonWeight = Mathf.MoveTowards(horizonWeight, 0.0f, 50.0f * deltaTime);
                     }
+
+                    moveDir *= currentSpeed;
+
+                    animator.SetFloat("Speed", currentSpeed);                    
+                    animator.SetFloat("HorizonWeight", horizonWeight);
                     movement.Move(moveDir);
                 }
                 break;
@@ -808,6 +804,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     //animator.SetTrigger("Jump");
                     //currentSpeed = 0.0f;
                     moveDir = transform.forward * currentSpeed;
+                    horizonWeight = 0.0f;
+                    animator.SetFloat("HorizonWeight", horizonWeight);
                 }
                 break;
             case PlayerState.TurnBack:
@@ -1286,6 +1284,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 Instantiate(destroyEffect, coll[i].transform.position, Quaternion.identity);
                 Destroy(coll[i].gameObject);
+            }
+            else if(coll[i].CompareTag("ImpactTarget"))
+            {
+                coll[i].GetComponent<ImpactTarget>().TriggerOn();
             }
         }
     }
