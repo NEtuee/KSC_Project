@@ -1525,4 +1525,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             Gizmos.DrawRay(start, -transform.up * collider.height * 2);
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (state == PlayerState.Default || state == PlayerState.Jump)
+        {
+            if (other.CompareTag("Boss"))
+            {
+                ragdoll.ExplosionRagdoll(200.0f, (transform.position+Vector3.up - other.transform.position).normalized);
+            }
+        }
+    }
 }

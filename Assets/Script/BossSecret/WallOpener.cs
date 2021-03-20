@@ -11,6 +11,8 @@ public class WallOpener : MonoBehaviour
 
 
     private bool _open = false;
+    private bool defferdOpen = false;
+    [SerializeField]private bool defferdMode = true;
     private float _timer = 0f;
 
     private Vector3 _startPosition;
@@ -18,7 +20,15 @@ public class WallOpener : MonoBehaviour
     private void Start()
     {
         _startPosition = transform.position;
-        target.whenTriggerOn += Open;
+
+        if (defferdMode == true)
+        {
+            target.whenTriggerOn += DefferdOpen;
+        }
+        else
+        {
+            target.whenTriggerOn += Open;
+        }
     }
 
     private void Update()
@@ -44,5 +54,21 @@ public class WallOpener : MonoBehaviour
     {
         _open = true;
         _timer = 0f;
+    }
+
+    public void DefferdOpen()
+    {
+        if(defferdOpen == false)
+        {
+            defferdOpen = true;
+            StartCoroutine(OpenCoroutine(2f));
+        }
+    }
+
+    IEnumerator OpenCoroutine(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Open();
+        defferdOpen = false;
     }
 }

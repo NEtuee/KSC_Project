@@ -5,13 +5,20 @@ using UnityEngine;
 public class EMPShield : MonoBehaviour
 {
     public GameObject destroyEffect;
+    public bool isOver =false;
     private float hp = 100f;
     private float shakeTime = 0.0f;
     private Vector3 startPos;
+
+    private Renderer renderer;
+    private Collider collider;
     // Start is called before the first frame update
     void Start()
     {
         startPos = transform.position;
+
+        renderer = GetComponent<Renderer>();
+        collider = GetComponent<Collider>();
     }
 
     // Update is called once per frame
@@ -44,7 +51,10 @@ public class EMPShield : MonoBehaviour
         if (hp <= 0f)
         {
             Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-            Destroy(gameObject);
+            collider.enabled = false;
+            renderer.enabled = false;
+            isOver = true;
+            //Destroy(gameObject);
         }
     }
 
@@ -55,7 +65,10 @@ public class EMPShield : MonoBehaviour
         if (hp <= 0f)
         {
             Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-            Destroy(gameObject);
+            collider.enabled = false;
+            renderer.enabled = false;
+            isOver = true;
+            //Destroy(gameObject);
         }
     }
 
@@ -68,7 +81,10 @@ public class EMPShield : MonoBehaviour
         {
             isDestroy = true;
             Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-            Destroy(gameObject);
+            collider.enabled = false;
+            renderer.enabled = false;
+            isOver = true;
+            //Destroy(gameObject);
         }
     }
 }

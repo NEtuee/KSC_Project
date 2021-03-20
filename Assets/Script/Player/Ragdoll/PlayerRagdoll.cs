@@ -301,6 +301,21 @@ public class PlayerRagdoll : MonoBehaviour
         ragdollTime = Time.time;
     }
 
+    public void ExplosionRagdoll(float power, Vector3 dir)
+    {
+        isFlyRagdoll = true;
+        ActiveRagdoll(true);
+        SetRagdollContainer(true);
+        hipTransform.GetComponent<Rigidbody>().AddForce(dir * power, ForceMode.Impulse);
+        //hipTransform.GetComponent<Rigidbody>().AddExplosionForce(power, exlosionPos, radius,100.0f);
+        InputManager.Instance.GamePadSetVibrate(0.5f, 0.8f);
+        if (player != null)
+        {
+            player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+        }
+        ragdollTime = Time.time;
+    }
+
     public RagdollState GetRagdollState() { return state; }
 
     private void SetRagdollContainer(bool result)
