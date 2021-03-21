@@ -12,17 +12,29 @@ public class BossCtrl : MonoBehaviour
         Turn,
         Rush,
         Groggy,
-        GetUp
+        GetUp,
+        LookPatrol,
+        GoToPatrol,
+        Patrol,
+        Dead
     }
 
     private NavMeshAgent agent;
     [SerializeField] private bool beActive;
     [SerializeField] private bool debuging;
-
     [SerializeField] private Transform target;
     [SerializeField] private CheckCollider forwardCheck;
     [SerializeField] private CheckCollider bellyCheck;
     [SerializeField] private List<EMPShield> footWeakPoint = new List<EMPShield>();
+    [SerializeField] private List<EMPShield> weakPoints = new List<EMPShield>();
+    [SerializeField] private GameObject coreHideObejct;
+    [SerializeField] private GameObject coreHideCollider;
+    [SerializeField] private EMPShield coreObject;
+    [SerializeField] private LevelEdit_PointManager pointManager;
+    private LevelEdit_PointManager.PathClass path;
+    [SerializeField] private CheckBack checkBack;
+
+    private int currentPointIndex;
     private Vector3 targetPosition;
     private Rigidbody rigidbody;
     public BossState state = BossState.Wait;
@@ -33,7 +45,6 @@ public class BossCtrl : MonoBehaviour
     [SerializeField] private float rushSpeed = 10.0f;
     [SerializeField] private float groggyTime = 6.0f;
     private int wallLayer;
-
 
     private Vector3 targetDir;
     private Animator anim;
@@ -50,6 +61,8 @@ public class BossCtrl : MonoBehaviour
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
         wallLayer = LayerMask.NameToLayer("Wall");
+
+        path = pointManager.FindPath("BossDummy_1");
 
         GameManager.Instance.bossTransform = this.transform;
 
@@ -68,6 +81,14 @@ public class BossCtrl : MonoBehaviour
         if (beActive == false)
             return;
 
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            foreach (var weakPoint in weakPoints)
+            {
+                weakPoint.Hit();
+            }
+        }
+
         switch (state)
         {
             case BossState.Wait:
@@ -81,15 +102,30 @@ public class BossCtrl : MonoBehaviour
                 break;
             case BossState.Turn:
                 {
-                    targetDir = target.position - transform.position;
-                    targetDir.y = 0f;
-                    Quaternion targetRot = Quaternion.LookRotation(targetDir, transform.up);
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
-
-                    elapsedTime += Time.deltaTime;
-                    if (elapsedTime >= turnTime && Quaternion.Angle(transform.rotation, targetRot) < 5.0f)
+                    if (checkBack.playerCheck == true)
                     {
-                        ChangeState(BossState.Rush);
+                        Quaternion lookPatrolRot = Quaternion.LookRotation(targetPosition - transform.position, Vector3.up);
+                        if (transform.rotation != lookPatrolRot)
+                        {
+                            transform.rotation = Quaternion.RotateTowards(transform.rotation, lookPatrolRot, Time.deltaTime * turnSpeed);
+                        }
+                        else
+                        {
+                            state = BossState.Patrol;
+                        }
+                    }
+                    else
+                    {
+                        targetDir = target.position - transform.position;
+                        targetDir.y = 0f;
+                        Quaternion targetRot = Quaternion.LookRotation(targetDir, transform.up);
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
+
+                        elapsedTime += Time.deltaTime;
+                        if (elapsedTime >= turnTime && Quaternion.Angle(transform.rotation, targetRot) < 5.0f)
+                        {
+                            ChangeState(BossState.Rush);
+                        }
                     }
                 }
                 break;
@@ -110,17 +146,111 @@ public class BossCtrl : MonoBehaviour
                     elapsedTime += Time.deltaTime;
                     if (elapsedTime >= groggyTime)
                     {
-                        state = BossState.Wait;
-                        elapsedTime = 0.0f;
-                        anim.SetTrigger("Return");
+                            state = BossState.GetUp;
+                            elapsedTime = 0.0f;
+                            anim.SetTrigger("Return");               
+                    }
+                }
+                break;
+            case BossState.LookPatrol:
+                {
+                    Quaternion lookPatrolRot = Quaternion.LookRotation(targetPosition - transform.position, Vector3.up);
+                    if (transform.rotation != lookPatrolRot)
+                    {
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookPatrolRot, Time.deltaTime * turnSpeed);
+                    }
+                    else
+                    {
+                        state = BossState.GoToPatrol;
+                    }
+                }
+                break;
+            case BossState.GoToPatrol:
+                {
+                    if (transform.position != targetPosition)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, targetPosition, rushSpeed * Time.deltaTime);
+                    }
+                    else
+                    {
+                        state = BossState.Turn;
+                        anim.SetTrigger("Turn");
+                        bool isEnd;
+                        targetPosition = path.GetNextPoint(ref currentPointIndex, out isEnd).GetPoint();
+                        if(isEnd == true)
+                        {
+                            currentPointIndex = 0;
+                        }
+                    }
+                }
+                break;
+            case BossState.Patrol:
+                {
+                    if(checkBack.playerCheck == false)
+                    {
+                        ChangeState(BossState.Wait);
+                        return;
+                    }
+
+                    if (transform.position != targetPosition)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, targetPosition, rushSpeed * Time.deltaTime);
+                    }
+                    else
+                    {
+                        state = BossState.LookPatrol;
+                        anim.SetTrigger("Turn");
+                        bool isEnd;
+                        targetPosition = path.GetNextPoint(ref currentPointIndex, out isEnd).GetPoint();
+                        if (isEnd == true)
+                        {
+                            currentPointIndex = 0;
+                        }
                     }
                 }
                 break;
         }
     }
 
+    private void EndReturn()
+    {
+        if (checkBack.playerCheck == true)
+        {
+            state = BossState.LookPatrol;
+            anim.SetTrigger("Turn");
+            targetPosition = path.FindNearestPoint(transform.position, out currentPointIndex).GetPoint();
+        }
+        else
+        {
+            state = BossState.Wait;
+        }
+    }
+
     private void FixedUpdate()
     {
+        if (state == BossState.Dead)
+            return;
+
+        if (coreHideCollider.activeSelf == true)
+        {
+            foreach (var weakPoint in weakPoints)
+            {
+                if (weakPoint.isOver == false)
+                    return;
+            }
+
+            coreHideObejct.SetActive(false);
+            coreHideCollider.SetActive(false);
+            coreObject.gameObject.SetActive(true);
+        }
+        else
+        {
+            if (coreObject.isOver == true)
+            {
+                state = BossState.Dead;
+                anim.SetTrigger("Dead");
+            }
+        }
         //if (beActive == false)
         //    return;
 

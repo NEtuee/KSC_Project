@@ -6,7 +6,8 @@ public class EMPShield : MonoBehaviour
 {
     public GameObject destroyEffect;
     public bool isOver =false;
-    private float hp = 100f;
+    public bool isCore = false;
+    [SerializeField]private float hp = 100f;
     private float shakeTime = 0.0f;
     private Vector3 startPos;
 
@@ -74,7 +75,14 @@ public class EMPShield : MonoBehaviour
 
     public void Hit(float damage, out bool isDestroy)
     {
-        hp -= damage;
+        if (isCore == true)
+        {
+            hp -= 100.0f;
+        }
+        else
+        {
+            hp -= damage;
+        }
         shakeTime = 0.1f;
         isDestroy = false;
         if (hp <= 0f)
