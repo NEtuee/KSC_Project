@@ -13,6 +13,7 @@ public class LevelEdit_PointManager : MonoBehaviour
     public class PathClass
     {
         public string name;
+        public bool isLoop = true;
         public List<LevelEdit_MovePoint> movePoints = new List<LevelEdit_MovePoint>();
 
         public LevelEdit_MovePoint GetNextPoint(ref int point, out bool isEnd)
@@ -140,13 +141,17 @@ public class LevelEdit_PointManager : MonoBehaviour
             Handles.color = Color.red;
             // Handles.Label(list.movePoints[i].GetBezierPoint1().position, "p" + i + " Bezier_1");
             // Handles.Label(list.movePoints[i].GetBezierPoint2().position, "p" + i + " Bezier_2");
-            Handles.DrawLine(list.movePoints[i].GetPoint(),list.movePoints[i].GetPoint() + Vector3.up * 10f);
+            Handles.DrawLine(list.movePoints[i].GetPoint(),list.movePoints[i].GetPoint() + Vector3.up * 3f);
+            Gizmos.DrawSphere(list.movePoints[i].GetPoint(),.1f);
             // Handles.DrawLine(list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint(),list.movePoints[i].GetBezierPoint2().position);
         }
 
         Handles.color = Color.white;
 
-        for(int i = 0; i < list.movePoints.Count; ++i)
+        int count = list.movePoints.Count;
+        count = list.isLoop ? count : count - 1;
+
+        for(int i = 0; i < count; ++i)
         {
             Vector3 startPoint = list.movePoints[i].GetPoint();
             Vector3 endPoint = list.movePoints[(i == list.movePoints.Count - 1 ? 0 : i + 1)].GetPoint();
