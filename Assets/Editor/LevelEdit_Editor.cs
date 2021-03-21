@@ -9,8 +9,9 @@ public class LevelEdit_Editor : Editor
 	LevelEdit_Controll controll;
 
 	private string createPath;
-
 	private string[] patternList;
+
+	private float _dist = 0.1f;
 
 	void OnEnable()
     {
@@ -30,6 +31,8 @@ public class LevelEdit_Editor : Editor
 		{
 			BeginH();
 			GUILayout.Label(path[i].name);
+
+			path[i].isLoop = GUILayout.Toggle(path[i].isLoop,"IsLoop");
 
 			if(GUILayout.Button("Select",GUILayout.Width(100f)))
 			{
@@ -52,6 +55,11 @@ public class LevelEdit_Editor : Editor
 		Space(10f);
 
 		BeginH();
+		GUILayout.Label("Distance : ");
+		_dist = EditorGUILayout.FloatField(_dist);
+		EndH();
+
+		BeginH();
 
 		createPath = GUILayout.TextField(createPath);
 		if(GUILayout.Button("CreatePath",GUILayout.Width(100f)))
@@ -69,8 +77,9 @@ public class LevelEdit_Editor : Editor
 		DrawPointList();
 		Space(10f);
 		if(pointManager.currentPath != "")
+		{
 			DrawControllMenu();
-
+		}
 
 
 		if(GUILayout.Button("Save"))
@@ -82,6 +91,36 @@ public class LevelEdit_Editor : Editor
 			Debug.Log("save");
 		}
     }
+
+	void OnSceneGUI()
+	{
+        AddPointToCursorPoint();
+    }
+
+	public void AddPointToCursorPoint()
+	{
+		Event e = Event.current;
+
+		if(e.type == EventType.KeyDown && 
+			e.keyCode == KeyCode.P &&
+			controll.GetPointManager().currentPath != "")
+		{
+			//Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay(e.mousePosition);
+			Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay( new Vector3( e.mousePosition.x, Screen.height - e.mousePosition.y - 36, 0 ) );
+			if(Physics.Raycast(ray,out RaycastHit hit,Mathf.Infinity))
+			{
+				var point = CreatePoint();
+				point.transform.position = hit.point + hit.normal * _dist;
+				point.transform.rotation = Quaternion.FromToRotation(point.transform.up,hit.normal);
+
+				controll.AddPoint(controll.GetPointManager().currentPath,point);
+			}
+			else
+			{
+				Debug.Log("raycast failed");
+			}
+		}        
+	}
 
 	public void DrawPointList()
 	{
@@ -100,6 +139,7 @@ public class LevelEdit_Editor : Editor
 		GUILayout.BeginHorizontal("box");
 
 		GUILayout.Label(label);
+		
 		if(GUILayout.Button("select",GUILayout.Width(70)))
 		{
 			Selection.activeGameObject = controll.GetPoint(controll.GetPointManager().currentPath,pos).gameObject;
