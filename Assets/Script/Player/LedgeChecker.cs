@@ -11,12 +11,16 @@ public class LedgeChecker : MonoBehaviour
     private bool preValue;
     private int checkCount;
     [SerializeField] private bool isDetectLedge;
-
+    private Vector3 originalPos;
+    private Quaternion originalRot;
     private void Start()
     {
         root = transform.parent;
         head = root.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head);
-        transform.parent = head;
+        //transform.parent = head;
+
+        originalPos = transform.localPosition;
+        originalRot = transform.localRotation;
     }
 
     private void Update()
@@ -25,7 +29,9 @@ public class LedgeChecker : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.rotation = Quaternion.LookRotation(root.forward, root.up);
+        //transform.rotation = Quaternion.LookRotation(root.forward, root.up);
+        //transform.localPosition = originalPos;
+        //transform.localRotation = originalRot;
 
         foreach (GameObject obj in collider1.collidedObjects)
         {

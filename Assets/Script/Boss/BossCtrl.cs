@@ -25,7 +25,7 @@ public class BossCtrl : MonoBehaviour
     [SerializeField] private List<EMPShield> footWeakPoint = new List<EMPShield>();
     private Vector3 targetPosition;
     private Rigidbody rigidbody;
-    [SerializeField] private BossState state = BossState.Wait;
+    public BossState state = BossState.Wait;
     private float elapsedTime = 0.0f;
     [SerializeField] private float waitTime = 3.0f;
     [SerializeField] private float turnTime = 3.0f;
@@ -65,20 +65,15 @@ public class BossCtrl : MonoBehaviour
 
     void Update()
     {
-        
-    }
-
-    private void FixedUpdate()
-    {
         if (beActive == false)
             return;
 
-        switch(state)
+        switch (state)
         {
             case BossState.Wait:
                 {
-                    elapsedTime += Time.fixedDeltaTime;
-                    if(elapsedTime >= waitTime)
+                    elapsedTime += Time.deltaTime;
+                    if (elapsedTime >= waitTime)
                     {
                         ChangeState(BossState.Turn);
                     }
@@ -89,10 +84,10 @@ public class BossCtrl : MonoBehaviour
                     targetDir = target.position - transform.position;
                     targetDir.y = 0f;
                     Quaternion targetRot = Quaternion.LookRotation(targetDir, transform.up);
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, Time.fixedDeltaTime * turnSpeed);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
 
-                    elapsedTime += Time.fixedDeltaTime;
-                    if(elapsedTime >= turnTime && Quaternion.Angle(transform.rotation,targetRot) < 5.0f)
+                    elapsedTime += Time.deltaTime;
+                    if (elapsedTime >= turnTime && Quaternion.Angle(transform.rotation, targetRot) < 5.0f)
                     {
                         ChangeState(BossState.Rush);
                     }
@@ -105,13 +100,15 @@ public class BossCtrl : MonoBehaviour
                     //Vector3 velocityChange = targetVelocity - velocity;
                     //rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
 
-                    rigidbody.MovePosition(transform.position+transform.forward * rushSpeed * Time.fixedDeltaTime);
+                    //rigidbody.MovePosition(transform.position+transform.forward * rushSpeed * Time.fixedDeltaTime);
+                    //transform.Translate(transform.forward * rushSpeed * Time.fixedDeltaTime);
+                    transform.position += transform.forward * rushSpeed * Time.deltaTime;
                 }
                 break;
             case BossState.Groggy:
                 {
-                    elapsedTime += Time.fixedDeltaTime;
-                    if(elapsedTime >= groggyTime)
+                    elapsedTime += Time.deltaTime;
+                    if (elapsedTime >= groggyTime)
                     {
                         state = BossState.Wait;
                         elapsedTime = 0.0f;
@@ -119,8 +116,65 @@ public class BossCtrl : MonoBehaviour
                     }
                 }
                 break;
-        }    
+        }
     }
+
+    private void FixedUpdate()
+    {
+        //if (beActive == false)
+        //    return;
+
+        //switch(state)
+        //{
+        //    case BossState.Wait:
+        //        {
+        //            elapsedTime += Time.fixedDeltaTime;
+        //            if(elapsedTime >= waitTime)
+        //            {
+        //                ChangeState(BossState.Turn);
+        //            }
+        //        }
+        //        break;
+        //    case BossState.Turn:
+        //        {
+        //            targetDir = target.position - transform.position;
+        //            targetDir.y = 0f;
+        //            Quaternion targetRot = Quaternion.LookRotation(targetDir, transform.up);
+        //            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, Time.fixedDeltaTime * turnSpeed);
+
+        //            elapsedTime += Time.fixedDeltaTime;
+        //            if(elapsedTime >= turnTime && Quaternion.Angle(transform.rotation,targetRot) < 5.0f)
+        //            {
+        //                ChangeState(BossState.Rush);
+        //            }
+        //        }
+        //        break;
+        //    case BossState.Rush:
+        //        {
+        //            //Vector3 targetVelocity = transform.forward * rushSpeed;
+        //            //Vector3 velocity = rigidbody.velocity;
+        //            //Vector3 velocityChange = targetVelocity - velocity;
+        //            //rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+
+        //            //rigidbody.MovePosition(transform.position+transform.forward * rushSpeed * Time.fixedDeltaTime);
+        //            //transform.Translate(transform.forward * rushSpeed * Time.fixedDeltaTime);
+        //            transform.position += transform.forward * rushSpeed * Time.fixedDeltaTime;
+        //        }
+        //        break;
+        //    case BossState.Groggy:
+        //        {
+        //            elapsedTime += Time.fixedDeltaTime;
+        //            if (elapsedTime >= groggyTime)
+        //            {
+        //                state = BossState.Wait;
+        //                elapsedTime = 0.0f;
+        //                anim.SetTrigger("Return");
+        //            }
+        //        }
+        //        break;
+        //}    
+    }
+
 
     private void ChangeState(BossState state)
     {

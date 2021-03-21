@@ -782,6 +782,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     //transform.rotation = Quaternion.LookRotation(moveDir);
                     //footIK.EnableFeetIk();
                     handIK.ActiveHandIK(false);
+                    footIK.EnableFeetIk();
                     GameManager.Instance.stateManager.Visible(false);
                 }
                 break;
@@ -796,6 +797,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     handIK.ActiveHandIK(true);
                     handIK.ActiveLedgeIK(false);
+                    footIK.DisableFeetIk();
                     //footIK.DisableFeetIk();
                 }
                 break;
@@ -1528,12 +1530,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void OnTriggerEnter(Collider other)
     {
-        if (state == PlayerState.Default || state == PlayerState.Jump)
-        {
-            if (other.CompareTag("Boss"))
-            {
-                ragdoll.ExplosionRagdoll(200.0f, (transform.position+Vector3.up - other.transform.position).normalized);
-            }
-        }
+        //if (state == PlayerState.Default || state == PlayerState.Jump)
+        //{
+        //    if (other.CompareTag("Boss"))
+        //    {
+        //        ragdoll.ExplosionRagdoll(200.0f, (transform.position+Vector3.up - other.transform.position).normalized);
+        //    }
+        //}
     }
 }

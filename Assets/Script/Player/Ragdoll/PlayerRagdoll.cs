@@ -286,6 +286,8 @@ public class PlayerRagdoll : MonoBehaviour
 
     public void ExplosionRagdoll(float power, Vector3 exlosionPos, float radius)
     {
+        if (isFlyRagdoll == true)
+            return;
         //GameManager.Instance.PauseControl(true);
         isFlyRagdoll = true;
         ActiveRagdoll(true);
@@ -303,6 +305,9 @@ public class PlayerRagdoll : MonoBehaviour
 
     public void ExplosionRagdoll(float power, Vector3 dir)
     {
+        if (isFlyRagdoll == true)
+            return;
+
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);
