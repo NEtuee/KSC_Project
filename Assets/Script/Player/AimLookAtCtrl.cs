@@ -7,6 +7,7 @@ public class AimLookAtCtrl : MonoBehaviour
     private Transform mainCam;
     private RaycastHit hit;
     private Vector3 targetPos;
+    [SerializeField] private LayerMask hitLayer;
     private void Awake()
     {
         mainCam = Camera.main.transform;
@@ -14,7 +15,7 @@ public class AimLookAtCtrl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(Physics.Raycast(mainCam.position, mainCam.forward, out hit, 100f))
+        if(Physics.Raycast(mainCam.position, mainCam.forward, out hit, 100f, hitLayer))
         {
             targetPos = hit.point;
         }

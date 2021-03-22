@@ -780,10 +780,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetBool("IsGrab", false);
                     animator.SetBool("IsLedge", false);
                     //transform.rotation = Quaternion.LookRotation(moveDir);
-                    //footIK.EnableFeetIk();
-                    handIK.ActiveHandIK(false);
                     footIK.EnableFeetIk();
+                    handIK.ActiveHandIK(false);
+                    //footIK.EnableFeetIk();
                     GameManager.Instance.stateManager.Visible(false);
+
+                    if (transform.parent == null)
+                        GameManager.Instance.cameraManger.SetFollowCameraDistance(5.0f, 20.0f);
+                    else
+                        GameManager.Instance.cameraManger.SetFollowCameraDistance(10.0f, 20.0f);
                 }
                 break;
             case PlayerState.Grab:
@@ -798,6 +803,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.ActiveHandIK(true);
                     handIK.ActiveLedgeIK(false);
                     footIK.DisableFeetIk();
+
+                    GameManager.Instance.cameraManger.SetFollowCameraDistance(12.0f, 20.0f);
                     //footIK.DisableFeetIk();
                 }
                 break;
@@ -848,6 +855,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     GameManager.Instance.cameraManger.ActiveAimCamera();
                     GameManager.Instance.stateManager.Visible(true);
+                    footIK.DisableFeetIk();
                 }
                 break;
             case PlayerState.HangLedge:
@@ -1119,6 +1127,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 rigCtrl.Active();
                 gunObject.SetActive(true);
                 animator.SetLayerWeight(2, 1.0f);
+                animator.SetLayerWeight(3, 1.0f);
             }
             return true;
         }
@@ -1137,6 +1146,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 rigCtrl.Disable();
                 gunObject.SetActive(false);
                 animator.SetLayerWeight(2, 0.0f);
+                animator.SetLayerWeight(3, 0.0f);
             }
             return true;
         }

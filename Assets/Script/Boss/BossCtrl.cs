@@ -63,7 +63,7 @@ public class BossCtrl : MonoBehaviour
         target = GameObject.FindGameObjectWithTag("Player").transform;
         wallLayer = LayerMask.NameToLayer("Wall");
 
-        path = pointManager.FindPath("BossDummy_1");
+        path = pointManager.FindPath("Routine_Boss");
 
         GameManager.Instance.bossTransform = this.transform;
 
@@ -79,6 +79,11 @@ public class BossCtrl : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.B))
+        {
+            beActive = !beActive;
+        }
+
         if (beActive == false)
             return;
 
@@ -174,7 +179,7 @@ public class BossCtrl : MonoBehaviour
                     }
                     else
                     {
-                        state = BossState.Turn;
+                        state = BossState.LookPatrol;
                         anim.SetTrigger("Turn");
                         bool isEnd;
                         targetPosition = path.GetNextPoint(ref currentPointIndex, out isEnd).GetPoint();
@@ -233,7 +238,7 @@ public class BossCtrl : MonoBehaviour
         if(Physics.Raycast(transform.position,-transform.up,out hit,10f,groundLayer))
         {
             Vector3 position = transform.position;
-            position.y = Mathf.MoveTowards(transform.position.y, hit.point.y, 10f * Time.fixedDeltaTime);
+            position.y = Mathf.MoveTowards(transform.position.y, hit.point.y+0.05f, 10f * Time.fixedDeltaTime);
             transform.position = position;
         }
 

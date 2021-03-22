@@ -15,6 +15,10 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Transform spearLunchPos;
     [SerializeField] private bool isBlend;
     [SerializeField] private bool isAttentionCamera;
+    private bool isBlendCameraDistance;
+    private float targetDistance;
+    private float distanceBlendStartTime;
+    private float distanceBlendDuration;
     private bool isRunningCallBackCoroutine;
     private CinemachineVirtualCameraBase currentActiveCam = null;
     private CinemachineVirtualCameraBase prevActiveCam = null;
@@ -53,6 +57,8 @@ public class CameraManager : MonoBehaviour
         {
             UpdateCameraSide();
         }
+
+        BlendDistanceFollowCamera();
     }
 
     /// <summary>
@@ -333,5 +339,27 @@ public class CameraManager : MonoBehaviour
         }
 
         playerFollowCam3rdPersonComponent.CameraSide = Mathf.SmoothDamp(playerFollowCam3rdPersonComponent.CameraSide, 0.5f + targetFactor, ref cameraSideSmoothVelocity, 300f*Time.deltaTime);
+    }
+
+    public void SetFollowCameraDistance(float targetDistance, float blendDuration)
+    {
+        isBlendCameraDistance = true;
+        this.targetDistance = targetDistance;
+        distanceBlendDuration = blendDuration;
+        distanceBlendStartTime = Time.time;
+    }
+
+    private void BlendDistanceFollowCamera()
+    {
+        if(isBlendCameraDistance == true)
+        {
+            float t = (Time.time - distanceBlendStartTime) / distanceBlendDuration;
+            float currentDist = playerFollowCam3rdPersonComponent.CameraDistance;
+            playerFollowCam3rdPersonComponent.CameraDistance = Mathf.SmoothStep(currentDist, targetDistance, t);
+            if(t >= 1.0f)
+            {
+                isBlendCameraDistance = false;
+            }
+        }
     }
 }
