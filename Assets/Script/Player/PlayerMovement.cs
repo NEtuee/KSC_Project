@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float trueSpeed;
     public LayerMask fowardCheckLayer;
 
+    private UpdateMethod updateMethod;
+
     [Header("Ground")]
     [SerializeField] private float groundDistance;
     public float groundMinDistance = 0.1f;
@@ -70,6 +72,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         ragdoll = GetComponent<PlayerRagdoll>();
+
+        updateMethod = player.updateMethod == UpdateMethod.Update ? UpdateMethod.Update : UpdateMethod.FixedUpdate;
     }
 
     public void Move(Vector3 direction)
@@ -124,6 +128,11 @@ public class PlayerMovement : MonoBehaviour
         {
             currentJumpPower = 0.0f;
         }
+
+        if (updateMethod == UpdateMethod.Update)
+        {
+            MoveConservation();
+        }
     }
 
     private void FixedUpdate()
@@ -157,9 +166,17 @@ public class PlayerMovement : MonoBehaviour
             slidingTime = 0f;
         }
 
-        if(keepSpeed == true && prevParent != null)
+        if(updateMethod == UpdateMethod.FixedUpdate)
         {
-            amount = 1 -Mathf.InverseLerp(detachTime, detachTime + speedKeepTime, Time.time);
+            MoveConservation();
+        }
+    }
+
+    private void MoveConservation()
+    {
+        if (keepSpeed == true && prevParent != null)
+        {
+            amount = 1 - Mathf.InverseLerp(detachTime, detachTime + speedKeepTime, Time.time);
 
             Vector3 difference = (prevParent.position - prevParentPrevPos);
             float velocity = difference.magnitude;
@@ -168,12 +185,13 @@ public class PlayerMovement : MonoBehaviour
             prevParentPrevPos = prevParent.position;
             Move_Nodelta(difference * velocity * amount);
 
-            if(Mathf.Abs(amount) < Mathf.Epsilon)
+            if (Mathf.Abs(amount) < Mathf.Epsilon)
             {
                 keepSpeed = false;
             }
         }
     }
+
 
     private void CheckGroundDistance()
     {

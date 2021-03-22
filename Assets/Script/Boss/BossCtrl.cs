@@ -33,6 +33,7 @@ public class BossCtrl : MonoBehaviour
     [SerializeField] private LevelEdit_PointManager pointManager;
     private LevelEdit_PointManager.PathClass path;
     [SerializeField] private CheckBack checkBack;
+    [SerializeField] private LayerMask groundLayer;
 
     private int currentPointIndex;
     private Vector3 targetPosition;
@@ -228,6 +229,14 @@ public class BossCtrl : MonoBehaviour
 
     private void FixedUpdate()
     {
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position,-transform.up,out hit,10f,groundLayer))
+        {
+            Vector3 position = transform.position;
+            position.y = Mathf.MoveTowards(transform.position.y, hit.point.y, 10f * Time.fixedDeltaTime);
+            transform.position = position;
+        }
+
         if (state == BossState.Dead)
             return;
 
