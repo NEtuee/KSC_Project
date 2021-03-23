@@ -50,9 +50,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [Range(0, 5)] [SerializeField] private float fallingControlSenstive = 1f;
     [SerializeField] private float horizonWeight = 0.0f;
     [SerializeField] private float rotAngle = 0.0f;
-    [SerializeField] private float animationNormalizeTime = 0.0f;
-    [SerializeField] private AnimationCurve walkCurve;
-    [SerializeField] private AnimationCurve runCurve;
+    //[SerializeField] private AnimationCurve walkCurve;
+    //[SerializeField] private AnimationCurve runCurve;
 
     [Header("Jump Value")]
     [SerializeField] private float currentJumpPower = 0f;
@@ -80,13 +79,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Vector3 moveDir;
     private Vector3 lookDir;
     private Vector3 prevDir;
-    private Vector3 slidingDir;
-    private Vector3 prevSlidingDir;
     private Vector3 camForward;
     private Vector3 camRight;
-    private Quaternion climbingPrevRot;
-    private Vector3 prevForward;
-    private Vector3 ledgeOffsetPosition;
 
     [Header("Detection")]
     [SerializeField] private LedgeChecker ledgeChecker;
@@ -117,7 +111,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
-
     private Transform mainCameraTrasform;
     private Animator animator;
     private PlayerMovement movement;
@@ -158,14 +151,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         StartCoroutine(StopCheck());
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isPause == true)
         {
             return;
         }
-        //GizmoHelper.Instance.DrawLine(headTransfrom.position + transform.up * 0.2f, headTransfrom.position + transform.up * 0.2f + transform.forward * 2f, Color.red);
+
         InputUpdate();
 
         if (updateMethod == UpdateMethod.Update)
@@ -216,7 +208,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     if (InputManager.Instance.GetAction(KeybindingActions.Jump))
                     {
-                        //ChangeState(PlayerState.Jump);
                         animator.SetTrigger("Jump");
                         return;
                     }
@@ -302,8 +293,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             currentJumpPower = 0.0f;
         }
 
-        animationNormalizeTime = animator.GetCurrentAnimatorStateInfo(0).normalizedTime % 1f;
-
         switch (state)
         {
             case PlayerState.Default:
@@ -333,7 +322,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     RaycastHit hit;
                     if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2f, groundLayer))
                     {
-                        //moveDir = (Vector3.ProjectOnPlane(moveDir, hit.normal)).normalized;
                         moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
                     }
 
@@ -379,7 +367,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     RaycastHit hit;
                     if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2f, groundLayer))
                     {
-                        //moveDir = (Vector3.ProjectOnPlane(moveDir, hit.normal)).normalized;
                         moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
                     }
                 }
@@ -389,7 +376,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if(movement.isGrounded == true)
                     {
                         ChangeState(PlayerState.Default);
-                        //animator.SetLayerWeight(1, 1.0f);
                         return;
                     }
 
@@ -415,14 +401,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         CheckLedge();
                     }
-
-                    
-                    //UpdateGrab();
-
-                    //if (movement.GetGroundAngle() > 40.0f)
-                    //{
-                    //    ChangeState(PlayerState.HangRagdoll);
-                    //}
                 }
                 break;
             case PlayerState.HangRagdoll:
@@ -436,11 +414,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.HangLedge:
                 {
-                    //if(ledgeChecker.IsDetectedLedge() == false)
-                    //{
-                    //    ChangeState(PlayerState.Grab);
-                    //}
-                    //UpdateGrab();
                 }
                 break;
             case PlayerState.Aiming:
@@ -535,7 +508,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
 
         UpdateCurrentSpeed(deltaTime);
-        //prevDir = moveDir.normalized;
         prevDir = lookDir;
     }
 
@@ -547,7 +519,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.HangLedge:
                 {
                     UpdateGrab();
-                    //CheckLedge();
                 }
                 break;
         }
@@ -683,17 +654,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void UpdateCurrentSpeed(float deltaTime)
     {
-        //if (state != PlayerState.Default)
-        //{
-        //    return;
-        //}
-
         Vector3 moveForward = lookDir;
         Vector3 prevForward = prevDir;
         moveForward.y = prevForward.y = 0.0f;
         moveForward.Normalize();
         prevForward.Normalize();
-        //Debug.Log(Vector3.Dot(moveForward, prevForward));
 
         if(state == PlayerState.Grab || state == PlayerState.RunToStop)
         {
@@ -706,7 +671,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 ChangeState(PlayerState.TurnBack);
             }
-            //currentSpeed = 0.0f;
             return;
         }
 
@@ -731,7 +695,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         else
         {
             currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, deltaTime * 40.0f);
-            //currentSpeed = 0.0f;
         }
     }
 
@@ -779,10 +742,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.applyRootMotion = false;
                     animator.SetBool("IsGrab", false);
                     animator.SetBool("IsLedge", false);
-                    //transform.rotation = Quaternion.LookRotation(moveDir);
                     footIK.EnableFeetIk();
                     handIK.ActiveHandIK(false);
-                    //footIK.EnableFeetIk();
                     GameManager.Instance.stateManager.Visible(false);
 
                     if (transform.parent == null)
@@ -805,13 +766,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     footIK.DisableFeetIk();
 
                     GameManager.Instance.cameraManger.SetFollowCameraDistance(12.0f, 20.0f);
-                    //footIK.DisableFeetIk();
                 }
                 break;
             case PlayerState.Jump:
                 {
-                    //animator.SetTrigger("Jump");
-                    //currentSpeed = 0.0f;
                     moveDir = transform.forward * currentSpeed;
                     horizonWeight = 0.0f;
                     animator.SetFloat("HorizonWeight", horizonWeight);
@@ -875,8 +833,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
-    public void BackPrevState() { ChangeState(prevState); }
-
     IEnumerator StopCheck()
     {
         float time = 0.0f;
@@ -908,22 +864,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
-                    //var p = transform.position;
-                    //p += animator.deltaPosition;
-                    //transform.position = p;
                 }
                 break;
             case PlayerState.TurnBack:
                 {
-                    //var p = transform.localPosition;
-                    //p += animator.deltaPosition;
-                    //transform.localPosition = p;
-                    //var r = transform.localRotation;
-                    //r *= animator.deltaRotation;
-                    //transform.localRotation = r;
-
-                    //var p = transform.position;
-                    //p += animator.deltaPosition;
                     transform.position += moveDir.normalized * animator.deltaPosition.magnitude;
                     var r = transform.rotation;
                     r *= animator.deltaRotation;
@@ -934,11 +878,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     if (Physics.Raycast(transform.position + Vector3.up + moveDir.normalized*0.5f, Vector3.down, 1.5f, groundLayer))
                     {
-                        //var p = transform.localPosition;
-                        //p += animator.deltaPosition.magnitude * moveDir.normalized;
-                        //transform.localPosition = p;
-                        //var p = transform.position;
-                        //p += moveDir.normalized * animator.deltaPosition.magnitude;
                         transform.position += moveDir.normalized * animator.deltaPosition.magnitude;
                     }
                 }
@@ -946,11 +885,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Grab:
             case PlayerState.HangLedge:
                 {
-                    //Debug.Log(Vector3.Angle(transform.up,Vector3.up));
-
                     if (isClimbingMove == true)
                         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-wallHit.normal, Vector3.up), 5f * Time.deltaTime);
-
 
                     var p = transform.position;
                     p += animator.deltaPosition;
@@ -967,11 +903,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
-    public PlayerState GetState()
-    {
-        return state;
-    }
-
+    #region Detection
     private bool UpDetection()
     {
         if (ledgeChecker.IsDetectedLedge() == false)
@@ -1029,7 +961,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         return false;
     }
+    #endregion
 
+    #region 인풋
     private bool InputTryGrab()
     {
         Vector3 point1;
@@ -1098,7 +1032,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                         ChangeState(PlayerState.Default);
 
-                        //transform.SetParent(null);
                         movement.Detach();
                         return true;
                     }
@@ -1279,6 +1212,55 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         
     }
 
+    private void InputChangeLauncherMode()
+    {
+        if (InputManager.Instance.GetAction(KeybindingActions.Equiment1th))
+        {
+            launcherMode.Value = 1;
+        }
+        else if (InputManager.Instance.GetAction(KeybindingActions.Equiment2th))
+        {
+            launcherMode.Value = 2;
+        }
+    }
+
+    private bool InputLedgeUp()
+    {
+        if (InputManager.Instance.GetAction(KeybindingActions.Jump) && isLedge == true && isClimbingMove == false)
+        {
+            isLedge = false;
+            animator.SetTrigger("LedgeUp");
+            animator.SetBool("IsLedge", false);
+
+            Vector3 currentRot = transform.rotation.eulerAngles;
+            currentRot.x = 0.0f;
+            currentRot.z = 0.0f;
+            transform.rotation = Quaternion.Euler(currentRot);
+
+            ChangeState(PlayerState.LedgeUp);
+
+            return true;
+        }
+        return false;
+    }
+
+    #endregion
+
+    #region 겟터
+    public PlayerState GetState()
+    {
+        return state;
+    }
+    public void BackPrevState() { ChangeState(prevState); }
+
+    #endregion
+
+    #region 셋터
+    public void SetClimbMove(bool move) { isClimbingMove = move; }
+
+    #endregion
+
+    #region EMP 레이저
     private void LaunchImpect()
     {
         energy.Value -= 50.0f;
@@ -1351,36 +1333,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
         this.loadCount.Value = 1;
     }
-
-    private void InputChangeLauncherMode()
-    {
-        if(InputManager.Instance.GetAction(KeybindingActions.Equiment1th))
-        {
-            launcherMode.Value = 1;
-        }
-        else if(InputManager.Instance.GetAction(KeybindingActions.Equiment2th))
-        {
-            launcherMode.Value = 2;
-        }
-    }
-
-    
+    #endregion
 
     private void UpdateGrab()
     {
-        //RaycastHit hit;
-        //Vector3 point1 = transform.position + collider.center - transform.forward;
-
-        //if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
-        //{
-        //    transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
-        //    transform.rotation = Quaternion.LookRotation(-hit.normal, transform.up);
-        //}
-        //else
-        //{
-        //    ChangeState(PlayerState.Default);
-        //}
-        
         Vector3 startPos = transform.position + transform.up * (collider.height * 0.5f) + (-transform.forward * 1f);
 
         if (Physics.SphereCast(startPos, collider.radius, transform.forward, out wallHit, 3.0f, detectionLayer))
@@ -1395,7 +1351,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 transform.rotation = Quaternion.LookRotation(-wallHit.normal, transform.up);
             }
-            //transform.rotation *= Quaternion.FromToRotation(transform.up, Vector3.up);
 
             if (wallHit.collider.transform != transform.parent)
             {
@@ -1420,42 +1375,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             isClimbingMove = false;
             isLedge = true;
-            ledgeOffsetPosition = transform.position;
             ChangeState(PlayerState.HangLedge);
         }
-    }
-
-    private bool InputLedgeUp()
-    {
-        if (InputManager.Instance.GetAction(KeybindingActions.Jump) && isLedge == true && isClimbingMove == false)
-        {
-            isLedge = false;
-            animator.SetTrigger("LedgeUp");
-            animator.SetBool("IsLedge",false);
-
-            Vector3 currentRot = transform.rotation.eulerAngles;
-            currentRot.x = 0.0f;
-            currentRot.z = 0.0f;
-            transform.rotation = Quaternion.Euler(currentRot);
-
-            ChangeState(PlayerState.LedgeUp);
-
-            return true;
-        }
-        return false;
-    }
-
-    public void SetClimbMove(bool move) { isClimbingMove = move;}
-
-    private void LateUpdate()
-    {
-        //if(state == PlayerState.Aiming)
-        //{
-        //    Vector3 chestDir = mainCameraTrasform.right;
-        //    Transform chestTransform = animator.GetBoneTransform(HumanBodyBones.Chest);
-        //    //chestTransform.LookAt(chestTransform.position + chestDir * 5f);
-        //    chestTransform.localRotation = Quaternion.LookRotation(chestTransform.position + (chestDir * 5f),chestTransform.right);
-        //}
     }
 
     private void RestoreEnergy(float deltaTime)
@@ -1470,15 +1391,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private void AdjustLedgeOffset()
     {
         Vector3 start = transform.position + transform.up * collider.height * 2;
-        //Vector3 offsetPoint = transform.position-Vector3.Lerp(animator.GetBoneTransform(HumanBodyBones.LeftHand).position, animator.GetBoneTransform(HumanBodyBones.RightHand).position,0.5f);
-
-        //RaycastHit hit;
-        //if (Physics.SphereCast(start, collider.radius * 2f, -transform.up, out hit, collider.height * 2, climbingLayer))
-        //{
-        //    Debug.Log("Adjust");
-        //    transform.position = hit.point + offsetPoint + (transform.forward * dectionOffset.z) + (transform.right * dectionOffset.x) + (transform.up * dectionOffset.y);
-        //}
-
         RaycastHit upHit;
         RaycastHit forwardHit;
         Vector3 finalPosition;
@@ -1491,28 +1403,28 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 transform.position = finalPosition;
             }
         }
-
     }
 
-    public float GetFootStepOffset()
-    {
-        if (state != PlayerState.Default)
-            return 0.0f;
+    //public float GetFootStepOffset()
+    //{
+    //    if (state != PlayerState.Default)
+    //        return 0.0f;
 
-        if(currentSpeed == 9.0f)
-        {
-            return runCurve.Evaluate(animationNormalizeTime);
-        }
-        else if(currentSpeed >= 5.5f)
-        {
-            return walkCurve.Evaluate(animationNormalizeTime);
-        }
-        else
-        {
-            return 0.0f;
-        }
-    }
+    //    if(currentSpeed == 9.0f)
+    //    {
+    //        return runCurve.Evaluate(animationNormalizeTime);
+    //    }
+    //    else if(currentSpeed >= 5.5f)
+    //    {
+    //        return walkCurve.Evaluate(animationNormalizeTime);
+    //    }
+    //    else
+    //    {
+    //        return 0.0f;
+    //    }
+    //}
 
+    #region 디버그
     private void OnDrawGizmos()
     {
         DebugDraw();
@@ -1537,15 +1449,5 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             Gizmos.DrawRay(start, -transform.up * collider.height * 2);
         }
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //if (state == PlayerState.Default || state == PlayerState.Jump)
-        //{
-        //    if (other.CompareTag("Boss"))
-        //    {
-        //        ragdoll.ExplosionRagdoll(200.0f, (transform.position+Vector3.up - other.transform.position).normalized);
-        //    }
-        //}
-    }
+    #endregion
 }

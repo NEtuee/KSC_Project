@@ -170,12 +170,12 @@ public class PlayerRagdoll : MonoBehaviour
         {
             float ragdollBlendAmount = 1f - Mathf.InverseLerp(ragdollEndTime, ragdollEndTime + ragdollToAnimBlendTime, Time.time);
 
-            //if (storedHipsPositionPrivBlend != hipTransform.position)
-            //{
-            //    storedHipsPositionPrivAnim = hipTransform.position;
-            //}
-            //storedHipsPositionPrivBlend = Vector3.Lerp(storedHipsPositionPrivAnim, storedHipsPosition, ragdollBlendAmount);
-            //hipTransform.position = storedHipsPositionPrivBlend;
+            if (storedHipsPositionPrivBlend != hipTransform.position)
+            {
+                storedHipsPositionPrivAnim = hipTransform.position;
+            }
+            storedHipsPositionPrivBlend = Vector3.Lerp(storedHipsPositionPrivAnim, storedHipsPosition, ragdollBlendAmount);
+            hipTransform.position = storedHipsPositionPrivBlend;
 
             foreach (TransformComponent trComp in transforms)
             {
