@@ -409,7 +409,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     //{
                     //    ragdoll.DisableFixRagdoll();
                     //}
-
                 }
                 break;
             case PlayerState.HangLedge:
