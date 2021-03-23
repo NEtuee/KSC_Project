@@ -100,7 +100,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isFlyRagdoll == true && Time.time - ragdollTime > 0.1f && hipTransform.GetComponent<Rigidbody>().velocity.magnitude < 0.01f)
+        if (isFlyRagdoll == true && Time.time - ragdollTime > 0.1f && hipTransform.GetComponent<Rigidbody>().velocity.magnitude < 0.05f)
         {
             ReturnAnimated();
         }
@@ -474,19 +474,36 @@ public class PlayerRagdoll : MonoBehaviour
 
     private bool CheckIfLieOnBack()
     {
-        var left = anim.GetBoneTransform(HumanBodyBones.LeftUpperLeg).position;
-        var right = anim.GetBoneTransform(HumanBodyBones.RightUpperLeg).position;
-        var hipsPos = hipTransform.parent.position;
+        //var left = anim.GetBoneTransform(HumanBodyBones.LeftUpperLeg).position;
+        //var right = anim.GetBoneTransform(HumanBodyBones.RightUpperLeg).position;
+        //var hipsPos = hipTransform.parent.position;
 
-        left -= hipsPos;
-        left.y = 0f;
-        right -= hipsPos;
-        right.y = 0f;
+        //left -= hipsPos;
+        //left.y = 0f;
+        //right -= hipsPos;
+        //right.y = 0f;
 
-        var q = Quaternion.FromToRotation(left, Vector3.right);
-        var t = q * right;
+        //var q = Quaternion.FromToRotation(left, Vector3.right);
+        //var t = q * right;
 
-        return t.z < 0f;
+        Transform upperChest = anim.GetBoneTransform(HumanBodyBones.UpperChest);
+
+        Vector3 chestForward = upperChest.up;
+        chestForward.x = 0;
+        chestForward.z = 0;
+        chestForward.Normalize();
+
+        if (chestForward.y > 0)
+            return false;
+        else
+            return true;
+
+        //if (Vector3.Dot(Vector3.Cross(upperChest.up, Vector3.right), Vector3.up) > 0)
+        //    return true;
+        //else
+        //    return false;
+
+        //return t.z < 0f;
     }
 
     private Vector3 GetRagdollDirection()
@@ -500,9 +517,9 @@ public class PlayerRagdoll : MonoBehaviour
         ragdollDirection = ragdollDirection.normalized;
 
         if (CheckIfLieOnBack())
-            return ragdollDirection;
-        else
             return -ragdollDirection;
+        else
+            return ragdollDirection;
     }
 
     private float GetDistanceToFloor(float currentY)
@@ -529,7 +546,7 @@ public class PlayerRagdoll : MonoBehaviour
 
         Vector3 forward = transform.forward;
         transform.rotation = Quaternion.FromToRotation(forward, ragdollDirection) * transform.rotation;
-        hipTransform.rotation = Quaternion.FromToRotation(ragdollDirection, forward) * hipTransform.rotation;
+        //hipTransform.rotation = Quaternion.FromToRotation(ragdollDirection, forward) * hipTransform.rotation;
     }
 
     private void DisableAntiStrech()

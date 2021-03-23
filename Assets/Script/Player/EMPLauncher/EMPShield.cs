@@ -9,15 +9,13 @@ public class EMPShield : MonoBehaviour
     public bool isCore = false;
     [SerializeField]private float hp = 100f;
     private float shakeTime = 0.0f;
-    private Vector3 startPos;
+    private Vector3 originalPosition;
 
     private Renderer renderer;
     private Collider collider;
     // Start is called before the first frame update
     void Start()
     {
-        startPos = transform.position;
-
         renderer = GetComponent<Renderer>();
         collider = GetComponent<Collider>();
     }
@@ -25,14 +23,14 @@ public class EMPShield : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if(shakeTime > 0.0f)
+
+        if (shakeTime > 0.0f)
         {
-            transform.position = (Vector3)Random.insideUnitCircle*0.2f + startPos;
+            transform.position = (Vector3)Random.insideUnitCircle * 0.2f + originalPosition;
             shakeTime -= Time.deltaTime;
-            if(shakeTime <= 0.0f)
+            if (shakeTime <= 0.0f)
             {
-                transform.position = startPos;
+                transform.localPosition = originalPosition;
             }
         }
     }
@@ -47,6 +45,7 @@ public class EMPShield : MonoBehaviour
 
     public void Hit()
     {
+        originalPosition = transform.localPosition;
         hp -= 100f;
         shakeTime = 0.1f;
         if (hp <= 0f)
@@ -61,6 +60,7 @@ public class EMPShield : MonoBehaviour
 
     public void Hit(float damage)
     {
+        originalPosition = transform.localPosition;
         hp -= damage;
         shakeTime = 0.1f;
         if (hp <= 0f)
@@ -75,6 +75,8 @@ public class EMPShield : MonoBehaviour
 
     public void Hit(float damage, out bool isDestroy)
     {
+        originalPosition = transform.localPosition;
+
         if (isCore == true)
         {
             hp -= 100.0f;

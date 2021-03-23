@@ -15,8 +15,8 @@ public class Drone : MonoBehaviour
     [SerializeField] private float collectRequiredTime = 1f;
     private float collectStartTime;
     
-    private Vector3 approachTargetPosition;
-    private Stack<Vector3> orderList = new Stack<Vector3>();
+    private Transform approachTarget;
+    private Stack<Transform> orderList = new Stack<Transform>();
     private Transform mainCam;
     // Start is called before the first frame update
     void Start()
@@ -48,13 +48,30 @@ public class Drone : MonoBehaviour
             case DroneState.Default:
                 {
                     Vector3 targetPosition = (target.forward * forwardOffset + target.right * rightOffset + target.up * upOffset) + target.position;
-                    transform.position = Vector3.Lerp(transform.position, targetPosition, deltaTime * 5f);
+                    targetPosition = Vector3.Lerp(transform.position, targetPosition, deltaTime * 5f);
+                    Vector3 lookDir = targetPosition - transform.position;
+                    Quaternion targetRot;
+                    if (lookDir != Vector3.zero)
+                        targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), 10.0f * deltaTime);
+                    else
+                        targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), 10.0f * deltaTime);
+
+                    transform.SetPositionAndRotation(targetPosition, targetRot);
                 }
                 break;
             case DroneState.Approach:
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, approachTargetPosition, moveSpeed * deltaTime);
-                    if((transform.position - approachTargetPosition).sqrMagnitude < 1f)
+                    Vector3 targetPosition = Vector3.MoveTowards(transform.position, approachTarget.position, moveSpeed * deltaTime);
+                    Vector3 lookDir = approachTarget.position - transform.position;
+                    Quaternion targetRot;
+                    if (lookDir != Vector3.zero)
+                        targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), 10.0f * deltaTime);
+                    else
+                        targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), 10.0f * deltaTime);
+
+                    transform.SetPositionAndRotation(targetPosition, targetRot);
+
+                    if ((transform.position - approachTarget.position).sqrMagnitude < 1f)
                     {
                         state = DroneState.Collect;
                         collectStartTime = Time.time;
@@ -72,17 +89,25 @@ public class Drone : MonoBehaviour
                         else
                         {
                             state = DroneState.Approach;
-                            approachTargetPosition = orderList.Pop();
+                            approachTarget = orderList.Pop();
                         }
                     }
                 }
                 break;
             case DroneState.Return:
                 {
-                    Vector3 targetPosition = (target.forward * forwardOffset + target.right * rightOffset + target.up * upOffset) + target.position;
-                    transform.position = Vector3.MoveTowards(transform.position, targetPosition, deltaTime * moveSpeed);
+                    Vector3 destination = (target.forward * forwardOffset + target.right * rightOffset + target.up * upOffset) + target.position;
+                    Vector3 targetPosition = Vector3.MoveTowards(transform.position, destination, deltaTime * moveSpeed);
+                    Vector3 lookDir = targetPosition - transform.position;
+                    Quaternion targetRot;
+                    if (lookDir != Vector3.zero)
+                        targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), 10.0f * deltaTime);
+                    else
+                        targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), 10.0f * deltaTime);
 
-                    if((transform.position - targetPosition).sqrMagnitude <=2.0f)
+                    transform.SetPositionAndRotation(targetPosition, targetRot);
+
+                    if ((transform.position - destination).sqrMagnitude <=2.0f)
                     {
                         state = DroneState.Default;
                     }
@@ -91,16 +116,16 @@ public class Drone : MonoBehaviour
         }
     }
 
-    public void OrderApproch(Vector3 targetPosition)
+    public void OrderApproch(Transform target)
     {
         if (state == DroneState.Default || state == DroneState.Return)
         {
             state = DroneState.Approach;
-            approachTargetPosition = targetPosition;
+            approachTarget = target;
         }
         else
         {
-            orderList.Push(targetPosition);
+            orderList.Push(target);
         }
     }
 }

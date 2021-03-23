@@ -798,7 +798,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Ragdoll:
                 {
-                    transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+                    if (lookDir == Vector3.zero)
+                    {
+                        transform.rotation = Quaternion.LookRotation(transform.forward, Vector3.up);
+                    }
+                    else
+                    {
+                        transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+                    }
                     transform.parent = null;
                     handIK.ActiveHandIK(false);
                 }
@@ -839,7 +846,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         while(true)
         {
-            if(time >= 0.05f)
+            if(time >= 0.05f && currentSpeed > walkSpeed)
             {
                 ChangeState(PlayerState.RunToStop);
                 time = 0.0f;
@@ -1322,7 +1329,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     shield.Hit(loadCount * 40f, out destroy);
                     if(destroy == true && drone != null)
                     {
-                        drone.OrderApproch(hit.collider.transform.position);
+                        drone.OrderApproch(hit.collider.transform);
                     }
                 }
             }
