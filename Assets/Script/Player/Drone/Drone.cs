@@ -50,6 +50,7 @@ public class Drone : MonoBehaviour
                     Vector3 targetPosition = (target.forward * forwardOffset + target.right * rightOffset + target.up * upOffset) + target.position;
                     targetPosition = Vector3.Lerp(transform.position, targetPosition, deltaTime * 5f);
                     Vector3 lookDir = targetPosition - transform.position;
+                    lookDir.y = 0.0f;
                     Quaternion targetRot;
                     if (lookDir != Vector3.zero)
                         targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), 10.0f * deltaTime);

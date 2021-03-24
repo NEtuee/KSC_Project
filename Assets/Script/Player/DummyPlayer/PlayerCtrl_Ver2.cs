@@ -22,7 +22,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         Ragdoll,
         LedgeUp,
         HangRagdoll,
-        Aiming
+        Aiming,
+        ClimbingJump,
+        ReadyClimbingJump
+    }
+
+    public enum ClimbingJumpDirection
+    {
+        Up,Left,Right
     }
 
     public enum EMPLaunchType
@@ -58,6 +65,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float minJumpPower = -10.0f;
     [SerializeField] private float jumpPower = 10f;
     [SerializeField] private float gravity = 20.0f;
+    [SerializeField] private float currentClimbingJumpPower = 0f;
+    [SerializeField] private float climbingHorizonJumpPower = 5.0f;
+    [SerializeField] private float climbingUpJumpPower = 8.0f;
+    [SerializeField] private float keepClimbingJumpTime = 0.8f;
+    private float climbingJumpStartTime;
+    private ClimbingJumpDirection climbingJumpDirection;
+
 
     [Header("LayerMask")]
     [SerializeField] private LayerMask groundLayer;
@@ -106,6 +120,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private bool loading = false;
     private bool impactLoading = false;
     [SerializeField] private GameObject gunObject;
+    [SerializeField] private Animator gunAnim;
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
 
@@ -227,6 +242,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Grab:
                 {
+                    if (InputClimbingJump())
+                        return;
+
                     if (InputReleaseGrab())
                         return;
                 }
@@ -259,6 +277,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         {
                             loading = true;
                             loadTime = 0f;
+                            gunAnim.SetTrigger("Next");
                         }
                     }
 
@@ -268,9 +287,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         return;
                 }
                 break;
-                
+            case PlayerState.ClimbingJump:
+                {
+                    if (InputTryGrab())
+                        return;
+                }
+                break;         
         }
-
         InputChangeLauncherMode();
     }
 
@@ -283,7 +306,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         animator.SetBool("IsGround", movement.isGrounded);
 
-        if (state != PlayerState.Grab && state != PlayerState.HangLedge &&movement.isGrounded == false)
+        if (state != PlayerState.Grab && state != PlayerState.HangLedge && state != PlayerState.ClimbingJump &&movement.isGrounded == false)
         {
             currentJumpPower -= gravity * deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
@@ -501,6 +524,60 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         }
 
                         movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                    }
+                }
+                break;
+            case PlayerState.ClimbingJump:
+                {
+                    Vector3 climbingJumpDir = Vector3.zero;
+                    Vector3 upDirect = Vector3.zero;
+                    switch (climbingJumpDirection)
+                    {
+                        case ClimbingJumpDirection.Up:
+                            currentClimbingJumpPower -= gravity * deltaTime;
+                            currentClimbingJumpPower = Mathf.Clamp(currentClimbingJumpPower, minJumpPower, 50f);
+                            moveDir = transform.up;
+                            break;
+                        case ClimbingJumpDirection.Left:
+                            {
+                                moveDir = -transform.right;
+                                float normalizeTime = (Time.time - climbingJumpStartTime) / keepClimbingJumpTime;
+                                if (normalizeTime < 0.5f)
+                                {
+                                    upDirect = transform.up * 2f;
+                                }
+                                else
+                                {
+                                    upDirect = -transform.up * 2f;
+                                }
+                            }
+                            break;
+                        case ClimbingJumpDirection.Right:
+                            {
+                                moveDir = transform.right;
+                                float normalizeTime = (Time.time - climbingJumpStartTime) / keepClimbingJumpTime;
+                                if (normalizeTime < 0.5f)
+                                {
+                                    upDirect = transform.up * 2f;
+                                }
+                                else
+                                {
+                                    upDirect = -transform.up * 2f;
+                                }
+                            }
+                            break;
+                    }
+
+                    moveDir *= currentClimbingJumpPower;
+                    Vector3 finalDir = moveDir + upDirect;
+                    movement.Move(finalDir);
+
+                    if (Time.time - climbingJumpStartTime >= keepClimbingJumpTime)
+                    {
+                        moveDir = moveDir.normalized * finalDir.magnitude;
+                        ChangeState(PlayerState.Jump);
+                        if (climbingJumpDirection == ClimbingJumpDirection.Up)
+                            currentJumpPower = currentClimbingJumpPower;
                     }
                 }
                 break;
@@ -763,13 +840,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.ActiveHandIK(true);
                     handIK.ActiveLedgeIK(false);
                     footIK.DisableFeetIk();
-
+                    isClimbingMove = false;
                     GameManager.Instance.cameraManger.SetFollowCameraDistance(12.0f, 20.0f);
                 }
                 break;
             case PlayerState.Jump:
                 {
-                    moveDir = transform.forward * currentSpeed;
+                    if(prevState != PlayerState.ClimbingJump)
+                       moveDir = transform.forward * currentSpeed;
                     horizonWeight = 0.0f;
                     animator.SetFloat("HorizonWeight", horizonWeight);
                 }
@@ -834,6 +912,38 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.LedgeUp:
                 {
                     handIK.ActiveHandIK(false);
+                }
+                break;
+            case PlayerState.ClimbingJump:
+                {
+                    climbingJumpStartTime = Time.time;
+                    if(inputVertical >= 0.5f)
+                    {
+                        climbingJumpDirection = ClimbingJumpDirection.Up;
+                    }
+                    else
+                    {
+                        climbingJumpDirection = ClimbingJumpDirection.Up;
+                        if (inputHorizontal >= 0.5f)
+                        {
+                            climbingJumpDirection = ClimbingJumpDirection.Right;
+                        }
+                        else if(inputHorizontal <= -0.5f)
+                        {
+                            climbingJumpDirection = ClimbingJumpDirection.Left;
+                        }
+                    }
+                    if(climbingJumpDirection == ClimbingJumpDirection.Up)
+                        currentClimbingJumpPower = climbingUpJumpPower;
+                    else
+                        currentClimbingJumpPower = climbingHorizonJumpPower;
+                }
+                break;
+            case PlayerState.ReadyClimbingJump:
+                {
+                    handIK.ActiveHandIK(false);
+                    animator.SetBool("IsGrab", false);
+                    animator.SetTrigger("ClimbingJump");
                 }
                 break;
         }
@@ -1068,6 +1178,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.SetLayerWeight(2, 1.0f);
                 animator.SetLayerWeight(3, 1.0f);
             }
+            gunAnim.SetTrigger("Next");
             return true;
         }
 
@@ -1087,6 +1198,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.SetLayerWeight(2, 0.0f);
                 animator.SetLayerWeight(3, 0.0f);
             }
+            gunAnim.SetTrigger("Off");
             return true;
         }
 
@@ -1247,6 +1359,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             return true;
         }
+        return false;
+    }
+
+    private bool InputClimbingJump()
+    {
+        if (InputManager.Instance.GetAction(KeybindingActions.Jump))
+        {
+            //ChangeState(PlayerState.ClimbingJump);
+            ChangeState(PlayerState.ReadyClimbingJump);
+            return true;
+        }
+
         return false;
     }
 

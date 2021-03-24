@@ -151,4 +151,9 @@ public class AnimCtrl_Dummy : MonoBehaviour
     {
         //handIk.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.0f);
     }
+
+    private void StartClimbingJump()
+    {
+        owner.ChangeState(PlayerCtrl_Ver2.PlayerState.ClimbingJump);
+    }
 }
