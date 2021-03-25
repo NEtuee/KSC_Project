@@ -98,11 +98,25 @@ public class HandIKCtrl : MonoBehaviour
     [SerializeField] private bool rl_detect;
     [SerializeField] private bool rr_detect;
 
+    [SerializeField]private Transform leftHandPointObjet;
+    [SerializeField]private Transform rightHandPointObject;
+    [SerializeField]private Transform nextLeftHandPointObject;
+    [SerializeField] private Transform nextRightHandPointObject;
+
     void Start()
     {
         animator = GetComponent<Animator>();
         leftHandTr = animator.GetBoneTransform(HumanBodyBones.LeftHand);
         rightHandTr = animator.GetBoneTransform(HumanBodyBones.RightHand);
+
+        leftHandPointObjet = new GameObject("LeftHandPoint").transform;
+        rightHandPointObject = new GameObject("RightHandPoint").transform;
+        nextLeftHandPointObject = new GameObject("NextLeftHandPoint").transform;
+        nextRightHandPointObject = new GameObject("NextRightHandPoint").transform;
+        leftHandPointObjet.SetParent(this.transform);
+        rightHandPointObject.SetParent(this.transform);
+        nextRightHandPointObject.SetParent(this.transform);
+        nextLeftHandPointObject.SetParent(this.transform);
     }
 
     // Update is called once per frame
@@ -116,7 +130,8 @@ public class HandIKCtrl : MonoBehaviour
             return;
         }
 
-        if(leftHandPos == Vector3.zero || rightHandPos == Vector3.zero)
+        //if(leftHandPos == Vector3.zero || rightHandPos == Vector3.zero)
+        if (leftHandPointObjet.position == Vector3.zero || rightHandPointObject.position == Vector3.zero)
         {
             leftWeight = rightWeight = 0.0f;
             return; 
@@ -232,6 +247,8 @@ public class HandIKCtrl : MonoBehaviour
             ledgeDetection = result;
             leftHandPos = Vector3.zero;
             rightHandPos = Vector3.zero;
+            leftHandPointObjet.position = Vector3.zero;
+            rightHandPointObject.position = Vector3.zero;
         }
     }
 
@@ -242,13 +259,15 @@ public class HandIKCtrl : MonoBehaviour
 
         if (enableLeftHandIk)
         {
-            animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPos);
+            //animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPos);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPointObjet.position);
             animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftWeight);
         }
 
         if (enableRightHandIk)
         {
-            animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPos);
+            //animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPos);
+            animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPointObject.position);
             animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rightWeight);
         }
     }
@@ -257,26 +276,38 @@ public class HandIKCtrl : MonoBehaviour
     {
         climbingMove = true;
         ledgeDetection = false;
-        leftHandPos = llHit.point - transform.TransformDirection(hangLedgeOffset);
-        nextRightHandPos = lrHit.point - transform.TransformDirection(hangLedgeOffset);
+        //leftHandPos = llHit.point - transform.TransformDirection(hangLedgeOffset);
+        //nextRightHandPos = lrHit.point - transform.TransformDirection(hangLedgeOffset);
+        leftHandPointObjet.SetParent(llHit.transform);
+        leftHandPointObjet.position = llHit.point - transform.TransformDirection(hangLedgeOffset);
+        nextRightHandPointObject.SetParent(lrHit.transform);
+        nextRightHandPointObject.position = lrHit.point - transform.TransformDirection(hangLedgeOffset);
     }
 
     private void UpdateLeftHandPos()
     {
-        leftHandPos = nextLeftHandPos;
+        //leftHandPos = nextLeftHandPos;
+        leftHandPointObjet.SetParent(nextLeftHandPointObject.parent);
+        leftHandPointObjet.position = nextLeftHandPointObject.position;
     }
 
     private void RightTrace()
     {
         climbingMove = true;
         ledgeDetection = false;
-        rightHandPos = rrHit.point - transform.TransformDirection(hangLedgeOffset);
-        nextLeftHandPos = rlHit.point - transform.TransformDirection(hangLedgeOffset);
+        //rightHandPos = rrHit.point - transform.TransformDirection(hangLedgeOffset);
+        //nextLeftHandPos = rlHit.point - transform.TransformDirection(hangLedgeOffset);
+        rightHandPointObject.SetParent(rrHit.transform);
+        rightHandPointObject.position = rrHit.point - transform.TransformDirection(hangLedgeOffset);
+        nextLeftHandPointObject.SetParent(rlHit.transform);
+        nextLeftHandPointObject.position = rlHit.point - transform.TransformDirection(hangLedgeOffset);
     }
 
     private void UpdateRightHandPos()
     {
-        rightHandPos = nextRightHandPos;
+        //rightHandPos = nextRightHandPos;
+        rightHandPointObject.SetParent(nextRightHandPointObject.parent);
+        rightHandPointObject.position = nextRightHandPointObject.position;
     }
 
     public void DisableIK()
@@ -493,13 +524,21 @@ public class HandIKCtrl : MonoBehaviour
         climbingMove = true;
         if(left == 1)
         {
-            leftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
-            nextRightHandPos = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            //leftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            //nextRightHandPos = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            leftHandPointObjet.SetParent(upLeftHit.transform);
+            leftHandPointObjet.position = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextRightHandPointObject.SetParent(upRightHit.transform);
+            nextRightHandPointObject.position = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
         else
         {
-            rightHandPos = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
-            nextLeftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            //rightHandPos = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            //nextLeftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            rightHandPointObject.SetParent(upRightHit.transform);
+            rightHandPointObject.position = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextRightHandPointObject.SetParent(upLeftHit.transform);
+            nextLeftHandPointObject.position = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
     }
 
@@ -508,13 +547,21 @@ public class HandIKCtrl : MonoBehaviour
         climbingMove = true;
         if(left == 1)
         {
-            nextLeftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
-            nextRightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            //nextLeftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            //nextRightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextLeftHandPointObject.SetParent(downLeftHit.transform);
+            nextLeftHandPointObject.position = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextRightHandPointObject.SetParent(downRightHit.transform);
+            nextRightHandPointObject.position = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
         else
         {
-            nextRightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
-            nextLeftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            //nextRightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            //nextLeftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextRightHandPointObject.SetParent(downRightHit.transform);
+            nextRightHandPointObject.position = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextLeftHandPointObject.SetParent(downLeftHit.transform);
+            nextLeftHandPointObject.position = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
     }
 
