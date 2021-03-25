@@ -29,7 +29,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public enum ClimbingJumpDirection
     {
-        Up,Left,Right
+        Up,Left,Right,UpLeft,UpRight
     }
 
     public enum EMPLaunchType
@@ -69,6 +69,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float climbingHorizonJumpPower = 5.0f;
     [SerializeField] private float climbingUpJumpPower = 8.0f;
     [SerializeField] private float keepClimbingJumpTime = 0.8f;
+    [SerializeField] private AnimationCurve climbingHorizonJumpSpeedCurve;
     private float climbingJumpStartTime;
     private ClimbingJumpDirection climbingJumpDirection;
 
@@ -538,18 +539,43 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             currentClimbingJumpPower = Mathf.Clamp(currentClimbingJumpPower, minJumpPower, 50f);
                             moveDir = transform.up;
                             break;
+                        case ClimbingJumpDirection.UpLeft:
+                            currentClimbingJumpPower -= gravity * deltaTime;
+                            currentClimbingJumpPower = Mathf.Clamp(currentClimbingJumpPower, minJumpPower, 50f);
+                            if (currentClimbingJumpPower > 0)
+                            {
+                                moveDir = (transform.up + -transform.right).normalized;
+                            }
+                            else
+                            {
+                                moveDir = transform.up;
+                            }
+                            break;
+                        case ClimbingJumpDirection.UpRight:
+                            currentClimbingJumpPower -= gravity * deltaTime;
+                            currentClimbingJumpPower = Mathf.Clamp(currentClimbingJumpPower, minJumpPower, 50f);
+                            if (currentClimbingJumpPower > 0)
+                            {
+                                moveDir = (transform.up + transform.right).normalized;
+                            }
+                            else
+                            {
+                                moveDir = transform.up;
+                            }
+                            break;
                         case ClimbingJumpDirection.Left:
                             {
                                 moveDir = -transform.right;
                                 float normalizeTime = (Time.time - climbingJumpStartTime) / keepClimbingJumpTime;
                                 if (normalizeTime < 0.5f)
                                 {
-                                    upDirect = transform.up * 2f;
+                                    upDirect = transform.up * 3f;
                                 }
                                 else
                                 {
-                                    upDirect = -transform.up * 2f;
+                                    upDirect = -transform.up * 3f;
                                 }
+                                currentClimbingJumpPower = climbingHorizonJumpPower * climbingHorizonJumpSpeedCurve.Evaluate(normalizeTime);
                             }
                             break;
                         case ClimbingJumpDirection.Right:
@@ -558,12 +584,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                                 float normalizeTime = (Time.time - climbingJumpStartTime) / keepClimbingJumpTime;
                                 if (normalizeTime < 0.5f)
                                 {
-                                    upDirect = transform.up * 2f;
+                                    upDirect = transform.up * 3f;
                                 }
                                 else
                                 {
-                                    upDirect = -transform.up * 2f;
+                                    upDirect = -transform.up * 3f;
                                 }
+                                currentClimbingJumpPower = climbingHorizonJumpPower*climbingHorizonJumpSpeedCurve.Evaluate(normalizeTime);
                             }
                             break;
                     }
@@ -576,7 +603,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         moveDir = moveDir.normalized * finalDir.magnitude;
                         ChangeState(PlayerState.Jump);
-                        if (climbingJumpDirection == ClimbingJumpDirection.Up)
+                        if (climbingJumpDirection != ClimbingJumpDirection.Left && climbingJumpDirection != ClimbingJumpDirection.Right)
                             currentJumpPower = currentClimbingJumpPower;
                     }
                 }
@@ -603,6 +630,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         animator.SetFloat("InputVertical", Mathf.Abs(inputVertical));
         animator.SetFloat("InputHorizon", Mathf.Abs(inputHorizontal));
+        animator.SetFloat("InputHorizonNoAbs", inputHorizontal);
 
         if (state == PlayerState.Default)
         {
@@ -917,9 +945,23 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.ClimbingJump:
                 {
                     climbingJumpStartTime = Time.time;
-                    if(inputVertical >= 0.5f)
+
+                    if (climbingJumpDirection == ClimbingJumpDirection.Left || climbingJumpDirection == ClimbingJumpDirection.Right)
+                        currentClimbingJumpPower = climbingHorizonJumpPower;
+                    else
+                        currentClimbingJumpPower = climbingUpJumpPower;
+                }
+                break;
+            case PlayerState.ReadyClimbingJump:
+                {
+                    if (inputVertical >= 0.5f)
                     {
-                        climbingJumpDirection = ClimbingJumpDirection.Up;
+                        if(inputHorizontal == 0.0f)
+                            climbingJumpDirection = ClimbingJumpDirection.Up;
+                        else if(inputHorizontal > 0.0f)
+                            climbingJumpDirection = ClimbingJumpDirection.UpRight;
+                        else if(inputHorizontal < 0.0f)
+                            climbingJumpDirection = ClimbingJumpDirection.UpLeft;
                     }
                     else
                     {
@@ -928,19 +970,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         {
                             climbingJumpDirection = ClimbingJumpDirection.Right;
                         }
-                        else if(inputHorizontal <= -0.5f)
+                        else if (inputHorizontal <= -0.5f)
                         {
                             climbingJumpDirection = ClimbingJumpDirection.Left;
                         }
                     }
-                    if(climbingJumpDirection == ClimbingJumpDirection.Up)
-                        currentClimbingJumpPower = climbingUpJumpPower;
-                    else
-                        currentClimbingJumpPower = climbingHorizonJumpPower;
-                }
-                break;
-            case PlayerState.ReadyClimbingJump:
-                {
+
                     handIK.ActiveHandIK(false);
                     animator.SetBool("IsGrab", false);
                     animator.SetTrigger("ClimbingJump");

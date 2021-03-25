@@ -537,7 +537,7 @@ public class HandIKCtrl : MonoBehaviour
             //nextLeftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
             rightHandPointObject.SetParent(upRightHit.transform);
             rightHandPointObject.position = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
-            nextRightHandPointObject.SetParent(upLeftHit.transform);
+            nextLeftHandPointObject.SetParent(upLeftHit.transform);
             nextLeftHandPointObject.position = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
     }
