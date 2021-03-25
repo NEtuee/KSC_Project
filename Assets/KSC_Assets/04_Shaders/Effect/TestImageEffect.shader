@@ -4,6 +4,7 @@ Shader "Hidden/TestImageEffect"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _Distance ("Distance",float) = 0
+        _ScanRange ("Arc",float) = 0
 
         _ScanWidth("Scan Width", float) = 10
 		_LeadSharp("Leading Edge Sharpness", float) = 10
@@ -37,8 +38,10 @@ Shader "Hidden/TestImageEffect"
             sampler2D _MainTex;
             float _Distance;
             float4 _WorldSpaceScannerPos;
+            float4 _ForwardDirection;
             float _ScanWidth;
 			float _LeadSharp;
+            float _ScanRange;
 			float4 _LeadColor;
 			float4 _MidColor;
 			float4 _TrailColor;
@@ -75,16 +78,27 @@ Shader "Hidden/TestImageEffect"
                 //Transform to world space
                 float4 worldPos = mul (_ViewToWorld, float4 (viewPos, 1));
 
-                float dist = distance (_WorldSpaceScannerPos, worldPos);
+                float4 direction = normalize(worldPos - _WorldSpaceScannerPos);
+
+                _ForwardDirection = float4(1,0,0,0);
+                float angle = dot(_ForwardDirection, direction);
+
                 half4 scannerCol = half4(0, 0, 0, 0);
 
-                if (dist < _Distance && dist > _Distance - _ScanWidth && depth < 1)
-				{
-					float diff = 1 - (_Distance - dist) / (_ScanWidth);
-					half4 edge = lerp(_MidColor, _LeadColor, pow(diff, _LeadSharp));
-					scannerCol = lerp(_TrailColor, edge, diff) + horizBars(i.uv) * _HBarColor;
-					scannerCol *= diff;
-				}
+                if(angle < _ScanRange)
+                {   
+                    float dist = distance (_WorldSpaceScannerPos, worldPos);
+
+                    if (dist < _Distance && dist > _Distance - _ScanWidth && depth < 1)
+				    {
+				    	float diff = 1 - (_Distance - dist) / (_ScanWidth);
+				    	half4 edge = lerp(_MidColor, _LeadColor, pow(diff, _LeadSharp));
+				    	scannerCol = lerp(_TrailColor, edge, diff) + horizBars(i.uv) * _HBarColor;
+				    	scannerCol *= diff;
+				    }
+                }
+
+                
             
                 // if(distance (_WorldSpaceScannerPos, worldPos) < _Distance)
                 //     return 1;

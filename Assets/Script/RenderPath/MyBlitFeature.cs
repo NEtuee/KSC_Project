@@ -32,12 +32,12 @@ public class MyBlitFeature : ScriptableRendererFeature
   {
     if (!settings.IsEnabled)
     {
-      // we can do nothing this frame if we want
       return;
     }
     
-    // Gather up and pass any extra information our pass will need.
-    // In this case we're getting the camera's color buffer target
+    if(renderingData.cameraData.camera != Camera.main)
+      return;
+    
 
     var cameraColorTargetIdent = renderer.cameraColorTarget;
     myRenderPass.Setup(cameraColorTargetIdent);
