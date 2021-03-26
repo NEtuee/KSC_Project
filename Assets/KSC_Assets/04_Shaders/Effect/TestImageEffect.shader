@@ -34,11 +34,16 @@ Shader "Hidden/TestImageEffect"
             sampler2D_float _CameraDepthTexture;
             float4x4 _InvProjectionMatrix;    //Pass this in via 'camera.projectionMatrix.inverse'
             float4x4 _ViewToWorld;    //Pass this in via 'camera.cameraToWorldMatrix'
+
             sampler2D _MainTex;
             float _Distance;
             float4 _WorldSpaceScannerPos;
+            float4 _ForwardDirection;
+
             float _ScanWidth;
 			float _LeadSharp;
+            float _ScanArc;
+            
 			float4 _LeadColor;
 			float4 _MidColor;
 			float4 _TrailColor;
@@ -75,53 +80,27 @@ Shader "Hidden/TestImageEffect"
                 //Transform to world space
                 float4 worldPos = mul (_ViewToWorld, float4 (viewPos, 1));
 
-                float dist = distance (_WorldSpaceScannerPos, worldPos);
+                float4 direction = normalize(worldPos - _WorldSpaceScannerPos);
+                float angle = abs(dot(_ForwardDirection, direction) - 1) * 90;
+
                 half4 scannerCol = half4(0, 0, 0, 0);
 
-                if (dist < _Distance && dist > _Distance - _ScanWidth && depth < 1)
-				{
-					float diff = 1 - (_Distance - dist) / (_ScanWidth);
-					half4 edge = lerp(_MidColor, _LeadColor, pow(diff, _LeadSharp));
-					scannerCol = lerp(_TrailColor, edge, diff) + horizBars(i.uv) * _HBarColor;
-					scannerCol *= diff;
-				}
-            
-                // if(distance (_WorldSpaceScannerPos, worldPos) < _Distance)
-                //     return 1;
+                if(angle < _ScanArc * 0.5)
+                {   
+                    float dist = distance (_WorldSpaceScannerPos, worldPos);
 
-                //Fill a sphere around the origin
+                    if (dist < _Distance && dist > _Distance - _ScanWidth && depth < 1)
+				    {
+				    	float diff = 1 - (_Distance - dist) / (_ScanWidth);
+				    	half4 edge = lerp(_MidColor, _LeadColor, pow(diff, _LeadSharp));
+				    	scannerCol = lerp(_TrailColor, edge, diff) + horizBars(i.uv) * _HBarColor;
+				    	scannerCol *= diff;
+				    }
+                }
+
                 return col + scannerCol;
             }
-
-            // struct v2f
-            // {
-            //     float2 uv : TEXCOORD0;
-            //     float4 vertex : SV_POSITION;
-            //     float4 worldSpacePos : TEXCOORD1;
-            // };
-
-            // v2f vert (appdata v)
-            // {
-            //     v2f o;
-            //     o.vertex = UnityObjectToClipPos(v.vertex);
-            //     o.uv = v.uv;
-            //     o.worldSpacePos = mul(unity_ObjectToWorld, v.vertex);
-            //     return o;
-            // }
-
-            // sampler2D _MainTex;
-            // float _Distance;
-
-            // fixed4 frag (v2f i) : SV_Target
-            // {
-            //     fixed4 col = tex2D(_MainTex, i.uv);
-            //     // just invert the colors
-            //     float dist = distance(i.worldSpacePos,float4(0,0,0,1));
-            //     if(dist < _Distance)
-            //         return 1;
-            //     col.rgb = col.rgb;
-            //     return col;
-            // }
+            
             ENDCG
         }
     }
