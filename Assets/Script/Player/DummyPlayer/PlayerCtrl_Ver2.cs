@@ -847,7 +847,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetBool("IsGrab", false);
                     animator.SetBool("IsLedge", false);
                     footIK.EnableFeetIk();
-                    handIK.ActiveHandIK(false);
+                    handIK.DisableHandIK();
                     GameManager.Instance.stateManager.Visible(false);
 
                     if (transform.parent == null)
@@ -912,12 +912,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
                     }
                     transform.parent = null;
-                    handIK.ActiveHandIK(false);
+                    handIK.DisableHandIK();
                 }
                 break;
             case PlayerState.HangRagdoll:
                 {
-                    handIK.ActiveHandIK(false);
+                    handIK.DisableHandIK();
                     ragdoll.ActiveRightHandFixRagdoll();
                 }
                 break;
@@ -939,7 +939,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.LedgeUp:
                 {
-                    handIK.ActiveHandIK(false);
+                    handIK.DisableHandIK();
                 }
                 break;
             case PlayerState.ClimbingJump:
@@ -976,7 +976,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         }
                     }
 
-                    handIK.ActiveHandIK(false);
+                    handIK.DisableHandIK();
                     animator.SetBool("IsGrab", false);
                     animator.SetTrigger("ClimbingJump");
                 }

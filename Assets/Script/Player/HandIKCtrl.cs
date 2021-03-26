@@ -202,8 +202,8 @@ public class HandIKCtrl : MonoBehaviour
         }
 
         LedgeIKPosDetection();
-        enableLeftHandIk = true;
-        enableRightHandIk = true;
+        //enableLeftHandIk = true;
+        //enableRightHandIk = true;
         if (ledgeIK)
         {
             if (ledgeDetection == true)
@@ -243,15 +243,24 @@ public class HandIKCtrl : MonoBehaviour
     public void ActiveHandIK(bool result)
     {
         enableHandIK = result;
-        if(result == false)
+        if (result == false)
         {
             ledgeIK = result;
             ledgeDetection = result;
             leftHandPos = Vector3.zero;
             rightHandPos = Vector3.zero;
-            leftHandPointObjet.position = Vector3.zero;
-            rightHandPointObject.position = Vector3.zero;
         }
+    }
+
+    public void DisableHandIK()
+    {
+        enableHandIK = false;
+        enableLeftHandIk = false;
+        enableRightHandIk = false;
+        ledgeIK = false;
+        ledgeDetection = false;
+        leftHandPos = Vector3.zero;
+        rightHandPos = Vector3.zero;
     }
 
     private void OnAnimatorIK(int layerIndex)
@@ -286,8 +295,8 @@ public class HandIKCtrl : MonoBehaviour
         leftHandPointObjet.SetParent(llHit.transform);
         leftHandPointObjet.position = llHit.point - transform.TransformDirection(hangLedgeOffset);
 
-        if (rightHandPointObject == null)
-            rightHandPointObject = CreatePointObject("RightHandPoint");
+        if (nextRightHandPointObject == null)
+            nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
         nextRightHandPointObject.SetParent(lrHit.transform);
         nextRightHandPointObject.position = lrHit.point - transform.TransformDirection(hangLedgeOffset);
     }
@@ -295,18 +304,26 @@ public class HandIKCtrl : MonoBehaviour
     private void UpdateLeftHandPos()
     {
         //leftHandPos = nextLeftHandPos;
+        enableLeftHandIk = true;
+        if (leftHandPointObjet == null)
+            leftHandPointObjet = CreatePointObject("LeftHandPoint");
         leftHandPointObjet.SetParent(nextLeftHandPointObject.parent);
         leftHandPointObjet.position = nextLeftHandPointObject.position;
     }
 
     private void RightTrace()
     {
+        enableRightHandIk = true;
         climbingMove = true;
         ledgeDetection = false;
         //rightHandPos = rrHit.point - transform.TransformDirection(hangLedgeOffset);
         //nextLeftHandPos = rlHit.point - transform.TransformDirection(hangLedgeOffset);
+        if (rightHandPointObject == null)
+            rightHandPointObject = CreatePointObject("RightHandPoint");
         rightHandPointObject.SetParent(rrHit.transform);
         rightHandPointObject.position = rrHit.point - transform.TransformDirection(hangLedgeOffset);
+        if (nextLeftHandPointObject == null)
+            nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
         nextLeftHandPointObject.SetParent(rlHit.transform);
         nextLeftHandPointObject.position = rlHit.point - transform.TransformDirection(hangLedgeOffset);
     }
@@ -314,6 +331,8 @@ public class HandIKCtrl : MonoBehaviour
     private void UpdateRightHandPos()
     {
         //rightHandPos = nextRightHandPos;
+        if (rightHandPointObject == null)
+            rightHandPointObject = CreatePointObject("RightHandPoint");
         rightHandPointObject.SetParent(nextRightHandPointObject.parent);
         rightHandPointObject.position = nextRightHandPointObject.position;
     }
@@ -534,8 +553,12 @@ public class HandIKCtrl : MonoBehaviour
         {
             //leftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
             //nextRightHandPos = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            if (leftHandPointObjet == null)
+                leftHandPointObjet = CreatePointObject("LeftHandPoint");
             leftHandPointObjet.SetParent(upLeftHit.transform);
             leftHandPointObjet.position = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            if (nextRightHandPointObject == null)
+                nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
             nextRightHandPointObject.SetParent(upRightHit.transform);
             nextRightHandPointObject.position = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
@@ -543,8 +566,12 @@ public class HandIKCtrl : MonoBehaviour
         {
             //rightHandPos = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
             //nextLeftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            if (rightHandPointObject == null)
+                rightHandPointObject = CreatePointObject("RightHandPoint");
             rightHandPointObject.SetParent(upRightHit.transform);
             rightHandPointObject.position = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            if (nextLeftHandPointObject == null)
+                nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
             nextLeftHandPointObject.SetParent(upLeftHit.transform);
             nextLeftHandPointObject.position = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
@@ -557,8 +584,12 @@ public class HandIKCtrl : MonoBehaviour
         {
             //nextLeftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
             //nextRightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            if (nextLeftHandPointObject == null)
+                nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
             nextLeftHandPointObject.SetParent(downLeftHit.transform);
             nextLeftHandPointObject.position = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            if (nextRightHandPointObject == null)
+                nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
             nextRightHandPointObject.SetParent(downRightHit.transform);
             nextRightHandPointObject.position = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
@@ -566,8 +597,12 @@ public class HandIKCtrl : MonoBehaviour
         {
             //nextRightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
             //nextLeftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            if (nextRightHandPointObject == null)
+                nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
             nextRightHandPointObject.SetParent(downRightHit.transform);
             nextRightHandPointObject.position = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            if (nextLeftHandPointObject == null)
+                nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
             nextLeftHandPointObject.SetParent(downLeftHit.transform);
             nextLeftHandPointObject.position = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
         }

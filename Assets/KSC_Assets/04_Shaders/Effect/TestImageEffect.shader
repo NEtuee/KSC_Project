@@ -79,8 +79,11 @@ Shader "Hidden/TestImageEffect"
                 float3 viewPos = (i.viewDir.xyz / i.viewDir.w) * depth;
                 //Transform to world space
                 float4 worldPos = mul (_ViewToWorld, float4 (viewPos, 1));
-
+                worldPos.y = 0;
+                _WorldSpaceScannerPos.y = 0;
                 float4 direction = normalize(worldPos - _WorldSpaceScannerPos);
+                direction.y = 0;
+                _ForwardDirection.y = 0;
                 float angle = abs(dot(_ForwardDirection, direction) - 1) * 90;
 
                 half4 scannerCol = half4(0, 0, 0, 0);
