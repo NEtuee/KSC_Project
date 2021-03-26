@@ -2,22 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EMPShield : MonoBehaviour
+public class EMPShield : Scanable
 {
     public GameObject destroyEffect;
     public bool isOver =false;
     public bool isCore = false;
     [SerializeField]private float hp = 100f;
+    public Color scanColor;
     private float shakeTime = 0.0f;
     private Vector3 originalPosition;
 
     private Renderer renderer;
     private Collider collider;
+
+    private Material mat;
     // Start is called before the first frame update
     void Start()
     {
         renderer = GetComponent<Renderer>();
         collider = GetComponent<Collider>();
+        mat = renderer.material;
     }
 
     // Update is called once per frame
@@ -96,5 +100,10 @@ public class EMPShield : MonoBehaviour
             isOver = true;
             //Destroy(gameObject);
         }
+    }
+
+    public override void Scanned()
+    {
+        mat.SetColor("_BaseColor", scanColor);
     }
 }

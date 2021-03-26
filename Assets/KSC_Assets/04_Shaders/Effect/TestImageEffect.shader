@@ -84,6 +84,7 @@ Shader "Hidden/TestImageEffect"
                 float4 direction = normalize(worldPos - _WorldSpaceScannerPos);
                 direction.y = 0;
                 _ForwardDirection.y = 0;
+                _ForwardDirection = normalize(_ForwardDirection);
                 float angle = abs(dot(_ForwardDirection, direction) - 1) * 90;
 
                 half4 scannerCol = half4(0, 0, 0, 0);

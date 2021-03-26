@@ -10,7 +10,8 @@ public class ScanCamTest : MonoBehaviour
     public float arc = 30f;
     public float scanSpeed = 80f;
 
-    private float _range = 0f;
+    [SerializeField] private float maxRange = 1000.0f;
+    [SerializeField]private float _range = 0f;
 
     void Update()
     {
@@ -19,10 +20,15 @@ public class ScanCamTest : MonoBehaviour
             _range = 0f;
             scanMat.SetFloat("_ScanArc",arc);
             scanMat.SetVector("_WorldSpaceScannerPos", scanStart.position);
-            scanMat.SetVector("_ForwardDirection", forward.forward);
+            Vector3 forwardDir = forward.forward;
+            forwardDir.y = 0.0f;
+            scanMat.SetVector("_ForwardDirection", forwardDir);
         }
 
-        _range += scanSpeed * Time.deltaTime;
-        scanMat.SetFloat("_Distance", _range);
+        if (_range < maxRange)
+        {
+            _range += scanSpeed * Time.deltaTime;
+            scanMat.SetFloat("_Distance", _range);
+        }
     }
 }
