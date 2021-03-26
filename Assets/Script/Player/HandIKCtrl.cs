@@ -114,7 +114,9 @@ public class HandIKCtrl : MonoBehaviour
         nextLeftHandPointObject = new GameObject("NextLeftHandPoint").transform;
         nextRightHandPointObject = new GameObject("NextRightHandPoint").transform;
         leftHandPointObjet.SetParent(this.transform);
+        leftHandPointObjet.position = Vector3.zero;
         rightHandPointObject.SetParent(this.transform);
+        rightHandPointObject.position = Vector3.zero;
         nextRightHandPointObject.SetParent(this.transform);
         nextLeftHandPointObject.SetParent(this.transform);
     }
@@ -278,8 +280,14 @@ public class HandIKCtrl : MonoBehaviour
         ledgeDetection = false;
         //leftHandPos = llHit.point - transform.TransformDirection(hangLedgeOffset);
         //nextRightHandPos = lrHit.point - transform.TransformDirection(hangLedgeOffset);
+
+        if (leftHandPointObjet == null)
+            leftHandPointObjet = CreatePointObject("LeftHandPoint");
         leftHandPointObjet.SetParent(llHit.transform);
         leftHandPointObjet.position = llHit.point - transform.TransformDirection(hangLedgeOffset);
+
+        if (rightHandPointObject == null)
+            rightHandPointObject = CreatePointObject("RightHandPoint");
         nextRightHandPointObject.SetParent(lrHit.transform);
         nextRightHandPointObject.position = lrHit.point - transform.TransformDirection(hangLedgeOffset);
     }
@@ -563,6 +571,11 @@ public class HandIKCtrl : MonoBehaviour
             nextLeftHandPointObject.SetParent(downLeftHit.transform);
             nextLeftHandPointObject.position = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
+    }
+
+    private Transform CreatePointObject(string name)
+    {
+        return new GameObject(name).transform;
     }
 
     public void EnableLeftTrace() { leftTrace = true; }
