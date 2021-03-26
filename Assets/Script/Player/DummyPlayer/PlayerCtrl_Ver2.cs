@@ -124,6 +124,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Animator gunAnim;
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
+    [SerializeField] private ParticleSystem layserParticle;
 
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
@@ -1458,7 +1459,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             RaycastHit hit;
             if(Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward,out hit,100f))
             {
-                line.Active(launchPos.position, hit.point,0.1f, 0.1f, 0.15f);
+                //line.Active(launchPos.position, hit.point,0.1f, 0.1f, 0.15f);
+                layserParticle.Play();
                 EMPShield shield;
                 if(hit.collider.TryGetComponent<EMPShield>(out shield))
                 {
@@ -1467,7 +1469,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             }
             else
             {
-                line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f,0.1f, 0.1f, 0.15f);
+                //line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f,0.1f, 0.1f, 0.15f);
+                layserParticle.Play();
             }
         }
     }
@@ -1479,7 +1482,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             RaycastHit hit;
             if (Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward, out hit, 100f))
             {
-                line.Active(launchPos.position, hit.point, 0.1f, 0.1f, 0.15f * loadCount);
+                //line.Active(launchPos.position, hit.point, 0.1f, 0.1f, 0.15f * loadCount);
+                layserParticle.Play();
                 EMPShield shield;
                 bool destroy;
                 if (hit.collider.TryGetComponent<EMPShield>(out shield))
@@ -1493,7 +1497,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             }
             else
             {
-                line.Active(launchPos.position, mainCameraTrasform.position + mainCameraTrasform.forward * 100f, 0.1f, 0.1f, 0.15f * loadCount);
+                //line.Active(launchPos.position, mainCameraTrasform.position + mainCameraTrasform.forward * 100f, 0.1f, 0.1f, 0.15f * loadCount);
+                layserParticle.Play();
             }
         }
         this.loadCount.Value = 1;
