@@ -10,6 +10,8 @@ public class DroneScaner : MonoBehaviour
     public float arc = 30f;
     public float scanSpeed = 80f;
 
+    private Vector3 scanStartPosition;
+
     [SerializeField] private bool scaning = false;
     [SerializeField] private float maxRange = 1000.0f;
     [SerializeField] private float _range = 0f;
@@ -18,6 +20,7 @@ public class DroneScaner : MonoBehaviour
     [SerializeField] private List<string> scanableTags = new List<string>();
     [SerializeField] private List<Scanable> scanableObjects = new List<Scanable>();
 
+    private RaycastHit hit;
     private void Start()
     {
         foreach(string tag in scanableTags)
@@ -41,6 +44,7 @@ public class DroneScaner : MonoBehaviour
             scaning = true;
             _range = 0f;
             scanMat.SetFloat("_ScanArc", arc);
+            scanStartPosition = scanStart.position;
             scanMat.SetVector("_WorldSpaceScannerPos", scanStart.position);
             scanForward = forward.forward;
             scanForward.y = 0.0f;
@@ -53,10 +57,19 @@ public class DroneScaner : MonoBehaviour
             _range += scanSpeed * Time.deltaTime;
             scanMat.SetFloat("_Distance", _range);
 
-            for(int i = 0; i< scanableObjects.Count; i++)
-            {
+            if (_range > maxRange)
+                scaning = false;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (scaning == true)
+        {
+            for (int i = 0; i < scanableObjects.Count;)
+            { 
                 Vector3 scanObjPosition = scanableObjects[i].transform.position;
-                Vector3 startPosition = scanStart.position;
+                Vector3 startPosition = scanStartPosition;
                 scanObjPosition.y = startPosition.y = 0.0f;
 
                 //Vector3 forwardDir = forward.forward;
@@ -65,15 +78,21 @@ public class DroneScaner : MonoBehaviour
 
                 if (Mathf.Acos(Vector3.Dot(scanForward, (scanObjPosition - startPosition).normalized)) * Mathf.Rad2Deg < arc)
                 {
-                    if((scanObjPosition - startPosition).magnitude <=_range)
+                    if ((scanObjPosition - startPosition).magnitude <= _range)
                     {
-                        scanableObjects[i].Scanned();
+                        Physics.Raycast(scanStartPosition, scanableObjects[i].transform.position - scanStartPosition, out hit, maxRange);
+
+                        if (hit.collider.gameObject == scanableObjects[i].gameObject)
+                        {
+                            scanableObjects[i].Scanned();
+                            scanableObjects.Remove(scanableObjects[i]);
+                            continue;
+                        }
                     }
                 }
+             
+                i++;
             }
-
-            if (_range > maxRange)
-                scaning = false;
         }
     }
 }
