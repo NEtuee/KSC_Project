@@ -10,6 +10,7 @@ public class HandIKCtrl : MonoBehaviour
 
     private Transform leftHandTr, rightHandTr;
 
+    [SerializeField] private bool notUseHandIK;
     [SerializeField] private bool enableHandIK;
     [SerializeField] private bool enableLeftHandIk;
     [SerializeField] private bool enableRightHandIk;
@@ -37,6 +38,11 @@ public class HandIKCtrl : MonoBehaviour
     [SerializeField] private Transform UR;
     [SerializeField] private Transform DL;
     [SerializeField] private Transform DR;
+    [SerializeField] private Transform ULR;
+    [SerializeField] private Transform ULL;
+    [SerializeField] private Transform URR;
+    [SerializeField] private Transform URL;
+
     [SerializeField] private GameObject maker;
 
     [Header("LedgeIK")]
@@ -75,7 +81,8 @@ public class HandIKCtrl : MonoBehaviour
     [SerializeField] private AnimationCurve upClimbingRightHandCurve;
     [SerializeField] private AnimationCurve downClimbingLeftHandCurve;
     [SerializeField] private AnimationCurve downClimbingRightHandCurve;
-
+    [SerializeField] private AnimationCurve upDiagonalClimbingFirstHandCurve;
+    [SerializeField] private AnimationCurve upDiagonalClimbingSecondHandCurve;
 
 
     [SerializeField] private bool leftSide;
@@ -93,6 +100,10 @@ public class HandIKCtrl : MonoBehaviour
     private RaycastHit upRightHit;
     private RaycastHit downLeftHit;
     private RaycastHit downRightHit;
+    private RaycastHit upLeft_LeftHit;
+    private RaycastHit upLeft_RightHit;
+    private RaycastHit upRight_LeftHit;
+    private RaycastHit upRight_RightHit;
     [SerializeField] private bool ll_detect;
     [SerializeField] private bool lr_detect;
     [SerializeField] private bool rl_detect;
@@ -126,6 +137,11 @@ public class HandIKCtrl : MonoBehaviour
     {
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.6f)), transform.TransformDirection(new Vector3(-0.5f, -1.0f, 0.0f)), Color.green);
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.6f)), transform.TransformDirection(new Vector3(0.5f, -1.0f, 0.0f)), Color.green);
+
+        if(notUseHandIK == true)
+        {
+            return;
+        }
 
         if (enableHandIK == false)
         {
@@ -190,12 +206,26 @@ public class HandIKCtrl : MonoBehaviour
                 leftWeight = downClimbingLeftHandCurve.Evaluate(normalizedTime);
                 rightWeight = downClimbingRightHandCurve.Evaluate(normalizedTime);
             }
-
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Climbing.Climbing_UpLeft"))
+            {
+                leftWeight = upDiagonalClimbingFirstHandCurve.Evaluate(normalizedTime);
+                rightWeight = upDiagonalClimbingSecondHandCurve.Evaluate(normalizedTime);
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Climbing.Climbing_UpRight"))
+            {
+                leftWeight = upDiagonalClimbingSecondHandCurve.Evaluate(normalizedTime);
+                rightWeight = upDiagonalClimbingFirstHandCurve.Evaluate(normalizedTime);
+            }
         }
     }
 
     private void FixedUpdate()
     {
+        if (notUseHandIK == true)
+        {
+            return;
+        }
+
         if (enableHandIK == false)
         {
             return;
@@ -331,6 +361,7 @@ public class HandIKCtrl : MonoBehaviour
     private void UpdateRightHandPos()
     {
         //rightHandPos = nextRightHandPos;
+        enableRightHandIk = true;
         if (rightHandPointObject == null)
             rightHandPointObject = CreatePointObject("RightHandPoint");
         rightHandPointObject.SetParent(nextRightHandPointObject.parent);
@@ -344,21 +375,21 @@ public class HandIKCtrl : MonoBehaviour
     }
     
 
-    public void Maker(bool left)
+    public void Maker(int left)
     {
         RaycastHit hit;
-        if (left)
+        if (left == 1)
         {
-            if (Physics.Raycast(UL.position, transform.forward, out hit, 0.5f, climbingLayer))
+            if (Physics.Raycast(ULL.position, transform.forward, out hit, 1.5f, climbingLayer))
                 Instantiate(maker, hit.point, Quaternion.identity);
-            if (Physics.Raycast(UR.position, transform.forward, out hit, 0.5f, climbingLayer))
+            if (Physics.Raycast(ULR.position, transform.forward, out hit, 1.5f, climbingLayer))
                 Instantiate(maker, hit.point, Quaternion.identity);
         }
         else
         {
-            if (Physics.Raycast(DR.position, transform.forward, out hit, 0.5f, climbingLayer))
+            if (Physics.Raycast(URR.position, transform.forward, out hit, 1.5f, climbingLayer))
                 Instantiate(maker, hit.point, Quaternion.identity);
-            if (Physics.Raycast(DL.position, transform.forward, out hit, 0.5f, climbingLayer))
+            if (Physics.Raycast(URL.position, transform.forward, out hit, 1.5f, climbingLayer))
                 Instantiate(maker, hit.point, Quaternion.identity);
         }
     }
@@ -544,6 +575,36 @@ public class HandIKCtrl : MonoBehaviour
         if(detect == true)
             dir = transform.forward;
         Physics.SphereCast(start, insideSurfaceRadius, dir, out rlHit, 1.5f, climbingLayer);
+
+        //////////////////////////UPLeftAndRight///////////////////////////////////////////////////
+        start = ULL.position;
+        dir = transform.forward;
+        detect = Physics.SphereCast(start, outsideSurfaceRadius, dir, out upLeft_LeftHit, 1.5f, climbingLayer);
+        if (detect == false)
+        {
+            dir = Quaternion.AngleAxis(outSideRotateDetectionAngle, transform.up) * dir;
+            Physics.SphereCast(start, outsideSurfaceRadius, dir, out upLeft_LeftHit, 1.5f, climbingLayer);
+        }
+
+        start = ULR.position;
+        if (detect == true)
+            dir = transform.forward;
+        Physics.SphereCast(start, insideSurfaceRadius, dir, out upLeft_RightHit, 1.5f, climbingLayer);
+
+        start = URR.position;
+        dir = transform.forward;
+        detect = Physics.SphereCast(start, outsideSurfaceRadius, dir, out upRight_RightHit, 1.5f, climbingLayer);
+        if (detect == false)
+        {
+            dir = Quaternion.AngleAxis(-outSideRotateDetectionAngle, transform.up) * dir;
+            Physics.SphereCast(start, outsideSurfaceRadius, dir, out upRight_RightHit, 1.5f, climbingLayer);
+        }
+
+        start = URL.position;
+        if (detect == true)
+            dir = transform.forward;
+        Physics.SphereCast(start, insideSurfaceRadius, dir, out upRight_LeftHit, 1.5f, climbingLayer);
+
     }
 
     private void TraceUp(int left)
@@ -553,6 +614,7 @@ public class HandIKCtrl : MonoBehaviour
         {
             //leftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
             //nextRightHandPos = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            enableLeftHandIk = true;
             if (leftHandPointObjet == null)
                 leftHandPointObjet = CreatePointObject("LeftHandPoint");
             leftHandPointObjet.SetParent(upLeftHit.transform);
@@ -566,6 +628,7 @@ public class HandIKCtrl : MonoBehaviour
         {
             //rightHandPos = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
             //nextLeftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            enableRightHandIk = true;
             if (rightHandPointObject == null)
                 rightHandPointObject = CreatePointObject("RightHandPoint");
             rightHandPointObject.SetParent(upRightHit.transform);
@@ -584,10 +647,12 @@ public class HandIKCtrl : MonoBehaviour
         {
             //nextLeftHandPos = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
             //nextRightHandPos = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            enableLeftHandIk = true;
             if (nextLeftHandPointObject == null)
                 nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
             nextLeftHandPointObject.SetParent(downLeftHit.transform);
             nextLeftHandPointObject.position = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            enableRightHandIk = true;
             if (nextRightHandPointObject == null)
                 nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
             nextRightHandPointObject.SetParent(downRightHit.transform);
@@ -606,6 +671,34 @@ public class HandIKCtrl : MonoBehaviour
             nextLeftHandPointObject.SetParent(downLeftHit.transform);
             nextLeftHandPointObject.position = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
+    }
+
+    private void TraceUpLeft()
+    {
+        climbingMove = true;
+        enableLeftHandIk = true;
+        if (leftHandPointObjet == null)
+            leftHandPointObjet = CreatePointObject("LeftHandPoint");
+        leftHandPointObjet.SetParent(upLeft_LeftHit.transform);
+        leftHandPointObjet.position = upLeft_LeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+        if (nextRightHandPointObject == null)
+            nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
+        nextRightHandPointObject.SetParent(upLeft_RightHit.transform);
+        nextRightHandPointObject.position = upLeft_RightHit.point - transform.TransformDirection(upClimbingIKOffset);
+    }
+
+    private void TraceUpRight()
+    {
+        climbingMove = true;
+        enableRightHandIk = true;
+        if (rightHandPointObject == null)
+            rightHandPointObject = CreatePointObject("LeftHandPoint");
+        rightHandPointObject.SetParent(upRight_RightHit.transform);
+        rightHandPointObject.position = upRight_RightHit.point - transform.TransformDirection(upClimbingIKOffset);
+        if (nextLeftHandPointObject == null)
+            nextLeftHandPointObject = CreatePointObject("NextRightHandPoint");
+        nextLeftHandPointObject.SetParent(upRight_LeftHit.transform);
+        nextLeftHandPointObject.position = upRight_LeftHit.point - transform.TransformDirection(upClimbingIKOffset);
     }
 
     private Transform CreatePointObject(string name)

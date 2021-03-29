@@ -5,9 +5,9 @@ using UnityEngine;
 public class EMPShield : Scanable
 {
     public GameObject destroyEffect;
-    public bool isOver =false;
+    public bool isOver = false;
     public bool isCore = false;
-    [SerializeField]private float hp = 100f;
+    [SerializeField] private float hp = 100f;
     public Color scanColor;
     private float shakeTime = 0.0f;
     private Vector3 originalPosition;
@@ -16,7 +16,10 @@ public class EMPShield : Scanable
     private Collider collider;
 
     private Material mat;
-    // Start is called before the first frame update
+
+    [SerializeField] private bool visibleCheck;
+    [SerializeField] private string currentRenderCamera;
+
     void Start()
     {
         renderer = GetComponent<Renderer>();
@@ -27,7 +30,6 @@ public class EMPShield : Scanable
     // Update is called once per frame
     void Update()
     {
-
         if (shakeTime > 0.0f)
         {
             transform.position = (Vector3)Random.insideUnitCircle * 0.2f + originalPosition;
@@ -37,6 +39,8 @@ public class EMPShield : Scanable
                 transform.localPosition = originalPosition;
             }
         }
+
+        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -105,5 +109,54 @@ public class EMPShield : Scanable
     public override void Scanned()
     {
         mat.SetColor("_BaseColor", scanColor);
+    }
+
+    //private void OnBecameVisible()
+    //{
+    //    //if (visibleCheck == false)
+    //    //    return;
+
+    //    //Debug.Log("visibe");
+
+    //    visible = true;
+    //}
+
+    //private void OnBecameInvisible()
+    //{
+    //    //if (visibleCheck == false)
+    //    //    return;
+    //    //        Debug.Log("Invisible");
+    //    //#if UNITY_EDITOR
+    //    //        if (Camera.current != null)
+    //    //        {
+    //    //            if (Camera.current.name == "SceneCamera")
+    //    //                return;
+    //    //        }
+    //    //#endif
+
+    //    visible = false;
+    //}
+
+    private void OnWillRenderObject()
+    {
+        //if(Camera.current != null)
+        //{
+        //    visible = false;
+        //    currentRenderCamera = Camera.current.name;
+        //    if (Camera.current.name == "Preview Camera")
+        //    {
+        //        visible = true;
+        //    }
+        //}
+        //else
+        //{
+        //    currentRenderCamera = "null";
+        //    visible = true;
+        //}
+    }
+
+    public bool GetIsVisible()
+    {
+        return visible;
     }
 }
