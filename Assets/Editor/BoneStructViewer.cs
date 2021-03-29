@@ -128,6 +128,8 @@ public class BoneStructViewer : EditorWindow
 
         EditorGUILayout.EndHorizontal();
 
+        
+
         DrawStructure("X Foward",new Vector2(1f,0.5f), new Vector2(5,130),objectRotation,ViewType.XAxis);
         // DrawStructure("Y Foward", new Vector2(5 + position.width * .33f,130),ViewType.YAxis);
         // DrawStructure("Z Foward", new Vector2(5 + position.width * .66f,130),ViewType.ZAxis);
