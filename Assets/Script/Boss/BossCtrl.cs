@@ -16,7 +16,9 @@ public class BossCtrl : MonoBehaviour
         LookPatrol,
         GoToPatrol,
         Patrol,
-        Dead
+        Dead,
+        Cannon,
+        Breath
     }
 
     private NavMeshAgent agent;
@@ -46,6 +48,18 @@ public class BossCtrl : MonoBehaviour
     [SerializeField] private float rushSpeed = 10.0f;
     [SerializeField] private float groggyTime = 6.0f;
     private int wallLayer;
+
+    [Header("Cannon")]
+    [SerializeField] private CannonShot cannon;
+    [SerializeField] private int shotNum = 8;
+    [SerializeField] private int shotCount = 0;
+    [SerializeField] private float shotInterval = 1.0f;
+    [SerializeField] private int cannonPatternCount = 0;
+
+    [Header("Breath")]
+    [SerializeField] private ParticleSystem breathParticle;
+    [SerializeField] private float breathTime = 3.0f;
+    [SerializeField] private int breathPatternCount = 0;
 
     private Vector3 targetDir;
     private Animator anim;
@@ -130,7 +144,21 @@ public class BossCtrl : MonoBehaviour
                         elapsedTime += Time.deltaTime;
                         if (elapsedTime >= turnTime && Quaternion.Angle(transform.rotation, targetRot) < 5.0f)
                         {
-                            ChangeState(BossState.Rush);
+                            if(breathPatternCount != 2)
+                            {
+                                ChangeState(BossState.Breath);
+                            }
+                            else
+                            {
+                                if(cannonPatternCount != 1)
+                                {
+                                    ChangeState(BossState.Cannon);
+                                }
+                                else
+                                {
+                                    ChangeState(BossState.Rush);
+                                }
+                            }
                         }
                     }
                 }
@@ -212,6 +240,34 @@ public class BossCtrl : MonoBehaviour
                         {
                             currentPointIndex = 0;
                         }
+                    }
+                }
+                break;
+            case BossState.Cannon:
+                {
+                    elapsedTime += Time.deltaTime;
+                    if(elapsedTime >= shotInterval)
+                    {
+                        cannon.Shot();
+                        shotCount++;
+                        elapsedTime = 0.0f;
+                    }
+
+                    if(shotCount == shotNum)
+                    {
+                        shotCount = 0;
+                        cannonPatternCount++;
+                        ChangeState(BossState.Turn);
+                    }
+                }
+                break;
+            case BossState.Breath:
+                {
+                    elapsedTime += Time.deltaTime;
+                    if(elapsedTime >= breathTime)
+                    {
+                        breathPatternCount++;
+                        ChangeState(BossState.Turn);
                     }
                 }
                 break;
@@ -346,6 +402,8 @@ public class BossCtrl : MonoBehaviour
                 break;
             case BossState.Rush:
                 {
+                    breathPatternCount = 0;
+                    cannonPatternCount = 0;
                     anim.SetTrigger("Rush");
                 }
                 break;
@@ -357,6 +415,17 @@ public class BossCtrl : MonoBehaviour
             case BossState.GetUp:
                 {
                     anim.SetTrigger("Return");
+                }
+                break;
+            case BossState.Cannon:
+                {
+                    anim.SetTrigger("Wait");
+                }
+                break;
+            case BossState.Breath:
+                {
+                    anim.SetTrigger("Wait");
+                    breathParticle.Play();
                 }
                 break;
         }

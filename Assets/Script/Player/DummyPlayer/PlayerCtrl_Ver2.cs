@@ -124,6 +124,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Animator gunAnim;
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
+    [SerializeField] private ParticleSystem layserParticle;
 
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
@@ -699,10 +700,26 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     if (currentVerticalValue > 0.0f)
                     {
-                        if (UpDetection() == true)
+                        if(currentHorizontalValue == 0.0f)
                         {
-                            animator.SetTrigger("UpClimbing");
-                            isClimbingMove = true;
+                            if (UpDetection() == true)
+                            {
+                                animator.SetTrigger("UpClimbing");
+                                isClimbingMove = true;
+                            }
+                        }
+                        else
+                        {
+                            if(currentHorizontalValue > 0.0f)
+                            {
+                                animator.SetTrigger("UpRightClimbing");
+                                isClimbingMove = true;
+                            }
+                            else
+                            {
+                                animator.SetTrigger("UpLeftClimbing");
+                                isClimbingMove = true;
+                            }
                         }
                     }
                     else
@@ -965,7 +982,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                     else
                     {
-                        climbingJumpDirection = ClimbingJumpDirection.Up;
                         if (inputHorizontal >= 0.5f)
                         {
                             climbingJumpDirection = ClimbingJumpDirection.Right;
@@ -973,6 +989,27 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         else if (inputHorizontal <= -0.5f)
                         {
                             climbingJumpDirection = ClimbingJumpDirection.Left;
+                        }
+                        else
+                        {
+
+                            Vector3 backVector = -transform.forward;
+                            backVector.y = 0f;
+                            transform.rotation = Quaternion.LookRotation(backVector);
+
+                            moveDir = transform.forward;
+                            moveDir.Normalize();
+                            currentSpeed = runSpeed;
+                            moveDir *= currentSpeed;
+                            currentJumpPower = jumpPower;
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+
+                            animator.SetBool("IsGrab", false);
+
+                            Jump();
+                            ChangeState(PlayerState.Jump);
+
+                            return;
                         }
                     }
 
@@ -1458,7 +1495,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             RaycastHit hit;
             if(Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward,out hit,100f))
             {
-                line.Active(launchPos.position, hit.point,0.1f, 0.1f, 0.15f);
+                //line.Active(launchPos.position, hit.point,0.1f, 0.1f, 0.15f);
+                layserParticle.Play();
                 EMPShield shield;
                 if(hit.collider.TryGetComponent<EMPShield>(out shield))
                 {
@@ -1467,7 +1505,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             }
             else
             {
-                line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f,0.1f, 0.1f, 0.15f);
+                //line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f,0.1f, 0.1f, 0.15f);
+                layserParticle.Play();
             }
         }
     }
@@ -1479,7 +1518,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             RaycastHit hit;
             if (Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward, out hit, 100f))
             {
-                line.Active(launchPos.position, hit.point, 0.1f, 0.1f, 0.15f * loadCount);
+                //line.Active(launchPos.position, hit.point, 0.1f, 0.1f, 0.15f * loadCount);
+                layserParticle.Play();
                 EMPShield shield;
                 bool destroy;
                 if (hit.collider.TryGetComponent<EMPShield>(out shield))
@@ -1493,7 +1533,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             }
             else
             {
-                line.Active(launchPos.position, mainCameraTrasform.position + mainCameraTrasform.forward * 100f, 0.1f, 0.1f, 0.15f * loadCount);
+                //line.Active(launchPos.position, mainCameraTrasform.position + mainCameraTrasform.forward * 100f, 0.1f, 0.1f, 0.15f * loadCount);
+                layserParticle.Play();
             }
         }
         this.loadCount.Value = 1;

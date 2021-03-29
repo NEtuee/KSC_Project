@@ -24,6 +24,10 @@ public class CannonShot : MonoBehaviour
     private void Start()
     {
         _explosion = GetComponent<ExplosionTest>();
+        if(target == null)
+        {
+            target = GameManager.Instance.player.transform;
+        }
     }
 
     public bool CanShot(Transform t)
@@ -63,6 +67,18 @@ public class CannonShot : MonoBehaviour
         var obj = Instantiate(cannonBall,transform.position,Quaternion.identity).GetComponent<CannonBall>();
         obj.explosionParticle = explosion;
         obj.Shot(transform.position,target.position,cannonRandomness);
+
+        //_explosion.Exlposion(root.transform.position);
+    }
+
+    public void Shot()
+    {
+        if (!_canShot)
+            return;
+
+ 
+        var obj = Instantiate(cannonBall, transform.position, Quaternion.identity).GetComponent<CannonBall>();
+        obj.Shot(transform.position, target.position, cannonRandomness);
 
         //_explosion.Exlposion(root.transform.position);
     }
