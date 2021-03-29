@@ -84,6 +84,7 @@ public class DroneScaner : MonoBehaviour
 
                         if (hit.collider.gameObject == scanableObjects[i].gameObject)
                         {
+                            Debug.Log("?");
                             scanableObjects[i].Scanned();
                             scanableObjects.Remove(scanableObjects[i]);
                             continue;
