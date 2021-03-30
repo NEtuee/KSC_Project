@@ -24,9 +24,6 @@ public class BrokenMedusa_AI : Scanable
     public float scanYLimit = 10f;
     public float lookDistance = 20f;
     public float frontMoveSpeed = 5f;
-    public float minimumTargetDistance = 20f;
-
-    public Transform test;
 
     public GraphAnimator graphAnimator;
     public BossScan scanner;
@@ -48,6 +45,7 @@ public class BrokenMedusa_AI : Scanable
 
     private Transform _target;
 
+    private Vector3 _centerPosition;
     private Vector3 _moveLine;
     private Vector3 _perpendicularPoint;
     private Vector3 _searchDirection;
@@ -59,7 +57,11 @@ public class BrokenMedusa_AI : Scanable
     public void Start()
     {
         _target = GameManager.Instance.player.transform;
+        _centerPosition = transform.position;
         graphAnimator.Play("UpDown",body);
+
+        _timeCounter.InitTimer("FrontWalk");
+        _timeCounter.InitTimer("FrontWalk_Init");
     }
 
     public void Update()
@@ -95,6 +97,8 @@ public class BrokenMedusa_AI : Scanable
             {
                 ChangeState(State.SearchIdle);
             }
+
+            FrontMoveProgress();
         }
         else if(currentState == State.LockOnMove)
         {
@@ -109,6 +113,8 @@ public class BrokenMedusa_AI : Scanable
                 ChangeState(State.SearchIdle);
             }
 
+            FrontMoveProgress();
+
             // if(_targetDistance >= minimumTargetDistance)
             // {
             //     ChangeState(State.LockOnFrontWalk);
@@ -117,10 +123,6 @@ public class BrokenMedusa_AI : Scanable
         else if(currentState == State.LockOnFrontWalk)
         {
             TargetFrontMove();
-            if(_targetDistance <= minimumTargetDistance)
-            {
-                ChangeState(State.LockOnMove);
-            }
         }
         else if(currentState == State.Scanned)
         {
@@ -151,6 +153,7 @@ public class BrokenMedusa_AI : Scanable
         else if(currentState == State.SearchIdle)
         {
             _timeCounter.IncreaseTimer("SearchIdle",1f,out bool limit);
+            CenterMove();
             if(limit)
             {
                 ChangeState(State.SearchScan);
@@ -158,8 +161,8 @@ public class BrokenMedusa_AI : Scanable
         }
         else if(currentState == State.SearchRotate)
         {
-            HeadTurn(false,true);
-            BodyRotateForHead();
+            BodyTurn(false);
+            //BodyRotateForHead();
 
             var angle = Vector3.Angle(_searchDirection,head.forward);
             if(angle >= 90f)
@@ -237,6 +240,23 @@ public class BrokenMedusa_AI : Scanable
          && IsOnGrounded())
         {
             ChangeState(State.Scanned);
+        }
+    }
+
+    public void FrontMoveProgress()
+    {
+        _timeCounter.IncreaseTimer("FrontWalk_Init",3f,out bool limit);
+        if(limit)
+        {
+            TargetFrontMove();
+            var timelimit = 1.3f;
+            timelimit = _targetDistance >= 20f ? 4f : timelimit;
+            _timeCounter.IncreaseTimer("FrontWalk",timelimit,out limit);
+            if(limit)
+            {
+                _timeCounter.InitTimer("FrontWalk");
+                _timeCounter.InitTimer("FrontWalk_Init");
+            }
         }
     }
 
@@ -335,8 +355,19 @@ public class BrokenMedusa_AI : Scanable
 
     public void TargetFrontMove()
     {
-        var dir = (_target.position - transform.position).normalized;
-        if(_pointDistance >= 1f)
+        var dir = (_target.position - transform.position);
+        dir = Vector3.ProjectOnPlane(dir,Vector3.up).normalized;
+        if(_targetDistance >= 2f)
+        {
+            Move(dir, frontMoveSpeed);
+        }
+    }
+
+    public void CenterMove()
+    {
+        var dir = (_centerPosition - transform.position).normalized;
+        var centerDist = Vector3.Distance(_centerPosition,transform.position);
+        if(centerDist >= 1f)
         {
             Move(dir, frontMoveSpeed);
         }
@@ -344,8 +375,6 @@ public class BrokenMedusa_AI : Scanable
 
     public void LineMove()
     {
-        test.position = _perpendicularPoint;
-
         if(_pointDistance >= 1f)
         {
             Move(_moveLine, (_pointDistance * 4f) * _direction);
@@ -451,9 +480,9 @@ public class BrokenMedusa_AI : Scanable
 
     public void BodyRotateForHead()
     {
-        var angle = Vector3.Angle(head.forward, transform.forward);
-
-        if(angle > headRotationLock)
+        //var angle = Vector3.Angle(transform.forward, head.forward);
+        var angle = Vector3.SignedAngle(head.forward,transform.forward,head.up);
+        if(MathEx.abs(angle) > headRotationLock)
         {
             BodyTurn(Vector3.SignedAngle(head.forward,transform.forward,head.up) < 0);//_direction < 0);
         }
