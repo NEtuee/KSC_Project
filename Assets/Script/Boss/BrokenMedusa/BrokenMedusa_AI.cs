@@ -229,6 +229,11 @@ public class BrokenMedusa_AI : Scanable
         }
     }
 
+    public void Hit()
+    {
+        graphAnimator.Play("Hit",body);
+    }
+
     public void Dead()
     {
         ChangeState(State.Dead);
@@ -245,11 +250,11 @@ public class BrokenMedusa_AI : Scanable
 
     public void FrontMoveProgress()
     {
-        _timeCounter.IncreaseTimer("FrontWalk_Init",3f,out bool limit);
+        _timeCounter.IncreaseTimer("FrontWalk_Init",4f,out bool limit);
         if(limit)
         {
             TargetFrontMove();
-            var timelimit = 1.3f;
+            var timelimit = 1.2f;
             timelimit = _targetDistance >= 20f ? 4f : timelimit;
             _timeCounter.IncreaseTimer("FrontWalk",timelimit,out limit);
             if(limit)
