@@ -28,7 +28,7 @@ public class ExplosionTest : MonoBehaviour
                 PlayerRagdoll ragdoll = coll[i].GetComponent<PlayerRagdoll>();
                 if(ragdoll != null)
                 {
-                    ragdoll.ExplosionRagdoll(20.0f, coll[i].transform.position - transform.position);
+                    ragdoll.ExplosionRagdoll(10.0f, coll[i].transform.position - transform.position);
                 }
             }
         }
