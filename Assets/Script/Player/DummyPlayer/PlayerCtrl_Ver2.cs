@@ -1695,4 +1695,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
     #endregion
+
+    private void OnGUI()
+    {
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 20;
+        style.normal.textColor = Color.white;
+
+        GUI.Label(new Rect(10f, 100f, 100, 20), "State : " + state.ToString(),style);
+    }
 }
