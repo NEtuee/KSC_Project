@@ -177,6 +177,11 @@ public class GameManager : MonoBehaviour
         return player.gameObject;
     }
 
+    public Vector3 GetPlayerPosition()
+    {
+        return player.transform.position;
+    }
+
     public void SetPlayer(PlayerCtrl player)
     {
         this.player = player;
