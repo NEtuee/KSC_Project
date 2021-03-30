@@ -9,22 +9,19 @@ public class EMPShield : Scanable
     public GameObject destroyEffect;
     public bool isOver = false;
     public bool isCore = false;
+    [SerializeField] private bool debug;
     [SerializeField] private float hp = 100f;
     public Color scanColor;
     private float shakeTime = 0.0f;
     private Vector3 originalPosition;
 
-    private Renderer renderer;
     private Collider collider;
 
     private Material mat;
 
-    [SerializeField] private bool visibleCheck;
-    [SerializeField] private string currentRenderCamera;
-
     void Start()
     {
-        renderer = GetComponent<Renderer>();
+        base.Start();
         collider = GetComponent<Collider>();
         mat = renderer.material;
     }
@@ -42,7 +39,50 @@ public class EMPShield : Scanable
             }
         }
 
-        
+        if(debug)
+        {
+            //Vector3 cameraPosition = GameManager.Instance.GetPlayerPosition();
+            Vector3 cameraPosition = ((PlayerCtrl_Ver2)GameManager.Instance.player).GetPlayerCenter();
+
+            Bounds bound = renderer.bounds;
+            Vector3 extents = bound.extents;
+            Vector3 point;
+            point = bound.center + new Vector3(-extents.x, -extents.y, extents.z);
+            Debug.DrawLine(cameraPosition, point, Color.red);
+            //2
+            point = bound.center + new Vector3(extents.x, -extents.y, extents.z);
+            Debug.DrawLine(cameraPosition, point, Color.red);
+
+            //3
+            point = bound.center + new Vector3(-extents.x, -extents.y, -extents.z);
+            Debug.DrawLine(cameraPosition, point, Color.red);
+
+            //4
+            point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
+            Debug.DrawLine(cameraPosition, point, Color.red);
+
+            //5
+            point = bound.center + new Vector3(-extents.x, extents.y, extents.z);
+            Debug.DrawLine(cameraPosition, point, Color.red);
+
+            //6
+            point = bound.center + new Vector3(extents.x, extents.y, extents.z);
+            Debug.DrawLine(cameraPosition, point, Color.red);
+
+            //7
+            point = bound.center + new Vector3(-extents.x, extents.y, -extents.z);
+            Debug.DrawLine(cameraPosition, point, Color.red);
+
+            //8
+            point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
+            Debug.DrawLine(cameraPosition, point, Color.red);
+
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        CheckVisible();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -166,5 +206,139 @@ public class EMPShield : Scanable
     public bool GetIsVisible()
     {
         return visible;
+    }
+
+    public bool CheckInCamera()
+    {
+        Vector3 cameraPosition = ((PlayerCtrl_Ver2)GameManager.Instance.player).GetPlayerCenter();
+        Bounds bound = renderer.bounds;
+        Vector3 extents = bound.extents;
+
+        Vector3 point;
+
+        //1
+        point = bound.center + new Vector3(-extents.x, -extents.y, extents.z);
+        if(Physics.Linecast(point,cameraPosition, visibleCastLayer) == false)
+        {
+            return true;
+        }
+        //2
+        point = bound.center + new Vector3(extents.x, -extents.y, extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            return true;
+        }
+        //3
+        point = bound.center + new Vector3(-extents.x, -extents.y, -extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            return true;
+        }
+        //4
+        point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            return true;
+        }
+        //5
+        point = bound.center + new Vector3(-extents.x, extents.y, extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            return true;
+        }
+        //6
+        point = bound.center + new Vector3(extents.x, extents.y, extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            return true;
+        }
+        //7
+        point = bound.center + new Vector3(-extents.x, extents.y, -extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            return true;
+        }
+        //8
+        point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void CheckVisible()
+    {
+        //Vector3 cameraPosition = GameManager.Instance.cameraManger.GetCameraPosition();
+        //Vector3 cameraPosition = GameManager.Instance.GetPlayerPosition();
+        Vector3 cameraPosition = ((PlayerCtrl_Ver2)GameManager.Instance.player).GetPlayerCenter();
+        Bounds bound = renderer.bounds;
+        Vector3 extents = bound.extents;
+
+        RaycastHit hit;
+
+        Vector3 point;
+
+        //1
+        point = bound.center + new Vector3(-extents.x, -extents.y, extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            visible = true;
+            return;
+        }
+
+        //2
+        point = bound.center + new Vector3(extents.x, -extents.y, extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            visible = true;
+            return;
+        }
+        //3
+        point = bound.center + new Vector3(-extents.x, -extents.y, -extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            visible = true;
+            return;
+        }
+        //4
+        point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            visible = true;
+            return;
+        }
+        //5
+        point = bound.center + new Vector3(-extents.x, extents.y, extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            visible = true;
+            return;
+        }
+        //6
+        point = bound.center + new Vector3(extents.x, extents.y, extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            visible = true;
+            return;
+        }
+        //7
+        point = bound.center + new Vector3(-extents.x, extents.y, -extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            visible = true;
+            return;
+        }
+        //8
+        point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
+        if (Physics.Linecast(point, cameraPosition, visibleCastLayer) == false)
+        {
+            visible = true;
+            return;
+        }
+
+        visible = false;
+        return;
     }
 }

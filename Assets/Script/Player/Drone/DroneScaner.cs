@@ -80,15 +80,22 @@ public class DroneScaner : MonoBehaviour
                 {
                     if ((scanObjPosition - startPosition).magnitude <= _range)
                     {
-                        Physics.Raycast(scanStartPosition, scanableObjects[i].transform.position - scanStartPosition, out hit, maxRange);
+                        //Physics.Raycast(scanStartPosition, scanableObjects[i].transform.position - scanStartPosition, out hit, maxRange);
 
-                        if (hit.collider.gameObject == scanableObjects[i].gameObject)
+                        //if (hit.collider.gameObject == scanableObjects[i].gameObject)
+                        //{
+                        //    scanableObjects[i].Scanned();
+                        //    scanableObjects.Remove(scanableObjects[i]);
+                        //    continue;
+                        //}
+
+                        if (scanableObjects[i].CheckInAngle(scanStartPosition))
                         {
-                            Debug.Log("?");
                             scanableObjects[i].Scanned();
                             scanableObjects.Remove(scanableObjects[i]);
                             continue;
                         }
+
                     }
                 }
              

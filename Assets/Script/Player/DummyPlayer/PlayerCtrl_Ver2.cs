@@ -729,10 +729,26 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                     else
                     {
-                        if (DownDetection() == true)
+                        if (currentHorizontalValue == 0.0f)
                         {
-                            animator.SetTrigger("DownClimbing");
-                            isClimbingMove = true;
+                            if (DownDetection() == true)
+                            {
+                                animator.SetTrigger("DownClimbing");
+                                isClimbingMove = true;
+                            }
+                        }
+                        else
+                        {
+                            if (currentHorizontalValue > 0.0f)
+                            {
+                                animator.SetTrigger("DownRightClimbing");
+                                isClimbingMove = true;
+                            }
+                            else
+                            {
+                                animator.SetTrigger("DownLeftClimbing");
+                                isClimbingMove = true;
+                            }
                         }
                     }
                 }
@@ -841,6 +857,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Aiming:
                 {
+                    ActiveAim(false);
                     GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
                 }
                 break;
@@ -921,6 +938,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                     currentSpeed = 0.0f;
                     animator.SetFloat("Speed", 0.0f);
+                    horizonWeight = 0.0f;
+                    animator.SetFloat("HorizonWeight", horizonWeight);
                 }
                 break;
             case PlayerState.Ragdoll:
@@ -1011,6 +1030,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                             animator.SetBool("IsGrab", false);
 
+                            handIK.DisableHandIK();
                             Jump();
                             ChangeState(PlayerState.Jump);
 
@@ -1247,15 +1267,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (InputManager.Instance.GetAction(KeybindingActions.EMPAim))
         {
             ChangeState(PlayerState.Aiming);
-            loadCount.Value = 1;
-            if (rigCtrl != null)
-            {
-                rigCtrl.Active();
-                gunObject.SetActive(true);
-                animator.SetLayerWeight(2, 1.0f);
-                animator.SetLayerWeight(3, 1.0f);
-            }
-            gunAnim.SetTrigger("Next");
+            ActiveAim(true);
             return true;
         }
 
@@ -1267,15 +1279,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (InputManager.Instance.GetAction(KeybindingActions.EMPAimRelease))
         {
             ChangeState(PlayerState.Default);
-            loadCount.Value = 0;
-            if (rigCtrl != null)
-            {
-                rigCtrl.Disable();
-                gunObject.SetActive(false);
-                animator.SetLayerWeight(2, 0.0f);
-                animator.SetLayerWeight(3, 0.0f);
-            }
-            gunAnim.SetTrigger("Off");
+            ActiveAim(false);
             return true;
         }
 
@@ -1460,6 +1464,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
     public void BackPrevState() { ChangeState(prevState); }
 
+    public Vector3 GetPlayerCenter() { return collider.bounds.center; }
+
     #endregion
 
     #region ╪бем
@@ -1545,6 +1551,34 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         this.loadCount.Value = 1;
     }
     #endregion
+
+    private void ActiveAim(bool active)
+    {
+        if(active == true)
+        {
+            loadCount.Value = 1;
+            if (rigCtrl != null)
+            {
+                rigCtrl.Active();
+                gunObject.SetActive(true);
+                animator.SetLayerWeight(2, 1.0f);
+                animator.SetLayerWeight(3, 1.0f);
+            }
+            gunAnim.SetTrigger("Next");
+        }
+        else
+        {
+            loadCount.Value = 0;
+            if (rigCtrl != null)
+            {
+                rigCtrl.Disable();
+                gunObject.SetActive(false);
+                animator.SetLayerWeight(2, 0.0f);
+                animator.SetLayerWeight(3, 0.0f);
+            }
+            gunAnim.SetTrigger("Off");
+        }
+    }
 
     private void UpdateGrab()
     {
