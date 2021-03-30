@@ -244,7 +244,7 @@ public class PlayerMovement : MonoBehaviour
 
         CheckGroundDistance();
 
-        if(groundDistance <= groundMinDistance)
+        if (groundDistance <= groundMinDistance)
         {
             if (groundAngle < invalidityAngle)
             {
@@ -257,7 +257,8 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    transform.SetParent(null);
+                    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
+                      transform.SetParent(null);
                 }
 
                 keepSpeed = false;
@@ -286,7 +287,7 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 isGrounded = false;
-                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll)
+                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll&& player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge&& player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
                 {
                     transform.SetParent(null);
                 }

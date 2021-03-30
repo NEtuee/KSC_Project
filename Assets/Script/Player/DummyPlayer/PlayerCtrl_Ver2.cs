@@ -438,6 +438,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.HangLedge:
                 {
+                    //UpdateGrab();
                 }
                 break;
             case PlayerState.Aiming:
@@ -620,6 +621,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         switch(state)
         {
             case PlayerState.Grab:
+                {
+                    UpdateGrab();
+                }
+                break;
             case PlayerState.HangLedge:
                 {
                     UpdateGrab();
@@ -1560,7 +1565,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             if (wallHit.collider.transform != transform.parent)
             {
-                transform.parent = wallHit.collider.transform;
+                transform.SetParent(wallHit.collider.transform);
             }
         }
         
