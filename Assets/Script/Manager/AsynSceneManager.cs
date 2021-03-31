@@ -5,25 +5,66 @@ using UnityEngine.SceneManagement;
 
 public class AsynSceneManager : MonoBehaviour
 {
-    public string unloadScene;
-    public string loadScene;
+    public delegate void del_SceneLoaded();
 
-    public GameObject wall;
-    private bool isOver = false;
+    public List<string> levels = new List<string>();
+    public int currentLevel = 0;
+
+    private string _currentScene;
+    private List<string> _unloadScenes = new List<string>();
+
+    private List<del_SceneLoaded> _afterLoadRegisterLine = new List<del_SceneLoaded>();
+    private List<del_SceneLoaded> _beforeLoadRegisterLine = new List<del_SceneLoaded>();
+    private bool _isLoaded = false;
+    private int _loadedScenes = 0;
     
-    void Start()
+    private del_SceneLoaded _beforeLoad = ()=>{};
+    private del_SceneLoaded _afterLoad = ()=>{};
+
+    public void Start()
     {
-        
+        LoadCurrentlevel();
     }
 
-    void Update()
+    public void LoadCurrentlevel()
     {
-        
+        _currentScene = levels[currentLevel];
+        RegisterProgress();
+        StartCoroutine(SceneLoadingProgress());
     }
 
-    IEnumerator UnloadSceneCoroutine()
+    public void LoadNextlevel()
     {
-        AsyncOperation operation = SceneManager.UnloadSceneAsync(unloadScene);
+        _currentScene = levels[(++currentLevel >= levels.Count ? 0 : currentLevel)];
+
+        StartCoroutine(SceneLoadingProgress());
+    }
+
+    IEnumerator SceneLoadingProgress()
+    {
+        _beforeLoad();
+
+        _loadedScenes = _unloadScenes.Count;
+
+        Debug.Log(_loadedScenes);
+        for(int i = 0; i < _unloadScenes.Count; ++i)
+        {
+            StartCoroutine("UnloadSceneCoroutine",_unloadScenes[i]);
+        }
+
+        while(_loadedScenes != 0)
+        {
+            yield return null;
+        }
+
+        _unloadScenes.Clear();
+
+        StartCoroutine(LoadSceneCoroutine());
+    }
+
+    IEnumerator UnloadSceneCoroutine(string scene)
+    {
+        AsyncOperation operation = SceneManager.UnloadSceneAsync(scene);
         operation.allowSceneActivation = false;
 
         while(operation.isDone == false)
@@ -32,15 +73,14 @@ public class AsynSceneManager : MonoBehaviour
         }
 
         operation.allowSceneActivation = true;
-
-        StartCoroutine(LoadSceneCoroutine());
+        --_loadedScenes;
     }
 
     IEnumerator LoadSceneCoroutine()
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(loadScene,LoadSceneMode.Additive);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(_currentScene,LoadSceneMode.Additive);
         operation.allowSceneActivation = false;
-
+        
         while (operation.isDone == false)
         {
             if (operation.progress >= 0.9f)
@@ -48,16 +88,36 @@ public class AsynSceneManager : MonoBehaviour
 
             yield return null;
         }
-        wall.SetActive(false);
+
+        _afterLoad();
+
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(_currentScene));
+        _unloadScenes.Add(_currentScene);
+
+        RegisterProgress();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void RegisterBeforeLoadOnStart(del_SceneLoaded func){_beforeLoadRegisterLine.Add(func);}
+    public void RegisterAfterLoadOnStart(del_SceneLoaded func){_afterLoadRegisterLine.Add(func);}
+
+    public void RegisterBeforeLoad(del_SceneLoaded func){_beforeLoad += func;}
+    public void RegisterAfterLoad(del_SceneLoaded func){_afterLoad += func;}
+    public void CancelBeforeLoad(del_SceneLoaded func){_beforeLoad -= func;}
+    public void CancelAfterLoad(del_SceneLoaded func){_afterLoad -= func;}
+
+    public void RegisterProgress()
     {
-        if (isOver == false)
+        foreach(var func in _afterLoadRegisterLine)
         {
-            isOver = true;
-            wall.SetActive(true);
-            StartCoroutine(UnloadSceneCoroutine());
+            _afterLoad += func;
         }
+        foreach(var func in _beforeLoadRegisterLine)
+        {
+            _beforeLoad += func;
+        }
+
+        _afterLoadRegisterLine.Clear();
+        _beforeLoadRegisterLine.Clear();
     }
+
 }
