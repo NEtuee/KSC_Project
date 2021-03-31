@@ -26,21 +26,29 @@ public class AsynSceneManager : MonoBehaviour
         LoadCurrentlevel();
     }
 
+    public void LoadLevel(int level)
+    {
+        currentLevel = level;
+        RegisterProgress();
+        StartCoroutine(SceneLoadingProgress(true));
+    }
+
     public void LoadCurrentlevel()
     {
         _currentScene = levels[currentLevel];
         RegisterProgress();
-        StartCoroutine(SceneLoadingProgress());
+        StartCoroutine(SceneLoadingProgress(true));
     }
 
     public void LoadNextlevel()
     {
-        _currentScene = levels[(++currentLevel >= levels.Count ? 0 : currentLevel)];
+        currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
+        _currentScene = levels[currentLevel];
 
-        StartCoroutine(SceneLoadingProgress());
+        StartCoroutine(SceneLoadingProgress(false));
     }
 
-    IEnumerator SceneLoadingProgress()
+    IEnumerator SceneLoadingProgress(bool setPos)
     {
         _beforeLoad();
 
@@ -49,7 +57,7 @@ public class AsynSceneManager : MonoBehaviour
         Debug.Log(_loadedScenes);
         for(int i = 0; i < _unloadScenes.Count; ++i)
         {
-            StartCoroutine("UnloadSceneCoroutine",_unloadScenes[i]);
+            StartCoroutine(UnloadSceneCoroutine(_unloadScenes[i]));
         }
 
         while(_loadedScenes != 0)
@@ -59,7 +67,7 @@ public class AsynSceneManager : MonoBehaviour
 
         _unloadScenes.Clear();
 
-        StartCoroutine(LoadSceneCoroutine());
+        StartCoroutine(LoadSceneCoroutine(setPos));
     }
 
     IEnumerator UnloadSceneCoroutine(string scene)
@@ -76,7 +84,7 @@ public class AsynSceneManager : MonoBehaviour
         --_loadedScenes;
     }
 
-    IEnumerator LoadSceneCoroutine()
+    IEnumerator LoadSceneCoroutine(bool setPos)
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync(_currentScene,LoadSceneMode.Additive);
         operation.allowSceneActivation = false;
@@ -95,6 +103,15 @@ public class AsynSceneManager : MonoBehaviour
         _unloadScenes.Add(_currentScene);
 
         RegisterProgress();
+
+        if(setPos)
+        {
+            var stage = GameObject.FindObjectOfType<StageManager>();
+            if(stage != null)
+            {
+                GameObject.FindObjectOfType<StageManager>().SetPlayerToPosition();
+            }
+        }
     }
 
     public void RegisterBeforeLoadOnStart(del_SceneLoaded func){_beforeLoadRegisterLine.Add(func);}

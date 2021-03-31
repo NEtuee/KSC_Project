@@ -17,6 +17,8 @@ public abstract class Scanable : MonoBehaviour
 
     public bool CheckInAngle(Vector3 scanPos)
     {
+        if(renderer == null)
+            return true;
         Vector3 cameraPosition = scanPos;
         Bounds bound = renderer.bounds;
         Vector3 extents = bound.extents;

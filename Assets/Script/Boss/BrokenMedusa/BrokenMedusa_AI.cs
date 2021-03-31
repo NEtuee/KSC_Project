@@ -62,10 +62,17 @@ public class BrokenMedusa_AI : Scanable
 
         _timeCounter.InitTimer("FrontWalk");
         _timeCounter.InitTimer("FrontWalk_Init");
+        _timeCounter.InitTimer("timer");
     }
 
     public void Update()
     {
+        _timeCounter.IncreaseTimer("timer",1f,out bool timeLimit);
+        if(!timeLimit)
+        {
+            return;
+        }
+
         UpdateDirection();
         UpdatePerpendicularPoint();
         Push(false);
@@ -308,6 +315,13 @@ public class BrokenMedusa_AI : Scanable
     {
         if(pushDistance >= _targetDistance && graphAnimator.IsPlaying("ShildAttack") == null)
         {
+            var dist = Vector3.Distance(transform.position, _target.position);
+            if(dist >= 6f)
+            {
+                UpdateMoveLine();
+                return;
+            }
+
             if(up)
             {
                 PushBackUp();
