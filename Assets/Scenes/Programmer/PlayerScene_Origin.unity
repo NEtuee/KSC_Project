@@ -5347,8 +5347,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.15, z: 0.64051664}
-  m_Center: {x: 0, y: 0, z: -0.045258343}
+  m_Size: {x: 0.4, y: 0.15, z: 0.9705037}
+  m_Center: {x: -2.7377536e-10, y: 0, z: 0.119734935}
 --- !u!1 &583741603
 GameObject:
   m_ObjectHideFlags: 0
@@ -11356,6 +11356,7 @@ MonoBehaviour:
   energy:
     value: 0
   updateMethod: 1
+  playerDebug: 1
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -11420,6 +11421,12 @@ MonoBehaviour:
   climbingLayer:
     serializedVersion: 2
     m_Bits: 64
+  ledgeAbleLayer:
+    serializedVersion: 2
+    m_Bits: 131072
+  adjustAbleLayer:
+    serializedVersion: 2
+    m_Bits: 131136
   dectionOffset: {x: 0, y: -1.2, z: 0.1}
   currentVerticalValue: 0
   currentHorizontalValue: 0
@@ -11435,6 +11442,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   moveDir: {x: 0, y: 0, z: 0}
   ledgeChecker: {fileID: 1021882846}
+  hangAbleEdgeDist: 3
   restoreValuePerSecond: 10
   costValue: 25
   chargeNecessryTime: 1
@@ -11527,6 +11535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaca3df7719879a4283e33e06dedb678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementDebug: 1
   velocity: {x: 0, y: 0, z: 0}
   speed: 0
   trueSpeed: 0
@@ -11539,7 +11548,7 @@ MonoBehaviour:
   groundSlopMinDistanc: 0.7
   groundLayer:
     serializedVersion: 2
-    m_Bits: 65728
+    m_Bits: 196800
   isGrounded: 0
   isJumping: 0
   jumpMinTime: 0.5
@@ -11760,6 +11769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626d0f969576a5144a38618173d63dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugHandIK: 1
   rightHand_Effetor: {x: 0, y: 0, z: 0}
   leftHand_Effetor: {x: 0, y: 0, z: 0}
   notUseHandIK: 0
@@ -11770,7 +11780,7 @@ MonoBehaviour:
   rightTrace: 0
   climbingLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 131136
   leftWeightMove: 0
   rightWeightMove: 0
   leftWeight: 1
@@ -11797,12 +11807,11 @@ MonoBehaviour:
   ledgeIK: 0
   climbingMove: 0
   ledgeDetection: 0
-  horizonOffeset: 0.5
-  centerDetectionOffset: 0.25
   leftHandPos: {x: 0, y: 0, z: 0}
   rightHandPos: {x: 0, y: 0, z: 0}
-  leftHandOffset: {x: 0, y: 0.05, z: 0.25}
-  rightHandOffset: {x: 0, y: 0.05, z: 0.25}
+  leftHandOffset: {x: 0, y: -0.1, z: 0.15}
+  rightHandOffset: {x: 0, y: -0.1, z: 0.15}
+  ledgeSphereUpOffset: 1.2
   normalizedTime: 0
   upSpeed: 16
   downSpeed: 16
@@ -16939,8 +16948,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.15, z: 0.6534599}
-  m_Center: {x: 0, y: 0, z: -0.051729977}
+  m_Size: {x: 0.4, y: 0.15, z: 1.0093461}
+  m_Center: {x: -3.0167052e-10, y: 0, z: 0.12621313}
 --- !u!1 &2132878866
 GameObject:
   m_ObjectHideFlags: 0

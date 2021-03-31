@@ -38,6 +38,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
 
     public UpdateMethod updateMethod;
+    public bool playerDebug;
 
     [Header("State")]
     [SerializeField] private bool isRun = false;
@@ -78,6 +79,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask detectionLayer;
     [SerializeField] private LayerMask climbingLayer;
+    [SerializeField] private LayerMask ledgeAbleLayer;
+    [SerializeField] private LayerMask adjustAbleLayer;
     [SerializeField] private Vector3 dectionOffset;
 
     [Header("Input Record")]
@@ -99,6 +102,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     [Header("Detection")]
     [SerializeField] private LedgeChecker ledgeChecker;
+
+    [Header("Edge")]
+    [SerializeField] private float hangAbleEdgeDist = 2f;
 
     [Header("EMP Lunacher")]
     [SerializeField]private float restoreValuePerSecond = 10f;
@@ -394,6 +400,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         moveDir = (Vector3.ProjectOnPlane(transform.forward, hit.normal)).normalized;
                     }
+
+                    if (movement.isGrounded == false)
+                    {
+                        ChangeState(PlayerState.Jump);
+                    }
                 }
                 break;
             case PlayerState.Jump:
@@ -421,11 +432,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 }
                 break;
             case PlayerState.Grab:
-                {
-                    if (isClimbingMove == true)
-                    {
-                        CheckLedge();
-                    }
+                {                
+                    CheckLedge();            
                 }
                 break;
             case PlayerState.HangRagdoll:
@@ -1189,15 +1197,21 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
             if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
             {
-                ChangeState(PlayerState.Grab);
-            
+                if (ledgeChecker.IsDetectedLedge() == false)
+                {
+                    ChangeState(PlayerState.Grab);
+                }
+                else
+                {
+                    ChangeState(PlayerState.Grab);
+                    ChangeState(PlayerState.HangLedge);
+                }
+
                 transform.rotation = Quaternion.LookRotation(-hit.normal);
                 transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
 
                 rigidbody.velocity = Vector3.zero;
-
                 prevSpeed = currentSpeed;
-
                 moveDir = Vector3.zero;
 
                 transform.SetParent(hit.collider.transform);
@@ -1218,6 +1232,35 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     transform.SetParent(hit.collider.transform);
                     movement.Attach();
                     moveDir = Vector3.zero;
+                    return true;
+                }
+            }
+
+            point1 = transform.position + transform.up*collider.height*0.5f - transform.forward;
+            if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 3f, ledgeAbleLayer))
+            {
+                RaycastHit ledgePointHit;
+                point1 = transform.position + transform.up * collider.height * 2;
+                if (Physics.SphereCast(point1, collider.radius * 2f, -transform.up, out ledgePointHit, collider.height * 2, adjustAbleLayer))
+                {
+                    if (Vector3.Distance(ledgePointHit.point, transform.position) > hangAbleEdgeDist)
+                    {
+                        return false;
+                    }
+
+                    transform.rotation = Quaternion.LookRotation(-hit.normal);
+                    transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
+
+                    ChangeState(PlayerState.Grab);
+                    ChangeState(PlayerState.HangLedge);
+
+                    rigidbody.velocity = Vector3.zero;
+                    prevSpeed = currentSpeed;
+                    moveDir = Vector3.zero;
+
+                    transform.SetParent(hit.collider.transform);
+                    movement.Attach();
+
                     return true;
                 }
             }
@@ -1501,8 +1544,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void LaunchLayser()
     {
-        if(line != null)
-        {
             RaycastHit hit;
             if(Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward,out hit,100f))
             {
@@ -1519,13 +1560,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 //line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f,0.1f, 0.1f, 0.15f);
                 layserParticle.Play();
             }
-        }
     }
 
     private void LaunchLayser(int loadCount)
     {
-        if (line != null)
-        {
+     
             RaycastHit hit;
             if (Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward, out hit, 100f))
             {
@@ -1547,7 +1586,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 //line.Active(launchPos.position, mainCameraTrasform.position + mainCameraTrasform.forward * 100f, 0.1f, 0.1f, 0.15f * loadCount);
                 layserParticle.Play();
             }
-        }
+ 
         this.loadCount.Value = 1;
     }
     #endregion
@@ -1584,12 +1623,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         Vector3 startPos = transform.position + transform.up * (collider.height * 0.5f) + (-transform.forward * 1f);
 
-        if (Physics.SphereCast(startPos, collider.radius, transform.forward, out wallHit, 3.0f, detectionLayer))
+        if (Physics.SphereCast(startPos, collider.radius, transform.forward, out wallHit, 3.0f, adjustAbleLayer))
         {
             float distToWall = (wallHit.point - (transform.position + transform.up * (collider.height * 0.5f))).magnitude;
             if (distToWall > 0.6f || distToWall < 0.35f)
             {
-                transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.35f;
+               transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.35f;
             }
 
             if (isClimbingMove == true)
@@ -1607,6 +1646,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void CheckLedge()
     {
+        if (isClimbingMove == false)
+            return;
+
         bool dectect = false;
         RaycastHit hit;
         Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
@@ -1639,14 +1681,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         RaycastHit upHit;
         RaycastHit forwardHit;
         Vector3 finalPosition;
-        if (Physics.SphereCast(start, collider.radius * 2f, -transform.up, out upHit, collider.height * 2, climbingLayer))
+        if (Physics.SphereCast(start, collider.radius * 2f, -transform.up, out upHit, collider.height * 2, adjustAbleLayer))
         {
-            if (Physics.Raycast(transform.position,transform.forward,out forwardHit,1.5f,climbingLayer))
+            finalPosition = upHit.point + (transform.up * dectionOffset.y);
+            if (Physics.Raycast(transform.position + transform.up * collider.height *0.5f ,transform.forward,out forwardHit,1.5f, adjustAbleLayer))
             {
-                finalPosition = upHit.point + (transform.up * dectionOffset.y);
-                finalPosition += forwardHit.normal * dectionOffset.z;
-                transform.position = finalPosition;
+                //finalPosition += forwardHit.point * dectionOffset.z;
             }
+            transform.position = finalPosition;
         }
     }
 
@@ -1693,15 +1735,30 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             Gizmos.DrawRay(start, -transform.up * collider.height * 2);
         }
+
+        start = transform.position + transform.up * collider.height * 2;
+        RaycastHit upHit;
+        RaycastHit forwardHit;
+        DebugCastDetection.Instance.DebugSphereCastDetection(start, collider.radius * 2f, -transform.up, collider.height * 2, ledgeAbleLayer,Color.white, Color.blue);
     }
     #endregion
 
     private void OnGUI()
     {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 20;
-        style.normal.textColor = Color.white;
+        if (playerDebug == true)
+        {
+            GUIStyle style = new GUIStyle();
+            style.fontSize = 20;
+            style.normal.textColor = Color.white;
 
-        GUI.Label(new Rect(10f, 100f, 100, 20), "State : " + state.ToString(),style);
+            GUI.Label(new Rect(10f, 100f, 100, 20), "State : " + state.ToString(), style);
+            GUI.Label(new Rect(10f, 120f, 100, 20), "PrevState : " + prevState.ToString(), style);
+            GUI.Label(new Rect(10f, 140f, 100, 20), "IsLedge : " + isLedge.ToString(), style);
+            GUI.Label(new Rect(10f, 160f, 100, 20), "IsClimbingMove : " + isClimbingMove.ToString(), style);
+            GUI.Label(new Rect(10f, 180f, 100, 20), "CurrentSpeed : " + currentSpeed.ToString(), style);
+            GUI.Label(new Rect(10f, 200f, 100, 20), "CurrentJumpPower : " + currentJumpPower.ToString(), style);
+            GUI.Label(new Rect(10f, 220f, 100, 20), "HorizonWeight : " + horizonWeight.ToString(), style);
+            GUI.Label(new Rect(10f, 240f, 100, 20), "ChargeTime : " + chargeTime.ToString(), style);
+        }
     }
 }

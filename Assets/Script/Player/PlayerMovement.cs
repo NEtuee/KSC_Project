@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public bool movementDebug;
     [SerializeField] private Vector3 velocity;
     [SerializeField] private float speed;
     [SerializeField] private float trueSpeed;
@@ -322,5 +323,19 @@ public class PlayerMovement : MonoBehaviour
     public float GetGroundAngle()
     {
         return groundAngle;
+    }
+
+    private void OnGUI()
+    {
+        if (movementDebug == true)
+        {
+            GUIStyle style = new GUIStyle();
+            style.fontSize = 20;
+            style.normal.textColor = Color.white;
+
+            GUI.Label(new Rect(10f, 260f, 100, 20), "IsGround : " + isGrounded.ToString(), style);
+            GUI.Label(new Rect(10f, 280f, 100, 20), "GroundAngle : " + groundAngle.ToString(), style);
+            GUI.Label(new Rect(10f, 300f, 100, 20), "IsKeepSpeed : " + keepSpeed.ToString(), style);
+        }
     }
 }
