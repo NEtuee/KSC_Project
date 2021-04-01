@@ -501,15 +501,15 @@ public class BossCtrl : MonoBehaviour
 
     private void OnGUI()
     {
-        if(debuging == true)
-        {
-            GUI.Box(new Rect(10, 200, 300, 100), "Boss");
-            //beActive = GUI.Toggle(new Rect(20, 40, 80, 20), beActive, "beActive");
-            GUI.Label(new Rect(20, 230, 40, 20), "State :"); 
-            GUI.Label(new Rect(60, 230, 40, 20), state.ToString());
+        //if(debuging == true)
+        //{
+        //    GUI.Box(new Rect(10, 200, 300, 100), "Boss");
+        //    //beActive = GUI.Toggle(new Rect(20, 40, 80, 20), beActive, "beActive");
+        //    GUI.Label(new Rect(20, 230, 40, 20), "State :"); 
+        //    GUI.Label(new Rect(60, 230, 40, 20), state.ToString());
 
 
-        }
+        //}
     }
 
     //private void OnCollisionStay(Collision collision)

@@ -22,6 +22,8 @@ public class PlayerCtrl_State : PlayerCtrl
         Nuckback
     }
 
+    public bool playerDebug;
+
     [Header("Movement Speed Value")]
     [SerializeField] private float walkSpeed = 15.0f;
     [SerializeField] private float runSpeed = 25.0f;
@@ -2303,4 +2305,5 @@ public class PlayerCtrl_State : PlayerCtrl
             yield return null;
         }
     }
+
 }
