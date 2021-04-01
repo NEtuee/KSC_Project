@@ -15,6 +15,7 @@ public class HandIKCtrl : MonoBehaviour
     [SerializeField] private bool enableHandIK;
     [SerializeField] private bool enableLeftHandIk;
     [SerializeField] private bool enableRightHandIk;
+    [SerializeField] private bool startLedgeIK;
 
     [SerializeField] private bool leftTrace;
     [SerializeField] private bool rightTrace;
@@ -291,7 +292,8 @@ public class HandIKCtrl : MonoBehaviour
         ledgeDetection = result;
         if(result == true)
         {
-            TraceLedge();
+            //TraceLedge();
+            startLedgeIK = true;
         }
     }
 
@@ -347,6 +349,7 @@ public class HandIKCtrl : MonoBehaviour
     {
         climbingMove = true;
         ledgeDetection = false;
+        startLedgeIK = false;
         //leftHandPos = llHit.point - transform.TransformDirection(hangLedgeOffset);
         //nextRightHandPos = lrHit.point - transform.TransformDirection(hangLedgeOffset);
 
@@ -376,6 +379,7 @@ public class HandIKCtrl : MonoBehaviour
         enableRightHandIk = true;
         climbingMove = true;
         ledgeDetection = false;
+        startLedgeIK = false;
         //rightHandPos = rrHit.point - transform.TransformDirection(hangLedgeOffset);
         //nextLeftHandPos = rlHit.point - transform.TransformDirection(hangLedgeOffset);
         if (rightHandPointObject == null)
@@ -414,7 +418,6 @@ public class HandIKCtrl : MonoBehaviour
             rightHandPointObject.SetParent(hit.transform);
            rightHandPointObject.position = hit.point - transform.TransformDirection(rightHandOffset);
         }
-
     }
 
     public void DisableIK()
@@ -448,7 +451,6 @@ public class HandIKCtrl : MonoBehaviour
     {
         DebugDetection();
 
-        Gizmos.color = Color.red;
         if(leftHandTr != null)
             Gizmos.DrawWireSphere(leftHandTr.position, sphereRadius);
         if (rightHandTr != null)
@@ -462,6 +464,18 @@ public class HandIKCtrl : MonoBehaviour
         bool isHit;
        
         /////////////////DetectLedgeIKPosition//////////////////////////////
+        if(startLedgeIK == true)
+        {
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -0.3f;
+            dir = transform.forward;
+            isHit = DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 0.3f;
+            dir = transform.forward;
+            isHit = DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+            return;
+        }
+
 
         if (ledgeIK == true)
         {
@@ -533,6 +547,26 @@ public class HandIKCtrl : MonoBehaviour
 
        
         /////////////////////////LdegeMoveDetect/////////////////////////////////////////////////////////////
+
+        if(startLedgeIK == true)
+        {
+            RaycastHit hit;
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -0.3f;
+            dir = transform.forward;
+            if (Physics.SphereCast(start, outSideLedgeRadius, dir, out hit, 1.5f, climbingLayer))
+            {
+                leftHandPointObjet.SetParent(hit.transform);
+                leftHandPointObjet.position = hit.point - transform.TransformDirection(hangLedgeOffset);
+            }
+
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 0.3f;
+            dir = transform.forward;
+            if (Physics.SphereCast(start, outSideLedgeRadius, dir, out hit, 1.5f, climbingLayer))
+            {
+                rightHandPointObject.SetParent(hit.transform);
+                rightHandPointObject.position = hit.point - transform.TransformDirection(hangLedgeOffset);
+            }
+        }
 
         if (ledgeIK== true)
         {
@@ -686,7 +720,8 @@ public class HandIKCtrl : MonoBehaviour
     private void TraceUp(int left)
     {
         climbingMove = true;
-        if(left == 1)
+        startLedgeIK = false;
+        if (left == 1)
         {
             //leftHandPos = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
             //nextRightHandPos = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
@@ -721,6 +756,7 @@ public class HandIKCtrl : MonoBehaviour
         climbingMove = true;
         enableLeftHandIk = true;
         enableLeftHandIk = true;
+        startLedgeIK = false;
         if (left == 1)
         {
             if (nextLeftHandPointObject == null)
@@ -749,6 +785,7 @@ public class HandIKCtrl : MonoBehaviour
     {
         climbingMove = true;
         enableLeftHandIk = true;
+        startLedgeIK = false;
         if (leftHandPointObjet == null)
             leftHandPointObjet = CreatePointObject("LeftHandPoint");
         leftHandPointObjet.SetParent(upLeft_LeftHit.transform);
@@ -763,6 +800,7 @@ public class HandIKCtrl : MonoBehaviour
     {
         climbingMove = true;
         enableRightHandIk = true;
+        startLedgeIK = false;
         if (rightHandPointObject == null)
             rightHandPointObject = CreatePointObject("LeftHandPoint");
         rightHandPointObject.SetParent(upRight_RightHit.transform);
@@ -778,6 +816,7 @@ public class HandIKCtrl : MonoBehaviour
         climbingMove = true;
         enableLeftHandIk = true;
         enableLeftHandIk = true;
+        startLedgeIK = false;
         if (nextLeftHandPointObject == null)
             nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
         nextLeftHandPointObject.SetParent(downLeft_LeftHit.transform);
@@ -794,6 +833,7 @@ public class HandIKCtrl : MonoBehaviour
         climbingMove = true;
         enableLeftHandIk = true;
         enableLeftHandIk = true;
+        startLedgeIK = false;
         if (nextRightHandPointObject == null)
             nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
         nextRightHandPointObject.SetParent(downRight_RightHit.transform);
@@ -832,6 +872,7 @@ public class HandIKCtrl : MonoBehaviour
             GUI.Label(new Rect(10f, 380f, 100, 20), "LeftWeight : " + leftWeight.ToString(), style); ;
             GUI.Label(new Rect(10f, 400f, 100, 20), "RightWeight : " + rightWeight.ToString(), style);
             GUI.Label(new Rect(10f, 420f, 100, 20), "LedgeMove : " + climbingMove.ToString(), style);
+            GUI.Label(new Rect(10f, 440f, 100, 20), "StartLedgeIK : " + startLedgeIK.ToString(), style);
         }
     }
 }
