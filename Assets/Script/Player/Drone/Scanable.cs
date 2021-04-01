@@ -5,7 +5,8 @@ using UnityEngine;
 public abstract class Scanable : MonoBehaviour
 {
     [SerializeField] protected LayerMask visibleCastLayer;
-    protected Renderer renderer;
+    [SerializeField]protected Renderer renderer;
+    protected Collider collider;
 
     public bool visible;
     public abstract void Scanned();
@@ -13,6 +14,7 @@ public abstract class Scanable : MonoBehaviour
     protected void Start()
     {
         renderer = GetComponent<Renderer>();
+        collider = GetComponent<Collider>();
     }
 
     public bool CheckInAngle(Vector3 scanPos)
@@ -20,7 +22,7 @@ public abstract class Scanable : MonoBehaviour
         if(renderer == null)
             return true;
         Vector3 cameraPosition = scanPos;
-        Bounds bound = renderer.bounds;
+        Bounds bound = collider.bounds;
         Vector3 extents = bound.extents;
 
         Vector3 point;
