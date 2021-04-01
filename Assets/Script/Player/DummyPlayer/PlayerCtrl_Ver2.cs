@@ -616,6 +616,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if (Time.time - climbingJumpStartTime >= keepClimbingJumpTime)
                     {
                         moveDir = moveDir.normalized * finalDir.magnitude;
+                        movement.Jump();
                         ChangeState(PlayerState.Jump);
                         if (climbingJumpDirection != ClimbingJumpDirection.Left && climbingJumpDirection != ClimbingJumpDirection.Right)
                             currentJumpPower = currentClimbingJumpPower;

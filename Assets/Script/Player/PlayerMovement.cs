@@ -116,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
         transform.SetParent(null);
     }
 
+
     private void Update()
     {
         if(groundAngle >= invalidityAngle)
@@ -259,7 +260,9 @@ public class PlayerMovement : MonoBehaviour
                 else
                 {
                     if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
-                      transform.SetParent(null);
+                    {
+                        transform.SetParent(null);
+                    }
                 }
 
                 keepSpeed = false;
@@ -288,7 +291,7 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 isGrounded = false;
-                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll&& player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge&& player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
+                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll&& player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge&& player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.ReadyClimbingJump && player.GetState() != PlayerCtrl_Ver2.PlayerState.ClimbingJump)
                 {
                     transform.SetParent(null);
                 }
