@@ -149,6 +149,7 @@ public class FMODSoundManager : MonoBehaviour
             comp.Preload = true;
             comp.DataCode = id;
             comp.gameObject.SetActive(active);
+            comp.transform.SetParent(this.transform);
 
             if(_cacheMap.ContainsKey(id))
             {

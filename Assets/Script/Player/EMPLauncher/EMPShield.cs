@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EMPShield : Scanable
 {
+    public UnityEvent whenDestroy;
     public GameObject destroyEffect;
     public bool isOver = false;
     public bool isCore = false;
@@ -102,6 +104,8 @@ public class EMPShield : Scanable
             collider.enabled = false;
             renderer.enabled = false;
             isOver = true;
+
+            whenDestroy.Invoke();
             //Destroy(gameObject);
         }
     }
@@ -117,6 +121,8 @@ public class EMPShield : Scanable
             collider.enabled = false;
             renderer.enabled = false;
             isOver = true;
+
+            whenDestroy.Invoke();
             //Destroy(gameObject);
         }
     }
@@ -142,6 +148,8 @@ public class EMPShield : Scanable
             collider.enabled = false;
             renderer.enabled = false;
             isOver = true;
+
+            whenDestroy.Invoke();
             //Destroy(gameObject);
         }
     }

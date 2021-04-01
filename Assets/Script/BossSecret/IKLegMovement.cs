@@ -74,21 +74,6 @@ public class IKLegMovement : MonoBehaviour
 
                 particlePool.Active(pos,Quaternion.LookRotation(new Vector3(0f,0f,1f),hit.normal));
 
-                Collider[] playerColl = Physics.OverlapSphere(pos, 3f,playerLayer);
-
-                if(playerColl.Length != 0)
-                {
-                    foreach(Collider curr in playerColl)
-                    {
-                        Debug.Log(curr.name);
-                        PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
-                        if(ragdoll != null)
-                        {
-                            ragdoll.ExplosionRagdoll(300.0f, pos, 10000.0f);
-                        }
-                    }
-                }
-
 
             }
         }
