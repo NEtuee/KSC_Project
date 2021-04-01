@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BrokenMedusa_AI : Scanable
+public class BrokenMedusa_AI : IKBossBase
 {
     public enum State
     {
@@ -17,47 +17,34 @@ public class BrokenMedusa_AI : Scanable
         Dead
     }
 
-    public float rotationSpeed = 180f;
-    public float groundCheckRadius = 5f;
     public float headRotationLock = 90f;
     public float pushDistance = 3f;
     public float scanYLimit = 10f;
     public float lookDistance = 20f;
-    public float frontMoveSpeed = 5f;
 
     public GraphAnimator graphAnimator;
     public BossScan scanner;
     public FloorControl floorControl;
 
-    public LayerMask groundLayer;
-    public LayerMask targetLayer;
+
     public Transform head;
     public Transform body;
     public Transform shildTransform;
     public Transform shildGraphic;
-    public Transform groundRayPoint;
-
-    public List<IKLegMovement> legs = new List<IKLegMovement>();
 
     public State currentState;
 
-    private TimeCounterEx _timeCounter = new TimeCounterEx();
-
-    private Transform _target;
-
-    private Vector3 _centerPosition;
     private Vector3 _moveLine;
     private Vector3 _perpendicularPoint;
     private Vector3 _searchDirection;
 
     private float _pointDistance;
-    private float _targetDistance;
     private float _direction;//1 = right, -1 = left
 
     public void Start()
     {
-        _target = GameManager.Instance.player.transform;
-        _centerPosition = transform.position;
+        Initialize();
+        
         graphAnimator.Play("UpDown",body);
 
         _timeCounter.InitTimer("FrontWalk");
@@ -372,26 +359,6 @@ public class BrokenMedusa_AI : Scanable
         }
     }
 
-    public void TargetFrontMove()
-    {
-        var dir = (_target.position - transform.position);
-        dir = Vector3.ProjectOnPlane(dir,Vector3.up).normalized;
-        if(_targetDistance >= 2f)
-        {
-            Move(dir, frontMoveSpeed);
-        }
-    }
-
-    public void CenterMove()
-    {
-        var dir = (_centerPosition - transform.position).normalized;
-        var centerDist = Vector3.Distance(_centerPosition,transform.position);
-        if(centerDist >= 1f)
-        {
-            Move(dir, frontMoveSpeed);
-        }
-    }
-
     public void LineMove()
     {
         if(_pointDistance >= 1f)
@@ -402,7 +369,7 @@ public class BrokenMedusa_AI : Scanable
 
     public bool LookTarget_Head()
     {
-        return HeadLook((_target.position - transform.position), true);
+        return HeadLook((_target.position - transform.position));
         //BodyLook((_target.position - transform.position));
     }
 
@@ -410,16 +377,8 @@ public class BrokenMedusa_AI : Scanable
     {
         var dir = Vector3.Cross(transform.transform.up,_moveLine).normalized;
 
-        HeadLook(dir, false);
+        HeadLook(dir);
         BodyLook(dir);
-    }
-
-    public void SetLegMovementSpeed(float speed)
-    {
-        foreach(var leg in legs)
-        {
-            leg.legSpeed = speed;
-        }
     }
 
     public void UpdatePerpendicularPoint()
@@ -446,21 +405,15 @@ public class BrokenMedusa_AI : Scanable
         _moveLine = Vector3.Cross(direction,Vector3.up);
     }
 
-    public void Move(Vector3 direction, float speed)
+    public override bool Move(Vector3 direction, float speed, float legSpeed = 4f)
     {
-        if(!ThereIsGround((direction * (groundCheckRadius * 0.5f)) * MathEx.normalize(speed),10f))
-        {
-            return;
-        }
-
-        SetLegMovementSpeed(4f + (MathEx.clampOverZero(MathEx.abs(speed) - 4f) * 0.4f));
-
-        transform.position += direction * speed * Time.deltaTime;
-
-        body.localRotation = body.localRotation * Quaternion.Euler(0f,0f,speed * Time.deltaTime * 10f);
+        if(base.Move(direction,speed,legSpeed))
+            body.localRotation = body.localRotation * Quaternion.Euler(0f,0f,speed * Time.deltaTime * 10f);
+        
+        return true;
     }
 
-    public bool HeadLook(Vector3 direction, bool bodyRotate)
+    public bool HeadLook(Vector3 direction)
     {
         var plane = Vector3.ProjectOnPlane(direction,head.up).normalized;
         var headAngle = Vector3.SignedAngle(head.forward,plane,head.up);
@@ -468,7 +421,7 @@ public class BrokenMedusa_AI : Scanable
         //head.RotateAround(head.position,head.up,headAngle);
         if(MathEx.abs(headAngle) >= 1f)
         {
-            HeadTurn(headAngle > 0,bodyRotate);
+            HeadTurn(headAngle > 0);
         }
         else
         {
@@ -492,9 +445,10 @@ public class BrokenMedusa_AI : Scanable
         }
     }
 
-    public void HeadTurn(bool isLeft, bool bodyRotate)
+    public void HeadTurn(bool isLeft)
     {
-        head.RotateAround(head.position,head.up,rotationSpeed * Time.deltaTime * (isLeft ? 1f : -1f));
+        Turn(isLeft,head);
+        //head.RotateAround(head.position,head.up,rotationSpeed * Time.deltaTime * (isLeft ? 1f : -1f));
     }
 
     public void BodyRotateForHead()
@@ -509,15 +463,7 @@ public class BrokenMedusa_AI : Scanable
 
     public void BodyTurn(bool isLeft)
     {
-        transform.RotateAround(transform.position,transform.up,rotationSpeed * Time.deltaTime * (isLeft ? 1f : -1f));
-    }
-
-    public bool ThereIsGround(Vector3 position, float dist)
-    {
-        Ray ray = new Ray();
-        ray.origin = groundRayPoint.position + position;
-        ray.direction = -transform.up;
-
-        return Physics.Raycast(ray,dist,groundLayer);
+        Turn(isLeft,transform);
+        //transform.RotateAround(transform.position,transform.up,rotationSpeed * Time.deltaTime * (isLeft ? 1f : -1f));
     }
 }
