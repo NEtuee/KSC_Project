@@ -15,7 +15,7 @@ public class MovementTest : MonoBehaviour
     {
         ray = new RayEx(new Ray(Vector3.zero,Vector3.down),5f,groundLayer);
     }
- 
+
     void Update ()
     {
         Debug.DrawLine(transform.position,transform.position + Vector3.down * ray.Distance,Color.red);

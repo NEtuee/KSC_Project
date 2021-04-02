@@ -10,6 +10,7 @@ public class BossHead : MonoBehaviour
     public AnimationCurve twistUpCurve;
 
     public float farDistance = 5f;
+    public float heightFactor = .3f;
 
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 
@@ -30,7 +31,7 @@ public class BossHead : MonoBehaviour
         {
             _timeCounter.InitTimer("loop");
         }
-        allParts[0].baseHeight = Mathf.Lerp(allParts[0].baseHeight,_targetHeight + (Mathf.Sin(time) * .7f),0.1f);
+        allParts[0].baseHeight = Mathf.Lerp(allParts[0].baseHeight,_targetHeight + (Mathf.Sin(time) * heightFactor),0.1f);
 
         for(int i = 1; i < allParts.Count; ++i)
         {
@@ -41,7 +42,7 @@ public class BossHead : MonoBehaviour
 
             if(dist >= farDistance)
             {
-                allParts[i].transform.position = one - direction * farDistance;
+                allParts[i].transform.position = Vector3.Lerp(two, one - direction * farDistance, 0.2f);
             }
 
             var angle = Vector3.SignedAngle(allParts[i].transform.forward,Vector3.ProjectOnPlane(direction,allParts[i].transform.up),allParts[i].transform.up);
