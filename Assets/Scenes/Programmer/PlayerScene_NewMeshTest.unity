@@ -800,6 +800,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe1b5234fc4b1474f881ec35140e9428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &112632218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112632216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a8618ac7146d748a811b3179878a0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levels:
+  - BrokenMedusa_main
+  - BossBaseScene
+  currentLevel: 0
 --- !u!114 &112632220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15111,7 +15127,7 @@ MonoBehaviour:
   rightTrace: 0
   climbingLayer:
     serializedVersion: 2
-    m_Bits: 131136
+    m_Bits: 133184
   leftWeightMove: 0
   rightWeightMove: 0
   leftWeight: 1
@@ -16249,16 +16265,19 @@ MonoBehaviour:
     m_Bits: 65728
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 2112
   climbingLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 2112
+  climbingPaintLayer:
+    serializedVersion: 2
+    m_Bits: 2048
   ledgeAbleLayer:
     serializedVersion: 2
     m_Bits: 131072
   adjustAbleLayer:
     serializedVersion: 2
-    m_Bits: 131136
+    m_Bits: 133184
   dectionOffset: {x: 0, y: -0.95, z: -0.35}
   currentVerticalValue: 0
   currentHorizontalValue: 0
@@ -17563,6 +17582,56 @@ PrefabInstance:
         type: 3}
       propertyPath: isAttentionCamera
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.data[0].name
+      value: Default
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.data[1].name
+      value: ExistParent
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.data[2].name
+      value: Grab
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.data[0].blendDuration
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.data[1].blendDuration
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.data[2].blendDuration
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.data[0].targetDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.data[1].targetDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: distanceBlendProfiles.Array.data[2].targetDistance
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3497379424530874560, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
         type: 3}

@@ -62,7 +62,11 @@ public class LoadingZone : MonoBehaviour
     public void AfterLoading()
     {
         GameManager.Instance.player.transform.SetParent(this.transform);
-        Camera.main.transform.SetParent(this.transform); 
+        Camera.main.transform.SetParent(this.transform);
+        GameManager.Instance.followTarget.transform.SetParent(this.transform);
+
+        GameManager.Instance.cameraManger.ZeroDamping();
+
         SceneManager.MoveGameObjectToScene(this.gameObject, SceneManager.GetActiveScene());
 
         var stage = GameObject.FindObjectOfType<StageManager>();
@@ -73,7 +77,11 @@ public class LoadingZone : MonoBehaviour
         
         GameManager.Instance.player.transform.SetParent(null);
         Camera.main.transform.SetParent(null);
-        
+        GameManager.Instance.followTarget.transform.SetParent(null);
+        GameManager.Instance.followTarget.SetForceRotation(Camera.main.transform.rotation.eulerAngles);
+
+        GameManager.Instance.cameraManger.RestoreDamping(0.1f);
+
         _isLoaded = true;
 
         StartCoroutine(Closeloading());

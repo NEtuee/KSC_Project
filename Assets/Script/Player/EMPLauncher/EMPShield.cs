@@ -1,17 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class EMPShield : Scanable
+public class EMPShield : Hitable
 {
-    public UnityEvent whenDestroy;
     public GameObject destroyEffect;
-    public bool isOver = false;
     public bool isCore = false;
     public bool isActive = false;
     [SerializeField] private bool debug;
-    [SerializeField] private float hp = 100f;
     public Color scanColor;
     private float shakeTime = 0.0f;
     private Vector3 originalPosition;
@@ -104,7 +100,7 @@ public class EMPShield : Scanable
         }
     }
 
-    public void Hit()
+    public override void Hit() 
     {
         if(isActive == false)
             StartCoroutine(ActiveEffect());
@@ -115,17 +111,13 @@ public class EMPShield : Scanable
         StartCoroutine(HitEffect());
         if (hp <= 0f)
         {
-            Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-            collider.enabled = false;
-            renderer.enabled = false;
-            isOver = true;
+            Destroy();
 
-            whenDestroy.Invoke();
             //Destroy(gameObject);
         }
     }
 
-    public void Hit(float damage)
+    public override void Hit(float damage)
     {
         if (isActive == false)
             StartCoroutine(ActiveEffect());
@@ -136,17 +128,13 @@ public class EMPShield : Scanable
         //shakeTime = 0.1f;
         if (hp <= 0f)
         {
-            Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-            collider.enabled = false;
-            renderer.enabled = false;
-            isOver = true;
+            Destroy();
 
-            whenDestroy.Invoke();
             //Destroy(gameObject);
         }
     }
 
-    public void Hit(float damage, out bool isDestroy)
+    public override void Hit(float damage, out bool isDestroy)
     {
         if (isActive == false)
             StartCoroutine(ActiveEffect());
@@ -167,14 +155,18 @@ public class EMPShield : Scanable
         if (hp <= 0f)
         {
             isDestroy = true;
-            Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-            collider.enabled = false;
-            renderer.enabled = false;
-            isOver = true;
-
-            whenDestroy.Invoke();
-            //Destroy(gameObject);
+            Destroy();
         }
+    }
+
+    public override void Destroy()
+    {
+        Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
+        collider.enabled = false;
+        renderer.enabled = false;
+        isOver = true;
+
+        whenDestroy.Invoke();
     }
 
     public override void Scanned()

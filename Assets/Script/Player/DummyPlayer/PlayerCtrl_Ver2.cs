@@ -81,6 +81,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask detectionLayer;
     [SerializeField] private LayerMask climbingLayer;
+    [SerializeField] private LayerMask climbingPaintLayer;
     [SerializeField] private LayerMask ledgeAbleLayer;
     [SerializeField] private LayerMask adjustAbleLayer;
     [SerializeField] private Vector3 dectionOffset;
@@ -173,6 +174,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         launcherMode.Value = 1;
 
         line = GetComponent<LayserRender>();
+
+        GameManager.Instance.cameraManger.SetFollowCameraDistance("Default");
 
         StartCoroutine(StopCheck());
     }
@@ -721,14 +724,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         if(currentHorizontalValue == 0.0f)
                         {
-                            //if (UpDetection() == true)
-                            //{
-                            //    animator.SetTrigger("UpClimbing");
-                            //    isClimbingMove = true;
-                            //}
-                            
-                             animator.SetTrigger("UpClimbing");
-                             isClimbingMove = true;
+                            if (UpDetection() == false)
+                            {
+                                animator.SetTrigger("UpClimbing");
+                                isClimbingMove = true;
+                            }
+
+                            //animator.SetTrigger("UpClimbing");
+                            // isClimbingMove = true;
                             
                         }
                         else
@@ -911,9 +914,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     GameManager.Instance.stateManager.Visible(false);
 
                     if (transform.parent == null)
-                        GameManager.Instance.cameraManger.SetFollowCameraDistance(5.0f, 20.0f);
+                        GameManager.Instance.cameraManger.SetFollowCameraDistance("Default");
                     else
-                        GameManager.Instance.cameraManger.SetFollowCameraDistance(10.0f, 20.0f);
+                        GameManager.Instance.cameraManger.SetFollowCameraDistance("ExistParent");
                 }
                 break;
             case PlayerState.Grab:
@@ -929,7 +932,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.ActiveLedgeIK(false);
                     footIK.DisableFeetIk();
                     isClimbingMove = false;
-                    GameManager.Instance.cameraManger.SetFollowCameraDistance(12.0f, 20.0f);
+                    GameManager.Instance.cameraManger.SetFollowCameraDistance("Grab");
                 }
                 break;
             case PlayerState.Jump:
@@ -1142,8 +1145,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     #region Detection
     private bool UpDetection()
     {
-        if (ledgeChecker.IsDetectedLedge() == false)
-            return true;
+        //if (ledgeChecker.IsDetectedLedge() == false)
+        //    return true;
 
         //RaycastHit hit;
         //Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
@@ -1153,22 +1156,23 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //    return true;
         //}
 
-        //RaycastHit hit;
-        //Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
-        //Vector3 point2 = point1 + transform.forward * 1f;
-        //if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
-        //{
-        //    MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
-        //    int[] triangles = wallMesh.mesh.triangles;
-        //    Color[] vertexColors = wallMesh.mesh.colors;
+        RaycastHit hit;
+        Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
+        Vector3 point2 = point1 + transform.forward * 1f;
+        if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, climbingPaintLayer))
+        {
+            MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
+            int[] triangles = wallMesh.mesh.triangles;
+            Color[] vertexColors = wallMesh.mesh.colors;
 
-        //    if(vertexColors[triangles[hit.triangleIndex*3+0]] != Color.red
-        //        && vertexColors[triangles[hit.triangleIndex * 3 + 1]] != Color.red
-        //        && vertexColors[triangles[hit.triangleIndex * 3 + 2]] != Color.red)
-        //    {
-        //        return true;
-        //    }
-        //}
+            //Debug.Log(vertexColors[triangles[hit.triangleIndex * 3 + 0]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 1]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 2]].ToString());
+            if (vertexColors[triangles[hit.triangleIndex * 3 + 0]] == Color.red
+                || vertexColors[triangles[hit.triangleIndex * 3 + 1]] == Color.red
+                || vertexColors[triangles[hit.triangleIndex * 3 + 2]] == Color.red)
+            {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -1587,9 +1591,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 //line.Active(launchPos.position, hit.point, 0.1f, 0.1f, 0.15f * loadCount);
                 layserParticle.Play();
-                EMPShield shield;
+                Hitable shield;
                 bool destroy;
-                if (hit.collider.TryGetComponent<EMPShield>(out shield))
+                if (hit.collider.TryGetComponent<Hitable>(out shield))
                 {
                     shield.Hit(loadCount * 40f, out destroy);
                     if(destroy == true && drone != null)

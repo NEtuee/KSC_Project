@@ -4,6 +4,14 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
+[System.Serializable]
+public struct DistanceBlendProfile
+{
+    public string name;
+    public float targetDistance;
+    public float blendDuration;
+}
+
 public class CameraManager : MonoBehaviour
 {
     [SerializeField] private CinemachineBrain brain;
@@ -27,6 +35,12 @@ public class CameraManager : MonoBehaviour
 
     private float cameraSideSmoothVelocity;
 
+    public DistanceBlendProfile[] distanceBlendProfiles;
+    private Dictionary<string, DistanceBlendProfile> distanceDic = new Dictionary<string, DistanceBlendProfile>();
+
+    //Damping
+    private Vector3 prevDamping = Vector3.zero;
+
     private void Start()
     {
         brainCameraTransfrom = brain.transform;
@@ -47,6 +61,11 @@ public class CameraManager : MonoBehaviour
         {
             brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
             brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
+        }
+
+        for(int i = 0; i<distanceBlendProfiles.Length;i++)
+        {
+            distanceDic.Add(distanceBlendProfiles[i].name, distanceBlendProfiles[i]);
         }
     }
 
@@ -349,6 +368,17 @@ public class CameraManager : MonoBehaviour
         distanceBlendStartTime = Time.time;
     }
 
+    public void SetFollowCameraDistance(string key)
+    {
+        if (distanceDic.ContainsKey(key) == false)
+            return;
+
+        isBlendCameraDistance = true;
+        targetDistance = distanceDic[key].targetDistance;
+        distanceBlendDuration = distanceDic[key].blendDuration;
+        distanceBlendStartTime = Time.time;
+    }
+
     private void BlendDistanceFollowCamera()
     {
         if(isBlendCameraDistance == true)
@@ -362,4 +392,32 @@ public class CameraManager : MonoBehaviour
             }
         }
     }
+
+    public void ZeroDamping()
+    {
+        prevDamping = playerFollowCam3rdPersonComponent.Damping;
+        playerFollowCam3rdPersonComponent.Damping = Vector3.zero;
+    }
+
+    public void RestoreDamping()
+    {
+        playerFollowCam3rdPersonComponent.Damping = prevDamping;
+    }
+
+    public void RestoreDamping(float lateTime)
+    {
+        StartCoroutine(LateRestoreDampingCoroutine(lateTime));
+    }
+
+    IEnumerator LateRestoreDampingCoroutine(float lateTime)
+    {
+        yield return new WaitForSeconds(lateTime);
+        RestoreDamping();
+    }
+
+    public void SetDamping(Vector3 damp)
+    {
+        playerFollowCam3rdPersonComponent.Damping = damp;
+    }
 }
+
