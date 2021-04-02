@@ -18,6 +18,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         Jump,
         Grab,
         HangLedge,
+        HangEdge,
         ClimbingLedge,
         Ragdoll,
         LedgeUp,
@@ -38,6 +39,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
 
     public UpdateMethod updateMethod;
+    public GameObject hitMaker;
     public bool playerDebug;
 
     [Header("State")]
@@ -79,6 +81,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask detectionLayer;
     [SerializeField] private LayerMask climbingLayer;
+    [SerializeField] private LayerMask climbingPaintLayer;
     [SerializeField] private LayerMask ledgeAbleLayer;
     [SerializeField] private LayerMask adjustAbleLayer;
     [SerializeField] private Vector3 dectionOffset;
@@ -102,6 +105,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     [Header("Detection")]
     [SerializeField] private LedgeChecker ledgeChecker;
+    [SerializeField] private SpaceChecker spaceChecker;
 
     [Header("Edge")]
     [SerializeField] private float hangAbleEdgeDist = 2f;
@@ -170,6 +174,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         launcherMode.Value = 1;
 
         line = GetComponent<LayserRender>();
+
+        GameManager.Instance.cameraManger.SetFollowCameraDistance("Default");
 
         StartCoroutine(StopCheck());
     }
@@ -257,6 +263,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         return;
                 }
                 break;
+            case PlayerState.HangEdge:
             case PlayerState.HangLedge:
                 {
                     if (InputReleaseGrab())
@@ -314,7 +321,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         animator.SetBool("IsGround", movement.isGrounded);
 
-        if (state != PlayerState.Grab && state != PlayerState.HangLedge && state != PlayerState.ClimbingJump &&movement.isGrounded == false)
+        if (state != PlayerState.Grab && state != PlayerState.HangLedge && state != PlayerState.HangEdge && state != PlayerState.ClimbingJump && movement.isGrounded == false)
         {
             currentJumpPower -= gravity * deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
@@ -368,7 +375,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * rotateSpeed);
                     }
 
-                    if(currentSpeed > 5.5f&&targetRotation != Quaternion.identity)
+                    if (currentSpeed > 5.5f && targetRotation != Quaternion.identity)
                     {
                         rotAngle = (int)Quaternion.Angle(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up));
                         if (Vector3.Dot(Vector3.Cross(transform.forward, lookDir), transform.up) < 0)
@@ -376,11 +383,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             rotAngle = -rotAngle;
                         }
 
-                        horizonWeight = Mathf.MoveTowards(horizonWeight, rotAngle, 25.0f * deltaTime);
+                        horizonWeight = Mathf.Lerp(horizonWeight, rotAngle, deltaTime * rotateSpeed);
                     }
                     else
                     {
-                        horizonWeight = Mathf.MoveTowards(horizonWeight, 0.0f, 50.0f * deltaTime);
+                        horizonWeight = Mathf.Lerp(horizonWeight, 0.0f, deltaTime * 12f);
                     }
 
                     moveDir *= currentSpeed;
@@ -612,6 +619,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if (Time.time - climbingJumpStartTime >= keepClimbingJumpTime)
                     {
                         moveDir = moveDir.normalized * finalDir.magnitude;
+                        movement.Jump();
                         ChangeState(PlayerState.Jump);
                         if (climbingJumpDirection != ClimbingJumpDirection.Left && climbingJumpDirection != ClimbingJumpDirection.Right)
                             currentJumpPower = currentClimbingJumpPower;
@@ -633,6 +641,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     UpdateGrab();
                 }
                 break;
+            case PlayerState.HangEdge:
             case PlayerState.HangLedge:
                 {
                     UpdateGrab();
@@ -676,7 +685,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             return;
         }
 
-        if((state == PlayerState.Grab || state == PlayerState.HangLedge) && isClimbingMove == false)
+        if((state == PlayerState.Grab || state == PlayerState.HangLedge || state == PlayerState.HangEdge) && isClimbingMove == false)
         {
             if (vertical == 0.0f)
             {
@@ -715,11 +724,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         if(currentHorizontalValue == 0.0f)
                         {
-                            if (UpDetection() == true)
+                            if (UpDetection() == false)
                             {
                                 animator.SetTrigger("UpClimbing");
                                 isClimbingMove = true;
                             }
+
+                            //animator.SetTrigger("UpClimbing");
+                            // isClimbingMove = true;
+                            
                         }
                         else
                         {
@@ -778,12 +791,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 if (currentVerticalValue == -1.0f)
                 {
-                    ChangeState(PlayerState.Grab);
-                    animator.SetBool("IsLedge", false);
-                    animator.SetTrigger("DownClimbing");
+                    if (state != PlayerState.HangEdge)
+                    {
+                        ChangeState(PlayerState.Grab);
+                        animator.SetBool("IsLedge", false);
+                        animator.SetTrigger("DownClimbing");
 
-                    isLedge = false;
-                    isClimbingMove = true;
+                        isLedge = false;
+                        isClimbingMove = true;
+                    }
                 }
                 else if (currentVerticalValue == 0.0f && currentHorizontalValue != 0.0f)
                 {
@@ -867,6 +883,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     ActiveAim(false);
                     GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
+                    drone.OrderDefault();
                 }
                 break;
             case PlayerState.Jump:
@@ -877,11 +894,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                 }
                 break;
+            case PlayerState.HangEdge:
             case PlayerState.HangLedge:
                 {
                     animator.SetBool("IsLedge", false);
                     isLedge = false;
-                    
                 }
                 break;
         }
@@ -898,9 +915,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     GameManager.Instance.stateManager.Visible(false);
 
                     if (transform.parent == null)
-                        GameManager.Instance.cameraManger.SetFollowCameraDistance(5.0f, 20.0f);
+                        GameManager.Instance.cameraManger.SetFollowCameraDistance("Default");
                     else
-                        GameManager.Instance.cameraManger.SetFollowCameraDistance(10.0f, 20.0f);
+                        GameManager.Instance.cameraManger.SetFollowCameraDistance("ExistParent");
                 }
                 break;
             case PlayerState.Grab:
@@ -916,7 +933,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.ActiveLedgeIK(false);
                     footIK.DisableFeetIk();
                     isClimbingMove = false;
-                    GameManager.Instance.cameraManger.SetFollowCameraDistance(12.0f, 20.0f);
+                    GameManager.Instance.cameraManger.SetFollowCameraDistance("Grab");
                 }
                 break;
             case PlayerState.Jump:
@@ -975,8 +992,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     GameManager.Instance.cameraManger.ActiveAimCamera();
                     GameManager.Instance.stateManager.Visible(true);
                     footIK.DisableFeetIk();
+                    drone.OrderAimHelp();
                 }
                 break;
+            case PlayerState.HangEdge:
             case PlayerState.HangLedge:
                 {
                     isLedge = true;
@@ -1103,17 +1122,34 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                 }
                 break;
-            case PlayerState.Grab:
+            case PlayerState.HangEdge:
             case PlayerState.HangLedge:
                 {
                     if (isClimbingMove == true)
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-wallHit.normal, Vector3.up), 5f * Time.deltaTime);
+                    {
+                        //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-wallHit.normal, Vector3.up), 5f * Time.deltaTime);
+                    }
 
                     var p = transform.position;
                     p += animator.deltaPosition;
                     transform.position = p;
                 }
                 break;
+            case PlayerState.Grab:
+                {
+                    if (isClimbingMove == true)
+                    {
+                        //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-wallHit.normal, Vector3.up), 5f * Time.deltaTime);
+                    }
+
+                    if (CheckCanClimbingMoveByVertexColor() == false)
+                        break;
+
+                    var p = transform.position;
+                    p += animator.deltaPosition;
+                    transform.position = p;
+                    break;
+                }
             case PlayerState.LedgeUp:
                 {
                     var p = transform.position;
@@ -1127,7 +1163,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     #region Detection
     private bool UpDetection()
     {
-        if (ledgeChecker.IsDetectedLedge() == false)
+        if (ledgeChecker.IsDetectedLedge() == true)
             return true;
 
         //RaycastHit hit;
@@ -1137,25 +1173,114 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //{
         //    return true;
         //}
+        
+        
+        if(DetectionCanClimbingAreaByVertexColor(transform.position+transform.up*collider.height*0.5f,transform.forward) == true)
+        {
+            return true;
+        }
 
-        //RaycastHit hit;
-        //Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
-        //Vector3 point2 = point1 + transform.forward * 1f;
-        //if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
+        if(DetectionCanClimbingAreaByVertexColor(transform.position + transform.up * collider.height * 0.75f, transform.forward) == true)
+        {
+            return true;
+        }
+
+        //if (DetectionCanClimbingAreaByVertexColor(transform.position + transform.up * collider.height, transform.forward) == true)
         //{
-        //    MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
-        //    int[] triangles = wallMesh.mesh.triangles;
-        //    Color[] vertexColors = wallMesh.mesh.colors;
-
-        //    if(vertexColors[triangles[hit.triangleIndex*3+0]] != Color.red
-        //        && vertexColors[triangles[hit.triangleIndex * 3 + 1]] != Color.red
-        //        && vertexColors[triangles[hit.triangleIndex * 3 + 2]] != Color.red)
-        //    {
-        //        return true;
-        //    }
+        //    return true;
         //}
 
         return false;
+    }
+
+    private bool DetectionCanClimbingAreaByVertexColor(Vector3 startPoint, Vector3 dir)
+    {
+        RaycastHit hit;
+        if (Physics.SphereCast(startPoint, collider.radius, dir, out hit, 2f, climbingPaintLayer))
+        {
+            MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
+            int[] triangles = wallMesh.mesh.triangles;
+            Color[] vertexColors = wallMesh.mesh.colors;
+
+            //Debug.Log(vertexColors[triangles[hit.triangleIndex * 3 + 0]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 1]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 2]].ToString());
+            if (vertexColors[triangles[hit.triangleIndex * 3 + 0]] == Color.red
+                || vertexColors[triangles[hit.triangleIndex * 3 + 1]] == Color.red
+                || vertexColors[triangles[hit.triangleIndex * 3 + 2]] == Color.red)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+        return false;
+    }
+
+    private bool DetectLedgeCanHangLedgeByVertexColor()
+    {
+        Vector3 start = transform.position + transform.up * collider.height * 2;
+        RaycastHit hit;
+        if (Physics.SphereCast(start, collider.radius * 2f, -transform.up, out hit, collider.height * 2, climbingPaintLayer))
+        {
+            MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
+            int[] triangles = wallMesh.mesh.triangles;
+            Color[] vertexColors = wallMesh.mesh.colors;
+
+            //Debug.Log(vertexColors[triangles[hit.triangleIndex * 3 + 0]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 1]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 2]].ToString());
+            if (vertexColors[triangles[hit.triangleIndex * 3 + 0]] == Color.red
+                || vertexColors[triangles[hit.triangleIndex * 3 + 1]] == Color.red
+                || vertexColors[triangles[hit.triangleIndex * 3 + 2]] == Color.red)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+        return false;
+    }
+
+    private bool CheckCanClimbingMoveByVertexColor()
+    {
+        if (isClimbingMove == false)
+            return true;
+
+        Vector3 start = Vector3.zero;
+
+        if(currentVerticalValue != 0)
+        {
+            start = currentVerticalValue == 1 ? transform.position + transform.up * collider.height *0.7f : transform.position;
+        }
+        else
+        {
+            start = currentHorizontalValue == 1 ? transform.position+transform.up*collider.height*0.5f+transform.right*collider.radius : transform.position + transform.up * collider.height * 0.5f + transform.right * -collider.radius;
+        }
+
+        RaycastHit hit;
+        if (Physics.SphereCast(start, collider.radius, transform.forward, out hit, 2f, climbingPaintLayer))
+        {
+            MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
+            int[] triangles = wallMesh.mesh.triangles;
+            Color[] vertexColors = wallMesh.mesh.colors;
+
+            //Debug.Log(vertexColors[triangles[hit.triangleIndex * 3 + 0]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 1]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 2]].ToString());
+            if (vertexColors[triangles[hit.triangleIndex * 3 + 0]] == Color.red
+                || vertexColors[triangles[hit.triangleIndex * 3 + 1]] == Color.red
+                || vertexColors[triangles[hit.triangleIndex * 3 + 2]] == Color.red)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+
+        return true;
     }
 
     private bool DownDetection()
@@ -1252,7 +1377,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
 
                     ChangeState(PlayerState.Grab);
-                    ChangeState(PlayerState.HangLedge);
+                    ChangeState(PlayerState.HangEdge);
 
                     rigidbody.velocity = Vector3.zero;
                     prevSpeed = currentSpeed;
@@ -1276,6 +1401,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             switch(state)
             {
                 case PlayerState.Grab:
+                case PlayerState.HangEdge:
                 case PlayerState.HangLedge:
                     {
                         isClimbingMove = false;
@@ -1342,7 +1468,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         if (chargeTime >= chargeNecessryTime)
                         {
                             chargeTime = 0.0f;
-                            energy.Value -= 25f;
+                            int count = (int)Mathf.Abs(energy.Value / 25f);
+                            energy.Value -= 25f * (loadCount.Value > count ? count : loadCount.Value);
 
                             if (bulletPrefab != null)
                             {
@@ -1468,7 +1595,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputLedgeUp()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.Jump) && isLedge == true && isClimbingMove == false)
+        if (InputManager.Instance.GetAction(KeybindingActions.Jump) && isLedge == true 
+            && isClimbingMove == false && spaceChecker.Overlapped() == false)
         {
             isLedge = false;
             animator.SetTrigger("LedgeUp");
@@ -1570,14 +1698,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 //line.Active(launchPos.position, hit.point, 0.1f, 0.1f, 0.15f * loadCount);
                 layserParticle.Play();
-                EMPShield shield;
+                Hitable shield;
                 bool destroy;
-                if (hit.collider.TryGetComponent<EMPShield>(out shield))
+                if (hit.collider.TryGetComponent<Hitable>(out shield))
                 {
                     shield.Hit(loadCount * 40f, out destroy);
                     if(destroy == true && drone != null)
                     {
-                        drone.OrderApproch(hit.collider.transform);
+                        //drone.OrderApproch(hit.collider.transform);
                     }
                 }
             }
@@ -1660,6 +1788,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (ledgeChecker.IsDetectedLedge() == true && currentVerticalValue == 1.0f && dectect == false)
         {
+            if(DetectLedgeCanHangLedgeByVertexColor() == true)
+            {
+                return;
+            }
             isClimbingMove = false;
             isLedge = true;
             ChangeState(PlayerState.HangLedge);
@@ -1683,12 +1815,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         Vector3 finalPosition;
         if (Physics.SphereCast(start, collider.radius * 2f, -transform.up, out upHit, collider.height * 2, adjustAbleLayer))
         {
+            //Instantiate(hitMaker, upHit.point, Quaternion.identity);
             finalPosition = upHit.point + (transform.up * dectionOffset.y);
-            if (Physics.Raycast(transform.position + transform.up * collider.height *0.5f ,transform.forward,out forwardHit,1.5f, adjustAbleLayer))
-            {
-                //finalPosition += forwardHit.point * dectionOffset.z;
-            }
+            //if (Physics.Raycast(transform.position + transform.up * collider.height *0.5f ,transform.forward,out forwardHit,1.5f, adjustAbleLayer))
+            //{
+            //    //finalPosition += forwardHit.point * dectionOffset.z;
+            //}
+            finalPosition += transform.forward * dectionOffset.z;
+            //Debug.Log(finalPosition);
             transform.position = finalPosition;
+            StartCoroutine(ForceSnap(0.1f, finalPosition));
         }
     }
 
@@ -1710,6 +1846,21 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     //        return 0.0f;
     //    }
     //}
+    IEnumerator ForceSnap(float snapTime,Vector3 snapPosition)
+    {
+        float time = 0.0f;
+
+        while(time<snapTime)
+        {
+            if (state != PlayerState.HangLedge)
+                break;
+
+            transform.position = snapPosition;
+            time += Time.deltaTime;
+            yield return null;
+        }
+    }
+
 
     #region µð¹ö±×
     private void OnDrawGizmos()
@@ -1736,10 +1887,17 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             Gizmos.DrawRay(start, -transform.up * collider.height * 2);
         }
 
-        start = transform.position + transform.up * collider.height * 2;
-        RaycastHit upHit;
-        RaycastHit forwardHit;
-        DebugCastDetection.Instance.DebugSphereCastDetection(start, collider.radius * 2f, -transform.up, collider.height * 2, ledgeAbleLayer,Color.white, Color.blue);
+        Vector3 point1 = headTransfrom.position;
+        DebugCastDetection.Instance.DebugSphereCastDetection(point1, collider.radius, transform.forward, 2f, climbingPaintLayer, Color.blue, Color.red);
+
+        //start = transform.position + transform.up * collider.height * 2;
+        //RaycastHit upHit;
+        //RaycastHit forwardHit;
+        //DebugCastDetection.Instance.DebugSphereCastDetection(start, collider.radius * 2f, -transform.up, collider.height * 2, ledgeAbleLayer,Color.white, Color.blue);
+
+        //start = transform.position + transform.up * collider.height * 2;
+        //Vector3 extents = new Vector3(2.0f, 2.0f, 2.0f);
+        //DebugCastDetection.Instance.DebugBoxCastDetection(start, extents, -transform.up, transform.rotation, collider.height * 2, ledgeAbleLayer, Color.white, Color.red);
     }
     #endregion
 
@@ -1752,6 +1910,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             style.normal.textColor = Color.white;
 
             GUI.Label(new Rect(10f, 100f, 100, 20), "State : " + state.ToString(), style);
+            GUI.Label(new Rect(1650f, 100f, 100, 20), "Position : " + transform.position.ToString(), style);
             GUI.Label(new Rect(10f, 120f, 100, 20), "PrevState : " + prevState.ToString(), style);
             GUI.Label(new Rect(10f, 140f, 100, 20), "IsLedge : " + isLedge.ToString(), style);
             GUI.Label(new Rect(10f, 160f, 100, 20), "IsClimbingMove : " + isClimbingMove.ToString(), style);

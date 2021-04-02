@@ -46,6 +46,15 @@ public class FollowTargetCtrl : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            transform.rotation = Camera.main.transform.rotation;
+            transform.position = Camera.main.transform.position;
+            currentRot = Camera.main.transform.rotation.eulerAngles;
+            targetRot = Camera.main.transform.rotation.eulerAngles;
+            Resume();
+        }
+
         if (isPause == true)
         {
             return;
@@ -110,4 +119,10 @@ public class FollowTargetCtrl : MonoBehaviour
 
     public void Pause(){ isPause = true; }
     public void Resume() { isPause = false; }
+
+    public void SetForceRotation(Vector3 rot)
+    {
+        currentRot = rot;
+        targetRot = rot;
+    }
 }
