@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BrokenMedusa_AI : IKBossBase
 {
@@ -41,6 +42,8 @@ public class BrokenMedusa_AI : IKBossBase
     private float _pointDistance;
     private float _direction;//1 = right, -1 = left
 
+    public UnityEvent scannedEvent; 
+
     public void Start()
     {
         Initialize();
@@ -50,6 +53,9 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("FrontWalk");
         _timeCounter.InitTimer("FrontWalk_Init");
         _timeCounter.InitTimer("timer");
+
+        scannedEvent.AddListener(() => { GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelper_Medusa>().HelpEvent("Scanned"); });
+        scannedEvent.AddListener(() => { GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelper_Medusa>().ScanFlag(); });
     }
 
     public void Update()
@@ -204,6 +210,15 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void ChangeState(State state)
     {
+        switch(state)
+        {
+            case State.Scanned:
+                {
+                    scannedEvent.Invoke();
+                }
+                break;
+        }
+
         currentState = state;
 
         if(currentState == State.SearchIdle)

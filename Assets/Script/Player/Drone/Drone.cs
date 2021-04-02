@@ -14,6 +14,7 @@ public class Drone : MonoBehaviour
     [SerializeField] private Vector3 helpOffset;
     [SerializeField] private float collectRequiredTime = 1f;
     [SerializeField] private FloatingMove floatingMove;
+    [SerializeField] private bool help = false;
     private float collectStartTime;
     
     private Transform approachTarget;
@@ -39,6 +40,10 @@ public class Drone : MonoBehaviour
 
     private void LateUpdate()
     {
+        if(Input.GetKeyDown(KeyCode.N))
+        {
+            OrderHelp();
+        }
 
         if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.Update)
             return;
@@ -81,7 +86,12 @@ public class Drone : MonoBehaviour
                 break;
             case DroneState.Help:
                 {
-                    Vector3 targetPosition = (target.forward * helpOffset.z + target.right * helpOffset.x + target.up * helpOffset.y) + target.position;
+                    Vector3 camForward = Camera.main.transform.forward;
+                    Vector3 camRight = Camera.main.transform.right;
+                    camForward.y = 0;
+                    camRight.y = 0;
+
+                    Vector3 targetPosition = (camForward * helpOffset.z + camRight * helpOffset.x + Vector3.up * helpOffset.y) + target.position;
                     targetPosition = Vector3.Lerp(transform.position, targetPosition, deltaTime * 5f);
                     Vector3 lookDir = playerHead.position - transform.position;
                     Quaternion targetRot;
@@ -163,20 +173,47 @@ public class Drone : MonoBehaviour
         }
     }
 
-    public void OrderAimHelp()
+    public void OrderAimHelp(bool value)
     {
-        state = DroneState.AimHelp;
-        floatingMove.SetRangeRatio(0.2f);
+        if (value == true)
+        {
+            state = DroneState.AimHelp;
+            floatingMove.SetRangeRatio(0.2f);
+        }
+        else
+        {
+            if(help == true)
+            {
+                state = DroneState.Help;
+                floatingMove.SetRangeRatio(1.0f);
+            }
+            else
+            {
+                state = DroneState.Default;
+                floatingMove.SetRangeRatio(1.0f);
+            }
+        }
     }
 
     public void OrderDefault()
     {
-        state = DroneState.Default;
-        floatingMove.SetRangeRatio(1.0f);
+        help = false;
+        if (state != DroneState.AimHelp)
+        {
+            state = DroneState.Default;
+            floatingMove.SetRangeRatio(1.0f);
+        }
     }
 
     public void OrderHelp()
     {
-        state = DroneState.Help;
+        help = true;
+
+        if(state != DroneState.AimHelp)
+        {
+            state = DroneState.Help;
+        }
     }
+
+    public DroneState GetState() { return state; }
 }

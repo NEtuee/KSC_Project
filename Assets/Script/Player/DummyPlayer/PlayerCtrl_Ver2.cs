@@ -883,7 +883,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     ActiveAim(false);
                     GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
-                    drone.OrderDefault();
+                    drone.OrderAimHelp(false);
                 }
                 break;
             case PlayerState.Jump:
@@ -992,7 +992,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     GameManager.Instance.cameraManger.ActiveAimCamera();
                     GameManager.Instance.stateManager.Visible(true);
                     footIK.DisableFeetIk();
-                    drone.OrderAimHelp();
+                    drone.OrderAimHelp(true);
                 }
                 break;
             case PlayerState.HangEdge:
