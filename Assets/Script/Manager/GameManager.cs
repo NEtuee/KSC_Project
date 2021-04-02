@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public PlayerCtrl player;
     [SerializeField] public FollowTargetCtrl followTarget;
     [SerializeField] public UIManager uiManager;
-    [SerializeField] public CameraManager cameraManger;
+    [SerializeField] public CameraManager cameraManager;
     [SerializeField] public LevelEdit_BehaviorControll bossControll;
     [SerializeField] private Transform coreTransfrom;
     [SerializeField] private Transform killEventTransform;

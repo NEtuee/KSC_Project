@@ -45,7 +45,7 @@ public class CameraManager : MonoBehaviour
     {
         brainCameraTransfrom = brain.transform;
 
-        GameManager.Instance.cameraManger = this;
+        GameManager.Instance.cameraManager = this;
 
         otherCameras.Add(playerFollowCam);
         otherCameras.Add(playerAimCam);
@@ -67,6 +67,8 @@ public class CameraManager : MonoBehaviour
         {
             distanceDic.Add(distanceBlendProfiles[i].name, distanceBlendProfiles[i]);
         }
+
+        SetFollowCameraDistance("Default");
     }
 
     private void Update()
