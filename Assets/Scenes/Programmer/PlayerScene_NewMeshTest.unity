@@ -219,7 +219,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 17370241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.691, y: 2.126, z: -22.297}
+  m_LocalPosition: {x: 6.691, y: 2.126, z: -7.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 474954001}
@@ -260,10 +260,11 @@ MonoBehaviour:
   target: {fileID: 950518270524338637}
   state: 0
   moveSpeed: 7
-  rightOffset: -1
-  upOffset: 1.7
-  forwardOffset: -1
+  defaultFollowOffset: {x: -1, y: 1.7, z: -1}
+  aimHelpOffset: {x: 1.8, y: 1.3, z: 1}
+  helpOffset: {x: 1, y: 1.7, z: 2}
   collectRequiredTime: 1
+  floatingMove: {fileID: 296742651}
 --- !u!114 &17370245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -813,8 +814,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - BrokenMedusa_main
   - BossBaseScene
+  - BrokenMedusa_main
   currentLevel: 0
 --- !u!114 &112632220
 MonoBehaviour:
@@ -2366,6 +2367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingSpeed: 1
   range: 0.5
+  rangeRatio: 1
 --- !u!114 &312095795 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2662566965663938057, guid: e4ab1a28654fc114cb49b9515016be77,
@@ -3993,6 +3995,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingSpeed: 1
   range: 0.5
+  rangeRatio: 1
 --- !u!1 &502892971
 GameObject:
   m_ObjectHideFlags: 0
@@ -9392,6 +9395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingSpeed: 1
   range: 0.5
+  rangeRatio: 1
 --- !u!1 &1216182521
 GameObject:
   m_ObjectHideFlags: 0
