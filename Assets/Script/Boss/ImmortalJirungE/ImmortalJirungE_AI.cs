@@ -16,12 +16,14 @@ public class ImmortalJirungE_AI : IKBossBase
     public LevelEdit_Controll controll;
     public State currentState;
     public BossHead head;
+    public EMPShield shield;
 
     public LayerMask obstacleLayer;
 
     public List<Rigidbody> bodys = new List<Rigidbody>();
 
     public float distanceAccuracy = 5f;
+    public float mainSpeed = 10f;
 
     private LevelEdit_PointManager.PathClass _currentPath;
     private Transform _targetTransform;
@@ -70,6 +72,20 @@ public class ImmortalJirungE_AI : IKBossBase
         {
             FollowPath();
 
+            Collider[] playerColl = Physics.OverlapSphere(transform.position, 2f,targetLayer);
+
+            if(playerColl.Length != 0)
+            {
+                foreach(Collider curr in playerColl)
+                {
+                    PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
+                    if(ragdoll != null)
+                    {
+                        ragdoll.ExplosionRagdoll(300.0f, transform.forward);
+                    }
+                }
+            }
+
             _timeCounter.IncreaseTimer("whipTime",out bool limit);
             if(limit)
             {
@@ -79,6 +95,17 @@ public class ImmortalJirungE_AI : IKBossBase
         else if(currentState == State.WallMoveExit)
         {
             FollowPath();
+
+            _timeCounter.IncreaseTimer("wallMoveTime",out bool limit);
+            if(limit)
+            {
+                shield.Reactive();
+
+                if(Random.Range(0,2) == 0)
+                    ChangeState(State.WallMove);
+                else
+                    ChangeState(State.FloorWhip);
+            }
         }
         else if(currentState == State.Stun)
         {
@@ -98,7 +125,7 @@ public class ImmortalJirungE_AI : IKBossBase
             _timeCounter.IncreaseTimer("recoverTime",1f,out bool limit);
             if(limit)
             {
-                ChangeState(State.WallMove);
+                ChangeState(State.WallMoveExit);
             }
         }
 
@@ -146,7 +173,6 @@ public class ImmortalJirungE_AI : IKBossBase
 
         head.enabled = true;
     }
-    
 
     public void ChangeState(State state)
     {
@@ -167,6 +193,7 @@ public class ImmortalJirungE_AI : IKBossBase
         else if(state == State.WallMoveExit)
         {
             GetPath("WallMoveExit");
+            _timeCounter.InitTimer("wallMoveTime",0f,Random.Range(13f,20f));
             _pathLoop = true;
         }
         else if(state == State.Stun)
@@ -198,7 +225,7 @@ public class ImmortalJirungE_AI : IKBossBase
             return true;
 
         SetTarget(_targetTransform.position);
-        Move(transform.forward,20f);
+        Move(transform.forward,mainSpeed);
         if(IsArrivedTarget())
         {
             var target = GetNextPoint(out bool isEnd).transform;

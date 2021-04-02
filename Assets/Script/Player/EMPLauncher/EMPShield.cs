@@ -159,6 +159,13 @@ public class EMPShield : Hitable
         }
     }
 
+    public void Reactive()
+    {
+        collider.enabled = true;
+        renderer.enabled = true;
+        isOver = false;
+    }
+
     public override void Destroy()
     {
         Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
