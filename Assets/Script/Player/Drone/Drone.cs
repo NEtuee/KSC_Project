@@ -22,6 +22,12 @@ public class Drone : MonoBehaviour
     private Transform mainCam;
 
     private Transform playerHead;
+
+    public delegate void WhenAimHelp();
+    public WhenAimHelp whenAimHelp;
+    public delegate void WhenHelp();
+    public WhenAimHelp whenHelp;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -179,6 +185,7 @@ public class Drone : MonoBehaviour
         {
             state = DroneState.AimHelp;
             floatingMove.SetRangeRatio(0.2f);
+            whenAimHelp?.Invoke();
         }
         else
         {
@@ -186,6 +193,7 @@ public class Drone : MonoBehaviour
             {
                 state = DroneState.Help;
                 floatingMove.SetRangeRatio(1.0f);
+                whenHelp?.Invoke();
             }
             else
             {
@@ -212,6 +220,7 @@ public class Drone : MonoBehaviour
         if(state != DroneState.AimHelp)
         {
             state = DroneState.Help;
+            whenHelp?.Invoke();
         }
     }
 

@@ -8,6 +8,9 @@ public class DroneHelper_Medusa : MonoBehaviour
     [SerializeField] private Canvas droneDiscriptCanvas;
     [SerializeField] private TextMeshProUGUI descriptText;
 
+    [SerializeField] private Vector3 helpStateScale;
+    [SerializeField] private Vector3 aimHelpStateScale;
+
     [SerializeField] private DroneDescript droneDescript;
     [SerializeField] private float hintTime = 5f;
     [SerializeField] private bool helping = false;
@@ -28,6 +31,10 @@ public class DroneHelper_Medusa : MonoBehaviour
         {
             descriptDictionary.Add(droneDescript.descripts[i].key, droneDescript.descripts[i].descript);
         }
+
+        drone.whenHelp += () => { droneDiscriptCanvas.GetComponent<RectTransform>().localScale = helpStateScale; };
+        drone.whenAimHelp += () => { droneDiscriptCanvas.GetComponent<RectTransform>().localScale = aimHelpStateScale; };
+
     }
 
     void Update()
