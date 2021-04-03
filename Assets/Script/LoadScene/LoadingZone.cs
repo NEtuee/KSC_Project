@@ -65,7 +65,7 @@ public class LoadingZone : MonoBehaviour
         Camera.main.transform.SetParent(this.transform);
         GameManager.Instance.followTarget.transform.SetParent(this.transform);
 
-        GameManager.Instance.cameraManger.ZeroDamping();
+        GameManager.Instance.cameraManager.ZeroDamping();
 
         SceneManager.MoveGameObjectToScene(this.gameObject, SceneManager.GetActiveScene());
 
@@ -80,7 +80,7 @@ public class LoadingZone : MonoBehaviour
         GameManager.Instance.followTarget.transform.SetParent(null);
         GameManager.Instance.followTarget.SetForceRotation(Camera.main.transform.rotation.eulerAngles);
 
-        GameManager.Instance.cameraManger.RestoreDamping(0.1f);
+        GameManager.Instance.cameraManager.RestoreDamping(0.1f);
 
         _isLoaded = true;
 

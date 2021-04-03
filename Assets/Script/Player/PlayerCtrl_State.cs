@@ -1712,7 +1712,7 @@ public class PlayerCtrl_State : PlayerCtrl
             isAim = true;
             //cameraCtrl.SetCamMode(CamMode.Aim);
             //GameManager.Instance.cameraManger.ActiveAimCamera(() => { GameManager.Instance.timeManager.OnBulletTime(); });
-            GameManager.Instance.cameraManger.ActiveAimCamera();
+            GameManager.Instance.cameraManager.ActiveAimCamera();
             //GameManager.Instance.timeManager.OnBulletTime();
 
             OnAim?.Invoke();
@@ -1722,7 +1722,7 @@ public class PlayerCtrl_State : PlayerCtrl
         {
             isAim = false;
             //cameraCtrl.SetCamMode(CamMode.Default);
-            GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
+            GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
             GameManager.Instance.timeManager.OffBulletTime();
             OnAimOff?.Invoke();
         }
@@ -1770,7 +1770,7 @@ public class PlayerCtrl_State : PlayerCtrl
     {
         isAim = false;
         //cameraCtrl.SetCamMode(CamMode.Default);
-        GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
+        GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
         GameManager.Instance.timeManager.OffBulletTime();
 
         OnAimOff?.Invoke();

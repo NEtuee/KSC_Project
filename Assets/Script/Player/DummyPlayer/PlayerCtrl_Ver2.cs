@@ -175,8 +175,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         line = GetComponent<LayserRender>();
 
-        GameManager.Instance.cameraManger.SetFollowCameraDistance("Default");
-
         StartCoroutine(StopCheck());
     }
 
@@ -882,8 +880,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Aiming:
                 {
                     ActiveAim(false);
-                    GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
-                    drone.OrderDefault();
+                    GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+                    drone.OrderAimHelp(false);
                 }
                 break;
             case PlayerState.Jump:
@@ -915,9 +913,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     GameManager.Instance.stateManager.Visible(false);
 
                     if (transform.parent == null)
-                        GameManager.Instance.cameraManger.SetFollowCameraDistance("Default");
+                        GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
                     else
-                        GameManager.Instance.cameraManger.SetFollowCameraDistance("ExistParent");
+                        GameManager.Instance.cameraManager.SetFollowCameraDistance("ExistParent");
                 }
                 break;
             case PlayerState.Grab:
@@ -933,7 +931,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.ActiveLedgeIK(false);
                     footIK.DisableFeetIk();
                     isClimbingMove = false;
-                    GameManager.Instance.cameraManger.SetFollowCameraDistance("Grab");
+                    GameManager.Instance.cameraManager.SetFollowCameraDistance("Grab");
                 }
                 break;
             case PlayerState.Jump:
@@ -989,10 +987,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Aiming:
                 {
-                    GameManager.Instance.cameraManger.ActiveAimCamera();
+                    GameManager.Instance.cameraManager.ActiveAimCamera();
                     GameManager.Instance.stateManager.Visible(true);
                     footIK.DisableFeetIk();
-                    drone.OrderAimHelp();
+                    drone.OrderAimHelp(true);
                 }
                 break;
             case PlayerState.HangEdge:

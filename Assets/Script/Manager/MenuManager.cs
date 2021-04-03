@@ -56,7 +56,7 @@ public class MenuManager : MonoBehaviour
             isMenuBlend = true;
             GameManager.Instance.player.Pause();
             GameManager.Instance.followTarget.Pause();
-            GameManager.Instance.cameraManger.ActiveAimCamera(() =>menuPopup.Peek().Appear(0.2f, () => isMenuBlend = false));
+            GameManager.Instance.cameraManager.ActiveAimCamera(() =>menuPopup.Peek().Appear(0.2f, () => isMenuBlend = false));
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
@@ -80,7 +80,7 @@ public class MenuManager : MonoBehaviour
                 isMenuBlend = false;
                 GameManager.Instance.player.Resume();
                 GameManager.Instance.followTarget.Resume();
-                GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
+                GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
             });
             return;
         }
