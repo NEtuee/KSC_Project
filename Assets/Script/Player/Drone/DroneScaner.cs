@@ -30,6 +30,9 @@ public class DroneScaner : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (Input.GetKeyDown(KeyCode.V))
         {
             scaning = true;
@@ -55,6 +58,9 @@ public class DroneScaner : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (scaning == true)
         {
             for (int i = 0; i < scanableObjects.Count;)

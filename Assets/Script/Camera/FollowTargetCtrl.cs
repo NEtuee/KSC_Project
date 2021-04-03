@@ -46,7 +46,10 @@ public class FollowTargetCtrl : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha0))
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             transform.rotation = Camera.main.transform.rotation;
             transform.position = Camera.main.transform.position;
@@ -86,6 +89,9 @@ public class FollowTargetCtrl : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (updateMode == true)
             return;
 
@@ -102,6 +108,9 @@ public class FollowTargetCtrl : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (updateMode == false)
             return;
 

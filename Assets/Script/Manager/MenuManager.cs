@@ -36,6 +36,13 @@ public class MenuManager : MonoBehaviour
                         break;
                 }
             });
+
+        ((PlayerCtrl_Ver2)GameManager.Instance.player).activeAimEvent += () => {
+            crossHair.SetActive(true);
+        };
+        ((PlayerCtrl_Ver2)GameManager.Instance.player).releaseAimEvent += () => {
+            crossHair.SetActive(false);
+        };
     }
 
     // Update is called once per frame
@@ -44,7 +51,6 @@ public class MenuManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && isMenuBlend == false)
         {
             InputEsc();
-            crossHair.SetActive(!crossHair.activeSelf);
         }
     }
 
@@ -54,11 +60,13 @@ public class MenuManager : MonoBehaviour
         {
             menuPopup.Push(main);
             isMenuBlend = true;
-            GameManager.Instance.player.Pause();
-            GameManager.Instance.followTarget.Pause();
+            //GameManager.Instance.player.Pause();
+            //GameManager.Instance.followTarget.Pause();
+            GameManager.Instance.PAUSE = true;
             GameManager.Instance.cameraManager.ActiveAimCamera(() =>menuPopup.Peek().Appear(0.2f, () => isMenuBlend = false));
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            crossHair.SetActive(false);
 
             return;
         }
@@ -78,8 +86,9 @@ public class MenuManager : MonoBehaviour
             menuPopup.Pop().Disappear(0.2f, () =>
             {
                 isMenuBlend = false;
-                GameManager.Instance.player.Resume();
-                GameManager.Instance.followTarget.Resume();
+                //GameManager.Instance.player.Resume();
+                //GameManager.Instance.followTarget.Resume();
+                GameManager.Instance.PAUSE = false;
                 GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
             });
             return;
@@ -118,5 +127,10 @@ public class MenuManager : MonoBehaviour
              menuPopup.Push(sound);
              menuPopup.Peek().Appear(soundBlendingTime, () => isMenuBlend = false);
          });
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exit");
     }
 }

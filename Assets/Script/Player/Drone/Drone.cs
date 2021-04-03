@@ -12,6 +12,7 @@ public class Drone : MonoBehaviour
     [SerializeField] private Vector3 defaultFollowOffset;
     [SerializeField] private Vector3 aimHelpOffset;
     [SerializeField] private Vector3 helpOffset;
+    [SerializeField] private Vector3 helpGrabStateOffset;
     [SerializeField] private float collectRequiredTime = 1f;
     [SerializeField] private FloatingMove floatingMove;
     [SerializeField] private bool help = false;
@@ -22,6 +23,7 @@ public class Drone : MonoBehaviour
     private Transform mainCam;
 
     private Transform playerHead;
+    private PlayerCtrl_Ver2 player;
 
     public delegate void WhenAimHelp();
     public WhenAimHelp whenAimHelp;
@@ -33,11 +35,15 @@ public class Drone : MonoBehaviour
     {
         mainCam = Camera.main.transform;
         playerHead = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head);
+        player = (PlayerCtrl_Ver2)GameManager.Instance.player;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.FixedUpdate)
             return;
 
@@ -46,7 +52,10 @@ public class Drone : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(Input.GetKeyDown(KeyCode.N))
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.N))
         {
             OrderHelp();
         }
@@ -97,7 +106,13 @@ public class Drone : MonoBehaviour
                     camForward.y = 0;
                     camRight.y = 0;
 
-                    Vector3 targetPosition = (camForward * helpOffset.z + camRight * helpOffset.x + Vector3.up * helpOffset.y) + target.position;
+
+                    Vector3 targetPosition; 
+                    if(player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab)
+                        targetPosition= (camForward * helpOffset.z + camRight * helpOffset.x + Vector3.up * helpOffset.y) + target.position;
+                    else
+                        targetPosition = (target.forward * helpGrabStateOffset.z + target.right * helpGrabStateOffset.x + Vector3.up * helpGrabStateOffset.y) + target.position;
+
                     targetPosition = Vector3.Lerp(transform.position, targetPosition, deltaTime * 5f);
                     Vector3 lookDir = playerHead.position - transform.position;
                     Quaternion targetRot;

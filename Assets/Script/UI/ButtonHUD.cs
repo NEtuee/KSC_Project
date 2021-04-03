@@ -6,8 +6,9 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
-public class ButtonHUD : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ButtonHUD : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,IPointerClickHandler
 {
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Canvas canvas;
@@ -21,6 +22,9 @@ public class ButtonHUD : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     [SerializeField]private Vector2 startSize;
     [SerializeField] private CircleGage gage;
+
+    public UnityEvent OnClick;
+
     private Color startColor;
     private Color buttonAlphaColor;
     private Color startTextColor;
@@ -116,5 +120,10 @@ public class ButtonHUD : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void OnPointerExit(PointerEventData eventData)
     {
         rectTransform.DOSizeDelta(targetSize, 0.1f);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnClick?.Invoke();
     }
 }

@@ -28,6 +28,9 @@ public class Follow : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.FixedUpdate)
             return;
         Vector3 targetPosition;
@@ -66,6 +69,9 @@ public class Follow : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.Update)
             return;
 

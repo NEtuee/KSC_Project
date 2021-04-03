@@ -136,6 +136,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private AnimationCurve reloadWeightCurve;
     [SerializeField] private ParticleSystem layserParticle;
 
+    public delegate void ActiveAimEvent();
+    public ActiveAimEvent activeAimEvent;
+    public delegate void ReleaseAimEvent();
+    public ReleaseAimEvent releaseAimEvent;
+
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
     private Transform mainCameraTrasform;
@@ -180,6 +185,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (isPause == true)
         {
             return;
@@ -195,6 +203,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (isPause == true)
         {
             return;
@@ -882,6 +893,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     ActiveAim(false);
                     GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
                     drone.OrderAimHelp(false);
+                    releaseAimEvent?.Invoke();
                 }
                 break;
             case PlayerState.Jump:
@@ -991,6 +1003,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     GameManager.Instance.stateManager.Visible(true);
                     footIK.DisableFeetIk();
                     drone.OrderAimHelp(true);
+                    activeAimEvent?.Invoke();
                 }
                 break;
             case PlayerState.HangEdge:

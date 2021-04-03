@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     public BulletTimeManager timeManager;
     public float killEventFov = 66f;
+    public bool PAUSE = false;
     [SerializeField] public PlayerCtrl player;
     [SerializeField] public FollowTargetCtrl followTarget;
     [SerializeField] public UIManager uiManager;
@@ -128,7 +129,7 @@ public class GameManager : MonoBehaviour
         player.PauseControl(result);
     }
 
-   
+    
 
     public void ResumePlayerControl()
     {

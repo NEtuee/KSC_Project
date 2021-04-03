@@ -21,7 +21,10 @@ public class FloorControl : MonoBehaviour
 
     public void Update()
     {
-        if(_launch)
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
+        if (_launch)
         {
             for(int i = 0; i < floors.Count; ++i)
             {

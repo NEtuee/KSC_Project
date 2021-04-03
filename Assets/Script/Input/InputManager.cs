@@ -62,7 +62,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        DebugAxis = Input.GetAxis("RightTrigger_Xbox");
+        //DebugAxis = Input.GetAxis("RightTrigger_Xbox");
     }
 
     public static InputManager Instance

@@ -42,7 +42,8 @@ public class BrokenMedusa_AI : IKBossBase
     private float _pointDistance;
     private float _direction;//1 = right, -1 = left
 
-    public UnityEvent scannedEvent; 
+    public UnityEvent scannedEvent;
+    public UnityEvent deadEvent;
 
     public void Start()
     {
@@ -54,12 +55,14 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("FrontWalk_Init");
         _timeCounter.InitTimer("timer");
 
-        scannedEvent.AddListener(() => { GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelper_Medusa>().HelpEvent("Scanned"); });
-        scannedEvent.AddListener(() => { GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelper_Medusa>().ScanFlag(); });
+        scannedEvent.AddListener(() => { GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelperRoot>().HelpEvent("Scanned"); });
     }
 
     public void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         _timeCounter.IncreaseTimer("timer",1f,out bool timeLimit);
         if(!timeLimit)
         {
@@ -215,6 +218,11 @@ public class BrokenMedusa_AI : IKBossBase
             case State.Scanned:
                 {
                     scannedEvent.Invoke();
+                }
+                break;
+            case State.Dead:
+                {
+                    deadEvent.Invoke();
                 }
                 break;
         }

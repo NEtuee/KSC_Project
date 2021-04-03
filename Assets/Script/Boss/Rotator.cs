@@ -9,7 +9,10 @@ public class Rotator : MonoBehaviour
 
     public void Update()
     {
-        if(play)
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
+        if (play)
             transform.rotation = transform.rotation * Quaternion.Euler(speed * Time.deltaTime);
     }
 }

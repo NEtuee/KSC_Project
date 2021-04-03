@@ -41,6 +41,9 @@ public class LevelEdit_Trigger : MonoBehaviour
 
     public void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         _timeCounter.IncreaseTimer("time",1f,out _timeOut);
 
         if(isTriggered && triggerTimer != 0f)
@@ -65,13 +68,15 @@ public class LevelEdit_Trigger : MonoBehaviour
     }
 
     public bool IsTriggered() {return isTriggered;}
+    public void SetCollisionTrigger(bool active) { collisionTrigger = active; }
 
     public void OnTriggerEnter(Collider coll)
     {
-        if(isTriggered || !collisionTrigger || !_timeOut)
+
+        if (isTriggered || !collisionTrigger || !_timeOut)
             return;
 
-        if((coll.gameObject.layer & targetLayer.value) != 0)
+        if ((coll.gameObject.layer & targetLayer.value) != 0)
         {
             Debug.Log(gameObject.name);
             gameObject.name = "triggered";
