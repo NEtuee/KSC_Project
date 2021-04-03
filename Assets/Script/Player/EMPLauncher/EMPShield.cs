@@ -7,6 +7,7 @@ public class EMPShield : Hitable
     public GameObject destroyEffect;
     public bool isCore = false;
     public bool isActive = false;
+    public bool shieldEffect = true;
     [SerializeField] private bool debug;
     public Color scanColor;
     private float shakeTime = 0.0f;
@@ -24,11 +25,16 @@ public class EMPShield : Hitable
         collider = GetComponent<Collider>();
         mat = renderer.material;
 
-        Color color2 = mat.GetColor("_color2");
-        color2.a = 0f;
-        mat.SetColor("_color2",color2);
+        if(shieldEffect)
+        {
+            Color color2 = mat.GetColor("_color2");
+            color2.a = 0f;
+            mat.SetColor("_color2",color2);
 
-        originalWpo = mat.GetFloat("_WPO");
+            originalWpo = mat.GetFloat("_WPO");
+        }
+
+        
 
         //shieldParticle = GetComponent<ParticleSystem>();
     }
@@ -187,6 +193,9 @@ public class EMPShield : Hitable
 
     IEnumerator ActiveEffect()
     {
+        if(!shieldEffect)
+            yield break;
+
         isActive = true;
         Color color2 = mat.GetColor("_color2");
         float target = 0.043f;
@@ -205,6 +214,9 @@ public class EMPShield : Hitable
 
     IEnumerator HitEffect()
     {
+        if(!shieldEffect)
+            yield break;
+
         float wpo = 2.0f;
         mat.SetFloat("_WPO", wpo);
         

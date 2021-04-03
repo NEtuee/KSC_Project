@@ -6,11 +6,13 @@ using UnityEditor;
 public class IKFootPointRotator : MonoBehaviour
 {
     public List<Transform> footPoints;
+    public List<IKLegMovement> legs;
 
     public LayerMask layerMask;
 
     public float rayDistance = 10f;
     public float baseHeight = 1f;
+    public float rotateFactor = 0.07f;
 
     public bool rotation = true;
 
@@ -38,7 +40,6 @@ public class IKFootPointRotator : MonoBehaviour
             }
         }
 
-
         if(ray.Cast(transform.position,out hit))
         {
             var point = hit.point + (-down * baseHeight);
@@ -48,8 +49,24 @@ public class IKFootPointRotator : MonoBehaviour
         var avg = (normals).normalized;
 
         if(rotation)
-            transform.rotation = Quaternion.Lerp(transform.rotation,(Quaternion.FromToRotation(transform.up,avg) * transform.rotation),0.07f);
+            transform.rotation = Quaternion.Lerp(transform.rotation,(Quaternion.FromToRotation(transform.up,avg) * transform.rotation),rotateFactor);
 
         
+    }
+
+    public void IKUnHold()
+    {
+        foreach(var leg in legs)
+        {
+            leg.Hold(false);
+        }
+    }
+
+    public void IKHold()
+    {
+        foreach(var leg in legs)
+        {
+            leg.Hold(true);
+        }
     }
 }

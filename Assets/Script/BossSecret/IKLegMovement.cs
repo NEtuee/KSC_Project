@@ -49,13 +49,26 @@ public class IKLegMovement : MonoBehaviour
 
     private void LateUpdate()
     {
+        _downRay.SetDirection(-rayPoint.up);
+
         if(_hold)
         {
+            if(_downRay.Cast(rayPoint.position,out RaycastHit check))
+            {
+                var rayDist = Vector3.Distance(ik.transform.position,check.point);
+                var dist = Vector3.Distance(ik.transform.position,ikHolder.position);
+
+                if(rayDist < dist)
+                {
+                    ik.transform.position = check.point;
+                    return;
+                }
+
+            }
+            
             ik.transform.position = Vector3.Lerp(ik.transform.position,ikHolder.position,.2f);
             return;
         }
-
-        _downRay.SetDirection(-rayPoint.up);
 
         if(_downRay.Cast(rayPoint.position,out RaycastHit hit))
         {
@@ -89,7 +102,8 @@ public class IKLegMovement : MonoBehaviour
                 _timer = 0;
                 _isMove = false;
 
-                particlePool.Active(pos,Quaternion.LookRotation(new Vector3(0f,0f,1f),hit.normal));
+                if(particlePool != null)
+                    particlePool.Active(pos,Quaternion.LookRotation(new Vector3(0f,0f,1f),hit.normal));
 
 
             }
