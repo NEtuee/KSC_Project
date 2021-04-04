@@ -54,7 +54,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 637511905733320356
+  lastModified: 637508372004668306
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -219,10 +219,30 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 3087509414934411152}
+  - {fileID: -1814918059410337868}
   MinDistance: 0
   MaxDistance: 0
   Length: 8107
+--- !u!114 &-7709289218715429889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Incinerator_Dam/Distance
+  m_EditorClassIdentifier: 
+  Name: Distance
+  Min: 0
+  Max: 5000
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-7672957984218613975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,7 +346,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 7590260046445311929}
+  - {fileID: 6085023682120029239}
   MinDistance: 0
   MaxDistance: 0
   Length: 11071
@@ -826,7 +846,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/Mob.bank
   Name: Mob
   StudioPath: bank:/Mob
-  lastModified: 637511905733430384
+  lastModified: 637508372004748339
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -865,7 +885,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637511905733340253
+  lastModified: 637508372004678318
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1226,7 +1246,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/PC.bank
   Name: PC
   StudioPath: bank:/PC
-  lastModified: 637511905733540407
+  lastModified: 637508372004818344
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1359,6 +1379,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &-1814918059410337868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Mob_BreathFire/BreathEnd
+  m_EditorClassIdentifier: 
+  Name: BreathEnd
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-1755196264223630626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2005,7 +2045,7 @@ MonoBehaviour:
   - {fileID: -5047245703204951773}
   StringsBanks:
   - {fileID: 8703614079223778173}
-  stringsBankWriteTime: 637511905733350245
+  stringsBankWriteTime: 637508372004688312
   cacheVersion: 6
 --- !u!114 &50726842375340322
 MonoBehaviour:
@@ -2108,7 +2148,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/Drone.bank
   Name: Drone
   StudioPath: bank:/Drone
-  lastModified: 637511905733330267
+  lastModified: 637508372004678318
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2391,7 +2431,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 6413402348348659084}
+  - {fileID: -7709289218715429889}
   MinDistance: 0
   MaxDistance: 0
   Length: 0
@@ -2494,7 +2534,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/Ambient.bank
   Name: Ambient
   StudioPath: bank:/Ambient
-  lastModified: 637511905733280348
+  lastModified: 637508372004648303
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2615,7 +2655,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 637511905733590424
+  lastModified: 637508372004848356
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -3048,6 +3088,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &6085023682120029239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_Breath/PC_Breath
+  m_EditorClassIdentifier: 
+  Name: PC_Breath
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &6100296144611615958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3710,7 +3770,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637511905733350245
+  lastModified: 637508372004688312
   LoadResult: 0
   FileSizes:
   - Name: 

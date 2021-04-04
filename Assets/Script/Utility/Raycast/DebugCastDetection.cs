@@ -45,4 +45,5 @@ public class DebugCastDetection
 
         return isHit;
     }
+
 }

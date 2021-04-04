@@ -1472,7 +1472,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case EMPLaunchType.ButtonDiff:
                 {
-                    if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && energy.Value >= 25f)
+                    if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && energy.Value >= 25f && loading == false) 
                     {
                         chargeTime += Time.deltaTime;
 

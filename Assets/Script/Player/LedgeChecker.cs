@@ -8,6 +8,18 @@ public class LedgeChecker : MonoBehaviour
     [SerializeField] Transform head;
     [SerializeField] private LedgeCollider collider1;
     [SerializeField] private LedgeCollider collider2;
+
+    [SerializeField] private LayerMask collisionLayer;
+    [SerializeField] private Vector3 upCollisionOffset;
+    [SerializeField] private Vector3 downCollisionOffset;
+    [SerializeField] private Vector3 upCollisionSize;
+    [SerializeField] private Vector3 downCollisionSize;
+
+    [SerializeField] private bool upCollision = false;
+    [SerializeField] private bool downCollision = false;
+
+    private Collider[] collisionBuffer = new Collider[10];
+
     private bool preValue;
     private int checkCount;
     [SerializeField] private bool isDetectLedge;
@@ -33,26 +45,45 @@ public class LedgeChecker : MonoBehaviour
         //transform.localPosition = originalPos;
         //transform.localRotation = originalRot;
 
-        foreach (GameObject obj in collider1.collidedObjects)
+        int collisionCount = 0;
+
+        collisionCount = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(downCollisionOffset), downCollisionSize * 0.5f, collisionBuffer, transform.rotation, collisionLayer);
+        downCollision = collisionCount == 0 ? true : false;
+
+        collisionCount = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(upCollisionOffset), upCollisionSize * 0.5f, collisionBuffer, transform.rotation, collisionLayer);
+        upCollision = collisionCount == 0 ? true : false;
+
+        isDetectLedge = false;
+
+        if (downCollision == true)
         {
-            if(collider2.collidedObjects.Contains(obj) == false)
+            if(upCollision == false)
             {
                 isDetectLedge = true;
-                //ChangeValue(true);
-                break;
-            }
-            else
-            {
-                isDetectLedge = false;
-                //ChangeValue(false);
             }
         }
 
-        if(collider1.collidedObjects.Count == 0)
-        {
-            //ChangeValue(true);
-            isDetectLedge = true;
-        }
+
+        //foreach (GameObject obj in collider1.collidedObjects)
+        //{
+        //    if(collider2.collidedObjects.Contains(obj) == false)
+        //    {
+        //        isDetectLedge = true;
+        //        //ChangeValue(true);
+        //        break;
+        //    }
+        //    else
+        //    {
+        //        isDetectLedge = false;
+        //        //ChangeValue(false);
+        //    }
+        //}
+
+        //if(collider1.collidedObjects.Count == 0)
+        //{
+        //    //ChangeValue(true);
+        //    isDetectLedge = true;
+        //}
     }
 
     public bool IsDetectedLedge()
@@ -75,6 +106,13 @@ public class LedgeChecker : MonoBehaviour
         {
             checkCount = 0;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.137f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
+        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.263f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
     }
 }
 
