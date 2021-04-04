@@ -12,17 +12,17 @@ public class StateManager : MonoBehaviour
     {
         GameManager.Instance.player.hp.Subscribe(value =>
         {
-            hpUI.SetValue(value / 100f);
+            hpUI.SetValue(value);
         });
 
         GameManager.Instance.player.stamina.Subscribe(value =>
         {
-            staminaUI.SetValue(value / 100f);
+            staminaUI.SetValue(value);
         });
 
         GameManager.Instance.player.energy.Subscribe(value =>
         {
-            energyUI.SetValue(value / 100f);
+            energyUI.SetValue(value);
         });
     }
 

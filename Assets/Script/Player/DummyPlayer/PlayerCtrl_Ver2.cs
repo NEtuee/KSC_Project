@@ -135,6 +135,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
     [SerializeField] private ParticleSystem layserParticle;
+    [SerializeField] private ParticlePool hitEffect;
+
+    [Header("HpState")]
+    private float latestHitTime;
+    [SerializeField] private float hpRestoreCoolTime = 5f;
+    [SerializeField] private float hpRestoreSpeed = 5f;
+
 
     public delegate void ActiveAimEvent();
     public ActiveAimEvent activeAimEvent;
@@ -339,6 +346,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             currentJumpPower = 0.0f;
         }
+
+        RestoreHp(deltaTime);
 
         switch (state)
         {
@@ -1711,6 +1720,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 layserParticle.Play();
                 Hitable shield;
                 bool destroy;
+                
+                if(hitEffect != null)
+                {
+                    hitEffect.Active(hit.point, Quaternion.identity);
+                }
+ 
                 if (hit.collider.TryGetComponent<Hitable>(out shield))
                 {
                     shield.Hit(loadCount * 40f, out destroy);
@@ -1818,6 +1833,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
+    private void RestoreHp(float deltaTime)
+    {
+        if(hp.Value != 100.0f && Time.time - latestHitTime > hpRestoreCoolTime)
+        {
+            hp.Value += hpRestoreSpeed * deltaTime;
+            hp.Value = Mathf.Clamp(hp.Value, 0.0f, 100.0f);
+        }
+    }
+
     private void AdjustLedgeOffset()
     {
         Vector3 start = transform.position + transform.up * collider.height * 2;
@@ -1870,6 +1894,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             time += Time.deltaTime;
             yield return null;
         }
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        hp.Value -= damage;
+        latestHitTime = Time.time;
     }
 
 
