@@ -53,6 +53,8 @@ public class IKLegMovement : MonoBehaviour
 
         if(_hold)
         {
+            if(ikHolder == null)
+                return;
             if(_downRay.Cast(rayPoint.position,out RaycastHit check))
             {
                 var rayDist = Vector3.Distance(ik.transform.position,check.point);
