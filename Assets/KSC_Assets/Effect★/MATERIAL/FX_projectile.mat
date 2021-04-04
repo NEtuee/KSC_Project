@@ -10,7 +10,7 @@ Material:
   m_Name: FX_projectile
   m_Shader: {fileID: 4800000, guid: aa1a355d403cce54ba595ca0dd582bbe, type: 3}
   m_ShaderKeywords: _ALPHABLEND_ON
-  m_LightmapFlags: 0
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -80,6 +80,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AlphaCutoff: 0.5
     - _BlendOp: 0
     - _BumpScale: 1
     - _CameraFadingEnabled: 0
@@ -120,7 +121,8 @@ Material:
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 0.52652204, g: 1.3443109, b: 3.8490567, a: 1}
-    - _Color0: {r: 0.31534016, g: 0.794275, b: 2.0258217, a: 0}
+    - _Color0: {r: 0, g: 0.82792604, b: 3.953347, a: 1}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
