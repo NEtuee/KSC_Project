@@ -131,8 +131,6 @@ public class MiniSpider_AI : IKPathFollowBossBase
 
     public void ChangeState(State state)
     {
-        currentState = state;
-
         if(state == State.Idle)
         {
             _timeCounter.InitTimer("bombRefillTime",0f,bombRefillTime);
@@ -158,13 +156,15 @@ public class MiniSpider_AI : IKPathFollowBossBase
             footPointRotator.enabled = false;
             _timeCounter.InitTimer("deadTimer",0f,4f);
 
-            if(_bomb != null && !_bomb.isOver)
+            if(_bomb != null && !_bomb.isOver && currentState != State.Out)
             {
                 _bomb.Hit();
             }
 
             animator.Stop();
         }
+
+        currentState = state;
     }
 
     public void BombThrow()

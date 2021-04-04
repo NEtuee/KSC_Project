@@ -15,6 +15,7 @@ public class IKPathFollowBossBase : IKBossBase
 
     protected Vector3 _targetDirection;
     protected float _turnAccuracy = 1f;
+    protected float _accelSpeed = 0f;
 
     protected bool _pathArrived = false;
     protected bool _pathLoop = false;
@@ -44,7 +45,7 @@ public class IKPathFollowBossBase : IKBossBase
 
     public override bool Move(Vector3 direction, float speed, float legMovementSpeed = 4f)
     {
-
+        _accelSpeed = Mathf.Lerp(_accelSpeed,speed,0.2f);
         var angle = Vector3.SignedAngle(transform.forward,_targetDirection,transform.up);
 
         if(MathEx.abs(angle) > _turnAccuracy)
@@ -57,7 +58,7 @@ public class IKPathFollowBossBase : IKBossBase
         
 
 
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += direction * _accelSpeed * Time.deltaTime;
         
 
         return true;

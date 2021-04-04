@@ -15,6 +15,9 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
         Hit,
         Fall,
         Flip,
+        Dead,
+        FlipDown,
+        FlipReady,
     };
 
     public State currentState;
@@ -33,16 +36,25 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
     public List<Transform> handFollowTarget = new List<Transform>();
 
 
+    private State _prevState;
+
     private EMPShield _targetBomb;
 
+
+    private Vector3 _flipOrigin;
+    private Vector3 _flipTarget;
+    private Quaternion _flipOriginRotation;
+    private Quaternion _flipTargetRotation;
     private float _bombPickSpeed;
 
     public void Start()
     {
-        ChangeState(State.Move);
+        ChangeState(State.FlipReady);
         _timeCounter.InitTimer("PickTime",0f);
         _timeCounter.InitTimer("MoveTime",0f);
         _timeCounter.InitTimer("ThrowTime",0f);
+        _timeCounter.InitTimer("FallTime",0f,5f);
+        _timeCounter.InitTimer("FlipFallTime",0f);
         _timeCounter.InitTimer("PickMoveTime",0f,Random.Range(5f,15f));
         _timeCounter.InitTimer("Hit",0f,3);
         _timeCounter.InitTimer("IdleTime",0f);
@@ -63,6 +75,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
         else if(currentState == State.Move)
         {
             FollowPath();
+            Push(10f,250f);
 
             _timeCounter.IncreaseTimer("PickMoveTime",out var limit);
             if(limit)
@@ -88,11 +101,15 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
             if(dist <= 6f + mainSpeed)
             {
                 _bombPickSpeed = dist - 6f;;
-                if(_bombPickSpeed <= 0.3f)
+                if(_bombPickSpeed <= 1f)
                 {
                     _bombPickSpeed = 0f;
                     ChangeState(State.PickBomb);
                 }
+            }
+            else
+            {
+                Push(10f,250f);
             }
 
             SetTarget(_targetTransform.position);
@@ -128,6 +145,8 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
         }
         else if(currentState == State.GoUp)
         {
+            Push(10f,250f);
+            
             if(_targetBomb == null || _targetBomb.isOver)
             {
                 ChangeState(State.Move);
@@ -156,33 +175,78 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
             _timeCounter.IncreaseTimer("Hit",out var limit);
             if(limit)
             {
-                ChangeState(State.Move);
+                if((_prevState == State.PickBomb || _prevState == State.PickBombMove) && _targetBomb != null)
+                {
+                    Debug.Log("What");
+                    ChangeState(State.PickBomb);
+                }
+                else if(_targetBomb != null && !_targetBomb.isOver)
+                {
+                    Debug.Log("the");
+                    ChangeState(State.GoUp);
+                }
+                else
+                    ChangeState(State.Move);
             }
         }
         else if(currentState == State.Fall)
         {
             rig.AddForce(Vector3.down * 200f * Time.deltaTime,ForceMode.Acceleration);
+            _timeCounter.IncreaseTimer("FallTime",out var limit);
+            if(limit)
+            {
+                ChangeState(State.Flip);
+            }
         }
         else if(currentState == State.Flip)
         {
-            transform.RotateAround(transform.position,transform.forward,180f * Time.deltaTime);
+            transform.RotateAround(transform.position,transform.forward,270f * Time.deltaTime);
             if(GroundCheck(out var hit,10f))
             {
                 rotator.enabled = true;
                 rotator.IKUnHold();
                 rig.isKinematic = true;
 
+                animator.Play("Recover",body);
                 ChangeState(State.Idle);
             }
             
         }
+        else if(currentState == State.FlipDown)
+        {
+            var time = _timeCounter.IncreaseTimer("FlipFallTime",out var limit);
+            if(limit)
+            {
+                rotator.enabled = true;
+                rotator.IKUnHold();
+                animator.Play("Landing",body);
+
+                Push(18f,250f);
+                ChangeState(State.Idle);
+            }
+
+            transform.position = Vector3.Lerp(_flipOrigin,_flipTarget,time * .5f);
+            transform.rotation = Quaternion.Lerp(_flipOriginRotation,_flipTargetRotation,time * .5f);
+        }
+        else if(currentState == State.FlipReady)
+        {
+            _timeCounter.IncreaseTimer("FlipReady",out var limit);
+            if(limit)
+            {
+                ChangeState(State.FlipDown);
+            }
+        }
     }
+
+
+
 
     public void ChangeState(State state)
     {
+        _prevState = currentState;
         if(state == State.Idle)
         {
-            _timeCounter.InitTimer("IdleTime",0f,3f);
+            _timeCounter.InitTimer("IdleTime",0f,2f);
         }
         else if(state == State.Move)
         {
@@ -199,6 +263,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
             if(_targetBomb == null || _targetBomb.isOver)
             {
                 ChangeState(State.Move);
+                return;
             }
             else
             {
@@ -231,18 +296,93 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
         {
             rotator.enabled = false;
             rig.isKinematic = false;
+
+            _timeCounter.InitTimer("FallTime",0f,5f);
         }
         else if(state == State.Flip)
         {
+            
             //rig.AddForce(Vector3.up * 4000f,ForceMode.Impulse);
+        }
+        else if(state == State.Dead)
+        {
+            Dead();
+        }
+        else if(state == State.FlipDown)
+        {
+            if(DownCheck())
+            {
+                rotator.IKHold();
+                rotator.enabled = false;
+            }
+            else
+            {
+                ChangeState(State.Idle);
+                return;
+            }
+            
+        }
+        else if(state == State.FlipReady)
+        {
+            _timeCounter.InitTimer("FlipReady",0f,10f);
         }
 
         currentState = state;
     }
 
+    public void Push(float raidus, float power)
+    {
+        Collider[] playerColl = Physics.OverlapSphere(transform.position, raidus,targetLayer);
+
+
+        if(playerColl.Length != 0)
+        {
+            foreach(Collider curr in playerColl)
+            {
+                PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
+                if(ragdoll != null)
+                {
+                    ragdoll.ExplosionRagdoll(power, 
+                        (Vector3.ProjectOnPlane(ragdoll.transform.position - transform.position,Vector3.up).normalized));
+                }
+            }
+        }
+    }
+    
+    public bool DownCheck()
+    {
+        Ray ray = new Ray(transform.position,transform.up);
+        if(Physics.Raycast(ray,out var hit,100f,groundLayer))
+        {
+            _flipOrigin = transform.position;
+            _flipOriginRotation = transform.rotation;
+            _flipTarget = hit.point + hit.normal;
+            _flipTargetRotation = transform.rotation * Quaternion.Euler(0f,0f,180f);
+            _timeCounter.InitTimer("FlipFallTime",0f,2f);
+
+            return true;
+        }
+
+        Debug.Log("????");
+        return false;
+    }
+
     public void Dead()
     {
+        foreach(var leg in rotator.legs)
+        {
+            var legRig = leg.gameObject.AddComponent<Rigidbody>();
+            var dir = transform.position - leg.transform.position;
+            leg.transform.SetParent(null);
+            leg.enabled = false;
+            legRig.AddForce(dir * 10f,ForceMode.Impulse);
+        }
 
+        rig.isKinematic = false;
+        rig.AddForce(Vector3.up * 4000f,ForceMode.Impulse);
+
+        rotator.enabled = false;
+        this.enabled = false;
     }
 
     public void ShieldHit()
