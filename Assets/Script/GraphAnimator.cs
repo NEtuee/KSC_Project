@@ -125,13 +125,13 @@ public class GraphAnimator : MonoBehaviour
         for(int i = 0; i < _playList.Count;)
         {
             int curr = i;
-            var time = _timeCounter.IncreaseTimer(_playList[i].name,1f,out bool limit, _playList[i].speed);
+            var time = _timeCounter.IncreaseTimer(_playList[i].name,out bool limit, _playList[i].speed);
             bool remove = false;
             if(limit)
             {
                 if(_playList[i].loop)
                 {
-                    time = _timeCounter.InitTimer(_playList[i].name);
+                    time = _timeCounter.InitTimer(_playList[i].name,time - 1f);
                     ++curr;
                 }
                 else if(!_playList[i].TargetExistsCheck())
