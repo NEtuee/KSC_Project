@@ -113,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
             keepSpeed = true;
         }
 
-        transform.SetParent(null);
+        SetParent(null);
     }
 
 
@@ -211,6 +211,11 @@ public class PlayerMovement : MonoBehaviour
                 groundAngle = Mathf.Acos(Vector3.Dot(groundHit.normal, Vector3.up)) * Mathf.Rad2Deg;
                 slidingVector = (Vector3.Project(Vector3.down, groundHit.normal) - Vector3.down).normalized;
             }
+            else
+            {
+                detectObject = null;
+            }
+
             if (dist >= groundMinDistance)
             {
                 Vector3 pos = transform.position + Vector3.up * (capsuleCollider.radius);
@@ -253,15 +258,15 @@ public class PlayerMovement : MonoBehaviour
                 isGrounded = true;
                 isJumping = false;
 
-                if (detectObject.CompareTag("Enviroment"))
+                if (detectObject != null && detectObject.CompareTag("Enviroment"))
                 {
-                    transform.SetParent(detectObject);
+                    SetParent(detectObject);
                 }
                 else
                 {
                     if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
                     {
-                        transform.SetParent(null);
+                        SetParent(null);
                     }
                 }
 
@@ -293,7 +298,7 @@ public class PlayerMovement : MonoBehaviour
                 isGrounded = false;
                 if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll&& player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge&& player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.ReadyClimbingJump && player.GetState() != PlayerCtrl_Ver2.PlayerState.ClimbingJump)
                 {
-                    transform.SetParent(null);
+                    SetParent(null);
                 }
             }
         }
@@ -308,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         prevParent = transform.parent;
-        transform.SetParent(null);
+        SetParent(null);
         detachTime = Time.time;
 
         if (prevParent != null)
@@ -326,6 +331,14 @@ public class PlayerMovement : MonoBehaviour
     public float GetGroundAngle()
     {
         return groundAngle;
+    }
+
+    public void SetParent(Transform parent)
+    {
+        if (transform.parent != parent)
+        {
+            transform.SetParent(parent);
+        }
     }
 
     private void OnGUI()

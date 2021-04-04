@@ -996,7 +996,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
                     }
-                    transform.parent = null;
+                    movement.SetParent(null);
                     handIK.DisableHandIK();
                 }
                 break;
@@ -1359,7 +1359,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 prevSpeed = currentSpeed;
                 moveDir = Vector3.zero;
 
-                transform.SetParent(hit.collider.transform);
+                movement.SetParent(hit.collider.transform);
                 movement.Attach();
                 
                 return true;
@@ -1374,7 +1374,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     ChangeState(PlayerState.Grab);
 
-                    transform.SetParent(hit.collider.transform);
+                    movement.SetParent(hit.collider.transform);
                     movement.Attach();
                     moveDir = Vector3.zero;
                     return true;
@@ -1403,7 +1403,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     prevSpeed = currentSpeed;
                     moveDir = Vector3.zero;
 
-                    transform.SetParent(hit.collider.transform);
+                    movement.SetParent(hit.collider.transform);
                     movement.Attach();
 
                     return true;
@@ -1792,7 +1792,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             if (wallHit.collider.transform != transform.parent)
             {
-                transform.SetParent(wallHit.collider.transform);
+                movement.SetParent(wallHit.collider.transform);
             }
         }
         
@@ -1951,6 +1951,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             style.normal.textColor = Color.white;
 
             GUI.Label(new Rect(10f, 100f, 100, 20), "State : " + state.ToString(), style);
+            GUI.Label(new Rect(200f, 100f, 100, 20), "Parent : " + transform.parent, style);
             GUI.Label(new Rect(1650f, 100f, 100, 20), "Position : " + transform.position.ToString(), style);
             GUI.Label(new Rect(10f, 120f, 100, 20), "PrevState : " + prevState.ToString(), style);
             GUI.Label(new Rect(10f, 140f, 100, 20), "IsLedge : " + isLedge.ToString(), style);
