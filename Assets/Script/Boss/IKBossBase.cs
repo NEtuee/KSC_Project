@@ -60,6 +60,13 @@ public class IKBossBase : Scanable
         }
     }
 
+    public virtual bool MoveForward(float speed)
+    {
+        transform.position += transform.forward * speed * Time.deltaTime;
+
+        return true;
+    }
+
     public virtual bool Move(Vector3 direction, float speed, float legMovementSpeed = 4f)
     {
         if(!ThereIsGround((direction * (groundCheckRadius * 0.5f)) * MathEx.normalize(speed),10f))

@@ -7,9 +7,16 @@ public class GraphAnimator : MonoBehaviour
     [System.Serializable]
     public class GraphAnimation
     {
+        public enum AnimationType
+        {
+            Translate,
+            Rotation
+        };
+
         public string name;
         public bool loop;
         public float speed;
+        public AnimationType animationType;
         public AnimationCurve xCurve;
         public AnimationCurve yCurve;
         public AnimationCurve zCurve;
@@ -19,12 +26,20 @@ public class GraphAnimator : MonoBehaviour
 
         public void ApplyCurve(float time)
         {
-            var pos = _origin;
-            pos.x += xCurve.Evaluate(time);
-            pos.y += yCurve.Evaluate(time);
-            pos.z += zCurve.Evaluate(time);
+            var target = _origin;
+            target.x += xCurve.Evaluate(time);
+            target.y += yCurve.Evaluate(time);
+            target.z += zCurve.Evaluate(time);
 
-            _target.localPosition = pos;
+            if(animationType == AnimationType.Translate)
+            {
+                _target.localPosition = target;
+            }
+            else if(animationType == AnimationType.Rotation)
+            {
+                _target.localEulerAngles = target;
+            }
+            
         }
 
         public bool TargetExistsCheck()
@@ -35,18 +50,31 @@ public class GraphAnimator : MonoBehaviour
         public void ReturnOrigin()
         {
             if(_target != null)
-                _target.localPosition = _origin;
+            {
+                if(animationType == AnimationType.Translate)
+                {
+                    _target.localPosition = _origin;
+                }
+                else if(animationType == AnimationType.Rotation)
+                {
+                    _target.localEulerAngles = _origin;
+                }
+            }
         }
 
         public void Set(Transform t) 
         {
-            if(_target != null)
-            {
-                _target.localPosition = _origin;
-            }
+            ReturnOrigin();
 
             _target = t;
-            _origin = _target.localPosition;
+            if(animationType == AnimationType.Translate)
+            {
+                _origin = _target.localPosition;
+            }
+            else if(animationType == AnimationType.Rotation)
+            {
+                _origin = _target.localEulerAngles;
+            }
         }
     }
 
@@ -97,13 +125,13 @@ public class GraphAnimator : MonoBehaviour
         for(int i = 0; i < _playList.Count;)
         {
             int curr = i;
-            var time = _timeCounter.IncreaseTimer(_playList[i].name,1f,out bool limit, _playList[i].speed);
+            var time = _timeCounter.IncreaseTimer(_playList[i].name,out bool limit, _playList[i].speed);
             bool remove = false;
             if(limit)
             {
                 if(_playList[i].loop)
                 {
-                    time = _timeCounter.InitTimer(_playList[i].name);
+                    time = _timeCounter.InitTimer(_playList[i].name,time - 1f);
                     ++curr;
                 }
                 else if(!_playList[i].TargetExistsCheck())

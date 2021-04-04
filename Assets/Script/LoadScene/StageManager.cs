@@ -15,6 +15,7 @@ public class StageManager : MonoBehaviour
     {
         _prevLoadingZone = prev;
         _prevLoadingZone.transform.SetPositionAndRotation(prevZoneTransform.position,prevZoneTransform.rotation);
+        _prevLoadingZone.transform.SetParent(prevZoneTransform);
     }
 
     public void SetPlayerToPosition()

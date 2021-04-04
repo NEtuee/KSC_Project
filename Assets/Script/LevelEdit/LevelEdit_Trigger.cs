@@ -36,7 +36,6 @@ public class LevelEdit_Trigger : MonoBehaviour
     {
         _timeCounter.InitTimer("time");
 
-        Debug.Log("??");
     }
 
     public void Update()
