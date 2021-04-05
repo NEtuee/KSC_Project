@@ -17,26 +17,34 @@ public class StageManager : MonoBehaviour
 
     public void Close()
     {
-        _prevLoadingZone.Close();
+        if(_prevLoadingZone != null)
+            _prevLoadingZone.Close();
     }
 
     public void Update()
     {
         if(_progress)
         {
-            float time = _timeCounter.IncreaseTimer("time",out var limit);
+            _timeCounter.IncreaseTimer("StartTime",out var limit);
             if(limit)
             {
-                _progress = false;
+                float time = _timeCounter.IncreaseTimer("time",out limit);
+                if(limit)
+                {
+                    _progress = false;
+                }
+                _prevLoadingZone.transform.position = Vector3.Lerp(_prevPos, prevPositionTarget.position,time);
+
             }
 
-            _prevLoadingZone.transform.position = Vector3.Lerp(_prevPos, prevPositionTarget.position,time);
+            
         }
     }
 
-    public void TranslatePrevLoadingZone()
+    public void TranslatePrevLoadingZone(float startTime)
     {
         _progress = true;
+        _timeCounter.InitTimer("StartTime",0f,startTime);
         _timeCounter.InitTimer("time");
         _prevPos = prevZoneTransform.position;
     }

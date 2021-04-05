@@ -3731,13 +3731,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 218927456}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.63, z: 10.99}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.02, z: 14.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &222819152
 GameObject:
   m_ObjectHideFlags: 0
@@ -31323,7 +31323,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1707462753}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: -11.31, z: 10.99}
+  m_LocalPosition: {x: 0, y: -11.31, z: 14.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -39930,7 +39930,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prevZoneTransform: {fileID: 218927457}
   loadedPlayerPosition: {fileID: 1948310389}
-  prevPositionTarget: {fileID: 0}
+  prevPositionTarget: {fileID: 1707462754}
 --- !u!4 &2141153352
 Transform:
   m_ObjectHideFlags: 0
@@ -40183,6 +40183,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2141153351}
+        m_TargetAssemblyTypeName: StageManager, Assembly-CSharp
+        m_MethodName: TranslatePrevLoadingZone
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   afterTriggerEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -40214,7 +40226,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4780755793295034239}
   m_LocalRotation: {x: -0, y: 0.00016089134, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.93}
+  m_LocalPosition: {x: 0, y: 0, z: 6.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
