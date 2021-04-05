@@ -15,6 +15,7 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
     public State currentState;
     public BossHead head;
     public EMPShield shield;
+    public int whipPath = 0;
 
     public LayerMask obstacleLayer;
 
@@ -55,9 +56,15 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
         }
         else if(currentState == State.FloorWhip)
         {
-            FollowPath();
+            Move(transform.forward,mainSpeed);
+            _targetDistance = Vector3.Distance(GameManager.Instance.player.transform.position,transform.position);
+            if(_targetDistance >= 10f)
+            {
+                Debug.Log("re");
+                SetTarget(GameManager.Instance.player.transform.position);
+            }
 
-            Collider[] playerColl = Physics.OverlapSphere(transform.position, 2f,targetLayer);
+            Collider[] playerColl = Physics.OverlapSphere(transform.position, 2.5f,targetLayer);
 
             if(playerColl.Length != 0)
             {
@@ -166,13 +173,19 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
         if(state == State.WallMove)
         {
             GetPath("WallMove");
-            _timeCounter.InitTimer("wallMoveTime",0f,Random.Range(8f,20f));
+            _timeCounter.InitTimer("wallMoveTime",0f,Random.Range(5f,12f));
             _pathLoop = true;
         }
         else if(state == State.FloorWhip)
         {
-            GetPath("FloorWhip" + Random.Range(0,4));
-            _timeCounter.InitTimer("whipTime",0f,Random.Range(5f,8f));
+            if(GameManager.Instance.player.transform.position.y >= 10f)
+            {
+                GetPath("FloorWhip" + whipPath);
+            }
+            else
+                SetTarget(GameManager.Instance.player.transform.position);
+                
+            _timeCounter.InitTimer("whipTime",0f,Random.Range(8f,12f));
             _pathLoop = true;
         }
         else if(state == State.WallMoveExit)
