@@ -19,8 +19,6 @@ public class DroneHelper_Arachne : DroneHelper
 
     [SerializeField] private float developerHintTime = 180.0f;
 
-    private float sceneStartTime;
-
     private void Start()
     {
         base.Start();
@@ -34,6 +32,8 @@ public class DroneHelper_Arachne : DroneHelper
     {
         if (root.active == false)
             return;
+
+        CheckScan();
 
         if (arachneDeadCheck == false)
         {

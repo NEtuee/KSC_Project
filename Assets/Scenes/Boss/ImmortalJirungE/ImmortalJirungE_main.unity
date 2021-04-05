@@ -1088,10 +1088,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -1099,7 +1103,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1452386207}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 701728862}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -1107,11 +1119,23 @@ PrefabInstance:
       value: DecreaseShieldCount
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ShieldDestroyFlag
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ImmortalJirungE_master, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Drone_Immortal, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 451985761, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -2959,6 +2983,12 @@ MonoBehaviour:
     m_Bits: 64
   bodys:
   - {fileID: 258356219}
+  whenReactiveshield:
+    m_PersistentCalls:
+      m_Calls: []
+  whenRecover:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &258356217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8970,10 +9000,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -8981,7 +9015,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1452386207}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 701728862}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -8989,11 +9031,23 @@ PrefabInstance:
       value: DecreaseShieldCount
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ShieldDestroyFlag
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ImmortalJirungE_master, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Drone_Immortal, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 451985761, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -9159,6 +9213,52 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 3.36
   m_Center: {x: -1.5394366e-15, y: 0.0000010430824, z: 0.0000073909778}
+--- !u!1 &701728860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 701728861}
+  - component: {fileID: 701728862}
+  m_Layer: 0
+  m_Name: DroneHelperSetting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &701728861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 701728860}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &701728862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 701728860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d0b0347630ee3b4089ae24b27717c16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  entranceFlag: 0
+  shieldDestroy: 0
 --- !u!1 &715658655
 GameObject:
   m_ObjectHideFlags: 0
@@ -11698,6 +11798,36 @@ MonoBehaviour:
     m_Bits: 64
   bodys:
   - {fileID: 914171672}
+  whenReactiveshield:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 701728862}
+        m_TargetAssemblyTypeName: Drone_Immortal, Assembly-CSharp
+        m_MethodName: RestoreShieldFlag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  whenRecover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 701728862}
+        m_TargetAssemblyTypeName: Drone_Immortal, Assembly-CSharp
+        m_MethodName: RecoveryFlag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &917363406
 GameObject:
   m_ObjectHideFlags: 0
@@ -17786,6 +17916,21 @@ MonoBehaviour:
   - {fileID: 1636898691}
   - {fileID: 914171675}
   lightning: {fileID: 2141153356}
+  whenAllShieldDestroy:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 701728862}
+        m_TargetAssemblyTypeName: Drone_Immortal, Assembly-CSharp
+        m_MethodName: AllShieldDestroyFlag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1452563967
 GameObject:
   m_ObjectHideFlags: 0
@@ -18638,6 +18783,89 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1548331549}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1555746376
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1555746379}
+  - component: {fileID: 1555746378}
+  - component: {fileID: 1555746377}
+  m_Layer: 0
+  m_Name: Entrance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1555746377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555746376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8565ab475c4f7674b963f2ed061a2f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerType: 0
+  triggerEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 701728862}
+        m_TargetAssemblyTypeName: Drone_Immortal, Assembly-CSharp
+        m_MethodName: EntranceFlag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  afterTriggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  isTriggered: 0
+  collisionTrigger: 1
+  reloadTime: 0
+  afterTriggerTime: 0
+--- !u!65 &1555746378
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555746376}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1555746379
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555746376}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0388, y: 36.2562, z: -29.5289}
+  m_LocalScale: {x: 6.7459, y: 6.6906, z: 6.8748}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1558065189
 GameObject:
   m_ObjectHideFlags: 0
@@ -19561,6 +19789,12 @@ MonoBehaviour:
     m_Bits: 64
   bodys:
   - {fileID: 1636898694}
+  whenReactiveshield:
+    m_PersistentCalls:
+      m_Calls: []
+  whenRecover:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1636898692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24510,10 +24744,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -24521,7 +24759,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1452386207}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 701728862}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -24529,11 +24775,23 @@ PrefabInstance:
       value: DecreaseShieldCount
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ShieldDestroyFlag
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ImmortalJirungE_master, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Drone_Immortal, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 451985761, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}

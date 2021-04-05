@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ImmortalJirungE_master : MonoBehaviour
 {
     public List<ImmortalJirungE_AI> aIs;
     public BezierLightning lightning;
+
+    public UnityEvent whenAllShieldDestroy;
 
     private int shieldCount = 0;
 
@@ -52,6 +55,8 @@ public class ImmortalJirungE_master : MonoBehaviour
 
                 Recovery();
             }
+
+            whenAllShieldDestroy?.Invoke();
         }
     }
 }

@@ -34,6 +34,8 @@ public class DroneHelper_Medusa : DroneHelper
         if (root.active == false)
             return;
 
+        CheckScan();
+
         if (root.helping == true)
         {
             bool limit;
