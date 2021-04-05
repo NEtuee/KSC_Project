@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public FMODSoundManager soundManager;
     [SerializeField] public StateManager stateManager;
     [SerializeField] public TextMeshProUGUI sceneNameText;
+    [SerializeField] public AsynSceneManager AsynSceneManager;
     public Transform bossTransform;
 
     public List<LockOnTarget> lockOnTargets = new List<LockOnTarget>();
@@ -114,6 +115,15 @@ public class GameManager : MonoBehaviour
         //            break;
         //    }
         //}
+
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            AsynSceneManager.LoadNextlevel();
+        }
     }
 
     public void SwitchMenuDone()

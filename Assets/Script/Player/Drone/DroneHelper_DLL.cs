@@ -17,6 +17,8 @@ public class DroneHelper_DLL : DroneHelper
         if (root.active == false)
             return;
 
+        CheckLevelTime();
+
         if (root.helping == true)
         {
             bool limit;

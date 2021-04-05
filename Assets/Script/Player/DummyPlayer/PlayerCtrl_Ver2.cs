@@ -114,7 +114,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField]private float restoreValuePerSecond = 10f;
     [SerializeField] private float costValue = 25f;
     [SerializeField] private float chargeNecessryTime = 1f;
-    private float chargeTime = 0.0f;
+    public FloatReactiveProperty chargeTime = new FloatReactiveProperty(0.0f);
     [SerializeField] private Transform launchPos;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float impectPower = 50.0f;
@@ -186,6 +186,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         launcherMode.Value = 1;
 
         line = GetComponent<LayserRender>();
+
+        chargeTime.Value = 0.0f;
 
         StartCoroutine(StopCheck());
     }
@@ -1489,11 +1491,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             return;
                         }
 
-                        chargeTime += Time.deltaTime;
+                        chargeTime.Value += Time.deltaTime;
 
-                        if (chargeTime >= chargeNecessryTime)
+                        if (chargeTime.Value >= chargeNecessryTime)
                         {
-                            chargeTime = 0.0f;
+                            chargeTime.Value = 0.0f;
                             int count = (int)Mathf.Abs(energy.Value / 25f);
                             energy.Value -= 25f * (loadCount.Value > count ? count : loadCount.Value);
 
@@ -1510,7 +1512,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                     else
                     {
-                        chargeTime = 0.0f;
+                        chargeTime.Value = 0.0f;
                     }
 
                     //if (Input.GetKeyDown(KeyCode.Mouse1) && energy.Value >= 50f)
@@ -1530,11 +1532,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         if (launcherMode.Value == 2 && energy.Value < 50f)
                             return;
 
-                        chargeTime += Time.deltaTime;
+                        chargeTime.Value += Time.deltaTime;
 
-                        if (chargeTime >= chargeNecessryTime)
+                        if (chargeTime.Value >= chargeNecessryTime)
                         {
-                            chargeTime = 0.0f;
+                            chargeTime.Value = 0.0f;
                             energy.Value -= 25f;
 
                             if (launcherMode.Value == 1)
@@ -1557,7 +1559,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                     else
                     {
-                        chargeTime = 0.0f;
+                        chargeTime.Value = 0.0f;
                     }
                 }
                 break;
@@ -1571,11 +1573,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         if (launcherMode.Value == 2 && energy.Value < 50f)
                             return;
 
-                        chargeTime += Time.deltaTime;
+                        chargeTime.Value += Time.deltaTime;
 
-                        if (chargeTime >= chargeNecessryTime)
+                        if (chargeTime.Value >= chargeNecessryTime)
                         {
-                            chargeTime = 0.0f;
+                            chargeTime.Value = 0.0f;
                             int count = (int)Mathf.Abs(energy.Value / 25f);
                             energy.Value -= 25f * (loadCount.Value>count? count : loadCount.Value);
 
@@ -1599,7 +1601,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                     else
                     {
-                        chargeTime = 0.0f;
+                        chargeTime.Value = 0.0f;
                     }
                 }
                 break;

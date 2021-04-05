@@ -43,6 +43,7 @@ public class BrokenMedusa_AI : IKBossBase
     private float _direction;//1 = right, -1 = left
 
     public UnityEvent scannedEvent;
+    public UnityEvent whenSearch;
     public UnityEvent deadEvent;
 
     public void Start()
@@ -213,6 +214,24 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void ChangeState(State state)
     {
+        State prevState = currentState;
+
+        switch(prevState)
+        {
+            case State.LockOnLook:
+                {
+                    if(state != State.LockOnMove)
+                    whenSearch?.Invoke();
+                }
+                break;
+            case State.LockOnMove:
+                {
+                    if (state != State.LockOnLook)
+                        whenSearch?.Invoke();
+                }
+                break;
+        }
+
         switch(state)
         {
             case State.Scanned:
