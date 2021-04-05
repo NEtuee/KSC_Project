@@ -62,6 +62,9 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
 
     void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         UpdateHandIK();
 
         if(currentState == State.Idle)

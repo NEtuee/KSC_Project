@@ -47,7 +47,11 @@ public class MiniSpider_AI : IKPathFollowBossBase
 
     public void Update()
     {
-        if(currentState == State.Idle)
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
+
+        if (currentState == State.Idle)
         {
             _timeCounter.IncreaseTimer("bombRefillTime",out bool limit);
             

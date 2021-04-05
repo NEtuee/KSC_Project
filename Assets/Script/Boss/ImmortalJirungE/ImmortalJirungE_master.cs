@@ -20,6 +20,9 @@ public class ImmortalJirungE_master : MonoBehaviour
 
     public void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         _timeCounterEx.IncreaseTimer("time",out var limit);
         if(limit)
         {

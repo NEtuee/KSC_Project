@@ -30,7 +30,10 @@ public class DaddyLongLegs_AI : IKBossBase
 
     public void Update()
     {
-        if(!_animate)
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
+        if (!_animate)
         {
             _timeCounter.IncreaseTimer("Start",out var limit);
             if(limit)

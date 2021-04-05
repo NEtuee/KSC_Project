@@ -35,7 +35,11 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
 
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.J))
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
+
+        if (Input.GetKeyDown(KeyCode.J))
         {
             ChangeState(State.Stun);
         }
