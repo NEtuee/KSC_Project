@@ -43,9 +43,10 @@ public class LoadingZone : MonoBehaviour
     {
         if(!_isLoaded)
         {
-            DontDestroyOnLoad(this.gameObject);
+            Debug.Log("TLQKF");
             GameManager.Instance.player.transform.SetParent(this.transform);
-            Camera.main.transform.SetParent(this.transform);    
+            Camera.main.transform.SetParent(this.transform);
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {

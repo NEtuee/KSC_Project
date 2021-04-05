@@ -37,6 +37,30 @@ public class ImmortalJirungE_master : MonoBehaviour
             _timeCounterEx.InitTimer("time",0f,Random.Range(1f,2f));
             
         }
+
+        bool whip = false;
+        foreach(var jirung in aIs)
+        {
+            if(jirung.currentState == ImmortalJirungE_AI.State.FloorWhip)
+            {
+                whip = true;
+                break;
+            }
+        }
+
+        if(!whip)
+        {
+            foreach(var jirung in aIs)
+            {
+                if(jirung.canFloorWhip && jirung.currentState == ImmortalJirungE_AI.State.WallMove)
+                {
+                    jirung.ChangeState(ImmortalJirungE_AI.State.FloorWhip);
+                    break;
+                }
+            }
+        }
+
+        
     }
 
     public void Recovery()
