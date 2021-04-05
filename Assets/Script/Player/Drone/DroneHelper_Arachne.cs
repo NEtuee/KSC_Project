@@ -8,6 +8,7 @@ public class DroneHelper_Arachne : DroneHelper
     [SerializeField] private bool arachneAppear = false;
     [SerializeField] private bool scanned = false;
     [SerializeField] private bool bombing = false;
+    [SerializeField] private bool hitFlage = false;
     [SerializeField] private bool timeRunningHint = false;
     [SerializeField] private bool arachneDown = false;
     [SerializeField] private bool arachneDeadCheck = false;
@@ -34,35 +35,39 @@ public class DroneHelper_Arachne : DroneHelper
         if (root.active == false)
             return;
 
-        if(developerHint == false)
+        if (arachneDeadCheck == false)
         {
-            if(Time.time-sceneStartTime > developerHintTime)
-            {
-                developerHint = true;
-                root.HelpEvent("Arachne_BigHint");
-            }
-        }
 
-        if(arachneDown == false)
-        {
-            bool limit;
-            if (timeRunningHint == false)
+            if (developerHint == false)
             {
-                root.timer.IncreaseTimer("DownHintTimer", timeRunningHintTime, out limit);
-                if (limit == true)
+                if (Time.time - sceneStartTime > developerHintTime)
                 {
-                    root.HelpEvent("Arachne_DownHint");
-                    timeRunningHint = true;
-                    root.timer.InitTimer("DownHintTimer", 0.0f);
+                    developerHint = true;
+                    root.HelpEvent("ArachneBigHint");
                 }
             }
-            else
+
+            if (arachneDown == false)
             {
-                root.timer.IncreaseTimer("DownHintTimer", timeRunningHintTime, out limit);
-                if (limit == true)
+                bool limit;
+                if (timeRunningHint == false)
                 {
-                    root.HelpEvent("Arachne_DownHint");
-                    root.timer.InitTimer("DownHintTimer", 0.0f);
+                    root.timer.IncreaseTimer("DownHintTimer", timeRunningHintTime, out limit);
+                    if (limit == true)
+                    {
+                        root.HelpEvent("ArachneDownHint");
+                        timeRunningHint = true;
+                        root.timer.InitTimer("DownHintTimer", 0.0f);
+                    }
+                }
+                else
+                {
+                    root.timer.IncreaseTimer("DownHintTimer", timeRunningHintTime, out limit);
+                    if (limit == true)
+                    {
+                        root.HelpEvent("ArachneDownHint");
+                        root.timer.InitTimer("DownHintTimer", 0.0f);
+                    }
                 }
             }
         }
@@ -82,26 +87,44 @@ public class DroneHelper_Arachne : DroneHelper
 
     public void ScanFlag()
     {
-        scanned = true;
-        root.HelpEvent("Arachne_Weak");
+        if (scanned == false)
+        {
+            scanned = true;
+            root.HelpEvent("ArachneWeak");
+        }
     }
 
     public void ArachneAppearFlag()
     {
         arachneAppear = true;
-        root.HelpEvent("Arachne_Appear");
+        root.HelpEvent("ArachneAppear");
     }
 
     public void BombHintFlag()
     {
-        bombHint = true;
-        root.HelpEvent("Arachne_BombHint");
+        if (bombHint == false)
+        {
+            bombHint = true;
+            root.HelpEvent("ArachneBombHint");
+        }
+    }
+
+    public void HitFlag()
+    {
+        if (hitFlage == false)
+        {
+            hitFlage = true;
+            root.HelpEvent("ArachneStun");
+        }
     }
 
     public void BombingFlag()
     {
-        bombing = true;
-        root.HelpEvent("Arachne_Bomb");
+        if (bombing == false)
+        {
+            bombing = true;
+            root.HelpEvent("ArachneBomb");
+        }
     }
 
     public void ArachneDownFlag()

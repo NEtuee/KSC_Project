@@ -9,6 +9,7 @@ public abstract class Hitable : Scanable
     [SerializeField] protected float hp = 100f;
     public UnityEvent whenDestroy;
     public UnityEvent whenHit = new UnityEvent();
+    public UnityEvent whenScanned = new UnityEvent();
 
     public abstract void Hit();
 

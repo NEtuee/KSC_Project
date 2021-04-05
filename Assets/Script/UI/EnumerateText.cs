@@ -10,8 +10,8 @@ public class EnumerateText : MonoBehaviour
     private TextMeshProUGUI text;
 
     private bool running = false;
-    private string targetString;
-    private string currentString;
+    [SerializeField]private string targetString;
+    [SerializeField]private string currentString;
 
     private int currentTextIndex = 0;
 
@@ -27,7 +27,7 @@ public class EnumerateText : MonoBehaviour
         {
             if(running == true)
             {
-                while(currentTextIndex + 1 < targetString.Length)
+                while(currentTextIndex < targetString.Length)
                 {
                     currentTextIndex++;
                     currentString = targetString.Substring(0, currentTextIndex);
