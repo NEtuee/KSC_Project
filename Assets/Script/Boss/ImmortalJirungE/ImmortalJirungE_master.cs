@@ -25,7 +25,7 @@ public class ImmortalJirungE_master : MonoBehaviour
         {
             for(int i = 1; i < aIs.Count + 1; ++i)
             {
-                lightning.Active(aIs[i - 1].transform.position,aIs[i >= aIs.Count ? 0 : i].transform.position,2,0.1f,0.4f);
+                lightning.Active(aIs[i - 1].transform.position,aIs[i >= aIs.Count ? 0 : i].transform.position,3,0.1f,4f);
             }
 
             _timeCounterEx.InitTimer("time",0f,Random.Range(1f,2f));

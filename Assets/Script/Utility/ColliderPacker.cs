@@ -6,6 +6,7 @@ public class ColliderPacker : MonoBehaviour
 {
     public List<Collider> targetObjects = new List<Collider>();
     public bool deleteTarget = false;
+    public Vector3 colliderScale = Vector3.one;
 
     public void Normalize()
     {
@@ -22,13 +23,13 @@ public class ColliderPacker : MonoBehaviour
                     var center = box.center;
                     var size = box.size;
     
-                    center.x *= scale.x;
-                    center.y *= scale.y;
-                    center.z *= scale.z;
+                    center.x *= scale.x * colliderScale.x;
+                    center.y *= scale.y * colliderScale.y;
+                    center.z *= scale.z * colliderScale.z;
     
-                    size.x *= scale.x;
-                    size.y *= scale.y;
-                    size.z *= scale.z;
+                    size.x *= scale.x * colliderScale.x;
+                    size.y *= scale.y * colliderScale.y;
+                    size.z *= scale.z * colliderScale.z;
     
                     box.center = center;
                     box.size = size;
@@ -66,7 +67,7 @@ public class ColliderPacker : MonoBehaviour
             if(targetObjects[i].GetType() == typeof(BoxCollider))
             {
                 var collider = package.AddComponent<BoxCollider>();
-                collider.size = scale;
+                collider.size = MathEx.MultiplyElems(scale, colliderScale);
             }
 
             targetObjects[i].transform.SetParent(package.transform);

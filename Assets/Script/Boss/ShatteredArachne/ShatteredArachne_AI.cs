@@ -100,8 +100,8 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
 
             if(dist <= 6f + mainSpeed)
             {
-                _bombPickSpeed = dist - 6f;;
-                if(_bombPickSpeed <= 1f)
+                _bombPickSpeed = dist - 3f;
+                if(dist <= 7f)
                 {
                     _bombPickSpeed = 0f;
                     ChangeState(State.PickBomb);
@@ -129,9 +129,9 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
                 var pos = _targetBomb.transform.position;
                 var targetPos = bombPoint.position;
 
-                pos.y = Mathf.Lerp(pos.y, targetPos.y,0.07f);
-                pos.x = Mathf.Lerp(pos.x, targetPos.x,0.01f);
-                pos.z = Mathf.Lerp(pos.z, targetPos.z,0.01f);
+                pos.y = Mathf.Lerp(pos.y, targetPos.y,0.14f);
+                pos.x = Mathf.Lerp(pos.x, targetPos.x,0.02f);
+                pos.z = Mathf.Lerp(pos.z, targetPos.z,0.02f);
                 _targetBomb.transform.position = pos;
 
                 _timeCounter.IncreaseTimer("MoveTime",out limit);
@@ -149,6 +149,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
             
             if(_targetBomb == null || _targetBomb.isOver)
             {
+                Debug.Log("Check");
                 ChangeState(State.Move);
             }
 
@@ -175,14 +176,14 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
             _timeCounter.IncreaseTimer("Hit",out var limit);
             if(limit)
             {
+                rotator.enabled = true;
+
                 if((_prevState == State.PickBomb || _prevState == State.PickBombMove) && _targetBomb != null)
                 {
-                    Debug.Log("What");
                     ChangeState(State.PickBomb);
                 }
                 else if(_targetBomb != null && !_targetBomb.isOver)
                 {
-                    Debug.Log("the");
                     ChangeState(State.GoUp);
                 }
                 else
@@ -246,7 +247,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
         _prevState = currentState;
         if(state == State.Idle)
         {
-            _timeCounter.InitTimer("IdleTime",0f,2f);
+            _timeCounter.InitTimer("IdleTime",0f,3f);
         }
         else if(state == State.Move)
         {
@@ -274,22 +275,24 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
         }
         else if(state == State.PickBomb)
         {
-            _timeCounter.InitTimer("PickTime",0f);
-            _timeCounter.InitTimer("MoveTime",0f);
+            _timeCounter.InitTimer("PickTime",0f,0.5f);
+            _timeCounter.InitTimer("MoveTime",0f,0.5f);
             _targetBomb.GetComponent<Rigidbody>().isKinematic = true;
             _targetBomb.transform.SetParent(transform);
         }
         else if(state == State.GoUp)
         {
-            GetPath("GoUp_" + Random.Range(0,3),false);
+            var up = "GoUp_" + Random.Range(0,3);
+            GetPath(up,false);
             _pathLoop = false;
         }
         else if(state == State.ThrowBomb)
         {
-            _timeCounter.InitTimer("ThrowTime",0f,3f);
+            _timeCounter.InitTimer("ThrowTime",0f,2f);
         }
         else if(state == State.Hit)
         {
+            rotator.enabled = false;
             _timeCounter.InitTimer("Hit",0f,3);
         }
         else if(state == State.Fall)
@@ -297,7 +300,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
             rotator.enabled = false;
             rig.isKinematic = false;
 
-            _timeCounter.InitTimer("FallTime",0f,5f);
+            _timeCounter.InitTimer("FallTime",0f,10f);
         }
         else if(state == State.Flip)
         {
