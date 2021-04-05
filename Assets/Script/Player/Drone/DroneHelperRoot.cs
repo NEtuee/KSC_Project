@@ -63,7 +63,7 @@ public class DroneHelperRoot : MonoBehaviour
     {
         if (descriptDictionary.ContainsKey(key) == false)
         {
-            Debug.LogError("Not Exits Key");
+            Debug.LogError(key+"Not Exits Key");
             return false;
         }
 

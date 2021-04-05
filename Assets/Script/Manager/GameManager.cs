@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EscMenu soundMenu;
     [SerializeField] public FMODSoundManager soundManager;
     [SerializeField] public StateManager stateManager;
+    [SerializeField] public TextMeshProUGUI sceneNameText;
     public Transform bossTransform;
 
     public List<LockOnTarget> lockOnTargets = new List<LockOnTarget>();

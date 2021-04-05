@@ -1485,7 +1485,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     {
                         if(energy.Value < 25f)
                         {
-                            
+                            drone.DroneHelpCall("Support_Energy");
                             return;
                         }
 

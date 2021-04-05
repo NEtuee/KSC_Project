@@ -595,10 +595,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &159300666
@@ -815,6 +822,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &183150617
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 183150619}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &183150619
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183150617}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 21
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &185916263
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,6 +971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetObjects: []
   deleteTarget: 1
+  colliderScale: {x: 1, y: 1, z: 1}
 --- !u!1001 &204391769
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6180,10 +6218,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &814611921
@@ -6874,10 +6919,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &975567350
@@ -6998,10 +7050,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &1012984483
@@ -7573,10 +7632,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &1054011016
@@ -8288,10 +8354,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &1185221517
@@ -10019,10 +10092,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &1603145365
@@ -10610,10 +10690,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &1676253739
@@ -10965,10 +11052,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &1776642045
@@ -11595,10 +11689,17 @@ MonoBehaviour:
   whenDestroy:
     m_PersistentCalls:
       m_Calls: []
+  whenHit:
+    m_PersistentCalls:
+      m_Calls: []
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 3901721362512671319, guid: 1bb88c3e6dc2acc4487b4c39a6caec5c,
     type: 3}
   isCore: 0
   isActive: 0
+  shieldEffect: 1
   debug: 0
   scanColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!65 &1940535193
