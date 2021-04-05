@@ -6,7 +6,7 @@ public abstract class DroneHelper : MonoBehaviour
 {
     [SerializeField] protected DroneHelperRoot root;
 
-    private void Start()
+    protected void Start()
     {
         root = GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelperRoot>();
         root.SetHelper(this);
