@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000002, guid: 6a01b82be6a8290408e9dbfc64be8847,
+  m_LightingDataAsset: {fileID: 112000002, guid: 5a37efbc5e1b6914db84cd936fc96b6a,
     type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 8087c7ea39509f44c95e16de9c46ef11,
     type: 2}
@@ -297,11 +297,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eb1b563033d2be44af036d2fa74d5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  standard: 0
   target: {fileID: 543450651812950204}
   rightOffset: -1
   upOffset: 1.7
   forwardOffset: -1
   billBoard: 0
+  flip: 0
+  interpolation: 0
 --- !u!114 &17370244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,10 +320,13 @@ MonoBehaviour:
   target: {fileID: 543450651812950204}
   state: 0
   moveSpeed: 7
-  rightOffset: -1
-  upOffset: 1.7
-  forwardOffset: -1
+  defaultFollowOffset: {x: 0, y: 0, z: 0}
+  aimHelpOffset: {x: 0, y: 0, z: 0}
+  helpOffset: {x: 0, y: 0, z: 0}
+  helpGrabStateOffset: {x: 0, y: 0, z: 0}
   collectRequiredTime: 1
+  floatingMove: {fileID: 0}
+  help: 0
 --- !u!114 &17370245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -597,7 +603,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69449274}
   m_LocalRotation: {x: 0, y: 0.008726558, z: 0, w: 0.999962}
-  m_LocalPosition: {x: 3.6499817, y: 4.03, z: -27.604244}
+  m_LocalPosition: {x: 3.729815, y: 3.40122, z: -23.030603}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1690922439}
@@ -2423,6 +2429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingSpeed: 1
   range: 0.5
+  rangeRatio: 1
 --- !u!1001 &310373736
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4541,6 +4548,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingSpeed: 1
   range: 0.5
+  rangeRatio: 1
 --- !u!1 &487296187
 GameObject:
   m_ObjectHideFlags: 0
@@ -6004,6 +6012,9 @@ MonoBehaviour:
   inUi: {fileID: 1050564712}
   startSize: {x: 120, y: 240}
   gage: {fileID: 980355534}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!223 &716434214
 Canvas:
   m_ObjectHideFlags: 0
@@ -6364,6 +6375,9 @@ MonoBehaviour:
   inUi: {fileID: 0}
   startSize: {x: 120, y: 240}
   gage: {fileID: 0}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &752574845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6851,6 +6865,9 @@ MonoBehaviour:
   inUi: {fileID: 0}
   startSize: {x: 120, y: 240}
   gage: {fileID: 0}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &814168198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7229,6 +7246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gageImage: {fileID: 913653954}
+  gageValueText: {fileID: 0}
   updateType: 3
   updateSpeed: 0.2
   updateValue: 0
@@ -8016,6 +8034,15 @@ MonoBehaviour:
   head: {fileID: 0}
   collider1: {fileID: 2123427018}
   collider2: {fileID: 558797912}
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  upCollisionOffset: {x: 0, y: 0, z: 0}
+  downCollisionOffset: {x: 0, y: 0, z: 0}
+  upCollisionSize: {x: 0, y: 0, z: 0}
+  downCollisionSize: {x: 0, y: 0, z: 0}
+  upCollision: 0
+  downCollision: 0
   isDetectLedge: 0
 --- !u!1 &1042930965
 GameObject:
@@ -9116,6 +9143,9 @@ MonoBehaviour:
   inUi: {fileID: 0}
   startSize: {x: 120, y: 240}
   gage: {fileID: 0}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1129169581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9553,11 +9583,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eb1b563033d2be44af036d2fa74d5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  standard: 0
   target: {fileID: 543450651812950204}
   rightOffset: -1
   upOffset: 2.2
   forwardOffset: -1
   billBoard: 1
+  flip: 0
+  interpolation: 0
 --- !u!114 &1160563209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10020,6 +10053,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingSpeed: 1
   range: 0.5
+  rangeRatio: 1
 --- !u!1 &1245249825
 GameObject:
   m_ObjectHideFlags: 0
@@ -11235,6 +11269,9 @@ MonoBehaviour:
   inUi: {fileID: 1870913447}
   startSize: {x: 120, y: 240}
   gage: {fileID: 118104187}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!223 &1453928329
 Canvas:
   m_ObjectHideFlags: 0
@@ -11368,6 +11405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gageImage: {fileID: 1457107363}
+  gageValueText: {fileID: 0}
   updateType: 0
   updateSpeed: 0.2
   updateValue: 0
@@ -11441,6 +11479,7 @@ MonoBehaviour:
   energy:
     value: 0
   updateMethod: 1
+  hitMaker: {fileID: 0}
   playerDebug: 1
   isRun: 0
   state: 0
@@ -11506,6 +11545,9 @@ MonoBehaviour:
   climbingLayer:
     serializedVersion: 2
     m_Bits: 64
+  climbingPaintLayer:
+    serializedVersion: 2
+    m_Bits: 0
   ledgeAbleLayer:
     serializedVersion: 2
     m_Bits: 131072
@@ -11527,6 +11569,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   moveDir: {x: 0, y: 0, z: 0}
   ledgeChecker: {fileID: 1021882846}
+  spaceChecker: {fileID: 0}
   hangAbleEdgeDist: 3
   restoreValuePerSecond: 10
   costValue: 25
@@ -11595,6 +11638,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   layserParticle: {fileID: 501369554}
+  hitEffect: {fileID: 0}
+  hpRestoreCoolTime: 5
+  hpRestoreSpeed: 5
 --- !u!114 &1459259135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11861,6 +11907,7 @@ MonoBehaviour:
   enableHandIK: 0
   enableLeftHandIk: 0
   enableRightHandIk: 0
+  startLedgeIK: 0
   leftTrace: 0
   rightTrace: 0
   climbingLayer:
@@ -13453,6 +13500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gageImage: {fileID: 1634082130}
+  gageValueText: {fileID: 0}
   updateType: 3
   updateSpeed: 0.2
   updateValue: 0
@@ -16123,6 +16171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gageImage: {fileID: 1954207247}
+  gageValueText: {fileID: 0}
   updateType: 3
   updateSpeed: 0.2
   updateValue: 0
@@ -16298,6 +16347,9 @@ MonoBehaviour:
   inUi: {fileID: 1531623720}
   startSize: {x: 120, y: 240}
   gage: {fileID: 247089691}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2008214046
 GameObject:
   m_ObjectHideFlags: 0
@@ -18519,17 +18571,17 @@ PrefabInstance:
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.4037147
+      value: 3.94448
       objectReference: {fileID: 0}
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7800002
+      value: 3.3294039
       objectReference: {fileID: 0}
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.531988
+      value: -23.036943
       objectReference: {fileID: 0}
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
@@ -19207,17 +19259,17 @@ PrefabInstance:
     - target: {fileID: 5217452666823169045, guid: df6fd956879dfa44690be0b182a6d60a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.6499817
+      value: 3.729815
       objectReference: {fileID: 0}
     - target: {fileID: 5217452666823169045, guid: df6fd956879dfa44690be0b182a6d60a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.03
+      value: 3.40122
       objectReference: {fileID: 0}
     - target: {fileID: 5217452666823169045, guid: df6fd956879dfa44690be0b182a6d60a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -27.604244
+      value: -23.030603
       objectReference: {fileID: 0}
     - target: {fileID: 5217452666823169045, guid: df6fd956879dfa44690be0b182a6d60a,
         type: 3}

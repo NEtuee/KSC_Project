@@ -26,6 +26,14 @@ public class AsynSceneManager : MonoBehaviour
         LoadCurrentlevel();
     }
 
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.I))
+        {
+            LoadCurrentlevel();
+        }
+    }
+
     public void LoadLevel(int level)
     {
         currentLevel = level;
