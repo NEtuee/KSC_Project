@@ -10,6 +10,8 @@ public class AsynSceneManager : MonoBehaviour
     public List<string> levels = new List<string>();
     public int currentLevel = 0;
 
+    public StageManager currentStageManager;
+
     private string _currentScene;
     private List<string> _unloadScenes = new List<string>();
 
@@ -44,6 +46,13 @@ public class AsynSceneManager : MonoBehaviour
     public void LoadCurrentlevel()
     {
         _currentScene = levels[currentLevel];
+        RegisterProgress();
+        StartCoroutine(SceneLoadingProgress(true));
+    }
+
+    public void LoadPrevlevel()
+    {
+        _currentScene = levels[--currentLevel < 0 ? levels.Count - 1 : currentLevel];
         RegisterProgress();
         StartCoroutine(SceneLoadingProgress(true));
     }
@@ -105,7 +114,10 @@ public class AsynSceneManager : MonoBehaviour
             yield return null;
         }
 
+        currentStageManager = GameObject.FindObjectOfType<StageManager>();
         _afterLoad();
+
+        Debug.Log(currentStageManager.SceneTitle);
 
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(_currentScene));
         _unloadScenes.Add(_currentScene);
@@ -114,8 +126,7 @@ public class AsynSceneManager : MonoBehaviour
 
         if(setPos)
         {
-            var stage = GameObject.FindObjectOfType<StageManager>();
-            if(stage != null)
+            if(currentStageManager != null)
             {
                 GameObject.FindObjectOfType<StageManager>().SetPlayerToPosition();
             }
