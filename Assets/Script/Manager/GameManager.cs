@@ -76,6 +76,28 @@ public class GameManager : MonoBehaviour
         {
             lockOnTargets.Add(lockTarget.GetComponent<LockOnTarget>());
         }
+
+        AsynSceneManager.RegisterAfterLoad(() =>
+        { 
+            switch(AsynSceneManager.currentStageManager.SceneTitle)
+            {
+                case "Outdoor_Main":
+                    sceneNameText.text = "지상";
+                    break;
+                case "DaddyLongLegs_Main":
+                    sceneNameText.text = "대디 롱 래그";
+                    break;
+                case "BrokenMedusa_main":
+                    sceneNameText.text = "고장난 메두사";
+                    break;
+                case "ImmortalJirungE_main":
+                    sceneNameText.text = "임모탈 지렁이";
+                    break;
+                case "ShatteredArachne_Main":
+                    sceneNameText.text = "조각난 아라크네";
+                    break;
+            }
+        });
     }
 
     private void Update()
@@ -122,7 +144,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            AsynSceneManager.LoadNextlevel();
+            AsynSceneManager.LoadNextlevelFrom();
         }
     }
 
