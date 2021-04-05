@@ -57,6 +57,13 @@ public class AsynSceneManager : MonoBehaviour
         StartCoroutine(SceneLoadingProgress(true));
     }
 
+    public void LoadNextlevelFrom()
+    {
+        currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
+        _currentScene = levels[currentLevel];
+        StartCoroutine(SceneLoadingProgress(true));
+    }
+
     public void LoadNextlevel()
     {
         currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
