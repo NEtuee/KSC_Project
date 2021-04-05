@@ -14,31 +14,31 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0.6020381, g: 0.7830189, b: 0.60601294, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.0045
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_AmbientMode: 3
+  m_SubtractiveShadowColor: {r: 0.19097647, g: 0.24705882, b: 0.19097647, a: 1}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
-  m_DefaultReflectionMode: 0
+  m_DefaultReflectionMode: 1
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,9 +97,10 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 57581a32b8b32834a87880e33fe49fbb,
+  m_LightingDataAsset: {fileID: 112000004, guid: 57581a32b8b32834a87880e33fe49fbb,
     type: 2}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 4addcb47d07fd1c4fbc7add01de42302,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -141,7 +142,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &9823237
 Transform:
@@ -196,7 +197,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -228,7 +229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 25812026}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +267,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &48186523
 Transform:
@@ -321,7 +322,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -361,7 +362,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &58049028
 Transform:
@@ -416,7 +417,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -450,7 +451,7 @@ GameObject:
   - component: {fileID: 67385142}
   - component: {fileID: 67385144}
   - component: {fileID: 67385143}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -537,7 +538,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &73264360
 Transform:
@@ -592,7 +593,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -632,7 +633,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &75035893
 Transform:
@@ -687,7 +688,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -719,7 +720,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 76700651}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -794,7 +795,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 99951904}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +827,7 @@ GameObject:
   - component: {fileID: 100948740}
   - component: {fileID: 100948742}
   - component: {fileID: 100948741}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Sphere
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -912,7 +913,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &112911466
 Transform:
@@ -1005,7 +1006,7 @@ GameObject:
   - component: {fileID: 115423571}
   - component: {fileID: 115423573}
   - component: {fileID: 115423572}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Sphere
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -1157,10 +1158,30 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2606128215987365116, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606128215987365116, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8228065288571749512, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
         type: 3}
       propertyPath: m_Name
       value: DummyBatterySet (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8228065288571749512, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8228065288571749512, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8228065288571749527, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
         type: 3}
@@ -1230,6 +1251,16 @@ PrefabInstance:
     - target: {fileID: 8228065288571749527, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9146419524186966626, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9146419524186966626, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1313,7 +1344,7 @@ GameObject:
   - component: {fileID: 124955702}
   - component: {fileID: 124955701}
   - component: {fileID: 124955700}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1405,7 +1436,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 130966605}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1437,7 +1468,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 135316626}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1469,7 +1500,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 139574938}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: GroundRay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1499,7 +1530,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 152778552}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1531,7 +1562,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 156365657}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Graphic
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -1572,7 +1603,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &156761107
 Transform:
@@ -1627,7 +1658,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -1659,7 +1690,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 160145219}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1699,7 +1730,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &163343872
 Transform:
@@ -1754,7 +1785,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -1786,7 +1817,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 168805578}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1819,7 +1850,7 @@ GameObject:
   - component: {fileID: 172676063}
   - component: {fileID: 172676062}
   - component: {fileID: 172676061}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -1915,7 +1946,7 @@ GameObject:
   - component: {fileID: 190245938}
   - component: {fileID: 190245937}
   - component: {fileID: 190245936}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -2008,7 +2039,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 199587569}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2043,7 +2074,7 @@ GameObject:
   - component: {fileID: 203446532}
   - component: {fileID: 203446531}
   - component: {fileID: 203446530}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -2144,7 +2175,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &203719388
 Transform:
@@ -2199,7 +2230,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -2232,7 +2263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 204750277}
   - component: {fileID: 204750278}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2289,7 +2320,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &206188722
 Transform:
@@ -2344,7 +2375,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -2414,7 +2445,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &222819153
 Transform:
@@ -2469,7 +2500,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -2546,7 +2577,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 229022928}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2583,7 +2614,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &237055112
 Transform:
@@ -2636,7 +2667,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &238784891
 Transform:
@@ -2691,7 +2722,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -2742,7 +2773,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 0.9019023, g: 1, b: 0.8349056, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -2780,7 +2811,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 33280
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -2800,13 +2831,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247999493}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.42329663, y: -0.20611796, z: 0.1689641, w: 0.8659021}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 53.391, y: -21.02, z: 11.424}
 --- !u!1 &254724407
 GameObject:
   m_ObjectHideFlags: 0
@@ -2824,7 +2855,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &254724408
 Transform:
@@ -2879,7 +2910,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -2915,7 +2946,7 @@ GameObject:
   - component: {fileID: 258356218}
   - component: {fileID: 258356217}
   - component: {fileID: 258356216}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: BodyPart (1)
   m_TagString: Enviroment
   m_Icon: {fileID: 0}
@@ -3067,7 +3098,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 258898009}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3097,7 +3128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 260415828}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3137,7 +3168,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &266410570
 Transform:
@@ -3192,7 +3223,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -3225,7 +3256,7 @@ GameObject:
   m_Component:
   - component: {fileID: 285983833}
   - component: {fileID: 285983832}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: LTLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3341,7 +3372,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 286636713}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3379,7 +3410,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &290493062
 Transform:
@@ -3434,7 +3465,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -3469,7 +3500,7 @@ GameObject:
   - component: {fileID: 294273107}
   - component: {fileID: 294273106}
   - component: {fileID: 294273105}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -3570,7 +3601,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &307568845
 Transform:
@@ -3625,7 +3656,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -3657,7 +3688,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 315453177}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3695,7 +3726,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &316241220
 Transform:
@@ -3750,7 +3781,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -3790,7 +3821,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &318693473
 Transform:
@@ -3845,7 +3876,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -3877,7 +3908,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 322792203}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3907,7 +3938,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 328698770}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3945,7 +3976,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &335581497
 Transform:
@@ -4000,7 +4031,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -4085,7 +4116,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &355741383
 Transform:
@@ -4140,7 +4171,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -4175,7 +4206,7 @@ GameObject:
   - component: {fileID: 356760318}
   - component: {fileID: 356760317}
   - component: {fileID: 356760316}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -4276,7 +4307,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &369827679
 Transform:
@@ -4331,7 +4362,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -4366,7 +4397,7 @@ GameObject:
   - component: {fileID: 375775908}
   - component: {fileID: 375775907}
   - component: {fileID: 375775906}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -4459,7 +4490,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 378584307}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: GroundRay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4497,7 +4528,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &382057045
 Transform:
@@ -4552,7 +4583,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -4629,7 +4660,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 386576413}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4667,7 +4698,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &391065307
 Transform:
@@ -4722,7 +4753,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -4757,7 +4788,7 @@ GameObject:
   - component: {fileID: 399375724}
   - component: {fileID: 399375723}
   - component: {fileID: 399375722}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -4850,7 +4881,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 403928669}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4888,7 +4919,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &416271373
 Transform:
@@ -4943,7 +4974,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -4975,7 +5006,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 419516137}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5058,7 +5089,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &450460844
 Transform:
@@ -5113,7 +5144,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -5153,7 +5184,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &455225096
 Transform:
@@ -5208,7 +5239,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -5240,7 +5271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 455353479}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5280,7 +5311,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &459212641
 Transform:
@@ -5335,7 +5366,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -5367,7 +5398,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 462603636}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5405,7 +5436,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &468425407
 Transform:
@@ -5460,7 +5491,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -5500,7 +5531,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &468683760
 Transform:
@@ -5555,7 +5586,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -5595,7 +5626,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &478319038
 Transform:
@@ -5650,7 +5681,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -5728,7 +5759,7 @@ GameObject:
   m_Component:
   - component: {fileID: 482318982}
   - component: {fileID: 482318983}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5777,7 +5808,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 486018812}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5808,7 +5839,7 @@ GameObject:
   m_Component:
   - component: {fileID: 498891333}
   - component: {fileID: 498891334}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5859,7 +5890,7 @@ GameObject:
   - component: {fileID: 502688955}
   - component: {fileID: 502688957}
   - component: {fileID: 502688956}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Sphere (1)
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -5946,7 +5977,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &506055126
 Transform:
@@ -6001,7 +6032,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -6033,7 +6064,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 509775969}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6068,7 +6099,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &512732163
 Transform:
@@ -6121,7 +6152,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 516799620}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6159,7 +6190,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &522549683
 Transform:
@@ -6214,7 +6245,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -6254,7 +6285,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &526974845
 Transform:
@@ -6309,7 +6340,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -6349,7 +6380,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &531756949
 Transform:
@@ -6404,7 +6435,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -6439,7 +6470,7 @@ GameObject:
   - component: {fileID: 538808367}
   - component: {fileID: 538808366}
   - component: {fileID: 538808365}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -6540,7 +6571,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &548892225
 Transform:
@@ -6595,7 +6626,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -6630,7 +6661,7 @@ GameObject:
   - component: {fileID: 550753413}
   - component: {fileID: 550753412}
   - component: {fileID: 550753411}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -6731,7 +6762,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &558452233
 Transform:
@@ -6786,7 +6817,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -6818,7 +6849,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 559747464}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6848,7 +6879,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 561356722}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Content
   m_TagString: Enviroment
   m_Icon: {fileID: 0}
@@ -6901,7 +6932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 563148322}
   - component: {fileID: 563148323}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Cube_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6953,7 +6984,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &566318085
 Transform:
@@ -7008,7 +7039,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -7048,7 +7079,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &568196280
 Transform:
@@ -7103,7 +7134,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -7143,7 +7174,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &573397924
 Transform:
@@ -7198,7 +7229,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -7232,7 +7263,7 @@ GameObject:
   - component: {fileID: 574378759}
   - component: {fileID: 574378761}
   - component: {fileID: 574378760}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Sphere
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -7311,7 +7342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 584756901}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7346,7 +7377,7 @@ GameObject:
   - component: {fileID: 587730221}
   - component: {fileID: 587730220}
   - component: {fileID: 587730219}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7446,7 +7477,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &589972734
 Transform:
@@ -7501,7 +7532,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -7533,7 +7564,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 593654147}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7563,7 +7594,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 598812690}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7646,7 +7677,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &600532148
 Transform:
@@ -7701,7 +7732,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -7741,7 +7772,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &605921201
 Transform:
@@ -7796,7 +7827,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -7836,7 +7867,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &611319711
 Transform:
@@ -7891,7 +7922,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -7931,7 +7962,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &612996720
 Transform:
@@ -7986,7 +8017,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -8018,7 +8049,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 621272375}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8056,7 +8087,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &626516230
 Transform:
@@ -8111,7 +8142,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -8144,7 +8175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 630376057}
   - component: {fileID: 630376058}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8194,7 +8225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 639382642}
   - component: {fileID: 639382643}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RTLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8310,7 +8341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 650618340}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8350,7 +8381,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &653208117
 Transform:
@@ -8405,7 +8436,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -8437,7 +8468,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 664131948}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8470,7 +8501,7 @@ GameObject:
   - component: {fileID: 667240600}
   - component: {fileID: 667240599}
   - component: {fileID: 667240598}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -8563,7 +8594,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 667937608}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8596,7 +8627,7 @@ GameObject:
   m_Component:
   - component: {fileID: 677442293}
   - component: {fileID: 677442294}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RBLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8712,7 +8743,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 684793185}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8744,7 +8775,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 694157054}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8777,7 +8808,7 @@ GameObject:
   - component: {fileID: 697385698}
   - component: {fileID: 697385697}
   - component: {fileID: 697385696}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -8873,7 +8904,7 @@ GameObject:
   - component: {fileID: 698717419}
   - component: {fileID: 698717418}
   - component: {fileID: 698717417}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -8966,7 +8997,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 699469983}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9069,10 +9100,30 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2606128215987365116, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606128215987365116, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8228065288571749512, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
         type: 3}
       propertyPath: m_Name
       value: DummyBatterySet (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8228065288571749512, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8228065288571749512, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8228065288571749527, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
         type: 3}
@@ -9142,6 +9193,16 @@ PrefabInstance:
     - target: {fileID: 8228065288571749527, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9146419524186966626, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9146419524186966626, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -9271,7 +9332,7 @@ GameObject:
   - component: {fileID: 715658659}
   - component: {fileID: 715658658}
   - component: {fileID: 715658657}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -9372,7 +9433,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &732735878
 Transform:
@@ -9427,7 +9488,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -9462,7 +9523,7 @@ GameObject:
   - component: {fileID: 746902576}
   - component: {fileID: 746902575}
   - component: {fileID: 746902574}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9554,7 +9615,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 747057545}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9586,7 +9647,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 753654552}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9616,7 +9677,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 755443536}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9649,7 +9710,7 @@ GameObject:
   - component: {fileID: 757729764}
   - component: {fileID: 757729763}
   - component: {fileID: 757729762}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -9750,7 +9811,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &769211259
 Transform:
@@ -9805,7 +9866,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -9839,7 +9900,7 @@ GameObject:
   - component: {fileID: 769247654}
   - component: {fileID: 769247656}
   - component: {fileID: 769247655}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9919,7 +9980,7 @@ GameObject:
   m_Component:
   - component: {fileID: 773787977}
   - component: {fileID: 773787978}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9976,7 +10037,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &799543059
 Transform:
@@ -10031,7 +10092,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -10071,7 +10132,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &801239107
 Transform:
@@ -10126,7 +10187,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -10158,7 +10219,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 808695392}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10196,7 +10257,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &811539000
 Transform:
@@ -10251,7 +10312,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -10291,7 +10352,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &826772160
 Transform:
@@ -10346,7 +10407,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -10386,7 +10447,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &832348055
 Transform:
@@ -10441,7 +10502,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -10473,7 +10534,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 838050706}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10503,7 +10564,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 845798038}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: GroundRay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10533,7 +10594,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 848749804}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10573,7 +10634,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &849337511
 Transform:
@@ -10628,7 +10689,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -10705,7 +10766,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 857264612}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10740,7 +10801,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &857676492
 Transform:
@@ -10788,7 +10849,7 @@ GameObject:
   - component: {fileID: 867257983}
   - component: {fileID: 867257982}
   - component: {fileID: 867257981}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -10889,7 +10950,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &880168240
 Transform:
@@ -10944,7 +11005,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -10976,7 +11037,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 880263958}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11014,7 +11075,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &883728700
 Transform:
@@ -11069,7 +11130,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -11103,7 +11164,7 @@ GameObject:
   - component: {fileID: 885806397}
   - component: {fileID: 885806399}
   - component: {fileID: 885806398}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Sphere (1)
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -11190,7 +11251,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &888204612
 Transform:
@@ -11245,7 +11306,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -11280,7 +11341,7 @@ GameObject:
   - component: {fileID: 896356044}
   - component: {fileID: 896356043}
   - component: {fileID: 896356042}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -11373,7 +11434,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 900810974}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11403,7 +11464,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 904112772}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11435,7 +11496,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 905146433}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11468,7 +11529,7 @@ GameObject:
   - component: {fileID: 909000703}
   - component: {fileID: 909000702}
   - component: {fileID: 909000701}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -11564,7 +11625,7 @@ GameObject:
   - component: {fileID: 911284650}
   - component: {fileID: 911284649}
   - component: {fileID: 911284648}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -11661,7 +11722,7 @@ GameObject:
   - component: {fileID: 914171671}
   - component: {fileID: 914171673}
   - component: {fileID: 914171675}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: BodyPart
   m_TagString: Enviroment
   m_Icon: {fileID: 0}
@@ -11845,7 +11906,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &917363407
 Transform:
@@ -11900,7 +11961,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -11923,6 +11984,99 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 917363406}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &936905050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 936905051}
+  - component: {fileID: 936905052}
+  m_Layer: 0
+  m_Name: Point Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &936905051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936905050}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 17.15, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1516103115}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &936905052
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936905050}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Intensity: 200
+  m_Range: 35.5
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.02
+    m_NormalBias: 0.1
+    m_NearPlane: 0.1
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 2
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 3
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &939225378
 GameObject:
   m_ObjectHideFlags: 0
@@ -11940,7 +12094,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &939225379
 Transform:
@@ -11995,7 +12149,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -12035,7 +12189,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &946309416
 Transform:
@@ -12090,7 +12244,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -12130,7 +12284,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &948454314
 Transform:
@@ -12185,7 +12339,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -12217,7 +12371,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 950679178}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12255,7 +12409,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &952241440
 Transform:
@@ -12310,7 +12464,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -12343,7 +12497,7 @@ GameObject:
   m_Component:
   - component: {fileID: 959703878}
   - component: {fileID: 959703879}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RBLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12460,7 +12614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 973171484}
   - component: {fileID: 973171485}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RBLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12584,7 +12738,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &973512035
 Transform:
@@ -12639,7 +12793,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -12674,7 +12828,7 @@ GameObject:
   - component: {fileID: 994739460}
   - component: {fileID: 994739459}
   - component: {fileID: 994739458}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -12770,7 +12924,7 @@ GameObject:
   - component: {fileID: 998487025}
   - component: {fileID: 998487024}
   - component: {fileID: 998487023}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Sphere (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12853,6 +13007,99 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 998487021}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1001496956
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001496957}
+  - component: {fileID: 1001496958}
+  m_Layer: 0
+  m_Name: Exit Light (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1001496957
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001496956}
+  m_LocalRotation: {x: 0.000118707874, y: -0.7468324, z: 0.6650054, w: -0.003051739}
+  m_LocalPosition: {x: -0.22544068, y: 48.705925, z: 26.102043}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1516103115}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 83.361, y: 177.662, z: -2.1}
+--- !u!108 &1001496958
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001496956}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 0
+  m_Shape: 0
+  m_Color: {r: 1, g: 0.57005405, b: 0.28773582, a: 1}
+  m_Intensity: 200
+  m_Range: 29.8
+  m_SpotAngle: 116.92838
+  m_InnerSpotAngle: 71.06149
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.02
+    m_NormalBias: 0.1
+    m_NearPlane: 0.1
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 1
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 3
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &1012966025
 GameObject:
   m_ObjectHideFlags: 0
@@ -12957,7 +13204,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1019662187
 Transform:
@@ -13098,7 +13345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1042092141}
   - component: {fileID: 1042092142}
-  m_Layer: 7
+  m_Layer: 15
   m_Name: Collider
   m_TagString: Enviroment
   m_Icon: {fileID: 0}
@@ -13145,7 +13392,7 @@ GameObject:
   - component: {fileID: 1046718234}
   - component: {fileID: 1046718233}
   - component: {fileID: 1046718232}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -13246,7 +13493,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1052756454
 Transform:
@@ -13301,7 +13548,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -13341,7 +13588,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1053428482
 Transform:
@@ -13396,7 +13643,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -13436,7 +13683,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1059397636
 Transform:
@@ -13491,7 +13738,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -13526,7 +13773,7 @@ GameObject:
   - component: {fileID: 1064875314}
   - component: {fileID: 1064875313}
   - component: {fileID: 1064875312}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -13624,7 +13871,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1066487545
 Transform:
@@ -13677,7 +13924,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1078531527
 Transform:
@@ -13732,7 +13979,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -13772,7 +14019,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1083539981
 Transform:
@@ -13827,7 +14074,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -13957,7 +14204,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1102606000
 Transform:
@@ -14012,7 +14259,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -14045,7 +14292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1102745127}
   - component: {fileID: 1102745128}
-  m_Layer: 7
+  m_Layer: 15
   m_Name: Collider
   m_TagString: Enviroment
   m_Icon: {fileID: 0}
@@ -14142,7 +14389,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1107041561
 Transform:
@@ -14197,7 +14444,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -14237,7 +14484,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1111721635
 Transform:
@@ -14292,7 +14539,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -14326,7 +14573,7 @@ GameObject:
   - component: {fileID: 1122364352}
   - component: {fileID: 1122364354}
   - component: {fileID: 1122364353}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cylinder
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -14451,7 +14698,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1130043113}
   - component: {fileID: 1130043114}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14500,7 +14747,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1132721496}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14523,6 +14770,102 @@ Transform:
   m_Father: {fileID: 1287881957}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &1133999596
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1133999600}
+  - component: {fileID: 1133999599}
+  - component: {fileID: 1133999598}
+  - component: {fileID: 1133999597}
+  m_Layer: 0
+  m_Name: e
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!64 &1133999597
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133999596}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1133999598
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133999596}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1133999599
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133999596}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1133999600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133999596}
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0.0000028312204}
+  m_LocalPosition: {x: 0, y: 118.8, z: 0}
+  m_LocalScale: {x: 9.8362, y: 9.8362, z: 9.8362}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
 --- !u!1 &1156111941
 GameObject:
   m_ObjectHideFlags: 0
@@ -14532,7 +14875,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1156111942}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14570,7 +14913,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1167734320
 Transform:
@@ -14625,7 +14968,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -14665,7 +15008,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1174549041
 Transform:
@@ -14720,7 +15063,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -14755,7 +15098,7 @@ GameObject:
   - component: {fileID: 1176893852}
   - component: {fileID: 1176893851}
   - component: {fileID: 1176893850}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -14848,7 +15191,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1178255102}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14881,7 +15224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1180237227}
   - component: {fileID: 1180237228}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: LTLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15005,7 +15348,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1182839908
 Transform:
@@ -15060,7 +15403,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -15100,7 +15443,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1191990909
 Transform:
@@ -15155,7 +15498,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -15187,7 +15530,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1212443648}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15272,7 +15615,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1218276963
 Transform:
@@ -15327,7 +15670,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -15361,7 +15704,7 @@ GameObject:
   - component: {fileID: 1221724358}
   - component: {fileID: 1221724360}
   - component: {fileID: 1221724359}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Sphere (1)
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -15448,7 +15791,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1233791984
 Transform:
@@ -15503,7 +15846,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -15543,7 +15886,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1238699594
 Transform:
@@ -15598,7 +15941,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -15630,7 +15973,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1242322320}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15670,7 +16013,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1250400118
 Transform:
@@ -15725,7 +16068,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -15758,7 +16101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1263318773}
   - component: {fileID: 1263318774}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RTLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15874,7 +16217,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1272608102}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Graphic
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -15910,7 +16253,7 @@ GameObject:
   - component: {fileID: 1274917746}
   - component: {fileID: 1274917745}
   - component: {fileID: 1274917744}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -16011,7 +16354,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1280036524
 Transform:
@@ -16066,7 +16409,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -16098,7 +16441,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1287881957}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16130,7 +16473,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1292201025}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16170,7 +16513,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1292646350
 Transform:
@@ -16225,7 +16568,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -16265,7 +16608,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1293040804
 Transform:
@@ -16320,7 +16663,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -16355,7 +16698,7 @@ GameObject:
   - component: {fileID: 1294319957}
   - component: {fileID: 1294319956}
   - component: {fileID: 1294319955}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -16448,7 +16791,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1305341800}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16485,7 +16828,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1315881433
 Transform:
@@ -16520,14 +16863,14 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a1671a100aac98345af69274bae1aec5, type: 2}
+  - {fileID: 2100000, guid: 1386c008436970a4faa8cea35f6db333, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -16559,7 +16902,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1321856500}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16591,7 +16934,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1326757412}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16631,7 +16974,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1328606327
 Transform:
@@ -16686,7 +17029,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -16721,7 +17064,7 @@ GameObject:
   - component: {fileID: 1333356053}
   - component: {fileID: 1333356052}
   - component: {fileID: 1333356051}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -16822,7 +17165,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1339270016
 Transform:
@@ -16877,7 +17220,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -16912,7 +17255,7 @@ GameObject:
   - component: {fileID: 1340955767}
   - component: {fileID: 1340955766}
   - component: {fileID: 1340955765}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17106,7 +17449,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1348480400
 Transform:
@@ -17160,7 +17503,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1356725712
 Transform:
@@ -17215,7 +17558,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -17294,7 +17637,7 @@ GameObject:
   - component: {fileID: 1365681417}
   - component: {fileID: 1365681419}
   - component: {fileID: 1365681418}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17381,7 +17724,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1386951958
 Transform:
@@ -17436,7 +17779,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -17468,7 +17811,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1402507645}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17503,7 +17846,7 @@ GameObject:
   - component: {fileID: 1413661621}
   - component: {fileID: 1413661620}
   - component: {fileID: 1413661619}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -17602,7 +17945,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1420492290
 Transform:
@@ -17640,7 +17983,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1422667122}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17713,7 +18056,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1440083222}
   - component: {fileID: 1440083223}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: LBLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17829,7 +18172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1448337931}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17861,7 +18204,7 @@ GameObject:
   - component: {fileID: 1452386205}
   - component: {fileID: 1452386206}
   - component: {fileID: 1452386207}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17948,7 +18291,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1452563968
 Transform:
@@ -18003,7 +18346,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -18043,7 +18386,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1460025797
 Transform:
@@ -18098,7 +18441,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -18133,7 +18476,7 @@ GameObject:
   - component: {fileID: 1476405517}
   - component: {fileID: 1476405516}
   - component: {fileID: 1476405515}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -18226,7 +18569,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1486732376}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Content
   m_TagString: Enviroment
   m_Icon: {fileID: 0}
@@ -18323,7 +18666,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1504798536}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18398,7 +18741,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1515771509}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18421,6 +18764,40 @@ Transform:
   m_Father: {fileID: 1292201025}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &1516103114
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1516103115}
+  m_Layer: 0
+  m_Name: === Light ===
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1516103115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516103114}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1821451442}
+  - {fileID: 2047238509}
+  - {fileID: 936905051}
+  - {fileID: 1001496957}
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1519934986
 GameObject:
   m_ObjectHideFlags: 0
@@ -18430,7 +18807,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1519934987}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18465,7 +18842,7 @@ GameObject:
   - component: {fileID: 1526796836}
   - component: {fileID: 1526796835}
   - component: {fileID: 1526796834}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Sphere (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18610,7 +18987,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1545347700
 Transform:
@@ -18665,7 +19042,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -18705,7 +19082,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1548331550
 Transform:
@@ -18760,7 +19137,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -18875,7 +19252,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1558065190}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18913,7 +19290,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1558560276
 Transform:
@@ -18968,7 +19345,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -19000,7 +19377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1566719906}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Content
   m_TagString: Enviroment
   m_Icon: {fileID: 0}
@@ -19055,7 +19432,7 @@ GameObject:
   - component: {fileID: 1568459731}
   - component: {fileID: 1568459730}
   - component: {fileID: 1568459729}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -19149,7 +19526,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1575184143}
   - component: {fileID: 1575184144}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19206,7 +19583,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1582484427
 Transform:
@@ -19261,7 +19638,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -19296,7 +19673,7 @@ GameObject:
   - component: {fileID: 1585621501}
   - component: {fileID: 1585621500}
   - component: {fileID: 1585621499}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19388,7 +19765,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1595310784}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19419,7 +19796,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1596928094}
   - component: {fileID: 1596928095}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19468,7 +19845,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1597491496}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19508,7 +19885,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1604108882
 Transform:
@@ -19563,7 +19940,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -19595,7 +19972,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1606456873}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19673,7 +20050,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1633680446}
   - component: {fileID: 1633680447}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Cube_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19721,7 +20098,7 @@ GameObject:
   - component: {fileID: 1636898693}
   - component: {fileID: 1636898692}
   - component: {fileID: 1636898691}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: BodyPart (2)
   m_TagString: Enviroment
   m_Icon: {fileID: 0}
@@ -19874,7 +20251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1639959085}
   - component: {fileID: 1639959086}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19931,7 +20308,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1643162538
 Transform:
@@ -19986,7 +20363,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -20026,7 +20403,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1647160100
 Transform:
@@ -20081,7 +20458,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -20121,7 +20498,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1649863846
 Transform:
@@ -20176,7 +20553,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -20208,7 +20585,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1652999287}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20248,7 +20625,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1653225675
 Transform:
@@ -20303,7 +20680,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -20388,7 +20765,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1655025289
 Transform:
@@ -20443,7 +20820,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -20483,7 +20860,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1665492277
 Transform:
@@ -20538,7 +20915,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -20578,7 +20955,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1666910869
 Transform:
@@ -20633,7 +21010,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -20668,7 +21045,7 @@ GameObject:
   - component: {fileID: 1668144372}
   - component: {fileID: 1668144371}
   - component: {fileID: 1668144370}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -20761,7 +21138,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1677608845}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20801,7 +21178,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1682055589
 Transform:
@@ -20856,7 +21233,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -20934,7 +21311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1684070190}
   - component: {fileID: 1684070191}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20991,7 +21368,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1687331851
 Transform:
@@ -21046,7 +21423,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -21078,7 +21455,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1700764830}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21116,7 +21493,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1702834517
 Transform:
@@ -21171,7 +21548,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -21206,7 +21583,7 @@ GameObject:
   - component: {fileID: 1707252351}
   - component: {fileID: 1707252350}
   - component: {fileID: 1707252349}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -21307,7 +21684,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1715311329
 Transform:
@@ -21362,7 +21739,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -21394,7 +21771,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1726345282}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21427,7 +21804,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1726564933}
   - component: {fileID: 1726564932}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: LBLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21551,7 +21928,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1729104084
 Transform:
@@ -21606,7 +21983,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -21691,7 +22068,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1745101765
 Transform:
@@ -21746,7 +22123,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -21786,7 +22163,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1745858545
 Transform:
@@ -21841,7 +22218,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -21873,7 +22250,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1750237221}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21904,7 +22281,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1761867714}
   - component: {fileID: 1761867715}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21956,7 +22333,7 @@ GameObject:
   - component: {fileID: 1772603360}
   - component: {fileID: 1772603359}
   - component: {fileID: 1772603358}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -22051,7 +22428,7 @@ GameObject:
   - component: {fileID: 1778934567}
   - component: {fileID: 1778934569}
   - component: {fileID: 1778934568}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cylinder
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -22131,7 +22508,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1781641268}
   - component: {fileID: 1781641269}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Cube_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22183,7 +22560,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1785179141
 Transform:
@@ -22238,7 +22615,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -22323,7 +22700,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1819395058
 Transform:
@@ -22378,7 +22755,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -22401,6 +22778,99 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1819395057}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1821451441
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1821451442}
+  - component: {fileID: 1821451443}
+  m_Layer: 0
+  m_Name: Exit Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1821451442
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821451441}
+  m_LocalRotation: {x: -0.0010581763, y: -0.94446945, z: 0.3285852, w: -0.0028648677}
+  m_LocalPosition: {x: -0.22544068, y: 38.455925, z: 38.852043}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1516103115}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!108 &1821451443
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821451441}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 0
+  m_Shape: 0
+  m_Color: {r: 1, g: 0.57005405, b: 0.28773582, a: 1}
+  m_Intensity: 200
+  m_Range: 29.8
+  m_SpotAngle: 116.92838
+  m_InnerSpotAngle: 71.06149
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.02
+    m_NormalBias: 0.1
+    m_NearPlane: 0.1
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 1
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 3
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &1823011756
 GameObject:
   m_ObjectHideFlags: 0
@@ -22410,7 +22880,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1823011757}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22449,7 +22919,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1842370574
 Transform:
@@ -22503,7 +22973,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1851893849
 Transform:
@@ -22558,7 +23028,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -22593,7 +23063,7 @@ GameObject:
   - component: {fileID: 1852890891}
   - component: {fileID: 1852890890}
   - component: {fileID: 1852890889}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -22694,7 +23164,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1853780051
 Transform:
@@ -22749,7 +23219,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -22789,7 +23259,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1853806633
 Transform:
@@ -22844,7 +23314,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -22876,7 +23346,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1854696973}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22909,7 +23379,7 @@ GameObject:
   - component: {fileID: 1857112739}
   - component: {fileID: 1857112738}
   - component: {fileID: 1857112737}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Sphere (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23001,7 +23471,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1859259035}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: IKHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23046,7 +23516,7 @@ GameObject:
   - component: {fileID: 1885992077}
   - component: {fileID: 1885992076}
   - component: {fileID: 1885992075}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23139,7 +23609,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1887824686}
   - component: {fileID: 1887824687}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RTLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23263,7 +23733,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1892160254
 Transform:
@@ -23318,7 +23788,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -23352,7 +23822,7 @@ GameObject:
   - component: {fileID: 1894113633}
   - component: {fileID: 1894113635}
   - component: {fileID: 1894113634}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cylinder
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -23431,7 +23901,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1895376724}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23471,7 +23941,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1899919790
 Transform:
@@ -23526,7 +23996,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -23558,7 +24028,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1904024840}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23588,7 +24058,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1931293678}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23623,7 +24093,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1934896480
 Transform:
@@ -23669,7 +24139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939825980}
   - component: {fileID: 1939825979}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: LTLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23860,7 +24330,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1953888466}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23898,7 +24368,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1956734320
 Transform:
@@ -23953,7 +24423,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -23988,7 +24458,7 @@ GameObject:
   - component: {fileID: 1964835322}
   - component: {fileID: 1964835321}
   - component: {fileID: 1964835320}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -24081,7 +24551,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1970835216}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24113,7 +24583,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1972999726}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24144,7 +24614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1983837210}
   - component: {fileID: 1983837211}
-  m_Layer: 7
+  m_Layer: 15
   m_Name: Collider
   m_TagString: Enviroment
   m_Icon: {fileID: 0}
@@ -24196,7 +24666,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1984855668
 Transform:
@@ -24251,7 +24721,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -24283,7 +24753,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2007760571}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24323,7 +24793,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2008516404
 Transform:
@@ -24378,7 +24848,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -24418,7 +24888,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2009976786
 Transform:
@@ -24473,7 +24943,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -24513,7 +24983,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2012666681
 Transform:
@@ -24568,7 +25038,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -24608,7 +25078,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2021739778
 Transform:
@@ -24663,7 +25133,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -24813,10 +25283,30 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2606128215987365116, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606128215987365116, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8228065288571749512, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
         type: 3}
       propertyPath: m_Name
       value: DummyBatterySet (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8228065288571749512, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8228065288571749512, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8228065288571749527, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
         type: 3}
@@ -24888,6 +25378,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9146419524186966626, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9146419524186966626, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
 --- !u!4 &2033341298 stripped
@@ -24954,7 +25454,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2034357361}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Graphic
   m_TagString: Graphic
   m_Icon: {fileID: 0}
@@ -24990,7 +25490,7 @@ GameObject:
   - component: {fileID: 2042988956}
   - component: {fileID: 2042988955}
   - component: {fileID: 2042988954}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -25083,7 +25583,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2046085598}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25121,7 +25621,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2046239745
 Transform:
@@ -25176,7 +25676,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -25199,6 +25699,99 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2046239744}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2047238508
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2047238509}
+  - component: {fileID: 2047238510}
+  m_Layer: 0
+  m_Name: Exit Light_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2047238509
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047238508}
+  m_LocalRotation: {x: -0.00028063887, y: -0.8272436, z: 0.56183517, w: -0.0030411258}
+  m_LocalPosition: {x: -0.22544068, y: 46.77, z: -26.397957}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1516103115}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 68.365, y: 179.267, z: -0.459}
+--- !u!108 &2047238510
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047238508}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 0
+  m_Shape: 0
+  m_Color: {r: 1, g: 0.57005405, b: 0.28773582, a: 1}
+  m_Intensity: 200
+  m_Range: 29.8
+  m_SpotAngle: 116.92838
+  m_InnerSpotAngle: 71.06149
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.02
+    m_NormalBias: 0.1
+    m_NearPlane: 0.1
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 1
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 3
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &2065228582
 GameObject:
   m_ObjectHideFlags: 0
@@ -25208,7 +25801,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2065228583}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: RayPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25246,7 +25839,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2074972343
 Transform:
@@ -25301,7 +25894,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -25334,7 +25927,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2085065450}
   - component: {fileID: 2085065451}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25386,7 +25979,7 @@ GameObject:
   - component: {fileID: 2088561853}
   - component: {fileID: 2088561852}
   - component: {fileID: 2088561851}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -25577,7 +26170,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2118847946
 Transform:
@@ -25632,7 +26225,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -25672,7 +26265,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2120261044
 Transform:
@@ -25727,7 +26320,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -25762,7 +26355,7 @@ GameObject:
   - component: {fileID: 2120624651}
   - component: {fileID: 2120624650}
   - component: {fileID: 2120624649}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: Capsule
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
@@ -25868,7 +26461,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2132350635}
   - component: {fileID: 2132350634}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: LBLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25992,7 +26585,7 @@ GameObject:
   m_TagString: Env_Props
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2133533459
 Transform:
@@ -26047,7 +26640,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.1
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
