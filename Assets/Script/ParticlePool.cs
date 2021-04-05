@@ -54,6 +54,7 @@ public class ParticlePool : MonoBehaviour
             var particle = obj.GetComponent<ParticleSystem>();
 
             obj.SetActive(false);
+            obj.transform.SetParent(this.transform);
             particle.Stop();
 
             _cache.Enqueue(particle);

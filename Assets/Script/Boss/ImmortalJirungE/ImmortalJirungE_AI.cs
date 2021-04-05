@@ -17,6 +17,8 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
     public BossHead head;
     public EMPShield shield;
     public int whipPath = 0;
+    public bool canFloorWhip = false;
+    public bool lowCheck = false;
 
     public LayerMask obstacleLayer;
 
@@ -42,16 +44,6 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
         if (GameManager.Instance.PAUSE == true)
             return;
 
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            ChangeState(State.Stun);
-        }
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            ChangeState(State.Recovery);
-        }
-
         if(currentState == State.WallMove)
         {
             FollowPath();
@@ -59,17 +51,24 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
             _timeCounter.IncreaseTimer("wallMoveTime",out bool limit);
             if(limit)
             {
-                ChangeState(State.FloorWhip);
+                canFloorWhip = true;
+                //ChangeState(State.FloorWhip);
             }
         }
         else if(currentState == State.FloorWhip)
         {
-            Move(transform.forward,mainSpeed);
-            _targetDistance = Vector3.Distance(GameManager.Instance.player.transform.position,transform.position);
-            if(_targetDistance >= 10f)
+            if(lowCheck)
             {
-                Debug.Log("re");
-                SetTarget(GameManager.Instance.player.transform.position);
+                Move(transform.forward,mainSpeed);
+                _targetDistance = Vector3.Distance(GameManager.Instance.player.transform.position,transform.position);
+                if(_targetDistance >= 20f)
+                {
+                    SetTarget(GameManager.Instance.player.transform.position);
+                }
+            }   
+            else
+            {
+                FollowPath();
             }
 
             Collider[] playerColl = Physics.OverlapSphere(transform.position, 2.5f,targetLayer);
@@ -89,6 +88,7 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
             _timeCounter.IncreaseTimer("whipTime",out bool limit);
             if(limit)
             {
+                canFloorWhip = false;
                 ChangeState(State.WallMove);
             }
         }
@@ -102,10 +102,10 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
                 shield.Reactive();
                 whenReactiveshield?.Invoke();
 
-                if (Random.Range(0,2) == 0)
+//                if (Random.Range(0,2) == 0)
                     ChangeState(State.WallMove);
-                else
-                    ChangeState(State.FloorWhip);
+                // else
+                //     ChangeState(State.FloorWhip);
             }
         }
         else if(currentState == State.Stun)
@@ -192,9 +192,13 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
             if(GameManager.Instance.player.transform.position.y >= 10f)
             {
                 GetPath("FloorWhip" + whipPath);
+                lowCheck = false;
             }
             else
+            {
                 SetTarget(GameManager.Instance.player.transform.position);
+                lowCheck = true;
+            }
                 
             _timeCounter.InitTimer("whipTime",0f,Random.Range(8f,12f));
             _pathLoop = true;
