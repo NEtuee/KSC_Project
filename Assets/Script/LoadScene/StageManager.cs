@@ -63,7 +63,13 @@ public class StageManager : MonoBehaviour
 
     public void SetPlayerToPosition()
     {
+        Camera.main.transform.SetParent(null);
+        GameManager.Instance.followTarget.transform.SetParent(null);
+        GameManager.Instance.player.transform.SetParent(null);
+        
         GameManager.Instance.player.transform.position = loadedPlayerPosition.position;
         GameManager.Instance.player.transform.rotation = loadedPlayerPosition.rotation;
+
+        prevZoneTransform.gameObject.SetActive(false);
     }
 }

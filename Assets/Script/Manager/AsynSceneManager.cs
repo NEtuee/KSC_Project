@@ -137,10 +137,10 @@ public class AsynSceneManager : MonoBehaviour
             yield return null;
         }
 
-        currentStageManager = GameObject.FindObjectOfType<StageManager>();
+        var stage = GameObject.FindObjectOfType<StageManager>();
         _afterLoad();
 
-        Debug.Log(currentStageManager.SceneTitle);
+        Debug.Log(stage.SceneTitle);
 
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(_currentScene));
         _unloadScenes.Add(_currentScene);
@@ -149,11 +149,17 @@ public class AsynSceneManager : MonoBehaviour
 
         if(setPos)
         {
-            if(currentStageManager != null)
+            if(stage != null)
             {
-                GameObject.FindObjectOfType<StageManager>().SetPlayerToPosition();
+                GameManager.Instance.player.transform.SetParent(null);
+                DontDestroyOnLoad(GameManager.Instance.player.transform);
+                stage.SetPlayerToPosition();
+                GameManager.Instance.player.transform.SetParent(null);
+                DontDestroyOnLoad(GameManager.Instance.player.transform);
             }
         }
+
+        currentStageManager = stage;
     }
 
     public void RegisterBeforeLoadOnStart(del_SceneLoaded func){_beforeLoadRegisterLine.Add(func);}
