@@ -74,6 +74,14 @@ public class AsynSceneManager : MonoBehaviour
 
     IEnumerator SceneLoadingProgress(bool setPos)
     {
+        Camera.main.transform.SetParent(null);
+        GameManager.Instance.followTarget.transform.SetParent(null);
+        GameManager.Instance.player.transform.SetParent(null);
+        
+        DontDestroyOnLoad(Camera.main.transform);
+        DontDestroyOnLoad(GameManager.Instance.followTarget.transform);
+        DontDestroyOnLoad(GameManager.Instance.player.transform);
+
         _beforeLoad();
 
         _loadedScenes = _unloadScenes.Count;
@@ -110,6 +118,14 @@ public class AsynSceneManager : MonoBehaviour
 
     IEnumerator LoadSceneCoroutine(bool setPos)
     {
+        Camera.main.transform.SetParent(null);
+        GameManager.Instance.followTarget.transform.SetParent(null);
+        GameManager.Instance.player.transform.SetParent(null);
+
+        DontDestroyOnLoad(Camera.main.transform);
+        DontDestroyOnLoad(GameManager.Instance.followTarget.transform);
+        DontDestroyOnLoad(GameManager.Instance.player.transform);
+
         AsyncOperation operation = SceneManager.LoadSceneAsync(_currentScene,LoadSceneMode.Additive);
         operation.allowSceneActivation = false;
         
