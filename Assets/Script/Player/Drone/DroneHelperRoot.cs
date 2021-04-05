@@ -49,7 +49,8 @@ public class DroneHelperRoot : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.B))
         {
-            HelpEvent("Test2");
+            //HelpEvent("Test2");
+            HelpEvent("ArachneBombHint");
         }
 
         if (currentHelper != null)
@@ -61,7 +62,10 @@ public class DroneHelperRoot : MonoBehaviour
     public bool HelpEvent(string key)
     {
         if (descriptDictionary.ContainsKey(key) == false)
+        {
+            Debug.LogError("Not Exits Key");
             return false;
+        }
 
         active = true;
         helping = true;

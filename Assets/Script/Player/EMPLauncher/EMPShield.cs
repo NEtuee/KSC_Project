@@ -189,6 +189,7 @@ public class EMPShield : Hitable
         {
             StartCoroutine(ActiveEffect());
         }
+        whenScanned?.Invoke();
     }
 
     IEnumerator ActiveEffect()

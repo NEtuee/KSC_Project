@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ShatteredArachne_AI : IKPathFollowBossBase
 {
@@ -35,6 +36,10 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
     public List<Transform> handPosOrigin = new List<Transform>();
     public List<Transform> handFollowTarget = new List<Transform>();
 
+    public UnityEvent flipDownDone;
+    public UnityEvent hitEvent;
+    public UnityEvent throwBombEvent;
+    public UnityEvent whenDead;
 
     private State _prevState;
 
@@ -173,6 +178,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
 
                 ChangeState(State.Move);
             }
+            throwBombEvent?.Invoke();
         }
         else if(currentState == State.Hit)
         {
@@ -192,6 +198,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
                 else
                     ChangeState(State.Move);
             }
+            hitEvent?.Invoke();
         }
         else if(currentState == State.Fall)
         {
@@ -248,6 +255,16 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
     public void ChangeState(State state)
     {
         _prevState = currentState;
+
+        switch(_prevState)
+        {
+            case State.FlipDown:
+                {
+                    flipDownDone?.Invoke();
+                }
+                break;
+        }
+
         if(state == State.Idle)
         {
             _timeCounter.InitTimer("IdleTime",0f,3f);
@@ -389,6 +406,8 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
 
         rotator.enabled = false;
         this.enabled = false;
+
+        whenDead?.Invoke();
     }
 
     public void ShieldHit()

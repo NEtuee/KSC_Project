@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MiniSpider_AI : IKPathFollowBossBase
 {
@@ -31,6 +32,8 @@ public class MiniSpider_AI : IKPathFollowBossBase
     public string goPath;
     public string outPath;
 
+    public UnityEvent startEvent;
+
     private EMPShield _bomb;
     private Rigidbody _bombRigidbody;
     private Vector3 _posOrigin;
@@ -43,6 +46,8 @@ public class MiniSpider_AI : IKPathFollowBossBase
         _timeCounter.InitTimer("bombRefillTime",bombRefillTime,bombRefillTime);
 
         _posOrigin = transform.position;
+
+        StartCoroutine(LateStart());
     }
 
     public void Update()
@@ -196,5 +201,11 @@ public class MiniSpider_AI : IKPathFollowBossBase
         _bomb.GetComponent<EMPBomb>().destroy = true;
         _bombRigidbody = _bomb.GetComponent<Rigidbody>();
         _bombRigidbody.isKinematic = true;
+    }
+
+    IEnumerator LateStart()
+    {
+        yield return new WaitForSeconds(1f);
+        startEvent?.Invoke();
     }
 }

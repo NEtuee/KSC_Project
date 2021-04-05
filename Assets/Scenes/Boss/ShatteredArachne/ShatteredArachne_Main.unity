@@ -2137,6 +2137,9 @@ MonoBehaviour:
   bombRefillTime: 3
   goPath: MiniSpiderGo_1
   outPath: MiniSpiderOut_0
+  startEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &148593347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11660,6 +11663,62 @@ MonoBehaviour:
   Iterations: 10
   Delta: 0.001
   SnapBackStrength: 1
+--- !u!1 &688438032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 688438034}
+  - component: {fileID: 688438033}
+  m_Layer: 0
+  m_Name: DroneHelperSetting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &688438033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688438032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15bba4af2a4f2e446bd08b6d5a613aaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  bombHint: 0
+  arachneAppear: 0
+  scanned: 0
+  bombing: 0
+  hitFlage: 0
+  timeRunningHint: 0
+  arachneDown: 0
+  arachneDeadCheck: 0
+  developerHint: 0
+  timeRunningHintTime: 120
+  timeRunningCoolTime: 60
+  developerHintTime: 180
+--- !u!4 &688438034
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688438032}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.29776, y: 10.189996, z: 1.2167387}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &688494656
 GameObject:
   m_ObjectHideFlags: 0
@@ -14053,6 +14112,9 @@ MonoBehaviour:
   bombRefillTime: 3
   goPath: MiniSpiderGo_2
   outPath: MiniSpiderOut_1
+  startEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &830969204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20761,6 +20823,66 @@ MonoBehaviour:
   handFollowTarget:
   - {fileID: 574799012}
   - {fileID: 1106209832}
+  flipDownDone:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 688438033}
+        m_TargetAssemblyTypeName: DroneHelper_Arachne, Assembly-CSharp
+        m_MethodName: ArachneAppearFlag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  hitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 688438033}
+        m_TargetAssemblyTypeName: DroneHelper_Arachne, Assembly-CSharp
+        m_MethodName: HitFlag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  throwBombEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 688438033}
+        m_TargetAssemblyTypeName: DroneHelper_Arachne, Assembly-CSharp
+        m_MethodName: BombingFlag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  whenDead:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 688438033}
+        m_TargetAssemblyTypeName: DroneHelper_Arachne, Assembly-CSharp
+        m_MethodName: ArachneDeadFlag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1178413314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23153,7 +23275,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a1671a100aac98345af69274bae1aec5, type: 2}
+  - {fileID: 2100000, guid: 1386c008436970a4faa8cea35f6db333, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -34449,6 +34571,21 @@ MonoBehaviour:
   bombRefillTime: 3
   goPath: MiniSpiderGo_0
   outPath: MiniSpiderOut_0
+  startEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 688438033}
+        m_TargetAssemblyTypeName: DroneHelper_Arachne, Assembly-CSharp
+        m_MethodName: BombHintFlag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1979381057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35917,7 +36054,15 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -35925,7 +36070,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1178413313}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 688438033}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -35933,11 +36086,23 @@ PrefabInstance:
       value: ShieldHit
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ScanFlag
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ShatteredArachne_AI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DroneHelper_Arachne, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 451985760, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 451985761, guid: 1eb75f5508bc1b742b7c84bdd2f1f77c, type: 3}
@@ -36095,6 +36260,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  whenScanned:
+    m_PersistentCalls:
+      m_Calls: []
   destroyEffect: {fileID: 7655876491907094240, guid: 9b99b3ef5cd32b142a57f2342e0dfb66,
     type: 3}
 --- !u!1 &2044998688
@@ -36994,6 +37162,9 @@ MonoBehaviour:
   bombRefillTime: 3
   goPath: MiniSpiderGo_3
   outPath: MiniSpiderOut_1
+  startEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2064189969
 MonoBehaviour:
   m_ObjectHideFlags: 0
