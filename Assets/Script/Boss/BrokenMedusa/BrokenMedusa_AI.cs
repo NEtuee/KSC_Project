@@ -289,6 +289,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void ScanForward()
     {
+        scanner.SetHeight(transform.position.y + scanYLimit);
         scanner.ScanSetup(transform.position,head.forward);
     }
 
@@ -326,7 +327,7 @@ public class BrokenMedusa_AI : IKBossBase
         if(pushDistance >= _targetDistance && graphAnimator.IsPlaying("ShildAttack") == null)
         {
             var dist = Vector3.Distance(transform.position, _target.position);
-            if(dist >= 6f)
+            if(dist >= 7f)
             {
                 UpdateMoveLine();
                 return;
@@ -356,7 +357,7 @@ public class BrokenMedusa_AI : IKBossBase
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
                 if(ragdoll != null)
                 {
-                    ragdoll.ExplosionRagdoll(150.0f, 
+                    ragdoll.ExplosionRagdoll(200.0f, 
                         Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
                 }
             }

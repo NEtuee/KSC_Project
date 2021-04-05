@@ -27,6 +27,11 @@ public class BossScan : MonoBehaviour
         }
     }
 
+    public void SetHeight(float height)
+    {
+        scanMat.SetFloat("_ScanHeightLimit",height);
+    }
+
     public void ScanSetup(Vector3 start,Vector3 forward)
     {
         scaning = true;

@@ -121,6 +121,8 @@ public class EMPShield : Hitable
 
             //Destroy(gameObject);
         }
+
+        whenHit.Invoke();
     }
 
     public override void Hit(float damage)
@@ -138,6 +140,8 @@ public class EMPShield : Hitable
 
             //Destroy(gameObject);
         }
+
+        whenHit.Invoke();
     }
 
     public override void Hit(float damage, out bool isDestroy)
@@ -163,6 +167,8 @@ public class EMPShield : Hitable
             isDestroy = true;
             Destroy();
         }
+
+        whenHit.Invoke();
     }
 
     public void Reactive()

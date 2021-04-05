@@ -5,6 +5,7 @@ Shader "Hidden/TestImageEffect"
         _MainTex ("Texture", 2D) = "white" {}
         _Distance ("Distance",float) = 0
 
+        _ScanHeightLimit("Scan Height", float) = 9999
         _ScanWidth("Scan Width", float) = 10
 		_LeadSharp("Leading Edge Sharpness", float) = 10
 		_LeadColor("Leading Edge Color", Color) = (1, 1, 1, 0)
@@ -43,6 +44,7 @@ Shader "Hidden/TestImageEffect"
             float _ScanWidth;
 			float _LeadSharp;
             float _ScanArc;
+            float _ScanHeightLimit = 9999;
             
 			float4 _LeadColor;
 			float4 _MidColor;
@@ -79,6 +81,11 @@ Shader "Hidden/TestImageEffect"
                 float3 viewPos = (i.viewDir.xyz / i.viewDir.w) * depth;
                 //Transform to world space
                 float4 worldPos = mul (_ViewToWorld, float4 (viewPos, 1));
+
+                bool isUp = (_ScanHeightLimit > worldPos.y);
+                if(!isUp)
+                    return col;
+
                 worldPos.y = 0;
                 _WorldSpaceScannerPos.y = 0;
                 float4 direction = normalize(worldPos - _WorldSpaceScannerPos);
