@@ -52,7 +52,8 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadPrevlevel()
     {
-        _currentScene = levels[--currentLevel < 0 ? levels.Count - 1 : currentLevel];
+        currentLevel = (--currentLevel < 0 ? levels.Count - 1 : currentLevel);
+        _currentScene = levels[currentLevel];
         RegisterProgress();
         StartCoroutine(SceneLoadingProgress(true));
     }

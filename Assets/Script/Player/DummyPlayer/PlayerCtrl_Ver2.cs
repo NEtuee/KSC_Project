@@ -1074,7 +1074,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             moveDir.Normalize();
                             currentSpeed = runSpeed;
                             moveDir *= currentSpeed;
-                            currentJumpPower = jumpPower;
+                            currentJumpPower = jumpPower * 0.5f;
                             transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
 
                             animator.SetBool("IsGrab", false);

@@ -135,5 +135,12 @@ public class DroneHelper_Arachne : DroneHelper
     public void ArachneDeadFlag()
     {
         arachneDeadCheck = true;
+        StartCoroutine(LateEnd());
+    }
+
+    IEnumerator LateEnd()
+    {
+        yield return new WaitForSeconds(5f);
+        GameManager.Instance.endBackGround.SetActive(true);
     }
 }

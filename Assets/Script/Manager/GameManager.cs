@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public StateManager stateManager;
     [SerializeField] public TextMeshProUGUI sceneNameText;
     [SerializeField] public AsynSceneManager AsynSceneManager;
+    [SerializeField] public GameObject endBackGround;
     public Transform bossTransform;
 
     public List<LockOnTarget> lockOnTargets = new List<LockOnTarget>();
@@ -77,9 +78,15 @@ public class GameManager : MonoBehaviour
             lockOnTargets.Add(lockTarget.GetComponent<LockOnTarget>());
         }
 
+        StartCoroutine(LateStart());
+    }
+
+    IEnumerator LateStart()
+    {
+        yield return new WaitForSeconds(1.0f);
         AsynSceneManager.RegisterAfterLoad(() =>
-        { 
-            switch(AsynSceneManager.currentStageManager.SceneTitle)
+        {
+            switch (AsynSceneManager.currentStageManager.SceneTitle)
             {
                 case "Outdoor_Main":
                     sceneNameText.text = "지상";
@@ -140,11 +147,19 @@ public class GameManager : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.O))
         {
+            AsynSceneManager.LoadPrevlevel();
+            AsynSceneManager.currentStageManager.SetPlayerToPosition();
         }
 
         if (Input.GetKeyDown(KeyCode.P))
         {
             AsynSceneManager.LoadNextlevelFrom();
+            AsynSceneManager.currentStageManager.SetPlayerToPosition();
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            AsynSceneManager.LoadCurrentlevel();
             AsynSceneManager.currentStageManager.SetPlayerToPosition();
         }
     }
