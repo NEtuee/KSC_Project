@@ -1340,7 +1340,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             point1 = transform.position + collider.center - transform.forward;
             point2 = point1 + transform.forward * 2f;
             //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
-            if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
+            if (Physics.SphereCast(point1, collider.radius * 1.5f, transform.forward, out hit, 3f, detectionLayer))
             {
                 if (ledgeChecker.IsDetectedLedge() == false)
                 {
@@ -1382,7 +1382,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             }
 
             point1 = transform.position + transform.up*collider.height*0.5f - transform.forward;
-            if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 3f, ledgeAbleLayer))
+            if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 5f, ledgeAbleLayer))
             {
                 RaycastHit ledgePointHit;
                 point1 = transform.position + transform.up * collider.height * 2;
@@ -1481,8 +1481,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case EMPLaunchType.ButtonDiff:
                 {
-                    if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && energy.Value >= 25f && loading == false) 
+                    if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && loading == false) 
                     {
+                        if(energy.Value < 25f)
+                        {
+                            
+                            return;
+                        }
+
                         chargeTime += Time.deltaTime;
 
                         if (chargeTime >= chargeNecessryTime)
@@ -1507,10 +1513,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         chargeTime = 0.0f;
                     }
 
-                    if (Input.GetKeyDown(KeyCode.Mouse1) && energy.Value >= 50f)
-                    {
-                        LaunchImpect();
-                    }
+                    //if (Input.GetKeyDown(KeyCode.Mouse1) && energy.Value >= 50f)
+                    //{
+                    //    LaunchImpect();
+                    //}
 
                 }
                 break;
@@ -1543,7 +1549,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             }
                             else
                             {
-                                LaunchImpect();
+                                //LaunchImpect();
                             }
                         }
 
@@ -1585,7 +1591,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             }
                             else
                             {
-                                LaunchImpect();
+                                //LaunchImpect();
                             }
                         }
 
@@ -1615,21 +1621,30 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputLedgeUp()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.Jump) && isLedge == true 
-            && isClimbingMove == false && spaceChecker.Overlapped() == false)
+        if (InputManager.Instance.GetAction(KeybindingActions.Jump))
         {
-            isLedge = false;
-            animator.SetTrigger("LedgeUp");
-            animator.SetBool("IsLedge", false);
+            if(currentVerticalValue == 1.0f)
+            {
+                InputClimbingJump();
+                return true;
+            }
 
-            Vector3 currentRot = transform.rotation.eulerAngles;
-            currentRot.x = 0.0f;
-            currentRot.z = 0.0f;
-            transform.rotation = Quaternion.Euler(currentRot);
 
-            ChangeState(PlayerState.LedgeUp);
+            if (isLedge == true && isClimbingMove == false && spaceChecker.Overlapped() == false)
+            {
+                isLedge = false;
+                animator.SetTrigger("LedgeUp");
+                animator.SetBool("IsLedge", false);
 
-            return true;
+                Vector3 currentRot = transform.rotation.eulerAngles;
+                currentRot.x = 0.0f;
+                currentRot.z = 0.0f;
+                transform.rotation = Quaternion.Euler(currentRot);
+
+                ChangeState(PlayerState.LedgeUp);
+
+                return true;
+            }
         }
         return false;
     }

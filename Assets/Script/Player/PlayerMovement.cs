@@ -119,6 +119,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if(groundAngle >= invalidityAngle)
         {
             currentJumpPower -= gravity * Time.deltaTime;
@@ -139,6 +142,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         velocity = transform.position - prevPosition;
         trueSpeed = velocity.magnitude;
         speed = trueSpeed * 100f;
@@ -197,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckGroundDistance()
     {
-        if(capsuleCollider != null)
+        if (capsuleCollider != null)
         {
             float radius = capsuleCollider.radius * 0.9f;
             float dist = 10f;
@@ -337,6 +343,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (transform.parent != parent)
         {
+            //Debug.Log(parent);
             transform.SetParent(parent);
         }
     }

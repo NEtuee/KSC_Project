@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ImmortalJirungE_AI : IKPathFollowBossBase
 {
@@ -20,6 +21,9 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
     public LayerMask obstacleLayer;
 
     public List<Rigidbody> bodys = new List<Rigidbody>();
+
+    public UnityEvent whenReactiveshield;
+    public UnityEvent whenRecover;
 
     private SphereRayEx _forwardRay;
     private SphereRayEx _sideRay;
@@ -96,8 +100,9 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
             if(limit)
             {
                 shield.Reactive();
+                whenReactiveshield?.Invoke();
 
-                if(Random.Range(0,2) == 0)
+                if (Random.Range(0,2) == 0)
                     ChangeState(State.WallMove);
                 else
                     ChangeState(State.FloorWhip);
@@ -168,6 +173,8 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
         }
 
         head.enabled = true;
+
+        whenRecover?.Invoke();
     }
 
     public void ChangeState(State state)
