@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+    public string SceneTitle = "";
+
     public Transform prevZoneTransform;
     public Transform loadedPlayerPosition;
 
@@ -43,6 +45,9 @@ public class StageManager : MonoBehaviour
 
     public void TranslatePrevLoadingZone(float startTime)
     {
+        if(prevPositionTarget == null)
+            return;
+
         _progress = true;
         _timeCounter.InitTimer("StartTime",0f,startTime);
         _timeCounter.InitTimer("time");
