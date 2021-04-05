@@ -32,8 +32,8 @@ public class DroneHelperRoot : MonoBehaviour
             descriptDictionary.Add(droneDescript.descripts[i].key, droneDescript.descripts[i].descript);
         }
 
-        drone.whenHelp += () => { droneDiscriptCanvas.GetComponent<RectTransform>().localScale = helpStateScale; };
-        drone.whenAimHelp += () => { droneDiscriptCanvas.GetComponent<RectTransform>().localScale = aimHelpStateScale; };
+        //drone.whenHelp += () => { droneDiscriptCanvas.GetComponent<RectTransform>().localScale = helpStateScale; };
+        //drone.whenAimHelp += () => { droneDiscriptCanvas.GetComponent<RectTransform>().localScale = aimHelpStateScale; };
     }
 
     // Update is called once per frame

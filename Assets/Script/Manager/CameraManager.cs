@@ -18,6 +18,8 @@ public class CameraManager : MonoBehaviour
     private Transform brainCameraTransfrom;
     [SerializeField] private CinemachineVirtualCameraBase playerFollowCam;
     [SerializeField] private Cinemachine3rdPersonFollow playerFollowCam3rdPersonComponent;
+    private Cinemachine3rdPersonFollow playerAimCam3rdPersonComponent;
+    private Cinemachine3rdPersonFollow current3rdPersonComponent;
     [SerializeField] private CinemachineVirtualCameraBase playerAimCam;
     [SerializeField] private List<CinemachineVirtualCameraBase> otherCameras = new List<CinemachineVirtualCameraBase>();
     [SerializeField] private Transform spearLunchPos;
@@ -98,6 +100,8 @@ public class CameraManager : MonoBehaviour
         currentActiveCam = playerFollowCam;
 
         playerFollowCam3rdPersonComponent = playerFollowCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+        playerAimCam3rdPersonComponent = playerAimCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+        current3rdPersonComponent = playerFollowCam3rdPersonComponent;
     }
 
     /// <summary>
@@ -112,6 +116,9 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerFollowCam;
         currentActiveCam.gameObject.SetActive(true);
+
+        current3rdPersonComponent = playerFollowCam3rdPersonComponent;
+
         return true;
     }
 
@@ -124,6 +131,8 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerFollowCam;
         currentActiveCam.gameObject.SetActive(true);
+        current3rdPersonComponent = playerFollowCam3rdPersonComponent;
+
         if (isRunningCallBackCoroutine)
         {
             StopAllCoroutines();
@@ -144,6 +153,7 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerAimCam;
         currentActiveCam.gameObject.SetActive(true);
+        current3rdPersonComponent = playerAimCam3rdPersonComponent;
         return true;
     }
 
@@ -156,6 +166,7 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerAimCam;
         currentActiveCam.gameObject.SetActive(true);
+        current3rdPersonComponent = playerAimCam3rdPersonComponent;
         if (isRunningCallBackCoroutine)
         {
             StopAllCoroutines();
@@ -420,6 +431,11 @@ public class CameraManager : MonoBehaviour
     public void SetDamping(Vector3 damp)
     {
         playerFollowCam3rdPersonComponent.Damping = damp;
+    }
+
+    public float GetCameraDistance()
+    {
+        return current3rdPersonComponent.CameraDistance;
     }
 }
 
