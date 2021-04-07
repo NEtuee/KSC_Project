@@ -150,6 +150,12 @@ public class PlayerMovement : MonoBehaviour
         speed = trueSpeed * 100f;
         prevPosition = transform.position;
 
+        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab || player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp || player.GetState() == PlayerCtrl_Ver2.PlayerState.Ragdoll || player.GetState() == PlayerCtrl_Ver2.PlayerState.HangRagdoll || player.GetState() == PlayerCtrl_Ver2.PlayerState.HangLedge || player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp)
+        {
+            groundDistance = 0.0f;
+            return;
+        }
+
         CheckGround();
 
         if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Default)
@@ -348,6 +354,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void SetGrab()
+    {
+        isJumping = false;
+    }
+
     private void OnGUI()
     {
         if (movementDebug == true)
@@ -359,6 +370,8 @@ public class PlayerMovement : MonoBehaviour
             GUI.Label(new Rect(10f, 260f, 100, 20), "IsGround : " + isGrounded.ToString(), style);
             GUI.Label(new Rect(10f, 280f, 100, 20), "GroundAngle : " + groundAngle.ToString(), style);
             GUI.Label(new Rect(10f, 300f, 100, 20), "IsKeepSpeed : " + keepSpeed.ToString(), style);
+            GUI.Label(new Rect(10f, 480f, 100, 20), "GroundDistance : " + groundDistance.ToString(), style);
+
         }
     }
 }

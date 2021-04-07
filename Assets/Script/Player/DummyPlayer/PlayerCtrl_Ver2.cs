@@ -189,6 +189,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         chargeTime.Value = 0.0f;
 
+        if(updateMethod == UpdateMethod.FixedUpdate)
+        {
+            animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
+        }
+
         StartCoroutine(StopCheck());
     }
 
@@ -928,6 +933,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
+                    collider.isTrigger = false;
                     animator.applyRootMotion = false;
                     animator.SetBool("IsGrab", false);
                     animator.SetBool("IsLedge", false);
@@ -954,6 +960,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.ActiveLedgeIK(false);
                     footIK.DisableFeetIk();
                     isClimbingMove = false;
+                    movement.SetGrab();
                     GameManager.Instance.cameraManager.SetFollowCameraDistance("Grab");
                 }
                 break;
@@ -1030,6 +1037,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.LedgeUp:
                 {
                     handIK.DisableHandIK();
+                    collider.isTrigger = true;
                 }
                 break;
             case PlayerState.ClimbingJump:

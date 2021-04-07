@@ -48,6 +48,8 @@ public class HandIKCtrl : MonoBehaviour
     [SerializeField] private Transform DLR;
     [SerializeField] private Transform DRL;
     [SerializeField] private Transform DRR;
+    [SerializeField] private Transform center_L;
+    [SerializeField] private Transform center_R;
 
 
     [SerializeField] private GameObject maker;
@@ -306,6 +308,10 @@ public class HandIKCtrl : MonoBehaviour
             ledgeDetection = result;
             leftHandPos = Vector3.zero;
             rightHandPos = Vector3.zero;
+        }
+        else
+        {
+            TraceCenter();
         }
     }
 
@@ -815,7 +821,6 @@ public class HandIKCtrl : MonoBehaviour
     {
         climbingMove = true;
         enableLeftHandIk = true;
-        enableLeftHandIk = true;
         startLedgeIK = false;
         if (nextLeftHandPointObject == null)
             nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
@@ -832,7 +837,6 @@ public class HandIKCtrl : MonoBehaviour
     {
         climbingMove = true;
         enableLeftHandIk = true;
-        enableLeftHandIk = true;
         startLedgeIK = false;
         if (nextRightHandPointObject == null)
             nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
@@ -842,6 +846,28 @@ public class HandIKCtrl : MonoBehaviour
             nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
         nextLeftHandPointObject.SetParent(downRight_LeftHit.transform);
         nextLeftHandPointObject.position = downRight_LeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+    }
+
+    private void TraceCenter()
+    {
+        bool detectd;
+        detectd = Physics.SphereCast(center_L.position, outsideSurfaceRadius, transform.forward, out llHit, 1.5f, climbingLayer);
+        if(detectd == true)
+        {
+            //Debug.Log("LeftIK");
+            enableLeftHandIk = true;
+            leftHandPointObjet.SetParent(llHit.transform);
+            leftHandPointObjet.position = llHit.point - transform.TransformDirection(upClimbingIKOffset);
+        }
+
+        detectd = Physics.SphereCast(center_R.position, outsideSurfaceRadius, transform.forward, out rrHit, 1.5f, climbingLayer);
+        if(detectd == true)
+        {
+            //Debug.Log("RightIK");
+            enableRightHandIk = true;
+            rightHandPointObject.SetParent(rrHit.transform);
+            rightHandPointObject.position = rrHit.point - transform.TransformDirection(upClimbingIKOffset);
+        }
     }
 
     private Transform CreatePointObject(string name)

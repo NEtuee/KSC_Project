@@ -5,11 +5,14 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public enum GameUpdate { Update,Fixed}
+
     public enum MenuState { MenuOn,MenuOff}
 
     public BulletTimeManager timeManager;
     public float killEventFov = 66f;
     public bool PAUSE = false;
+    public GameUpdate GAMEUPDATE;
     [SerializeField] public PlayerCtrl player;
     [SerializeField] public FollowTargetCtrl followTarget;
     [SerializeField] public UIManager uiManager;
@@ -59,6 +62,15 @@ public class GameManager : MonoBehaviour
         if(instance == null)
         {
             instance = this;
+        }
+
+        if(((PlayerCtrl_Ver2)player).updateMethod == UpdateMethod.Update)
+        {
+            GAMEUPDATE = GameUpdate.Update;
+        }
+        else
+        {
+            GAMEUPDATE = GameUpdate.Fixed;
         }
     }
 
