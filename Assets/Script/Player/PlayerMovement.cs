@@ -150,7 +150,12 @@ public class PlayerMovement : MonoBehaviour
         speed = trueSpeed * 100f;
         prevPosition = transform.position;
 
-        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab || player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp || player.GetState() == PlayerCtrl_Ver2.PlayerState.Ragdoll || player.GetState() == PlayerCtrl_Ver2.PlayerState.HangRagdoll || player.GetState() == PlayerCtrl_Ver2.PlayerState.HangLedge || player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp)
+        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab || 
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp ||
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.Ragdoll || 
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.HangRagdoll ||
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.HangLedge ||
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp)
         {
             groundDistance = 0.0f;
             return;
@@ -276,7 +281,12 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
+                    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab 
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge 
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
                     {
                         SetParent(null);
                     }

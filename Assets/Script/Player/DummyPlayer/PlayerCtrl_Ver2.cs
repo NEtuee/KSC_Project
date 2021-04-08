@@ -60,8 +60,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [Range(0, 5)] [SerializeField] private float fallingControlSenstive = 1f;
     [SerializeField] private float horizonWeight = 0.0f;
     [SerializeField] private float rotAngle = 0.0f;
-    //[SerializeField] private AnimationCurve walkCurve;
-    //[SerializeField] private AnimationCurve runCurve;
+
 
     [Header("Jump Value")]
     [SerializeField] private float currentJumpPower = 0f;
@@ -94,7 +93,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float fixedVertical;
     [SerializeField] private float fixedHorizontal;
     [SerializeField] private AnimationCurve bandCurve;
-    private float horizonInputTime = 0.0f;
 
     [Header("Move Direction")]
     [SerializeField] private Vector3 moveDir;
@@ -111,31 +109,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float hangAbleEdgeDist = 2f;
 
     [Header("EMP Lunacher")]
-    [SerializeField]private float restoreValuePerSecond = 10f;
+    [SerializeField] private EMPGun empGun;
+    [SerializeField] private float restoreValuePerSecond = 10f;
     [SerializeField] private float costValue = 25f;
     [SerializeField] private float chargeNecessryTime = 1f;
     public FloatReactiveProperty chargeTime = new FloatReactiveProperty(0.0f);
-    [SerializeField] private Transform launchPos;
-    [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float impectPower = 50.0f;
     [SerializeField] private ParticleSystem impectEffect;
     [SerializeField] private GameObject destroyEffect;
-    public IntReactiveProperty launcherMode = new IntReactiveProperty(1);
-    [SerializeField] private EMPLaunchType type;
-    [SerializeField] private bool isLayser;
-    [SerializeField] private LayserRender line;
     [SerializeField] public IntReactiveProperty loadCount = new IntReactiveProperty(0);
     [SerializeField] private float loadTerm = 2f;
     [SerializeField] private float impactTerm = 2.5f;
     [SerializeField] private float loadTime = 0f;
     [SerializeField] private bool loading = false;
     private bool impactLoading = false;
-    [SerializeField] private GameObject gunObject;
-    [SerializeField] private Animator gunAnim;
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
-    [SerializeField] private ParticleSystem layserParticle;
-    [SerializeField] private ParticlePool hitEffect;
 
     [Header("HpState")]
     private float latestHitTime;
@@ -169,23 +158,17 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ragdoll = GetComponent<PlayerRagdoll>();
         footIK = GetComponent<IKCtrl>();
         handIK = GetComponent<HandIKCtrl>();
-        if (launchPos == null)
-        {
-            launchPos = transform.Find("LunchPos");
-        }
+     
         rigCtrl = GetComponent<RigCtrl>();
-        if(gunObject != null)
+
+        if(empGun != null)
         {
-            gunObject.SetActive(false);
+            empGun.Active(false);
         }
 
         moveDir = Vector3.zero;
         currentSpeed = 0.0f;
         mainCameraTrasform = Camera.main.transform;
-
-        launcherMode.Value = 1;
-
-        line = GetComponent<LayserRender>();
 
         chargeTime.Value = 0.0f;
 
@@ -309,16 +292,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Aiming:
                 {
-                    if(type == EMPLaunchType.ButtonDiff)
-                    {
-                        if(loading == false && impactLoading == false && loadCount.Value < 3 && Input.GetKeyDown(KeyCode.LeftControl))
-                        {
-                            loading = true;
-                            loadTime = 0f;
-                            gunAnim.SetTrigger("Next");
-                        }
-                    }
-
+                   if(loading == false && impactLoading == false && loadCount.Value < 3 && Input.GetKeyDown(KeyCode.LeftControl))
+                   {
+                       loading = true;
+                       loadTime = 0f;
+                        empGun.GunLoad();
+                   }
+                    
                     InputChargeShot();
 
                     if (InputAimingRelease())
@@ -332,7 +312,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 }
                 break;         
         }
-        InputChangeLauncherMode();
     }
 
     private void ProcessUpdate(float deltaTime)
@@ -470,57 +449,43 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.HangRagdoll:
                 {
-                    //if (movement.GetGroundAngle() <= 40.0f)
-                    //{
-                    //    ragdoll.DisableFixRagdoll();
-                    //}
                 }
                 break;
             case PlayerState.HangLedge:
                 {
-                    //UpdateGrab();
                 }
                 break;
             case PlayerState.Aiming:
                 {
-                    if (type == EMPLaunchType.ButtonDiff)
+                    
+                    if (loading == true)
                     {
-                        if (loading == true)
+                        rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime/loadTerm));
+                        loadTime += deltaTime;
+                        if(loadTime > loadTerm)
                         {
-                            rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime/loadTerm));
-                            loadTime += deltaTime;
-                            if(loadTime > loadTerm)
-                            {
-                                rigCtrl.SetAimingWeight(1f);
-                                loadCount.Value++;
-                                loadTime = 0;
-                                loading = false;
-                            }
-                        }
-
-                        if(impactLoading == true)
-                        {
-                            rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime / impactTerm));
-                            loadTime += deltaTime;
-                            if (loadTime > impactTerm)
-                            {
-                                rigCtrl.SetAimingWeight(1f);
-                                loadTime = 0;
-                                impactLoading = false;
-                            }
+                            rigCtrl.SetAimingWeight(1f);
+                            loadCount.Value++;
+                            loadTime = 0;
+                            loading = false;
                         }
                     }
+
+                    if(impactLoading == true)
+                    {
+                         rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime / impactTerm));
+                         loadTime += deltaTime;
+                         if (loadTime > impactTerm)
+                         {
+                            rigCtrl.SetAimingWeight(1f);
+                            loadTime = 0;
+                            impactLoading = false;
+                         }
+                    }
+                    
 
                     RaycastHit hit;
-                    if(Physics.Raycast(mainCameraTrasform.position,mainCameraTrasform.forward,out hit,150f))
-                    {
-                        launchPos.LookAt(hit.point);
-                    }
-                    else
-                    {
-                        launchPos.LookAt(mainCameraTrasform.position + mainCameraTrasform.forward * 150.0f);
-                    }
-
+            
                     if (movement.isGrounded == true)
                     {
                         if (inputVertical != 0.0f || inputHorizontal != 0.0f)
@@ -1195,16 +1160,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         if (ledgeChecker.IsDetectedLedge() == true)
             return true;
-
-        //RaycastHit hit;
-        //Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
-        //Vector3 point2 = point1 + transform.forward * 1f;
-        //if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
-        //{
-        //    return true;
-        //}
-        
-        
+  
         if(DetectionCanClimbingAreaByVertexColor(transform.position+transform.up*collider.height*0.5f,transform.forward) == true)
         {
             return true;
@@ -1214,11 +1170,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             return true;
         }
-
-        //if (DetectionCanClimbingAreaByVertexColor(transform.position + transform.up * collider.height, transform.forward) == true)
-        //{
-        //    return true;
-        //}
 
         return false;
     }
@@ -1232,7 +1183,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             int[] triangles = wallMesh.mesh.triangles;
             Color[] vertexColors = wallMesh.mesh.colors;
 
-            //Debug.Log(vertexColors[triangles[hit.triangleIndex * 3 + 0]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 1]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 2]].ToString());
             if (vertexColors[triangles[hit.triangleIndex * 3 + 0]] == Color.red
                 || vertexColors[triangles[hit.triangleIndex * 3 + 1]] == Color.red
                 || vertexColors[triangles[hit.triangleIndex * 3 + 2]] == Color.red)
@@ -1258,7 +1208,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             int[] triangles = wallMesh.mesh.triangles;
             Color[] vertexColors = wallMesh.mesh.colors;
 
-            //Debug.Log(vertexColors[triangles[hit.triangleIndex * 3 + 0]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 1]].ToString() + vertexColors[triangles[hit.triangleIndex * 3 + 2]].ToString());
             if (vertexColors[triangles[hit.triangleIndex * 3 + 0]] == Color.red
                 || vertexColors[triangles[hit.triangleIndex * 3 + 1]] == Color.red
                 || vertexColors[triangles[hit.triangleIndex * 3 + 2]] == Color.red)
@@ -1317,7 +1266,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         RaycastHit hit;
         Vector3 point1 = transform.position + transform.up * -0.3f;
-        Vector3 point2 = point1 + transform.forward * 1f;
         if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 2f, detectionLayer))
         {
             return true;
@@ -1343,12 +1291,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private bool InputTryGrab()
     {
         Vector3 point1;
-        Vector3 point2;
         RaycastHit hit;
         if (InputManager.Instance.GetAction(KeybindingActions.Grab))
         {
             point1 = transform.position + collider.center - transform.forward;
-            point2 = point1 + transform.forward * 2f;
             //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
             if (Physics.SphereCast(point1, collider.radius * 1.5f, transform.forward, out hit, 3f, detectionLayer))
             {
@@ -1447,16 +1393,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         movement.Detach();
                         return true;
                     }
-                    break;
                 case PlayerState.HangRagdoll:
                     {
                         ragdoll.ReleaseHangRagdoll();
                         return true;
                     }
-                    break;
             }
-
-            
         }
         return false;
     }
@@ -1487,146 +1429,36 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputChargeShot()
     {
-        switch (type)
+        if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && loading == false)
         {
-            case EMPLaunchType.ButtonDiff:
-                {
-                    if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && loading == false) 
-                    {
-                        if(energy.Value < 25f)
-                        {
-                            drone.DroneHelpCall("Support_Energy");
-                            return;
-                        }
+            if (energy.Value < 25f)
+            {
+                drone.DroneHelpCall("Support_Energy");
+                return;
+            }
 
-                        chargeTime.Value += Time.deltaTime;
+            chargeTime.Value += Time.deltaTime;
 
-                        if (chargeTime.Value >= chargeNecessryTime)
-                        {
-                            chargeTime.Value = 0.0f;
-                            int count = (int)Mathf.Abs(energy.Value / 25f);
-                            energy.Value -= 25f * (loadCount.Value > count ? count : loadCount.Value);
+            if (chargeTime.Value >= chargeNecessryTime)
+            {
+                chargeTime.Value = 0.0f;
+                int count = (int)Mathf.Abs(energy.Value / 25f);
+                energy.Value -= 25f * (loadCount.Value > count ? count : loadCount.Value);
 
-                            if (bulletPrefab != null)
-                            {
-                                if (isLayser)
-                                    LaunchLayser(loadCount.Value);
-                                else
-                                    Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
-                            }
-                        }
-
-                        return;
-                    }
-                    else
-                    {
-                        chargeTime.Value = 0.0f;
-                    }
-
-                    //if (Input.GetKeyDown(KeyCode.Mouse1) && energy.Value >= 50f)
-                    //{
-                    //    LaunchImpect();
-                    //}
-
-                }
-                break;
-            case EMPLaunchType.Switching:
-                {
-                    if (InputManager.Instance.GetAction(KeybindingActions.Aiming))
-                    {
-                        if (launcherMode.Value == 1 && energy.Value < 25f)
-                            return;
-
-                        if (launcherMode.Value == 2 && energy.Value < 50f)
-                            return;
-
-                        chargeTime.Value += Time.deltaTime;
-
-                        if (chargeTime.Value >= chargeNecessryTime)
-                        {
-                            chargeTime.Value = 0.0f;
-                            energy.Value -= 25f;
-
-                            if (launcherMode.Value == 1)
-                            {
-                                if (bulletPrefab != null)
-                                {
-                                    if (isLayser)
-                                        LaunchLayser();
-                                    else
-                                        Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
-                                }
-                            }
-                            else
-                            {
-                                //LaunchImpect();
-                            }
-                        }
-
-                        return;
-                    }
-                    else
-                    {
-                        chargeTime.Value = 0.0f;
-                    }
-                }
-                break;
-            case EMPLaunchType.Load:
-                {
-                    if (InputManager.Instance.GetAction(KeybindingActions.Aiming))
-                    {
-                        if (launcherMode.Value == 1 && loadCount.Value != 0 && energy.Value < 25f)
-                            return;
-
-                        if (launcherMode.Value == 2 && energy.Value < 50f)
-                            return;
-
-                        chargeTime.Value += Time.deltaTime;
-
-                        if (chargeTime.Value >= chargeNecessryTime)
-                        {
-                            chargeTime.Value = 0.0f;
-                            int count = (int)Mathf.Abs(energy.Value / 25f);
-                            energy.Value -= 25f * (loadCount.Value>count? count : loadCount.Value);
-
-                            if (launcherMode.Value == 1)
-                            {
-                                if (bulletPrefab != null)
-                                {
-                                    if (isLayser)
-                                        LaunchLayser(loadCount.Value);
-                                    else
-                                        Instantiate(bulletPrefab, launchPos.position, launchPos.rotation);
-                                }
-                            }
-                            else
-                            {
-                                //LaunchImpect();
-                            }
-                        }
-
-                        return;
-                    }
-                    else
-                    {
-                        chargeTime.Value = 0.0f;
-                    }
-                }
-                break;
+                empGun.LaunchLayser(loadCount.Value * 40.0f);
+                loadCount.Value = 1;
+            }
+            return;
         }
-        
-    }
-
-    private void InputChangeLauncherMode()
-    {
-        if (InputManager.Instance.GetAction(KeybindingActions.Equiment1th))
+        else
         {
-            launcherMode.Value = 1;
+            chargeTime.Value = 0.0f;
         }
-        else if (InputManager.Instance.GetAction(KeybindingActions.Equiment2th))
-        {
-            launcherMode.Value = 2;
-        }
+
+        //if (Input.GetKeyDown(KeyCode.Mouse1) && energy.Value >= 50f)
+        //{
+        //    LaunchImpect();
+        //}
     }
 
     private bool InputLedgeUp()
@@ -1638,7 +1470,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 InputClimbingJump();
                 return true;
             }
-
 
             if (isLedge == true && isClimbingMove == false && spaceChecker.Overlapped() == false)
             {
@@ -1663,7 +1494,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         if (InputManager.Instance.GetAction(KeybindingActions.Jump))
         {
-            //ChangeState(PlayerState.ClimbingJump);
             ChangeState(PlayerState.ReadyClimbingJump);
             return true;
         }
@@ -1714,60 +1544,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             }
         }
     }
-
-    private void LaunchLayser()
-    {
-            RaycastHit hit;
-            if(Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward,out hit,100f))
-            {
-                //line.Active(launchPos.position, hit.point,0.1f, 0.1f, 0.15f);
-                layserParticle.Play();
-                EMPShield shield;
-                if(hit.collider.TryGetComponent<EMPShield>(out shield))
-                {
-                    shield.Hit();
-                }
-            }
-            else
-            {
-                //line.Active(launchPos.position, mainCameraTrasform.position+mainCameraTrasform.forward*100f,0.1f, 0.1f, 0.15f);
-                layserParticle.Play();
-            }
-    }
-
-    private void LaunchLayser(int loadCount)
-    {
-     
-            RaycastHit hit;
-            if (Physics.Raycast(mainCameraTrasform.position, mainCameraTrasform.forward, out hit, 100f))
-            {
-                //line.Active(launchPos.position, hit.point, 0.1f, 0.1f, 0.15f * loadCount);
-                layserParticle.Play();
-                Hitable shield;
-                bool destroy;
-                
-                if(hitEffect != null)
-                {
-                    hitEffect.Active(hit.point, Quaternion.identity);
-                }
- 
-                if (hit.collider.TryGetComponent<Hitable>(out shield))
-                {
-                    shield.Hit(loadCount * 40f, out destroy);
-                    if(destroy == true && drone != null)
-                    {
-                        //drone.OrderApproch(hit.collider.transform);
-                    }
-                }
-            }
-            else
-            {
-                //line.Active(launchPos.position, mainCameraTrasform.position + mainCameraTrasform.forward * 100f, 0.1f, 0.1f, 0.15f * loadCount);
-                layserParticle.Play();
-            }
- 
-        this.loadCount.Value = 1;
-    }
     #endregion
 
     private void ActiveAim(bool active)
@@ -1778,11 +1554,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             if (rigCtrl != null)
             {
                 rigCtrl.Active();
-                gunObject.SetActive(true);
+                empGun.Active(true);
                 animator.SetLayerWeight(2, 1.0f);
                 animator.SetLayerWeight(3, 1.0f);
             }
-            gunAnim.SetTrigger("Next");
+            empGun.GunLoad();
         }
         else
         {
@@ -1790,11 +1566,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             if (rigCtrl != null)
             {
                 rigCtrl.Disable();
-                gunObject.SetActive(false);
+                empGun.Active(false);
                 animator.SetLayerWeight(2, 0.0f);
                 animator.SetLayerWeight(3, 0.0f);
             }
-            gunAnim.SetTrigger("Off");
+            empGun.GunOff();
         }
     }
 
@@ -1871,41 +1647,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         Vector3 start = transform.position + transform.up * collider.height * 2;
         RaycastHit upHit;
-        RaycastHit forwardHit;
         Vector3 finalPosition;
         if (Physics.SphereCast(start, collider.radius * 2f, -transform.up, out upHit, collider.height * 2, adjustAbleLayer))
         {
-            //Instantiate(hitMaker, upHit.point, Quaternion.identity);
             finalPosition = upHit.point + (transform.up * dectionOffset.y);
-            //if (Physics.Raycast(transform.position + transform.up * collider.height *0.5f ,transform.forward,out forwardHit,1.5f, adjustAbleLayer))
-            //{
-            //    //finalPosition += forwardHit.point * dectionOffset.z;
-            //}
             finalPosition += transform.forward * dectionOffset.z;
-            //Debug.Log(finalPosition);
             transform.position = finalPosition;
             StartCoroutine(ForceSnap(0.1f, finalPosition));
         }
     }
 
-    //public float GetFootStepOffset()
-    //{
-    //    if (state != PlayerState.Default)
-    //        return 0.0f;
-
-    //    if(currentSpeed == 9.0f)
-    //    {
-    //        return runCurve.Evaluate(animationNormalizeTime);
-    //    }
-    //    else if(currentSpeed >= 5.5f)
-    //    {
-    //        return walkCurve.Evaluate(animationNormalizeTime);
-    //    }
-    //    else
-    //    {
-    //        return 0.0f;
-    //    }
-    //}
     IEnumerator ForceSnap(float snapTime,Vector3 snapPosition)
     {
         float time = 0.0f;

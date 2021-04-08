@@ -71,6 +71,7 @@ public class PlayerRagdoll : MonoBehaviour
 
         bip = transform.Find("Root_001");
         Rigidbody[] rigidBodies = bip.GetComponentsInChildren<Rigidbody>();
+        pelvis = anim.GetBoneTransform(HumanBodyBones.Hips);
 
         foreach (Rigidbody rigid in rigidBodies)
         {

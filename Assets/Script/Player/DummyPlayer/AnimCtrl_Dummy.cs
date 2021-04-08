@@ -7,23 +7,26 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private PlayerCtrl_Ver2 owner;
     private Animator animator;
     private HandIKCtrl handIk;
-    [SerializeField] private Vector3 rootPosition;
+
+    private Transform leftFootTransform;
+    private Transform rightFootTransform;
 
     private void Start()
     { 
         owner=GetComponent<PlayerCtrl_Ver2>();
         animator = GetComponent<Animator>();
         handIk = GetComponent<HandIKCtrl>();
+
+        if(animator != null)
+        {
+            leftFootTransform = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+            rightFootTransform = animator.GetBoneTransform(HumanBodyBones.RightFoot);
+        }
     }
 
     private void EndTurnBack()
     {
         owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
-    }
-
-    private void StartStop()
-    {
-        animator.applyRootMotion = true;
     }
 
     private void EndStop()
@@ -35,16 +38,6 @@ public class AnimCtrl_Dummy : MonoBehaviour
     {
         owner.Jump();
         GameManager.Instance.soundManager.Play(16, Vector3.zero,transform);
-    }
-
-    private void StartLandingAdditive()
-    {
-        //animator.SetLayerWeight(1, 1f);
-    }
-
-    private void EndLandingAdditive()
-    {
-       //animator.SetLayerWeight(1, 0f);
     }
 
     private void EndClimbMove()
@@ -59,10 +52,6 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private void Right()
     {
         animator.SetBool("Left", true);
-    }
-
-    private void CanInput()
-    {
     }
 
     private void StartLedgeUp()
@@ -81,47 +70,13 @@ public class AnimCtrl_Dummy : MonoBehaviour
         owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
     }
 
-    private void StartLeftHandClimbing()
-    {
-        //handIk.DisableLeftHandIk();
-        //handIk.DisableRightHandIk();
-    }
-
-    private void StartrightHandClimbing()
-    {
-        //handIk.DisableLeftHandIk();
-        //handIk.DisableRightHandIk();
-    }
-
-    private void TraceLeftHand()
-    {
-        handIk.EnableLeftTrace();
-    }
-
-    private void TraceRightHand()
-    {
-        handIk.EnableRightTrace();
-    }
-
-    private void TraceBothHand()
-    {
-        handIk.EnableLeftTrace();
-        handIk.EnableRightTrace();
-    }
-
-    private void TraceOff()
-    {
-        handIk.DisableLeftTrace();
-        handIk.DisableRightTrace();
-    }
-
     private void JogFootStep(int left)
     {
         Vector3 footStepPosition;
         if (left == 0)
-            footStepPosition = animator.GetBoneTransform(HumanBodyBones.LeftFoot).position;
+            footStepPosition = leftFootTransform.position;
         else
-            footStepPosition = animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
+            footStepPosition = rightFootTransform.position;
 
         GameManager.Instance.soundManager.Play(12, footStepPosition);
     }
@@ -130,26 +85,11 @@ public class AnimCtrl_Dummy : MonoBehaviour
     {
         Vector3 footStepPosition;
         if (left == 0)
-            footStepPosition = animator.GetBoneTransform(HumanBodyBones.LeftFoot).position;
+            footStepPosition = leftFootTransform.position;
         else
-            footStepPosition = animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
+            footStepPosition = rightFootTransform.position;
 
         GameManager.Instance.soundManager.Play(13, footStepPosition);
-    }
-
-    private void StartJumpEnd()
-    {
-        //GameManager.Instance.soundManager.Play(18, transform.position);
-    }
-
-    private void MoveLeftHand()
-    {
-        //handIk.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0.0f);
-    }
-
-    private void MoveRightHand()
-    {
-        //handIk.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.0f);
     }
 
     private void StartClimbingJump()

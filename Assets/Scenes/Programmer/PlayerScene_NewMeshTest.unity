@@ -1604,15 +1604,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 112632216}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2a8618ac7146d748a811b3179878a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
   - Outdoor_Main
-  - BrokenMedusa_main
   - DaddyLongLegs_Main
+  - BrokenMedusa_main
   - ImmortalJirungE_main
   - ShatteredArachne_Main
   currentLevel: 0
@@ -3752,12 +3752,6 @@ PrefabInstance:
 --- !u!4 &315491744 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3373318194516751191, guid: 6627c0a58c76bec43b5b69a41cbbef30,
-    type: 3}
-  m_PrefabInstance: {fileID: 315491743}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &315491745 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 2979929928572947959, guid: 6627c0a58c76bec43b5b69a41cbbef30,
     type: 3}
   m_PrefabInstance: {fileID: 315491743}
   m_PrefabAsset: {fileID: 0}
@@ -9485,12 +9479,6 @@ PrefabInstance:
 --- !u!4 &888572724 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1974781681886853628, guid: f56f8a480c312ff4796a1e58bcc1f9c5,
-    type: 3}
-  m_PrefabInstance: {fileID: 888572723}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &888572725 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 8868217515464188584, guid: f56f8a480c312ff4796a1e58bcc1f9c5,
     type: 3}
   m_PrefabInstance: {fileID: 888572723}
   m_PrefabAsset: {fileID: 0}
@@ -15503,6 +15491,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1532582867}
   - component: {fileID: 1532582868}
+  - component: {fileID: 1532582869}
   m_Layer: 9
   m_Name: Gun
   m_TagString: Untagged
@@ -15542,6 +15531,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1532582869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532582866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f5dd0aaa20a35449f14f47e261490e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunAnim: {fileID: 1087941972}
+  launchPos: {fileID: 751023205}
+  impectEffect: {fileID: 569566949}
+  layserEffect: {fileID: 125412493}
+  hitEffect: {fileID: 656071712}
 --- !u!1 &1569298309
 GameObject:
   m_ObjectHideFlags: 0
@@ -21369,8 +21375,6 @@ MonoBehaviour:
   newPelvisOffset: 0
   pelvisUpAndDownSpeed: 0.28
   feetToIkPositionSpeed: 0.5
-  leftFootAnimVariableName: LeftFootCurve
-  rightFootAnimVariableName: RightFootCurve
   useProIkFeature: 1
   showSolverDebug: 1
 --- !u!114 &467032923266050939
@@ -21386,24 +21390,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugHandIK: 1
-  rightHand_Effetor: {x: 0, y: 0, z: 0}
-  leftHand_Effetor: {x: 0, y: 0, z: 0}
   notUseHandIK: 0
   enableHandIK: 0
   enableLeftHandIk: 0
   enableRightHandIk: 0
   startLedgeIK: 0
-  leftTrace: 0
-  rightTrace: 0
   climbingLayer:
     serializedVersion: 2
     m_Bits: 133184
-  leftWeightMove: 0
-  rightWeightMove: 0
   leftWeight: 1
   rightWeight: 1
-  lerpSpeed: 1
-  sphereRadius: 0.13
   LL: {fileID: 698776142}
   LR: {fileID: 583156774}
   RL: {fileID: 1326348240}
@@ -21422,6 +21418,24 @@ MonoBehaviour:
   DRR: {fileID: 25633035}
   center_L: {fileID: 0}
   center_R: {fileID: 0}
+  leftLeftOffset: {x: 0, y: 0, z: 0}
+  leftRightOffset: {x: 0, y: 0, z: 0}
+  rightLeftOffset: {x: 0, y: 0, z: 0}
+  rightRightOffset: {x: 0, y: 0, z: 0}
+  upLeftOffset: {x: 0, y: 0, z: 0}
+  upRightOffset: {x: 0, y: 0, z: 0}
+  downLeftOffset: {x: 0, y: 0, z: 0}
+  downRightOffset: {x: 0, y: 0, z: 0}
+  upLeftRightOffset: {x: 0, y: 0, z: 0}
+  upLeftLeftOffset: {x: 0, y: 0, z: 0}
+  upRightLeftOffset: {x: 0, y: 0, z: 0}
+  upRightRightOffset: {x: 0, y: 0, z: 0}
+  downLeftLeftOffset: {x: 0, y: 0, z: 0}
+  downLeftRightOffset: {x: 0, y: 0, z: 0}
+  downRightLeftOffset: {x: 0, y: 0, z: 0}
+  downRightRightOffset: {x: 0, y: 0, z: 0}
+  centerLeftOffset: {x: 0, y: 0, z: 0}
+  centerRightOffset: {x: 0, y: 0, z: 0}
   maker: {fileID: 2716952014592763931, guid: 11e87a531a3c2654d9f44a182b01ec4e, type: 3}
   ledgeIK: 0
   climbingMove: 0
@@ -21432,8 +21446,6 @@ MonoBehaviour:
   rightHandOffset: {x: 0, y: -0.1, z: 0.15}
   ledgeSphereUpOffset: 1.2
   normalizedTime: 0
-  upSpeed: 16
-  downSpeed: 16
   hangLedgeOffset: {x: 0, y: 0.07, z: 0.03}
   upClimbingIKOffset: {x: 0, y: 0, z: 0.03}
   centerDetectRadius: 0.2
@@ -22357,12 +22369,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  leftSide: 0
-  rightSide: 0
-  ll_detect: 0
-  lr_detect: 0
-  rl_detect: 0
-  rr_detect: 0
   leftHandPointObjet: {fileID: 0}
   rightHandPointObject: {fileID: 0}
   nextLeftHandPointObject: {fileID: 0}
@@ -22452,7 +22458,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30fdd000538f4cf4091dbf318a649202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rootPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &467032923266050943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22567,31 +22572,22 @@ MonoBehaviour:
   ledgeChecker: {fileID: 337375691}
   spaceChecker: {fileID: 1897688483}
   hangAbleEdgeDist: 3
+  empGun: {fileID: 0}
   restoreValuePerSecond: 10
   costValue: 25
   chargeNecessryTime: 1
   chargeTime:
     value: 0
-  launchPos: {fileID: 1798414805}
-  bulletPrefab: {fileID: 5378012489971627574, guid: f377b115f7e27f94caaebf12221ee4ba,
-    type: 3}
   impectPower: 20
   impectEffect: {fileID: 78870022}
   destroyEffect: {fileID: 3901721362512671319, guid: e7012121af2e1d0459223eabcb739017,
     type: 3}
-  launcherMode:
-    value: 1
-  type: 0
-  isLayser: 1
-  line: {fileID: 0}
   loadCount:
     value: 0
   loadTerm: 1
   impactTerm: 2.5
   loadTime: 0
   loading: 0
-  gunObject: {fileID: 1456331166}
-  gunAnim: {fileID: 315491745}
   drone: {fileID: 17370244}
   reloadWeightCurve:
     serializedVersion: 2
@@ -22635,8 +22631,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  layserParticle: {fileID: 888572725}
-  hitEffect: {fileID: 0}
   hpRestoreCoolTime: 5
   hpRestoreSpeed: 5
 --- !u!136 &467032923266050944
@@ -28990,8 +28984,6 @@ MonoBehaviour:
   newPelvisOffset: 0
   pelvisUpAndDownSpeed: 0.28
   feetToIkPositionSpeed: 0.5
-  leftFootAnimVariableName: LeftFootCurve
-  rightFootAnimVariableName: RightFootCurve
   useProIkFeature: 1
   showSolverDebug: 1
 --- !u!114 &7578834775685743528
@@ -29006,25 +28998,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626d0f969576a5144a38618173d63dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugHandIK: 1
-  rightHand_Effetor: {x: 0, y: 0, z: 0}
-  leftHand_Effetor: {x: 0, y: 0, z: 0}
+  debugHandIK: 0
   notUseHandIK: 0
   enableHandIK: 0
   enableLeftHandIk: 0
   enableRightHandIk: 0
   startLedgeIK: 0
-  leftTrace: 0
-  rightTrace: 0
   climbingLayer:
     serializedVersion: 2
     m_Bits: 133184
-  leftWeightMove: 0
-  rightWeightMove: 0
   leftWeight: 1
   rightWeight: 1
-  lerpSpeed: 1
-  sphereRadius: 0.13
   LL: {fileID: 755332688}
   LR: {fileID: 1077079681}
   RL: {fileID: 224925025}
@@ -29043,6 +29027,24 @@ MonoBehaviour:
   DRR: {fileID: 1434168352}
   center_L: {fileID: 429908810}
   center_R: {fileID: 772232416}
+  leftLeftOffset: {x: -0.788, y: 1.007, z: -0.275997}
+  leftRightOffset: {x: -0.6, y: 1.007, z: -0.275997}
+  rightLeftOffset: {x: 0.6, y: 1.007, z: -0.276}
+  rightRightOffset: {x: 0.78, y: 1.007, z: -0.276}
+  upLeftOffset: {x: -0.095, y: 1.782, z: -0.276}
+  upRightOffset: {x: 0.095, y: 1.782, z: -0.276}
+  downLeftOffset: {x: -0.095, y: 0.384, z: -0.276}
+  downRightOffset: {x: 0.095, y: 0.384, z: -0.276}
+  upLeftRightOffset: {x: -0.591, y: 1.3, z: -0.276}
+  upLeftLeftOffset: {x: -0.781, y: 1.3, z: -0.276}
+  upRightLeftOffset: {x: 0.591, y: 1.3, z: -0.276}
+  upRightRightOffset: {x: 0.781, y: 1.3, z: -0.276}
+  downLeftLeftOffset: {x: -0.781, y: 0.55, z: -0.276}
+  downLeftRightOffset: {x: -0.591, y: 0.55, z: -0.276}
+  downRightLeftOffset: {x: 0.591, y: 0.55, z: -0.276}
+  downRightRightOffset: {x: 0.781, y: 0.55, z: -0.276}
+  centerLeftOffset: {x: -0.095, y: 1.007, z: -0.276}
+  centerRightOffset: {x: 0.095, y: 1.007, z: -0.276}
   maker: {fileID: 2716952014592763931, guid: 11e87a531a3c2654d9f44a182b01ec4e, type: 3}
   ledgeIK: 0
   climbingMove: 0
@@ -29053,8 +29055,6 @@ MonoBehaviour:
   rightHandOffset: {x: 0, y: -0.1, z: 0.15}
   ledgeSphereUpOffset: 1.2
   normalizedTime: 0
-  upSpeed: 16
-  downSpeed: 16
   hangLedgeOffset: {x: 0, y: 0.07, z: 0.03}
   upClimbingIKOffset: {x: 0, y: 0, z: 0.03}
   centerDetectRadius: 0.2
@@ -29978,12 +29978,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  leftSide: 0
-  rightSide: 0
-  ll_detect: 0
-  lr_detect: 0
-  rl_detect: 0
-  rr_detect: 0
   leftHandPointObjet: {fileID: 0}
   rightHandPointObject: {fileID: 0}
   nextLeftHandPointObject: {fileID: 0}
@@ -30031,7 +30025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaca3df7719879a4283e33e06dedb678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementDebug: 1
+  movementDebug: 0
   velocity: {x: 0, y: 0, z: 0}
   speed: 0
   trueSpeed: 0
@@ -30073,7 +30067,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30fdd000538f4cf4091dbf318a649202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rootPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &7578834775685743532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30097,7 +30090,7 @@ MonoBehaviour:
     value: 0
   updateMethod: 0
   hitMaker: {fileID: 0}
-  playerDebug: 1
+  playerDebug: 0
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -30188,31 +30181,22 @@ MonoBehaviour:
   ledgeChecker: {fileID: 385760241}
   spaceChecker: {fileID: 2081060857}
   hangAbleEdgeDist: 3
+  empGun: {fileID: 1532582869}
   restoreValuePerSecond: 10
   costValue: 25
   chargeNecessryTime: 1
   chargeTime:
     value: 0
-  launchPos: {fileID: 751023205}
-  bulletPrefab: {fileID: 5378012489971627574, guid: f377b115f7e27f94caaebf12221ee4ba,
-    type: 3}
   impectPower: 20
   impectEffect: {fileID: 569566949}
   destroyEffect: {fileID: 3901721362512671319, guid: e7012121af2e1d0459223eabcb739017,
     type: 3}
-  launcherMode:
-    value: 1
-  type: 0
-  isLayser: 1
-  line: {fileID: 0}
   loadCount:
     value: 0
   loadTerm: 1
   impactTerm: 2.5
   loadTime: 0
   loading: 0
-  gunObject: {fileID: 1532582866}
-  gunAnim: {fileID: 1087941972}
   drone: {fileID: 17370244}
   reloadWeightCurve:
     serializedVersion: 2
@@ -30256,8 +30240,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  layserParticle: {fileID: 125412493}
-  hitEffect: {fileID: 656071712}
   hpRestoreCoolTime: 5
   hpRestoreSpeed: 5
 --- !u!136 &7578834775685743533

@@ -22,21 +22,6 @@ public class MenuManager : MonoBehaviour
     private bool isMenuBlend = false;
     void Start()
     {
-        ((PlayerCtrl_Ver2)GameManager.Instance.player).launcherMode.Subscribe(
-            value => { 
-                switch(value)
-                {
-                    case 1:
-                        launcherStateText.enabled = true;
-                        impectStateText.enabled = false;
-                        break;
-                    case 2:
-                        launcherStateText.enabled = false;
-                        impectStateText.enabled = true;
-                        break;
-                }
-            });
-
         ((PlayerCtrl_Ver2)GameManager.Instance.player).activeAimEvent += () => {
             crossHair.SetActive(true);
         };
