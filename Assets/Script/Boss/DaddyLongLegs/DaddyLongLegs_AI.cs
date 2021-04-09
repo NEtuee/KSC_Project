@@ -15,6 +15,8 @@ public class DaddyLongLegs_AI : IKBossBase
 
     public void Start()
     {
+        GetSoundManager();
+        SetLegHitGroundSound(1507);
         if(randomStart)
             startTime = Random.Range(0f,3f);
 

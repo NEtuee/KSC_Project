@@ -49,6 +49,8 @@ public class BrokenMedusa_AI : IKBossBase
     public void Start()
     {
         Initialize();
+        GetSoundManager();
+        SetLegHitGroundSound(1512);
         
         graphAnimator.Play("UpDown",body);
 
@@ -268,10 +270,13 @@ public class BrokenMedusa_AI : IKBossBase
     public void Hit()
     {
         graphAnimator.Play("Hit",body);
+        _soundManager.Play(1701,transform.position);
     }
 
     public void Dead()
     {
+        _soundManager.Play(1510,transform.position);
+        _soundManager.Play(1501,transform.position);
         ChangeState(State.Dead);
     }
 
@@ -308,6 +313,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void ScanForward()
     {
+        _soundManager.Play(1511,transform.position);
         scanner.SetHeight(transform.position.y + scanYLimit);
         scanner.ScanSetup(transform.position,head.forward);
     }
