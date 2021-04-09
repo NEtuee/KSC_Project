@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI sceneNameText;
     [SerializeField] public AsynSceneManager AsynSceneManager;
     [SerializeField] public GameObject endBackGround;
+    [SerializeField] public EffectManager effectManager;
     public Transform bossTransform;
 
     public List<LockOnTarget> lockOnTargets = new List<LockOnTarget>();
@@ -93,7 +94,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LateStart());
     }
 
-    IEnumerator LateStart()
+    private IEnumerator LateStart()
     {
         yield return new WaitForSeconds(1.0f);
         AsynSceneManager.RegisterAfterLoad(() =>

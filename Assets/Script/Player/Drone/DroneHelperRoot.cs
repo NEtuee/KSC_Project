@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Object = System.Object;
 
 public class DroneHelperRoot : MonoBehaviour
 {
@@ -53,7 +54,7 @@ public class DroneHelperRoot : MonoBehaviour
             HelpEvent("ArachneBombHint");
         }
 
-        if (currentHelper != null)
+        if(ReferenceEquals(currentHelper, null) == false)
         {
             currentHelper.HelperUpdate();
         }
@@ -78,7 +79,7 @@ public class DroneHelperRoot : MonoBehaviour
 
     public void ActiveDescriptCanvas(bool active)
     {
-        if(droneDiscriptCanvas != null)
+        if(ReferenceEquals(droneDiscriptCanvas,null) == false)
         {
             droneDiscriptCanvas.enabled = active;
         }

@@ -6,8 +6,8 @@ public class EMPGun : MonoBehaviour
 {
     [SerializeField] private Animator gunAnim;
     [SerializeField] private Transform launchPos;
-    [SerializeField] private ParticleSystem impectEffect;
-    [SerializeField] private ParticleSystem layserEffect;
+    [SerializeField] private ParticleSystem impactEffect;
+    [SerializeField] private ParticleSystem laserEffect;
     [SerializeField] private ParticlePool hitEffect;
 
     private Transform mainCamera;
@@ -31,15 +31,15 @@ public class EMPGun : MonoBehaviour
         }
     }
 
-    public void LaunchLayser(float damage)
+    public void LaunchLaser(float damage)
     {
         if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         {
-            if (layserEffect != null)
-                layserEffect.Play();
+            if (ReferenceEquals(laserEffect,null) == false)
+                laserEffect.Play();
 
-            if (hitEffect != null)
-                hitEffect.Active(hit.point, Quaternion.identity);
+            //hitEffect.Active(hit.point, Quaternion.identity);
+            GameManager.Instance.effectManager.Active("LaserHit",hit.point);
 
             Hitable hitable;
             if (hit.collider.TryGetComponent<Hitable>(out hitable))
@@ -49,17 +49,17 @@ public class EMPGun : MonoBehaviour
         }
         else
         {
-            if (layserEffect != null)
-                layserEffect.Play();
+            if (laserEffect != null)
+                laserEffect.Play();
         }
     }
 
-    public void LaunchLayser(float damage, out bool destroyed)
+    public void LaunchLaser(float damage, out bool destroyed)
     {
         if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         {
-            if (layserEffect != null)
-                layserEffect.Play();
+            if (laserEffect != null)
+                laserEffect.Play();
 
             if (hitEffect != null)
                 hitEffect.Active(hit.point, Quaternion.identity);
@@ -76,15 +76,15 @@ public class EMPGun : MonoBehaviour
         }
         else
         {
-            if (layserEffect != null)
-                layserEffect.Play();
+            if (laserEffect != null)
+                laserEffect.Play();
             destroyed = false;
         }
     }
 
-    public void LaunchImpect()
+    public void LaunchImpact()
     {
-        //impectEffect.Play();
+        //impactEffect.Play();
         
     }
 

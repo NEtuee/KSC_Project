@@ -21,7 +21,7 @@ public class IKBossBase : Scanable
     protected Vector3 _centerPosition;
     protected float _targetDistance;
 
-    public virtual void Initialize()
+    public virtual void Initialize() 
     {
         _target = GameManager.Instance.player.transform;
         _centerPosition = transform.position;
@@ -62,7 +62,7 @@ public class IKBossBase : Scanable
 
     public virtual bool MoveForward(float speed)
     {
-        transform.position += transform.forward * speed * Time.deltaTime;
+        transform.position += transform.forward * (speed * Time.deltaTime);
 
         return true;
     }

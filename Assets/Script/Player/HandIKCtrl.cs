@@ -5,6 +5,7 @@ using UnityEngine;
 public class HandIKCtrl : MonoBehaviour
 {
     public bool debugHandIK;
+    public bool debugDetectSphere;
     private Animator animator;
 
     [SerializeField] private bool notUseHandIK;
@@ -133,7 +134,6 @@ public class HandIKCtrl : MonoBehaviour
         GenerateDetectPoint();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 3.0f, 0.6f)), transform.TransformDirection(new Vector3(-0.5f, -1.0f, 0.0f)), Color.green);
@@ -149,7 +149,6 @@ public class HandIKCtrl : MonoBehaviour
             return;
         }
 
-        //if(leftHandPos == Vector3.zero || rightHandPos == Vector3.zero)
         if (leftHandPointObjet.position == Vector3.zero || rightHandPointObject.position == Vector3.zero)
         {
             leftWeight = rightWeight = 0.0f;
@@ -243,8 +242,7 @@ public class HandIKCtrl : MonoBehaviour
         }
 
         LedgeIKPosDetection();
-        //enableLeftHandIk = true;
-        //enableRightHandIk = true;
+
         if (ledgeIK)
         {
             if (ledgeDetection == true)
@@ -281,7 +279,6 @@ public class HandIKCtrl : MonoBehaviour
         ledgeDetection = result;
         if(result == true)
         {
-            //TraceLedge();
             startLedgeIK = true;
         }
     }
@@ -325,14 +322,12 @@ public class HandIKCtrl : MonoBehaviour
 
         if (enableLeftHandIk)
         {
-            //animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPos);
             animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPointObjet.position);
             animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftWeight);
         }
 
         if (enableRightHandIk)
         {
-            //animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPos);
             animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPointObject.position);
             animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rightWeight);
         }
@@ -343,8 +338,6 @@ public class HandIKCtrl : MonoBehaviour
         climbingMove = true;
         ledgeDetection = false;
         startLedgeIK = false;
-        //leftHandPos = llHit.point - transform.TransformDirection(hangLedgeOffset);
-        //nextRightHandPos = lrHit.point - transform.TransformDirection(hangLedgeOffset);
 
         if (leftHandPointObjet == null)
             leftHandPointObjet = CreatePointObject("LeftHandPoint");
@@ -359,7 +352,6 @@ public class HandIKCtrl : MonoBehaviour
 
     private void UpdateLeftHandPos()
     {
-        //leftHandPos = nextLeftHandPos;
         enableLeftHandIk = true;
         if (leftHandPointObjet == null)
             leftHandPointObjet = CreatePointObject("LeftHandPoint");
@@ -373,8 +365,7 @@ public class HandIKCtrl : MonoBehaviour
         climbingMove = true;
         ledgeDetection = false;
         startLedgeIK = false;
-        //rightHandPos = rrHit.point - transform.TransformDirection(hangLedgeOffset);
-        //nextLeftHandPos = rlHit.point - transform.TransformDirection(hangLedgeOffset);
+
         if (rightHandPointObject == null)
             rightHandPointObject = CreatePointObject("RightHandPoint");
         rightHandPointObject.SetParent(rrHit.transform);
@@ -387,7 +378,6 @@ public class HandIKCtrl : MonoBehaviour
 
     private void UpdateRightHandPos()
     {
-        //rightHandPos = nextRightHandPos;
         enableRightHandIk = true;
         if (rightHandPointObject == null)
             rightHandPointObject = CreatePointObject("RightHandPoint");
@@ -450,9 +440,19 @@ public class HandIKCtrl : MonoBehaviour
         Vector3 start;
         Vector3 dir;
         bool isHit;
-       
+
+        if (leftHandPointObjet != null && rightHandPointObject != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(leftHandPointObjet.position, 0.3f);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(rightHandPointObject.position, 0.3f);
+        }
+
+        if (debugDetectSphere == false)
+            return;
         /////////////////DetectLedgeIKPosition//////////////////////////////
-        if(startLedgeIK == true)
+        if (startLedgeIK == true)
         {
             start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -0.3f;
             dir = transform.forward;
@@ -527,9 +527,6 @@ public class HandIKCtrl : MonoBehaviour
 
     private void LedgeIKPosDetection()
     {
-        //if (climbingMove == true)
-        //    return;
-
         Vector3 start;
         Vector3 dir;
 
@@ -822,22 +819,19 @@ public class HandIKCtrl : MonoBehaviour
         nextLeftHandPointObject.position = downRight_LeftHit.point - transform.TransformDirection(upClimbingIKOffset);
     }
 
-    private void TraceCenter()
+    public void TraceCenter()
     {
-        bool detectd;
-        detectd = Physics.SphereCast(center_L.position, outsideSurfaceRadius, transform.forward, out llHit, 1.5f, climbingLayer);
-        if(detectd == true)
+        bool detected = Physics.SphereCast(center_L.position, outsideSurfaceRadius, transform.forward, out llHit, 1.5f, climbingLayer);
+        if(detected == true)
         {
-            //Debug.Log("LeftIK");
             enableLeftHandIk = true;
             leftHandPointObjet.SetParent(llHit.transform);
             leftHandPointObjet.position = llHit.point - transform.TransformDirection(upClimbingIKOffset);
         }
 
-        detectd = Physics.SphereCast(center_R.position, outsideSurfaceRadius, transform.forward, out rrHit, 1.5f, climbingLayer);
-        if(detectd == true)
+        detected = Physics.SphereCast(center_R.position, outsideSurfaceRadius, transform.forward, out rrHit, 1.5f, climbingLayer);
+        if(detected == true)
         {
-            //Debug.Log("RightIK");
             enableRightHandIk = true;
             rightHandPointObject.SetParent(rrHit.transform);
             rightHandPointObject.position = rrHit.point - transform.TransformDirection(upClimbingIKOffset);

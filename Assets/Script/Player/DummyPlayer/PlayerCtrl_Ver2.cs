@@ -1251,6 +1251,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 || vertexColors[triangles[hit.triangleIndex * 3 + 1]] == Color.red
                 || vertexColors[triangles[hit.triangleIndex * 3 + 2]] == Color.red)
             {
+                handIK.TraceCenter();
                 return false;
             }
         }
@@ -1287,7 +1288,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
     #endregion
 
-    #region ¿Œ«≤
+    #region Ïù∏Ìíã
     private bool InputTryGrab()
     {
         Vector3 point1;
@@ -1445,7 +1446,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 int count = (int)Mathf.Abs(energy.Value / 25f);
                 energy.Value -= 25f * (loadCount.Value > count ? count : loadCount.Value);
 
-                empGun.LaunchLayser(loadCount.Value * 40.0f);
+                empGun.LaunchLaser(loadCount.Value * 40.0f);
                 loadCount.Value = 1;
             }
             return;
@@ -1503,7 +1504,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     #endregion
 
-    #region ∞Ÿ≈Õ
+    #region Í≤üÌÑ∞
     public PlayerState GetState()
     {
         return state;
@@ -1512,14 +1513,33 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public Vector3 GetPlayerCenter() { return collider.bounds.center; }
 
+    public bool IsNowClimbingBehavior()
+    {
+        switch (state)
+        {
+            case PlayerState.Default:
+            case PlayerState.Jump:
+            case PlayerState.RunToStop:
+            case PlayerState.TurnBack:
+            case PlayerState.Aiming:
+            case PlayerState.Ragdoll:
+            case PlayerState.HangRagdoll:
+            {
+                return false;
+            }
+            default:
+                return true;
+        }
+    }
+
     #endregion
 
-    #region º¬≈Õ
+    #region ÏÖãÌÑ∞
     public void SetClimbMove(bool move) { isClimbingMove = move; }
 
     #endregion
 
-    #region EMP ∑π¿Ã¿˙
+    #region EMP Î†àÏù¥Ï†Ä
     private void LaunchImpect()
     {
         energy.Value -= 50.0f;
@@ -1551,7 +1571,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if(active == true)
         {
             loadCount.Value = 1;
-            if (rigCtrl != null)
+            //if (rigCtrl != null)
+            if(Object.ReferenceEquals(rigCtrl,null) == false)
             {
                 rigCtrl.Active();
                 empGun.Active(true);
@@ -1563,7 +1584,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         else
         {
             loadCount.Value = 0;
-            if (rigCtrl != null)
+            if (Object.ReferenceEquals(rigCtrl,null) == false)
             {
                 rigCtrl.Disable();
                 empGun.Active(false);
@@ -1645,7 +1666,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void AdjustLedgeOffset()
     {
-        Vector3 start = transform.position + transform.up * collider.height * 2;
+        Vector3 start = transform.position + transform.up * (collider.height * 2);
         RaycastHit upHit;
         Vector3 finalPosition;
         if (Physics.SphereCast(start, collider.radius * 2f, -transform.up, out upHit, collider.height * 2, adjustAbleLayer))
@@ -1679,7 +1700,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
 
 
-    #region µπˆ±◊
+    #region ÎîîÎ≤ÑÍ∑∏
     private void OnDrawGizmos()
     {
         DebugDraw();

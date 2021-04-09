@@ -1604,15 +1604,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 112632216}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2a8618ac7146d748a811b3179878a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
+  - BrokenMedusa_main
   - Outdoor_Main
   - DaddyLongLegs_Main
-  - BrokenMedusa_main
   - ImmortalJirungE_main
   - ShatteredArachne_Main
   currentLevel: 0
@@ -1629,8 +1629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8048bc9851dd70840a1d346c211b649f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadScenes:
-  - test_level_Programer
+  loadScenes: []
   loadWhenAwake: 0
 --- !u!114 &112632221
 MonoBehaviour:
@@ -7283,6 +7282,7 @@ GameObject:
   m_Component:
   - component: {fileID: 656071713}
   - component: {fileID: 656071712}
+  - component: {fileID: 656071714}
   m_Layer: 0
   m_Name: EffectManager
   m_TagString: Untagged
@@ -7297,7 +7297,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656071711}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a875c79d1a64ae4a860f8ca9771025b, type: 3}
   m_Name: 
@@ -7318,6 +7318,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &656071714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656071711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6043fcf77a5bf1c40906a4a4729239d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlePairReference: {fileID: 11400000, guid: f9b2096faf0911946b07d7bf92152767,
+    type: 2}
 --- !u!1 &684473869
 GameObject:
   m_ObjectHideFlags: 0
@@ -9639,6 +9653,7 @@ MonoBehaviour:
   upOffset: 0.5
   forwardOffset: 0
   billBoard: 1
+  billBoardRotationSpeed: 12
   flip: 1
   interpolation: 0
 --- !u!114 &905299281
@@ -13000,6 +13015,7 @@ MonoBehaviour:
   upOffset: 2.2
   forwardOffset: -1
   billBoard: 1
+  billBoardRotationSpeed: 6
   flip: 0
   interpolation: 0
 --- !u!114 &1160563209
@@ -13301,7 +13317,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1190799502}
   m_LocalRotation: {x: 0, y: 0.008726558, z: 0, w: 0.999962}
-  m_LocalPosition: {x: 4.1426616, y: 4.03, z: -28.027966}
+  m_LocalPosition: {x: 4.1426616, y: 100, z: -28.027966}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1976537129}
@@ -15545,8 +15561,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunAnim: {fileID: 1087941972}
   launchPos: {fileID: 751023205}
-  impectEffect: {fileID: 569566949}
-  layserEffect: {fileID: 125412493}
+  impactEffect: {fileID: 0}
+  laserEffect: {fileID: 125412493}
   hitEffect: {fileID: 656071712}
 --- !u!1 &1569298309
 GameObject:
@@ -21390,6 +21406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugHandIK: 1
+  debugDetectSphere: 0
   notUseHandIK: 0
   enableHandIK: 0
   enableLeftHandIk: 0
@@ -28999,6 +29016,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugHandIK: 0
+  debugDetectSphere: 0
   notUseHandIK: 0
   enableHandIK: 0
   enableLeftHandIk: 0
@@ -31334,6 +31352,11 @@ PrefabInstance:
       propertyPath: bossTransform
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8611312563200437170, guid: a9419146eeb5b164487363a6b9a3b978,
+        type: 3}
+      propertyPath: effectManager
+      value: 
+      objectReference: {fileID: 656071714}
     - target: {fileID: 8611312563200437170, guid: a9419146eeb5b164487363a6b9a3b978,
         type: 3}
       propertyPath: endBackGround

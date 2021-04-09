@@ -16,7 +16,7 @@ public class Rotator : MonoBehaviour
             return;
 
         if (play)
-            transform.rotation = transform.rotation * Quaternion.Euler(speed * Time.deltaTime);
+            transform.rotation *= Quaternion.Euler(speed * Time.deltaTime);
     }
 
     public void FixedUpdate()
@@ -28,6 +28,6 @@ public class Rotator : MonoBehaviour
             return;
 
         if (play)
-            transform.rotation = transform.rotation * Quaternion.Euler(speed * Time.fixedDeltaTime);
+            transform.rotation *= Quaternion.Euler(speed * Time.fixedDeltaTime);
     }
 }

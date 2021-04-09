@@ -111,7 +111,7 @@ public class Drone : MonoBehaviour
 
 
                     Vector3 targetPosition; 
-                    if(player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab)
+                    if(player.IsNowClimbingBehavior() == false)
                         targetPosition= (camForward * helpOffset.z + camRight * helpOffset.x + Vector3.up * helpOffset.y) + target.position;
                     else
                         targetPosition = (target.forward * helpGrabStateOffset.z + target.right * helpGrabStateOffset.x + Vector3.up * helpGrabStateOffset.y) + target.position;
@@ -246,7 +246,7 @@ public class Drone : MonoBehaviour
 
     public void DroneHelpCall(string key)
     {
-        if(droneHelperRoot != null)
+        if(ReferenceEquals(droneHelperRoot,null) == false)
         {
             droneHelperRoot.HelpEvent(key);
         }
