@@ -34,7 +34,7 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private void JumpTiming()
     {
         owner.Jump();
-        GameManager.Instance.soundManager.Play(16, Vector3.zero,transform);
+        GameManager.Instance.soundManager.Play(1003, Vector3.zero,transform);
     }
 
     private void StartLandingAdditive()
@@ -123,7 +123,7 @@ public class AnimCtrl_Dummy : MonoBehaviour
         else
             footStepPosition = animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
 
-        GameManager.Instance.soundManager.Play(12, footStepPosition);
+        GameManager.Instance.soundManager.Play(1000, footStepPosition);
     }
 
     private void RunFootStep(int left)
@@ -134,7 +134,7 @@ public class AnimCtrl_Dummy : MonoBehaviour
         else
             footStepPosition = animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
 
-        GameManager.Instance.soundManager.Play(13, footStepPosition);
+        GameManager.Instance.soundManager.Play(1001, footStepPosition);
     }
 
     private void StartJumpEnd()

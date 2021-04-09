@@ -21,7 +21,9 @@ public class IKBossBase : Scanable
     protected Vector3 _centerPosition;
     protected float _targetDistance;
 
-    public virtual void Initialize()
+    protected FMODSoundManager _soundManager;
+
+        public virtual void Initialize()
     {
         _target = GameManager.Instance.player.transform;
         _centerPosition = transform.position;
@@ -31,6 +33,24 @@ public class IKBossBase : Scanable
     {
         
     }
+
+    protected void GetSoundManager()
+    {
+        _soundManager = GameManager.Instance.soundManager;
+    }
+    
+    
+    protected void SetLegHitGroundSound(int code)
+    {
+        foreach (var leg in legs)
+        {
+            leg.legHitToGround += pos =>
+            {
+                _soundManager.Play(code, pos);
+            };
+        }
+    }
+    
 
     public void TargetFrontMove()
     {

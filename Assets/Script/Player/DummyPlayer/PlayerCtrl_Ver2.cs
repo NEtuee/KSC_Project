@@ -911,7 +911,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     if(changeState == PlayerState.Default)
                     {
-                        GameManager.Instance.soundManager.Play(18, Vector3.zero, transform);
+                        GameManager.Instance.soundManager.Play(1000, Vector3.zero, transform);
                     }
                 }
                 break;
@@ -1331,7 +1331,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
     #endregion
 
-    #region ÀÎÇ²
+    #region ì¸í’‹
     private bool InputTryGrab()
     {
         Vector3 point1;
@@ -1665,7 +1665,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     #endregion
 
-    #region °ÙÅÍ
+    #region ê²Ÿí„°
     public PlayerState GetState()
     {
         return state;
@@ -1676,12 +1676,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     #endregion
 
-    #region ¼ÂÅÍ
+    #region ì…‹í„°
     public void SetClimbMove(bool move) { isClimbingMove = move; }
 
     #endregion
 
-    #region EMP ·¹ÀÌÀú
+    #region EMP ë ˆì´ì €
     private void LaunchImpect()
     {
         energy.Value -= 50.0f;
@@ -1920,7 +1920,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
 
 
-    #region µğ¹ö±×
+    #region ë””ë²„ê·¸
     private void OnDrawGizmos()
     {
         DebugDraw();
