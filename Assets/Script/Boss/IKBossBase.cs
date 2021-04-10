@@ -52,23 +52,23 @@ public class IKBossBase : Scanable
     }
     
 
-    public void TargetFrontMove()
+    public void TargetFrontMove(float deltaTime)
     {
         var dir = (_target.position - transform.position);
         dir = Vector3.ProjectOnPlane(dir,Vector3.up).normalized;
         if(_targetDistance >= 2f)
         {
-            Move(dir, frontMoveSpeed);
+            Move(dir, frontMoveSpeed, deltaTime);
         }
     }
 
-    public void CenterMove()
+    public void CenterMove(float deltaTime)
     {
         var dir = (_centerPosition - transform.position).normalized;
         var centerDist = Vector3.Distance(_centerPosition,transform.position);
         if(centerDist >= 1f)
         {
-            Move(dir, frontMoveSpeed);
+            Move(dir, frontMoveSpeed, deltaTime);
         }
     }
 
@@ -80,14 +80,14 @@ public class IKBossBase : Scanable
         }
     }
 
-    public virtual bool MoveForward(float speed)
+    public virtual bool MoveForward(float speed, float deltaTime)
     {
-        transform.position += transform.forward * speed * Time.deltaTime;
+        transform.position += transform.forward * (speed * deltaTime);
 
         return true;
     }
 
-    public virtual bool Move(Vector3 direction, float speed, float legMovementSpeed = 4f)
+    public virtual bool Move(Vector3 direction, float speed, float deltaTime, float legMovementSpeed = 4f)
     {
         if(!ThereIsGround((direction * (groundCheckRadius * 0.5f)) * MathEx.normalize(speed),10f))
         {
@@ -96,14 +96,14 @@ public class IKBossBase : Scanable
 
         SetLegMovementSpeed(legMovementSpeed + (MathEx.clampOverZero(MathEx.abs(speed) - legMovementSpeed) * 0.4f));
 
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += direction * (speed * deltaTime);
 
         return true;
     }
 
-    public void Turn(bool isLeft, Transform target)
+    public void Turn(bool isLeft, Transform target, float deltaTime)
     {
-        target.RotateAround(target.position,target.up,rotationSpeed * Time.deltaTime * (isLeft ? 1f : -1f));
+        target.RotateAround(target.position,target.up,rotationSpeed * deltaTime * (isLeft ? 1f : -1f));
     }
 
     public bool GroundCheck(out RaycastHit hit,float dist)
