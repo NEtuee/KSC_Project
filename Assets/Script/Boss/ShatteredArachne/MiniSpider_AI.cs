@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -52,11 +53,23 @@ public class MiniSpider_AI : IKPathFollowBossBase
 
     public void Update()
     {
-        if (GameManager.Instance.PAUSE == true)
+        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update) 
             return;
 
+        UpdateProcess(Time.deltaTime);
+    }
 
-        if (currentState == State.Idle)
+    public void FixedUpdate()
+    {
+        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed) 
+            return;
+
+        UpdateProcess(Time.deltaTime);
+    }
+
+    private void UpdateProcess(float deltaTime)
+    {
+         if (currentState == State.Idle)
         {
             _timeCounter.IncreaseTimer("bombRefillTime",out bool limit);
             
@@ -83,7 +96,7 @@ public class MiniSpider_AI : IKPathFollowBossBase
         }
         else if(currentState == State.Go)
         {
-            FollowPath();
+            FollowPath(deltaTime);
 
             // if(_bomb == null || _bomb.isOver)
             // {
@@ -97,7 +110,7 @@ public class MiniSpider_AI : IKPathFollowBossBase
         }
         else if(currentState == State.Out)
         {
-            FollowPath();
+            FollowPath(deltaTime);
 
             if(_pathArrived)
             {
@@ -137,7 +150,6 @@ public class MiniSpider_AI : IKPathFollowBossBase
             }
         }
     }
-
     public void ChangeState(State state)
     {
         if(state == State.Idle)

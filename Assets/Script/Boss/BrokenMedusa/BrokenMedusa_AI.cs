@@ -64,7 +64,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void Update()
     {
-        if (GameManager.Instance.PAUSE == true && GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
+        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
             return;
 
         UpdateProcess(Time.deltaTime);
@@ -72,7 +72,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void FixedUpdate()
     {
-        if (GameManager.Instance.PAUSE == true && GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
             return;
         
         UpdateProcess(Time.fixedDeltaTime);
@@ -118,27 +118,22 @@ public class BrokenMedusa_AI : IKBossBase
                 ChangeState(State.SearchIdle);
             }
 
-            FrontMoveProgress();
+            FrontMoveProgress(deltaTime);
         }
         else if(currentState == State.LockOnMove)
         {
             LookLineForward_Body(deltaTime);
             LineMove(deltaTime);
-
+            
             if(lookDistance < _targetDistance)
                 ChangeState(State.LockOnLook);
-
+            
             if(!IsOnGrounded())
             {
                 ChangeState(State.SearchIdle);
             }
 
-            FrontMoveProgress();
-
-            // if(_targetDistance >= minimumTargetDistance)
-            // {
-            //     ChangeState(State.LockOnFrontWalk);
-            // }
+            FrontMoveProgress(deltaTime);
         }
         else if(currentState == State.LockOnFrontWalk)
         {
@@ -302,12 +297,12 @@ public class BrokenMedusa_AI : IKBossBase
         }
     }
 
-    public void FrontMoveProgress()
+    public void FrontMoveProgress(float deltaTime)
     {
         _timeCounter.IncreaseTimer("FrontWalk_Init",4f,out bool limit);
         if(limit)
         {
-            TargetFrontMove(Time.deltaTime);
+            TargetFrontMove(deltaTime);
             var timelimit = 1.2f;
             timelimit = _targetDistance >= 20f ? 4f : timelimit;
             _timeCounter.IncreaseTimer("FrontWalk",timelimit,out limit);
@@ -469,7 +464,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public override bool Move(Vector3 direction, float speed, float deltaTime,float legSpeed = 4f)
     {
-        if(base.Move(direction,speed,legSpeed))
+        if(base.Move(direction,speed,deltaTime,legSpeed))
             body.localRotation = body.localRotation * Quaternion.Euler(0f,0f,speed * deltaTime * 10f);
         
         return true;
