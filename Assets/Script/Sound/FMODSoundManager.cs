@@ -25,7 +25,7 @@ public class FMODSoundManager : MonoBehaviour
 
         CreateCachedGlobalParams();
         
-        GameManager.Instance.AsynSceneManager.RegisterBeforeLoadOnStart(ReturnAllCache);
+        //GameManager.Instance.AsynSceneManager.RegisterBeforeLoadOnStart(ReturnAllCache);
     }
 
     private void LateUpdate()
