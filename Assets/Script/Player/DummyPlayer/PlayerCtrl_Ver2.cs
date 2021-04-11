@@ -190,6 +190,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.E))
+            animator.SetTrigger("Shot");
+
         InputUpdate();
 
         if (updateMethod == UpdateMethod.Update)
