@@ -131,6 +131,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float hpRestoreCoolTime = 5f;
     [SerializeField] private float hpRestoreSpeed = 5f;
 
+    [Header("Spine")]
+    private Transform spine;
+    [SerializeField] private Vector3 relativeVec;
+    [SerializeField] private Transform lookAtAim;
+
 
     public delegate void ActiveAimEvent();
     public ActiveAimEvent activeAimEvent;
@@ -176,6 +181,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
         }
+
+        spine = animator.GetBoneTransform(HumanBodyBones.Spine);
 
         StartCoroutine(StopCheck());
     }
@@ -644,6 +651,35 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
         }
     }
+
+    private void LateUpdate()
+    {
+        switch(state)
+        {
+            case PlayerState.Aiming:
+                {
+                    //spine.LookAt(lookAtAim);
+                    //Quaternion targetRotation = spine.rotation * Quaternion.Euler(relativeVec);
+
+                    Vector3 dir = (spine.position - lookAtAim.position).normalized;
+
+                    Quaternion originalRot = spine.rotation;
+
+                    spine.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVec);
+
+                    spine.rotation *= Quaternion.Inverse(transform.rotation);
+
+                    spine.rotation *= originalRot;
+
+                    //spine.rotation = targetRotation;
+
+                    //spine.rotation = spine.rotation;
+
+                }
+                break;
+        }
+    }
+
     private void UpdateInputValue(float vertical, float horizontal)
     {
         animator.SetFloat("InputVertical", Mathf.Abs(inputVertical));

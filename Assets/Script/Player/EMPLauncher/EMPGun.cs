@@ -49,8 +49,9 @@ public class EMPGun : MonoBehaviour
                 _aimConstraint.weight = aimWeight;
             }, 0f, 0.1f);
         }
-        
-        
+
+        Vector3 effectPosition = launchPos.position + launchPos.forward * 15.2f;
+        //Quaternion effectRot = laun
         
         if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         {
@@ -70,6 +71,9 @@ public class EMPGun : MonoBehaviour
         {
             if (laserEffect != null)
                 laserEffect.Play();
+
+            GameManager.Instance.effectManager.Active("Laser", laserEffectPos.position, laserEffectPos.rotation);
+
         }
     }
 
