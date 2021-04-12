@@ -192,6 +192,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (Input.GetKeyDown(KeyCode.E))
             animator.SetTrigger("Shot");
+        if (Input.GetKeyDown(KeyCode.Q))
+            energy.Value = 100.0f;
 
         InputUpdate();
 

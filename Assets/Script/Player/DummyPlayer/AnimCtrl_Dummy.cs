@@ -11,6 +11,8 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private Transform leftFootTransform;
     private Transform rightFootTransform;
 
+    public EMPGun gun;
+
     private void Start()
     { 
         owner=GetComponent<PlayerCtrl_Ver2>();
@@ -95,5 +97,10 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private void StartClimbingJump()
     {
         owner.ChangeState(PlayerCtrl_Ver2.PlayerState.ClimbingJump);
+    }
+
+    private void EndShot()
+    {
+        gun.EndShot();
     }
 }

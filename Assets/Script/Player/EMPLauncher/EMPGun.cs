@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
+using DG.Tweening;
+
 
 public class EMPGun : MonoBehaviour
 {
@@ -9,13 +12,19 @@ public class EMPGun : MonoBehaviour
     [SerializeField] private ParticleSystem impactEffect;
     [SerializeField] private ParticleSystem laserEffect;
     [SerializeField] private ParticlePool hitEffect;
+    [SerializeField] private Transform laserEffectPos;
+    [SerializeField] private MultiAimConstraint _aimConstraint;
+    [SerializeField] private Animator playerAnim;
 
+    private float aimWeight;
+    
     private Transform mainCamera;
     private RaycastHit hit;
 
     void Start()
     {
         mainCamera = Camera.main.transform;
+        aimWeight = _aimConstraint.weight;
     }
 
     // Update is called once per frame
@@ -33,11 +42,21 @@ public class EMPGun : MonoBehaviour
 
     public void LaunchLaser(float damage)
     {
+        if (playerAnim != null)
+        {
+            playerAnim.SetTrigger("Shot");
+            DOTween.To(() => aimWeight, x => { aimWeight = x;
+                _aimConstraint.weight = aimWeight;
+            }, 0f, 0.1f);
+        }
+        
+        
+        
         if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         {
-            if (ReferenceEquals(laserEffect,null) == false)
-                laserEffect.Play();
-
+            // if (ReferenceEquals(laserEffect,null) == false)
+            //     laserEffect.Play();
+            GameManager.Instance.effectManager.Active("Laser",laserEffectPos.position,laserEffectPos.rotation);
             //hitEffect.Active(hit.point, Quaternion.identity);
             GameManager.Instance.effectManager.Active("LaserHit",hit.point);
 
@@ -101,5 +120,12 @@ public class EMPGun : MonoBehaviour
     public void GunOff()
     {
         gunAnim.SetTrigger("Off");
+    }
+
+    public void EndShot()
+    {
+        DOTween.To(() => aimWeight, x => { aimWeight = x;
+            _aimConstraint.weight = aimWeight; 
+        }, 1f, 0.25f);
     }
 }
