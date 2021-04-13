@@ -73,10 +73,10 @@ public class LoadingZone : MonoBehaviour
         SceneManager.MoveGameObjectToScene(this.gameObject, SceneManager.GetActiveScene());
 
         var stage = GameObject.FindObjectOfType<StageManager>();
-        if(stage != null)
-        {
-            GameObject.FindObjectOfType<StageManager>().RegisterLoadingZone(this);
-        }
+        // if(stage != null)
+        // {
+        //     GameObject.FindObjectOfType<StageManager>().RegisterLoadingZone(this);
+        // }
         
         GameManager.Instance.player.transform.SetParent(null);
         GameManager.Instance.followTarget.SetForceRotation(Camera.main.transform.rotation.eulerAngles);

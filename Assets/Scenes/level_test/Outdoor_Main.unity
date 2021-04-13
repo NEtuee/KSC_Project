@@ -125,18 +125,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &764927 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6027053883414328241, guid: f99152944c25ade44a2ace661f2d66ce,
-    type: 3}
-  m_PrefabInstance: {fileID: 6027053883413960782}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2edca4027d3f754f9cb7a799ffba255, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &34738552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28950,9 +28938,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SceneTitle: "\uC57C\uC678"
-  prevZoneTransform: {fileID: 347454111}
+  entranceElevator: {fileID: 0}
+  exitElevator: {fileID: 6027053883413960783}
   loadedPlayerPosition: {fileID: 2033470693}
-  prevPositionTarget: {fileID: 0}
 --- !u!4 &1790884729
 Transform:
   m_ObjectHideFlags: 0
@@ -31719,8 +31707,8 @@ MonoBehaviour:
   triggerEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 764927}
-        m_TargetAssemblyTypeName: LoadingZone, Assembly-CSharp
+      - m_Target: {fileID: 6027053883413960783}
+        m_TargetAssemblyTypeName: Elevator, Assembly-CSharp
         m_MethodName: Open
         m_Mode: 1
         m_Arguments:
@@ -31793,6 +31781,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4855344544148519091, guid: f99152944c25ade44a2ace661f2d66ce,
+        type: 3}
+      propertyPath: isExit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6027053883414328242, guid: f99152944c25ade44a2ace661f2d66ce,
         type: 3}
       propertyPath: m_Name
@@ -31865,3 +31858,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f99152944c25ade44a2ace661f2d66ce, type: 3}
+--- !u!114 &6027053883413960783 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4855344544148519091, guid: f99152944c25ade44a2ace661f2d66ce,
+    type: 3}
+  m_PrefabInstance: {fileID: 6027053883413960782}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bfd9dca7ab638c4e8b842b2d9d08a14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
