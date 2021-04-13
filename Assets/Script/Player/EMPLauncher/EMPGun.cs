@@ -7,14 +7,14 @@ using DG.Tweening;
 
 public class EMPGun : MonoBehaviour
 {
+    [SerializeField] private GameObject _gunObject;
     [SerializeField] private Animator gunAnim;
+    [SerializeField] private Animator playerAnim;
     [SerializeField] private Transform launchPos;
     [SerializeField] private ParticleSystem impactEffect;
     [SerializeField] private ParticleSystem laserEffect;
-    [SerializeField] private ParticlePool hitEffect;
     [SerializeField] private Transform laserEffectPos;
-    [SerializeField] private MultiAimConstraint _aimConstraint;
-    [SerializeField] private Animator playerAnim;
+    [SerializeField] private Transform lookAim;
 
     private float aimWeight;
     
@@ -24,19 +24,16 @@ public class EMPGun : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main.transform;
-        aimWeight = _aimConstraint.weight;
+        _gunObject.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 150f))
+        launchPos.LookAt(lookAim);
+
+        if (Input.GetKeyDown(KeyCode.K))
         {
-            launchPos.LookAt(hit.point);
-        }
-        else
-        {
-            launchPos.LookAt(mainCamera.position + mainCamera.forward * 150.0f);
+            GameManager.Instance.cameraManager.GenerateRecoilImpulse();
         }
     }
 
@@ -45,24 +42,16 @@ public class EMPGun : MonoBehaviour
         if (playerAnim != null)
         {
             playerAnim.SetTrigger("Shot");
-            DOTween.To(() => aimWeight, x => { aimWeight = x;
-                _aimConstraint.weight = aimWeight;
-            }, 0f, 0.1f);
         }
-
-        Vector3 effectPosition = launchPos.position + launchPos.forward * 15.2f;
-        //Quaternion effectRot = laun
         
+        GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+        GameManager.Instance.effectManager.Active("Laser", laserEffectPos.position, laserEffectPos.rotation);
+
         if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         {
-            // if (ReferenceEquals(laserEffect,null) == false)
-            //     laserEffect.Play();
-            GameManager.Instance.effectManager.Active("Laser",laserEffectPos.position,laserEffectPos.rotation);
-            //hitEffect.Active(hit.point, Quaternion.identity);
             GameManager.Instance.effectManager.Active("LaserHit",hit.point);
 
-            Hitable hitable;
-            if (hit.collider.TryGetComponent<Hitable>(out hitable))
+            if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
             {
                 hitable.Hit(damage);
             }
@@ -71,9 +60,6 @@ public class EMPGun : MonoBehaviour
         {
             if (laserEffect != null)
                 laserEffect.Play();
-
-            GameManager.Instance.effectManager.Active("Laser", laserEffectPos.position, laserEffectPos.rotation);
-
         }
     }
 
@@ -81,11 +67,8 @@ public class EMPGun : MonoBehaviour
     {
         if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         {
-            if (laserEffect != null)
-                laserEffect.Play();
-
-            if (hitEffect != null)
-                hitEffect.Active(hit.point, Quaternion.identity);
+            GameManager.Instance.effectManager.Active("Laser",laserEffectPos.position,laserEffectPos.rotation);
+            GameManager.Instance.effectManager.Active("LaserHit",hit.point);
 
             Hitable hitable;
             if (hit.collider.TryGetComponent<Hitable>(out hitable))
@@ -113,23 +96,31 @@ public class EMPGun : MonoBehaviour
 
     public void Active(bool active)
     {
-        this.gameObject.SetActive(active);
+        //this.gameObject.SetActive(active);
+        if (_gunObject != null)
+        {
+            _gunObject.SetActive(active);
+        }
     }
 
     public void GunLoad()
     {
-        gunAnim.SetTrigger("Next");
+        if (gunAnim != null)
+        {
+            gunAnim.SetTrigger("Next");
+        }
     }
 
     public void GunOff()
     {
-        gunAnim.SetTrigger("Off");
+        if (gunAnim != null)
+        {
+            gunAnim.SetTrigger("Off");
+        }
     }
 
     public void EndShot()
     {
-        DOTween.To(() => aimWeight, x => { aimWeight = x;
-            _aimConstraint.weight = aimWeight; 
-        }, 1f, 0.25f);
+
     }
 }

@@ -25,6 +25,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Transform spearLunchPos;
     [SerializeField] private bool isBlend;
     [SerializeField] private bool isAttentionCamera;
+    [SerializeField] private CinemachineImpulseSource _recoilImpulseSource;
     private bool isBlendCameraDistance;
     private float targetDistance;
     private float distanceBlendStartTime;
@@ -436,6 +437,13 @@ public class CameraManager : MonoBehaviour
     public float GetCameraDistance()
     {
         return current3rdPersonComponent.CameraDistance;
+    }
+
+    public void GenerateRecoilImpulse()
+    {
+        if (_recoilImpulseSource == null)
+            return;
+        _recoilImpulseSource.GenerateImpulse();
     }
 }
 

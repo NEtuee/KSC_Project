@@ -101,6 +101,5 @@ public class AnimCtrl_Dummy : MonoBehaviour
 
     private void EndShot()
     {
-        gun.EndShot();
     }
 }

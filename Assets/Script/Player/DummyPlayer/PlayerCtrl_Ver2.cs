@@ -135,6 +135,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private Transform spine;
     [SerializeField] private Vector3 relativeVec;
     [SerializeField] private Transform lookAtAim;
+    private Quaternion storeSpineRotation;
 
 
     public delegate void ActiveAimEvent();
@@ -177,10 +178,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         chargeTime.Value = 0.0f;
 
-        if(updateMethod == UpdateMethod.FixedUpdate)
-        {
-            animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
-        }
+        // if(updateMethod == UpdateMethod.FixedUpdate)
+        // {
+        //     animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
+        // }
 
         spine = animator.GetBoneTransform(HumanBodyBones.Spine);
 
@@ -468,32 +469,31 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 }
                 break;
             case PlayerState.Aiming:
+            {
+                if (loading == true) 
                 {
-                    
-                    if (loading == true)
-                    {
-                        rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime/loadTerm));
-                        loadTime += deltaTime;
-                        if(loadTime > loadTerm)
-                        {
-                            rigCtrl.SetAimingWeight(1f);
-                            loadCount.Value++;
-                            loadTime = 0;
-                            loading = false;
-                        }
+                    rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime/loadTerm)); 
+                    loadTime += deltaTime;
+                    if(loadTime > loadTerm) 
+                    { 
+                        rigCtrl.SetAimingWeight(1f); 
+                        loadCount.Value++; 
+                        loadTime = 0;
+                        loading = false;
                     }
+                }
 
-                    if(impactLoading == true)
-                    {
-                         rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime / impactTerm));
-                         loadTime += deltaTime;
-                         if (loadTime > impactTerm)
-                         {
-                            rigCtrl.SetAimingWeight(1f);
-                            loadTime = 0;
-                            impactLoading = false;
-                         }
+                if(impactLoading == true)
+                { 
+                    rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime / impactTerm)); 
+                    loadTime += deltaTime; 
+                    if (loadTime > impactTerm) 
+                    { 
+                        rigCtrl.SetAimingWeight(1f); 
+                        loadTime = 0;
+                        impactLoading = false;
                     }
+                }
                     
 
                     RaycastHit hit;
@@ -658,22 +658,20 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Aiming:
                 {
-                    //spine.LookAt(lookAtAim);
-                    //Quaternion targetRotation = spine.rotation * Quaternion.Euler(relativeVec);
-
-                    Vector3 dir = (spine.position - lookAtAim.position).normalized;
-
-                    Quaternion originalRot = spine.rotation;
-
-                    spine.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVec);
-
-                    spine.rotation *= Quaternion.Inverse(transform.rotation);
-
-                    spine.rotation *= originalRot;
-
-                    //spine.rotation = targetRotation;
-
-                    //spine.rotation = spine.rotation;
+                    if (spine != null)
+                    {
+                        Vector3 dir = (spine.position - lookAtAim.position).normalized;
+                        Quaternion originalRot = spine.rotation;
+                        var spineRotation = spine.rotation;
+                        spineRotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVec);
+                        spineRotation *= Quaternion.Inverse(transform.rotation);
+                        spineRotation *= originalRot;
+                        spine.rotation = spineRotation;
+                        //spine.rotation = spineRotation;
+                        // spine.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVec);
+                        // spine.rotation *= Quaternion.Inverse(transform.rotation);
+                        // spine.rotation *= originalRot;
+                    }
 
                 }
                 break;

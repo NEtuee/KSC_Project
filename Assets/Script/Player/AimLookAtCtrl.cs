@@ -13,7 +13,7 @@ public class AimLookAtCtrl : MonoBehaviour
         mainCam = Camera.main.transform;
     }
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         if(Physics.Raycast(mainCam.position, mainCam.forward, out hit, 100f, hitLayer))
         {
@@ -25,5 +25,6 @@ public class AimLookAtCtrl : MonoBehaviour
         }
 
         transform.position = Vector3.MoveTowards(transform.position, targetPos, 100.0f * Time.deltaTime);
+        //transform.position = targetPos;
     }
 }
