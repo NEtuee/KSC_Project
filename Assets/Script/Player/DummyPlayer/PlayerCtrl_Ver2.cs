@@ -92,6 +92,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float inputHorizontal;
     [SerializeField] private float fixedVertical;
     [SerializeField] private float fixedHorizontal;
+    [SerializeField] private float _gunPoseVerticalValue = 0.0f;
+    [SerializeField] private float _gunPoseHorizonValue = 0.0f;
     [SerializeField] private AnimationCurve bandCurve;
 
     [Header("Move Direction")]
@@ -130,6 +132,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private float latestHitTime;
     [SerializeField] private float hpRestoreCoolTime = 5f;
     [SerializeField] private float hpRestoreSpeed = 5f;
+
+    [Header("Spine")]
+    private Transform spine;
+    [SerializeField] private Vector3 relativeVec;
+    [SerializeField] private Transform lookAtAim;
+    private Quaternion storeSpineRotation;
 
 
     public delegate void ActiveAimEvent();
@@ -172,10 +180,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         chargeTime.Value = 0.0f;
 
-        if(updateMethod == UpdateMethod.FixedUpdate)
-        {
-            animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
-        }
+        // if(updateMethod == UpdateMethod.FixedUpdate)
+        // {
+        //     animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
+        // }
+
+        spine = animator.GetBoneTransform(HumanBodyBones.Spine);
 
         StartCoroutine(StopCheck());
     }
@@ -189,6 +199,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             return;
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+            animator.SetTrigger("Shot");
+        if (Input.GetKeyDown(KeyCode.Q))
+            energy.Value = 100.0f;
 
         InputUpdate();
 
@@ -456,32 +471,31 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 }
                 break;
             case PlayerState.Aiming:
+            {
+                if (loading == true) 
                 {
-                    
-                    if (loading == true)
-                    {
-                        rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime/loadTerm));
-                        loadTime += deltaTime;
-                        if(loadTime > loadTerm)
-                        {
-                            rigCtrl.SetAimingWeight(1f);
-                            loadCount.Value++;
-                            loadTime = 0;
-                            loading = false;
-                        }
+                    rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime/loadTerm)); 
+                    loadTime += deltaTime;
+                    if(loadTime > loadTerm) 
+                    { 
+                        rigCtrl.SetAimingWeight(1f); 
+                        loadCount.Value++; 
+                        loadTime = 0;
+                        loading = false;
                     }
+                }
 
-                    if(impactLoading == true)
-                    {
-                         rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime / impactTerm));
-                         loadTime += deltaTime;
-                         if (loadTime > impactTerm)
-                         {
-                            rigCtrl.SetAimingWeight(1f);
-                            loadTime = 0;
-                            impactLoading = false;
-                         }
+                if(impactLoading == true)
+                { 
+                    rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime / impactTerm)); 
+                    loadTime += deltaTime; 
+                    if (loadTime > impactTerm) 
+                    { 
+                        rigCtrl.SetAimingWeight(1f); 
+                        loadTime = 0;
+                        impactLoading = false;
                     }
+                }
                     
 
                     RaycastHit hit;
@@ -639,11 +653,40 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
         }
     }
+
+    private void LateUpdate()
+    {
+        switch(state)
+        {
+            case PlayerState.Aiming:
+                {
+                    if (spine != null)
+                    {
+                        Vector3 dir = (spine.position - lookAtAim.position).normalized;
+                        Quaternion originalRot = spine.rotation;
+                        var spineRotation = spine.rotation;
+                        spineRotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVec);
+                        spineRotation *= Quaternion.Inverse(transform.rotation);
+                        spineRotation *= originalRot;
+                        spine.rotation = spineRotation;
+                        //spine.rotation = spineRotation;
+                        // spine.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVec);
+                        // spine.rotation *= Quaternion.Inverse(transform.rotation);
+                        // spine.rotation *= originalRot;
+                    }
+
+                }
+                break;
+        }
+    }
+
     private void UpdateInputValue(float vertical, float horizontal)
     {
         animator.SetFloat("InputVertical", Mathf.Abs(inputVertical));
         animator.SetFloat("InputHorizon", Mathf.Abs(inputHorizontal));
         animator.SetFloat("InputHorizonNoAbs", inputHorizontal);
+        animator.SetFloat("InputVerticalValue",_gunPoseVerticalValue);
+        animator.SetFloat("InputHorizonValue",_gunPoseHorizonValue);
 
         if (state == PlayerState.Default)
         {
@@ -851,6 +894,24 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         else
         {
             currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, deltaTime * 40.0f);
+        }
+        
+        if (inputVertical != 0)
+        {
+            _gunPoseVerticalValue = Mathf.MoveTowards(_gunPoseVerticalValue, inputVertical < 0? -1f:1f, deltaTime * 5.0f);
+        }
+        else
+        {
+            _gunPoseVerticalValue = Mathf.MoveTowards(_gunPoseVerticalValue, 0.0f, deltaTime * 5.0f);
+        }
+        
+        if (inputHorizontal != 0)
+        {
+            _gunPoseHorizonValue = Mathf.MoveTowards(_gunPoseHorizonValue, inputHorizontal < 0? -1f:1f, deltaTime * 5.0f);
+        }
+        else
+        {
+            _gunPoseHorizonValue = Mathf.MoveTowards(_gunPoseHorizonValue, 0.0f, deltaTime * 5.0f);
         }
     }
 
