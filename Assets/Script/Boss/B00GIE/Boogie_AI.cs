@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class Boogie_AI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void Hit()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log("Belly");
     }
 }

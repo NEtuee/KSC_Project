@@ -53,7 +53,7 @@ public class HeadRotator : MonoBehaviour
             SetTargetPosition(ikHolder.position);
             ReturnOriginRotate(headMoveFactor,deltaTime);
 
-            Debug.Log("?");
+//            Debug.Log("?");
         }
         else
         {
