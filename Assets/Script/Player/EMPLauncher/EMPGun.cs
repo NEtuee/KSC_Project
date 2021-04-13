@@ -45,7 +45,7 @@ public class EMPGun : MonoBehaviour
         }
         
         GameManager.Instance.cameraManager.GenerateRecoilImpulse();
-        GameManager.Instance.effectManager.Active("Laser", laserEffectPos.position, laserEffectPos.rotation);
+        GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
 
         if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         {
@@ -56,34 +56,31 @@ public class EMPGun : MonoBehaviour
                 hitable.Hit(damage);
             }
         }
-        else
-        {
-            if (laserEffect != null)
-                laserEffect.Play();
-        }
     }
 
     public void LaunchLaser(float damage, out bool destroyed)
     {
-        if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
+        if (playerAnim != null)
         {
-            GameManager.Instance.effectManager.Active("Laser",laserEffectPos.position,laserEffectPos.rotation);
+            playerAnim.SetTrigger("Shot");
+        }
+        
+        GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+        GameManager.Instance.effectManager.Active("Laser", laserEffectPos.position, laserEffectPos.rotation);
+
+        if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
+        {
             GameManager.Instance.effectManager.Active("LaserHit",hit.point);
 
-            Hitable hitable;
-            if (hit.collider.TryGetComponent<Hitable>(out hitable))
+            if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
             {
-                hitable.Hit(damage,out destroyed);
+                hitable.Hit(damage);
             }
-            else
-            {
-                destroyed = false;
-            }
+
+            destroyed = true;
         }
         else
         {
-            if (laserEffect != null)
-                laserEffect.Play();
             destroyed = false;
         }
     }

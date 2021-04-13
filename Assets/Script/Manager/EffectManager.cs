@@ -14,6 +14,7 @@ public class EffectManager : MonoBehaviour
         {
             ParticlePool particlePool = gameObject.AddComponent<ParticlePool>();
             particlePool.baseObject = particlePairReference.pairs[i].particle;
+            particlePool.Init();
             _particleDic.Add(particlePairReference.pairs[i].key,particlePool);
         }
     }

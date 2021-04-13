@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5560207845832847577
+--- !u!114 &-1107117366898893906
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TestScreen
-  m_Shader: {fileID: 4800000, guid: 178cd07d14661d944b561b5048103d89, type: 3}
+  m_Name: New Material 3
+  m_Shader: {fileID: 4800000, guid: 6a52e877d7a19e1499d3fee66f855908, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -32,6 +32,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BASE_LINE:
+        m_Texture: {fileID: 2800000, guid: 7bfd0d3391c5b564c9eb8aaf4f43cea2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -56,6 +60,22 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Flow_T_01:
+        m_Texture: {fileID: 2800000, guid: 8eb77339794c1224dbcc055b45af27a2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Flow_T_02:
+        m_Texture: {fileID: 2800000, guid: dcae411beb1d91649bf8b60e0e87fab5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Flow_Texture:
+        m_Texture: {fileID: 2800000, guid: 5f74b991a21bdcc4aafc8031799e97b7, type: 3}
+        m_Scale: {x: 0.25, y: 0.5}
+        m_Offset: {x: 0, y: 0}
+    - _Flow_Texture1:
+        m_Texture: {fileID: 2800000, guid: 5f74b991a21bdcc4aafc8031799e97b7, type: 3}
+        m_Scale: {x: 0.25, y: 0.25}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -76,6 +96,30 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _TX_0_01:
+        m_Texture: {fileID: 2800000, guid: 5bcb0cd196938504b9a8f5519c58594e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TX_0_02:
+        m_Texture: {fileID: 2800000, guid: 8eb77339794c1224dbcc055b45af27a2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TX_0_3:
+        m_Texture: {fileID: 2800000, guid: 92965c0ac211273499f6be670a0812af, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _base_02_texture:
+        m_Texture: {fileID: 2800000, guid: 8eb77339794c1224dbcc055b45af27a2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _gradation:
+        m_Texture: {fileID: 2800000, guid: eea0a33b01ef2804ba24d9fd82628b67, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -90,6 +134,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _AlphaClip: 0
+    - _AlphaCutoff: 0.5
+    - _Base_power: 1
+    - _Base_vbright: 1
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -98,21 +145,18 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Distance: 1000.07806
     - _DstBlend: 0
     - _EnvironmentReflections: 1
+    - _Flow_dis_01: 0.2
+    - _Flow_dis_02: 0.2
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _LeadSharp: 21.7
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ScanHeightLimit: 9999
-    - _ScanRange: 1.11
-    - _ScanWidth: 10
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -120,15 +164,16 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - _brifgtness: 3
+    - _dist_base_01: 0.5
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color0: {r: 0.32570383, g: 69.04905, b: 53.577312, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HBarColor: {r: 0.8773585, g: 0.28056702, b: 0.23589355, a: 1}
-    - _HaloColor: {r: 1, g: 1, b: 1, a: 1}
-    - _LeadColor: {r: 0.28773582, g: 0.5344825, b: 1, a: 1}
-    - _MidColor: {r: 0.504717, g: 0.6234156, b: 1, a: 1}
-    - _Position: {r: 0, g: 0, b: 0, a: 1}
+    - _Flow_01_uv_offset: {r: 1, g: 0.5026138, b: 0, a: 0.003921569}
+    - _Flow_02_uv_offset: {r: 1, g: 0.5026178, b: 0, a: 0.007843138}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _TrailColor: {r: 0, g: 0.69090414, b: 1, a: 1}
+    - _base_uv02_offset: {r: 1, g: 0.6244829, b: 0, a: 0.003921569}
+    - _base_uv_offset: {r: 1, g: 0.6244829, b: 0, a: 0.003921569}
   m_BuildTextureStacks: []

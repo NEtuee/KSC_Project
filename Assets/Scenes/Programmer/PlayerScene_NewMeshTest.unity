@@ -1317,19 +1317,37 @@ MonoBehaviour:
     m_TimeEnvelope:
       m_AttackShape:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_DecayShape:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: -1.994442
+          outSlope: -1.994442
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_AttackTime: 0
       m_SustainTime: 0.2
-      m_DecayTime: 0.7
+      m_DecayTime: 0.4
       m_ScaleWithImpact: 1
       m_HoldForever: 0
     m_ImpactRadius: 100
@@ -8096,13 +8114,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 725905500}
-  m_LocalRotation: {x: 0.00000010943039, y: 0.7071066, z: 0.00000022631136, w: 0.707107}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.014, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 243699740}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &732998452
 GameObject:
   m_ObjectHideFlags: 0
@@ -23346,6 +23364,8 @@ MonoBehaviour:
   inputHorizontal: 0
   fixedVertical: 0
   fixedHorizontal: 0
+  _gunPoseVerticalValue: 0
+  _gunPoseHorizonValue: 0
   bandCurve:
     serializedVersion: 2
     m_Curve: []
@@ -30893,7 +30913,7 @@ MonoBehaviour:
     value: 0
   updateMethod: 0
   hitMaker: {fileID: 0}
-  playerDebug: 0
+  playerDebug: 1
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -30974,6 +30994,8 @@ MonoBehaviour:
   inputHorizontal: 0
   fixedVertical: 0
   fixedHorizontal: 0
+  _gunPoseVerticalValue: 0
+  _gunPoseHorizonValue: 0
   bandCurve:
     serializedVersion: 2
     m_Curve: []

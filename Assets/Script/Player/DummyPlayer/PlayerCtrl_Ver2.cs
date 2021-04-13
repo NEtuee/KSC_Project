@@ -92,6 +92,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float inputHorizontal;
     [SerializeField] private float fixedVertical;
     [SerializeField] private float fixedHorizontal;
+    [SerializeField] private float _gunPoseVerticalValue = 0.0f;
+    [SerializeField] private float _gunPoseHorizonValue = 0.0f;
     [SerializeField] private AnimationCurve bandCurve;
 
     [Header("Move Direction")]
@@ -683,6 +685,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         animator.SetFloat("InputVertical", Mathf.Abs(inputVertical));
         animator.SetFloat("InputHorizon", Mathf.Abs(inputHorizontal));
         animator.SetFloat("InputHorizonNoAbs", inputHorizontal);
+        animator.SetFloat("InputVerticalValue",_gunPoseVerticalValue);
+        animator.SetFloat("InputHorizonValue",_gunPoseHorizonValue);
 
         if (state == PlayerState.Default)
         {
@@ -890,6 +894,24 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         else
         {
             currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, deltaTime * 40.0f);
+        }
+        
+        if (inputVertical != 0)
+        {
+            _gunPoseVerticalValue = Mathf.MoveTowards(_gunPoseVerticalValue, inputVertical < 0? -1f:1f, deltaTime * 5.0f);
+        }
+        else
+        {
+            _gunPoseVerticalValue = Mathf.MoveTowards(_gunPoseVerticalValue, 0.0f, deltaTime * 5.0f);
+        }
+        
+        if (inputHorizontal != 0)
+        {
+            _gunPoseHorizonValue = Mathf.MoveTowards(_gunPoseHorizonValue, inputHorizontal < 0? -1f:1f, deltaTime * 5.0f);
+        }
+        else
+        {
+            _gunPoseHorizonValue = Mathf.MoveTowards(_gunPoseHorizonValue, 0.0f, deltaTime * 5.0f);
         }
     }
 
