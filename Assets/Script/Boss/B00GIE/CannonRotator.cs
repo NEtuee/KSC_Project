@@ -67,6 +67,11 @@ public class CannonRotator : MonoBehaviour
             Rotate(deltaTime);
     }
 
+    public Vector3 GetLookDirection()
+    {
+        return -cannonHorizontal.up;
+    }
+    
     public void SetTargetToOrigin()
     {
         var angle = transform.rotation.eulerAngles;

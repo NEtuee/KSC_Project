@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 public class GraphAnimator : MonoBehaviour
@@ -7,10 +8,16 @@ public class GraphAnimator : MonoBehaviour
     [System.Serializable]
     public class GraphAnimation
     {
+        public struct TargetInfo
+        {
+            public Transform target;
+            public Vector3 origin;
+        }
         public enum AnimationType
         {
             Translate,
-            Rotation
+            Rotation,
+            AxisRotation,
         };
 
         public string name;
@@ -21,60 +28,119 @@ public class GraphAnimator : MonoBehaviour
         public AnimationCurve yCurve;
         public AnimationCurve zCurve;
 
-        private Transform _target;
-        private Vector3 _origin;
+        private List<TargetInfo> _targets = new List<TargetInfo>();
 
         public void ApplyCurve(float time)
         {
-            var target = _origin;
-            target.x += xCurve.Evaluate(time);
-            target.y += yCurve.Evaluate(time);
-            target.z += zCurve.Evaluate(time);
+            var x = xCurve.Evaluate(time);
+            var y = yCurve.Evaluate(time);
+            var z = zCurve.Evaluate(time);
 
-            if(animationType == AnimationType.Translate)
+            foreach (var t in _targets)
             {
-                _target.localPosition = target;
+                var target = t.origin;
+
+                if(animationType == AnimationType.Translate)
+                {
+                    target.x += x;
+                    target.y += y;
+                    target.z += z;
+                    
+                    t.target.localPosition = target;
+                }
+                else if(animationType == AnimationType.Rotation)
+                {
+                    target.x += x;
+                    target.y += y;
+                    target.z += z;
+                    
+                    t.target.localEulerAngles = target;
+                }
+                else if (animationType == AnimationType.AxisRotation)
+                {
+                    var rotation = Quaternion.Euler(target);
+                    rotation *= Quaternion.AngleAxis(x, Vector3.right);
+                    rotation *= Quaternion.AngleAxis(y, Vector3.up);
+                    rotation *= Quaternion.AngleAxis(z, Vector3.forward);
+
+                    t.target.localRotation = rotation;
+                }
             }
-            else if(animationType == AnimationType.Rotation)
-            {
-                _target.localEulerAngles = target;
-            }
-            
+
         }
 
         public bool TargetExistsCheck()
         {
-            return _target != null;
+            if (_targets.Count == 0)
+                return false;
+
+            foreach (var target in _targets)
+            {
+                if (target.target == null)
+                {
+                    _targets.Clear();
+                    return false;
+                }
+                    
+            }
+
+            return true;
         }
 
         public void ReturnOrigin()
         {
-            if(_target != null)
+            foreach (var target in _targets)
             {
-                if(animationType == AnimationType.Translate)
+                if (target.target != null)
                 {
-                    _target.localPosition = _origin;
+                    if(animationType == AnimationType.Translate)
+                    {
+                        target.target.localPosition = target.origin;
+                    }
+                    else if(animationType == AnimationType.Rotation || animationType == AnimationType.AxisRotation)
+                    {
+                        target.target.localEulerAngles = target.origin;
+                    }
                 }
-                else if(animationType == AnimationType.Rotation)
-                {
-                    _target.localEulerAngles = _origin;
-                }
+                    
             }
+            
+            _targets.Clear();
+        }
+
+        public void AddTargetList(Transform t)
+        {
+            TargetInfo info = new TargetInfo();
+            info.target = t;
+            
+            if(animationType == AnimationType.Translate)
+            {
+                info.origin = info.target.localPosition;
+            }
+            else if(animationType == AnimationType.Rotation || animationType == AnimationType.AxisRotation)
+            {
+                info.origin = info.target.localEulerAngles;
+            }
+            
+            _targets.Add(info);
         }
 
         public void Set(Transform t) 
         {
             ReturnOrigin();
 
-            _target = t;
-            if(animationType == AnimationType.Translate)
+            AddTargetList(t);
+        }
+
+        public void Set(List<Transform> t)
+        {
+            ReturnOrigin();
+
+            foreach (var tp in t)
             {
-                _origin = _target.localPosition;
+                AddTargetList(tp);
             }
-            else if(animationType == AnimationType.Rotation)
-            {
-                _origin = _target.localEulerAngles;
-            }
+            
         }
     }
 
@@ -100,6 +166,24 @@ public class GraphAnimator : MonoBehaviour
             ani.ReturnOrigin();
         }
         _playList.Clear();
+    }
+    
+    public void Play(string animation, List<Transform> targets)
+    {
+        var ani = FindAnimation(animation);
+        if(ani == null)
+        {
+            Debug.Log("Animation does not exists");
+            return;
+        }
+        
+        _timeCounter.InitTimer(animation);
+
+        ani.Set(targets);
+        if(IsPlaying(animation) == null)
+        {
+            _playList.Add(ani);
+        }
     }
 
     public void Play(string animation, Transform target)
