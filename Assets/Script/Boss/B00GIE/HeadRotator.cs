@@ -52,15 +52,11 @@ public class HeadRotator : MonoBehaviour
         {
             SetTargetPosition(ikHolder.position);
             ReturnOriginRotate(headMoveFactor,deltaTime);
-
-            Debug.Log("?");
         }
         else
         {
             SetTargetPosition(target.position);
             UpdateIKRotation(headMoveFactor,deltaTime);
-
-            Debug.Log("??");
         }
 
         UpdateTargetToHeadDist();
