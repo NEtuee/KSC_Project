@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using UnityEngine.UI;
 
 public enum UpdateMethod
 {
@@ -60,6 +61,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [Range(0, 5)] [SerializeField] private float fallingControlSenstive = 1f;
     [SerializeField] private float horizonWeight = 0.0f;
     [SerializeField] private float rotAngle = 0.0f;
+    [SerializeField] private float airRotateSpeed = 2.5f; 
 
 
     [Header("Jump Value")]
@@ -116,6 +118,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float costValue = 25f;
     [SerializeField] private float chargeNecessryTime = 1f;
     public FloatReactiveProperty chargeTime = new FloatReactiveProperty(0.0f);
+    [SerializeField] private float hitEnergyRestoreValue = 0.0f;
     [SerializeField] private float impectPower = 50.0f;
     [SerializeField] private ParticleSystem impectEffect;
     [SerializeField] private GameObject destroyEffect;
@@ -200,8 +203,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
-            animator.SetTrigger("Shot");
+        // if (Input.GetKeyDown(KeyCode.E))
+        //     animator.SetTrigger("Shot");
         if (Input.GetKeyDown(KeyCode.Q))
             energy.Value = 100.0f;
 
@@ -307,14 +310,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Aiming:
                 {
-                   if(loading == false && impactLoading == false && loadCount.Value < 3 && Input.GetKeyDown(KeyCode.LeftControl))
-                   {
-                       loading = true;
-                       loadTime = 0f;
-                        empGun.GunLoad();
-                   }
-                    
-                    InputChargeShot();
+                   // if(loading == false && impactLoading == false && loadCount.Value < 3 && Input.GetKeyDown(KeyCode.LeftControl))
+                   // {
+                   //     loading = true;
+                   //     loadTime = 0f;
+                   //      empGun.GunLoad();
+                   // }
+                   
+                   chargeTime.Value += Time.deltaTime;
+                   chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
+                   chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
+
+                   InputChargeShot();
 
                     if (InputAimingRelease())
                         return;
@@ -349,13 +356,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
 
         RestoreHp(deltaTime);
+        RestoreEnergy(deltaTime);
 
         switch (state)
         {
             case PlayerState.Default:
                 {
-                    RestoreEnergy(deltaTime);
-
                     if(movement.isGrounded == false)
                     {
                         ChangeState(PlayerState.Jump);
@@ -419,8 +425,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.TurnBack:
             case PlayerState.RunToStop:
                 {
-                    RestoreEnergy(deltaTime);
-
                     RaycastHit hit;
                     if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2f, groundLayer))
                     {
@@ -441,18 +445,46 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         return;
                     }
 
-                    Vector3 plusDir = ((camForward * inputVertical) + (camRight * inputHorizontal));
-                    movement.Move(plusDir * fallingControlSenstive);
-
-                    lookDir = ((camForward * inputVertical) + (camRight * inputHorizontal)).normalized;
-                    if (lookDir != Vector3.zero)
+                    // Vector3 plusDir = ((camForward * inputVertical) + (camRight * inputHorizontal));
+                    // movement.Move(plusDir * fallingControlSenstive);
+                    
+                    if (inputVertical != 0.0f || inputHorizontal != 0.0f)
                     {
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * 1.0f);
+                        moveDir = (camForward * inputVertical) + (camRight * inputHorizontal);
+                        moveDir.Normalize();
+                        lookDir = moveDir;
+                        //prevDir = moveDir;
                     }
                     else
                     {
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * 1.0f);
+                        moveDir = prevDir;
+                        moveDir.Normalize();
+                        lookDir = moveDir;
                     }
+
+                    //lookDir = ((camForward * inputVertical) + (camRight * inputHorizontal)).normalized;
+                    // if (lookDir != Vector3.zero)
+                    // {
+                    //     transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * airRotateSpeed);
+                    // }
+                    // else
+                    // {
+                    //     transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * airRotateSpeed);
+                    // }
+                    
+                    Quaternion targetRotation = Quaternion.identity;
+                    if (currentSpeed != 0.0f &&lookDir != Vector3.zero)
+                    {
+                        targetRotation = Quaternion.LookRotation(lookDir, Vector3.up);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * rotateSpeed);
+                    }
+                    else
+                    {
+                        targetRotation = Quaternion.LookRotation(transform.forward, Vector3.up);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * rotateSpeed);
+                    }
+                    
+                    moveDir *= currentSpeed;
 
                     movement.Move(moveDir + (Vector3.up * currentJumpPower));
                 }
@@ -527,6 +559,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                         animator.SetFloat("Speed", currentSpeed);
                         movement.Move(moveDir);
+
                     }
                     else
                     {
@@ -633,7 +666,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
 
         UpdateCurrentSpeed(deltaTime);
-        prevDir = lookDir;
+
+        prevDir = state == PlayerState.Aiming ? moveDir : lookDir;
     }
 
     private void ProcessFixedUpdate()
@@ -1483,6 +1517,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             ChangeState(PlayerState.Default);
             ActiveAim(false);
+            chargeTime.Value = 0.0f;
             return true;
         }
 
@@ -1491,36 +1526,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputChargeShot()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.Aiming) && loading == false)
+        if (InputManager.Instance.GetAction(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
         {
-            if (energy.Value < 25f)
-            {
-                drone.DroneHelpCall("Support_Energy");
-                return;
-            }
-
-            chargeTime.Value += Time.deltaTime;
-
-            if (chargeTime.Value >= chargeNecessryTime)
-            {
-                chargeTime.Value = 0.0f;
-                int count = (int)Mathf.Abs(energy.Value / 25f);
-                energy.Value -= 25f * (loadCount.Value > count ? count : loadCount.Value);
-
-                empGun.LaunchLaser(loadCount.Value * 40.0f);
-                loadCount.Value = 1;
-            }
-            return;
-        }
-        else
-        {
+            int loadCount = (int)(chargeTime.Value);
+            loadCount = loadCount > 3 ? 3 : loadCount;
+            
+            empGun.LaunchLaser(loadCount * 40.0f);
             chargeTime.Value = 0.0f;
+            energy.Value -= loadCount * costValue;
         }
-
-        //if (Input.GetKeyDown(KeyCode.Mouse1) && energy.Value >= 50f)
-        //{
-        //    LaunchImpect();
-        //}
     }
 
     private bool InputLedgeUp()
@@ -1709,11 +1723,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void RestoreEnergy(float deltaTime)
     {
-        if (energy.Value != 100.0f)
+        if (state == PlayerState.Aiming)
+            return;
+        
+        if (IsNowClimbingBehavior() == true)
         {
-            energy.Value += restoreValuePerSecond * deltaTime;
-            energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+            if (isClimbingMove == false)
+                return;
         }
+        else
+        {
+            if (state == PlayerState.Ragdoll || state == PlayerState.HangRagdoll || currentSpeed == 0.0f)
+                return;
+        }
+        
+        energy.Value += restoreValuePerSecond * deltaTime;
+        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }
 
     private void RestoreHp(float deltaTime)
@@ -1758,6 +1783,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         hp.Value -= damage;
         latestHitTime = Time.time;
+        energy.Value += hitEnergyRestoreValue;
+        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }
 
 

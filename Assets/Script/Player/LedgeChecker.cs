@@ -111,8 +111,10 @@ public class LedgeChecker : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.137f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
-        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.3f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
+        //Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.137f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
+        //Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.3f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
+        DebugCastDetection.Instance.DebugWireCube(transform.position + transform.TransformDirection(downCollisionOffset),transform, downCollisionSize,Color.red);
+        DebugCastDetection.Instance.DebugWireCube(transform.position + transform.TransformDirection(upCollisionOffset),transform, upCollisionSize,Color.red);
     }
 }
 
