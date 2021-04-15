@@ -115,8 +115,7 @@ public class PlayerMovement : MonoBehaviour
 
         SetParent(null);
     }
-
-
+    
     private void Update()
     {
         if (GameManager.Instance.PAUSE == true)
@@ -348,6 +347,7 @@ public class PlayerMovement : MonoBehaviour
     public void Attach()
     {
         keepSpeed = false;
+        isGrounded = false;
     }
 
     public float GetGroundAngle()

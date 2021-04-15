@@ -1413,7 +1413,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                 movement.SetParent(hit.collider.transform);
                 movement.Attach();
-                
+
                 return true;
             }
             else

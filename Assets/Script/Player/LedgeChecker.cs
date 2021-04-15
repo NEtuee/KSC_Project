@@ -48,10 +48,10 @@ public class LedgeChecker : MonoBehaviour
         int collisionCount = 0;
 
         collisionCount = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(downCollisionOffset), downCollisionSize * 0.5f, collisionBuffer, transform.rotation, collisionLayer);
-        downCollision = collisionCount == 0 ? true : false;
+        downCollision = collisionCount != 0 && true;
 
         collisionCount = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(upCollisionOffset), upCollisionSize * 0.5f, collisionBuffer, transform.rotation, collisionLayer);
-        upCollision = collisionCount == 0 ? true : false;
+        upCollision = collisionCount != 0 && true;
 
         isDetectLedge = false;
 
@@ -62,6 +62,7 @@ public class LedgeChecker : MonoBehaviour
                 isDetectLedge = true;
             }
         }
+       
 
 
         //foreach (GameObject obj in collider1.collidedObjects)

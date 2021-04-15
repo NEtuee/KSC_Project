@@ -11,8 +11,6 @@ public class EMPGun : MonoBehaviour
     [SerializeField] private Animator gunAnim;
     [SerializeField] private Animator playerAnim;
     [SerializeField] private Transform launchPos;
-    [SerializeField] private ParticleSystem impactEffect;
-    [SerializeField] private ParticleSystem laserEffect;
     [SerializeField] private Transform laserEffectPos;
     [SerializeField] private Transform lookAim;
 
