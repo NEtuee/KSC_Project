@@ -21,6 +21,8 @@ public class CannonRotator : MonoBehaviour
     public bool rotateLock = false;
     public bool targetInArea = false;
 
+    private float _verticalAngle = 0f;
+    
     private Quaternion _verticalTarget;
     private Quaternion _horizontalTarget;
     
@@ -33,9 +35,9 @@ public class CannonRotator : MonoBehaviour
         _horizontalOrigin = cannonHorizontal.rotation;
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
-        RotateProgress(Time.deltaTime);
+        RotateProgress(Time.fixedDeltaTime);
     }
 
     public void RotateProgress(float deltaTime)
@@ -53,14 +55,14 @@ public class CannonRotator : MonoBehaviour
             var verticalDir = target.position - cannonVertical.position;
             var horizontalDir = target.position - cannonHorizontal.position;
 
+            
             verticalDir = Vector3.ProjectOnPlane(verticalDir, transform.up).normalized;
+            _verticalAngle = Vector3.SignedAngle(cannonVertical.up,verticalDir,transform.up);
             //horizontalDir = Vector3.ProjectOnPlane(horizontalDir, transform.up);
 
             _verticalTarget = Quaternion.LookRotation(verticalDir) * Quaternion.Euler(verticalAngleOffset);
             _horizontalTarget = Quaternion.LookRotation(horizontalDir) * Quaternion.Euler(horizontalAngleOffset);
-            //_horizontalTarget = Quaternion.Euler(0f, 0f, Vector3.Angle(transform.forward, horizontalDir));
-            // _horizontalTarget = Quaternion.Euler(0f,0f,Vector3.Angle(-cannonHorizontal.up, horizontalDir)) 
-            //                     * Quaternion.Euler(horizontalAngleOffset);
+
         }
         
         if(!rotateLock)
@@ -87,6 +89,9 @@ public class CannonRotator : MonoBehaviour
 
     public void Rotate(float deltaTime)
     {
+        var isLeft = _verticalAngle > 0;
+        // if(MathEx.abs(_verticalAngle) > 10f )
+        //     cannonVertical.RotateAround(cannonVertical.position,-cannonVertical.right,180f * deltaTime * (isLeft ? 1f : -1f));
         cannonVertical.rotation = Quaternion.Lerp(cannonVertical.rotation, _verticalTarget, lerpFactor * deltaTime);
         cannonHorizontal.rotation = Quaternion.Lerp(cannonHorizontal.rotation, _horizontalTarget, lerpFactor * deltaTime);
     }

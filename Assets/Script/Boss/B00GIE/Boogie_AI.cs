@@ -46,8 +46,10 @@ public class Boogie_AI : IKBossBase
     private RayEx _cannonRay;
 
     private Vector3 _moveDirection;
+    private Vector3 _prevTargetPosition;
 
     private float _moveSpeed;
+    private float _cannonRotateLerpFactor = 0f;
 
     private bool _headOpen = false;
 
@@ -72,6 +74,8 @@ public class Boogie_AI : IKBossBase
         _playerRagdoll = GameManager.Instance.player.GetComponent<PlayerRagdoll>();
 
         _cannonRay = new RayEx(new Ray(Vector3.zero, Vector3.zero),100f,cannonShotLayer);
+
+        _cannonRotateLerpFactor = cannon.lerpFactor;
     }
 
     public void Update()
@@ -83,15 +87,35 @@ public class Boogie_AI : IKBossBase
     {
         if (currentState == State.CannonSearch)
         {
-            if (cannon.targetInArea)
+            if (_prevTargetPosition != _target.position)
             {
-                _timeCounter.IncreaseTimer("cannonSearch", out bool limit);
-                if (limit)
+                _prevTargetPosition = _target.position;
+                
+                if (cannon.targetInArea)
                 {
-                    _timeCounter.InitTimer("cannonSearch",0f,cannonSearchTime);
-                    ChangeState(State.CannonLock);
+                    _timeCounter.InitTimer("cannonSearchStay",0f);
+                    _timeCounter.IncreaseTimer("cannonSearch", out bool limit);
+
+                    cannon.lerpFactor += deltaTime;
+                    
+                    if (limit)
+                    {
+                        _timeCounter.InitTimer("cannonSearch",0f,cannonSearchTime);
+                        ChangeState(State.CannonLock);
+                    }
                 }
             }
+            else
+            {
+                _timeCounter.IncreaseTimer("cannonSearchStay", out bool limit);
+                if (limit)
+                {
+                    cannon.lerpFactor = _cannonRotateLerpFactor;
+                    _timeCounter.InitTimer("cannonSearch",0f,cannonSearchTime);
+                }
+            }
+            
+            
         }
         else if (currentState == State.CannonLock)
         {
@@ -188,12 +212,13 @@ public class Boogie_AI : IKBossBase
             _moveSpeed = hitStepSpeed;
             
             animator.Play("Hit",rootTransform);
+            animator.Play("HeadHit",headIKHolder);
         }
         else if (state == State.HeadHit)
         {
-            animator.Play("HeadHit",headIKHolder);
-            animator.Play("Hit",rootTransform);
-            animator.Play("ShieldOpen",headShields);
+            animator.Play("HeadHit",headIKHolder,true);
+            animator.Play("Hit",rootTransform,true);
+            animator.Play("ShieldOpen",headShields,true);
             
             _headOpen = true;
             headCollider.enabled = false;

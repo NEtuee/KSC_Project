@@ -168,7 +168,7 @@ public class GraphAnimator : MonoBehaviour
         _playList.Clear();
     }
     
-    public void Play(string animation, List<Transform> targets)
+    public void Play(string animation, List<Transform> targets, bool forcePlay = false)
     {
         var ani = FindAnimation(animation);
         if(ani == null)
@@ -180,13 +180,19 @@ public class GraphAnimator : MonoBehaviour
         _timeCounter.InitTimer(animation);
 
         ani.Set(targets);
-        if(IsPlaying(animation) == null)
+        var play = IsPlaying(animation);
+        if(play == null)
         {
             _playList.Add(ani);
         }
+        else if(forcePlay)
+        {
+            play.ReturnOrigin();
+            
+        }
     }
 
-    public void Play(string animation, Transform target)
+    public void Play(string animation, Transform target, bool forcePlay = false)
     {
         var ani = FindAnimation(animation);
         if(ani == null)
@@ -201,6 +207,10 @@ public class GraphAnimator : MonoBehaviour
         if(IsPlaying(animation) == null)
         {
             _playList.Add(ani);
+        }
+        else
+        {
+            
         }
     }
 

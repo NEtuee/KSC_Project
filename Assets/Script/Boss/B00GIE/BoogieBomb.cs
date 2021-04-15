@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BoogieBomb : MonoBehaviour
 {
+    public Collider coll;
+    public Rigidbody rig;
+    
     public void OnCollisionEnter(Collision coll)
     {
         GameManager.Instance.effectManager.Active("CannonExplosion",transform.position,transform.rotation);
@@ -13,6 +16,7 @@ public class BoogieBomb : MonoBehaviour
             head.Hit();
         }
 
-        Destroy(this.gameObject);
+        gameObject.SetActive(false);
+        //Destroy(this.gameObject);
     }
 }

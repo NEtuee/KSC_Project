@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IKBossBase : Scanable
+public class IKBossBase : Hitable
 {
     public float rotationSpeed = 180f;
     public float groundCheckRadius = 5f;
@@ -29,9 +29,27 @@ public class IKBossBase : Scanable
         _centerPosition = transform.position;
     }
 
-    public override void Scanned()
+    public override void Hit()
     {
         
+    }
+
+    public override void Hit(float damage)
+    {
+    }
+
+    public override void Hit(float damage, out bool isDestroy)
+    {
+        isDestroy = false;
+    }
+
+    public override void Destroy()
+    {
+
+    }
+
+    public override void Scanned()
+    {
     }
 
     protected void GetSoundManager()
