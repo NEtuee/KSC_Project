@@ -18,6 +18,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         RunToStop,
         Jump,
         Grab,
+        ReadyGrab,
         HangLedge,
         HangEdge,
         ClimbingLedge,
@@ -50,6 +51,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private bool isClimbingMove = false;
     [SerializeField] private bool isLedge = false;
     [SerializeField] private Transform headTransfrom;
+    [SerializeField] public bool isCanReadyClimbingCancel = false;
 
     [Header("Movement Speed Value")]
     [SerializeField] private float walkSpeed = 15.0f;
@@ -285,6 +287,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     if (InputReleaseGrab())
                         return;
+                }
+                break;
+            case PlayerState.ReadyGrab:
+                {
+                    if (isCanReadyClimbingCancel == true && (inputVertical != 0 || inputHorizontal != 0))
+                    {
+                        animator.SetTrigger("ReadyClimbCancel");
+                        ChangeState(PlayerState.Grab);
+                    }
                 }
                 break;
             case PlayerState.HangEdge:
@@ -681,7 +692,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.HangEdge:
             case PlayerState.HangLedge:
-                {
+            case PlayerState.ReadyGrab:
+            {
                     UpdateGrab();
                 }
                 break;
@@ -1024,6 +1036,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     GameManager.Instance.cameraManager.SetFollowCameraDistance("Grab");
                 }
                 break;
+            case PlayerState.ReadyGrab:
+                {
+                    animator.SetBool("IsGrab", true);
+                    currentJumpPower = 0.0f;
+                    currentSpeed = 0.0f;
+
+                    //handIK.ActiveHandIK(true);
+                    handIK.ActiveLedgeIK(false);
+                    isCanReadyClimbingCancel = false;
+
+                    currentVerticalValue = 0.0f;
+                    currentHorizontalValue = 0.0f;
+                    isClimbingMove = false;
+                    movement.SetGrab();
+                }
+                break;
             case PlayerState.Jump:
                 {
                     if(prevState != PlayerState.ClimbingJump)
@@ -1241,6 +1269,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     break;
                 }
             case PlayerState.LedgeUp:
+            case PlayerState.ReadyGrab:
                 {
                     var p = transform.position;
                     p += animator.deltaPosition;
@@ -1396,7 +1425,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 if (ledgeChecker.IsDetectedLedge() == false)
                 {
-                    ChangeState(PlayerState.Grab);
+                    //ChangeState(PlayerState.Grab);
+                    ChangeState(PlayerState.ReadyGrab);
                 }
                 else
                 {
@@ -1424,7 +1454,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     transform.rotation = Quaternion.LookRotation(-hit.normal, transform.forward);
                     transform.position = (hit.point) + (hit.normal) * collider.radius;
 
-                    ChangeState(PlayerState.Grab);
+                    //ChangeState(PlayerState.Grab);
+                    ChangeState(PlayerState.ReadyGrab);
 
                     movement.SetParent(hit.collider.transform);
                     movement.Attach();

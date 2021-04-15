@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 7efbb616c2029e242be339aff38cd09a
+guid: 5bdf3138dfb4fe24e97bf1d3fa62fd82
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
-      74: 6554237856963063663
-    second: Climb_Shaking_L
+      74: 4448716291969509680
+    second: Anim_Player_Climb_Bounce_Real
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -22,11 +22,11 @@ ModelImporter:
     rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
       copied configuration does not match position in animation file:\n\t'Bip001
       L Thigh' : position error = 18.205862 mm\n\t'Bip001 L Calf' : position error
-      = 19.983067 mm\n\t'Bip001 L Foot' : position error = 17.477247 mm\n\t'Bip001
-      L Toe0' : position error = 13.049220 mm\n\t'Bip001 R Thigh' : position error
-      = 18.205862 mm\n\t'Bip001 R Calf' : position error = 19.983095 mm\n\t'Bip001
-      R Foot' : position error = 17.477247 mm\n\t'Bip001 R Toe0' : position error
-      = 13.049342 mm\n"
+      = 19.983187 mm\n\t'Bip001 L Foot' : position error = 17.477186 mm\n\t'Bip001
+      L Toe0' : position error = 13.049267 mm\n\t'Bip001 R Thigh' : position error
+      = 18.205862 mm\n\t'Bip001 R Calf' : position error = 19.983067 mm\n\t'Bip001
+      R Foot' : position error = 17.477278 mm\n\t'Bip001 R Toe0' : position error
+      = 13.049278 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -42,11 +42,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Climb_Shaking_L
-      takeName: Anim_Player_Climb_Shaking_L
+      name: Anim_Player_Climb_Bounce_Real
+      takeName: Anim_Player_Climb_Bounce_Real
       internalID: 0
       firstFrame: 0
-      lastFrame: 160
+      lastFrame: 22
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -55,9 +55,9 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 1
-      loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
@@ -66,8 +66,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.57654405
+        functionName: CanCancelReadyClimbing
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 1
-        functionName: EndGrabShake
+        functionName: EndReadyGrab
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
