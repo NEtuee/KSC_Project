@@ -19,6 +19,7 @@ public class Boogie_AI : IKBossBase
     public Transform rootTransform;
     public Transform cannonRoot;
     public Transform headIKHolder;
+    public Transform explosionDistIndicator;
 
     public Collider headCollider;
     
@@ -76,6 +77,8 @@ public class Boogie_AI : IKBossBase
         _cannonRay = new RayEx(new Ray(Vector3.zero, Vector3.zero),100f,cannonShotLayer);
 
         _cannonRotateLerpFactor = cannon.lerpFactor;
+
+        explosionDistIndicator.localScale = new Vector3(explosionDist, 3f, explosionDist);
     }
 
     public void Update()
@@ -85,6 +88,17 @@ public class Boogie_AI : IKBossBase
 
     void Progress(float deltaTime)
     {
+        {
+            var dir = cannon.GetLookDirection();
+            _cannonRay.SetDirection(dir);
+            if (_cannonRay.Cast(cannonRoot.position, out var hit))
+            {
+                explosionDistIndicator.transform.position = hit.point;
+            }
+
+        }
+        
+        
         if (currentState == State.CannonSearch)
         {
             if (_prevTargetPosition != _target.position)
@@ -114,8 +128,6 @@ public class Boogie_AI : IKBossBase
                     _timeCounter.InitTimer("cannonSearch",0f,cannonSearchTime);
                 }
             }
-            
-            
         }
         else if (currentState == State.CannonLock)
         {
@@ -186,8 +198,14 @@ public class Boogie_AI : IKBossBase
     
     public void ChangeState(State state)
     {
+        if (state != State.CannonSearch && state != State.CannonLock & state != State.CannonShot)
+        {
+            explosionDistIndicator.gameObject.SetActive(false);
+        }
+        
         if (state == State.CannonSearch)
         {
+            explosionDistIndicator.gameObject.SetActive(true);
             cannon.rotateLock = false;
         }
         else if (state == State.CannonLock)
