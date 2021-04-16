@@ -132,6 +132,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private bool impactLoading = false;
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
+    [SerializeField] private Animator gunAnim;
 
     [Header("HpState")]
     private float latestHitTime;
@@ -331,6 +332,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                    chargeTime.Value += Time.deltaTime;
                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
+
+                    gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
 
                    InputChargeShot();
 
@@ -540,7 +543,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                 }
                     
-
                     RaycastHit hit;
             
                     if (movement.isGrounded == true)
@@ -1685,7 +1687,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.SetLayerWeight(2, 1.0f);
                 animator.SetLayerWeight(3, 1.0f);
             }
-            empGun.GunLoad();
         }
         else
         {
@@ -1697,7 +1698,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.SetLayerWeight(2, 0.0f);
                 animator.SetLayerWeight(3, 0.0f);
             }
-            empGun.GunOff();
         }
     }
 
@@ -1756,7 +1756,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         if (state == PlayerState.Aiming)
             return;
-        
+
         if (IsNowClimbingBehavior() == true)
         {
             if (isClimbingMove == false)

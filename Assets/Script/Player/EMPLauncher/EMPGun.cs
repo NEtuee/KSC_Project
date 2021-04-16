@@ -54,6 +54,11 @@ public class EMPGun : MonoBehaviour
                 hitable.Hit(damage);
             }
         }
+
+        if (gunAnim != null)
+        {
+            gunAnim.SetTrigger("ToZero");
+        }
     }
 
     public void LaunchLaser(float damage, out bool destroyed)
@@ -95,6 +100,14 @@ public class EMPGun : MonoBehaviour
         if (_gunObject != null)
         {
             _gunObject.SetActive(active);
+        }
+
+        if(gunAnim != null)
+        {
+            if(active == true)
+                gunAnim.SetTrigger("Active");
+            else
+                gunAnim.SetTrigger("Disable");
         }
     }
 
