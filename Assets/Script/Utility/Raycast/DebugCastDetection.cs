@@ -46,4 +46,34 @@ public class DebugCastDetection
         return isHit;
     }
 
+    public void DebugWireCube(Vector3 poistion, Transform criteria, Vector3 size,Color color)
+    {
+        Vector3 extents = size / 2;
+
+        Vector3 v1 = poistion - criteria.forward * extents.z + criteria.up * extents.y - criteria.right * extents.x;
+        Vector3 v2 = poistion - criteria.forward * extents.z + criteria.up * extents.y + criteria.right * extents.x;
+        Vector3 v3 = poistion - criteria.forward * extents.z - criteria.up * extents.y - criteria.right * extents.x;
+        Vector3 v4 = poistion - criteria.forward * extents.z - criteria.up * extents.y + criteria.right * extents.x;
+        Vector3 v5 = poistion + criteria.forward * extents.z + criteria.up * extents.y - criteria.right * extents.x;
+        Vector3 v6 = poistion + criteria.forward * extents.z + criteria.up * extents.y + criteria.right * extents.x;
+        Vector3 v7 = poistion + criteria.forward * extents.z - criteria.up * extents.y - criteria.right * extents.x;
+        Vector3 v8 = poistion + criteria.forward * extents.z - criteria.up * extents.y + criteria.right * extents.x;
+
+        Gizmos.color = color;
+        Gizmos.DrawLine(v1,v5);
+        Gizmos.DrawLine(v2,v6);
+        Gizmos.DrawLine(v3,v7);
+        Gizmos.DrawLine(v4,v8);
+        
+        Gizmos.DrawLine(v1,v2);
+        Gizmos.DrawLine(v3,v4);
+        Gizmos.DrawLine(v1,v3);
+        Gizmos.DrawLine(v2,v4);
+
+        Gizmos.DrawLine(v5,v6);
+        Gizmos.DrawLine(v7,v8);
+        Gizmos.DrawLine(v5,v7);
+        Gizmos.DrawLine(v6,v8);
+
+    }
 }

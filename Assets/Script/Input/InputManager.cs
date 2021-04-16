@@ -307,7 +307,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    #region Å°º¸µå ¹ÙÀÎµù
+    #region í‚¤ë³´ë“œ ë°”ì¸ë”©
     private bool BindKeyboard_GetKeyDown(KeybindingActions action)
     {
         return Input.GetKeyDown(actionData[action].keyboard.key);
@@ -324,7 +324,7 @@ public class InputManager : MonoBehaviour
     }
     #endregion
 
-    #region µà¾ó¼îÅ© ¹ÙÀÎµù
+    #region ë“€ì–¼ì‡¼í¬ ë°”ì¸ë”©
     private bool BindDualShock_GetKeyDown(KeybindingActions action)
     {
         return Input.GetKeyDown(actionData[action].dualshock.key);
@@ -361,7 +361,7 @@ public class InputManager : MonoBehaviour
     }
     #endregion
 
-    #region ¿¢½º¹Ú½º ÆĞµå ¹ÙÀÎµù
+    #region ì—‘ìŠ¤ë°•ìŠ¤ íŒ¨ë“œ ë°”ì¸ë”©
     private bool BindXbox_GetKeyDown(KeybindingActions action)
     {
         return Input.GetKeyDown(actionData[action].xbox.key);
@@ -398,7 +398,7 @@ public class InputManager : MonoBehaviour
     }
     #endregion
 
-    #region ¿¢¹Ú ÆĞµå Áøµ¿
+    #region ì—‘ë°• íŒ¨ë“œ ì§„ë™
     public void GamePadSetVibrate(float time, float power)
     {
         if (controlMode != ControlMode.XboxPad)

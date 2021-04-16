@@ -102,4 +102,19 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private void EndShot()
     {
     }
+
+    private void EndGrabShake()
+    {
+        owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Grab);
+    }
+    
+    private void EndReadyGrab()
+    {
+        owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Grab);
+    }
+
+    private void CanCancelReadyClimbing()
+    {
+        owner.isCanReadyClimbingCancel = true;
+    }
 }

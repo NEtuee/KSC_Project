@@ -48,10 +48,10 @@ public class LedgeChecker : MonoBehaviour
         int collisionCount = 0;
 
         collisionCount = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(downCollisionOffset), downCollisionSize * 0.5f, collisionBuffer, transform.rotation, collisionLayer);
-        downCollision = collisionCount == 0 ? true : false;
+        downCollision = collisionCount != 0 && true;
 
         collisionCount = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(upCollisionOffset), upCollisionSize * 0.5f, collisionBuffer, transform.rotation, collisionLayer);
-        upCollision = collisionCount == 0 ? true : false;
+        upCollision = collisionCount != 0 && true;
 
         isDetectLedge = false;
 
@@ -62,6 +62,7 @@ public class LedgeChecker : MonoBehaviour
                 isDetectLedge = true;
             }
         }
+       
 
 
         //foreach (GameObject obj in collider1.collidedObjects)
@@ -111,8 +112,10 @@ public class LedgeChecker : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.137f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
-        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.3f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
+        //Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.137f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
+        //Gizmos.DrawWireCube(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.3f, 0.377f)), new Vector3(0.4f, 0.15f, 1f));
+        DebugCastDetection.Instance.DebugWireCube(transform.position + transform.TransformDirection(downCollisionOffset),transform, downCollisionSize,Color.red);
+        DebugCastDetection.Instance.DebugWireCube(transform.position + transform.TransformDirection(upCollisionOffset),transform, upCollisionSize,Color.red);
     }
 }
 
