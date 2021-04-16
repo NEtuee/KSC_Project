@@ -43,8 +43,23 @@ public class EMPGun : MonoBehaviour
         }
         
         GameManager.Instance.cameraManager.GenerateRecoilImpulse();
-        GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
+        //GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
+        //GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
 
+        if (damage <=40f)
+        {
+            GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
+        }
+        else if (damage <= 80f)
+        {
+            GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
+        }   
+        else if (damage <= 120f)
+        {
+            GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
+        }
+        
+        
         if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         {
             GameManager.Instance.effectManager.Active("LaserHit",hit.point);

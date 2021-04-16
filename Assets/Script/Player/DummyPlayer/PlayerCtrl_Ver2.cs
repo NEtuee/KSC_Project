@@ -32,7 +32,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public enum ClimbingJumpDirection
     {
-        Up,Left,Right,UpLeft,UpRight
+        Up=0,Left,Right,UpLeft,UpRight,Falling
     }
 
     public enum EMPLaunchType
@@ -60,7 +60,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float currentSpeed;
     [SerializeField] private float prevSpeed;
     [SerializeField] private float rotateSpeed = 6.0f;
-    [Range(0, 5)] [SerializeField] private float fallingControlSenstive = 1f;
+    [Range(0, 5)] [SerializeField] private float fallingControlSensitive = 1f;
     [SerializeField] private float horizonWeight = 0.0f;
     [SerializeField] private float rotAngle = 0.0f;
     [SerializeField] private float airRotateSpeed = 2.5f; 
@@ -292,6 +292,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.ReadyGrab:
                 {
+                    if (InputReleaseGrab())
+                       return;
+                
                     if (isCanReadyClimbingCancel == true && (inputVertical != 0 || inputHorizontal != 0))
                     {
                         animator.SetTrigger("ReadyClimbCancel");
@@ -359,7 +362,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         animator.SetBool("IsGround", movement.isGrounded);
 
-        if (state != PlayerState.Grab && state != PlayerState.HangLedge && state != PlayerState.HangEdge && state != PlayerState.ClimbingJump && movement.isGrounded == false)
+        if (state != PlayerState.Grab && state != PlayerState.HangLedge && state != PlayerState.HangEdge && state != PlayerState.ClimbingJump && movement.isGrounded == false && state != PlayerState.ReadyGrab)
         {
             currentJumpPower -= gravity * deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);
@@ -579,7 +582,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         moveDir = transform.forward * currentSpeed;
 
                         Vector3 plusDir = ((camForward * inputVertical) + (camRight * inputHorizontal));
-                        movement.Move(plusDir * fallingControlSenstive);
+                        movement.Move(plusDir * fallingControlSensitive);
 
                         lookDir = ((camForward * inputVertical) + (camRight * inputHorizontal)).normalized;
                         if (lookDir != Vector3.zero)
@@ -968,6 +971,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         currentJumpPower = jumpPower;
         movement.Jump();
         prevSpeed = currentSpeed;
+        climbingJumpDirection = ClimbingJumpDirection.Up;
         ChangeState(PlayerState.Jump);
     }
 
@@ -1041,6 +1045,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.ReadyGrab:
                 {
                     animator.SetBool("IsGrab", true);
+                    animator.SetInteger("ReadyClimbNum",(int)climbingJumpDirection);
                     currentJumpPower = 0.0f;
                     currentSpeed = 0.0f;
 
@@ -1508,6 +1513,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 case PlayerState.Grab:
                 case PlayerState.HangEdge:
                 case PlayerState.HangLedge:
+                case PlayerState.ReadyGrab:
                     {
                         isClimbingMove = false;
                         isLedge = false;
@@ -1517,6 +1523,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         currentRot.z = 0.0f;
                         transform.rotation = Quaternion.Euler(currentRot);
 
+                        climbingJumpDirection = ClimbingJumpDirection.Falling;
+                        
                         ChangeState(PlayerState.Default);
 
                         movement.Detach();
