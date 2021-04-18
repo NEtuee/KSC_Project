@@ -1015,6 +1015,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.applyRootMotion = false;
                     animator.SetBool("IsGrab", false);
                     animator.SetBool("IsLedge", false);
+                    animator.SetTrigger("Landing");
                     footIK.EnableFeetIk();
                     handIK.DisableHandIK();
                     GameManager.Instance.stateManager.Visible(false);
