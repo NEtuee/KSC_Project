@@ -250,20 +250,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         UpdateInputValue(inputVertical, inputHorizontal);
 
-        if (InputManager.Instance.GetAction(KeybindingActions.RunToggle))
-        {
-            isRun = true;
-        }
-        else
-        {
-            isRun = false;
-        }
+        //if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+        //{
+        //    isRun = true;
+        //}
+        //else
+        //{
+        //    isRun = false;
+        //}
+
+        InputRun();
 
         switch (state)
         {
             case PlayerState.Default:
                 {
-                    if (InputManager.Instance.GetAction(KeybindingActions.Jump))
+                    if (InputManager.Instance.GetInput(KeybindingActions.Jump))
                     {
                         animator.SetTrigger("Jump");
                         return;
@@ -1436,7 +1438,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         Vector3 point1;
         RaycastHit hit;
-        if (InputManager.Instance.GetAction(KeybindingActions.Grab))
+        //if (InputManager.Instance.GetAction(KeybindingActions.Grab))
+        if(InputManager.Instance.GetInput(KeybindingActions.Grab))
         {
             point1 = transform.position + collider.center - transform.forward;
             //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
@@ -1518,7 +1521,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputReleaseGrab()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.ReleaseGrab))
+        //if (InputManager.Instance.GetAction(KeybindingActions.ReleaseGrab))
+        if(InputManager.Instance.GetRelease(KeybindingActions.Grab))
         {
             switch(state)
             {
@@ -1552,9 +1556,24 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         return false;
     }
 
+
+    private void InputRun()
+    {
+        if(InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+        {
+            isRun = true;
+        }
+
+        if(InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
+        {
+            isRun = false;
+        }
+    }
+
     private bool InputAiming()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.EMPAim))
+        //if (InputManager.Instance.GetAction(KeybindingActions.EMPAim))
+        if(InputManager.Instance.GetInput(KeybindingActions.EMPAim))
         {
             ChangeState(PlayerState.Aiming);
             ActiveAim(true);
@@ -1566,7 +1585,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputAimingRelease()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.EMPAimRelease))
+        //if (InputManager.Instance.GetAction(KeybindingActions.EMPAimRelease))
+        if(InputManager.Instance.GetRelease(KeybindingActions.EMPAim))
         {
             ChangeState(PlayerState.Default);
             ActiveAim(false);
@@ -1579,7 +1599,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputChargeShot()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
+        //if (InputManager.Instance.GetAction(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
+        if(InputManager.Instance.GetInput(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
         {
             int loadCount = (int)(chargeTime.Value);
             loadCount = loadCount > 3 ? 3 : loadCount;
@@ -1592,7 +1613,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputLedgeUp()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.Jump))
+        //if (InputManager.Instance.GetAction(KeybindingActions.Jump))
+        if(InputManager.Instance.GetInput(KeybindingActions.Jump))
         {
             if(currentVerticalValue == 1.0f)
             {
@@ -1621,7 +1643,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputClimbingJump()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.Jump))
+        if (InputManager.Instance.GetInput(KeybindingActions.Jump))
         {
             ChangeState(PlayerState.ReadyClimbingJump);
             return true;

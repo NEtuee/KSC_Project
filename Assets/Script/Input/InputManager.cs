@@ -26,18 +26,26 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    public class InputSet
+    {
+        public ActionResult GetInput;
+        public ActionResult GetRelease;
+    }
+
     public delegate bool ActionResult(KeybindingActions action);
 
     private static InputManager instance;
     [SerializeField] public KeyBindings keyBindings;
+    [SerializeField] public KeyBindingsToggle keyBindingsToggle;
     [SerializeField] private ControlMode controlMode;
     [SerializeField] private float joystickSenstive = 10f;
     [SerializeField] private float DebugAxis;
     private Dictionary<KeybindingActions, KeyCode> pc_keyDict = new Dictionary<KeybindingActions, KeyCode>();
     private Dictionary<KeybindingActions, GamepadControlSet> gamepad_keyDict = new Dictionary<KeybindingActions, GamepadControlSet>();
 
-    private Dictionary<KeybindingActions, KeybindingCheck> actionData = new Dictionary<KeybindingActions, KeybindingCheck>();
+    private Dictionary<KeybindingActions, KeybindingCheckToggle> actionData = new Dictionary<KeybindingActions, KeybindingCheckToggle>();
     private Dictionary<KeybindingActions, ActionResult> actionBinding = new Dictionary<KeybindingActions, ActionResult>();
+    private Dictionary<KeybindingActions, InputSet> actionBindingToggle = new Dictionary<KeybindingActions, InputSet>();
     private void Awake()
     {
         if (null == instance)
@@ -48,7 +56,8 @@ public class InputManager : MonoBehaviour
             //    gamepad_keyDict.Add(keyBindings.keybindingChecks[count].action, new GamepadControlSet(keyBindings.keybindingChecks[count].isAxis, keyBindings.keybindingChecks[count].gamepad, keyBindings.keybindingChecks[count].axisName));
             //}
 
-            InitializeKeyBind();
+            //InitializeKeyBind();
+            InitializeKeyBind_Toggle();
 
             instance = this;
 
@@ -82,121 +91,208 @@ public class InputManager : MonoBehaviour
         return actionBinding[action](action);
     }
 
-    public void InitializeKeyBind()
-    {
-        actionData.Clear();
-        actionBinding.Clear();
+    //public void InitializeKeyBind()
+    //{
+    //    actionData.Clear();
+    //    actionBinding.Clear();
 
-        for(int count = 0; count < keyBindings.keybindingChecks.Length; count++)
-        {
-            actionData.Add(keyBindings.keybindingChecks[count].action, keyBindings.keybindingChecks[count]);
+    //    for(int count = 0; count < keyBindings.keybindingChecks.Length; count++)
+    //    {
+    //        actionData.Add(keyBindings.keybindingChecks[count].action, keyBindings.keybindingChecks[count]);
             
-            switch(controlMode)
+    //        switch(controlMode)
+    //        {
+    //            case ControlMode.Keyboard:
+    //                {
+    //                    switch(keyBindings.keybindingChecks[count].keyboard.buttonType)
+    //                    {
+    //                        case ButtonType.GetKey:
+    //                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKey);
+    //                            break;
+    //                        case ButtonType.GetKeyDown:
+    //                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKeyDown);
+    //                            break;
+    //                        case ButtonType.GetKeyUp:
+    //                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKeyUp);
+    //                            break;
+    //                    }
+    //                }
+    //                break;
+    //            case ControlMode.DualShock:
+    //                {
+    //                    switch (keyBindings.keybindingChecks[count].dualshock.valueType)
+    //                    {
+    //                        case PadValueType.Button:
+    //                            {
+    //                                switch(keyBindings.keybindingChecks[count].dualshock.buttonType)
+    //                                {
+    //                                    case ButtonType.GetKeyDown:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKeyDown);
+    //                                        break;
+    //                                    case ButtonType.GetKey:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKey);
+    //                                        break;
+    //                                    case ButtonType.GetKeyUp:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKeyUp);
+    //                                        break;
+    //                                }
+    //                            }
+    //                            break;
+    //                        case PadValueType.Axis:
+    //                            {
+    //                                switch (keyBindings.keybindingChecks[count].dualshock.condition)
+    //                                {
+    //                                    case AxisCondition.Equal:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisEqual);
+    //                                        break;
+    //                                    case AxisCondition.NotEqual:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisNotEqual);
+    //                                        break;
+    //                                    case AxisCondition.Greater:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisGreater);
+    //                                        break;
+    //                                    case AxisCondition.Less:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisLess);
+    //                                        break;
+    //                                }
+    //                            }
+    //                            break;
+    //                    }
+    //                }
+    //                break;
+    //            case ControlMode.XboxPad:
+    //                {
+    //                    switch (keyBindings.keybindingChecks[count].xbox.valueType)
+    //                    {
+    //                        case PadValueType.Button:
+    //                            {
+    //                                switch (keyBindings.keybindingChecks[count].xbox.buttonType)
+    //                                {
+    //                                    case ButtonType.GetKeyDown:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKeyDown);
+    //                                        break;
+    //                                    case ButtonType.GetKey:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKey);
+    //                                        break;
+    //                                    case ButtonType.GetKeyUp:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKeyUp);
+    //                                        break;
+    //                                }
+    //                            }
+    //                            break;
+    //                        case PadValueType.Axis:
+    //                            {
+    //                                switch (keyBindings.keybindingChecks[count].xbox.condition)
+    //                                {
+    //                                    case AxisCondition.Equal:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisEqual);
+    //                                        break;
+    //                                    case AxisCondition.NotEqual:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisNotEqual);
+    //                                        break;
+    //                                    case AxisCondition.Greater:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisGreater);
+    //                                        break;
+    //                                    case AxisCondition.Less:
+    //                                        actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisLess);
+    //                                        break;
+    //                                }
+    //                            }
+    //                            break;
+    //                    }
+    //                }
+    //                break;
+    //        }
+    //    }
+    //}
+
+    public void InitializeKeyBind_Toggle()
+    {
+        actionBindingToggle.Clear();
+        actionData.Clear();
+
+        for (int count = 0; count < keyBindingsToggle.keybindingChecks.Length; count++)
+        {
+            actionData.Add(keyBindingsToggle.keybindingChecks[count].action, keyBindingsToggle.keybindingChecks[count]);
+
+            InputSet currentInputSet = new InputSet();
+
+            switch (controlMode)
             {
                 case ControlMode.Keyboard:
                     {
-                        switch(keyBindings.keybindingChecks[count].keyboard.buttonType)
-                        {
-                            case ButtonType.GetKey:
-                                actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKey);
-                                break;
-                            case ButtonType.GetKeyDown:
-                                actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKeyDown);
-                                break;
-                            case ButtonType.GetKeyUp:
-                                actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKeyUp);
-                                break;
-                        }
+                        currentInputSet.GetInput += BindKeyboard_GetKeyDown;
+                        if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                            currentInputSet.GetRelease += BindKeyboard_GetKeyUp;
+                        else
+                            currentInputSet.GetRelease += BindKeyboard_GetKeyDown;
                     }
                     break;
                 case ControlMode.DualShock:
                     {
-                        switch (keyBindings.keybindingChecks[count].dualshock.valueType)
+                        switch (keyBindingsToggle.keybindingChecks[count].dualshock.valueType)
                         {
                             case PadValueType.Button:
                                 {
-                                    switch(keyBindings.keybindingChecks[count].dualshock.buttonType)
-                                    {
-                                        case ButtonType.GetKeyDown:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKeyDown);
-                                            break;
-                                        case ButtonType.GetKey:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKey);
-                                            break;
-                                        case ButtonType.GetKeyUp:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKeyUp);
-                                            break;
-                                    }
+                                    currentInputSet.GetInput += BindDualShock_GetKeyDown;
+                                    if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                                        currentInputSet.GetRelease += BindDualShock_GetKeyUp;
+                                    else
+                                        currentInputSet.GetRelease += BindDualShock_GetKeyDown;
                                 }
                                 break;
                             case PadValueType.Axis:
-                                {
-                                    switch (keyBindings.keybindingChecks[count].dualshock.condition)
-                                    {
-                                        case AxisCondition.Equal:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisEqual);
-                                            break;
-                                        case AxisCondition.NotEqual:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisNotEqual);
-                                            break;
-                                        case AxisCondition.Greater:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisGreater);
-                                            break;
-                                        case AxisCondition.Less:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisLess);
-                                            break;
-                                    }
+                                {                                 
+                                    currentInputSet.GetInput += BindDualShock_AxisDown;
+                                    if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                                        currentInputSet.GetRelease += BindDualShock_AxisUp;
+                                    else
+                                        currentInputSet.GetRelease += BindDualShock_AxisDown;
                                 }
                                 break;
                         }
+
                     }
                     break;
                 case ControlMode.XboxPad:
                     {
-                        switch (keyBindings.keybindingChecks[count].xbox.valueType)
+                        switch (keyBindingsToggle.keybindingChecks[count].xbox.valueType)
                         {
                             case PadValueType.Button:
-                                {
-                                    switch (keyBindings.keybindingChecks[count].xbox.buttonType)
-                                    {
-                                        case ButtonType.GetKeyDown:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKeyDown);
-                                            break;
-                                        case ButtonType.GetKey:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKey);
-                                            break;
-                                        case ButtonType.GetKeyUp:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKeyUp);
-                                            break;
-                                    }
+                                {                                  
+                                    currentInputSet.GetInput += BindXbox_GetKeyDown;
+                                    if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                                        currentInputSet.GetRelease += BindXbox_GetKeyUp;
+                                    else
+                                        currentInputSet.GetRelease += BindXbox_GetKeyDown;
                                 }
                                 break;
                             case PadValueType.Axis:
-                                {
-                                    switch (keyBindings.keybindingChecks[count].xbox.condition)
-                                    {
-                                        case AxisCondition.Equal:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisEqual);
-                                            break;
-                                        case AxisCondition.NotEqual:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisNotEqual);
-                                            break;
-                                        case AxisCondition.Greater:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisGreater);
-                                            break;
-                                        case AxisCondition.Less:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisLess);
-                                            break;
-                                    }
+                                {                                  
+                                    currentInputSet.GetInput += BindXbox_AxisDown;
+                                    if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                                        currentInputSet.GetRelease += BindXbox_AxisUp;
+                                    else
+                                        currentInputSet.GetRelease += BindXbox_AxisDown;
                                 }
                                 break;
                         }
                     }
                     break;
             }
+            actionBindingToggle.Add(keyBindingsToggle.keybindingChecks[count].action, currentInputSet);
         }
     }
 
+    public bool GetInput(KeybindingActions actions)
+    {
+        return actionBindingToggle[actions].GetInput(actions);
+    }
+
+    public bool GetRelease(KeybindingActions actions)
+    {
+        return actionBindingToggle[actions].GetRelease(actions);
+    }
 
     public bool GetKeyDown(KeybindingActions action)
     {
@@ -340,24 +436,34 @@ public class InputManager : MonoBehaviour
         return Input.GetKeyUp(actionData[action].dualshock.key);
     }
 
-    private bool BindDualShock_AxisEqual(KeybindingActions action)
+    //private bool BindDualShock_AxisEqual(KeybindingActions action)
+    //{
+    //    return (Input.GetAxis(actionData[action].dualshock.axisName) == actionData[action].dualshock.value);
+    //}
+
+    //private bool BindDualShock_AxisNotEqual(KeybindingActions action)
+    //{
+    //    return (Input.GetAxis(actionData[action].dualshock.axisName) != actionData[action].dualshock.value);
+    //}
+
+    //private bool BindDualShock_AxisGreater(KeybindingActions action)
+    //{
+    //    return (Input.GetAxis(actionData[action].dualshock.axisName) > actionData[action].dualshock.value);
+    //}
+
+    //private bool BindDualShock_AxisLess(KeybindingActions action)
+    //{
+    //    return (Input.GetAxis(actionData[action].dualshock.axisName) < actionData[action].dualshock.value);
+    //}
+
+    private bool BindDualShock_AxisDown(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].dualshock.axisName) == actionData[action].dualshock.value);
+        return (Input.GetAxis(actionData[action].dualshock.axisName) < 0.9f && Input.GetAxis(actionData[action].dualshock.axisName) < 0.5f);
     }
 
-    private bool BindDualShock_AxisNotEqual(KeybindingActions action)
+    private bool BindDualShock_AxisUp(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].dualshock.axisName) != actionData[action].dualshock.value);
-    }
-
-    private bool BindDualShock_AxisGreater(KeybindingActions action)
-    {
-        return (Input.GetAxis(actionData[action].dualshock.axisName) > actionData[action].dualshock.value);
-    }
-
-    private bool BindDualShock_AxisLess(KeybindingActions action)
-    {
-        return (Input.GetAxis(actionData[action].dualshock.axisName) < actionData[action].dualshock.value);
+        return Input.GetAxis(actionData[action].dualshock.axisName) == 0.0f;
     }
     #endregion
 
@@ -377,24 +483,34 @@ public class InputManager : MonoBehaviour
         return Input.GetKeyUp(actionData[action].xbox.key);
     }
     
-    private bool BindXbox_AxisEqual(KeybindingActions action)
+    //private bool BindXbox_AxisEqual(KeybindingActions action)
+    //{
+    //    return (Input.GetAxis(actionData[action].xbox.axisName) == actionData[action].xbox.value);
+    //}
+
+    //private bool BindXbox_AxisNotEqual(KeybindingActions action)
+    //{
+    //    return (Input.GetAxis(actionData[action].xbox.axisName) != actionData[action].xbox.value);
+    //}
+
+    //private bool BindXbox_AxisGreater(KeybindingActions action)
+    //{
+    //    return (Input.GetAxis(actionData[action].xbox.axisName) > actionData[action].xbox.value);
+    //}
+
+    //private bool BindXbox_AxisLess(KeybindingActions action)
+    //{
+    //    return (Input.GetAxis(actionData[action].xbox.axisName) < actionData[action].xbox.value);
+    //}
+
+    private bool BindXbox_AxisDown(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].xbox.axisName) == actionData[action].xbox.value);
+        return (Input.GetAxis(actionData[action].xbox.axisName) < 0.9f && Input.GetAxis(actionData[action].xbox.axisName) < 0.5f);
     }
 
-    private bool BindXbox_AxisNotEqual(KeybindingActions action)
+    private bool BindXbox_AxisUp(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].xbox.axisName) != actionData[action].xbox.value);
-    }
-
-    private bool BindXbox_AxisGreater(KeybindingActions action)
-    {
-        return (Input.GetAxis(actionData[action].xbox.axisName) > actionData[action].xbox.value);
-    }
-
-    private bool BindXbox_AxisLess(KeybindingActions action)
-    {
-        return (Input.GetAxis(actionData[action].xbox.axisName) < actionData[action].xbox.value);
+        return Input.GetAxis(actionData[action].xbox.axisName) == 0.0f;
     }
     #endregion
 
