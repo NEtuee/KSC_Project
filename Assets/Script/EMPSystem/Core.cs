@@ -32,6 +32,12 @@ public class Core : Hitable
 
     public override void Hit(float damage)
     {
+        hp -= damage;
+
+        if (hp <= 0f)
+        {
+            Destroy();
+        }
     }
 
     public override void Hit(float damage, out bool isDestroy)

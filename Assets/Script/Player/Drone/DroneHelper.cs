@@ -15,6 +15,8 @@ public abstract class DroneHelper : MonoBehaviour
         root.SetHelper(this);
 
         root.timer.InitTimer("ScanCheckTimer");
+        root.timer.InitTimer("LevelTimer");
+        sceneStartTime = Time.time;
     }
 
     public void InitHelper(DroneHelperRoot root)
@@ -40,6 +42,17 @@ public abstract class DroneHelper : MonoBehaviour
         {
             tryScan = true;
             root.HelpEvent("Support_Scan");
+        }
+    }
+
+    protected void CheckLevelTime()
+    {
+        bool limit;
+        root.timer.IncreaseTimer("LevelTimer", 300.0f, out limit);
+        if (limit == true)
+        {
+            root.HelpEvent("Support_Level");
+            root.timer.InitTimer("LevelTimer",0.0f);
         }
     }
 }

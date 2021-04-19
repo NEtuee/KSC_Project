@@ -24,6 +24,8 @@ public class FMODSoundManager : MonoBehaviour
         _globalCache = new Dictionary<int, FMOD.Studio.PARAMETER_DESCRIPTION>();
 
         CreateCachedGlobalParams();
+        
+        //GameManager.Instance.AsynSceneManager.RegisterBeforeLoadOnStart(ReturnAllCache);
     }
 
     private void LateUpdate()
@@ -35,7 +37,7 @@ public class FMODSoundManager : MonoBehaviour
             {
                 if(!value[i].IsPlaying())
                 {
-                    _cacheMap[value[i].DataCode].Enqueue(value[i]);
+                    //_cacheMap[value[i].DataCode].Enqueue(value[i]);
                     ReturnCache(pair.Key,value[i]);
                     value.RemoveAt(i);
                 }
@@ -51,44 +53,64 @@ public class FMODSoundManager : MonoBehaviour
 
     public FMODUnity.StudioEventEmitter Play(int id, Vector3 localPosition,Transform parent)
     {
-        var emmiter = GetCache(id);
+        var emitter = GetCache(id);
 
-        emmiter.transform.SetParent(parent);
-        emmiter.transform.localPosition = localPosition;
-        emmiter.gameObject.SetActive(true);
+        emitter.transform.SetParent(parent);
+        emitter.transform.localPosition = localPosition;
+        emitter.gameObject.SetActive(true);
 
-        emmiter.Play();
+        emitter.Play();
 
-        AddActiveMap(id,emmiter);
+        AddActiveMap(id,emitter);
         
-        return emmiter;
+        return emitter;
     }
+
+    public void ReturnAllCache()
+    {
+        foreach(var pair in _activeMap)
+        {
+            var value = pair.Value;
+            for(int i = 0; i < value.Count; ++i)
+            {
+                value[i].Stop();
+                //_cacheMap[value[i].DataCode].Enqueue(value[i]);
+                value[i].transform.SetParent(gameObject.transform);
+                ReturnCache(pair.Key,value[i]);
+                value.RemoveAt(i);
+
+            }
+        }
+    }
+    
 
     public FMODUnity.StudioEventEmitter Play(int id, Vector3 position)
     {
-        var emmiter = GetCache(id);
+        var emitter = GetCache(id);
         
-        emmiter.transform.SetParent(null);
-        emmiter.transform.SetPositionAndRotation(position,Quaternion.identity);
-        emmiter.gameObject.SetActive(true);
+        emitter.transform.SetParent(null);
+        emitter.transform.SetPositionAndRotation(position,Quaternion.identity);
+        emitter.gameObject.SetActive(true);
 
-        emmiter.Play();
+        emitter.Play();
         
-        AddActiveMap(id,emmiter);
+        AddActiveMap(id,emitter);
 
-        return emmiter;
+        return emitter;
     }
 
-    public void AddActiveMap(int id, FMODUnity.StudioEventEmitter emmiter)
+    private void AddActiveMap(int id, FMODUnity.StudioEventEmitter emitter)
     {
         if(_activeMap.ContainsKey(id))
         {
-            _activeMap[id].Add(emmiter);
+            _activeMap[id].Add(emitter);
         }
         else
         {
-            var list = new List<FMODUnity.StudioEventEmitter>();
-            list.Add(emmiter);
+            var list = new List<FMODUnity.StudioEventEmitter>
+            {
+                emitter
+            };
             _activeMap.Add(id,list);
         }
     }
@@ -112,20 +134,20 @@ public class FMODSoundManager : MonoBehaviour
     public void SetGlobalParam(int id, float value)
     {
         var desc = FindGlobalParamDesc(id);
-        FMOD.RESULT result = FMODUnity.RuntimeManager.StudioSystem.setParameterByID(desc.id, value);
+        var result = FMODUnity.RuntimeManager.StudioSystem.setParameterByID(desc.id, value);
         if(result != FMOD.RESULT.OK)
         {
             Debug.Log("global parameter not found");
         }
     }
 
-    public void ReturnCache(int id, FMODUnity.StudioEventEmitter emmiter)
+    private void ReturnCache(int id, FMODUnity.StudioEventEmitter emitter)
     {
-        emmiter.gameObject.SetActive(false);
-        _cacheMap[id].Enqueue(emmiter);
+        emitter.gameObject.SetActive(false);
+        _cacheMap[id].Enqueue(emitter);
     }
 
-    public FMODUnity.StudioEventEmitter GetCache(int id)
+    private FMODUnity.StudioEventEmitter GetCache(int id)
     {
         if(!_cacheMap.ContainsKey(id) || _cacheMap[id].Count == 0)
         {
@@ -136,7 +158,7 @@ public class FMODSoundManager : MonoBehaviour
         return _cacheMap[id].Dequeue();
     }
 
-    public void CreateSoundCacheItem(int id,int count,bool active = false)
+    private void CreateSoundCacheItem(int id,int count,bool active = false)
     {
         var sound = FindSoundInfo(id);
         if(sound == null)
@@ -165,7 +187,7 @@ public class FMODSoundManager : MonoBehaviour
         }
     }
 
-    public FMOD.Studio.PARAMETER_DESCRIPTION FindGlobalParamDesc(int id)
+    private FMOD.Studio.PARAMETER_DESCRIPTION FindGlobalParamDesc(int id)
     {
         if(_globalCache.ContainsKey(id))
         {
@@ -173,12 +195,12 @@ public class FMODSoundManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("global paramaeter does not exists");
+            Debug.Log("global parameter does not exists");
             return default(FMOD.Studio.PARAMETER_DESCRIPTION);
         }
     }
 
-    public SoundInfoItem.SoundInfo FindSoundInfo(int id)
+    private SoundInfoItem.SoundInfo FindSoundInfo(int id)
     {
         if(createSoundMap)
         {
@@ -196,13 +218,13 @@ public class FMODSoundManager : MonoBehaviour
         }
     }
 
-    public void CreateCachedGlobalParams()
+    private void CreateCachedGlobalParams()
     {
         var global = infoItem.FindSound(0);
         
         foreach(var item in global.parameters)
         {
-            FMOD.RESULT result = FMODUnity.RuntimeManager.StudioSystem.getParameterDescriptionByName(item.name, out var desc);
+            var result = FMODUnity.RuntimeManager.StudioSystem.getParameterDescriptionByName(item.name, out var desc);
 
             if(result != FMOD.RESULT.OK)
             {
@@ -214,7 +236,7 @@ public class FMODSoundManager : MonoBehaviour
         }
     }
 
-    public void CreateSoundMap()
+    private void CreateSoundMap()
     {
         if(_soundMap != null)
         {
@@ -223,11 +245,11 @@ public class FMODSoundManager : MonoBehaviour
 
         _soundMap = new Dictionary<int, SoundInfoItem.SoundInfo>();
 
-        var datas = infoItem.soundData;
+        var data = infoItem.soundData;
 
-        foreach(var data in datas)
+        foreach(var d in data)
         {
-            _soundMap.Add(data.id,data);
+            _soundMap.Add(d.id,d);
         }
     }
 }

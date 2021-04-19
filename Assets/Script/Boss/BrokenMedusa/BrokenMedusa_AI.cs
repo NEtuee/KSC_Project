@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,11 +44,14 @@ public class BrokenMedusa_AI : IKBossBase
     private float _direction;//1 = right, -1 = left
 
     public UnityEvent scannedEvent;
+    public UnityEvent whenSearch;
     public UnityEvent deadEvent;
 
     public void Start()
     {
         Initialize();
+        GetSoundManager();
+        SetLegHitGroundSound(1512);
         
         graphAnimator.Play("UpDown",body);
 
@@ -60,9 +64,22 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void Update()
     {
-        if (GameManager.Instance.PAUSE == true)
+        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
             return;
 
+        UpdateProcess(Time.deltaTime);
+    }
+
+    public void FixedUpdate()
+    {
+        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+            return;
+        
+        UpdateProcess(Time.fixedDeltaTime);
+    }
+
+    private void UpdateProcess(float deltaTime)
+    {
         _timeCounter.IncreaseTimer("timer",1f,out bool timeLimit);
         if(!timeLimit)
         {
@@ -89,7 +106,7 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.LockOnLook)
         {
-            LookTarget_Head();
+            LookTarget_Head(deltaTime);
             if(lookDistance > _targetDistance)
             {
                 UpdateMoveLine();
@@ -101,35 +118,30 @@ public class BrokenMedusa_AI : IKBossBase
                 ChangeState(State.SearchIdle);
             }
 
-            FrontMoveProgress();
+            FrontMoveProgress(deltaTime);
         }
         else if(currentState == State.LockOnMove)
         {
-            LookLineForward_Body();
-            LineMove();
-
+            LookLineForward_Body(deltaTime);
+            LineMove(deltaTime);
+            
             if(lookDistance < _targetDistance)
                 ChangeState(State.LockOnLook);
-
+            
             if(!IsOnGrounded())
             {
                 ChangeState(State.SearchIdle);
             }
 
-            FrontMoveProgress();
-
-            // if(_targetDistance >= minimumTargetDistance)
-            // {
-            //     ChangeState(State.LockOnFrontWalk);
-            // }
+            FrontMoveProgress(deltaTime);
         }
         else if(currentState == State.LockOnFrontWalk)
         {
-            TargetFrontMove();
+            TargetFrontMove(deltaTime);
         }
         else if(currentState == State.Scanned)
         {
-            if(LookTarget_Head())
+            if(LookTarget_Head(deltaTime))
             {
                 if(!scanner.scaning)
                 {
@@ -156,7 +168,7 @@ public class BrokenMedusa_AI : IKBossBase
         else if(currentState == State.SearchIdle)
         {
             _timeCounter.IncreaseTimer("SearchIdle",1f,out bool limit);
-            CenterMove();
+            CenterMove(deltaTime);
             if(limit)
             {
                 ChangeState(State.SearchScan);
@@ -164,7 +176,7 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.SearchRotate)
         {
-            BodyTurn(false);
+            BodyTurn(false,deltaTime);
             //BodyRotateForHead();
 
             var angle = Vector3.Angle(_searchDirection,head.forward);
@@ -208,11 +220,28 @@ public class BrokenMedusa_AI : IKBossBase
 
             this.enabled = false;
         }
-
     }
 
     public void ChangeState(State state)
     {
+        State prevState = currentState;
+
+        switch(prevState)
+        {
+            case State.LockOnLook:
+                {
+                    if(state != State.LockOnMove)
+                    whenSearch?.Invoke();
+                }
+                break;
+            case State.LockOnMove:
+                {
+                    if (state != State.LockOnLook)
+                        whenSearch?.Invoke();
+                }
+                break;
+        }
+
         switch(state)
         {
             case State.Scanned:
@@ -249,10 +278,13 @@ public class BrokenMedusa_AI : IKBossBase
     public void Hit()
     {
         graphAnimator.Play("Hit",body);
+        _soundManager.Play(1701,transform.position);
     }
 
     public void Dead()
     {
+        _soundManager.Play(1510,transform.position);
+        _soundManager.Play(1501,transform.position);
         ChangeState(State.Dead);
     }
 
@@ -265,12 +297,12 @@ public class BrokenMedusa_AI : IKBossBase
         }
     }
 
-    public void FrontMoveProgress()
+    public void FrontMoveProgress(float deltaTime)
     {
         _timeCounter.IncreaseTimer("FrontWalk_Init",4f,out bool limit);
         if(limit)
         {
-            TargetFrontMove();
+            TargetFrontMove(deltaTime);
             var timelimit = 1.2f;
             timelimit = _targetDistance >= 20f ? 4f : timelimit;
             _timeCounter.IncreaseTimer("FrontWalk",timelimit,out limit);
@@ -289,6 +321,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void ScanForward()
     {
+        _soundManager.Play(1511,transform.position);
         scanner.SetHeight(transform.position.y + scanYLimit);
         scanner.ScanSetup(transform.position,head.forward);
     }
@@ -383,26 +416,26 @@ public class BrokenMedusa_AI : IKBossBase
         }
     }
 
-    public void LineMove()
+    public void LineMove(float deltaTime)
     {
         if(_pointDistance >= 1f)
         {
-            Move(_moveLine, (_pointDistance * 4f) * _direction);
+            Move(_moveLine, (_pointDistance * 4f) * _direction, deltaTime);
         }
     }
 
-    public bool LookTarget_Head()
+    public bool LookTarget_Head(float deltaTime)
     {
-        return HeadLook((_target.position - transform.position));
+        return HeadLook((_target.position - transform.position),deltaTime);
         //BodyLook((_target.position - transform.position));
     }
 
-    public void LookLineForward_Body()
+    public void LookLineForward_Body(float deltaTime)
     {
         var dir = Vector3.Cross(transform.transform.up,_moveLine).normalized;
 
-        HeadLook(dir);
-        BodyLook(dir);
+        HeadLook(dir,deltaTime);
+        BodyLook(dir,deltaTime);
     }
 
     public void UpdatePerpendicularPoint()
@@ -429,15 +462,15 @@ public class BrokenMedusa_AI : IKBossBase
         _moveLine = Vector3.Cross(direction,Vector3.up);
     }
 
-    public override bool Move(Vector3 direction, float speed, float legSpeed = 4f)
+    public override bool Move(Vector3 direction, float speed, float deltaTime,float legSpeed = 4f)
     {
-        if(base.Move(direction,speed,legSpeed))
-            body.localRotation = body.localRotation * Quaternion.Euler(0f,0f,speed * Time.deltaTime * 10f);
+        if(base.Move(direction,speed,deltaTime,legSpeed))
+            body.localRotation = body.localRotation * Quaternion.Euler(0f,0f,speed * deltaTime * 10f);
         
         return true;
     }
 
-    public bool HeadLook(Vector3 direction)
+    public bool HeadLook(Vector3 direction,float deltaTime)
     {
         var plane = Vector3.ProjectOnPlane(direction,head.up).normalized;
         var headAngle = Vector3.SignedAngle(head.forward,plane,head.up);
@@ -445,49 +478,49 @@ public class BrokenMedusa_AI : IKBossBase
         //head.RotateAround(head.position,head.up,headAngle);
         if(MathEx.abs(headAngle) >= 1f)
         {
-            HeadTurn(headAngle > 0);
+            HeadTurn(headAngle > 0,deltaTime);
         }
         else
         {
             look = true;
         }
 
-        BodyRotateForHead();
+        BodyRotateForHead(deltaTime);
 
         return look;
         
     }
 
-    public void BodyLook(Vector3 direction)
+    public void BodyLook(Vector3 direction, float deltaTime)
     {
         var plane = Vector3.ProjectOnPlane(direction,transform.up).normalized;
         var bodyAngle = Vector3.SignedAngle(transform.forward,plane,transform.up);
 
         if(MathEx.abs(bodyAngle) >= 1f)
         {
-            BodyTurn(bodyAngle > 0);
+            BodyTurn(bodyAngle > 0,deltaTime);
         }
     }
 
-    public void HeadTurn(bool isLeft)
+    public void HeadTurn(bool isLeft, float deltaTime)
     {
-        Turn(isLeft,head);
+        Turn(isLeft,head,deltaTime);
         //head.RotateAround(head.position,head.up,rotationSpeed * Time.deltaTime * (isLeft ? 1f : -1f));
     }
 
-    public void BodyRotateForHead()
+    public void BodyRotateForHead(float deltaTime)
     {
         //var angle = Vector3.Angle(transform.forward, head.forward);
         var angle = Vector3.SignedAngle(head.forward,transform.forward,head.up);
         if(MathEx.abs(angle) > headRotationLock)
         {
-            BodyTurn(Vector3.SignedAngle(head.forward,transform.forward,head.up) < 0);//_direction < 0);
+            BodyTurn(Vector3.SignedAngle(head.forward,transform.forward,head.up) < 0, deltaTime);//_direction < 0);
         }
     }
 
-    public void BodyTurn(bool isLeft)
+    public void BodyTurn(bool isLeft, float deltaTime)
     {
-        Turn(isLeft,transform);
+        Turn(isLeft,transform,deltaTime);
         //transform.RotateAround(transform.position,transform.up,rotationSpeed * Time.deltaTime * (isLeft ? 1f : -1f));
     }
 }

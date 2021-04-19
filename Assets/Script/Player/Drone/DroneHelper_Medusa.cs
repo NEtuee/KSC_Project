@@ -29,12 +29,18 @@ public class DroneHelper_Medusa : DroneHelper
         root.HelpEvent("CheckExit");
     }
 
+    public void ReleaseLockOnFlag()
+    {
+        root.HelpEvent("MD_ReleaseLockOn");
+    }
+
     public override void HelperUpdate()
     {
         if (root.active == false)
             return;
 
         CheckScan();
+        CheckLevelTime();
 
         if (root.helping == true)
         {

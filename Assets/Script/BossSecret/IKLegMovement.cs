@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class IKLegMovement : MonoBehaviour
 {
+    public delegate void LegHitToGround(Vector3 v);
+    
     public IKLegMovement oppositeLeg;
 
     public ParticlePool particlePool;
+    public LegHitToGround legHitToGround = (v) => { };
 
     public LayerMask groundLayer;
     public LayerMask playerLayer;
@@ -104,10 +107,10 @@ public class IKLegMovement : MonoBehaviour
                 _timer = 0;
                 _isMove = false;
 
-                if(particlePool != null)
+                if(ReferenceEquals(particlePool, null) == false)
                     particlePool.Active(pos,Quaternion.LookRotation(new Vector3(0f,0f,1f),hit.normal));
 
-
+                legHitToGround(pos);
             }
         }
         

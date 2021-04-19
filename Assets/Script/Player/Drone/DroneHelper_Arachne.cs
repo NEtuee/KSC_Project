@@ -22,7 +22,6 @@ public class DroneHelper_Arachne : DroneHelper
     private void Start()
     {
         base.Start();
-        sceneStartTime = Time.time;
 
         root.timer.InitTimer("DownHintTimer");
     }
@@ -34,6 +33,7 @@ public class DroneHelper_Arachne : DroneHelper
             return;
 
         CheckScan();
+        CheckLevelTime();
 
         if (arachneDeadCheck == false)
         {
@@ -135,5 +135,12 @@ public class DroneHelper_Arachne : DroneHelper
     public void ArachneDeadFlag()
     {
         arachneDeadCheck = true;
+        StartCoroutine(LateEnd());
+    }
+
+    IEnumerator LateEnd()
+    {
+        yield return new WaitForSeconds(5f);
+        GameManager.Instance.endBackGround.SetActive(true);
     }
 }

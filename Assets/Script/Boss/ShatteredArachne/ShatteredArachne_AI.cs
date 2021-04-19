@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class ShatteredArachne_AI : IKPathFollowBossBase
 {
@@ -72,6 +74,22 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
 
         UpdateHandIK();
 
+        if (GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
+            return;
+        
+        UpdateProcess(Time.deltaTime);
+    }
+
+    private void FixedUpdate()
+    {
+        if (GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+            return;
+        
+        UpdateProcess(Time.fixedDeltaTime);
+    }
+
+    private void UpdateProcess(float deltaTime)
+    {
         if(currentState == State.Idle)
         {
             _timeCounter.IncreaseTimer("IdleTime",out var limit);
@@ -82,7 +100,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
         }
         else if(currentState == State.Move)
         {
-            FollowPath();
+            FollowPath(deltaTime);
             Push(10f,250f);
 
             _timeCounter.IncreaseTimer("PickMoveTime",out var limit);
@@ -121,7 +139,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
             }
 
             SetTarget(_targetTransform.position);
-            Move(transform.forward,_bombPickSpeed);
+            Move(transform.forward,_bombPickSpeed,deltaTime);
         }
         else if(currentState == State.PickBomb)
         {
@@ -161,7 +179,7 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
                 ChangeState(State.Move);
             }
 
-            FollowPath();
+            FollowPath(deltaTime);
             if(_pathArrived)
             {
                 ChangeState(State.ThrowBomb);
@@ -248,8 +266,6 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
             }
         }
     }
-
-
 
 
     public void ChangeState(State state)
@@ -470,6 +486,4 @@ public class ShatteredArachne_AI : IKPathFollowBossBase
             handFollowTarget[i].position = handPosOrigin[i].position;
         }
     }
-
-    
 }
