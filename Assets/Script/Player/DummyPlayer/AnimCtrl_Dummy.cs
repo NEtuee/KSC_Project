@@ -117,4 +117,9 @@ public class AnimCtrl_Dummy : MonoBehaviour
     {
         owner.isCanReadyClimbingCancel = true;
     }
+
+    private void CanClimbingCancel()
+    {
+        owner.SetCanClimbingCancel(true);
+    }
 }

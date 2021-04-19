@@ -17,6 +17,8 @@ public class MenuManager : MonoBehaviour
 
     public GameObject crossHair;
 
+    public GameObject keyCustomMenuDummy;
+
     private Stack<EscMenu> menuPopup = new Stack<EscMenu>();
 
     private bool isMenuBlend = false;
@@ -36,6 +38,11 @@ public class MenuManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && isMenuBlend == false)
         {
             InputEsc();
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            keyCustomMenuDummy.SetActive(!keyCustomMenuDummy.activeSelf);
         }
     }
 

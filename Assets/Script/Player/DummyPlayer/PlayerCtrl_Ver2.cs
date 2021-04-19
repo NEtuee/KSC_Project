@@ -52,6 +52,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private bool isLedge = false;
     [SerializeField] private Transform headTransfrom;
     [SerializeField] public bool isCanReadyClimbingCancel = false;
+    [SerializeField] private bool isCanClimbingCancel = false;
 
     [Header("Movement Speed Value")]
     [SerializeField] private float walkSpeed = 15.0f;
@@ -288,6 +289,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     if (InputReleaseGrab())
                         return;
+
+                    if (isCanClimbingCancel == true)
+                    {
+                        if (currentVerticalValue != 0.0f || currentHorizontalValue != 0.0f)
+                        {
+                            animator.SetTrigger("ClimbingCancel");
+                            isCanClimbingCancel = false;
+                        }
+                    }
                 }
                 break;
             case PlayerState.ReadyGrab:
@@ -1052,6 +1062,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     //handIK.ActiveHandIK(true);
                     handIK.ActiveLedgeIK(false);
+                    footIK.DisableFeetIk();
                     isCanReadyClimbingCancel = false;
 
                     currentVerticalValue = 0.0f;
@@ -1652,7 +1663,21 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     #endregion
 
     #region 셋터
-    public void SetClimbMove(bool move) { isClimbingMove = move; }
+
+    public void SetClimbMove(bool move)
+    {
+        isClimbingMove = move;
+        if (move == false)
+        {
+            isCanClimbingCancel = false;
+        }
+    }
+
+    public void SetCanClimbingCancel(bool result)
+    {
+        isCanClimbingCancel = result;
+        isClimbingMove = false;
+    }
 
     #endregion
 
