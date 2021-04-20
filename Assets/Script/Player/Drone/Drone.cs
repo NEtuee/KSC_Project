@@ -25,6 +25,8 @@ public class Drone : MonoBehaviour
     private Transform playerHead;
     private PlayerCtrl_Ver2 player;
 
+    private DroneHelperRoot droneHelperRoot;
+
     public delegate void WhenAimHelp();
     public WhenAimHelp whenAimHelp;
     public delegate void WhenHelp();
@@ -36,6 +38,7 @@ public class Drone : MonoBehaviour
         mainCam = Camera.main.transform;
         playerHead = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head);
         player = (PlayerCtrl_Ver2)GameManager.Instance.player;
+        droneHelperRoot = GetComponent<DroneHelperRoot>();
     }
 
     // Update is called once per frame
@@ -108,7 +111,7 @@ public class Drone : MonoBehaviour
 
 
                     Vector3 targetPosition; 
-                    if(player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab)
+                    if(player.IsNowClimbingBehavior() == false)
                         targetPosition= (camForward * helpOffset.z + camRight * helpOffset.x + Vector3.up * helpOffset.y) + target.position;
                     else
                         targetPosition = (target.forward * helpGrabStateOffset.z + target.right * helpGrabStateOffset.x + Vector3.up * helpGrabStateOffset.y) + target.position;
@@ -240,4 +243,12 @@ public class Drone : MonoBehaviour
     }
 
     public DroneState GetState() { return state; }
+
+    public void DroneHelpCall(string key)
+    {
+        if(ReferenceEquals(droneHelperRoot,null) == false)
+        {
+            droneHelperRoot.HelpEvent(key);
+        }
+    }
 }

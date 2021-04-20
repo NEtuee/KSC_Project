@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class ImmortalJirungE_AI : IKPathFollowBossBase
 {
@@ -41,12 +43,25 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
 
     public void Update()
     {
-        if (GameManager.Instance.PAUSE == true)
+        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
             return;
+        
+        UpdateProcess(Time.deltaTime);
+    }
 
-        if(currentState == State.WallMove)
+    public void FixedUpdate()
+    {
+        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+            return;
+        
+        UpdateProcess(Time.fixedDeltaTime);
+    }
+
+    public void UpdateProcess(float deltaTime)
+    {
+         if(currentState == State.WallMove)
         {
-            FollowPath();
+            FollowPath(deltaTime);
 
             _timeCounter.IncreaseTimer("wallMoveTime",out bool limit);
             if(limit)
@@ -59,7 +74,7 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
         {
             if(lowCheck)
             {
-                Move(transform.forward,mainSpeed);
+                Move(transform.forward,mainSpeed,deltaTime);
                 _targetDistance = Vector3.Distance(GameManager.Instance.player.transform.position,transform.position);
                 if(_targetDistance >= 20f)
                 {
@@ -68,7 +83,7 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
             }   
             else
             {
-                FollowPath();
+                FollowPath(deltaTime);
             }
 
             Collider[] playerColl = Physics.OverlapSphere(transform.position, 2.5f,targetLayer);
@@ -94,7 +109,7 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
         }
         else if(currentState == State.WallMoveExit)
         {
-            FollowPath();
+            FollowPath(deltaTime);
 
             _timeCounter.IncreaseTimer("wallMoveTime",out bool limit);
             if(limit)
@@ -112,7 +127,7 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
         {
             foreach(var body in bodys)
             {
-                body.AddForce(Vector3.down * 2000f * Time.deltaTime,ForceMode.Acceleration);
+                body.AddForce(Vector3.down * (2000f * Time.deltaTime),ForceMode.Acceleration);
             }
 
             _timeCounter.IncreaseTimer("stunTime",5,out bool limit);
@@ -130,7 +145,6 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
             }
         }
 
-        
     }
 
     public void Stun()
@@ -232,7 +246,7 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
         }
     }
 
-    public override bool Move(Vector3 direction, float speed, float legMovementSpeed = 4f)
+    public override bool Move(Vector3 direction, float speed, float deltaTime,float legMovementSpeed = 4f)
     {
         //transform.position += transform.forward * _movementSpeed * Time.deltaTime;
 
@@ -243,16 +257,16 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
             // var angle = Vector3.Angle(transform.forward,dir);
 
             //Turn(angle < 0,this.transform);
-            Turn(false,this.transform);
+            Turn(false,this.transform, deltaTime);
             speed *= 0.5f;
         }
         else if(LeftRayCheck(out hit))
         {
-            Turn(true,this.transform);
+            Turn(true,this.transform,deltaTime);
         }
         else if(RightRayCheck(out hit))
         {
-            Turn(false,this.transform);
+            Turn(false,this.transform,deltaTime);
         }
         else
         {
@@ -261,14 +275,14 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
             if(MathEx.abs(angle) > _turnAccuracy)
             {
                 if(angle > 0)
-                    Turn(true,this.transform);
+                    Turn(true,this.transform,deltaTime);
                 else
-                    Turn(false,this.transform);
+                    Turn(false,this.transform,deltaTime);
             }
         }
 
 
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += direction * (speed * Time.deltaTime);
         
 
         return true;

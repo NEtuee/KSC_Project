@@ -45,7 +45,9 @@ public class LoadingZone : MonoBehaviour
         {
             Debug.Log("TLQKF");
             GameManager.Instance.player.transform.SetParent(this.transform);
+            GameManager.Instance.followTarget.transform.SetParent(this.transform);
             Camera.main.transform.SetParent(this.transform);
+            
             DontDestroyOnLoad(this.gameObject);
         }
         else
@@ -77,8 +79,6 @@ public class LoadingZone : MonoBehaviour
         }
         
         GameManager.Instance.player.transform.SetParent(null);
-        Camera.main.transform.SetParent(null);
-        GameManager.Instance.followTarget.transform.SetParent(null);
         GameManager.Instance.followTarget.SetForceRotation(Camera.main.transform.rotation.eulerAngles);
 
         GameManager.Instance.cameraManager.RestoreDamping(0.1f);

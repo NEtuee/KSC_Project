@@ -268,24 +268,6 @@ public class PlayerAnimCtrl : MonoBehaviour
         owner.EndStagger();
     }
 
-    private void LeftHandTrace()
-    {
-        if(handIKCtrl != null)
-        {
-            //Debug.Log("LeftTrace");
-            handIKCtrl.EnableLeftTrace();
-        }
-    }
-
-    private void RightHandTrace()
-    {
-        if(handIKCtrl != null)
-        {
-            //Debug.Log("RightTrace");
-            handIKCtrl.EnableRightTrace();
-        }
-    }
-
     private void StartRopeClimbing(int left)
     {
         if(left == 1)

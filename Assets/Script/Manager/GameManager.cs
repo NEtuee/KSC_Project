@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public enum GameUpdate { Update,Fixed}
+
     public enum MenuState { MenuOn,MenuOff}
 
     public BulletTimeManager timeManager;
     public float killEventFov = 66f;
     public bool PAUSE = false;
+    public GameUpdate GAMEUPDATE;
     [SerializeField] public PlayerCtrl player;
     [SerializeField] public FollowTargetCtrl followTarget;
     [SerializeField] public UIManager uiManager;
@@ -22,6 +26,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EscMenu soundMenu;
     [SerializeField] public FMODSoundManager soundManager;
     [SerializeField] public StateManager stateManager;
+    [SerializeField] public TextMeshProUGUI sceneNameText;
+    [SerializeField] public AsynSceneManager AsynSceneManager;
+    [SerializeField] public GameObject endBackGround;
+    [SerializeField] public EffectManager effectManager;
     public Transform bossTransform;
 
     public List<LockOnTarget> lockOnTargets = new List<LockOnTarget>();
@@ -56,6 +64,15 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
+
+        if(((PlayerCtrl_Ver2)player).updateMethod == UpdateMethod.Update)
+        {
+            GAMEUPDATE = GameUpdate.Update;
+        }
+        else
+        {
+            GAMEUPDATE = GameUpdate.Fixed;
+        }
     }
 
     private void Start()
@@ -73,6 +90,34 @@ public class GameManager : MonoBehaviour
         {
             lockOnTargets.Add(lockTarget.GetComponent<LockOnTarget>());
         }
+
+        StartCoroutine(LateStart());
+    }
+
+    private IEnumerator LateStart()
+    {
+        yield return new WaitForSeconds(1.0f);
+        AsynSceneManager.RegisterAfterLoad(() =>
+        {
+            switch (AsynSceneManager.currentStageManager.SceneTitle)
+            {
+                case "Outdoor_Main":
+                    sceneNameText.text = "지상";
+                    break;
+                case "DaddyLongLegs_Main":
+                    sceneNameText.text = "대디 롱 래그";
+                    break;
+                case "BrokenMedusa_main":
+                    sceneNameText.text = "고장난 메두사";
+                    break;
+                case "ImmortalJirungE_main":
+                    sceneNameText.text = "임모탈 지렁이";
+                    break;
+                case "ShatteredArachne_Main":
+                    sceneNameText.text = "조각난 아라크네";
+                    break;
+            }
+        });
     }
 
     private void Update()
@@ -112,6 +157,24 @@ public class GameManager : MonoBehaviour
         //            break;
         //    }
         //}
+
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            AsynSceneManager.LoadPrevlevel();
+            AsynSceneManager.currentStageManager.SetPlayerToPosition();
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            AsynSceneManager.LoadNextlevelFrom();
+            AsynSceneManager.currentStageManager.SetPlayerToPosition();
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            AsynSceneManager.LoadCurrentlevel();
+            AsynSceneManager.currentStageManager.SetPlayerToPosition();
+        }
     }
 
     public void SwitchMenuDone()

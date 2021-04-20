@@ -38,6 +38,11 @@ public class ParticlePool : MonoBehaviour
         _progressParticles.Add(particle);
     }
 
+    public void Init(int count = 1)
+    {
+        CreateCacheItems(count);
+    }
+
     private ParticleSystem GetCachedItem()
     {
         if(_cache.Count == 0)

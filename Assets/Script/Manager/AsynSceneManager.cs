@@ -52,8 +52,16 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadPrevlevel()
     {
-        _currentScene = levels[--currentLevel < 0 ? levels.Count - 1 : currentLevel];
+        currentLevel = (--currentLevel < 0 ? levels.Count - 1 : currentLevel);
+        _currentScene = levels[currentLevel];
         RegisterProgress();
+        StartCoroutine(SceneLoadingProgress(true));
+    }
+
+    public void LoadNextlevelFrom()
+    {
+        currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
+        _currentScene = levels[currentLevel];
         StartCoroutine(SceneLoadingProgress(true));
     }
 
@@ -67,6 +75,14 @@ public class AsynSceneManager : MonoBehaviour
 
     IEnumerator SceneLoadingProgress(bool setPos)
     {
+        Camera.main.transform.SetParent(null);
+        GameManager.Instance.followTarget.transform.SetParent(null);
+        GameManager.Instance.player.transform.SetParent(null);
+        
+        DontDestroyOnLoad(Camera.main.transform);
+        DontDestroyOnLoad(GameManager.Instance.followTarget.transform);
+        DontDestroyOnLoad(GameManager.Instance.player.transform);
+
         _beforeLoad();
 
         _loadedScenes = _unloadScenes.Count;
@@ -103,6 +119,14 @@ public class AsynSceneManager : MonoBehaviour
 
     IEnumerator LoadSceneCoroutine(bool setPos)
     {
+        Camera.main.transform.SetParent(null);
+        GameManager.Instance.followTarget.transform.SetParent(null);
+        GameManager.Instance.player.transform.SetParent(null);
+
+        DontDestroyOnLoad(Camera.main.transform);
+        DontDestroyOnLoad(GameManager.Instance.followTarget.transform);
+        DontDestroyOnLoad(GameManager.Instance.player.transform);
+
         AsyncOperation operation = SceneManager.LoadSceneAsync(_currentScene,LoadSceneMode.Additive);
         operation.allowSceneActivation = false;
         
@@ -114,10 +138,10 @@ public class AsynSceneManager : MonoBehaviour
             yield return null;
         }
 
-        currentStageManager = GameObject.FindObjectOfType<StageManager>();
+        var stage = GameObject.FindObjectOfType<StageManager>();
         _afterLoad();
 
-        Debug.Log(currentStageManager.SceneTitle);
+        Debug.Log(stage.SceneTitle);
 
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(_currentScene));
         _unloadScenes.Add(_currentScene);
@@ -126,11 +150,17 @@ public class AsynSceneManager : MonoBehaviour
 
         if(setPos)
         {
-            if(currentStageManager != null)
+            if(stage != null)
             {
-                GameObject.FindObjectOfType<StageManager>().SetPlayerToPosition();
+                GameManager.Instance.player.transform.SetParent(null);
+                DontDestroyOnLoad(GameManager.Instance.player.transform);
+                stage.SetPlayerToPosition();
+                GameManager.Instance.player.transform.SetParent(null);
+                DontDestroyOnLoad(GameManager.Instance.player.transform);
             }
         }
+
+        currentStageManager = stage;
     }
 
     public void RegisterBeforeLoadOnStart(del_SceneLoaded func){_beforeLoadRegisterLine.Add(func);}

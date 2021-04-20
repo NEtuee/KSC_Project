@@ -8,6 +8,7 @@ public class PlayerRePositionor : MonoBehaviour
     public UnityEvent whenFall;
     public Transform respawn;
     public Transform bip;
+
     public void Start()
     {
         bip = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
@@ -28,6 +29,7 @@ public class PlayerRePositionor : MonoBehaviour
         }
 
         whenFall.Invoke();
+
         // else if(coll.gameObject.layer == LayerMask.NameToLayer("Player"))
         // {
 

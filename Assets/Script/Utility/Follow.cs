@@ -16,6 +16,7 @@ public class Follow : MonoBehaviour
     [SerializeField] private float upOffset = 0.0f;
     [SerializeField] private float forwardOffset = 0.0f;
     [SerializeField] private bool billBoard = false;
+    [SerializeField] private float billBoardRotationSpeed = 6.0f;
     [SerializeField] private bool flip = false;
     [SerializeField] private bool interpolation;
     private Transform mainCam;
@@ -58,12 +59,12 @@ public class Follow : MonoBehaviour
 
         if (billBoard == false)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(target.forward), Time.fixedDeltaTime * 3f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(target.forward), Time.fixedDeltaTime * billBoardRotationSpeed);
             //transform.rotation = transform.rotation * Quaternion.AngleAxis(90.0f, transform.up);
         }
         else
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-(mainCam.position - transform.position)), Time.fixedDeltaTime * 3f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-(mainCam.position - transform.position)), Time.fixedDeltaTime * billBoardRotationSpeed);
         }
     }
 
@@ -100,12 +101,12 @@ public class Follow : MonoBehaviour
 
         if (billBoard == false)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(target.forward) * Quaternion.AngleAxis(180.0f, transform.up), Time.deltaTime * 3f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(target.forward) * Quaternion.AngleAxis(180.0f, transform.up), Time.deltaTime * billBoardRotationSpeed);
             //transform.rotation = transform.rotation * Quaternion.AngleAxis(90.0f, transform.up);
         }
         else
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-(mainCam.position - transform.position)), Time.deltaTime * 3f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-(mainCam.position - transform.position)), Time.deltaTime * billBoardRotationSpeed);
         }
     }
 }
