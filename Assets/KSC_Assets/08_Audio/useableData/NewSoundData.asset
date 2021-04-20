@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
   m_Name: NewSoundData
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 57dcc9ecc9950eb4f8936d569520b1b3, type: 3}
+  csvData: {fileID: 4900000, guid: f91709099811d144ebb21048425c9c42, type: 3}
   soundData:
   - path: global data
     id: 0
@@ -82,7 +82,7 @@ MonoBehaviour:
     id: 1010
     type: SFX
     parameters: []
-  - path: event:/PlayerCharacter/Weapon/PC_Laser_Fire
+  - path: event:/PlayerCharacter/Weapon/PC_Laser_Fire_1st
     id: 1011
     type: SFX
     parameters: []
@@ -98,6 +98,22 @@ MonoBehaviour:
       id: 10131
       min: 0
       max: 100
+  - path: event:/PlayerCharacter/Movement/Hit/PC_Down_Ground
+    id: 1014
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/Hit/PC_Hit_Metal
+    id: 1015
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/Standing/PC_Hand
+    id: 1016
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/Standing/PC_StandUp
+    id: 1017
+    type: SFX
+    parameters: []
   - path: event:/Drone/Movement/DR_Flying
     id: 1300
     type: SFX
@@ -192,5 +208,9 @@ MonoBehaviour:
     parameters: []
   - path: snapshot:/BGMVolume
     id: 4003
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/Local_Setting/DaddyLevelReverb
+    id: 4004
     type: Snapshot
     parameters: []

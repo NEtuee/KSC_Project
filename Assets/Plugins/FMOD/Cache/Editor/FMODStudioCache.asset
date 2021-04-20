@@ -78,8 +78,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 200
   Length: 2810
 --- !u!114 &-8666824198971837986
 MonoBehaviour:
@@ -96,7 +96,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Mob.bank
   Name: FmodBank_Mob
   StudioPath: bank:/Mob/FmodBank_Mob
-  lastModified: 637535862267804682
+  lastModified: 637544694410000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -182,6 +182,26 @@ MonoBehaviour:
     data1: 280802902
     data2: 3015445898
   Exists: 1
+--- !u!114 &-8567551469618698826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Test_Specializing_FMOD/PC_Charging
+  m_EditorClassIdentifier: 
+  Name: PC_Charging
+  Min: 0
+  Max: 100
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-8500903659113715444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,8 +242,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 2000
 --- !u!114 &-8057448859100830328
 MonoBehaviour:
@@ -318,8 +338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: snapshot:/MasterVolume
   guid: abbb8118cd421f4dabd6ef74d55473c7
-  Banks:
-  - {fileID: -5021835153761381509}
+  Banks: []
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
@@ -351,6 +370,29 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 8107
+--- !u!114 &-7748396509931733083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Movement/Hit/PC_Hit_Metal
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Movement/Hit/PC_Hit_Metal
+  guid: f3aa6dd792a38e4c809f8841f2bf4572
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1893
 --- !u!114 &-7709289218715429889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,6 +432,26 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 0
+--- !u!114 &-7661265494077231912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_Weapon_Fire/SoundCompressRecovery
+  m_EditorClassIdentifier: 
+  Name: SoundCompressRecovery
+  Min: 0
+  Max: 100
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-7661013675592255942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,8 +516,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 6358
 --- !u!114 &-7502257195118738623
 MonoBehaviour:
@@ -477,8 +539,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 4801
 --- !u!114 &-7492085022454518840
 MonoBehaviour:
@@ -726,8 +788,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 1557
 --- !u!114 &-6527006644828847132
 MonoBehaviour:
@@ -763,7 +825,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_JirungE.bank
   Name: FmodBank_JirungE
   StudioPath: bank:/Mob/FmodBank_JirungE
-  lastModified: 637535862267714563
+  lastModified: 637544694410000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -868,7 +930,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_PlayerCharacter.bank
   Name: FmodBank_PlayerCharacter
   StudioPath: bank:/Player/FmodBank_PlayerCharacter
-  lastModified: 637535862267884501
+  lastModified: 637544694420000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1062,6 +1124,26 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &-5827210123561921291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Test_Specializing_FMODSteam/PC_Charging
+  m_EditorClassIdentifier: 
+  Name: PC_Charging
+  Min: 0
+  Max: 100
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-5646371980126365797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1082,6 +1164,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-5493026865857250792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Movement/Standing/PC_Hand
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Movement/Standing/PC_Hand
+  guid: 7596aa46cc73734c9b5923cb4fa8c4dc
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 340
 --- !u!114 &-5422014118462631074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1120,8 +1225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: snapshot:/BGMVolume
   guid: eff2ee10c604af43bfd7503d05950efb
-  Banks:
-  - {fileID: -5021835153761381509}
+  Banks: []
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
@@ -1270,8 +1374,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 2763
 --- !u!114 &-5021835153761381509
 MonoBehaviour:
@@ -1288,7 +1392,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Master.bank
   Name: FmodBank_Master
   StudioPath: bank:/FmodBank_Master
-  lastModified: 637535862267724528
+  lastModified: 637544694410000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1312,6 +1416,29 @@ MonoBehaviour:
     data1: 2849294268
     data2: 2408353259
   Exists: 1
+--- !u!114 &-4731024085520670838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Weapon/PC_Weapon_Upgrade_1st
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Weapon/PC_Weapon_Upgrade_1st
+  guid: cda2bab732d8fa40a1b3a003772d7f4a
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-4716658338773438528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1347,7 +1474,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Drone.bank
   Name: FmodBank_Drone
   StudioPath: bank:/Player/FmodBank_Drone
-  lastModified: 637535862267704648
+  lastModified: 637544694410000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1386,7 +1513,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Ambient.bank
   Name: FmodBank_Ambient
   StudioPath: bank:/Other/FmodBank_Ambient
-  lastModified: 637535862267574552
+  lastModified: 637544694400000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1428,7 +1555,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Arachne.bank
   Name: FmodBank_Arachne
   StudioPath: bank:/Mob/FmodBank_Arachne
-  lastModified: 637535862267614537
+  lastModified: 637544694400000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1452,8 +1579,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 0
 --- !u!114 &-4220072509027212271
 MonoBehaviour:
@@ -1497,6 +1624,29 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 24929
+--- !u!114 &-4128029660627047220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Weapon/PC_Weapon_Upgrade_2nd
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Weapon/PC_Weapon_Upgrade_2nd
+  guid: fb460deab0089844bb2c76df7cd6a95d
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-3946471183628108041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1565,8 +1715,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 3236
 --- !u!114 &-3760658307187649025
 MonoBehaviour:
@@ -1691,8 +1841,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 1128
 --- !u!114 &-3463751573445583736
 MonoBehaviour:
@@ -1757,8 +1907,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 1128
 --- !u!114 &-3273288172628364679
 MonoBehaviour:
@@ -1804,6 +1954,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 1110
+--- !u!114 &-3258909592031625162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_Railgun_Charging/PC_Charging
+  m_EditorClassIdentifier: 
+  Name: PC_Charging
+  Min: 0
+  Max: 100
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-3219577783157738042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1844,8 +2014,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 1468
 --- !u!114 &-3047120982921037061
 MonoBehaviour:
@@ -1886,8 +2056,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 450
 --- !u!114 &-2703301356309087663
 MonoBehaviour:
@@ -2220,8 +2390,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 200
   Length: 2277
 --- !u!114 &-1641152429954897606
 MonoBehaviour:
@@ -2282,6 +2452,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-1445583320941857608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Movement/Hit/PC_Down_Ground
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Movement/Hit/PC_Down_Ground
+  guid: 44a7ffafde7f5547aa6580f85e3e8d59
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-1422633127248392453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2501,8 +2694,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 1083
 --- !u!114 &-826120430195118488
 MonoBehaviour:
@@ -2613,6 +2806,30 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-619008400777663468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Test_Specializing_FMODSteam
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Test_Specializing_FMODSteam
+  guid: 3fe11a2ffaec5141903279c555c729ea
+  Banks:
+  - {fileID: 1063484591266509654}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -5827210123561921291}
+  MinDistance: 1
+  MaxDistance: 100
+  Length: 10141
 --- !u!114 &-481051018457813709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2798,8 +3015,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 2763
 --- !u!114 &-21466496617380945
 MonoBehaviour:
@@ -2845,6 +3062,7 @@ MonoBehaviour:
   - {fileID: -8666824198971837986}
   - {fileID: -6126670350051478680}
   - {fileID: 7293183480586007849}
+  - {fileID: 1063484591266509654}
   EditorEvents:
   - {fileID: -6124697354610661422}
   - {fileID: 359433898742662828}
@@ -2857,10 +3075,6 @@ MonoBehaviour:
   - {fileID: -7517969810406638535}
   - {fileID: -122029795847290282}
   - {fileID: -848189413611234207}
-  - {fileID: 8923702519452860240}
-  - {fileID: 9213926417812726176}
-  - {fileID: -7774816059705806938}
-  - {fileID: -5399595920677435053}
   - {fileID: 1398806056361078001}
   - {fileID: -3103112026064264734}
   - {fileID: 1775924576511278825}
@@ -2870,7 +3084,6 @@ MonoBehaviour:
   - {fileID: -1666437094276605032}
   - {fileID: 7897313035152053291}
   - {fileID: -2912222169421369423}
-  - {fileID: 8833915050830366148}
   - {fileID: 8895674064096670277}
   - {fileID: -8415476760832167042}
   - {fileID: 1854616466565324662}
@@ -2883,6 +3096,24 @@ MonoBehaviour:
   - {fileID: 4328411754106530124}
   - {fileID: -8822166376360120688}
   - {fileID: 9105620082605525767}
+  - {fileID: 7981542204138451245}
+  - {fileID: 5179636796359676773}
+  - {fileID: 7591938862468182636}
+  - {fileID: 6705022800972054683}
+  - {fileID: 3115186861553349218}
+  - {fileID: 3001611490879657655}
+  - {fileID: 379459882971471301}
+  - {fileID: -1445583320941857608}
+  - {fileID: 7639807485219018424}
+  - {fileID: -5493026865857250792}
+  - {fileID: 7102114952521182018}
+  - {fileID: 3588130247684197764}
+  - {fileID: 1939009106670367297}
+  - {fileID: -4731024085520670838}
+  - {fileID: -7748396509931733083}
+  - {fileID: -4128029660627047220}
+  - {fileID: -619008400777663468}
+  - {fileID: 6298649740956804136}
   EditorParameters:
   - {fileID: -7453750545899047080}
   - {fileID: -1974181441772043774}
@@ -2893,7 +3124,7 @@ MonoBehaviour:
   - {fileID: -5021835153761381509}
   StringsBanks:
   - {fileID: 4824111326059105211}
-  stringsBankWriteTime: 637535862267744483
+  stringsBankWriteTime: 637544694410000000
   cacheVersion: 6
 --- !u!114 &50726842375340322
 MonoBehaviour:
@@ -2955,8 +3186,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 200
   Length: 6939
 --- !u!114 &359433898742662828
 MonoBehaviour:
@@ -3004,6 +3235,29 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 4100
+--- !u!114 &379459882971471301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Weapon/PC_Laser_Fire_3rd
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Weapon/PC_Laser_Fire_3rd
+  guid: 3a6ac5076d4d5443a1039e3b91fd55fc
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1750
 --- !u!114 &383550790775463524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3024,8 +3278,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 0
 --- !u!114 &525716075199659500
 MonoBehaviour:
@@ -3238,6 +3492,25 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &1063484591266509654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Test.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/KSC_Assets/08_Audio/Bank/Test.bank
+  Name: Test
+  StudioPath: bank:/Test
+  lastModified: 637544694420000000
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &1244177887958424741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3281,8 +3554,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 2704
 --- !u!114 &1533255002959386786
 MonoBehaviour:
@@ -3415,8 +3688,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 1557
 --- !u!114 &1854616466565324662
 MonoBehaviour:
@@ -3438,8 +3711,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 0
 --- !u!114 &1855539459513260140
 MonoBehaviour:
@@ -3500,6 +3773,30 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &1939009106670367297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Weapon/PC_Railgun_Charging
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Weapon/PC_Railgun_Charging
+  guid: cbdaf6002dd24443a884b33fcf3d8ffa
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -3258909592031625162}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &1966041006138128655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3686,6 +3983,29 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &3001611490879657655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/Global_Option/BGMVolume
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Global_Option/BGMVolume
+  guid: eff2ee10c604af43bfd7503d05950efb
+  Banks:
+  - {fileID: -5021835153761381509}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
 --- !u!114 &3077220858935337503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3725,6 +4045,30 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &3115186861553349218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/Global_Effect/PC_Weapon_Fire
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Global_Effect/PC_Weapon_Fire
+  guid: c3ff512ea67dc542b4bd968146c89ce0
+  Banks:
+  - {fileID: -5021835153761381509}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -7661265494077231912}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
 --- !u!114 &3290909262394124516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3851,6 +4195,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &3588130247684197764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Movement/Standing/PC_StandUp
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Movement/Standing/PC_StandUp
+  guid: bb944db87b38b348aa97512cf114a9ab
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 627
 --- !u!114 &3905902961858396787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3954,8 +4321,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 200
   Length: 2868
 --- !u!114 &4107111921317599790
 MonoBehaviour:
@@ -4017,8 +4384,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 2000
 --- !u!114 &4228643911605746208
 MonoBehaviour:
@@ -4102,8 +4469,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 0
 --- !u!114 &4477022026936334949
 MonoBehaviour:
@@ -4143,11 +4510,11 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Master.strings.bank
   Name: FmodBank_Master.strings
   StudioPath: bank:/FmodBank_Master.strings
-  lastModified: 637535862267744483
+  lastModified: 637544694410000000
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 3426
+    Value: 4436
   Exists: 1
 --- !u!114 &4947918670988896732
 MonoBehaviour:
@@ -4229,6 +4596,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &5179636796359676773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/Global_Option/AmbVolume
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Global_Option/AmbVolume
+  guid: 64b5eb78d8b35f478f4bf941835378a7
+  Banks:
+  - {fileID: -5021835153761381509}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
 --- !u!114 &5370279300566150934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4272,8 +4662,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 240
 --- !u!114 &5471540698848451913
 MonoBehaviour:
@@ -4333,7 +4723,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Daddy.bank
   Name: FmodBank_Daddy
   StudioPath: bank:/Mob/FmodBank_Daddy
-  lastModified: 637535862267634634
+  lastModified: 637544694400000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -4403,8 +4793,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 2115
 --- !u!114 &5901014661864325780
 MonoBehaviour:
@@ -4550,6 +4940,30 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &6298649740956804136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Test_Specializing_FMOD
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Test_Specializing_FMOD
+  guid: 6811c87d9d36344c99cbd0d429dbd638
+  Banks:
+  - {fileID: 1063484591266509654}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -8567551469618698826}
+  MinDistance: 1
+  MaxDistance: 100
+  Length: 10141
 --- !u!114 &6413402348348659084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4610,9 +5024,32 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
+  MinDistance: 1
+  MaxDistance: 200
+  Length: 2000
+--- !u!114 &6705022800972054683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/Local_Setting/DaddyLevelReverb
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Local_Setting/DaddyLevelReverb
+  guid: b9ff5ad97571574c81d8abd0ddd42e1c
+  Banks:
+  - {fileID: -5021835153761381509}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
   MinDistance: 0
   MaxDistance: 0
-  Length: 2000
+  Length: 0
 --- !u!114 &6718881248420016582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4737,6 +5174,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &7102114952521182018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Weapon/PC_Laser_Fire_1st
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Weapon/PC_Laser_Fire_1st
+  guid: 76ebe3f33d4eb943bb22ab2c1418cbf4
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1750
 --- !u!114 &7123604567146592344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4818,7 +5278,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_SFX.bank
   Name: FmodBank_SFX
   StudioPath: bank:/Other/FmodBank_SFX
-  lastModified: 637535862270035171
+  lastModified: 637544694410000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -4948,6 +5408,52 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &7591938862468182636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/Global_Option/MasterVolume
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Global_Option/MasterVolume
+  guid: abbb8118cd421f4dabd6ef74d55473c7
+  Banks:
+  - {fileID: -5021835153761381509}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
+--- !u!114 &7639807485219018424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Weapon/PC_Laser_Fire_2nd
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Weapon/PC_Laser_Fire_2nd
+  guid: 48fe806379a80e4abf51905e6c73bea1
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1750
 --- !u!114 &7675332332339982210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5037,8 +5543,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 0
 --- !u!114 &7906190782314534792
 MonoBehaviour:
@@ -5059,6 +5565,29 @@ MonoBehaviour:
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
+--- !u!114 &7981542204138451245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/Global_Option/SFXVolume
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Global_Option/SFXVolume
+  guid: 244ba63d0b47f44585b8aa46a5a88ff5
+  Banks:
+  - {fileID: -5021835153761381509}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
@@ -5336,8 +5865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/PlayerCharacter/Weapon/PC_Laser_Fire
   guid: 76ebe3f33d4eb943bb22ab2c1418cbf4
-  Banks:
-  - {fileID: -6126670350051478680}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -5386,8 +5914,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 100
   Length: 4566
 --- !u!114 &8885256718953846810
 MonoBehaviour:
@@ -5429,8 +5957,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 20
   Length: 982
 --- !u!114 &8923702519452860240
 MonoBehaviour:
@@ -5446,8 +5974,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: snapshot:/SFXVolume
   guid: 244ba63d0b47f44585b8aa46a5a88ff5
-  Banks:
-  - {fileID: -5021835153761381509}
+  Banks: []
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
@@ -5498,8 +6025,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 0
-  MaxDistance: 0
+  MinDistance: 1
+  MaxDistance: 200
   Length: 3718
 --- !u!114 &9167585124432856212
 MonoBehaviour:
@@ -5516,7 +6043,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Medusa.bank
   Name: FmodBank_Medusa
   StudioPath: bank:/Mob/FmodBank_Medusa
-  lastModified: 637535862267754575
+  lastModified: 637544694420000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -5534,8 +6061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: snapshot:/AmbVolume
   guid: 64b5eb78d8b35f478f4bf941835378a7
-  Banks:
-  - {fileID: -5021835153761381509}
+  Banks: []
   IsStream: 0
   Is3D: 0
   IsOneShot: 0

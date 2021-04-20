@@ -60,6 +60,8 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("timer");
 
         scannedEvent.AddListener(() => { GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelperRoot>().HelpEvent("Scanned"); });
+        
+        GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
     }
 
     public void Update()
@@ -89,6 +91,17 @@ public class BrokenMedusa_AI : IKBossBase
         UpdateDirection();
         UpdatePerpendicularPoint();
         Push(false);
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Hit();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Dead();
+        }
+        
 
         body.localRotation = Quaternion.Lerp(body.localRotation,Quaternion.identity,0.1f);
 
@@ -365,6 +378,8 @@ public class BrokenMedusa_AI : IKBossBase
                 UpdateMoveLine();
                 return;
             }
+            
+            GameManager.Instance.soundManager.Play(1015,_target.position);
 
             if(up)
             {

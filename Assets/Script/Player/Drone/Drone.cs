@@ -39,6 +39,8 @@ public class Drone : MonoBehaviour
         playerHead = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head);
         player = (PlayerCtrl_Ver2)GameManager.Instance.player;
         droneHelperRoot = GetComponent<DroneHelperRoot>();
+        
+        GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);
     }
 
     // Update is called once per frame
@@ -238,6 +240,7 @@ public class Drone : MonoBehaviour
         if(state != DroneState.AimHelp)
         {
             state = DroneState.Help;
+            GameManager.Instance.soundManager.Play(1302, Vector3.zero, transform);
             whenHelp?.Invoke();
         }
     }

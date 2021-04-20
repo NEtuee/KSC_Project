@@ -16,14 +16,7 @@ public class FMODSoundManager : MonoBehaviour
 
     private void Start()
     {
-        if(createSoundMap)
-            CreateSoundMap();
-
-        _cacheMap = new Dictionary<int, Queue<FMODUnity.StudioEventEmitter>>();
-        _activeMap = new Dictionary<int, List<FMODUnity.StudioEventEmitter>>();
-        _globalCache = new Dictionary<int, FMOD.Studio.PARAMETER_DESCRIPTION>();
-
-        CreateCachedGlobalParams();
+        Init();
         
         GameManager.Instance.AsynSceneManager.RegisterBeforeLoadOnStart(ReturnAllCache);
     }
@@ -83,7 +76,18 @@ public class FMODSoundManager : MonoBehaviour
             value.Clear();
         }
     }
-    
+
+    private void Init()
+    {
+        if(createSoundMap)
+            CreateSoundMap();
+
+        _cacheMap = new Dictionary<int, Queue<FMODUnity.StudioEventEmitter>>();
+        _activeMap = new Dictionary<int, List<FMODUnity.StudioEventEmitter>>();
+        _globalCache = new Dictionary<int, FMOD.Studio.PARAMETER_DESCRIPTION>();
+
+        CreateCachedGlobalParams();
+    }
 
     public FMODUnity.StudioEventEmitter Play(int id, Vector3 position)
     {
@@ -151,11 +155,17 @@ public class FMODSoundManager : MonoBehaviour
 
     private FMODUnity.StudioEventEmitter GetCache(int id)
     {
+        if (_cacheMap == null)
+        {
+            Init();
+        }
+        
         if(!_cacheMap.ContainsKey(id) || _cacheMap[id].Count == 0)
         {
             CreateSoundCacheItem(id,1);
         }
-
+        
+        Debug.Log(FindSoundInfo(id).path);
 
         return _cacheMap[id].Dequeue();
     }
