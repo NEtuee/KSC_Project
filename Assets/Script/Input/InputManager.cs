@@ -47,8 +47,13 @@ public class InputManager : MonoBehaviour
     private Dictionary<KeybindingActions, KeybindingCheckToggle> actionData = new Dictionary<KeybindingActions, KeybindingCheckToggle>();
     private Dictionary<KeybindingActions, ActionResult> actionBinding = new Dictionary<KeybindingActions, ActionResult>();
     private Dictionary<KeybindingActions, InputSet> actionBindingToggle = new Dictionary<KeybindingActions, InputSet>();
-    private Dictionary<KeybindingActions, bool> actionAxisDownFlag = new Dictionary<KeybindingActions, bool>();
-    private List<KeybindingActions> releaseList = new List<KeybindingActions>();
+    private Dictionary<KeybindingActions, InputSet> actionBindingDualShock = new Dictionary<KeybindingActions, InputSet>();
+    private Dictionary<KeybindingActions, InputSet> actionBindingXbox = new Dictionary<KeybindingActions, InputSet>();
+    private Dictionary<KeybindingActions, bool> dualShockAxisDownFlag = new Dictionary<KeybindingActions, bool>();
+    private Dictionary<KeybindingActions, bool> xboxAxisDownFlag = new Dictionary<KeybindingActions, bool>();
+    private List<KeybindingActions> dualShockReleaseList = new List<KeybindingActions>();
+    private List<KeybindingActions> xboxShockReleaseList = new List<KeybindingActions>();
+
     private void Awake()
     {
         if (null == instance)
@@ -76,28 +81,54 @@ public class InputManager : MonoBehaviour
     {
         //DebugAxis = Input.GetAxis("RightTrigger_Xbox");
 
-        if (releaseList.Count != 0)
+        // if (releaseList.Count != 0)
+        // {
+        //     for (int i = 0; i < releaseList.Count; i++)
+        //     {
+        //         switch (controlMode)
+        //         {
+        //             case ControlMode.DualShock:
+        //                 if (Input.GetAxis(actionData[releaseList[i]].dualshock.axisName) == 0.0f)
+        //                 {
+        //                     actionAxisDownFlag[releaseList[i]] = false;
+        //                     releaseList.Remove(releaseList[i]);
+        //                     return;
+        //                 }
+        //                 break;
+        //             case ControlMode.XboxPad:
+        //                 if (Input.GetAxis(actionData[releaseList[i]].xbox.axisName) == 0.0f)
+        //                 {
+        //                     actionAxisDownFlag[releaseList[i]] = false;
+        //                     releaseList.Remove(releaseList[i]);
+        //                     return;
+        //                 }
+        //                 break;
+        //         }
+        //     }
+        // }
+
+        if (dualShockReleaseList.Count != 0)
         {
-            for (int i = 0; i < releaseList.Count; i++)
+            for (int i = 0; i < dualShockReleaseList.Count; i++)
             {
-                switch (controlMode)
+                if (Input.GetAxis(actionData[dualShockReleaseList[i]].dualshock.axisName) == 0.0f)
                 {
-                    case ControlMode.DualShock:
-                        if (Input.GetAxis(actionData[releaseList[i]].dualshock.axisName) == 0.0f)
-                        {
-                            actionAxisDownFlag[releaseList[i]] = false;
-                            releaseList.Remove(releaseList[i]);
-                            return;
-                        }
-                        break;
-                    case ControlMode.XboxPad:
-                        if (Input.GetAxis(actionData[releaseList[i]].xbox.axisName) == 0.0f)
-                        {
-                            actionAxisDownFlag[releaseList[i]] = false;
-                            releaseList.Remove(releaseList[i]);
-                            return;
-                        }
-                        break;
+                    dualShockAxisDownFlag[dualShockReleaseList[i]] = false;
+                    dualShockReleaseList.Remove(dualShockReleaseList[i]);
+                    break;
+                }
+            }
+        }
+        
+        if (xboxShockReleaseList.Count != 0)
+        {
+            for (int i = 0; i < xboxShockReleaseList.Count; i++)
+            {
+                if (Input.GetAxis(actionData[xboxShockReleaseList[i]].dualshock.axisName) == 0.0f)
+                {
+                    xboxAxisDownFlag[xboxShockReleaseList[i]] = false;
+                    xboxShockReleaseList.Remove(xboxShockReleaseList[i]);
+                    break;
                 }
             }
         }
@@ -239,8 +270,10 @@ public class InputManager : MonoBehaviour
     {
         actionBindingToggle.Clear();
         actionData.Clear();
-        actionAxisDownFlag.Clear();
-        releaseList.Clear();
+        dualShockAxisDownFlag.Clear();
+        xboxAxisDownFlag.Clear();
+        dualShockReleaseList.Clear();
+        xboxShockReleaseList.Clear();
 
         for (int count = 0; count < keyBindingsToggle.keybindingChecks.Length; count++)
         {
@@ -274,7 +307,7 @@ public class InputManager : MonoBehaviour
                                 break;
                             case PadValueType.Axis:
                                 {                                 
-                                    actionAxisDownFlag.Add(keyBindingsToggle.keybindingChecks[count].action,false);
+                                    dualShockAxisDownFlag.Add(keyBindingsToggle.keybindingChecks[count].action,false);
                                     currentInputSet.GetInput += BindDualShock_AxisDown;
                                     if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
                                         currentInputSet.GetRelease += BindDualShock_AxisUp;
@@ -301,7 +334,7 @@ public class InputManager : MonoBehaviour
                                 break;
                             case PadValueType.Axis:
                                 {                                  
-                                    actionAxisDownFlag.Add(keyBindingsToggle.keybindingChecks[count].action,false);
+                                    xboxAxisDownFlag.Add(keyBindingsToggle.keybindingChecks[count].action,false);
                                     currentInputSet.GetInput += BindXbox_AxisDown;
                                     if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
                                         currentInputSet.GetRelease += BindXbox_AxisUp;
@@ -545,7 +578,7 @@ public class InputManager : MonoBehaviour
 
     private bool BindDualShock_AxisDown(KeybindingActions action)
     {
-        bool downFlag = actionAxisDownFlag[action];
+        bool downFlag = dualShockAxisDownFlag[action];
 
         if (downFlag == true)
             return false;
@@ -553,8 +586,8 @@ public class InputManager : MonoBehaviour
         if (Input.GetAxis(actionData[action].dualshock.axisName) != 1.0f)
             return false;
         
-        actionAxisDownFlag[action] = true;
-        releaseList.Add(action);
+        dualShockAxisDownFlag[action] = true;
+        dualShockReleaseList.Add(action);
         return true;
         //return (Input.GetAxis(actionData[action].dualshock.axisName) < 0.9f && Input.GetAxis(actionData[action].dualshock.axisName) < 0.5f);
     }
@@ -564,7 +597,7 @@ public class InputManager : MonoBehaviour
         if (Input.GetAxis(actionData[action].dualshock.axisName).Equals(0.0f) == false)
             return false;
 
-        actionAxisDownFlag[action] = false;
+        dualShockAxisDownFlag[action] = false;
         return true;
         //return Input.GetAxis(actionData[action].dualshock.axisName) == 0.0f;
     }
@@ -609,7 +642,7 @@ public class InputManager : MonoBehaviour
     private bool BindXbox_AxisDown(KeybindingActions action)
     {
         //return (Input.GetAxis(actionData[action].xbox.axisName) < 0.9f && Input.GetAxis(actionData[action].xbox.axisName) > 0.5f);
-        bool downFlag = actionAxisDownFlag[action];
+        bool downFlag = xboxAxisDownFlag[action];
 
         if (downFlag == true)
             return false;
@@ -617,8 +650,8 @@ public class InputManager : MonoBehaviour
         if (Input.GetAxis(actionData[action].xbox.axisName).Equals( 1.0f) == false)
             return false;
         
-        actionAxisDownFlag[action] = true;
-        releaseList.Add(action);
+        xboxAxisDownFlag[action] = true;
+        xboxShockReleaseList.Add(action);
         return true;
     }
 
@@ -627,7 +660,7 @@ public class InputManager : MonoBehaviour
         if (Input.GetAxis(actionData[action].xbox.axisName).Equals(0.0f) == false)
             return false;
 
-        actionAxisDownFlag[action] = false;
+        xboxAxisDownFlag[action] = false;
         return true;
         //return Input.GetAxis(actionData[action].xbox.axisName) == 0.0f;
     }
