@@ -21,6 +21,8 @@ public class IKLegMovement : MonoBehaviour
     public float rayDistance = 10f;
     public float limitDistance = 3f;
 
+    public float ikHeight = 0f;
+
     public bool ikDetach = false;
 
     public bool isMove{get{return _isMove;}}
@@ -41,11 +43,12 @@ public class IKLegMovement : MonoBehaviour
     private bool _hold = false;
     private float _timer = 0f;
 
-    private void Start()
+    private void Awake()
     {
         _downRay = new RayEx(new Ray(Vector3.zero,Vector3.down),rayDistance,groundLayer);
         if(ikDetach)
         {
+            ik.rotation = Quaternion.identity;
             ik.parent = null;
         }
     }
@@ -78,7 +81,7 @@ public class IKLegMovement : MonoBehaviour
         if(_downRay.Cast(rayPoint.position,out RaycastHit hit))
         {
             float dist = Vector3.Distance(ik.position,hit.point);
-            _targetPosition = hit.point;
+            _targetPosition = hit.point + (hit.normal * ikHeight);
             
             _targetRotation = Quaternion.LookRotation(hit.normal);
 

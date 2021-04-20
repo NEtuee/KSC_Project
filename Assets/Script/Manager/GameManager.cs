@@ -161,19 +161,16 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.O))
         {
             AsynSceneManager.LoadPrevlevel();
-            AsynSceneManager.currentStageManager.SetPlayerToPosition();
         }
 
         if (Input.GetKeyDown(KeyCode.P))
         {
             AsynSceneManager.LoadNextlevelFrom();
-            AsynSceneManager.currentStageManager.SetPlayerToPosition();
         }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
             AsynSceneManager.LoadCurrentlevel();
-            AsynSceneManager.currentStageManager.SetPlayerToPosition();
         }
     }
 

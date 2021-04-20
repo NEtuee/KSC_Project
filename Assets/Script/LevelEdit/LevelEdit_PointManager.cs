@@ -16,6 +16,23 @@ public class LevelEdit_PointManager : MonoBehaviour
         public bool isLoop = true;
         public List<LevelEdit_MovePoint> movePoints = new List<LevelEdit_MovePoint>();
 
+        public Vector3 GetDirectionToNextPoint(int point, bool inverse)
+        {
+            if (point >= movePoints.Count || point < 0)
+            {
+                Debug.LogError("point out of range");
+                return Vector3.zero;
+            }
+
+            var next = inverse ? (point - 1 < 0 ? movePoints.Count - 1 : point - 1) : (point + 1 >= movePoints.Count ? 0 : point + 1);   
+            
+            var p0 = movePoints[point];
+            var p1 = movePoints[next];
+
+            return (p1.GetPoint() - p0.GetPoint());
+        }
+        
+        
         public LevelEdit_MovePoint GetNextPoint(ref int point, out bool isEnd)
         {
             isEnd = ++point >= movePoints.Count ? true : false;

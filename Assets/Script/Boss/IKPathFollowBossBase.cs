@@ -69,6 +69,12 @@ public class IKPathFollowBossBase : IKBossBase
         return Vector3.Distance(transform.position,_targetTransform.position) <= dist;
     }
 
+    public bool GetPathArrived()
+    {
+        return _pathArrived;
+        
+    }
+
     public LevelEdit_MovePoint GetNextPoint(out bool isEnd)
     {
         return _currentPath.GetNextPoint(ref _targetPoint, out isEnd);
@@ -126,6 +132,14 @@ public class IKPathFollowBossBase : IKBossBase
         }
     }
 
+    public void GetPathStart(string path)
+    {
+        _pathArrived = false;
+        _currentPath = controll.GetPath(path);
+
+        _targetTransform = _currentPath.GetPoint(0).transform;
+    }
+
     public void GetPath(string path, bool arc = true)
     {
         _pathArrived = false;
@@ -135,4 +149,6 @@ public class IKPathFollowBossBase : IKBossBase
         else
             SetNearestPointToTarget();
     }
+    
+    
 }

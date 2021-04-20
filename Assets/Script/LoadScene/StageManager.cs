@@ -6,70 +6,13 @@ public class StageManager : MonoBehaviour
 {
     public string SceneTitle = "";
 
-    public Transform prevZoneTransform;
+    public Elevator entranceElevator;
+    public Elevator exitElevator;
     public Transform loadedPlayerPosition;
 
-    public Transform prevPositionTarget;
-
-    private LoadingZone _prevLoadingZone;
-    private TimeCounterEx _timeCounter = new TimeCounterEx();
-
-    private Vector3 _prevPos;
-    private bool _progress = false;
-
-    public void Close()
+    public void ObjectTeleportToLoadedPos(Transform target, Vector3 center)
     {
-        if(_prevLoadingZone != null)
-            _prevLoadingZone.Close();
-    }
-
-    public void Update()
-    {
-        if(_progress)
-        {
-            _timeCounter.IncreaseTimer("StartTime",out var limit);
-            if(limit)
-            {
-                float time = _timeCounter.IncreaseTimer("time",out limit);
-                if(limit)
-                {
-                    _progress = false;
-                }
-                _prevLoadingZone.transform.position = Vector3.Lerp(_prevPos, prevPositionTarget.position,time);
-
-            }
-
-            
-        }
-    }
-
-    public void TranslatePrevLoadingZone(float startTime)
-    {
-        if(prevPositionTarget == null)
-            return;
-
-        _progress = true;
-        _timeCounter.InitTimer("StartTime",0f,startTime);
-        _timeCounter.InitTimer("time");
-        _prevPos = prevZoneTransform.position;
-    }
-
-    public void RegisterLoadingZone(LoadingZone prev)
-    {
-        _prevLoadingZone = prev;
-        _prevLoadingZone.transform.SetPositionAndRotation(prevZoneTransform.position,prevZoneTransform.rotation);
-        _prevLoadingZone.transform.SetParent(prevZoneTransform);
-    }
-
-    public void SetPlayerToPosition()
-    {
-        Camera.main.transform.SetParent(null);
-        GameManager.Instance.followTarget.transform.SetParent(null);
-        GameManager.Instance.player.transform.SetParent(null);
-        
-        GameManager.Instance.player.transform.position = loadedPlayerPosition.position;
-        GameManager.Instance.player.transform.rotation = loadedPlayerPosition.rotation;
-
-        prevZoneTransform.gameObject.SetActive(false);
+        var centerDir = target.position - center;
+        target.position = loadedPlayerPosition.position + centerDir;
     }
 }
