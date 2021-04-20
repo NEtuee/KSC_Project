@@ -49,14 +49,17 @@ public class EMPGun : MonoBehaviour
         if (damage <=40f)
         {
             GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
+            InputManager.Instance.GamePadSetVibrate(0.2f,0.6f);
         }
         else if (damage <= 80f)
         {
             GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
+            InputManager.Instance.GamePadSetVibrate(0.3f,0.8f);
         }   
         else if (damage <= 120f)
         {
             GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
+            InputManager.Instance.GamePadSetVibrate(0.4f,1.0f);
         }
         
         

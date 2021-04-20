@@ -46,6 +46,7 @@ public class InputManager : MonoBehaviour
     private Dictionary<KeybindingActions, KeybindingCheckToggle> actionData = new Dictionary<KeybindingActions, KeybindingCheckToggle>();
     private Dictionary<KeybindingActions, ActionResult> actionBinding = new Dictionary<KeybindingActions, ActionResult>();
     private Dictionary<KeybindingActions, InputSet> actionBindingToggle = new Dictionary<KeybindingActions, InputSet>();
+    private Dictionary<KeybindingActions, bool> actionAxisDownFlag = new Dictionary<KeybindingActions, bool>();
     private void Awake()
     {
         if (null == instance)
@@ -71,7 +72,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        //DebugAxis = Input.GetAxis("RightTrigger_Xbox");
+        DebugAxis = Input.GetAxis("RightTrigger_Xbox");
     }
 
     public static InputManager Instance
@@ -210,6 +211,7 @@ public class InputManager : MonoBehaviour
     {
         actionBindingToggle.Clear();
         actionData.Clear();
+        actionAxisDownFlag.Clear();
 
         for (int count = 0; count < keyBindingsToggle.keybindingChecks.Length; count++)
         {
@@ -243,6 +245,7 @@ public class InputManager : MonoBehaviour
                                 break;
                             case PadValueType.Axis:
                                 {                                 
+                                    actionAxisDownFlag.Add(keyBindingsToggle.keybindingChecks[count].action,false);
                                     currentInputSet.GetInput += BindDualShock_AxisDown;
                                     if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
                                         currentInputSet.GetRelease += BindDualShock_AxisUp;
@@ -269,6 +272,7 @@ public class InputManager : MonoBehaviour
                                 break;
                             case PadValueType.Axis:
                                 {                                  
+                                    actionAxisDownFlag.Add(keyBindingsToggle.keybindingChecks[count].action,false);
                                     currentInputSet.GetInput += BindXbox_AxisDown;
                                     if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
                                         currentInputSet.GetRelease += BindXbox_AxisUp;
@@ -458,12 +462,32 @@ public class InputManager : MonoBehaviour
 
     private bool BindDualShock_AxisDown(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].dualshock.axisName) < 0.9f && Input.GetAxis(actionData[action].dualshock.axisName) < 0.5f);
+        bool downFlag = actionAxisDownFlag[action];
+
+        if (downFlag == true)
+            return false;
+
+        if (Input.GetAxis(actionData[action].dualshock.axisName) != 1.0f)
+            return false;
+        
+        actionAxisDownFlag[action] = true;
+        return true;
+        //return (Input.GetAxis(actionData[action].dualshock.axisName) < 0.9f && Input.GetAxis(actionData[action].dualshock.axisName) < 0.5f);
     }
 
     private bool BindDualShock_AxisUp(KeybindingActions action)
     {
-        return Input.GetAxis(actionData[action].dualshock.axisName) == 0.0f;
+        bool downFlag = actionAxisDownFlag[action];
+
+        if (downFlag == false)
+            return false;
+
+        if (Input.GetAxis(actionData[action].dualshock.axisName) != 0.0f)
+            return false;
+        
+        actionAxisDownFlag[action] = true;
+        return true;
+        //return Input.GetAxis(actionData[action].dualshock.axisName) == 0.0f;
     }
     #endregion
 
@@ -505,12 +529,32 @@ public class InputManager : MonoBehaviour
 
     private bool BindXbox_AxisDown(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].xbox.axisName) < 0.9f && Input.GetAxis(actionData[action].xbox.axisName) < 0.5f);
+        //return (Input.GetAxis(actionData[action].xbox.axisName) < 0.9f && Input.GetAxis(actionData[action].xbox.axisName) > 0.5f);
+        bool downFlag = actionAxisDownFlag[action];
+
+        if (downFlag == true)
+            return false;
+
+        if (Input.GetAxis(actionData[action].xbox.axisName) != 1.0f)
+            return false;
+        
+        actionAxisDownFlag[action] = true;
+        return true;
     }
 
     private bool BindXbox_AxisUp(KeybindingActions action)
     {
-        return Input.GetAxis(actionData[action].xbox.axisName) == 0.0f;
+        bool downFlag = actionAxisDownFlag[action];
+
+        if (downFlag == false)
+            return false;
+
+        if (Input.GetAxis(actionData[action].xbox.axisName) != 0.0f)
+            return false;
+
+        actionAxisDownFlag[action] = false;
+        return true;
+        //return Input.GetAxis(actionData[action].xbox.axisName) == 0.0f;
     }
     #endregion
 
