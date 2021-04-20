@@ -15,7 +15,9 @@ public class FloorControl : MonoBehaviour
         for(int i = 0; i < floors.Count; ++i)
         {
             origins.Add(floors[i].transform.position);
+            Debug.Log(floors[i].transform.position);
             floors[i].transform.position = firstPosition;
+            Debug.Log(firstPosition);
         }
     }
 
