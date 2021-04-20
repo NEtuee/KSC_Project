@@ -25,7 +25,7 @@ public class FMODSoundManager : MonoBehaviour
 
         CreateCachedGlobalParams();
         
-        //GameManager.Instance.AsynSceneManager.RegisterBeforeLoadOnStart(ReturnAllCache);
+        GameManager.Instance.AsynSceneManager.RegisterBeforeLoadOnStart(ReturnAllCache);
     }
 
     private void LateUpdate()
@@ -77,9 +77,10 @@ public class FMODSoundManager : MonoBehaviour
                 //_cacheMap[value[i].DataCode].Enqueue(value[i]);
                 value[i].transform.SetParent(gameObject.transform);
                 ReturnCache(pair.Key,value[i]);
-                value.RemoveAt(i);
 
             }
+            
+            value.Clear();
         }
     }
     
@@ -144,6 +145,7 @@ public class FMODSoundManager : MonoBehaviour
     private void ReturnCache(int id, FMODUnity.StudioEventEmitter emitter)
     {
         emitter.gameObject.SetActive(false);
+        emitter.transform.SetParent(this.transform);
         _cacheMap[id].Enqueue(emitter);
     }
 
