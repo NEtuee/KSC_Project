@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 using XInputDotNetPure;
 
@@ -47,6 +48,7 @@ public class InputManager : MonoBehaviour
     private Dictionary<KeybindingActions, ActionResult> actionBinding = new Dictionary<KeybindingActions, ActionResult>();
     private Dictionary<KeybindingActions, InputSet> actionBindingToggle = new Dictionary<KeybindingActions, InputSet>();
     private Dictionary<KeybindingActions, bool> actionAxisDownFlag = new Dictionary<KeybindingActions, bool>();
+    private List<KeybindingActions> releaseList = new List<KeybindingActions>();
     private void Awake()
     {
         if (null == instance)
@@ -72,7 +74,33 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        DebugAxis = Input.GetAxis("RightTrigger_Xbox");
+        //DebugAxis = Input.GetAxis("RightTrigger_Xbox");
+
+        if (releaseList.Count != 0)
+        {
+            for (int i = 0; i < releaseList.Count; i++)
+            {
+                switch (controlMode)
+                {
+                    case ControlMode.DualShock:
+                        if (Input.GetAxis(actionData[releaseList[i]].dualshock.axisName) == 0.0f)
+                        {
+                            actionAxisDownFlag[releaseList[i]] = false;
+                            releaseList.Remove(releaseList[i]);
+                            return;
+                        }
+                        break;
+                    case ControlMode.XboxPad:
+                        if (Input.GetAxis(actionData[releaseList[i]].xbox.axisName) == 0.0f)
+                        {
+                            actionAxisDownFlag[releaseList[i]] = false;
+                            releaseList.Remove(releaseList[i]);
+                            return;
+                        }
+                        break;
+                }
+            }
+        }
     }
 
     public static InputManager Instance
@@ -212,6 +240,7 @@ public class InputManager : MonoBehaviour
         actionBindingToggle.Clear();
         actionData.Clear();
         actionAxisDownFlag.Clear();
+        releaseList.Clear();
 
         for (int count = 0; count < keyBindingsToggle.keybindingChecks.Length; count++)
         {
@@ -367,6 +396,60 @@ public class InputManager : MonoBehaviour
         return false;
     }
 
+    public KeyCode GetBindingKeycode(KeybindingActions action)
+    {
+        switch (controlMode)
+        {
+            case ControlMode.Keyboard:
+                return actionData[action].keyboard.key;
+            case ControlMode.DualShock:
+                return actionData[action].dualshock.key;
+            case ControlMode.XboxPad:
+                return actionData[action].xbox.key;
+            default:
+                return actionData[action].keyboard.key;
+        }
+    }
+
+    public bool GetBindingIsToggle(KeybindingActions action)
+    {
+        return actionData[action].isToggle;
+    }
+
+    public void ChangeKeyBindings(KeybindingActions action, KeyCode keycode)
+    {
+        foreach (var keybinding in  keyBindingsToggle.keybindingChecks)
+        {
+            if (keybinding.action == action)
+            {
+                switch (controlMode)
+                {
+                    case ControlMode.Keyboard:
+                        keybinding.keyboard.key = keycode;
+                        return;
+                    case ControlMode.DualShock:
+                        keybinding.dualshock.key = keycode;
+                        return;
+                    case ControlMode.XboxPad:
+                        keybinding.xbox.key = keycode;
+                        return;
+                }
+            }
+        }
+    }
+
+    public void SetKeyToggle(KeybindingActions action, bool result)
+    {
+        foreach (var keybinding in  keyBindingsToggle.keybindingChecks)
+        {
+            if (keybinding.action == action)
+            {
+                keybinding.isToggle = result;
+                break;
+            }
+        }
+    }
+
     public float GetMoveAxisVertical()
     {
         return Input.GetAxis("Vertical");
@@ -471,21 +554,17 @@ public class InputManager : MonoBehaviour
             return false;
         
         actionAxisDownFlag[action] = true;
+        releaseList.Add(action);
         return true;
         //return (Input.GetAxis(actionData[action].dualshock.axisName) < 0.9f && Input.GetAxis(actionData[action].dualshock.axisName) < 0.5f);
     }
 
     private bool BindDualShock_AxisUp(KeybindingActions action)
     {
-        bool downFlag = actionAxisDownFlag[action];
-
-        if (downFlag == false)
+        if (Input.GetAxis(actionData[action].dualshock.axisName).Equals(0.0f) == false)
             return false;
 
-        if (Input.GetAxis(actionData[action].dualshock.axisName) != 0.0f)
-            return false;
-        
-        actionAxisDownFlag[action] = true;
+        actionAxisDownFlag[action] = false;
         return true;
         //return Input.GetAxis(actionData[action].dualshock.axisName) == 0.0f;
     }
@@ -535,21 +614,17 @@ public class InputManager : MonoBehaviour
         if (downFlag == true)
             return false;
 
-        if (Input.GetAxis(actionData[action].xbox.axisName) != 1.0f)
+        if (Input.GetAxis(actionData[action].xbox.axisName).Equals( 1.0f) == false)
             return false;
         
         actionAxisDownFlag[action] = true;
+        releaseList.Add(action);
         return true;
     }
 
     private bool BindXbox_AxisUp(KeybindingActions action)
     {
-        bool downFlag = actionAxisDownFlag[action];
-
-        if (downFlag == false)
-            return false;
-
-        if (Input.GetAxis(actionData[action].xbox.axisName) != 0.0f)
+        if (Input.GetAxis(actionData[action].xbox.axisName).Equals(0.0f) == false)
             return false;
 
         actionAxisDownFlag[action] = false;

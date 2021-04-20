@@ -43,6 +43,10 @@ public class MenuManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             keyCustomMenuDummy.SetActive(!keyCustomMenuDummy.activeSelf);
+            if (keyCustomMenuDummy.activeSelf == false)
+            {
+                InputManager.Instance.InitializeKeyBind_Toggle();
+            }
         }
     }
 

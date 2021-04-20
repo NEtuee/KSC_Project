@@ -6,20 +6,40 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class KeyInputChangeTest : MonoBehaviour, IPointerClickHandler
+public class KeyInputChangeTest : MonoBehaviour
 {
-    public TextMeshProUGUI keyText;
-    public bool waitInput;
+    public KeybindingActions action;
+    public TextMeshProUGUI holdKeyText;
+    public KeyInputPanel holdKeyPanel;
+    public TextMeshProUGUI toggleKeyText;
+    public KeyInputPanel toggleKeyPanel;
+    public bool waitHoldInput;
+    public bool waitToggleInput;
     
     void Start()
     {
+        if (holdKeyPanel != null)
+        {
+            holdKeyPanel.whenOnClick += StartHoldSetting;
+            toggleKeyPanel.whenOnClick += StartToggleSetting;
+        }
         
+        if (InputManager.Instance.GetBindingIsToggle(action) == true)
+        {
+            holdKeyText.text = "";
+            toggleKeyText.text = InputManager.Instance.GetBindingKeycode(action).ToString();
+        }
+        else
+        {
+            holdKeyText.text = InputManager.Instance.GetBindingKeycode(action).ToString();
+            toggleKeyText.text = "";
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (waitInput == false)
+        if (waitHoldInput == false && waitToggleInput == false)
             return;
 
         if (Input.anyKey)
@@ -30,22 +50,36 @@ public class KeyInputChangeTest : MonoBehaviour, IPointerClickHandler
                 {
                     KeyCode inputKey = KeyCode.None;
                     inputKey = inputKeycode;
-                    keyText.text = inputKey.ToString();
-                    waitInput = false;
+                    if(waitHoldInput == true)
+                      holdKeyText.text = inputKey.ToString();
+                    else
+                    {
+                        toggleKeyText.text = inputKey.ToString();
+                        InputManager.Instance.SetKeyToggle(action,true);
+                    }
+
+                    waitHoldInput = false;
+                    waitToggleInput = false;
+                    InputManager.Instance.ChangeKeyBindings(action,inputKey);
                     break;
                 }
             }
         }
     }
 
-    private void StartSetting()
+    private void StartHoldSetting()
     {
-        keyText.text = "";
-        waitInput = true;
+        holdKeyText.text = "";
+        toggleKeyText.text = "";
+        waitHoldInput = true;
+        InputManager.Instance.SetKeyToggle(action,false);
     }
 
-    public void OnPointerClick(PointerEventData eventData) 
+    private void StartToggleSetting()
     {
-        StartSetting();
+        toggleKeyText.text = "";
+        holdKeyText.text = "";
+        waitToggleInput = true;
     }
+    
 }
