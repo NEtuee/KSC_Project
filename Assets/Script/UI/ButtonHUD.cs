@@ -93,7 +93,9 @@ public class ButtonHUD : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             buttonText.DOFade(textAlphaColor.a, duration);
         }
 
+        if(inUi)
         inUi.Disapper(duration);
+        if(gage)
         gage.Disapper();
     }
 

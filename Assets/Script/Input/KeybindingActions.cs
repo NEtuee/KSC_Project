@@ -13,5 +13,6 @@ public enum KeybindingActions
     EMPAim,
     EMPAimRelease,
     Equiment1th,
-    Equiment2th
+    Equiment2th,
+    Option
 }

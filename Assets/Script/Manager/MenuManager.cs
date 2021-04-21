@@ -9,6 +9,8 @@ public class MenuManager : MonoBehaviour
     public EscMenu input;
     public EscMenu sound;
 
+    public EscMenu keyCustomMenu;
+
     public Canvas launcherStateText;
     public Canvas impectStateText;
 
@@ -35,19 +37,19 @@ public class MenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && isMenuBlend == false)
+        if (InputManager.Instance.GetInput(KeybindingActions.Option) && isMenuBlend == false)
         {
             InputEsc();
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            keyCustomMenuDummy.SetActive(!keyCustomMenuDummy.activeSelf);
-            if (keyCustomMenuDummy.activeSelf == false)
-            {
-                InputManager.Instance.InitializeKeyBind_Toggle();
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    keyCustomMenuDummy.SetActive(!keyCustomMenuDummy.activeSelf);
+        //    if (keyCustomMenuDummy.activeSelf == false)
+        //    {
+        //        InputManager.Instance.InitializeKeyBind_Toggle();
+        //    }
+        //}
     }
 
     public void InputEsc()
@@ -103,6 +105,13 @@ public class MenuManager : MonoBehaviour
                 menuPopup.Peek().Appear(0.2f, () => isMenuBlend = false);
             });
         }
+        else if(menuPopup.Peek() == keyCustomMenu)
+        {
+            menuPopup.Pop().Disappear(0.1f, () => {
+                menuPopup.Peek().Appear(0.2f, () => { isMenuBlend = false; 
+                });
+            });
+        }
     }
 
     public void OnButtonInput()
@@ -122,6 +131,15 @@ public class MenuManager : MonoBehaviour
          {
              menuPopup.Push(sound);
              menuPopup.Peek().Appear(soundBlendingTime, () => isMenuBlend = false);
+         });
+    }
+
+    public void OnButtonKeyCustomizeMenu()
+    {
+        menuPopup.Peek().Disappear(0.2f, () =>
+         {
+             menuPopup.Push(keyCustomMenu);
+             menuPopup.Peek().Appear(0.1f);
          });
     }
 

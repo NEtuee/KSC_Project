@@ -7,6 +7,7 @@ using TMPro;
 public class PauseDummyMenu : EscMenu
 {
     public TextMeshProUGUI pauseText;
+    public ButtonHUD keyCustomButton;
     public ButtonHUD exitButton;
 
     private void Start()
@@ -22,6 +23,7 @@ public class PauseDummyMenu : EscMenu
     {
         pauseText.DOFade(1f, duration);
         exitButton.Appear(duration, tweenCallback);
+        keyCustomButton.Appear(duration);
     }
 
     public override void Disappear(float duration)
@@ -33,5 +35,6 @@ public class PauseDummyMenu : EscMenu
     {
         pauseText.DOFade(0f, duration);
         exitButton.Disappear(duration, tweenCallback);
+        keyCustomButton.Disappear(duration);
     }
 }
