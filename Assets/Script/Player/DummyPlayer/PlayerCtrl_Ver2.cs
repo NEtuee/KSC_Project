@@ -164,6 +164,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private RaycastHit wallHit;
 
+    private FMODUnity.StudioEventEmitter _charge;
+    
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -995,8 +997,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         switch (prevState)
         {
             case PlayerState.Aiming:
-                {
-                    ActiveAim(false);
+            {
+                ActiveAim(false);
                     GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
                     drone.OrderAimHelp(false);
                     releaseAimEvent?.Invoke();
@@ -1575,6 +1577,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //if (InputManager.Instance.GetAction(KeybindingActions.EMPAim))
         if(InputManager.Instance.GetInput(KeybindingActions.EMPAim))
         {
+            GameManager.Instance.soundManager.Play(1008, Vector3.zero, transform);
+            _charge = GameManager.Instance.soundManager.Play(1013,Vector3.zero,transform);
             ChangeState(PlayerState.Aiming);
             ActiveAim(true);
             return true;
@@ -1588,6 +1592,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //if (InputManager.Instance.GetAction(KeybindingActions.EMPAimRelease))
         if(InputManager.Instance.GetRelease(KeybindingActions.EMPAim))
         {
+            GameManager.Instance.soundManager.Play(1009,Vector3.zero,transform);
+            _charge.Stop();
+            
             ChangeState(PlayerState.Default);
             ActiveAim(false);
             chargeTime.Value = 0.0f;
@@ -1602,6 +1609,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //if (InputManager.Instance.GetAction(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
         if(InputManager.Instance.GetInput(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
         {
+            GameManager.Instance.soundManager.Play(1010,Vector3.zero,transform);
+            GameManager.Instance.soundManager.Play(1011,Vector3.zero,transform);
+            
             int loadCount = (int)(chargeTime.Value);
             loadCount = loadCount > 3 ? 3 : loadCount;
             

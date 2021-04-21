@@ -44,6 +44,8 @@ public class DroneScaner : MonoBehaviour
             scanForward.y = 0.0f;
             scanForward.Normalize();
             scanMat.SetVector("_ForwardDirection", scanForward);
+            
+            GameManager.Instance.soundManager.Play(1301, Vector3.zero, transform);
         }
 
         if (scaning == true)
