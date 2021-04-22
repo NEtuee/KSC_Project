@@ -211,6 +211,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         // if (Input.GetKeyDown(KeyCode.E))
         //     animator.SetTrigger("Shot");
+        
         if (Input.GetKeyDown(KeyCode.Q))
             energy.Value = 100.0f;
 
@@ -523,6 +524,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Grab:
                 {                
                     CheckLedge();            
+                }
+                break;
+            case PlayerState.ReadyGrab:
+                {
+                    if (ledgeChecker.IsDetectedLedge() == true)
+                    {
+                        ChangeState(PlayerState.Grab);
+                        ChangeState(PlayerState.HangLedge);
+                    }
                 }
                 break;
             case PlayerState.HangRagdoll:
@@ -1046,8 +1056,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     currentJumpPower = 0.0f;
                     currentSpeed = 0.0f;
 
-                    currentVerticalValue = 0.0f;
-                    currentHorizontalValue = 0.0f;
+                    if (prevState != PlayerState.HangLedge)
+                    {
+                        currentVerticalValue = 0.0f;
+                        currentHorizontalValue = 0.0f;
+                    }
 
                     handIK.ActiveHandIK(true);
                     handIK.ActiveLedgeIK(false);
@@ -1453,7 +1466,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     ChangeState(PlayerState.ReadyGrab);
                 }
                 else
-                {
+                { 
                     ChangeState(PlayerState.Grab);
                     ChangeState(PlayerState.HangLedge);
                 }
@@ -1794,19 +1807,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void CheckLedge()
     {
-        if (isClimbingMove == false)
+        // if (isClimbingMove == false)
+        //     return;
+
+        // bool dectect = false;
+        // RaycastHit hit;
+        // Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
+        // Vector3 point2 = point1 + transform.forward * 1f;
+        // if (Physics.Raycast(point1, transform.forward, out hit, 2f, detectionLayer))
+        // {
+        //     dectect = true;
+        // }
+
+        if (currentVerticalValue.Equals(-1.0f))
             return;
-
-        bool dectect = false;
-        RaycastHit hit;
-        Vector3 point1 = headTransfrom.position + transform.up * 0.2f;
-        Vector3 point2 = point1 + transform.forward * 1f;
-        if (Physics.Raycast(point1, transform.forward, out hit, 2f, detectionLayer))
-        {
-            dectect = true;
-        }
-
-        if (ledgeChecker.IsDetectedLedge() == true && currentVerticalValue == 1.0f && dectect == false)
+        
+        if (ledgeChecker.IsDetectedLedge() == true && (currentVerticalValue.Equals(-1.0f)== false))
         {
             if(DetectLedgeCanHangLedgeByVertexColor() == true)
             {

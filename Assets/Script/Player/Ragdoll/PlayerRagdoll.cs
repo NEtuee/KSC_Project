@@ -137,6 +137,8 @@ public class PlayerRagdoll : MonoBehaviour
             else
                 DisableFixRagdoll();
         }
+        
+        
 
         //if (Input.GetKeyDown(KeyCode.R))
         //{
