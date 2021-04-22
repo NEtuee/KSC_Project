@@ -10,8 +10,14 @@ public enum InputType
     XboxPad
 }
 
+
 public class InputManager : MonoBehaviour
 {
+    public enum ConnectGamePad
+    {
+        None,DualShock,XboxPad
+    }
+
     public class GamepadControlSet
     {
         public bool isAxis;
@@ -58,6 +64,8 @@ public class InputManager : MonoBehaviour
 
     private List<KeybindingActions> dualShockReleaseList = new List<KeybindingActions>();
     private List<KeybindingActions> xboxShockReleaseList = new List<KeybindingActions>();
+
+    private ConnectGamePad currentConnectGamepad;
 
     private void Awake()
     {
@@ -126,6 +134,10 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        DetectConnectGamePad();
+    }
     public static InputManager Instance
     {
         get
@@ -231,17 +243,36 @@ public class InputManager : MonoBehaviour
 
     public bool GetInput(KeybindingActions actions)
     {
-        return (actionBindingToggle[actions].GetInput(actions)||actionBindingDualShock[actions].GetInput(actions)|| actionBindingXbox[actions].GetInput(actions));
+        if (currentConnectGamepad == ConnectGamePad.None)
+            return actionBindingToggle[actions].GetInput(actions);
+        else if (currentConnectGamepad == ConnectGamePad.DualShock)
+            return actionBindingToggle[actions].GetInput(actions) || actionBindingDualShock[actions].GetInput(actions);
+        else
+            return actionBindingToggle[actions].GetInput(actions) || actionBindingXbox[actions].GetInput(actions);
+        //return (actionBindingToggle[actions].GetInput(actions)||actionBindingDualShock[actions].GetInput(actions)|| actionBindingXbox[actions].GetInput(actions));
     }
 
     public bool GetRelease(KeybindingActions actions)
     {
-        return (actionBindingToggle[actions].GetRelease(actions)|| actionBindingDualShock[actions].GetRelease(actions)|| actionBindingXbox[actions].GetRelease(actions));
+        if (currentConnectGamepad == ConnectGamePad.None)
+            return actionBindingToggle[actions].GetRelease(actions);
+        else if (currentConnectGamepad == ConnectGamePad.DualShock)
+            return actionBindingToggle[actions].GetRelease(actions) || actionBindingDualShock[actions].GetRelease(actions);
+        else
+            return actionBindingToggle[actions].GetRelease(actions) || actionBindingXbox[actions].GetRelease(actions);
+        //return (actionBindingToggle[actions].GetRelease(actions)|| actionBindingDualShock[actions].GetRelease(actions)|| actionBindingXbox[actions].GetRelease(actions));
     }
 
     public bool GetKeep(KeybindingActions actions)
     {
-        return (actionBindingToggle[actions].GetKeep(actions) || actionBindingDualShock[actions].GetKeep(actions) || actionBindingXbox[actions].GetKeep(actions));
+        if (currentConnectGamepad == ConnectGamePad.None)
+            return actionBindingToggle[actions].GetKeep(actions);
+        else if (currentConnectGamepad == ConnectGamePad.DualShock)
+            return actionBindingToggle[actions].GetKeep(actions) || actionBindingDualShock[actions].GetKeep(actions);
+        else
+            return actionBindingToggle[actions].GetKeep(actions) || actionBindingXbox[actions].GetKeep(actions);
+
+        //return (actionBindingToggle[actions].GetKeep(actions) || actionBindingDualShock[actions].GetKeep(actions) || actionBindingXbox[actions].GetKeep(actions));
     }
 
     public KeyCode GetBindingKeycode(KeybindingActions action,InputType inputType)
@@ -310,32 +341,22 @@ public class InputManager : MonoBehaviour
 
     public float GetCameraAxisX()
     {
-        if(Input.GetJoystickNames().Length == 0)
+        if (currentConnectGamepad == ConnectGamePad.None)
             return Input.GetAxis("Mouse X");
-
-        if(Input.GetJoystickNames()[0] == "Wireless Controller")
-        {
+        else if (currentConnectGamepad == ConnectGamePad.DualShock)
             return Input.GetAxis("Mouse X") + Input.GetAxis("RightStickX_DualShock");
-        }
         else
-        {
             return Input.GetAxis("Mouse X") + Input.GetAxis("RightStickX_Xbox");
-        }
     }
 
     public float GetCameraAxisY()
     {
-        if (Input.GetJoystickNames().Length == 0)
+        if (currentConnectGamepad == ConnectGamePad.None)
             return Input.GetAxis("Mouse Y");
-
-        if (Input.GetJoystickNames()[0] == "Wireless Controller")
-        {
+        else if(currentConnectGamepad == ConnectGamePad.DualShock)
             return Input.GetAxis("Mouse Y") + Input.GetAxis("RightStickY_DualShock");
-        }
         else
-        {
             return Input.GetAxis("Mouse Y") + Input.GetAxis("RightStickY_Xbox");
-        }
     }
 
     #region 키보드 바인딩
@@ -480,4 +501,24 @@ public class InputManager : MonoBehaviour
         GamePad.SetVibration(0, 0, 0);
     }
     #endregion
+
+    private void DetectConnectGamePad()
+    {
+        string[] connected = Input.GetJoystickNames();
+
+        if (connected.Length == 0)
+        {
+            currentConnectGamepad = ConnectGamePad.None;
+            return;
+        }
+
+        if (Input.GetJoystickNames()[0] == "Wireless Controller")
+        {
+            currentConnectGamepad = ConnectGamePad.DualShock;
+        }
+        else
+        {
+            currentConnectGamepad = ConnectGamePad.XboxPad;
+        }
+    }
 }
