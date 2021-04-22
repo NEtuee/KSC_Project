@@ -1136,7 +1136,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.HangRagdoll:
                 {
                     handIK.DisableHandIK();
-                    ragdoll.ActiveRightHandFixRagdoll();
+                    ragdoll.ActiveLeftHandFixRagdoll();
                 }
                 break;
             case PlayerState.Aiming:
@@ -1753,7 +1753,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
     #endregion
 
-    private void ActiveAim(bool active)
+    public void ActiveAim(bool active)
     {
         if(active == true)
         {

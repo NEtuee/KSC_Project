@@ -18,7 +18,7 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private Transform rightHandTransform;
     [SerializeField] private List<Rigidbody> ragdollRigids = new List<Rigidbody>();
     [SerializeField] private List<TransformComponent> transforms = new List<TransformComponent>();
-    private List<AntiStretching> rigidBodyAntiStrechs = new List<AntiStretching>();
+    [SerializeField] private List<CopyBoneRotation> copyBoneRotations = new List<CopyBoneRotation>();
 
     [SerializeField] private Transform leftHandPoint;
     [SerializeField] private Transform rightHandPoint;
@@ -81,14 +81,14 @@ public class PlayerRagdoll : MonoBehaviour
             }
 
             ragdollRigids.Add(rigid);
-            AntiStretching anti;
-            if (rigid.TryGetComponent<AntiStretching>(out anti))
+            CopyBoneRotation copyBone;
+            if (rigid.TryGetComponent<CopyBoneRotation>(out copyBone))
             {
-                anti.enabled = false;
-                rigidBodyAntiStrechs.Add(anti);
+                copyBoneRotations.Add(copyBone);
             }
         }
 
+       
         foreach (var t in pelvis.GetComponentsInChildren<Transform>())
         {
             var trComp = new TransformComponent(t);
@@ -126,17 +126,27 @@ public class PlayerRagdoll : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            if (state == RagdollState.Animated)
-            {
-                //ActiveRightHandFixRagdoll();
-                player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangRagdoll);
-                //ActiveBothHandFixRagdoll();
-            }
-            else
-                DisableFixRagdoll();
-        }
+        //if (Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    if (state == RagdollState.Animated)
+        //    {
+        //        //ActiveRightHandFixRagdoll();
+        //        player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangRagdoll);
+        //        //ActiveBothHandFixRagdoll();
+        //        foreach (var copyBone in copyBoneRotations)
+        //        {
+        //            copyBone.active = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        foreach (var copyBone in copyBoneRotations)
+        //        {
+        //            copyBone.active = false;
+        //        }
+        //        DisableFixRagdoll();
+        //    }
+        //}
         
         
 
@@ -261,7 +271,6 @@ public class PlayerRagdoll : MonoBehaviour
         FixLeftHand(false);
         isFlyRagdoll = true;
         ActiveRagdoll(true);
-        DisableAntiStrech();
         SetRagdollContainer(true);
         player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         ragdollTime = Time.time;
@@ -550,14 +559,6 @@ public class PlayerRagdoll : MonoBehaviour
         Vector3 forward = transform.forward;
         transform.rotation = Quaternion.FromToRotation(forward, ragdollDirection) * transform.rotation;
         //hipTransform.rotation = Quaternion.FromToRotation(ragdollDirection, forward) * hipTransform.rotation;
-    }
-
-    private void DisableAntiStrech()
-    {
-        foreach (var anti in rigidBodyAntiStrechs)
-        {
-            anti.enabled = false;
-        }
     }
 }
 

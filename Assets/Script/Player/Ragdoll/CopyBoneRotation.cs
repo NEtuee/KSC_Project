@@ -20,11 +20,16 @@ public class CopyBoneRotation : MonoBehaviour
 
         if (mirror == false)
         {
-            transform.rotation = targetBone.rotation;
+            //transform.localRotation = targetBone.localRotation;
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, targetBone.localRotation, Time.deltaTime * 10.0f);
+            //transform.rotation = targetBone.rotation;
+            //transform.localPosition = targetBone.localPosition;
         }
         else
         {
-            transform.rotation = Quaternion.Inverse(targetBone.rotation);
+            //transform.localRotation = Quaternion.Inverse(targetBone.localRotation);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Inverse(targetBone.localRotation), Time.deltaTime * 10.0f);
+            //transform.localPosition = targetBone.localPosition;
         }
     }
 }
