@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class IKLegMovement : MonoBehaviour
 {
+    public delegate void LegHitToGround(Vector3 v);
+    
     public IKLegMovement oppositeLeg;
 
     public ParticlePool particlePool;
+    public LegHitToGround legHitToGround = (v) => { };
 
     public LayerMask groundLayer;
     public LayerMask playerLayer;
@@ -18,11 +21,14 @@ public class IKLegMovement : MonoBehaviour
     public float rayDistance = 10f;
     public float limitDistance = 3f;
 
+    public float ikHeight = 0f;
+
     public bool ikDetach = false;
 
     public bool isMove{get{return _isMove;}}
 
     public Transform ik;
+    public Transform ikHolder;
     public Transform rayPoint;
 
     private RayEx _downRay;
@@ -30,14 +36,19 @@ public class IKLegMovement : MonoBehaviour
     private Vector3 _stratPosition;
     private Vector3 _targetPosition;
 
+    private Quaternion _startRotation;
+    private Quaternion _targetRotation;
+
     private bool _isMove = false;
+    private bool _hold = false;
     private float _timer = 0f;
 
-    private void Start()
+    private void Awake()
     {
         _downRay = new RayEx(new Ray(Vector3.zero,Vector3.down),rayDistance,groundLayer);
         if(ikDetach)
         {
+            ik.rotation = Quaternion.identity;
             ik.parent = null;
         }
     }
@@ -45,15 +56,40 @@ public class IKLegMovement : MonoBehaviour
     private void LateUpdate()
     {
         _downRay.SetDirection(-rayPoint.up);
+
+        if(_hold)
+        {
+            if(ikHolder == null)
+                return;
+            if(_downRay.Cast(rayPoint.position,out RaycastHit check))
+            {
+                var rayDist = Vector3.Distance(ik.transform.position,check.point);
+                var dist = Vector3.Distance(ik.transform.position,ikHolder.position);
+
+                if(rayDist < dist)
+                {
+                    ik.transform.position = check.point;
+                    return;
+                }
+
+            }
+            
+            ik.transform.position = Vector3.Lerp(ik.transform.position,ikHolder.position,.2f);
+            return;
+        }
+
         if(_downRay.Cast(rayPoint.position,out RaycastHit hit))
         {
             float dist = Vector3.Distance(ik.position,hit.point);
-            _targetPosition = hit.point;
+            _targetPosition = hit.point + (hit.normal * ikHeight);
+            
+            _targetRotation = Quaternion.LookRotation(hit.normal);
 
             if(dist >= limitDistance && !_isMove && !oppositeLeg.isMove)
             {
                 _isMove = true;
                 _stratPosition = ik.position;
+                _startRotation = ik.rotation;
             }
         }
 
@@ -63,36 +99,29 @@ public class IKLegMovement : MonoBehaviour
             _timer = _timer >= 1f ? 1f : _timer;
 
             var pos = Vector3.Lerp(_stratPosition,_targetPosition,planeMovementCurve.Evaluate(_timer));
-            pos.y += heightMovementCurve.Evaluate(_timer);
+            //pos.y += heightMovementCurve.Evaluate(_timer);
+            pos += ik.forward * heightMovementCurve.Evaluate(_timer);
 
             ik.position = pos;
+            ik.rotation = Quaternion.Lerp(_startRotation,_targetRotation,planeMovementCurve.Evaluate(_timer));
 
             if(_timer >= 1f)
             {
                 _timer = 0;
                 _isMove = false;
 
-                particlePool.Active(pos,Quaternion.LookRotation(new Vector3(0f,0f,1f),hit.normal));
+                if(ReferenceEquals(particlePool, null) == false)
+                    particlePool.Active(pos,Quaternion.LookRotation(new Vector3(0f,0f,1f),hit.normal));
 
-                Collider[] playerColl = Physics.OverlapSphere(pos, 3f,playerLayer);
-
-                if(playerColl.Length != 0)
-                {
-                    foreach(Collider curr in playerColl)
-                    {
-                        Debug.Log(curr.name);
-                        PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
-                        if(ragdoll != null)
-                        {
-                            ragdoll.ExplosionRagdoll(300.0f, pos, 10000.0f);
-                        }
-                    }
-                }
-
-
+                legHitToGround(pos);
             }
         }
         
+    }
+
+    public void Hold(bool value)
+    {
+        _hold = value;
     }
 
 }

@@ -28,9 +28,23 @@ public class LevelEdit_Trigger : MonoBehaviour
 
     private bool afterEvent = false;
     private bool afterEventProgress = false;
+    private bool _timeOut = false;
+
+    private TimeCounterEx _timeCounter = new TimeCounterEx();
+
+    public void Start()
+    {
+        _timeCounter.InitTimer("time");
+
+    }
 
     public void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
+        _timeCounter.IncreaseTimer("time",1f,out _timeOut);
+
         if(isTriggered && triggerTimer != 0f)
         {
             triggerTimer -= Time.deltaTime;
@@ -53,14 +67,18 @@ public class LevelEdit_Trigger : MonoBehaviour
     }
 
     public bool IsTriggered() {return isTriggered;}
+    public void SetCollisionTrigger(bool active) { collisionTrigger = active; }
 
     public void OnTriggerEnter(Collider coll)
     {
-        if(isTriggered || !collisionTrigger)
+
+        if (isTriggered || !collisionTrigger || !_timeOut)
             return;
 
-        if((coll.gameObject.layer & targetLayer.value) != 0)
+        if ((coll.gameObject.layer & targetLayer.value) != 0)
         {
+            Debug.Log(gameObject.name);
+            gameObject.name = "triggered";
             TriggerEnable();
         }
     }

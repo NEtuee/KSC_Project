@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EMPShield : Scanable
+public class EMPShield : Hitable
 {
     public GameObject destroyEffect;
-    public bool isOver = false;
     public bool isCore = false;
+    public bool isActive = false;
+    public bool shieldEffect = true;
     [SerializeField] private bool debug;
-    [SerializeField] private float hp = 100f;
     public Color scanColor;
     private float shakeTime = 0.0f;
     private Vector3 originalPosition;
+    private float originalWpo;
 
-    private Collider collider;
+    private ParticleSystem shieldParticle;
+    //private Collider collider;
 
     private Material mat;
 
@@ -22,6 +24,19 @@ public class EMPShield : Scanable
         base.Start();
         collider = GetComponent<Collider>();
         mat = renderer.material;
+
+        if(shieldEffect)
+        {
+            Color color2 = mat.GetColor("_color2");
+            color2.a = 0f;
+            mat.SetColor("_color2",color2);
+
+            originalWpo = mat.GetFloat("_WPO");
+        }
+
+        
+
+        //shieldParticle = GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -42,7 +57,7 @@ public class EMPShield : Scanable
             //Vector3 cameraPosition = GameManager.Instance.GetPlayerPosition();
             Vector3 cameraPosition = ((PlayerCtrl_Ver2)GameManager.Instance.player).GetPlayerCenter();
 
-            Bounds bound = renderer.bounds;
+            Bounds bound = collider.bounds;
             Vector3 extents = bound.extents;
             Vector3 point;
             point = bound.center + new Vector3(-extents.x, -extents.y, extents.z);
@@ -80,7 +95,7 @@ public class EMPShield : Scanable
 
     private void FixedUpdate()
     {
-        CheckVisible();
+        //CheckVisible();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -91,38 +106,49 @@ public class EMPShield : Scanable
         }
     }
 
-    public void Hit()
+    public override void Hit() 
     {
+        if(isActive == false)
+            StartCoroutine(ActiveEffect());
+
         originalPosition = transform.localPosition;
         hp -= 100f;
         shakeTime = 0.1f;
+        StartCoroutine(HitEffect());
         if (hp <= 0f)
         {
-            Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-            collider.enabled = false;
-            renderer.enabled = false;
-            isOver = true;
+            Destroy();
+
             //Destroy(gameObject);
         }
+
+        whenHit.Invoke();
     }
 
-    public void Hit(float damage)
+    public override void Hit(float damage)
     {
+        if (isActive == false)
+            StartCoroutine(ActiveEffect());
+
         originalPosition = transform.localPosition;
         hp -= damage;
-        shakeTime = 0.1f;
+        StartCoroutine(HitEffect());
+        //shakeTime = 0.1f;
         if (hp <= 0f)
         {
-            Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-            collider.enabled = false;
-            renderer.enabled = false;
-            isOver = true;
+            Destroy();
+
             //Destroy(gameObject);
         }
+
+        whenHit.Invoke();
     }
 
-    public void Hit(float damage, out bool isDestroy)
+    public override void Hit(float damage, out bool isDestroy)
     {
+        if (isActive == false)
+            StartCoroutine(ActiveEffect());
+
         originalPosition = transform.localPosition;
 
         if (isCore == true)
@@ -133,22 +159,83 @@ public class EMPShield : Scanable
         {
             hp -= damage;
         }
-        shakeTime = 0.1f;
+        //shakeTime = 0.1f;
+        StartCoroutine(HitEffect());
         isDestroy = false;
         if (hp <= 0f)
         {
             isDestroy = true;
-            Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-            collider.enabled = false;
-            renderer.enabled = false;
-            isOver = true;
-            //Destroy(gameObject);
+            Destroy();
         }
+
+        whenHit.Invoke();
+    }
+
+    public void Reactive()
+    {
+        collider.enabled = true;
+        renderer.enabled = true;
+        isOver = false;
+    }
+
+    public override void Destroy()
+    {
+        Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
+        collider.enabled = false;
+        renderer.enabled = false;
+        isOver = true;
+
+        whenDestroy.Invoke();
     }
 
     public override void Scanned()
     {
-        mat.SetColor("_BaseColor", scanColor);
+        //mat.SetColor("_BaseColor", scanColor);
+        if (isActive == false)
+        {
+            StartCoroutine(ActiveEffect());
+        }
+        whenScanned?.Invoke();
+    }
+
+    IEnumerator ActiveEffect()
+    {
+        if(!shieldEffect)
+            yield break;
+
+        isActive = true;
+        Color color2 = mat.GetColor("_color2");
+        float target = 0.043f;
+        float current = 0.0f;
+
+        while (current < target)
+        {
+            current += 0.05f * Time.deltaTime;
+            color2.a = current;
+
+            mat.SetColor("_color2",color2);
+
+            yield return null;
+        }
+    }
+
+    IEnumerator HitEffect()
+    {
+        if(!shieldEffect)
+            yield break;
+
+        float wpo = 2.0f;
+        mat.SetFloat("_WPO", wpo);
+        
+        while(wpo > originalWpo)
+        {
+            wpo -= 1.5f * Time.deltaTime;
+            mat.SetFloat("_WPO", wpo);
+
+            yield return null;
+        }
+
+        mat.SetFloat("_WPO", originalWpo);
     }
 
     //private void OnBecameVisible()

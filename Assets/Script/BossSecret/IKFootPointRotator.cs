@@ -5,17 +5,14 @@ using UnityEditor;
 
 public class IKFootPointRotator : MonoBehaviour
 {
-    public Transform rayPoint;
-
-    public Transform leftFootPoint;
-    public Transform rightFootPoint;
-
+    public List<Transform> footPoints;
+    public List<IKLegMovement> legs;
 
     public LayerMask layerMask;
 
     public float rayDistance = 10f;
     public float baseHeight = 1f;
-    public float weight = 1f;
+    public float rotateFactor = 0.07f;
 
     public bool rotation = true;
 
@@ -32,15 +29,15 @@ public class IKFootPointRotator : MonoBehaviour
 
         ray.SetDirection(down);
 
-        Vector3 leftNormal = Vector3.zero;
-        Vector3 rightNormal = Vector3.zero;
-        if(ray.Cast(leftFootPoint.position,out RaycastHit hit))
+        Vector3 normals = Vector3.zero;
+        RaycastHit hit;
+
+        foreach(var point in footPoints)
         {
-            leftNormal = hit.normal;
-        }
-        if(ray.Cast(rightFootPoint.position,out hit))
-        {
-            rightNormal = hit.normal;
+            if(ray.Cast(point.position,out hit))
+            {
+                normals += hit.normal;
+            }
         }
 
         if(ray.Cast(transform.position,out hit))
@@ -49,11 +46,27 @@ public class IKFootPointRotator : MonoBehaviour
             transform.position = point;
         }
 
-        var avg = (leftNormal + rightNormal).normalized;
+        var avg = (normals).normalized;
 
         if(rotation)
-            transform.rotation = Quaternion.Lerp(transform.rotation,(Quaternion.FromToRotation(transform.up,avg) * transform.rotation),0.07f);
+            transform.rotation = Quaternion.Lerp(transform.rotation,(Quaternion.FromToRotation(transform.up,avg) * transform.rotation),rotateFactor);
 
         
+    }
+
+    public void IKUnHold()
+    {
+        foreach(var leg in legs)
+        {
+            leg.Hold(false);
+        }
+    }
+
+    public void IKHold()
+    {
+        foreach(var leg in legs)
+        {
+            leg.Hold(true);
+        }
     }
 }

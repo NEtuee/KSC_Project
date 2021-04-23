@@ -4,17 +4,28 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
+[System.Serializable]
+public struct DistanceBlendProfile
+{
+    public string name;
+    public float targetDistance;
+    public float blendDuration;
+}
+
 public class CameraManager : MonoBehaviour
 {
     [SerializeField] private CinemachineBrain brain;
     private Transform brainCameraTransfrom;
     [SerializeField] private CinemachineVirtualCameraBase playerFollowCam;
     [SerializeField] private Cinemachine3rdPersonFollow playerFollowCam3rdPersonComponent;
+    private Cinemachine3rdPersonFollow playerAimCam3rdPersonComponent;
+    private Cinemachine3rdPersonFollow current3rdPersonComponent;
     [SerializeField] private CinemachineVirtualCameraBase playerAimCam;
     [SerializeField] private List<CinemachineVirtualCameraBase> otherCameras = new List<CinemachineVirtualCameraBase>();
     [SerializeField] private Transform spearLunchPos;
     [SerializeField] private bool isBlend;
     [SerializeField] private bool isAttentionCamera;
+    [SerializeField] private CinemachineImpulseSource _recoilImpulseSource;
     private bool isBlendCameraDistance;
     private float targetDistance;
     private float distanceBlendStartTime;
@@ -27,11 +38,17 @@ public class CameraManager : MonoBehaviour
 
     private float cameraSideSmoothVelocity;
 
+    public DistanceBlendProfile[] distanceBlendProfiles;
+    private Dictionary<string, DistanceBlendProfile> distanceDic = new Dictionary<string, DistanceBlendProfile>();
+
+    //Damping
+    private Vector3 prevDamping = Vector3.zero;
+
     private void Start()
     {
         brainCameraTransfrom = brain.transform;
 
-        GameManager.Instance.cameraManger = this;
+        GameManager.Instance.cameraManager = this;
 
         otherCameras.Add(playerFollowCam);
         otherCameras.Add(playerAimCam);
@@ -48,6 +65,13 @@ public class CameraManager : MonoBehaviour
             brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
             brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
         }
+
+        for(int i = 0; i<distanceBlendProfiles.Length;i++)
+        {
+            distanceDic.Add(distanceBlendProfiles[i].name, distanceBlendProfiles[i]);
+        }
+
+        SetFollowCameraDistance("Default");
     }
 
     private void Update()
@@ -77,6 +101,8 @@ public class CameraManager : MonoBehaviour
         currentActiveCam = playerFollowCam;
 
         playerFollowCam3rdPersonComponent = playerFollowCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+        playerAimCam3rdPersonComponent = playerAimCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+        current3rdPersonComponent = playerFollowCam3rdPersonComponent;
     }
 
     /// <summary>
@@ -91,6 +117,9 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerFollowCam;
         currentActiveCam.gameObject.SetActive(true);
+
+        current3rdPersonComponent = playerFollowCam3rdPersonComponent;
+
         return true;
     }
 
@@ -103,6 +132,8 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerFollowCam;
         currentActiveCam.gameObject.SetActive(true);
+        current3rdPersonComponent = playerFollowCam3rdPersonComponent;
+
         if (isRunningCallBackCoroutine)
         {
             StopAllCoroutines();
@@ -123,6 +154,7 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerAimCam;
         currentActiveCam.gameObject.SetActive(true);
+        current3rdPersonComponent = playerAimCam3rdPersonComponent;
         return true;
     }
 
@@ -135,6 +167,7 @@ public class CameraManager : MonoBehaviour
         prevActiveCam.gameObject.SetActive(false);
         currentActiveCam = playerAimCam;
         currentActiveCam.gameObject.SetActive(true);
+        current3rdPersonComponent = playerAimCam3rdPersonComponent;
         if (isRunningCallBackCoroutine)
         {
             StopAllCoroutines();
@@ -349,6 +382,17 @@ public class CameraManager : MonoBehaviour
         distanceBlendStartTime = Time.time;
     }
 
+    public void SetFollowCameraDistance(string key)
+    {
+        if (distanceDic.ContainsKey(key) == false)
+            return;
+
+        isBlendCameraDistance = true;
+        targetDistance = distanceDic[key].targetDistance;
+        distanceBlendDuration = distanceDic[key].blendDuration;
+        distanceBlendStartTime = Time.time;
+    }
+
     private void BlendDistanceFollowCamera()
     {
         if(isBlendCameraDistance == true)
@@ -362,4 +406,44 @@ public class CameraManager : MonoBehaviour
             }
         }
     }
+
+    public void ZeroDamping()
+    {
+        prevDamping = playerFollowCam3rdPersonComponent.Damping;
+        playerFollowCam3rdPersonComponent.Damping = Vector3.zero;
+    }
+
+    public void RestoreDamping()
+    {
+        playerFollowCam3rdPersonComponent.Damping = prevDamping;
+    }
+
+    public void RestoreDamping(float lateTime)
+    {
+        StartCoroutine(LateRestoreDampingCoroutine(lateTime));
+    }
+
+    IEnumerator LateRestoreDampingCoroutine(float lateTime)
+    {
+        yield return new WaitForSeconds(lateTime);
+        RestoreDamping();
+    }
+
+    public void SetDamping(Vector3 damp)
+    {
+        playerFollowCam3rdPersonComponent.Damping = damp;
+    }
+
+    public float GetCameraDistance()
+    {
+        return current3rdPersonComponent.CameraDistance;
+    }
+
+    public void GenerateRecoilImpulse()
+    {
+        if (_recoilImpulseSource == null)
+            return;
+        _recoilImpulseSource.GenerateImpulse();
+    }
 }
+

@@ -5,6 +5,7 @@ using UniRx.Triggers;
 using UniRx;
 using DG.Tweening;
 using UnityEngine.Events;
+using TMPro;
 /// <summary>
 /// 게이지바를 표시하는 UI 입니다.
 /// 단순히 외부에서 값을 받아와서 자기가 가진 Image의 fillAmount값을 갱신합니다.
@@ -17,6 +18,7 @@ public class GageBarUI : MonoBehaviour
     }
 
     [SerializeField] private Image gageImage;
+    [SerializeField] private TextMeshProUGUI gageValueText;
     [SerializeField] private GageUpdateType updateType;
     [SerializeField] private float updateSpeed = 4f;
 
@@ -62,6 +64,10 @@ public class GageBarUI : MonoBehaviour
                             {
                                 isDisplay = false;
                                 gageImage.DOFade(0.0f, 1.0f);
+                                if (gageValueText != null)
+                                {
+                                    gageValueText.DOFade(0f, 1.0f);
+                                }
                                 disappearChain?.Invoke();
                             }
                             
@@ -98,6 +104,10 @@ public class GageBarUI : MonoBehaviour
                           {
                               isDisplay = false;
                               gageImage.DOFade(0.0f, 1.0f);
+                              if (gageValueText != null)
+                              {
+                                  gageValueText.DOFade(0f, 1.0f);
+                              }
                               disappearChain?.Invoke();
                           }
                          
@@ -116,11 +126,19 @@ public class GageBarUI : MonoBehaviour
             if (visible == false)
             {
                 gageImage.DOFade(displayAlpha, 0.5f);
+                if (gageValueText != null)
+                {
+                    gageValueText.DOFade(1f, 0.5f);
+                }
                 appearChain?.Invoke();
             }
         }
 
-        updateValue = value;
+        updateValue = value / 100;
+        if(gageValueText != null)
+        {
+            gageValueText.text = ((int)value).ToString();
+        }
     }
 
     public void Visible(bool result)
@@ -130,6 +148,10 @@ public class GageBarUI : MonoBehaviour
         {
             gageImage.DOKill();
             gageImage.DOFade(displayAlpha, 0.5f);
+            if (gageValueText != null)
+            {
+                gageValueText.DOFade(1f, 0.5f);
+            }
             appearChain?.Invoke();
         }
         else

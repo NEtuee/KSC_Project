@@ -54,6 +54,11 @@ public class MathEx : MonoBehaviour {
 		return new Vector3(value.x,y,value.y);
 	}
 
+	public static Vector3 MultiplyElems(Vector3 one, Vector3 two)
+	{
+		return new Vector3(one.x * two.x, one.y * two.y, one.z * two.z);
+	}
+
 	public static float DistanceFromPointToLine(Vector2 point, Vector2 line0, Vector2 line1)
     {
         Vector2 l1 = line0;

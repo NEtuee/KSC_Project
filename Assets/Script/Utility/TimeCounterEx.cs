@@ -5,16 +5,21 @@ using UnityEngine;
 public class TimeCounterEx
 {
     private Dictionary<string, float> _timerSet = new Dictionary<string, float>();
+    private Dictionary<string, float> _timeLimitSet = new Dictionary<string, float>();
 
-    public float InitTimer(string target, float time = 0f)
+    public static bool _IsUpdate;
+
+    public float InitTimer(string target, float time = 0f, float timeLimit = 1f)
     {
         if(!_timerSet.ContainsKey(target))
         {
             _timerSet.Add(target,time);
+            _timeLimitSet.Add(target,timeLimit);
         }
         else
         {
             _timerSet[target] = time;
+            _timeLimitSet[target] = timeLimit;
         }
 
         return time;
@@ -39,6 +44,12 @@ public class TimeCounterEx
         return curr;
     }
 
+    public float IncreaseTimer(string target, out bool overLimit, float timeScale = 1f)
+    {
+        float limit = _timeLimitSet[target];
+        return IncreaseTimer(target,limit,out overLimit,timeScale);
+    }
+
     public float IncreaseTimer(string target, float limit, out bool overLimit, float timeScale = 1f)
     {
         if(!_timerSet.ContainsKey(target))
@@ -46,7 +57,7 @@ public class TimeCounterEx
             _timerSet.Add(target,0f);
         }
 
-        var curr = _timerSet[target] += timeScale * Time.deltaTime;
+        var curr = _timerSet[target] += timeScale * GetDeltaTime();
         overLimit = false;
 
         if(curr >= limit)
@@ -65,7 +76,7 @@ public class TimeCounterEx
             _timerSet.Add(target,0f);
         }
 
-        var curr = _timerSet[target] -= Time.deltaTime;
+        var curr = _timerSet[target] -= GetDeltaTime();
         overLimit = false;
         
         if(curr <= limit)
@@ -75,5 +86,10 @@ public class TimeCounterEx
         }
 
         return curr;
+    }
+
+    public float GetDeltaTime()
+    {
+        return _IsUpdate ? Time.deltaTime : Time.fixedDeltaTime;
     }
 }

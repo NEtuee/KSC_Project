@@ -113,11 +113,14 @@ public class PlayerMovement : MonoBehaviour
             keepSpeed = true;
         }
 
-        transform.SetParent(null);
+        SetParent(null);
     }
-
+    
     private void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if(groundAngle >= invalidityAngle)
         {
             currentJumpPower -= gravity * Time.deltaTime;
@@ -138,10 +141,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         velocity = transform.position - prevPosition;
         trueSpeed = velocity.magnitude;
         speed = trueSpeed * 100f;
         prevPosition = transform.position;
+
+        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab || 
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp ||
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.Ragdoll || 
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.HangRagdoll ||
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.HangLedge ||
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp)
+        {
+            groundDistance = 0.0f;
+            return;
+        }
 
         CheckGround();
 
@@ -196,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckGroundDistance()
     {
-        if(capsuleCollider != null)
+        if (capsuleCollider != null)
         {
             float radius = capsuleCollider.radius * 0.9f;
             float dist = 10f;
@@ -210,6 +227,11 @@ public class PlayerMovement : MonoBehaviour
                 groundAngle = Mathf.Acos(Vector3.Dot(groundHit.normal, Vector3.up)) * Mathf.Rad2Deg;
                 slidingVector = (Vector3.Project(Vector3.down, groundHit.normal) - Vector3.down).normalized;
             }
+            else
+            {
+                detectObject = null;
+            }
+
             if (dist >= groundMinDistance)
             {
                 Vector3 pos = transform.position + Vector3.up * (capsuleCollider.radius);
@@ -252,14 +274,21 @@ public class PlayerMovement : MonoBehaviour
                 isGrounded = true;
                 isJumping = false;
 
-                if (detectObject.CompareTag("Enviroment"))
+                if (detectObject != null && detectObject.CompareTag("Enviroment"))
                 {
-                    transform.SetParent(detectObject);
+                    SetParent(detectObject);
                 }
                 else
                 {
-                    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
-                      transform.SetParent(null);
+                    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab 
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge 
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
+                    {
+                        SetParent(null);
+                    }
                 }
 
                 keepSpeed = false;
@@ -288,9 +317,9 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 isGrounded = false;
-                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll&& player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge&& player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
+                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll&& player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge&& player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.ReadyClimbingJump && player.GetState() != PlayerCtrl_Ver2.PlayerState.ClimbingJump)
                 {
-                    transform.SetParent(null);
+                    SetParent(null);
                 }
             }
         }
@@ -305,7 +334,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         prevParent = transform.parent;
-        transform.SetParent(null);
+        SetParent(null);
         detachTime = Time.time;
 
         if (prevParent != null)
@@ -318,11 +347,26 @@ public class PlayerMovement : MonoBehaviour
     public void Attach()
     {
         keepSpeed = false;
+        isGrounded = false;
     }
 
     public float GetGroundAngle()
     {
         return groundAngle;
+    }
+
+    public void SetParent(Transform parent)
+    {
+        if (transform.parent != parent)
+        {
+            //Debug.Log(parent);
+            transform.SetParent(parent);
+        }
+    }
+
+    public void SetGrab()
+    {
+        isJumping = false;
     }
 
     private void OnGUI()
@@ -336,6 +380,8 @@ public class PlayerMovement : MonoBehaviour
             GUI.Label(new Rect(10f, 260f, 100, 20), "IsGround : " + isGrounded.ToString(), style);
             GUI.Label(new Rect(10f, 280f, 100, 20), "GroundAngle : " + groundAngle.ToString(), style);
             GUI.Label(new Rect(10f, 300f, 100, 20), "IsKeepSpeed : " + keepSpeed.ToString(), style);
+            GUI.Label(new Rect(10f, 480f, 100, 20), "GroundDistance : " + groundDistance.ToString(), style);
+
         }
     }
 }

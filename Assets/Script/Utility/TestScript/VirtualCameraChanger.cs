@@ -14,27 +14,27 @@ public class VirtualCameraChanger : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.F1))
         {
-            GameManager.Instance.cameraManger.ActiveCamera(firstCam);
+            GameManager.Instance.cameraManager.ActiveCamera(firstCam);
         }
 
         if (Input.GetKeyDown(KeyCode.F2))
         {
-            GameManager.Instance.cameraManger.ActiveCamera(secondCam);
+            GameManager.Instance.cameraManager.ActiveCamera(secondCam);
         }
 
         if (Input.GetKeyDown(KeyCode.F3))
         {
-            GameManager.Instance.cameraManger.ActiveCamera(thirdCam);
+            GameManager.Instance.cameraManager.ActiveCamera(thirdCam);
         }
 
         if (Input.GetKeyDown(KeyCode.F4))
         {
-            GameManager.Instance.cameraManger.ActiveCamera(fourthCam);
+            GameManager.Instance.cameraManager.ActiveCamera(fourthCam);
         }
 
         if (Input.GetKeyDown(KeyCode.F5))
         {
-            GameManager.Instance.cameraManger.BackToPrevCamera();
+            GameManager.Instance.cameraManager.BackToPrevCamera();
         }
     }
 

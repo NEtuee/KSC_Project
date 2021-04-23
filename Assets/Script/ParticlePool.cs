@@ -2,61 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticlePool : MonoBehaviour
+public class ParticlePool : ObjectPoolBase<ParticleSystem>
 {
-    public GameObject baseObject;
-
-    private Queue<ParticleSystem> _cache = new Queue<ParticleSystem>();
-    private List<ParticleSystem> _progressParticles = new List<ParticleSystem>();
-
-    private void Update()
+    public void Awake()
     {
-        for(int i = 0; i < _progressParticles.Count;)
+        _activeDelegate += (t,position,rotation) =>
         {
-            if(!_progressParticles[i].isEmitting && _progressParticles[i].particleCount == 0)
-            {
-                _progressParticles[i].gameObject.SetActive(false);
-                _progressParticles[i].Stop();
-
-                _cache.Enqueue(_progressParticles[i]);
-                _progressParticles.RemoveAt(i);
-            }
-            else
-            {
-                ++i;
-            }
-        }
-    }
-
-    public void Active(Vector3 position, Quaternion rotation)
-    {
-        var particle = GetCachedItem();
-        particle.transform.SetPositionAndRotation(position,rotation);
-        particle.gameObject.SetActive(true);
-        particle.Play(true);
-
-        _progressParticles.Add(particle);
-    }
-
-    private ParticleSystem GetCachedItem()
-    {
-        if(_cache.Count == 0)
-            CreateCacheItems(1);
+            t.transform.SetPositionAndRotation(position,rotation);
+            t.gameObject.SetActive(true);
+            t.Play(true);
+        };
         
-        return _cache.Dequeue();
-    }
-
-    private void CreateCacheItems(int count)
-    {
-        for(int i = 0; i < count; ++i)
+        _createDelegate += t =>
         {
-            var obj = Instantiate(baseObject,Vector3.zero,Quaternion.identity);
-            var particle = obj.GetComponent<ParticleSystem>();
-
-            obj.SetActive(false);
-            particle.Stop();
-
-            _cache.Enqueue(particle);
-        }
+            t.Stop();
+        };
+        
+        _deleteProgressDelegate += t =>
+        {
+            t.gameObject.SetActive(false);
+            t.Stop();
+        };
+        
+        _deleteCondition += t =>
+        {
+            return (!t.isEmitting && t.particleCount == 0);
+        };
     }
 }

@@ -1,0 +1,216 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
+  m_Name: NewSoundData
+  m_EditorClassIdentifier: 
+  csvData: {fileID: 4900000, guid: f91709099811d144ebb21048425c9c42, type: 3}
+  soundData:
+  - path: global data
+    id: 0
+    type: Global
+    parameters:
+    - name: MasterVolume
+      id: 1
+      min: 0
+      max: 100
+    - name: SFXVolume
+      id: 2
+      min: 0
+      max: 100
+    - name: AmbVolume
+      id: 3
+      min: 0
+      max: 100
+    - name: BGMVolume
+      id: 4
+      min: 0
+      max: 100
+    - name: PC_GroundID
+      id: 5
+      min: 0
+      max: 2
+  - path: event:/PlayerCharacter/Movement/PC_Jogging
+    id: 1000
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/PC_Running
+    id: 1001
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/PC_Running_Stop
+    id: 1002
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/PC_Jump
+    id: 1003
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/PC_Landing
+    id: 1004
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/PC_Walking
+    id: 1005
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/PC_Climing
+    id: 1006
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/PC_Climing_Jump
+    id: 1007
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Weapon_Aiming
+    id: 1008
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Weapon_AimOut
+    id: 1009
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Weapon_Trigger
+    id: 1010
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Laser_Fire_1st
+    id: 1011
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Impulse_Fire
+    id: 1012
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Railgun_Charging
+    id: 1013
+    type: SFX
+    parameters:
+    - name: PC_Charging
+      id: 10131
+      min: 0
+      max: 100
+  - path: event:/PlayerCharacter/Movement/Hit/PC_Down_Ground
+    id: 1014
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/Hit/PC_Hit_Metal
+    id: 1015
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/Standing/PC_Hand
+    id: 1016
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/Standing/PC_StandUp
+    id: 1017
+    type: SFX
+    parameters: []
+  - path: event:/Drone/Movement/DR_Flying
+    id: 1300
+    type: SFX
+    parameters: []
+  - path: event:/Drone/Action/DR_Scanning
+    id: 1301
+    type: SFX
+    parameters: []
+  - path: event:/Drone/Action/DR_Talking
+    id: 1302
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Shield/Mob_Shield_Idle
+    id: 1500
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Shield/Mob_Shield_Broken
+    id: 1501
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Hit/Mob_Effective_Hit
+    id: 1502
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Hit/Mob_Ignore_Hit
+    id: 1503
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Arachne/Arachne_Crash
+    id: 1504
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Arachne/Arachne_Destruction
+    id: 1505
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Arachne/Arachne_Walking
+    id: 1506
+    type: SFX
+    parameters: []
+  - path: event:/Mob/DaddyLongLegs/Daddy_Walking
+    id: 1507
+    type: SFX
+    parameters: []
+  - path: event:/Mob/JirungE/JirungE_Crash
+    id: 1508
+    type: SFX
+    parameters: []
+  - path: event:/Mob/JirungE/JirungE_Walking
+    id: 1509
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Medusa/Medusa_Destruction
+    id: 1510
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Medusa/Medusa_Scanning
+    id: 1511
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Medusa/Medusa_Walking
+    id: 1512
+    type: SFX
+    parameters: []
+  - path: event:/SFX/Explosion
+    id: 1700
+    type: SFX
+    parameters: []
+  - path: event:/SFX/Explosion_Small
+    id: 1701
+    type: SFX
+    parameters: []
+  - path: event:/Ambient/Test_Inside
+    id: 1702
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Test_Outside
+    id: 1703
+    type: AMB
+    parameters: []
+  - path: snapshot:/MasterVolume
+    id: 4000
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/SFXVolume
+    id: 4001
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/AmbVolume
+    id: 4002
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/BGMVolume
+    id: 4003
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/Local_Setting/DaddyLevelReverb
+    id: 4004
+    type: Snapshot
+    parameters: []

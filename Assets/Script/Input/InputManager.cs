@@ -1,15 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 using XInputDotNetPure;
+public enum InputType
+{
+    Keyboard,
+    DualShock,
+    XboxPad
+}
+
 
 public class InputManager : MonoBehaviour
 {
-    public enum ControlMode
+    public enum ConnectGamePad
     {
-        Keyboard,
-        DualShock,
-        XboxPad
+        None,DualShock,XboxPad
     }
 
     public class GamepadControlSet
@@ -26,29 +32,48 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    public class InputSet
+    {
+        public ActionResult GetInput;
+        public ActionResult GetRelease;
+        public ActionResult GetKeep;
+    }
+
     public delegate bool ActionResult(KeybindingActions action);
+
+    public bool inputBlock = false;
 
     private static InputManager instance;
     [SerializeField] public KeyBindings keyBindings;
-    [SerializeField] private ControlMode controlMode;
+    [SerializeField] public KeyBindingsToggle keyBindingsToggle;
     [SerializeField] private float joystickSenstive = 10f;
     [SerializeField] private float DebugAxis;
     private Dictionary<KeybindingActions, KeyCode> pc_keyDict = new Dictionary<KeybindingActions, KeyCode>();
     private Dictionary<KeybindingActions, GamepadControlSet> gamepad_keyDict = new Dictionary<KeybindingActions, GamepadControlSet>();
 
-    private Dictionary<KeybindingActions, KeybindingCheck> actionData = new Dictionary<KeybindingActions, KeybindingCheck>();
+    private Dictionary<KeybindingActions, KeybindingCheckToggle> actionData = new Dictionary<KeybindingActions, KeybindingCheckToggle>();
     private Dictionary<KeybindingActions, ActionResult> actionBinding = new Dictionary<KeybindingActions, ActionResult>();
+    private Dictionary<KeybindingActions, InputSet> actionBindingToggle = new Dictionary<KeybindingActions, InputSet>();
+    private Dictionary<KeybindingActions, InputSet> actionBindingDualShock = new Dictionary<KeybindingActions, InputSet>();
+    private Dictionary<KeybindingActions, InputSet> actionBindingXbox = new Dictionary<KeybindingActions, InputSet>();
+    private Dictionary<KeybindingActions, bool> dualShockAxisDownFlag = new Dictionary<KeybindingActions, bool>();
+    private Dictionary<KeybindingActions, bool> xboxAxisDownFlag = new Dictionary<KeybindingActions, bool>();
+
+    private List<KeybindingActions> xboxAxisActions = new List<KeybindingActions>();
+    private List<KeybindingActions> dualShockActions = new List<KeybindingActions>();
+    private Dictionary<KeybindingActions, bool> dualShockAxisUpFlag = new Dictionary<KeybindingActions, bool>();
+    private Dictionary<KeybindingActions, bool> xboxAxisUpFlag = new Dictionary<KeybindingActions, bool>();
+
+    private List<KeybindingActions> dualShockReleaseList = new List<KeybindingActions>();
+    private List<KeybindingActions> xboxShockReleaseList = new List<KeybindingActions>();
+
+    private ConnectGamePad currentConnectGamepad;
+
     private void Awake()
     {
         if (null == instance)
-        {
-            //for (int count = 0; count < keyBindings.keybindingChecks.Length; count++)
-            //{
-            //    pc_keyDict.Add(keyBindings.keybindingChecks[count].action, keyBindings.keybindingChecks[count].pc);
-            //    gamepad_keyDict.Add(keyBindings.keybindingChecks[count].action, new GamepadControlSet(keyBindings.keybindingChecks[count].isAxis, keyBindings.keybindingChecks[count].gamepad, keyBindings.keybindingChecks[count].axisName));
-            //}
-
-            InitializeKeyBind();
+        {         
+            InitializeKeyBind_Toggle();
 
             instance = this;
 
@@ -62,9 +87,59 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        DebugAxis = Input.GetAxis("RightTrigger_Xbox");
+        if (dualShockReleaseList.Count != 0)
+        {
+            for (int i = 0; i < dualShockReleaseList.Count; i++)
+            {
+                if (Input.GetAxis(actionData[dualShockReleaseList[i]].dualshock.axisName) == 0.0f)
+                {
+                    dualShockAxisDownFlag[dualShockReleaseList[i]] = false;
+                    dualShockReleaseList.Remove(dualShockReleaseList[i]);
+                    break;
+                }
+            }
+        }
+        
+        if (xboxShockReleaseList.Count != 0)
+        {
+            for (int i = 0; i < xboxShockReleaseList.Count; i++)
+            {
+                if (Input.GetAxis(actionData[xboxShockReleaseList[i]].dualshock.axisName) == 0.0f)
+                {
+                    xboxAxisDownFlag[xboxShockReleaseList[i]] = false;
+                    xboxShockReleaseList.Remove(xboxShockReleaseList[i]);
+                    break;
+                }
+            }
+        }
+
+        if(dualShockActions.Count != 0)
+        {
+            foreach(var actions in dualShockActions)
+            {
+                if(Input.GetAxis(actionData[actions].dualshock.axisName) != 0.0f)
+                {
+                    dualShockAxisUpFlag[actions] = true;
+                }
+            }
+        }
+
+        if (xboxAxisActions.Count != 0)
+        {
+            foreach (var actions in xboxAxisActions)
+            {
+                if (Input.GetAxis(actionData[actions].xbox.axisName) != 0.0f)
+                {
+                    xboxAxisUpFlag[actions] = true;
+                }
+            }
+        }
     }
 
+    private void FixedUpdate()
+    {
+        DetectConnectGamePad();
+    }
     public static InputManager Instance
     {
         get
@@ -82,232 +157,232 @@ public class InputManager : MonoBehaviour
         return actionBinding[action](action);
     }
 
-    public void InitializeKeyBind()
+    public void InitializeKeyBind_Toggle()
     {
+        actionBindingToggle.Clear();
+        actionBindingDualShock.Clear();
+        actionBindingXbox.Clear();
         actionData.Clear();
-        actionBinding.Clear();
+        dualShockAxisDownFlag.Clear();
+        dualShockAxisUpFlag.Clear();
+        xboxAxisDownFlag.Clear();
+        xboxAxisUpFlag.Clear();
+        dualShockReleaseList.Clear();
+        xboxShockReleaseList.Clear();
 
-        for(int count = 0; count < keyBindings.keybindingChecks.Length; count++)
+        for (int count = 0; count < keyBindingsToggle.keybindingChecks.Length; count++)
         {
-            actionData.Add(keyBindings.keybindingChecks[count].action, keyBindings.keybindingChecks[count]);
-            
-            switch(controlMode)
+            actionData.Add(keyBindingsToggle.keybindingChecks[count].action, keyBindingsToggle.keybindingChecks[count]);
+
+            InputSet keyboardInputSet = new InputSet();
+            keyboardInputSet.GetInput += BindKeyboard_GetKeyDown;
+            if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                keyboardInputSet.GetRelease += BindKeyboard_GetKeyUp;
+            else
+                keyboardInputSet.GetRelease += BindKeyboard_GetKeyDown;
+            keyboardInputSet.GetKeep += BindKeyboard_GetKey;
+            actionBindingToggle.Add(keyBindingsToggle.keybindingChecks[count].action, keyboardInputSet);
+
+            InputSet dualShockInputSet = new InputSet();
+            switch (keyBindingsToggle.keybindingChecks[count].dualshock.valueType)
             {
-                case ControlMode.Keyboard:
+                case PadValueType.Button:
                     {
-                        switch(keyBindings.keybindingChecks[count].keyboard.buttonType)
-                        {
-                            case ButtonType.GetKey:
-                                actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKey);
-                                break;
-                            case ButtonType.GetKeyDown:
-                                actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKeyDown);
-                                break;
-                            case ButtonType.GetKeyUp:
-                                actionBinding.Add(keyBindings.keybindingChecks[count].action, BindKeyboard_GetKeyUp);
-                                break;
-                        }
+                        dualShockInputSet.GetInput += BindDualShock_GetKeyDown;
+                        if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                            dualShockInputSet.GetRelease += BindDualShock_GetKeyUp;
+                        else
+                            dualShockInputSet.GetRelease += BindDualShock_GetKeyDown;
+                        dualShockInputSet.GetKeep += BindDualShock_GetKey;
                     }
                     break;
-                case ControlMode.DualShock:
+                case PadValueType.Axis:
                     {
-                        switch (keyBindings.keybindingChecks[count].dualshock.valueType)
-                        {
-                            case PadValueType.Button:
-                                {
-                                    switch(keyBindings.keybindingChecks[count].dualshock.buttonType)
-                                    {
-                                        case ButtonType.GetKeyDown:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKeyDown);
-                                            break;
-                                        case ButtonType.GetKey:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKey);
-                                            break;
-                                        case ButtonType.GetKeyUp:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_GetKeyUp);
-                                            break;
-                                    }
-                                }
-                                break;
-                            case PadValueType.Axis:
-                                {
-                                    switch (keyBindings.keybindingChecks[count].dualshock.condition)
-                                    {
-                                        case AxisCondition.Equal:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisEqual);
-                                            break;
-                                        case AxisCondition.NotEqual:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisNotEqual);
-                                            break;
-                                        case AxisCondition.Greater:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisGreater);
-                                            break;
-                                        case AxisCondition.Less:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindDualShock_AxisLess);
-                                            break;
-                                    }
-                                }
-                                break;
-                        }
+                        dualShockAxisDownFlag.Add(keyBindingsToggle.keybindingChecks[count].action, false);
+                        dualShockActions.Add(keyBindingsToggle.keybindingChecks[count].action);
+                        dualShockAxisUpFlag.Add(keyBindingsToggle.keybindingChecks[count].action, false);
+                        dualShockInputSet.GetInput += BindDualShock_AxisDown;
+                        if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                            dualShockInputSet.GetRelease += BindDualShock_AxisUp;
+                        else
+                            dualShockInputSet.GetRelease += BindDualShock_AxisDown;
+                        dualShockInputSet.GetKeep += BindDualShock_AxisKeep;
                     }
                     break;
-                case ControlMode.XboxPad:
+            }
+            actionBindingDualShock.Add(keyBindingsToggle.keybindingChecks[count].action,dualShockInputSet);
+
+            InputSet xboxInputSet = new InputSet();
+            switch (keyBindingsToggle.keybindingChecks[count].xbox.valueType)
+            {
+                case PadValueType.Button:
                     {
-                        switch (keyBindings.keybindingChecks[count].xbox.valueType)
-                        {
-                            case PadValueType.Button:
-                                {
-                                    switch (keyBindings.keybindingChecks[count].xbox.buttonType)
-                                    {
-                                        case ButtonType.GetKeyDown:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKeyDown);
-                                            break;
-                                        case ButtonType.GetKey:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKey);
-                                            break;
-                                        case ButtonType.GetKeyUp:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_GetKeyUp);
-                                            break;
-                                    }
-                                }
-                                break;
-                            case PadValueType.Axis:
-                                {
-                                    switch (keyBindings.keybindingChecks[count].xbox.condition)
-                                    {
-                                        case AxisCondition.Equal:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisEqual);
-                                            break;
-                                        case AxisCondition.NotEqual:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisNotEqual);
-                                            break;
-                                        case AxisCondition.Greater:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisGreater);
-                                            break;
-                                        case AxisCondition.Less:
-                                            actionBinding.Add(keyBindings.keybindingChecks[count].action, BindXbox_AxisLess);
-                                            break;
-                                    }
-                                }
-                                break;
-                        }
+                        xboxInputSet.GetInput += BindXbox_GetKeyDown;
+                        if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                            xboxInputSet.GetRelease += BindXbox_GetKeyUp;
+                        else
+                            xboxInputSet.GetRelease += BindXbox_GetKeyDown;
+                        xboxInputSet.GetKeep += BindXbox_GetKey;
                     }
                     break;
+                case PadValueType.Axis:
+                    {
+                        xboxAxisDownFlag.Add(keyBindingsToggle.keybindingChecks[count].action, false);
+                        xboxAxisActions.Add(keyBindingsToggle.keybindingChecks[count].action);
+                        xboxAxisUpFlag.Add(keyBindingsToggle.keybindingChecks[count].action, false);
+                        xboxInputSet.GetInput += BindXbox_AxisDown;
+                        if (keyBindingsToggle.keybindingChecks[count].isToggle == false)
+                            xboxInputSet.GetRelease += BindXbox_AxisUp;
+                        else
+                            xboxInputSet.GetRelease += BindXbox_AxisDown;
+                        xboxInputSet.GetKeep += BindXboxShock_AxisKeep;
+                    }
+                    break;
+            }
+            actionBindingXbox.Add(keyBindingsToggle.keybindingChecks[count].action, xboxInputSet);      
+        }
+    }
+
+    public bool GetInput(KeybindingActions actions)
+    {
+        if (inputBlock == true)
+            return false;
+
+        if (currentConnectGamepad == ConnectGamePad.None)
+            return actionBindingToggle[actions].GetInput(actions);
+        else if (currentConnectGamepad == ConnectGamePad.DualShock)
+            return actionBindingToggle[actions].GetInput(actions) || actionBindingDualShock[actions].GetInput(actions);
+        else
+            return actionBindingToggle[actions].GetInput(actions) || actionBindingXbox[actions].GetInput(actions);
+        //return (actionBindingToggle[actions].GetInput(actions)||actionBindingDualShock[actions].GetInput(actions)|| actionBindingXbox[actions].GetInput(actions));
+    }
+
+    public bool GetRelease(KeybindingActions actions)
+    {
+        if (inputBlock == true)
+            return false;
+
+        if (currentConnectGamepad == ConnectGamePad.None)
+            return actionBindingToggle[actions].GetRelease(actions);
+        else if (currentConnectGamepad == ConnectGamePad.DualShock)
+            return actionBindingToggle[actions].GetRelease(actions) || actionBindingDualShock[actions].GetRelease(actions);
+        else
+            return actionBindingToggle[actions].GetRelease(actions) || actionBindingXbox[actions].GetRelease(actions);
+        //return (actionBindingToggle[actions].GetRelease(actions)|| actionBindingDualShock[actions].GetRelease(actions)|| actionBindingXbox[actions].GetRelease(actions));
+    }
+
+    public bool GetKeep(KeybindingActions actions)
+    {
+        if (inputBlock == true)
+            return false;
+
+        if (currentConnectGamepad == ConnectGamePad.None)
+            return actionBindingToggle[actions].GetKeep(actions);
+        else if (currentConnectGamepad == ConnectGamePad.DualShock)
+            return actionBindingToggle[actions].GetKeep(actions) || actionBindingDualShock[actions].GetKeep(actions);
+        else
+            return actionBindingToggle[actions].GetKeep(actions) || actionBindingXbox[actions].GetKeep(actions);
+
+        //return (actionBindingToggle[actions].GetKeep(actions) || actionBindingDualShock[actions].GetKeep(actions) || actionBindingXbox[actions].GetKeep(actions));
+    }
+
+    public KeyCode GetBindingKeycode(KeybindingActions action,InputType inputType)
+    {
+        switch (inputType)
+        {
+            case InputType.Keyboard:
+                return actionData[action].keyboard.key;
+            case InputType.DualShock:
+                return actionData[action].dualshock.key;
+            case InputType.XboxPad:
+                return actionData[action].xbox.key;
+            default:
+                return actionData[action].keyboard.key;
+        }
+    }
+
+    public bool GetBindingIsToggle(KeybindingActions action)
+    {
+        return actionData[action].isToggle;
+    }
+
+    public void ChangeKeyBindings(KeybindingActions action, KeyCode keycode, InputType inputType)
+    {
+        foreach (var keybinding in  keyBindingsToggle.keybindingChecks)
+        {
+            if (keybinding.action == action)
+            {
+                switch (inputType)
+                {
+                    case InputType.Keyboard:
+                        keybinding.keyboard.key = keycode;
+                        return;
+                    case InputType.DualShock:
+                        keybinding.dualshock.key = keycode;
+                        return;
+                    case InputType.XboxPad:
+                        keybinding.xbox.key = keycode;
+                        return;
+                }
             }
         }
     }
 
-
-    public bool GetKeyDown(KeybindingActions action)
+    public void SetKeyToggle(KeybindingActions action, bool result)
     {
-        switch(controlMode)
+        foreach (var keybinding in  keyBindingsToggle.keybindingChecks)
         {
-            case ControlMode.Keyboard:
-                return Input.GetKeyDown(pc_keyDict[action]);
-            case ControlMode.DualShock:
-                if(gamepad_keyDict[action].isAxis == true)
-                {
-                    if(Input.GetAxis(gamepad_keyDict[action].axisName) > 0.0f && Input.GetAxis(gamepad_keyDict[action].axisName) < 0.1f)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    return Input.GetKeyDown(gamepad_keyDict[action].keyCode);
-                }
+            if (keybinding.action == action)
+            {
+                keybinding.isToggle = result;
                 break;
+            }
         }
-        return false;
-    }
-
-    public bool GetKey(KeybindingActions action)
-    {
-        switch (controlMode)
-        {
-            case ControlMode.Keyboard:
-                return Input.GetKey(pc_keyDict[action]);
-            case ControlMode.DualShock:
-                if (gamepad_keyDict[action].isAxis == true)
-                {
-                    if (Input.GetAxis(gamepad_keyDict[action].axisName) != -0.1f)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    return Input.GetKey(gamepad_keyDict[action].keyCode);
-                }
-                break;
-        }
-        return false;
-    }
-
-    public bool GetKeyUp(KeybindingActions action)
-    {
-        switch (controlMode)
-        {
-            case ControlMode.Keyboard:
-                return Input.GetKeyUp(pc_keyDict[action]);
-            case ControlMode.DualShock:
-                if (gamepad_keyDict[action].isAxis == true)
-                {
-                    if (Input.GetAxis(gamepad_keyDict[action].axisName) < 0.0f && Input.GetAxis(gamepad_keyDict[action].axisName) > -0.1f)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    return Input.GetKeyUp(gamepad_keyDict[action].keyCode);
-                }
-                break;
-        }
-        return false;
     }
 
     public float GetMoveAxisVertical()
     {
+        if (inputBlock == true)
+            return 0.0f;
+
         return Input.GetAxis("Vertical");
     }
 
     public float GetMoveAxisHorizontal()
     {
+        if (inputBlock == true)
+            return 0.0f;
+
         return Input.GetAxis("Horizontal");
     }
 
     public float GetCameraAxisX()
     {
-        switch (controlMode)
-        {
-            case ControlMode.Keyboard:
-                return Input.GetAxis("Mouse X");
-            case ControlMode.DualShock:
-                return Input.GetAxis("RightStickX_DualShock");
-            case ControlMode.XboxPad:
-                return Input.GetAxis("RightStickX_Xbox");
-            default:
-                return Input.GetAxis("Mouse X");
-        }
+        if (inputBlock == true)
+            return 0.0f;
+
+        if (currentConnectGamepad == ConnectGamePad.None)
+            return Input.GetAxis("Mouse X");
+        else if (currentConnectGamepad == ConnectGamePad.DualShock)
+            return Input.GetAxis("Mouse X") + Input.GetAxis("RightStickX_DualShock");
+        else
+            return Input.GetAxis("Mouse X") + Input.GetAxis("RightStickX_Xbox");
     }
 
     public float GetCameraAxisY()
     {
-        switch (controlMode)
-        {
-            case ControlMode.Keyboard:
-                return Input.GetAxis("Mouse Y");
-            case ControlMode.DualShock:
-                return Input.GetAxis("RightStickY_DualShock");
-            case ControlMode.XboxPad:
-                return Input.GetAxis("RightStickY_Xbox");
-            default:
-                return Input.GetAxis("Mouse Y");
-        }
+        if (inputBlock == true)
+            return 0.0f;
+
+        if (currentConnectGamepad == ConnectGamePad.None)
+            return Input.GetAxis("Mouse Y");
+        else if(currentConnectGamepad == ConnectGamePad.DualShock)
+            return Input.GetAxis("Mouse Y") + Input.GetAxis("RightStickY_DualShock");
+        else
+            return Input.GetAxis("Mouse Y") + Input.GetAxis("RightStickY_Xbox");
     }
 
-    #region Å°º¸µå ¹ÙÀÎµù
+    #region í‚¤ë³´ë“œ ë°”ì¸ë”©
     private bool BindKeyboard_GetKeyDown(KeybindingActions action)
     {
         return Input.GetKeyDown(actionData[action].keyboard.key);
@@ -324,7 +399,7 @@ public class InputManager : MonoBehaviour
     }
     #endregion
 
-    #region µà¾ó¼îÅ© ¹ÙÀÎµù
+    #region ë“€ì–¼ì‡¼í¬ ë°”ì¸ë”©
     private bool BindDualShock_GetKeyDown(KeybindingActions action)
     {
         return Input.GetKeyDown(actionData[action].dualshock.key);
@@ -339,29 +414,44 @@ public class InputManager : MonoBehaviour
     {
         return Input.GetKeyUp(actionData[action].dualshock.key);
     }
-
-    private bool BindDualShock_AxisEqual(KeybindingActions action)
+ 
+    private bool BindDualShock_AxisDown(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].dualshock.axisName) == actionData[action].dualshock.value);
+        bool downFlag = dualShockAxisDownFlag[action];
+
+        if (downFlag == true)
+            return false;
+
+        if (Input.GetAxis(actionData[action].dualshock.axisName) != 1.0f)
+            return false;
+        
+        dualShockAxisDownFlag[action] = true;
+        dualShockReleaseList.Add(action);
+        return true;
     }
 
-    private bool BindDualShock_AxisNotEqual(KeybindingActions action)
+    private bool BindDualShock_AxisUp(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].dualshock.axisName) != actionData[action].dualshock.value);
+        if (dualShockAxisUpFlag[action] == false)
+            return false;
+
+        if (Input.GetAxis(actionData[action].dualshock.axisName).Equals(0.0f) == false)
+            return false;
+
+        dualShockAxisDownFlag[action] = false;
+        return true;
     }
 
-    private bool BindDualShock_AxisGreater(KeybindingActions action)
+    private bool BindDualShock_AxisKeep(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].dualshock.axisName) > actionData[action].dualshock.value);
-    }
+        if (Input.GetAxis(actionData[action].dualshock.axisName).Equals(1.0f) == true)
+            return true;
 
-    private bool BindDualShock_AxisLess(KeybindingActions action)
-    {
-        return (Input.GetAxis(actionData[action].dualshock.axisName) < actionData[action].dualshock.value);
+        return false;
     }
     #endregion
 
-    #region ¿¢½º¹Ú½º ÆÐµå ¹ÙÀÎµù
+    #region ì—‘ìŠ¤ë°•ìŠ¤ íŒ¨ë“œ ë°”ì¸ë”©
     private bool BindXbox_GetKeyDown(KeybindingActions action)
     {
         return Input.GetKeyDown(actionData[action].xbox.key);
@@ -377,32 +467,47 @@ public class InputManager : MonoBehaviour
         return Input.GetKeyUp(actionData[action].xbox.key);
     }
     
-    private bool BindXbox_AxisEqual(KeybindingActions action)
+    private bool BindXbox_AxisDown(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].xbox.axisName) == actionData[action].xbox.value);
+        bool downFlag = xboxAxisDownFlag[action];
+
+        if (downFlag == true)
+            return false;
+
+        if (Input.GetAxis(actionData[action].xbox.axisName).Equals( 1.0f) == false)
+            return false;
+        
+        xboxAxisDownFlag[action] = true;
+        xboxShockReleaseList.Add(action);
+        return true;
     }
 
-    private bool BindXbox_AxisNotEqual(KeybindingActions action)
+    private bool BindXbox_AxisUp(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].xbox.axisName) != actionData[action].xbox.value);
+        if (xboxAxisUpFlag[action] == false)
+            return false;
+
+        if (Input.GetAxis(actionData[action].xbox.axisName).Equals(0.0f) == false)
+            return false;
+
+        xboxAxisDownFlag[action] = false;
+        return true;
     }
 
-    private bool BindXbox_AxisGreater(KeybindingActions action)
+    private bool BindXboxShock_AxisKeep(KeybindingActions action)
     {
-        return (Input.GetAxis(actionData[action].xbox.axisName) > actionData[action].xbox.value);
-    }
+        if (Input.GetAxis(actionData[action].xbox.axisName).Equals(1.0f) == true)
+            return true;
 
-    private bool BindXbox_AxisLess(KeybindingActions action)
-    {
-        return (Input.GetAxis(actionData[action].xbox.axisName) < actionData[action].xbox.value);
+        return false;
     }
     #endregion
 
-    #region ¿¢¹Ú ÆÐµå Áøµ¿
+    #region ì—‘ë°• íŒ¨ë“œ ì§„ë™
     public void GamePadSetVibrate(float time, float power)
     {
-        if (controlMode != ControlMode.XboxPad)
-            return;
+        //if (controlMode != ControlMode.XboxPad)
+        //    return;
 
         StartCoroutine(GamePadVibrate(time,power));
     }
@@ -419,4 +524,24 @@ public class InputManager : MonoBehaviour
         GamePad.SetVibration(0, 0, 0);
     }
     #endregion
+
+    private void DetectConnectGamePad()
+    {
+        string[] connected = Input.GetJoystickNames();
+
+        if (connected.Length == 0)
+        {
+            currentConnectGamepad = ConnectGamePad.None;
+            return;
+        }
+
+        if (Input.GetJoystickNames()[0] == "Wireless Controller")
+        {
+            currentConnectGamepad = ConnectGamePad.DualShock;
+        }
+        else
+        {
+            currentConnectGamepad = ConnectGamePad.XboxPad;
+        }
+    }
 }

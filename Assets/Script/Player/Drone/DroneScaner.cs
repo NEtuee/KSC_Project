@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DroneScaner : MonoBehaviour
 {
@@ -23,22 +24,15 @@ public class DroneScaner : MonoBehaviour
     private RaycastHit hit;
     private void Start()
     {
-        foreach(string tag in scanableTags)
-        {
-            GameObject[] scanableObj= GameObject.FindGameObjectsWithTag(tag);
-            Scanable currentScanable;
-            for(int i = 0; i < scanableObj.Length; i++)
-            {
-                if(scanableObj[i].TryGetComponent<Scanable>(out currentScanable))
-                {
-                    scanableObjects.Add(currentScanable);
-                }
-            }
-        }
+        FindScanableObjects();
+        SceneManager.sceneLoaded += (s,w)=>{FindScanableObjects();};
     }
 
     void Update()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (Input.GetKeyDown(KeyCode.V))
         {
             scaning = true;
@@ -50,6 +44,8 @@ public class DroneScaner : MonoBehaviour
             scanForward.y = 0.0f;
             scanForward.Normalize();
             scanMat.SetVector("_ForwardDirection", scanForward);
+            
+            GameManager.Instance.soundManager.Play(1301, Vector3.zero, transform);
         }
 
         if (scaning == true)
@@ -64,6 +60,9 @@ public class DroneScaner : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.PAUSE == true)
+            return;
+
         if (scaning == true)
         {
             for (int i = 0; i < scanableObjects.Count;)
@@ -100,6 +99,23 @@ public class DroneScaner : MonoBehaviour
                 }
              
                 i++;
+            }
+        }
+    }
+
+    public void FindScanableObjects()
+    {
+        scanableObjects.Clear();
+        foreach(string tag in scanableTags)
+        {
+            GameObject[] scanableObj= GameObject.FindGameObjectsWithTag(tag);
+            Scanable currentScanable;
+            for(int i = 0; i < scanableObj.Length; i++)
+            {
+                if(scanableObj[i].TryGetComponent<Scanable>(out currentScanable))
+                {
+                    scanableObjects.Add(currentScanable);
+                }
             }
         }
     }

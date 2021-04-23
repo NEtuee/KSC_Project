@@ -9,6 +9,8 @@ public class MenuManager : MonoBehaviour
     public EscMenu input;
     public EscMenu sound;
 
+    public EscMenu keyCustomMenu;
+
     public Canvas launcherStateText;
     public Canvas impectStateText;
 
@@ -17,35 +19,37 @@ public class MenuManager : MonoBehaviour
 
     public GameObject crossHair;
 
+    public GameObject keyCustomMenuDummy;
+
     private Stack<EscMenu> menuPopup = new Stack<EscMenu>();
 
     private bool isMenuBlend = false;
     void Start()
     {
-        ((PlayerCtrl_Ver2)GameManager.Instance.player).launcherMode.Subscribe(
-            value => { 
-                switch(value)
-                {
-                    case 1:
-                        launcherStateText.enabled = true;
-                        impectStateText.enabled = false;
-                        break;
-                    case 2:
-                        launcherStateText.enabled = false;
-                        impectStateText.enabled = true;
-                        break;
-                }
-            });
+        ((PlayerCtrl_Ver2)GameManager.Instance.player).activeAimEvent += () => {
+            crossHair.SetActive(true);
+        };
+        ((PlayerCtrl_Ver2)GameManager.Instance.player).releaseAimEvent += () => {
+            crossHair.SetActive(false);
+        };
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && isMenuBlend == false)
+        if (InputManager.Instance.GetInput(KeybindingActions.Option) && isMenuBlend == false)
         {
             InputEsc();
-            crossHair.SetActive(!crossHair.activeSelf);
         }
+
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    keyCustomMenuDummy.SetActive(!keyCustomMenuDummy.activeSelf);
+        //    if (keyCustomMenuDummy.activeSelf == false)
+        //    {
+        //        InputManager.Instance.InitializeKeyBind_Toggle();
+        //    }
+        //}
     }
 
     public void InputEsc()
@@ -54,11 +58,13 @@ public class MenuManager : MonoBehaviour
         {
             menuPopup.Push(main);
             isMenuBlend = true;
-            GameManager.Instance.player.Pause();
-            GameManager.Instance.followTarget.Pause();
-            GameManager.Instance.cameraManger.ActiveAimCamera(() =>menuPopup.Peek().Appear(0.2f, () => isMenuBlend = false));
+            //GameManager.Instance.player.Pause();
+            //GameManager.Instance.followTarget.Pause();
+            GameManager.Instance.PAUSE = true;
+            GameManager.Instance.cameraManager.ActiveAimCamera(() =>menuPopup.Peek().Appear(0.2f, () => isMenuBlend = false));
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            crossHair.SetActive(false);
 
             return;
         }
@@ -78,9 +84,10 @@ public class MenuManager : MonoBehaviour
             menuPopup.Pop().Disappear(0.2f, () =>
             {
                 isMenuBlend = false;
-                GameManager.Instance.player.Resume();
-                GameManager.Instance.followTarget.Resume();
-                GameManager.Instance.cameraManger.ActivePlayerFollowCamera();
+                //GameManager.Instance.player.Resume();
+                //GameManager.Instance.followTarget.Resume();
+                GameManager.Instance.PAUSE = false;
+                GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
             });
             return;
         }
@@ -96,6 +103,13 @@ public class MenuManager : MonoBehaviour
         {
             menuPopup.Pop().Disappear(soundBlendingTime, () => {
                 menuPopup.Peek().Appear(0.2f, () => isMenuBlend = false);
+            });
+        }
+        else if(menuPopup.Peek() == keyCustomMenu)
+        {
+            menuPopup.Pop().Disappear(0.1f, () => {
+                menuPopup.Peek().Appear(0.2f, () => { isMenuBlend = false; 
+                });
             });
         }
     }
@@ -118,5 +132,20 @@ public class MenuManager : MonoBehaviour
              menuPopup.Push(sound);
              menuPopup.Peek().Appear(soundBlendingTime, () => isMenuBlend = false);
          });
+    }
+
+    public void OnButtonKeyCustomizeMenu()
+    {
+        menuPopup.Peek().Disappear(0.2f, () =>
+         {
+             menuPopup.Push(keyCustomMenu);
+             menuPopup.Peek().Appear(0.1f);
+         });
+    }
+
+    public void Exit()
+    {
+        //Debug.Log("Exit");
+        Application.Quit();
     }
 }
