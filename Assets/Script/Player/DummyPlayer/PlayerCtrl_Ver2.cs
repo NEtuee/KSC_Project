@@ -27,7 +27,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         HangRagdoll,
         Aiming,
         ClimbingJump,
-        ReadyClimbingJump
+        ReadyClimbingJump,
+        HangShake
     }
 
     public enum ClimbingJumpDirection
@@ -377,7 +378,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         animator.SetBool("IsGround", movement.isGrounded);
 
-        if (state != PlayerState.Grab && state != PlayerState.HangLedge && state != PlayerState.HangEdge && state != PlayerState.ClimbingJump && movement.isGrounded == false && state != PlayerState.ReadyGrab)
+        if (state != PlayerState.Grab &&
+            state != PlayerState.HangLedge && 
+            state != PlayerState.HangEdge &&
+            state != PlayerState.ClimbingJump && 
+            movement.isGrounded == false && 
+            state != PlayerState.ReadyGrab)
         {
             currentJumpPower -= gravity * deltaTime;
             currentJumpPower = Mathf.Clamp(currentJumpPower, minJumpPower, 50f);

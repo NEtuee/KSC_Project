@@ -35,6 +35,7 @@ public class PlayerRagdoll : MonoBehaviour
     private bool isLeftHandFix;
     private bool isRightHandFix;
     private bool isFlyRagdoll;
+    private bool isHangShake;
 
     [SerializeField] private Transform hipTransform;
 
@@ -50,6 +51,10 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private float speed;
     private Vector3 prevPos;
     [Range(0, 10000)] public float fource = 0.0f;
+
+    [Header("HangShake")] 
+    [SerializeField] private Rigidbody connectBodySphere;
+    [SerializeField] private CopyTargetCharacter copyTargetCharacter;
 
     private GameObject _ragdollContainer;
     private PlayerCtrl_Ver2 player;
@@ -97,6 +102,8 @@ public class PlayerRagdoll : MonoBehaviour
 
         _ragdollContainer = new GameObject("RagdollContainer " + gameObject.name);
         CreateHandPoint();
+        
+        copyTargetCharacter.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -126,27 +133,45 @@ public class PlayerRagdoll : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Z))
-        //{
-        //    if (state == RagdollState.Animated)
-        //    {
-        //        //ActiveRightHandFixRagdoll();
-        //        player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangRagdoll);
-        //        //ActiveBothHandFixRagdoll();
-        //        foreach (var copyBone in copyBoneRotations)
-        //        {
-        //            copyBone.active = true;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        foreach (var copyBone in copyBoneRotations)
-        //        {
-        //            copyBone.active = false;
-        //        }
-        //        DisableFixRagdoll();
-        //    }
-        //}
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if (state == RagdollState.Animated)
+            {
+                //ActiveRightHandFixRagdoll();
+                //player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangRagdoll);
+                //ActiveBothHandFixRagdoll();
+                player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangShake);
+                
+                copyTargetCharacter.gameObject.SetActive(true);
+
+                copyTargetCharacter.transform.SetPositionAndRotation(transform.position,transform.rotation);
+                
+                connectBodySphere.transform.position = leftHandTransform.position;
+                connectBodySphere.transform.SetParent(transform.parent);
+
+                copyTargetCharacter.SetConnectBody(connectBodySphere);
+
+                isHangShake = true;
+                
+                HangShakeRagdoll();
+                
+                foreach (var copyBone in copyBoneRotations)
+                {
+                    copyBone.active = true;
+                }
+            }
+            else
+            {
+                foreach (var copyBone in copyBoneRotations)
+                {
+                    copyBone.active = false;
+                }
+
+                DisableFixRagdoll();
+                
+                isHangShake = false;
+            }
+        }
         
         
 
@@ -284,6 +309,15 @@ public class PlayerRagdoll : MonoBehaviour
         ActiveRagdoll(true);
         SetRagdollContainer(true);
         ragdollTime = Time.time;
+    }
+
+    public void HangShakeRagdoll()
+    {
+        anim.enabled = false;
+        collider.enabled = false;
+        SetRagdollContainer(true);
+        ragdollTime = Time.time;
+        state = RagdollState.Ragdoll;
     }
 
     public void SlidingRagdoll(Vector3 dir)
@@ -441,7 +475,7 @@ public class PlayerRagdoll : MonoBehaviour
 
         storedHipsPosition = hipTransform.position;
 
-        if (isLeftHandFix == false && isRightHandFix == false)
+        if (isLeftHandFix == false && isRightHandFix == false && isHangShake == false)
         {
             Vector3 shiftPos = hipTransform.position - transform.position;
             shiftPos.y = GetDistanceToFloor(shiftPos.y);
