@@ -1069,8 +1069,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     if (transform.parent == null)
                         GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
-                    else
-                        GameManager.Instance.cameraManager.SetFollowCameraDistance("ExistParent");
+                    // else
+                    //     GameManager.Instance.cameraManager.SetFollowCameraDistance("ExistParent");
                 }
                 break;
             case PlayerState.Grab:

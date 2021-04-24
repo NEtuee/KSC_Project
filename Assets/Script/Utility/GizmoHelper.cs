@@ -27,6 +27,8 @@ public class GizmoHelper : MonoBehaviour
 
     Queue<GizmoItem> Queue = new Queue<GizmoItem>();
 
+    private bool gizmoUpdate = false;
+
     public void Awake()
     {
         Instance = this;
@@ -42,6 +44,9 @@ public class GizmoHelper : MonoBehaviour
 
     public void DrawLine(Vector3 start, Vector3 end, Color color)
     {
+        if (!gizmoUpdate)
+            return;
+        
         var item = GetItem();
         item.Points.Add(start);
         item.Points.Add(end);
@@ -53,6 +58,9 @@ public class GizmoHelper : MonoBehaviour
 
     public void DrawRectangle(Vector3 position, Vector2 half, float radian, Color color)
     {
+        if (!gizmoUpdate)
+            return;
+
         var item = GetItem();
         var cosTheta = Mathf.Cos(radian);
         var sinTheta = Mathf.Sin(radian);
@@ -80,6 +88,9 @@ public class GizmoHelper : MonoBehaviour
 
     public void DrawCircle(Vector3 position, float radius, Color color)
     {
+        if (!gizmoUpdate)
+            return;
+
         var item = GetItem();
 
         for(int i = 0; i <= 36; ++i)
@@ -104,6 +115,7 @@ public class GizmoHelper : MonoBehaviour
 
     public void OnDrawGizmos()
     {
+        gizmoUpdate = true;
         foreach(var item in DrawList)
         {
             Gizmos.color = item.Color;
