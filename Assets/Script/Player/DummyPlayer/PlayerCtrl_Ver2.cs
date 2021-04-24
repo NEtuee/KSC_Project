@@ -67,7 +67,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float rotAngle = 0.0f;
     [SerializeField] private float airRotateSpeed = 2.5f; 
 
-
     [Header("Jump Value")]
     [SerializeField] private float currentJumpPower = 0f;
     [SerializeField] private float minJumpPower = -10.0f;
@@ -147,6 +146,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Transform lookAtAim;
     private Quaternion storeSpineRotation;
 
+    private float _turnOverTime = 0.0f;
 
     public delegate void ActiveAimEvent();
     public ActiveAimEvent activeAimEvent;
@@ -328,6 +328,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 }
                 break;
             case PlayerState.HangRagdoll:
+            case PlayerState.HangShake:
                 {
                     if (InputReleaseGrab())
                         return;
@@ -723,6 +724,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Grab:
                 {
                     UpdateGrab();
+
+                    if(_turnOverTime > 0.5f)
+                    {
+                        _turnOverTime = 0.0f;
+                        ChangeState(PlayerState.HangShake);
+                        return;
+                    }
+
+                    if (Vector3.Dot(Vector3.Cross(transform.up, Vector3.right), Vector3.forward) >= 0.3f)
+                    {
+                        _turnOverTime += Time.fixedDeltaTime;
+                    }
+                    else
+                    {
+                        _turnOverTime = 0.0f;
+                    }
                 }
                 break;
             case PlayerState.HangEdge:
@@ -1230,6 +1247,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetTrigger("ClimbingJump");
                 }
                 break;
+            case PlayerState.HangShake:
+                {
+                    ragdoll.ActiveHangShake();
+                }
+                break;
         }
     }
 
@@ -1570,6 +1592,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 case PlayerState.HangRagdoll:
                     {
                         ragdoll.ReleaseHangRagdoll();
+                        return true;
+                    }
+                case PlayerState.HangShake:
+                    {
+                        ragdoll.ReleaseHangShake();
                         return true;
                     }
             }

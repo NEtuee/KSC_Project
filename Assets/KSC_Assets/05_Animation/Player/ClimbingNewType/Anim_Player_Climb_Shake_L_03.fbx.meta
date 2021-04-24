@@ -1,20 +1,20 @@
 fileFormatVersion: 2
-guid: 7efbb616c2029e242be339aff38cd09a
+guid: 3d5de3237f6e13d4687a6bd264aeb58b
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
-      74: 6554237856963063663
-    second: Climb_Shaking_L
+      74: 2039570921653163422
+    second: Anim_Player_Climb_Shaking_L_02_recover
   - first:
-      74: 5300613056166593335
-    second: Cut
+      74: 3596472786194288526
+    second: ShakeLoop
   - first:
-      74: -4274649355217471197
-    second: FrontCut
+      74: 2206526174016690185
+    second: ShakeStart
   - first:
-      74: -495328128379554090
-    second: BackCut
+      74: -2929684043678448907
+    second: SkakeEnd
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -30,12 +30,12 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
       copied configuration does not match position in animation file:\n\t'Bip001
-      L Thigh' : position error = 18.205862 mm\n\t'Bip001 L Calf' : position error
-      = 19.983067 mm\n\t'Bip001 L Foot' : position error = 17.477247 mm\n\t'Bip001
-      L Toe0' : position error = 13.049220 mm\n\t'Bip001 R Thigh' : position error
-      = 18.205862 mm\n\t'Bip001 R Calf' : position error = 19.983095 mm\n\t'Bip001
+      L Thigh' : position error = 18.205847 mm\n\t'Bip001 L Calf' : position error
+      = 19.983036 mm\n\t'Bip001 L Foot' : position error = 17.477247 mm\n\t'Bip001
+      L Toe0' : position error = 13.049168 mm\n\t'Bip001 R Thigh' : position error
+      = 18.205870 mm\n\t'Bip001 R Calf' : position error = 19.983095 mm\n\t'Bip001
       R Foot' : position error = 17.477247 mm\n\t'Bip001 R Toe0' : position error
-      = 13.049342 mm\n"
+      = 13.049288 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -51,11 +51,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Climb_Shaking_L
-      takeName: Anim_Player_Climb_Shaking_L
+      name: Anim_Player_Climb_Shaking_L_02_recover
+      takeName: Anim_Player_Climb_Shaking_L_02_recover
       internalID: 0
       firstFrame: 0
-      lastFrame: 160
+      lastFrame: 195
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -64,13 +64,13 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 1
-      loopBlendPositionY: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
       loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
-      keepOriginalPositionY: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
-      heightFromFeet: 1
+      heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -80,11 +80,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Cut
-      takeName: Anim_Player_Climb_Shaking_L
+      name: ShakeLoop
+      takeName: Anim_Player_Climb_Shaking_L_02_recover
       internalID: 0
-      firstFrame: 25
-      lastFrame: 90
+      firstFrame: 60
+      lastFrame: 130
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -99,7 +99,7 @@ ModelImporter:
       keepOriginalOrientation: 1
       keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 1
+      heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -109,11 +109,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: FrontCut
-      takeName: Anim_Player_Climb_Shaking_L
+      name: ShakeStart
+      takeName: Anim_Player_Climb_Shaking_L_02_recover
       internalID: 0
       firstFrame: 0
-      lastFrame: 116
+      lastFrame: 59
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -138,11 +138,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BackCut
-      takeName: Anim_Player_Climb_Shaking_L
+      name: SkakeEnd
+      takeName: Anim_Player_Climb_Shaking_L_02_recover
       internalID: 0
-      firstFrame: 116
-      lastFrame: 160
+      firstFrame: 131
+      lastFrame: 195
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -161,14 +161,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.95977014
-        functionName: EndHangShake
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

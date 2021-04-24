@@ -281,11 +281,11 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab 
+                    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll
-                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge 
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangShake)
                     {
@@ -295,6 +295,11 @@ public class PlayerMovement : MonoBehaviour
 
                 keepSpeed = false;
             }
+            else
+            {
+                isGrounded = false;
+            }
+            
         }
         else
         {

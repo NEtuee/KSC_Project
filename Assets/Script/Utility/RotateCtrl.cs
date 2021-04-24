@@ -15,11 +15,11 @@ public class RotateCtrl : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.Rotate(transform.right * 20f * Time.deltaTime);
+            transform.Rotate(transform.right * 50f * Time.deltaTime);
         }
         else if(Input.GetKey(KeyCode.RightArrow))
         {
-            transform.Rotate(transform.right * -20f * Time.deltaTime);
+            transform.Rotate(transform.right * -50f * Time.deltaTime);
         }
     }
 }

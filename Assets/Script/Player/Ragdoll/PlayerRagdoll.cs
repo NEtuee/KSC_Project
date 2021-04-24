@@ -28,6 +28,7 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private string prevPlayAnimation;
     [SerializeField] private string standUpBackAnimation;
     [SerializeField] private string standUpBallyAnimation;
+    [SerializeField] private string climbingIdleAnimation;
     private Transform bip;
     [SerializeField] private Transform pelvis;
     private float ragdollTime;
@@ -44,7 +45,7 @@ public class PlayerRagdoll : MonoBehaviour
     private Vector3 storedHipsPositionPrivBlend;
 
     private float ragdollEndTime;
-    private const float ragdollToAnimBlendTime = 0.5f;
+    [SerializeField] private float ragdollToAnimBlendTime = 0.5f;
 
     [Header("Velocity")]
     [SerializeField] private Vector3 velocity;
@@ -102,7 +103,8 @@ public class PlayerRagdoll : MonoBehaviour
 
         _ragdollContainer = new GameObject("RagdollContainer " + gameObject.name);
         CreateHandPoint();
-        
+
+        copyTargetCharacter.whenEndHangShake += DisableHangShake;
         copyTargetCharacter.gameObject.SetActive(false);
     }
 
@@ -140,37 +142,24 @@ public class PlayerRagdoll : MonoBehaviour
                 //ActiveRightHandFixRagdoll();
                 //player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangRagdoll);
                 //ActiveBothHandFixRagdoll();
-                player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangShake);
-                
-                copyTargetCharacter.gameObject.SetActive(true);
 
-                copyTargetCharacter.transform.SetPositionAndRotation(transform.position,transform.rotation);
-                
-                connectBodySphere.transform.position = leftHandTransform.position;
-                connectBodySphere.transform.SetParent(transform.parent);
-
-                copyTargetCharacter.SetConnectBody(connectBodySphere);
-
-                isHangShake = true;
-                
-                HangShakeRagdoll();
-                
-                foreach (var copyBone in copyBoneRotations)
-                {
-                    copyBone.active = true;
-                }
+                //ActiveHangShake();
             }
-            else
-            {
-                foreach (var copyBone in copyBoneRotations)
-                {
-                    copyBone.active = false;
-                }
+            //else
+            //{
+            //    foreach (var copyBone in copyBoneRotations)
+            //    {
+            //        copyBone.active = false;
+            //    }
 
-                DisableFixRagdoll();
+            //    transform.rotation = copyTargetCharacter.transform.rotation;
+
+            //    DisableFixRagdoll();
                 
-                isHangShake = false;
-            }
+            //    isHangShake = false;
+
+            //    copyTargetCharacter.Init();
+            //}
         }
         
         
@@ -257,6 +246,7 @@ public class PlayerRagdoll : MonoBehaviour
         FixLeftHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
+        ragdollToAnimBlendTime = 0.5f;
     }
 
     public void ActiveRightHandFixRagdoll()
@@ -265,6 +255,7 @@ public class PlayerRagdoll : MonoBehaviour
         FixRightHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
+        ragdollToAnimBlendTime = 0.5f;
     }
 
     public void ReleaseFix()
@@ -280,6 +271,7 @@ public class PlayerRagdoll : MonoBehaviour
         FixRightHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
+        ragdollToAnimBlendTime = 0.5f;
     }
 
     public void DisableFixRagdoll()
@@ -301,6 +293,12 @@ public class PlayerRagdoll : MonoBehaviour
         ragdollTime = Time.time;
     }
 
+    public void ReleaseHangShake()
+    {
+        DisableHangShake();
+        ReleaseHangRagdoll();
+    }
+
     public void FlyRagdoll()
     {
         //GameManager.Instance.PauseControl(true);
@@ -318,6 +316,7 @@ public class PlayerRagdoll : MonoBehaviour
         SetRagdollContainer(true);
         ragdollTime = Time.time;
         state = RagdollState.Ragdoll;
+        ragdollToAnimBlendTime = 0.05f;
     }
 
     public void SlidingRagdoll(Vector3 dir)
@@ -347,6 +346,7 @@ public class PlayerRagdoll : MonoBehaviour
             player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         }
         ragdollTime = Time.time;
+        ragdollToAnimBlendTime = 0.5f;
     }
 
     public void ExplosionRagdoll(float power, Vector3 dir)
@@ -365,6 +365,7 @@ public class PlayerRagdoll : MonoBehaviour
             player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
         }
         ragdollTime = Time.time;
+        ragdollToAnimBlendTime = 0.5f;
     }
 
     public RagdollState GetRagdollState() { return state; }
@@ -593,6 +594,55 @@ public class PlayerRagdoll : MonoBehaviour
         Vector3 forward = transform.forward;
         transform.rotation = Quaternion.FromToRotation(forward, ragdollDirection) * transform.rotation;
         //hipTransform.rotation = Quaternion.FromToRotation(ragdollDirection, forward) * hipTransform.rotation;
+    }
+
+    public void ActiveHangShake()
+    {
+        //player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangShake);
+
+        copyTargetCharacter.gameObject.SetActive(true);
+        copyTargetCharacter.transform.SetPositionAndRotation(transform.position, transform.rotation);
+
+        RaycastHit hit;
+        if(Physics.Raycast(leftHandTransform.position,transform.forward,out hit,2.0f))
+        {
+            connectBodySphere.transform.position = hit.point;
+        }
+        else
+        {
+            connectBodySphere.transform.position = leftHandTransform.position;
+        }
+
+        connectBodySphere.transform.SetParent(transform.parent);
+
+        copyTargetCharacter.SetConnectBody(connectBodySphere);
+
+        isHangShake = true;
+
+        HangShakeRagdoll();
+
+        foreach (var copyBone in copyBoneRotations)
+        {
+            copyBone.active = true;
+        }
+    }
+
+    public void DisableHangShake()
+    {
+        foreach (var copyBone in copyBoneRotations)
+        {
+            copyBone.active = false;
+        }
+
+        transform.rotation = copyTargetCharacter.transform.rotation;
+
+        DisableFixRagdoll();
+
+        anim.Play(climbingIdleAnimation, 0, 0);
+
+        isHangShake = false;
+
+        copyTargetCharacter.Init();
     }
 }
 
