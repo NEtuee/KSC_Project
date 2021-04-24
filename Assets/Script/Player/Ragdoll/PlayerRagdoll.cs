@@ -606,7 +606,8 @@ public class PlayerRagdoll : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(leftHandTransform.position,transform.forward,out hit,2.0f))
         {
-            connectBodySphere.transform.position = hit.point;
+            //connectBodySphere.transform.position = hit.point;
+            connectBodySphere.transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(-hit.normal, Vector3.up));
         }
         else
         {

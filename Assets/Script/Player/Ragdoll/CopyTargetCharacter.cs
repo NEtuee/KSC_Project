@@ -64,7 +64,7 @@ public class CopyTargetCharacter : MonoBehaviour
 
         while (time < 1.5f)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(_targetForwardDirection, transform.up), 6f * Time.fixedDeltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(_chJoint.connectedBody.transform.forward, Vector3.up), 6f * Time.fixedDeltaTime);
 
             if(Vector3.Dot(Vector3.Cross(transform.up, Vector3.right), Vector3.forward) < 0)
             {
@@ -76,9 +76,9 @@ public class CopyTargetCharacter : MonoBehaviour
 
         _rigidbody.isKinematic = true;
         _rigidbody.useGravity = false;
-        while (Quaternion.LookRotation(_targetForwardDirection, Vector3.up) != transform.rotation)
+        while (Quaternion.LookRotation(_chJoint.connectedBody.transform.forward, Vector3.up) != transform.rotation)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(_targetForwardDirection, Vector3.up), 20f * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(_chJoint.connectedBody.transform.forward, Vector3.up), 20f * Time.deltaTime);
         }
 
         _anim.SetTrigger("Back");
