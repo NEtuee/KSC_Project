@@ -164,8 +164,6 @@ public class FMODSoundManager : MonoBehaviour
         {
             CreateSoundCacheItem(id,1);
         }
-        
-        Debug.Log(FindSoundInfo(id).path);
 
         return _cacheMap[id].Dequeue();
     }
