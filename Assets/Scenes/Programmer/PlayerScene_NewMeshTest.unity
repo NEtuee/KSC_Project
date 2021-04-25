@@ -31179,6 +31179,11 @@ PrefabInstance:
       objectReference: {fileID: 312095795}
     - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
         type: 3}
+      propertyPath: collisionRadius
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
       propertyPath: playerFollowCam
       value: 
       objectReference: {fileID: 608567198}
@@ -31192,6 +31197,11 @@ PrefabInstance:
       propertyPath: _recoilImpulseSource
       value: 
       objectReference: {fileID: 69449281}
+    - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
+        type: 3}
+      propertyPath: collisionLayer.m_Bits
+      value: 2240
+      objectReference: {fileID: 0}
     - target: {fileID: 716256448433818831, guid: 709fd03d0546fd24b9dbb8cb3f20ddd9,
         type: 3}
       propertyPath: distanceBlendProfiles.Array.size
@@ -31959,6 +31969,11 @@ PrefabInstance:
         type: 3}
       propertyPath: rotSmooth
       value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 3142794748548094868, guid: 8c14b2e5e67740e40850985192548d06,
+        type: 3}
+      propertyPath: updateMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3142794748548094868, guid: 8c14b2e5e67740e40850985192548d06,
         type: 3}
@@ -33603,6 +33618,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5217452668002815441, guid: df6fd956879dfa44690be0b182a6d60a,
         type: 3}
+      propertyPath: CameraRadius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5217452668002815441, guid: df6fd956879dfa44690be0b182a6d60a,
+        type: 3}
       propertyPath: ShoulderOffset.x
       value: 1.08
       objectReference: {fileID: 0}
@@ -33619,7 +33639,7 @@ PrefabInstance:
     - target: {fileID: 5217452668002815441, guid: df6fd956879dfa44690be0b182a6d60a,
         type: 3}
       propertyPath: CameraCollisionFilter.m_Bits
-      value: 192
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df6fd956879dfa44690be0b182a6d60a, type: 3}
@@ -36967,7 +36987,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 2
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 3
 --- !u!95 &7578834775685743535
 Animator:
   serializedVersion: 3

@@ -26,6 +26,9 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private bool isBlend;
     [SerializeField] private bool isAttentionCamera;
     [SerializeField] private CinemachineImpulseSource _recoilImpulseSource;
+    [SerializeField] private float collisionRadius;
+    [SerializeField] private LayerMask collisionLayer;
+    
     private bool isBlendCameraDistance;
     private float targetDistance;
     private float distanceBlendStartTime;
@@ -34,6 +37,9 @@ public class CameraManager : MonoBehaviour
     private CinemachineVirtualCameraBase currentActiveCam = null;
     private CinemachineVirtualCameraBase prevActiveCam = null;
 
+    private DirectionCollisionEx collisionEx;
+    private bool isCameraCollision;
+    
     private Dictionary<string, CinemachineVirtualCameraBase> cameraDictionary = new Dictionary<string, CinemachineVirtualCameraBase>();
 
     private float cameraSideSmoothVelocity;
@@ -49,6 +55,8 @@ public class CameraManager : MonoBehaviour
         brainCameraTransfrom = brain.transform;
 
         GameManager.Instance.cameraManager = this;
+
+        collisionEx = new DirectionCollisionEx(playerFollowCam.transform,collisionRadius,collisionLayer);
 
         otherCameras.Add(playerFollowCam);
         otherCameras.Add(playerAimCam);
@@ -77,11 +85,20 @@ public class CameraManager : MonoBehaviour
     private void Update()
     {
         //UpdateCameraSide((GameManager.Instance.GetInputHorizontal() + 1f) * 0.5f);
-        if(isAttentionCamera)
-        {
-            UpdateCameraSide();
-        }
+        // if(isAttentionCamera)
+        // {
+        //     UpdateCameraSide();
+        // }
 
+        var cross = Vector3.Cross(brainCameraTransfrom.forward,Vector3.up);
+        var side = Vector3.Dot(cross.normalized,GameManager.Instance.player.transform.forward);
+        var currSide = playerFollowCam3rdPersonComponent.CameraSide;
+
+        playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
+    }
+
+    private void FixedUpdate()
+    {
         BlendDistanceFollowCamera();
     }
 
@@ -331,48 +348,54 @@ public class CameraManager : MonoBehaviour
             return null;
     }
 
-    public void UpdateCameraSide()
+    public void SetCameraSide(float value)
     {
-        if (GameManager.Instance.bossTransform == null)
-            return;
-
-        Vector3 camForward = brainCameraTransfrom.forward;
-        camForward.y = 0;
-        camForward.Normalize();
-        Vector3 toBossDir = (GameManager.Instance.bossTransform.position - brainCameraTransfrom.position);
-        toBossDir.y = 0f;
-        toBossDir.Normalize();
-
-        float targetFactor;
-        float angle = Vector3.Dot(camForward, toBossDir);
-        float min = 0.8f;
-        float max = 1.0f;
-
-        if (angle >= min && angle <= max)
-        {
-            float factor = max - angle;
-            targetFactor = factor / (1f - min);
-        }
-        else if (angle < min && angle >= -0.2f)
-        {
-            targetFactor = 1.0f;
-        }
-        else
-        {
-            targetFactor = 0.0f;
-        }
-
-        if (Vector3.Cross(camForward, toBossDir).y < 0)
-        {
-            targetFactor *= -0.5f;
-        }
-        else
-        {
-            targetFactor *= 0.5f;
-        }
-
-        playerFollowCam3rdPersonComponent.CameraSide = Mathf.SmoothDamp(playerFollowCam3rdPersonComponent.CameraSide, 0.5f + targetFactor, ref cameraSideSmoothVelocity, 300f*Time.deltaTime);
+        playerFollowCam3rdPersonComponent.CameraSide = value;
+        Debug.Log(value);
     }
+
+    // public void UpdateCameraSide()
+    // {
+    //     if (GameManager.Instance.bossTransform == null)
+    //         return;
+
+    //     Vector3 camForward = brainCameraTransfrom.forward;
+    //     camForward.y = 0;
+    //     camForward.Normalize();
+    //     Vector3 toBossDir = (GameManager.Instance.bossTransform.position - brainCameraTransfrom.position);
+    //     toBossDir.y = 0f;
+    //     toBossDir.Normalize();
+
+    //     float targetFactor;
+    //     float angle = Vector3.Dot(camForward, toBossDir);
+    //     float min = 0.8f;
+    //     float max = 1.0f;
+
+    //     if (angle >= min && angle <= max)
+    //     {
+    //         float factor = max - angle;
+    //         targetFactor = factor / (1f - min);
+    //     }
+    //     else if (angle < min && angle >= -0.2f)
+    //     {
+    //         targetFactor = 1.0f;
+    //     }
+    //     else
+    //     {
+    //         targetFactor = 0.0f;
+    //     }
+
+    //     if (Vector3.Cross(camForward, toBossDir).y < 0)
+    //     {
+    //         targetFactor *= -0.5f;
+    //     }
+    //     else
+    //     {
+    //         targetFactor *= 0.5f;
+    //     }
+
+    //     playerFollowCam3rdPersonComponent.CameraSide = Mathf.SmoothDamp(playerFollowCam3rdPersonComponent.CameraSide, 0.5f + targetFactor, ref cameraSideSmoothVelocity, 300f*Time.deltaTime);
+    // }
 
     public void SetFollowCameraDistance(float targetDistance, float blendDuration)
     {
@@ -395,16 +418,31 @@ public class CameraManager : MonoBehaviour
 
     private void BlendDistanceFollowCamera()
     {
-        if(isBlendCameraDistance == true)
+        
+        float t = (Time.time - distanceBlendStartTime) / distanceBlendDuration;
+        float currentDist = playerFollowCam3rdPersonComponent.CameraDistance;
+
+        playerFollowCam3rdPersonComponent.CameraDistance = Mathf.SmoothStep(currentDist, targetDistance, t);
+        if (t >= 1.0f)
         {
-            float t = (Time.time - distanceBlendStartTime) / distanceBlendDuration;
-            float currentDist = playerFollowCam3rdPersonComponent.CameraDistance;
-            playerFollowCam3rdPersonComponent.CameraDistance = Mathf.SmoothStep(currentDist, targetDistance, t);
-            if(t >= 1.0f)
-            {
-                isBlendCameraDistance = false;
-            }
+            isBlendCameraDistance = false;
         }
+        
+        var prev = isCameraCollision;
+        var offset = playerFollowCam3rdPersonComponent.ShoulderOffset;
+        offset.x = 0f;
+        var dir = -(Camera.main.transform.rotation * Vector3.forward).normalized;
+        
+        isCameraCollision =
+            collisionEx.Cast(GameManager.Instance.followTarget.transform.position + offset,dir,playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
+
+        if (isCameraCollision)
+        {
+            //dist += 1f;
+            if (dist <= playerFollowCam3rdPersonComponent.CameraDistance)
+                playerFollowCam3rdPersonComponent.CameraDistance = dist;
+        }
+
     }
 
     public void ZeroDamping()
