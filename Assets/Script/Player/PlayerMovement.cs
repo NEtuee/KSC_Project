@@ -154,7 +154,8 @@ public class PlayerMovement : MonoBehaviour
             player.GetState() == PlayerCtrl_Ver2.PlayerState.Ragdoll || 
             player.GetState() == PlayerCtrl_Ver2.PlayerState.HangRagdoll ||
             player.GetState() == PlayerCtrl_Ver2.PlayerState.HangLedge ||
-            player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp)
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.LedgeUp ||
+            player.GetState() == PlayerCtrl_Ver2.PlayerState.HangShake)
         {
             groundDistance = 0.0f;
             return;
@@ -280,12 +281,13 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab 
+                    if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll
-                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge 
-                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp)
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangShake)
                     {
                         SetParent(null);
                     }
@@ -293,6 +295,11 @@ public class PlayerMovement : MonoBehaviour
 
                 keepSpeed = false;
             }
+            else
+            {
+                isGrounded = false;
+            }
+            
         }
         else
         {
@@ -317,7 +324,15 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 isGrounded = false;
-                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll&& player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge&& player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && player.GetState() != PlayerCtrl_Ver2.PlayerState.ReadyClimbingJump && player.GetState() != PlayerCtrl_Ver2.PlayerState.ClimbingJump)
+                if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab &&
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && 
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && 
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll&&
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge&&
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && 
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.ReadyClimbingJump &&
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.ClimbingJump && 
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.HangShake)
                 {
                     SetParent(null);
                 }

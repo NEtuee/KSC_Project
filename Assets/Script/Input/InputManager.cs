@@ -41,6 +41,8 @@ public class InputManager : MonoBehaviour
 
     public delegate bool ActionResult(KeybindingActions action);
 
+    public bool inputBlock = false;
+
     private static InputManager instance;
     [SerializeField] public KeyBindings keyBindings;
     [SerializeField] public KeyBindingsToggle keyBindingsToggle;
@@ -243,6 +245,9 @@ public class InputManager : MonoBehaviour
 
     public bool GetInput(KeybindingActions actions)
     {
+        if (inputBlock == true)
+            return false;
+
         if (currentConnectGamepad == ConnectGamePad.None)
             return actionBindingToggle[actions].GetInput(actions);
         else if (currentConnectGamepad == ConnectGamePad.DualShock)
@@ -254,6 +259,9 @@ public class InputManager : MonoBehaviour
 
     public bool GetRelease(KeybindingActions actions)
     {
+        if (inputBlock == true)
+            return false;
+
         if (currentConnectGamepad == ConnectGamePad.None)
             return actionBindingToggle[actions].GetRelease(actions);
         else if (currentConnectGamepad == ConnectGamePad.DualShock)
@@ -265,6 +273,9 @@ public class InputManager : MonoBehaviour
 
     public bool GetKeep(KeybindingActions actions)
     {
+        if (inputBlock == true)
+            return false;
+
         if (currentConnectGamepad == ConnectGamePad.None)
             return actionBindingToggle[actions].GetKeep(actions);
         else if (currentConnectGamepad == ConnectGamePad.DualShock)
@@ -331,16 +342,25 @@ public class InputManager : MonoBehaviour
 
     public float GetMoveAxisVertical()
     {
+        if (inputBlock == true)
+            return 0.0f;
+
         return Input.GetAxis("Vertical");
     }
 
     public float GetMoveAxisHorizontal()
     {
+        if (inputBlock == true)
+            return 0.0f;
+
         return Input.GetAxis("Horizontal");
     }
 
     public float GetCameraAxisX()
     {
+        if (inputBlock == true)
+            return 0.0f;
+
         if (currentConnectGamepad == ConnectGamePad.None)
             return Input.GetAxis("Mouse X");
         else if (currentConnectGamepad == ConnectGamePad.DualShock)
@@ -351,6 +371,9 @@ public class InputManager : MonoBehaviour
 
     public float GetCameraAxisY()
     {
+        if (inputBlock == true)
+            return 0.0f;
+
         if (currentConnectGamepad == ConnectGamePad.None)
             return Input.GetAxis("Mouse Y");
         else if(currentConnectGamepad == ConnectGamePad.DualShock)
