@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -39,9 +40,12 @@ public class BrokenMedusa_AI : IKBossBase
     private Vector3 _moveLine;
     private Vector3 _perpendicularPoint;
     private Vector3 _searchDirection;
-
+    private Vector3 _scannedPosition;
+    
     private float _pointDistance;
     private float _direction;//1 = right, -1 = left
+
+    private bool _scanCheck = false;
 
     public UnityEvent scannedEvent;
     public UnityEvent whenSearch;
@@ -82,6 +86,16 @@ public class BrokenMedusa_AI : IKBossBase
 
     private void UpdateProcess(float deltaTime)
     {
+        if (_isTriggered)
+        {
+            _timeCounter.IncreaseTimer("scanTime",out bool limit);
+            if (limit)
+            {
+                _isTriggered = false;
+            }
+            
+        }
+        
         _timeCounter.IncreaseTimer("timer",1f,out bool timeLimit);
         if(!timeLimit)
         {
@@ -119,7 +133,7 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.LockOnLook)
         {
-            LookTarget_Head(deltaTime);
+            LookTarget_Head(_target.position, deltaTime);
             if(lookDistance > _targetDistance)
             {
                 UpdateMoveLine();
@@ -154,11 +168,20 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.Scanned)
         {
-            if(LookTarget_Head(deltaTime))
+            if(LookTarget_Head(_scannedPosition, deltaTime))
             {
                 if(!scanner.scaning)
                 {
-                    ScanForward();
+                    if (_scanCheck)
+                    {
+                        ChangeState(State.SearchRotate);
+                    }
+                    else
+                    {
+                        ScanForward();
+                        _scanCheck = true;
+                    }
+                    
                 }
                 else
                 {
@@ -172,6 +195,7 @@ public class BrokenMedusa_AI : IKBossBase
                             floorControl.Launch();
                         }
                     }
+                    
                 }
 
                 
@@ -259,6 +283,8 @@ public class BrokenMedusa_AI : IKBossBase
         {
             case State.Scanned:
                 {
+                    _scanCheck = false;
+                    _scannedPosition = _target.position;
                     scannedEvent.Invoke();
                 }
                 break;
@@ -303,10 +329,12 @@ public class BrokenMedusa_AI : IKBossBase
 
     public override void Scanned()
     {
-        if((currentState == State.Idle || currentState == State.SearchIdle || currentState == State.SearchRotate || currentState == State.SearchScan)
-         && IsOnGrounded())
+        if((currentState == State.Idle || currentState == State.SearchIdle || currentState == State.SearchRotate || currentState == State.SearchScan))
         {
             ChangeState(State.Scanned);
+            _isTriggered = true;
+
+            _timeCounter.InitTimer("scanTime",0f,2f);
         }
     }
 
@@ -439,9 +467,9 @@ public class BrokenMedusa_AI : IKBossBase
         }
     }
 
-    public bool LookTarget_Head(float deltaTime)
+    public bool LookTarget_Head(Vector3 pos, float deltaTime)
     {
-        return HeadLook((_target.position - transform.position),deltaTime);
+        return HeadLook((pos - transform.position),deltaTime);
         //BodyLook((_target.position - transform.position));
     }
 
@@ -501,7 +529,8 @@ public class BrokenMedusa_AI : IKBossBase
         }
 
         BodyRotateForHead(deltaTime);
-
+        
+        
         return look;
         
     }
@@ -519,18 +548,30 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void HeadTurn(bool isLeft, float deltaTime)
     {
+        var forward = head.forward;
+        var rotation = head.rotation;
+        
         Turn(isLeft,head,deltaTime);
+
+        // var angle = Vector3.Angle(body.forward, forward);
+        // if (angle > headRotationLock)
+        // {
+        //     Turn(head,(headRotationLock - angle));
+        // }
         //head.RotateAround(head.position,head.up,rotationSpeed * Time.deltaTime * (isLeft ? 1f : -1f));
     }
 
-    public void BodyRotateForHead(float deltaTime)
+    public bool BodyRotateForHead(float deltaTime)
     {
         //var angle = Vector3.Angle(transform.forward, head.forward);
         var angle = Vector3.SignedAngle(head.forward,transform.forward,head.up);
         if(MathEx.abs(angle) > headRotationLock)
         {
             BodyTurn(Vector3.SignedAngle(head.forward,transform.forward,head.up) < 0, deltaTime);//_direction < 0);
+            return true;
         }
+
+        return false;
     }
 
     public void BodyTurn(bool isLeft, float deltaTime)
