@@ -177,7 +177,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         footIK = GetComponent<IKCtrl>();
         handIK = GetComponent<HandIKCtrl>();
      
-        rigCtrl = GetComponent<RigCtrl>();
 
         if(empGun != null)
         {
@@ -554,11 +553,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 if (loading == true) 
                 {
-                    rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime/loadTerm)); 
                     loadTime += deltaTime;
                     if(loadTime > loadTerm) 
                     { 
-                        rigCtrl.SetAimingWeight(1f); 
                         loadCount.Value++; 
                         loadTime = 0;
                         loading = false;
@@ -567,11 +564,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                 if(impactLoading == true)
                 { 
-                    rigCtrl.SetAimingWeight(reloadWeightCurve.Evaluate(loadTime / impactTerm)); 
                     loadTime += deltaTime; 
                     if (loadTime > impactTerm) 
                     { 
-                        rigCtrl.SetAimingWeight(1f); 
                         loadTime = 0;
                         impactLoading = false;
                     }
@@ -1792,24 +1787,19 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             loadCount.Value = 1;
             //if (rigCtrl != null)
-            if(Object.ReferenceEquals(rigCtrl,null) == false)
-            {
-                rigCtrl.Active();
-                empGun.Active(true);
-                animator.SetLayerWeight(2, 1.0f);
-                animator.SetLayerWeight(3, 1.0f);
-            }
+            empGun.Active(true);
+            animator.SetLayerWeight(2, 1.0f);
+            animator.SetLayerWeight(3, 1.0f);
+            
         }
         else
         {
             loadCount.Value = 0;
-            if (Object.ReferenceEquals(rigCtrl,null) == false)
-            {
-                rigCtrl.Disable();
-                empGun.Active(false);
-                animator.SetLayerWeight(2, 0.0f);
-                animator.SetLayerWeight(3, 0.0f);
-            }
+            
+            empGun.Active(false);
+            animator.SetLayerWeight(2, 0.0f);
+            animator.SetLayerWeight(3, 0.0f);
+            
         }
     }
 

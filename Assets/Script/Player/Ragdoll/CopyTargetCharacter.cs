@@ -16,14 +16,19 @@ public class CopyTargetCharacter : MonoBehaviour
 
     public delegate void WhenHangShake();
     public WhenHangShake whenEndHangShake;
-    
-    void Start()
+
+    private void Awake()
     {
         _anim = GetComponent<Animator>();
         _chJoint = GetComponent<CharacterJoint>();
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.isKinematic = true;
         _rigidbody.useGravity = false;
+    }
+
+    void Start()
+    {
+
     }
     
     public void SetConnectBody(Rigidbody connectBody)
