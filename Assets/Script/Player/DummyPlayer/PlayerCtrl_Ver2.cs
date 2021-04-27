@@ -177,6 +177,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         footIK = GetComponent<IKCtrl>();
         handIK = GetComponent<HandIKCtrl>();
      
+        if(animator != null)
+        {
+            headTransfrom = animator.GetBoneTransform(HumanBodyBones.Head);
+        }
 
         if(empGun != null)
         {

@@ -23,6 +23,7 @@ public class EMPGun : MonoBehaviour
     {
         mainCamera = Camera.main.transform;
         _gunObject.SetActive(false);
+        playerAnim = GetComponent<Animator>();
     }
 
     void Update()

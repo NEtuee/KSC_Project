@@ -39,6 +39,9 @@ public class IKCtrl : MonoBehaviour
     {
         if (enableFeetIk == false)
         {
+            leftFootIkPosition = Vector3.zero;
+            rightFootIkPosition = Vector3.zero;
+            //Debug.Log("Dddd");
             return;
         }
 
@@ -56,18 +59,17 @@ public class IKCtrl : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-
-        if (enableFeetIk == false)
-        {
-            return;
-        }
-
         if (animator == null)
         {
             return;
         }
 
         MovePelvisHeight();
+
+        if (enableFeetIk == false)
+        {
+            return;
+        }
 
         if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab || player.GetState() == PlayerCtrl_Ver2.PlayerState.HangLedge)
             return;
@@ -123,7 +125,9 @@ public class IKCtrl : MonoBehaviour
 
     private void MovePelvisHeight()
     {
-        if (movement.isGrounded == false || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab)
+        if (movement.isGrounded == false 
+            || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab
+            || player.GetState() == PlayerCtrl_Ver2.PlayerState.ClimbingJump)
         {
             lastPelvisPositionY = animator.bodyPosition.y;
             return;
