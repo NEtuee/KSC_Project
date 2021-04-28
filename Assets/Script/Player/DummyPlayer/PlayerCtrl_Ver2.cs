@@ -461,7 +461,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     animator.SetFloat("Speed", currentSpeed);                    
                     animator.SetFloat("HorizonWeight", horizonWeight);
-                    movement.Move(moveDir);
+
+                    if (Physics.Raycast(transform.position + collider.center, moveDir, collider.radius + currentSpeed * deltaTime) == false)
+                    {
+                        movement.Move(moveDir);
+                    }
                 }
                 break;
             case PlayerState.TurnBack:
@@ -528,7 +532,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     
                     moveDir *= currentSpeed;
 
-                    movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                    if (Physics.Raycast(transform.position + collider.center, moveDir, collider.radius + currentSpeed * deltaTime))
+                    {
+                        movement.Move(Vector3.up * currentJumpPower);
+                    }
+                    else
+                    {
+                        movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                    }
                 }
                 break;
             case PlayerState.Grab:
@@ -1361,10 +1372,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         return false;
     }
 
-    private bool DetectionCanClimbingAreaByVertexColor(Vector3 startPoint, Vector3 dir)
+    private bool DetectionCanClimbingAreaByVertexColor(Vector3 startPoint, Vector3 dir ,float dist = 2f)
     {
         RaycastHit hit;
-        if (Physics.SphereCast(startPoint, collider.radius, dir, out hit, 2f, climbingPaintLayer))
+        if (Physics.SphereCast(startPoint, collider.radius, dir, out hit, dist, climbingPaintLayer))
         {
             MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
             int[] triangles = wallMesh.mesh.triangles;
@@ -1487,6 +1498,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
             if (Physics.SphereCast(point1, collider.radius * 1.5f, transform.forward, out hit, 3f, detectionLayer))
             {
+                if(DetectionCanClimbingAreaByVertexColor(point1,transform.forward,3f) == true)
+                {
+                    return false;
+                }
+
                 if (ledgeChecker.IsDetectedLedge() == false)
                 {
                     //ChangeState(PlayerState.Grab);
@@ -1676,6 +1692,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 InputClimbingJump();
                 return true;
             }
+
+            if (DetectLedgeCanHangLedgeByVertexColor() == true)
+                return true;
 
             if (isLedge == true && isClimbingMove == false && spaceChecker.Overlapped() == false)
             {
