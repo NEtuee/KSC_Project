@@ -76,6 +76,7 @@ public class HandIKCtrl : MonoBehaviour
     [SerializeField] private float insideSurfaceRadius= 0.4f;
     [SerializeField] private float outsideSurfaceRadius = 0.4f;
     [SerializeField] private float outSideRotateDetectionAngle = 20.0f;
+    [SerializeField] private float ledgeOutSideRotateDetectionAngle = 40.0f;
 
     [SerializeField] private AnimationCurve ledgeLeftLeftHandCurve;
     [SerializeField] private AnimationCurve ledgeLeftRightHandCurve;
@@ -468,34 +469,44 @@ public class HandIKCtrl : MonoBehaviour
         if (ledgeIK == true)
         {
             //RR
-            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 0.7f;
-            dir = transform.forward;
-            isHit = DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius,dir, 1.5f, climbingLayer, Color.white, Color.blue);
-            if (isHit == false)
-            {
-                dir = Quaternion.AngleAxis(-outSideRotateDetectionAngle, transform.up) * dir;
-                DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
-            }
-
-            //RL
-            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 0.3f;
-            dir = transform.forward;
-            DebugCastDetection.Instance.DebugSphereCastDetection(start, insideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
-
-            //LL
-            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -0.7f;
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 1f;
             dir = transform.forward;
             isHit = DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
             if (isHit == false)
             {
-                dir = Quaternion.AngleAxis(outSideRotateDetectionAngle, transform.up) * dir;
+                dir = Quaternion.AngleAxis(-ledgeOutSideRotateDetectionAngle, transform.up) * dir;
+                DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+            }
+
+            //RL
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 0.4f;
+            dir = transform.forward;
+            isHit = DebugCastDetection.Instance.DebugSphereCastDetection(start, insideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+            if (isHit == false)
+            {
+                dir = Quaternion.AngleAxis(-ledgeOutSideRotateDetectionAngle, transform.up) * dir;
+                DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue); 
+            }
+
+            //LL
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -1f;
+            dir = transform.forward;
+            isHit = DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+            if (isHit == false)
+            {
+                dir = Quaternion.AngleAxis(ledgeOutSideRotateDetectionAngle, transform.up) * dir;
                 DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
             }
 
             //LR
-            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -0.3f;
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -0.4f;
             dir = transform.forward;
             DebugCastDetection.Instance.DebugSphereCastDetection(start, insideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+            if (isHit == false)
+            {
+                dir = Quaternion.AngleAxis(ledgeOutSideRotateDetectionAngle, transform.up) * dir;
+                DebugCastDetection.Instance.DebugSphereCastDetection(start, outSideLedgeRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+            }
         }
         else
         {
@@ -574,32 +585,40 @@ public class HandIKCtrl : MonoBehaviour
         if (ledgeIK== true)
         {
             //Right_right
-            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 0.7f;
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 1.0f;
             dir = transform.forward;
             if (Physics.SphereCast(start, outSideLedgeRadius, dir, out rrHit, 1.5f, climbingLayer) == false)
             {
-                dir = Quaternion.AngleAxis(-outSideRotateDetectionAngle, transform.up) * dir;
+                dir = Quaternion.AngleAxis(-ledgeOutSideRotateDetectionAngle, transform.up) * dir;
                 Physics.SphereCast(start, outSideLedgeRadius, dir, out rrHit, 1.5f, climbingLayer);
             }
 
             //Right_left
-            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 0.3f;
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * 0.4f;
             dir = transform.forward;
-            Physics.SphereCast(start, insideLedgeRadius, dir, out rlHit, 1.5f, climbingLayer);
+            if(Physics.SphereCast(start, insideLedgeRadius, dir, out rlHit, 1.5f, climbingLayer) == false)
+            {
+                dir = Quaternion.AngleAxis(-ledgeOutSideRotateDetectionAngle, transform.up) * dir;
+                Physics.SphereCast(start, outSideLedgeRadius, dir, out rlHit, 1.5f, climbingLayer);
+            }
 
             //Left_left
-            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -0.7f;
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -1f;
             dir = transform.forward;
             if (Physics.SphereCast(start, outSideLedgeRadius, dir, out llHit, 1.5f, climbingLayer) == false)
             {
-                dir = Quaternion.AngleAxis(outSideRotateDetectionAngle, transform.up) * dir;
+                dir = Quaternion.AngleAxis(ledgeOutSideRotateDetectionAngle, transform.up) * dir;
                 Physics.SphereCast(start, outSideLedgeRadius, dir, out llHit, 1.5f, climbingLayer);
             }
 
             //Left_left
-            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -0.3f;
+            start = transform.position + transform.forward * -0.5f + transform.up * ledgeSphereUpOffset + transform.right * -0.4f;
             dir = transform.forward;
-            Physics.SphereCast(start, insideLedgeRadius, dir, out lrHit, 1.5f, climbingLayer);
+            if(Physics.SphereCast(start, insideLedgeRadius, dir, out lrHit, 1.5f, climbingLayer) == false)
+            {
+                dir = Quaternion.AngleAxis(ledgeOutSideRotateDetectionAngle, transform.up) * dir;
+                Physics.SphereCast(start, outSideLedgeRadius, dir, out lrHit, 1.5f, climbingLayer);
+            }
 
             return;
         }

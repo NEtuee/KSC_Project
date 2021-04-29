@@ -95,7 +95,7 @@ public class IKCtrl : MonoBehaviour
             animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, leftRotWeight);
         }
 
-        MoveFeetToIkPoint(AvatarIKGoal.LeftFoot, leftFootIkPosition, leftFootIkRotation, ref lastLeftFootPositionY);  
+        MoveFeetToIkPoint(AvatarIKGoal.LeftFoot, leftFootIkPosition, leftFootIkRotation, ref lastLeftFootPositionY);
     }
 
     public void EnableFeetIk() { enableFeetIk = true; }
