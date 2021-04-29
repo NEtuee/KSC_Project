@@ -34,7 +34,8 @@ public class FollowTargetCtrl : MonoBehaviour
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
 
-        if(((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod == UpdateMethod.Update)
+        target = GameManager.Instance.player.transform;
+        if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod == UpdateMethod.Update)
         {
             updateMode = true;
         }

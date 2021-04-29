@@ -332,7 +332,8 @@ public class PlayerMovement : MonoBehaviour
                     player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && 
                     player.GetState() != PlayerCtrl_Ver2.PlayerState.ReadyClimbingJump &&
                     player.GetState() != PlayerCtrl_Ver2.PlayerState.ClimbingJump && 
-                    player.GetState() != PlayerCtrl_Ver2.PlayerState.HangShake)
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.HangShake&&
+                    player.GetState() != PlayerCtrl_Ver2.PlayerState.ReadyGrab)
                 {
                     SetParent(null);
                 }
@@ -374,7 +375,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (transform.parent != parent)
         {
-            //Debug.Log(parent);
             transform.SetParent(parent);
         }
     }
