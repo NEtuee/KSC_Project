@@ -1816,14 +1816,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 112632216}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2a8618ac7146d748a811b3179878a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - AD_0419_VisualMake
-  - B00GIE_main
+  - levelCode: Boogie
+    sceneToLoad:
+    - B00GIE_main
+    - ProgramerEnviorment_platform
+  - levelCode: Daddy
+    sceneToLoad:
+    - DaddyLongLegs_Main
+    - ProgramerEnviorment_platform
   currentLevel: 0
   currentStageManager: {fileID: 0}
 --- !u!114 &112632220
@@ -29328,6 +29334,11 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 448957485}
+    - target: {fileID: 5217452666823169044, guid: df6fd956879dfa44690be0b182a6d60a,
+        type: 3}
+      propertyPath: m_Priority
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5217452666823169044, guid: df6fd956879dfa44690be0b182a6d60a,
         type: 3}
       propertyPath: m_Lens.FieldOfView
