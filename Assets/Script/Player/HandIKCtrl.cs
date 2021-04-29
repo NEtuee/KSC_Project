@@ -438,7 +438,7 @@ public class HandIKCtrl : MonoBehaviour
     private void DebugDetection()
     {
         Vector3 start;
-        Vector3 dir;
+        Vector3 dir = Vector3.zero;
         bool isHit;
 
         if (leftHandPointObjet != null && rightHandPointObject != null)
@@ -500,27 +500,45 @@ public class HandIKCtrl : MonoBehaviour
         else
         {
             //RR
-            start = RR.position;
-            dir = transform.forward;
-            isHit=DebugCastDetection.Instance.DebugSphereCastDetection(start, outsideSurfaceRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
-            if(isHit == false)
-                dir = Quaternion.AngleAxis(-outSideRotateDetectionAngle, transform.up) * dir;
-            DebugCastDetection.Instance.DebugSphereCastDetection(start, outsideSurfaceRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+            if (RR != null)
+            {
+                start = RR.position;
+                dir = transform.forward;
+                isHit = DebugCastDetection.Instance.DebugSphereCastDetection(start, outsideSurfaceRadius, dir, 1.5f,
+                    climbingLayer, Color.white, Color.blue);
+                if (isHit == false)
+                    dir = Quaternion.AngleAxis(-outSideRotateDetectionAngle, transform.up) * dir;
+                DebugCastDetection.Instance.DebugSphereCastDetection(start, outsideSurfaceRadius, dir, 1.5f,
+                    climbingLayer, Color.white, Color.blue);
+            }
 
             //RL
-            start = RL.position;
-            DebugCastDetection.Instance.DebugSphereCastDetection(start, insideSurfaceRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
-            
-            //LL
-            start = LL.position;
-            dir = transform.forward;
-            isHit = DebugCastDetection.Instance.DebugSphereCastDetection(start, outsideSurfaceRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
-            if (isHit == false)
-                dir = Quaternion.AngleAxis(outSideRotateDetectionAngle, transform.up) * dir;
-            DebugCastDetection.Instance.DebugSphereCastDetection(start, outsideSurfaceRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+            if (RL != null)
+            {
+                start = RL.position;
+                DebugCastDetection.Instance.DebugSphereCastDetection(start, insideSurfaceRadius, dir, 1.5f,
+                    climbingLayer, Color.white, Color.blue);
+            }
 
-            start = LR.position;
-            DebugCastDetection.Instance.DebugSphereCastDetection(start, insideSurfaceRadius, dir, 1.5f, climbingLayer, Color.white, Color.blue);
+            //LL
+            if (LL != null)
+            {
+                start = LL.position;
+                dir = transform.forward;
+                isHit = DebugCastDetection.Instance.DebugSphereCastDetection(start, outsideSurfaceRadius, dir, 1.5f,
+                    climbingLayer, Color.white, Color.blue);
+                if (isHit == false)
+                    dir = Quaternion.AngleAxis(outSideRotateDetectionAngle, transform.up) * dir;
+                DebugCastDetection.Instance.DebugSphereCastDetection(start, outsideSurfaceRadius, dir, 1.5f,
+                    climbingLayer, Color.white, Color.blue);
+            }
+
+            if (LR != null)
+            {
+                start = LR.position;
+                DebugCastDetection.Instance.DebugSphereCastDetection(start, insideSurfaceRadius, dir, 1.5f,
+                    climbingLayer, Color.white, Color.blue);
+            }
         }
 
     }
