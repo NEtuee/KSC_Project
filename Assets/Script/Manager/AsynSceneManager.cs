@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class AsynSceneManager : MonoBehaviour
 {
@@ -33,6 +35,7 @@ public class AsynSceneManager : MonoBehaviour
     public int currentLevel = 0;
 
     public StageManager currentStageManager;
+    public Image fadeScreen;
 
     private LevelInfo _currentScene;
     private List<Scene> _unloadScenes = new List<Scene>();
@@ -109,6 +112,8 @@ public class AsynSceneManager : MonoBehaviour
         if(!_isLoaded)
             yield break;
 
+        fadeScreen.gameObject.SetActive(true);
+
         GameManager.Instance.PAUSE = true;
         _isLoaded = false;
 
@@ -156,6 +161,9 @@ public class AsynSceneManager : MonoBehaviour
 
         GameManager.Instance.PAUSE = false;
         _isLoaded = true;
+
+        yield return new WaitForSeconds(2f);
+        fadeScreen.gameObject.SetActive(false);
     }
 
     IEnumerator UnloadSceneCoroutine(Scene scene)
