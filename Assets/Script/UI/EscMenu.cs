@@ -13,4 +13,6 @@ public abstract class EscMenu : MonoBehaviour
 
     public abstract void Disappear(float duration, TweenCallback tweenCallback);
 
+    public abstract void Active(bool active);
+
 }
