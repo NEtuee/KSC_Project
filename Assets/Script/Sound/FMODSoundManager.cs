@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using FMOD;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class FMODSoundManager : MonoBehaviour
 {
@@ -144,6 +146,19 @@ public class FMODSoundManager : MonoBehaviour
         {
             Debug.Log("global parameter not found");
         }
+        
+        //Debug.Log("ID : "+id+" SetValue"+value);
+    }
+    
+    public float GetGlobalParam(int id)
+    {
+        var desc = FindGlobalParamDesc(id);
+        RESULT result = FMODUnity.RuntimeManager.StudioSystem.getParameterByID(desc.id, out var value);
+        if(result != FMOD.RESULT.OK)
+        {
+            Debug.Log("global parameter not found");
+        }
+        return value;
     }
 
     private void ReturnCache(int id, FMODUnity.StudioEventEmitter emitter)

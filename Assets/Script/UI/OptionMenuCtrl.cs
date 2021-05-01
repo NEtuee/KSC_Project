@@ -14,7 +14,7 @@ public class OptionMenuCtrl : MonoBehaviour
     public Image backGroundImage;
     public LeftOptionTitle titlePanel;
     public EscMenu optionItemPanel;
-    private MenuType _currentMenu = MenuType.None;
+    [SerializeField]private MenuType _currentMenu = MenuType.None;
 
     private EscMenu _currnetPanel = null;
     public EscMenu optionPanel;
@@ -111,5 +111,15 @@ public class OptionMenuCtrl : MonoBehaviour
             prevPanel.Active (false);
             _currnetPanel.Active (true);
         }, 1f);
+    }
+    
+    public void GameQuit()
+    {
+        Debug.Log("Exit");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit() // 어플리케이션 종료
+#endif
     }
 }

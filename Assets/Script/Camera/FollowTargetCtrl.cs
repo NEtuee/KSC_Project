@@ -12,6 +12,18 @@ public class FollowTargetCtrl : MonoBehaviour
     [SerializeField] private float rotSmooth = 0.1f;
     [SerializeField] private float followSmooth = 8f;
     [SerializeField] private bool isPause;
+    
+    public float YawRotateSpeed
+    {
+        get => yawRotateSpeed;
+        set => yawRotateSpeed = value;
+    }
+
+    public float PitchRotateSpeed
+    {
+        get => pitchRotateSpeed;
+        set => pitchRotateSpeed = value;
+    }
 
     private Vector3 currentRot;
     private Vector3 targetRot;
@@ -157,5 +169,15 @@ public class FollowTargetCtrl : MonoBehaviour
     {
         currentRot = rot;
         targetRot = rot;
+    }
+
+    public void SetYawRotateSpeed(float speed)
+    {
+        yawRotateSpeed = speed;
+    }
+
+    public void SetPitchRotateSpeed(float speed)
+    {
+        pitchRotateSpeed = speed;
     }
 }
