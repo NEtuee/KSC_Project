@@ -9,12 +9,20 @@ public abstract class Scanable : MonoBehaviour
     protected Collider collider;
 
     public bool visible;
+    public bool removeCheck = true;
     public abstract void Scanned();
 
+    protected bool _isTriggered = false;
+    
     protected void Start()
     {
         renderer = GetComponent<Renderer>();
         collider = GetComponent<Collider>();
+    }
+
+    public bool IsTriggered()
+    {
+        return _isTriggered;
     }
 
     public bool CheckInAngle(Vector3 scanPos)
