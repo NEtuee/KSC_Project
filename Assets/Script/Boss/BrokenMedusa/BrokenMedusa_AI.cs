@@ -7,6 +7,12 @@ using UnityEngine.Events;
 
 public class BrokenMedusa_AI : IKBossBase
 {
+    public enum AnimationType
+    {
+        KeyFrame,
+        Graph
+    };
+
     public enum State
     {
         Idle,
@@ -20,11 +26,14 @@ public class BrokenMedusa_AI : IKBossBase
         Dead
     }
 
+    public AnimationType animationType;
+
     public float headRotationLock = 90f;
     public float pushDistance = 3f;
     public float scanYLimit = 10f;
     public float lookDistance = 20f;
 
+    public Animation animationControll;
     public GraphAnimator graphAnimator;
     public BossScan scanner;
     public FloorControl floorControl;
@@ -57,7 +66,12 @@ public class BrokenMedusa_AI : IKBossBase
         GetSoundManager();
         SetLegHitGroundSound(1512);
         
-        graphAnimator.Play("UpDown",body);
+        if(animationType == AnimationType.Graph)
+            graphAnimator.Play("UpDown",body);
+        else if(animationType == AnimationType.KeyFrame)
+        {
+
+        }
 
         _timeCounter.InitTimer("FrontWalk");
         _timeCounter.InitTimer("FrontWalk_Init");
@@ -108,7 +122,7 @@ public class BrokenMedusa_AI : IKBossBase
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Hit();
+            animationControll.Play("Anim_Medusa_Hit");
         }
         
         if (Input.GetKeyDown(KeyCode.K))
@@ -134,7 +148,7 @@ public class BrokenMedusa_AI : IKBossBase
         else if(currentState == State.LockOnLook)
         {
             LookTarget_Head(_target.position, deltaTime);
-            if(lookDistance > _targetDistance)
+            if(lookDistance - 2 > _targetDistance)
             {
                 UpdateMoveLine();
                 ChangeState(State.LockOnMove);
@@ -152,7 +166,7 @@ public class BrokenMedusa_AI : IKBossBase
             LookLineForward_Body(deltaTime);
             LineMove(deltaTime);
             
-            if(lookDistance < _targetDistance)
+            if(lookDistance + 2f < _targetDistance)
                 ChangeState(State.LockOnLook);
             
             if(!IsOnGrounded())
@@ -183,23 +197,18 @@ public class BrokenMedusa_AI : IKBossBase
                     }
                     
                 }
-                else
-                {
-                    if(ScanCheck())
-                    {
-                        UpdateMoveLine();
-                        ChangeState(State.LockOnMove);
-
-                        if(!floorControl._launch)
-                        {
-                            floorControl.Launch();
-                        }
-                    }
-                    
-                }
-
                 
+            }
 
+            if(ScanCheck())
+            {
+                UpdateMoveLine();
+                ChangeState(State.LockOnMove);
+
+                if(!floorControl._launch)
+                {
+                    floorControl.Launch();
+                }
             }
         }
         else if(currentState == State.SearchIdle)
@@ -252,8 +261,18 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.Dead)
         {
-            graphAnimator.Stop();
-            graphAnimator.Play("Dead",body);
+            if(animationType == AnimationType.Graph)
+            {
+                graphAnimator.Stop();
+                graphAnimator.Play("Dead",body);
+            }
+            else if(animationType == AnimationType.KeyFrame)
+            {
+                graphAnimator.Stop();
+                graphAnimator.Play("Dead",body);
+
+                
+            }
 
             this.enabled = false;
         }
@@ -301,22 +320,50 @@ public class BrokenMedusa_AI : IKBossBase
         {
             _moveLine = Vector3.zero;
             _timeCounter.InitTimer("SearchIdle");
+
+            if(animationType == AnimationType.KeyFrame && !animationControll.IsPlaying("Anim_Medusa_Finding"))
+            {
+                animationControll.Play("Anim_Medusa_Finding");
+            }
         }
         else if(currentState == State.SearchRotate)
         {
             _searchDirection = head.forward;
             _timeCounter.InitTimer("SearchRotate");
+
+            if(animationType == AnimationType.KeyFrame && !animationControll.IsPlaying("Anim_Medusa_Finding"))
+            {
+                animationControll.Play("Anim_Medusa_Finding");
+            }
         }
         else if(currentState == State.SearchScan)
         {
             scanner.scaning = false;
             _timeCounter.InitTimer("SearchScan");
+
+            if(animationType == AnimationType.KeyFrame && !animationControll.IsPlaying("Anim_Medusa_Finding"))
+            {
+                animationControll.Play("Anim_Medusa_Finding");
+            }
+        }
+        else if(currentState == State.LockOnLook)
+        {
+            animationControll.PlayQueued("Anim_Medusa_Close");
+        }
+        else if(currentState == State.LockOnMove)
+        {
+            animationControll.PlayQueued("Anim_Medusa_Open");
         }
     }
 
-    public void Hit()
+    public override void Hit()
     {
-        graphAnimator.Play("Hit",body);
+        if(animationType == AnimationType.Graph)
+            graphAnimator.Play("Hit",body);
+        else if(animationType == AnimationType.KeyFrame)
+        {
+            animationControll.Play("Anim_Medusa_Hit");
+        }
         _soundManager.Play(1701,transform.position);
     }
 
@@ -398,7 +445,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void Push(bool up)
     {
-        if(pushDistance >= _targetDistance && graphAnimator.IsPlaying("ShildAttack") == null)
+        if(pushDistance >= _targetDistance/* && graphAnimator.IsPlaying("ShildAttack") == null*/)
         {
             var dist = Vector3.Distance(transform.position, _target.position);
             if(dist >= 7f)
@@ -409,7 +456,9 @@ public class BrokenMedusa_AI : IKBossBase
             
             GameManager.Instance.soundManager.Play(1015,_target.position);
 
-            if(up)
+            var upDist = MathEx.distance(transform.position.y, _target.position.y);
+
+            if(upDist >= 3f)
             {
                 PushBackUp();
             }
@@ -422,7 +471,12 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void PushBack()
     {
-        graphAnimator.Play("ShildAttack",shildGraphic);
+        if(animationType == AnimationType.Graph)
+            graphAnimator.Play("ShildAttack",shildGraphic);
+        else if(animationType == AnimationType.KeyFrame)
+        {
+            animationControll.Play("Anim_Medusa_Push");
+        }
 
         Collider[] playerColl = Physics.OverlapSphere(shildTransform.position, 10f,targetLayer);
 
@@ -442,7 +496,12 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void PushBackUp()
     {
-        graphAnimator.Play("ShildAttack",shildGraphic);
+        if(animationType == AnimationType.Graph)
+            graphAnimator.Play("ShildAttack",shildGraphic);
+        else if(animationType == AnimationType.KeyFrame)
+        {
+            animationControll.Play("Anim_Medusa_PushUp");
+        }
 
         Collider[] playerColl = Physics.OverlapSphere(shildTransform.position, 10f,targetLayer);
 
@@ -453,7 +512,7 @@ public class BrokenMedusa_AI : IKBossBase
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
                 if(ragdoll != null)
                 {
-                    ragdoll.ExplosionRagdoll(220.0f,_perpendicularPoint,1000f);
+                    ragdoll.ExplosionRagdoll(300.0f,_perpendicularPoint,1000f);
                 }
             }
         }
@@ -469,7 +528,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public bool LookTarget_Head(Vector3 pos, float deltaTime)
     {
-        return HeadLook((pos - transform.position),deltaTime);
+        return HeadLook((pos - transform.position).normalized,deltaTime);
         //BodyLook((_target.position - transform.position));
     }
 
@@ -518,6 +577,7 @@ public class BrokenMedusa_AI : IKBossBase
         var plane = Vector3.ProjectOnPlane(direction,head.up).normalized;
         var headAngle = Vector3.SignedAngle(head.forward,plane,head.up);
         bool look = false;
+
         //head.RotateAround(head.position,head.up,headAngle);
         if(MathEx.abs(headAngle) >= 1f)
         {
