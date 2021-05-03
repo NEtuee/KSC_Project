@@ -21,9 +21,13 @@ public class BossScan : MonoBehaviour
         {
             range += scanSpeed * Time.deltaTime;
             scanMat.SetFloat("_Distance", range);
+            scanMat.SetFloat("_ScanAlpha",1f - (range / maxRange));
 
             if (range > maxRange)
+            {
+                scanMat.SetFloat("_ScanAlpha",0f);
                 scaning = false;
+            }
         }
     }
 
@@ -36,6 +40,7 @@ public class BossScan : MonoBehaviour
     {
         scaning = true;
         range = 0f;
+        scanMat.SetFloat("_ScanAlpha",1f);
         scanMat.SetFloat("_ScanArc", arc);
         scanMat.SetVector("_WorldSpaceScannerPos", start);
         scanMat.SetVector("_ForwardDirection", forward);
