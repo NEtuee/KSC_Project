@@ -7,7 +7,7 @@ public class ObjectPoolBase<T> : MonoBehaviour
 {
     public delegate void ActiveDelegate(T t,Vector3 pos, Quaternion rot);
     public delegate void SettingDelegate(T t);
-    public delegate bool DeleteConditionDelegate(T t);
+    public delegate bool ConditionDelegate(T t);
     
     public GameObject baseObject;
 
@@ -18,7 +18,7 @@ public class ObjectPoolBase<T> : MonoBehaviour
     protected SettingDelegate _createDelegate = t => { };
     protected SettingDelegate _deleteProgressDelegate = t => { };
     protected SettingDelegate _progressDelegate = t => { };
-    protected DeleteConditionDelegate _deleteCondition = t => { return false;};
+    protected ConditionDelegate _deleteCondition = t => { return false;};
 
     protected virtual void Update()
     {
