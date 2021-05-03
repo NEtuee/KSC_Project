@@ -21,6 +21,12 @@ public class FMODSoundManager : MonoBehaviour
         Init();
         
         GameManager.Instance.AsynSceneManager.RegisterBeforeLoadOnStart(ReturnAllCache);
+
+        Play(4000, Vector3.zero);
+        Play(4001, Vector3.zero);
+        Play(4002, Vector3.zero);
+        Play(4003, Vector3.zero);
+
     }
 
     private void LateUpdate()

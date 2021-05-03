@@ -29,6 +29,11 @@ public class SoundOptionPanel : EscMenu
     {
         if (active)
         {
+            //GameManager.Instance.soundManager.Play(4000, Vector3.zero);
+            //GameManager.Instance.soundManager.Play(4001, Vector3.zero);
+            //GameManager.Instance.soundManager.Play(4002, Vector3.zero);
+            //GameManager.Instance.soundManager.Play(4003, Vector3.zero);
+
             _canvas.enabled = true;
 
             float value = 0;

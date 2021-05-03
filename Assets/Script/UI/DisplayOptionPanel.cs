@@ -58,12 +58,12 @@ public class DisplayOptionPanel : EscMenu
         _canvas.enabled = false;
         
         Resolution[] resolutions = Screen.resolutions;
-        Debug.Log(resolutions.Length);
+        //Debug.Log(resolutions.Length);
         
-        foreach (var res in resolutions)
-        {
-            Debug.Log(res.width+"x"+res.height);
-        }
+        //foreach (var res in resolutions)
+        //{
+        //    Debug.Log(res.width+"x"+res.height);
+        //}
         
         foreach (var res in resolutions)
         {
