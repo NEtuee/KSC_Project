@@ -121,7 +121,12 @@ public class IKBossBase : Hitable
 
     public void Turn(bool isLeft, Transform target, float deltaTime)
     {
-        target.RotateAround(target.position,target.up,rotationSpeed * deltaTime * (isLeft ? 1f : -1f));
+        Turn(target, rotationSpeed * deltaTime * (isLeft ? 1f : -1f));
+    }
+
+    public void Turn(Transform target, float factor)
+    {
+        target.RotateAround(target.position,target.up,factor);
     }
 
     public bool GroundCheck(out RaycastHit hit,float dist)
