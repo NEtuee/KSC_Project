@@ -1526,7 +1526,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 movement.SetParent(hit.collider.transform);
                 movement.Attach();
 
-                Debug.Log("default");
+                //Debug.Log("default");
 
                 return true;
             }
@@ -1545,7 +1545,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     movement.Attach();
                     moveDir = Vector3.zero;
 
-                    Debug.Log("groundgrab");
+                    //Debug.Log("groundgrab");
 
                     return true;
                 }
@@ -1576,7 +1576,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     movement.SetParent(hit.collider.transform);
                     movement.Attach();
 
-                    Debug.Log("ledgegrab");
+                    //Debug.Log("ledgegrab");
 
                     return true;
                 }
