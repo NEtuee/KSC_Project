@@ -50,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rigidbody;
     private PlayerRagdoll ragdoll;
     private PlayerCtrl_Ver2 player;
+    private CapsuleCollider collider;
 
     [SerializeField]private float slidingTime = 0.0f;
     [SerializeField] private float holdTime = 1f;
@@ -73,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         ragdoll = GetComponent<PlayerRagdoll>();
+        collider = GetComponent<CapsuleCollider>();
 
         updateMethod = player.updateMethod == UpdateMethod.Update ? UpdateMethod.Update : UpdateMethod.FixedUpdate;
     }
@@ -94,6 +96,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move_Nodelta(Vector3 direction)
     {
+        if (Physics.Raycast(transform.position + collider.center, direction, direction.magnitude) == false)
+            return;
+
         transform.position += direction;
     }
 

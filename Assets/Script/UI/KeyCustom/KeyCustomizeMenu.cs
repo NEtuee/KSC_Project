@@ -99,4 +99,17 @@ public class KeyCustomizeMenu : EscMenu
         InputManager.Instance.InitializeKeyBind_Toggle();
         tweenCallback.Invoke();
     }
+
+    public override void Active(bool active)
+    {
+        if(active)
+        {
+            canvas.enabled = true;
+        }
+        else
+        {
+            canvas.enabled = false;
+            InputManager.Instance.InitializeKeyBind_Toggle();
+        }
+    }
 }

@@ -146,6 +146,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Transform lookAtAim;
     private Quaternion storeSpineRotation;
 
+    public GameObject checkObj;
+
     private float _turnOverTime = 0.0f;
 
     public delegate void ActiveAimEvent();
@@ -755,7 +757,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.HangEdge:
             case PlayerState.HangLedge:
             case PlayerState.ReadyGrab:
-            {
+                {
                     UpdateGrab();
                 }
                 break;
@@ -1524,6 +1526,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 movement.SetParent(hit.collider.transform);
                 movement.Attach();
 
+                //Debug.Log("default");
+
                 return true;
             }
             else
@@ -1540,6 +1544,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     movement.SetParent(hit.collider.transform);
                     movement.Attach();
                     moveDir = Vector3.zero;
+
+                    //Debug.Log("groundgrab");
+
                     return true;
                 }
             }
@@ -1568,6 +1575,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     movement.SetParent(hit.collider.transform);
                     movement.Attach();
+
+                    //Debug.Log("ledgegrab");
 
                     return true;
                 }
@@ -1919,20 +1928,35 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             finalPosition = upHit.point + (transform.up * dectionOffset.y);
             finalPosition += transform.forward * dectionOffset.z;
             transform.position = finalPosition;
-            StartCoroutine(ForceSnap(0.1f, finalPosition));
+            if (checkObj != null)
+            {
+                checkObj.transform.position = finalPosition;
+            }
+            StartCoroutine(ForceSnap(0.5f, finalPosition, transform.localPosition));
+            //Debug.Log("AdjustLedgeOffset");
         }
     }
 
-    IEnumerator ForceSnap(float snapTime,Vector3 snapPosition)
+    IEnumerator ForceSnap(float snapTime,Vector3 snapPosition,Vector3 localPostiion)
     {
         float time = 0.0f;
-
         while(time<snapTime)
         {
             if (state != PlayerState.HangLedge)
                 break;
 
-            transform.position = snapPosition;
+            //Debug.Log("Adjusting");
+            //transform.position = snapPosition;
+
+            if (transform.parent == null)
+            {
+                transform.position = snapPosition;
+            }
+            else
+            {
+                transform.localPosition = localPostiion;
+            }
+
             time += Time.deltaTime;
             yield return null;
         }

@@ -8,6 +8,11 @@ public class InputMenu : EscMenu
     public EnterAboveUI[] bars = new EnterAboveUI[6];
     public float term = 0.2f;
 
+    public override void Active(bool active)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void Appear(float duration)
     {
         //bars[0].Appear(duration, () => bars[1].Appear(duration, ()=>bars[2].Appear(duration, () => bars[3].Appear(duration, () => bars[4].Appear(duration, () => bars[5].Appear(duration))))));

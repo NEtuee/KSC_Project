@@ -9,6 +9,11 @@ public class SoundMenu : EscMenu
     public EnterAboveSlider vfxSlider;
     public EnterAboveSlider bgmSlider;
 
+    public override void Active(bool active)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void Appear(float duration)
     {
         mainSlider.Appear(duration);
