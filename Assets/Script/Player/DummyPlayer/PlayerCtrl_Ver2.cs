@@ -1618,6 +1618,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             empGun.LaunchLaser(loadCount * 40.0f);
             chargeTime.Value = 0.0f;
             energy.Value -= loadCount * costValue;
+
+            TimeManager.instance.SetTimeScale(0f,.5f,0f);
         }
     }
 
