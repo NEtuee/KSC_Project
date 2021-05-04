@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
         }
 
         //StartCoroutine(LateStart());
+        QualitySettings.vSyncCount = 0;
     }
 
     private IEnumerator LateStart()
