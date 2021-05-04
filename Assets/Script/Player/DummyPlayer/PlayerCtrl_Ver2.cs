@@ -1932,31 +1932,31 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 checkObj.transform.position = finalPosition;
             }
-            StartCoroutine(ForceSnap(0.5f, finalPosition));
+            StartCoroutine(ForceSnap(0.5f, finalPosition, transform.localPosition));
             //Debug.Log("AdjustLedgeOffset");
         }
     }
 
-    IEnumerator ForceSnap(float snapTime,Vector3 snapPosition)
+    IEnumerator ForceSnap(float snapTime,Vector3 snapPosition,Vector3 localPostiion)
     {
         float time = 0.0f;
-        Vector3 localPos = transform.localPosition;
         while(time<snapTime)
         {
             if (state != PlayerState.HangLedge)
                 break;
 
             //Debug.Log("Adjusting");
-            transform.position = snapPosition;
+            //transform.position = snapPosition;
 
-            //if (transform.parent != null)
-            //{
-            //    transform.position = snapPosition;
-            //}
-            //else
-            //{
-            //    transform.localPosition = localPos;
-            //}
+            if (transform.parent == null)
+            {
+                transform.position = snapPosition;
+            }
+            else
+            {
+                transform.localPosition = localPostiion;
+            }
+
             time += Time.deltaTime;
             yield return null;
         }

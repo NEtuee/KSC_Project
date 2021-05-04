@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
             lockOnTargets.Add(lockTarget.GetComponent<LockOnTarget>());
         }
 
-        StartCoroutine(LateStart());
+        //StartCoroutine(LateStart());
     }
 
     private IEnumerator LateStart()
