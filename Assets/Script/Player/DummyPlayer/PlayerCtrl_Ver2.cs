@@ -466,7 +466,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     if (Physics.Raycast(transform.position + collider.center, moveDir, collider.radius + currentSpeed * deltaTime) == false)
                     {
-                        movement.Move(moveDir);
+                        if (currentSpeed != 0.0f)
+                        {
+                            movement.Move(moveDir);
+                        }
                     }
                 }
                 break;
@@ -1079,6 +1082,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.DisableHandIK();
                     GameManager.Instance.stateManager.Visible(false);
 
+                    collider.height = 1.898009f;
+
                     if (transform.parent == null)
                         GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
                     // else
@@ -1101,6 +1106,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.ActiveLedgeIK(false);
                     footIK.DisableFeetIk();
                     isClimbingMove = false;
+
+                    collider.height = 1.13f;
+
                     movement.SetGrab();
                     GameManager.Instance.cameraManager.SetFollowCameraDistance("Grab");
                 }
@@ -1856,6 +1864,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 movement.SetParent(wallHit.collider.transform);
             }
+        }
+        else
+        {
+            ChangeState(PlayerState.Default);
         }
         
     }
