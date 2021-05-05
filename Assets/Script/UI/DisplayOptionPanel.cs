@@ -94,7 +94,11 @@ public class DisplayOptionPanel : EscMenu
             }
         }
 
-        screenModeDropdown.value = Screen.fullScreen ? 0 : 1;    
+        screenModeDropdown.value = Screen.fullScreen ? 0 : 1;
+
+        screenModeDropdown.interactable = false;
+        resolutionDropdown.interactable = false;
+
     }
 
     public void ChangeScreenMode()
@@ -115,10 +119,11 @@ public class DisplayOptionPanel : EscMenu
     {
         Resolution currentResolution = _respondResolutions[resolutionDropdown.value];
 
-        if (Screen.currentResolution.height != currentResolution.height || Screen.currentResolution.width != currentResolution.width)
-        {
-            Screen.SetResolution(currentResolution.width,currentResolution.height,Screen.fullScreen);
-        }
+        //if (Screen.currentResolution.height != currentResolution.height || Screen.currentResolution.width != currentResolution.width)
+        //{
+        //    Screen.SetResolution(currentResolution.width,currentResolution.height,Screen.fullScreen);
+        //}
+        Screen.SetResolution(currentResolution.width, currentResolution.height, Screen.fullScreen);
     }
 
     public override void Active(bool active)
@@ -126,10 +131,18 @@ public class DisplayOptionPanel : EscMenu
         if (active)
         {
             _canvas.enabled = true;
+            _canvas.sortingOrder = 3;
+
+            screenModeDropdown.interactable = true;
+            resolutionDropdown.interactable = true;
         }
         else
         {
             _canvas.enabled = false;
+            _canvas.sortingOrder = 2;
+
+            screenModeDropdown.interactable = false;
+            resolutionDropdown.interactable = false;
         }
     }
 

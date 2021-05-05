@@ -20,6 +20,9 @@ public class ControlOptionPanel : EscMenu
     {
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = false;
+
+        pitchRotateSpeedSlider.interactable = false;
+        yawRotateSpeedSlider.interactable = false;
     }
 
     public override void Active(bool active)
@@ -27,16 +30,25 @@ public class ControlOptionPanel : EscMenu
         if (active)
         {
             _canvas.enabled = true;
+            _canvas.sortingOrder = 3;
+
             pitchRotateSpeedSlider.value = GameManager.Instance.followTarget.PitchRotateSpeed / MaxRotateSpeed;
             yawRotateSpeedSlider.value = GameManager.Instance.followTarget.YawRotateSpeed / MaxRotateSpeed;
             UpdateYawRotateSpeedText();
             UpdatePitchRotateSpeedText();
+
+            pitchRotateSpeedSlider.interactable = true;
+            yawRotateSpeedSlider.interactable = true;
         }
         else
         {
             GameManager.Instance.followTarget.PitchRotateSpeed = pitchRotateSpeedSlider.value * MaxRotateSpeed;
             GameManager.Instance.followTarget.YawRotateSpeed = yawRotateSpeedSlider.value * MaxRotateSpeed;
             _canvas.enabled = false;
+            _canvas.sortingOrder = 2;
+
+            pitchRotateSpeedSlider.interactable = false;
+            yawRotateSpeedSlider.interactable = false;
         }
     }
 

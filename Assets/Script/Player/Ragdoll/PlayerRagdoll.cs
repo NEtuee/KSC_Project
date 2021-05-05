@@ -622,6 +622,7 @@ public class PlayerRagdoll : MonoBehaviour
 
         connectBodySphere.transform.SetParent(transform.parent);
 
+        copyTargetCharacter.transform.SetParent(transform.parent);
         copyTargetCharacter.SetConnectBody(connectBodySphere);
 
         isHangShake = true;

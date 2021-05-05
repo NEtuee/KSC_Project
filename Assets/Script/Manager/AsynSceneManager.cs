@@ -35,7 +35,7 @@ public class AsynSceneManager : MonoBehaviour
     public int currentLevel = 0;
 
     public StageManager currentStageManager;
-    public Image fadeScreen;
+    public SceneLoadUI sceneLoadUI;
 
     private LevelInfo _currentScene;
     private List<Scene> _unloadScenes = new List<Scene>();
@@ -74,24 +74,36 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadCurrentlevel()
     {
-        _currentScene = levels[currentLevel];
-        RegisterProgress();
-        StartCoroutine(SceneLoadingProgress(true));
+        sceneLoadUI.StartLoad(()=> {
+            _currentScene = levels[currentLevel];
+            RegisterProgress();
+            StartCoroutine(SceneLoadingProgress(true));
+        }
+        );
+        //_currentScene = levels[currentLevel];
+        //RegisterProgress();
+        //StartCoroutine(SceneLoadingProgress(true));
     }
 
     public void LoadPrevlevel()
     {
-        currentLevel = (--currentLevel < 0 ? levels.Count - 1 : currentLevel);
-        _currentScene = levels[currentLevel];
-        RegisterProgress();
-        StartCoroutine(SceneLoadingProgress(true));
+        sceneLoadUI.StartLoad(() =>
+        {
+            currentLevel = (--currentLevel < 0 ? levels.Count - 1 : currentLevel);
+            _currentScene = levels[currentLevel];
+            RegisterProgress();
+            StartCoroutine(SceneLoadingProgress(true));
+        });
     }
 
     public void LoadNextlevelFrom()
     {
-        currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
-        _currentScene = levels[currentLevel];
-        StartCoroutine(SceneLoadingProgress(true));
+        sceneLoadUI.StartLoad(() =>
+        {
+            currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
+            _currentScene = levels[currentLevel];
+            StartCoroutine(SceneLoadingProgress(true));
+        });
     }
 
     public void LoadNextlevel()
@@ -111,8 +123,6 @@ public class AsynSceneManager : MonoBehaviour
     {
         if(!_isLoaded)
             yield break;
-
-        fadeScreen.gameObject.SetActive(true);
 
         GameManager.Instance.PAUSE = true;
         _isLoaded = false;
@@ -163,7 +173,7 @@ public class AsynSceneManager : MonoBehaviour
         _isLoaded = true;
 
         yield return new WaitForSeconds(2f);
-        fadeScreen.gameObject.SetActive(false);
+        sceneLoadUI.EndLoad();
     }
 
     IEnumerator UnloadSceneCoroutine(Scene scene)
@@ -189,6 +199,9 @@ public class AsynSceneManager : MonoBehaviour
         {
             if (operation.progress >= 0.9f)
                 operation.allowSceneActivation = true;
+
+            if (sceneActive == true)
+                sceneLoadUI.SetLoadingValue(operation.progress);
 
             yield return null;
         }

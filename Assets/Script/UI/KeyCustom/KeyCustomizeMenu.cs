@@ -105,10 +105,12 @@ public class KeyCustomizeMenu : EscMenu
         if(active)
         {
             canvas.enabled = true;
+            canvas.sortingOrder = 3;
         }
         else
         {
             canvas.enabled = false;
+            canvas.sortingOrder = 2;
             InputManager.Instance.InitializeKeyBind_Toggle();
         }
     }

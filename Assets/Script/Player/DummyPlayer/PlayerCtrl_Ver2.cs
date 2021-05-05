@@ -54,6 +54,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Transform headTransfrom;
     [SerializeField] public bool isCanReadyClimbingCancel = false;
     [SerializeField] private bool isCanClimbingCancel = false;
+    private bool _alreadyInputJump = false;
 
     [Header("Movement Speed Value")]
     [SerializeField] private float walkSpeed = 15.0f;
@@ -147,6 +148,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private Quaternion storeSpineRotation;
 
     public GameObject checkObj;
+
+    public CrossHair crossHair;
 
     private float _turnOverTime = 0.0f;
 
@@ -259,24 +262,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         UpdateInputValue(inputVertical, inputHorizontal);
 
-        //if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
-        //{
-        //    isRun = true;
-        //}
-        //else
-        //{
-        //    isRun = false;
-        //}
-
         InputRun();
 
         switch (state)
         {
             case PlayerState.Default:
                 {
-                    if (InputManager.Instance.GetInput(KeybindingActions.Jump))
+                    if (InputManager.Instance.GetInput(KeybindingActions.Jump) && _alreadyInputJump == false)
                     {
                         animator.SetTrigger("Jump");
+                        _alreadyInputJump = true;
                         return;
                     }
 
@@ -358,7 +353,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
 
-                    gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
+                   gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
 
                    InputChargeShot();
 
@@ -1136,6 +1131,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if(prevState != PlayerState.ClimbingJump)
                        moveDir = transform.forward * currentSpeed;
                     horizonWeight = 0.0f;
+                    _alreadyInputJump = false;
                     animator.SetFloat("HorizonWeight", horizonWeight);
                 }
                 break;
