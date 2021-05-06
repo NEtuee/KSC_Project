@@ -209,6 +209,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            AddJumpPower(10f);
+        }
+
         if (GameManager.Instance.PAUSE == true)
             return;
 
@@ -971,8 +976,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         moveForward.Normalize();
         prevForward.Normalize();
 
-        if(currentSpeed > 0f)
-            legBlur.material.SetFloat("_XOffset",(currentSpeed / runSpeed) * 0.004f);
+        //if(currentSpeed > 0f)
+        float speedFactor = (currentSpeed / runSpeed) * 0.004f;
+        float dot = Vector3.Dot(transform.forward,camRight);
+        float dotY = Vector3.Dot(transform.forward,camForward);
+        dotY *= 0.6f;
+        //dot = Mathf.Clamp(MathEx.abs(dot),0.2f,1f);
+
+        legBlur.material.SetFloat("_XOffset",speedFactor * dot);
+        legBlur.material.SetFloat("_YOffset",speedFactor * dotY);
 
         if(state == PlayerState.Grab || state == PlayerState.RunToStop)
         {
@@ -1028,6 +1040,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             _gunPoseHorizonValue = Mathf.MoveTowards(_gunPoseHorizonValue, 0.0f, deltaTime * 5.0f);
         }
+    }
+
+    public void AddJumpPower(float value)
+    {
+        currentJumpPower += value;
+    }
+
+    public void SetJumpPower(float value)
+    {
+        currentJumpPower = value;
     }
 
     public void Jump()
