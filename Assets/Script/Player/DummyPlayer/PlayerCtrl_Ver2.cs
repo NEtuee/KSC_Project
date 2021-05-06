@@ -45,6 +45,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     public GameObject hitMaker;
     public bool playerDebug;
 
+    [SerializeField] private MeshRenderer legBlur;
+
     [Header("State")]
     [SerializeField] private bool isRun = false;
     [SerializeField] private PlayerState state;
@@ -969,6 +971,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         moveForward.Normalize();
         prevForward.Normalize();
 
+        if(currentSpeed > 0f)
+            legBlur.material.SetFloat("_XOffset",(currentSpeed / runSpeed) * 0.004f);
+
         if(state == PlayerState.Grab || state == PlayerState.RunToStop)
         {
             return;
@@ -1689,7 +1694,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             chargeTime.Value = 0.0f;
             energy.Value -= loadCount * costValue;
 
-            TimeManager.instance.SetTimeScale(0f,.5f,0f);
+            if(loadCount >= 2)
+            {
+                GameManager.Instance.cameraManager.AddAimCameraDistance(-.5f);
+                TimeManager.instance.SetTimeScale(0f,.5f,0f,0.2f);
+            }
         }
     }
 
