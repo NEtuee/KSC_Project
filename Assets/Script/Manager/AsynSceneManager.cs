@@ -2,9 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class AsynSceneManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class LevelInfo
+    {
+        public string levelCode;
+        public List<string> scenesToLoad;
+    };
+
     public struct LocalInfo
     {
         public Vector3 localPosition;
@@ -21,12 +30,14 @@ public class AsynSceneManager : MonoBehaviour
 
     public delegate void del_SceneLoaded();
 
-    public List<string> levels = new List<string>();
+    public List<LevelInfo> levels = new List<LevelInfo>();
+    //public List<string> levels = new List<string>();
     public int currentLevel = 0;
 
     public StageManager currentStageManager;
+    public Image fadeScreen;
 
-    private string _currentScene;
+    private LevelInfo _currentScene;
     private List<Scene> _unloadScenes = new List<Scene>();
 
     private List<del_SceneLoaded> _afterLoadRegisterLine = new List<del_SceneLoaded>();
@@ -52,14 +63,6 @@ public class AsynSceneManager : MonoBehaviour
         _player = GameManager.Instance.player;
 
         LoadCurrentlevel();
-    }
-
-    public void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.I))
-        {
-            LoadCurrentlevel();
-        }
     }
 
     public void LoadLevel(int level)
@@ -99,10 +102,17 @@ public class AsynSceneManager : MonoBehaviour
         StartCoroutine(SceneLoadingProgress(false));
     }
 
+    public LevelInfo FindLevel(string code)
+    {
+        return levels.Find(x => x.levelCode == code);
+    }
+
     IEnumerator SceneLoadingProgress(bool setPos)
     {
         if(!_isLoaded)
             yield break;
+
+        fadeScreen.gameObject.SetActive(true);
 
         GameManager.Instance.PAUSE = true;
         _isLoaded = false;
@@ -118,6 +128,8 @@ public class AsynSceneManager : MonoBehaviour
 
         _beforeLoad();
 
+        currentStageManager = null;
+
         _loadedScenes = _unloadScenes.Count;
 
         for(int i = 0; i < _unloadScenes.Count; ++i)
@@ -132,7 +144,26 @@ public class AsynSceneManager : MonoBehaviour
 
         _unloadScenes.Clear();
 
-        StartCoroutine(LoadSceneCoroutine(setPos));
+
+        _loadedScenes = _currentScene.scenesToLoad.Count;
+
+        for(int i = 0; i < _currentScene.scenesToLoad.Count; ++i)
+        {
+            StartCoroutine(LoadSceneCoroutine(setPos,i == 0,_currentScene.scenesToLoad[i]));
+        }
+        
+        while(_loadedScenes != 0)
+        {
+            yield return null;
+        }
+
+        _afterLoad();
+
+        GameManager.Instance.PAUSE = false;
+        _isLoaded = true;
+
+        yield return new WaitForSeconds(2f);
+        fadeScreen.gameObject.SetActive(false);
     }
 
     IEnumerator UnloadSceneCoroutine(Scene scene)
@@ -149,9 +180,9 @@ public class AsynSceneManager : MonoBehaviour
         --_loadedScenes;
     }
 
-    IEnumerator LoadSceneCoroutine(bool setPos)
+    IEnumerator LoadSceneCoroutine(bool setPos, bool sceneActive, string target)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(_currentScene,LoadSceneMode.Additive);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(target,LoadSceneMode.Additive);
         operation.allowSceneActivation = false;
         
         while (operation.isDone == false)
@@ -162,10 +193,9 @@ public class AsynSceneManager : MonoBehaviour
             yield return null;
         }
 
-        _afterLoad();
-
-        var scene = SceneManager.GetSceneByName(_currentScene);
-        SceneManager.SetActiveScene(scene);
+        var scene = SceneManager.GetSceneByName(target);
+        if(sceneActive)
+            SceneManager.SetActiveScene(scene);
         _unloadScenes.Add(scene);
 
         RegisterProgress();
@@ -187,11 +217,10 @@ public class AsynSceneManager : MonoBehaviour
                 stage.entranceElevator.ObjectTeleport(_followLocalTarget.localPosition,_followLocalTarget.localRotation,_follow.transform);
             }
             
+            currentStageManager = stage;
         }
 
-        currentStageManager = stage;
-        GameManager.Instance.PAUSE = false;
-        _isLoaded = true;
+        --_loadedScenes;
     }
 
     public void UpdateLocalTargets(Transform target)

@@ -40,4 +40,8 @@ public class EscMainMenu : EscMenu
         titleButton.Disappear(duration, () => soundMenuButton.Disappear(duration, () => inputMenuButton.Disappear(duration, tweenCallback)));
     }
 
+    public override void Active(bool active)
+    {
+        throw new System.NotImplementedException();
+    }
 }

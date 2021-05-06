@@ -37,4 +37,9 @@ public class PauseDummyMenu : EscMenu
         exitButton.Disappear(duration, tweenCallback);
         keyCustomButton.Disappear(duration);
     }
+
+    public override void Active(bool active)
+    {
+        throw new System.NotImplementedException();
+    }
 }

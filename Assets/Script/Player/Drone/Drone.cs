@@ -38,6 +38,7 @@ public class Drone : MonoBehaviour
         mainCam = Camera.main.transform;
         playerHead = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head);
         player = (PlayerCtrl_Ver2)GameManager.Instance.player;
+        target = player.transform;
         droneHelperRoot = GetComponent<DroneHelperRoot>();
         
         GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);

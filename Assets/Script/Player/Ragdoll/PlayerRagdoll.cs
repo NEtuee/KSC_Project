@@ -94,7 +94,13 @@ public class PlayerRagdoll : MonoBehaviour
             }
         }
 
-       
+        //CopyBoneRotation[] copyBone = bip.GetComponentsInChildren<CopyBoneRotation>();
+        //foreach (CopyBoneRotation copy in copyBone)
+        //{
+        //    copyBoneRotations.Add(copy);
+        //}
+
+
         foreach (var t in pelvis.GetComponentsInChildren<Transform>())
         {
             var trComp = new TransformComponent(t);

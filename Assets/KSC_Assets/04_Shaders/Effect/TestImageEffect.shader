@@ -7,6 +7,7 @@ Shader "Hidden/TestImageEffect"
 
         _ScanHeightLimit("Scan Height", float) = 9999
         _ScanWidth("Scan Width", float) = 10
+        _ScanAlpha("Scan Alpha", float) = 1
 		_LeadSharp("Leading Edge Sharpness", float) = 10
 		_LeadColor("Leading Edge Color", Color) = (1, 1, 1, 0)
 		_MidColor("Mid Color", Color) = (1, 1, 1, 0)
@@ -43,6 +44,7 @@ Shader "Hidden/TestImageEffect"
 
             float _ScanWidth;
 			float _LeadSharp;
+            float _ScanAlpha;
             float _ScanArc;
             float _ScanHeightLimit = 9999;
             
@@ -106,6 +108,7 @@ Shader "Hidden/TestImageEffect"
 				    	half4 edge = lerp(_MidColor, _LeadColor, pow(diff, _LeadSharp));
 				    	scannerCol = lerp(_TrailColor, edge, diff) + horizBars(i.uv) * _HBarColor;
 				    	scannerCol *= diff;
+                        scannerCol *= _ScanAlpha;
 				    }
                 }
 

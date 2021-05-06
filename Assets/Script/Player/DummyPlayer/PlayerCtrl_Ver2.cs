@@ -146,6 +146,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Transform lookAtAim;
     private Quaternion storeSpineRotation;
 
+    public GameObject checkObj;
+
     private float _turnOverTime = 0.0f;
 
     public delegate void ActiveAimEvent();
@@ -177,6 +179,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         footIK = GetComponent<IKCtrl>();
         handIK = GetComponent<HandIKCtrl>();
      
+        if(animator != null)
+        {
+            headTransfrom = animator.GetBoneTransform(HumanBodyBones.Head);
+        }
 
         if(empGun != null)
         {
@@ -457,7 +463,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     animator.SetFloat("Speed", currentSpeed);                    
                     animator.SetFloat("HorizonWeight", horizonWeight);
-                    movement.Move(moveDir);
+
+                    if (Physics.Raycast(transform.position + collider.center, moveDir, collider.radius + currentSpeed * deltaTime) == false)
+                    {
+                        movement.Move(moveDir);
+                    }
                 }
                 break;
             case PlayerState.TurnBack:
@@ -524,7 +534,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     
                     moveDir *= currentSpeed;
 
-                    movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                    if (Physics.Raycast(transform.position + collider.center, moveDir, collider.radius + currentSpeed * deltaTime))
+                    {
+                        movement.Move(Vector3.up * currentJumpPower);
+                    }
+                    else
+                    {
+                        movement.Move(moveDir + (Vector3.up * currentJumpPower));
+                    }
                 }
                 break;
             case PlayerState.Grab:
@@ -740,7 +757,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.HangEdge:
             case PlayerState.HangLedge:
             case PlayerState.ReadyGrab:
-            {
+                {
                     UpdateGrab();
                 }
                 break;
@@ -1357,10 +1374,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         return false;
     }
 
-    private bool DetectionCanClimbingAreaByVertexColor(Vector3 startPoint, Vector3 dir)
+    private bool DetectionCanClimbingAreaByVertexColor(Vector3 startPoint, Vector3 dir ,float dist = 2f)
     {
         RaycastHit hit;
-        if (Physics.SphereCast(startPoint, collider.radius, dir, out hit, 2f, climbingPaintLayer))
+        if (Physics.SphereCast(startPoint, collider.radius, dir, out hit, dist, climbingPaintLayer))
         {
             MeshFilter wallMesh = hit.collider.GetComponent<MeshFilter>();
             int[] triangles = wallMesh.mesh.triangles;
@@ -1483,6 +1500,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
             if (Physics.SphereCast(point1, collider.radius * 1.5f, transform.forward, out hit, 3f, detectionLayer))
             {
+                if(DetectionCanClimbingAreaByVertexColor(point1,transform.forward,3f) == true)
+                {
+                    return false;
+                }
+
                 if (ledgeChecker.IsDetectedLedge() == false)
                 {
                     //ChangeState(PlayerState.Grab);
@@ -1504,6 +1526,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 movement.SetParent(hit.collider.transform);
                 movement.Attach();
 
+                //Debug.Log("default");
+
                 return true;
             }
             else
@@ -1520,6 +1544,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     movement.SetParent(hit.collider.transform);
                     movement.Attach();
                     moveDir = Vector3.zero;
+
+                    //Debug.Log("groundgrab");
+
                     return true;
                 }
             }
@@ -1548,6 +1575,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     movement.SetParent(hit.collider.transform);
                     movement.Attach();
+
+                    //Debug.Log("ledgegrab");
 
                     return true;
                 }
@@ -1672,6 +1701,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 InputClimbingJump();
                 return true;
             }
+
+            if (DetectLedgeCanHangLedgeByVertexColor() == true)
+                return true;
 
             if (isLedge == true && isClimbingMove == false && spaceChecker.Overlapped() == false)
             {
@@ -1896,20 +1928,35 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             finalPosition = upHit.point + (transform.up * dectionOffset.y);
             finalPosition += transform.forward * dectionOffset.z;
             transform.position = finalPosition;
-            StartCoroutine(ForceSnap(0.1f, finalPosition));
+            if (checkObj != null)
+            {
+                checkObj.transform.position = finalPosition;
+            }
+            StartCoroutine(ForceSnap(0.5f, finalPosition, transform.localPosition));
+            //Debug.Log("AdjustLedgeOffset");
         }
     }
 
-    IEnumerator ForceSnap(float snapTime,Vector3 snapPosition)
+    IEnumerator ForceSnap(float snapTime,Vector3 snapPosition,Vector3 localPostiion)
     {
         float time = 0.0f;
-
         while(time<snapTime)
         {
             if (state != PlayerState.HangLedge)
                 break;
 
-            transform.position = snapPosition;
+            //Debug.Log("Adjusting");
+            //transform.position = snapPosition;
+
+            if (transform.parent == null)
+            {
+                transform.position = snapPosition;
+            }
+            else
+            {
+                transform.localPosition = localPostiion;
+            }
+
             time += Time.deltaTime;
             yield return null;
         }

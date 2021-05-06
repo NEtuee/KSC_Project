@@ -40,24 +40,44 @@ public class SimpleReturnMove : MonoBehaviour
         //StartCoroutine(Move());
     }
 
-    private void Update()
-    {
-        if(transform.position != target)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+    //private void Update()
+    //{
+    //    if(transform.position != target)
+    //        {
+    //            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
     
+    //        }
+    //        else
+    //        {
+    //            if(target == startPos)
+    //            {
+    //                target = endPos;
+    //            }
+    //            else
+    //            {
+    //                target = startPos;
+    //            }
+    //        }
+    //}
+
+    private void FixedUpdate()
+    {
+        if (transform.position != target)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.fixedDeltaTime);
+
+        }
+        else
+        {
+            if (target == startPos)
+            {
+                target = endPos;
             }
             else
             {
-                if(target == startPos)
-                {
-                    target = endPos;
-                }
-                else
-                {
-                    target = startPos;
-                }
+                target = startPos;
             }
+        }
     }
 
     // IEnumerator Move()
@@ -67,7 +87,7 @@ public class SimpleReturnMove : MonoBehaviour
     //         if(transform.position != target)
     //         {
     //             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
-    
+
     //         }
     //         else
     //         {

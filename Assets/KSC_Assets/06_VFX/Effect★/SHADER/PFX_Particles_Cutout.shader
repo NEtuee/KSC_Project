@@ -4,10 +4,9 @@ Shader "QFX/ProjectilesFX/Particles Cutout"
 {
 	Properties
 	{
-		[HDR]_TintColor ("Tint Color", Color) = (0.5,0.5,0.5,0.5)
+		_TintColor ("Tint Color", Color) = (0.5,0.5,0.5,0.5)
 		_MainTex ("Particle Texture", 2D) = "white" {}
-		_InvFade ("Soft Particles Factor", Range(0.01,10.0)) = 1.0
-		[Toggle(_USESOFTPARTICLES_ON)] _UseSoftParticles("Use Soft Particles", Float) = 1
+		_InvFade ("Soft Particles Factor", Range(0.01,3.0)) = 1.0
 		[Enum(UnityEngine.Rendering.BlendMode)]_SrcBlend("SrcBlend", Int) = 5
 		[Enum(UnityEngine.Rendering.BlendMode)]_DstBlend("DstBlend", Int) = 10
 		_EmissiveMultiply("Emissive Multiply", Float) = 1
@@ -25,7 +24,7 @@ Shader "QFX/ProjectilesFX/Particles Cutout"
 		LOD 0
 
 			Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" }
-			Blend SrcAlpha OneMinusSrcAlpha
+			Blend [_SrcBlend] [_DstBlend]
 			ColorMask RGB
 			Cull Off
 			Lighting Off 
@@ -36,12 +35,16 @@ Shader "QFX/ProjectilesFX/Particles Cutout"
 			
 				CGPROGRAM
 				
+				#ifndef UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX
+				#define UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input)
+				#endif
+				
 				#pragma vertex vert
 				#pragma fragment frag
 				#pragma target 2.0
+				#pragma multi_compile_instancing
 				#pragma multi_compile_particles
 				#pragma multi_compile_fog
-				#pragma shader_feature_local _USESOFTPARTICLES_ON
 				#define ASE_NEEDS_FRAG_COLOR
 
 
@@ -62,10 +65,8 @@ Shader "QFX/ProjectilesFX/Particles Cutout"
 					fixed4 color : COLOR;
 					float4 texcoord : TEXCOORD0;
 					UNITY_FOG_COORDS(1)
-					#ifdef _USESOFTPARTICLES_ON
 					#ifdef SOFTPARTICLES_ON
 					float4 projPos : TEXCOORD2;
-					#endif
 					#endif
 					UNITY_VERTEX_INPUT_INSTANCE_ID
 					UNITY_VERTEX_OUTPUT_STEREO
@@ -104,14 +105,10 @@ Shader "QFX/ProjectilesFX/Particles Cutout"
 
 					v.vertex.xyz +=  float3( 0, 0, 0 ) ;
 					o.vertex = UnityObjectToClipPos(v.vertex);
-					
-					#ifdef _USESOFTPARTICLES_ON
 					#ifdef SOFTPARTICLES_ON
 						o.projPos = ComputeScreenPos (o.vertex);
 						COMPUTE_EYEDEPTH(o.projPos.z);
 					#endif
-					#endif
-					
 					o.color = v.color;
 					o.texcoord = v.texcoord;
 					UNITY_TRANSFER_FOG(o,o.vertex);
@@ -120,13 +117,14 @@ Shader "QFX/ProjectilesFX/Particles Cutout"
 
 				fixed4 frag ( v2f i  ) : SV_Target
 				{
-					#ifdef _USESOFTPARTICLES_ON
+					UNITY_SETUP_INSTANCE_ID( i );
+					UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX( i );
+
 					#ifdef SOFTPARTICLES_ON
 						float sceneZ = LinearEyeDepth (SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)));
 						float partZ = i.projPos.z;
 						float fade = saturate (_InvFade * (sceneZ-partZ));
 						i.color.a *= fade;
-					#endif
 					#endif
 
 					float2 uv_MainTex = i.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
@@ -155,35 +153,36 @@ Shader "QFX/ProjectilesFX/Particles Cutout"
 	
 }
 /*ASEBEGIN
-Version=18900
-107;659;1920;1184;1559.104;542.0078;1.58028;True;False
+Version=18707
+0;64;1920;955;1246.537;570.7968;1.213416;True;False
 Node;AmplifyShaderEditor.TemplateShaderPropertyNode;2;-795.2956,-94.87796;Inherit;False;0;0;_MainTex;Shader;False;0;5;SAMPLER2D;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.VertexColorNode;5;-468.5959,96.65337;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;1;-589.9226,-96.67332;Inherit;True;Property;_TextureSample0;Texture Sample 0;1;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;0;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.TemplateShaderPropertyNode;4;-461.2593,-272.6733;Inherit;False;0;0;_TintColor;Shader;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.ColorSpaceDouble;44;-297.3224,189.5573;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.CommentaryNode;43;-963.6647,218.8434;Inherit;False;458.6438;388.6699;Random UV;3;40;41;42;;0.7886953,1,0,1;0;0
+Node;AmplifyShaderEditor.VertexColorNode;5;-468.5959,96.65337;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;1;-589.9226,-96.67332;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.TemplateShaderPropertyNode;4;-461.2593,-272.6733;Inherit;False;0;0;_TintColor;Shader;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;6;-238.5061,-115.3267;Inherit;False;4;4;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;COLOR;0,0,0,0;False;3;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.TextureCoordinatesNode;40;-911.2475,445.3133;Inherit;False;0;22;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.TextureCoordinatesNode;42;-913.6647,268.8434;Inherit;False;0;-1;4;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;12;-48.36968,-281.2912;Inherit;False;Property;_EmissiveMultiply;Emissive Multiply;2;0;Create;True;0;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;41;-657.4208,396.9654;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT2;0,0;False;1;FLOAT2;0
 Node;AmplifyShaderEditor.ComponentMaskNode;8;-39.62205,-150.9127;Inherit;False;True;True;True;False;1;0;COLOR;0,0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.CommentaryNode;39;-178.7477,631.3087;Inherit;False;292.4;230.6;;1;28;;0.7981051,1,0,1;0;0
+Node;AmplifyShaderEditor.RangedFloatNode;12;-48.36968,-281.2912;Inherit;False;Property;_EmissiveMultiply;Emissive Multiply;2;0;Create;True;0;0;False;0;False;1;1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SamplerNode;22;-352.8778,368.2792;Inherit;True;Property;_NoiseTexture;Noise Texture;3;0;Create;True;0;0;False;0;False;-1;None;578dd30dcb9ad6840a2af3ffd297a8a5;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.TextureCoordinatesNode;28;-128.7477,686.0378;Inherit;False;0;-1;3;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;37;-22.85884,903.8126;Inherit;False;Property;_Cutout;Cutout;4;0;Create;True;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.ComponentMaskNode;9;-44.94417,-61.35075;Inherit;False;False;False;False;True;1;0;COLOR;0,0,0,0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;37;-22.85884,903.8126;Inherit;False;Property;_Cutout;Cutout;4;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;7;185.4125,-201.0506;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SamplerNode;22;-352.8778,368.2792;Inherit;True;Property;_NoiseTexture;Noise Texture;3;0;Create;True;0;0;0;False;0;False;-1;None;97ea782ccdf03764ba55e0b6308c9b15;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.CommentaryNode;32;-802.1362,-421.0815;Inherit;False;222.385;257.1656;Custom Blending;2;34;33;;1,0,0,1;0;0
 Node;AmplifyShaderEditor.DynamicAppendNode;11;358.016,-155.2244;Inherit;False;FLOAT4;4;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT4;0
+Node;AmplifyShaderEditor.CommentaryNode;32;-802.1362,-421.0815;Inherit;False;222.385;257.1656;Custom Blending;2;34;33;;1,0,0,1;0;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;36;194.6615,797.1216;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;30;211.0832,16.46783;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;45;-517.2735,-421.5465;Inherit;False;Property;_Color0;Color 0;5;1;[HDR];Create;True;0;0;False;0;False;0,0,0,0;0,0.6588235,4,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.IntNode;33;-752.1362,-279.3159;Inherit;False;Property;_DstBlend;DstBlend;1;1;[Enum];Create;True;0;1;UnityEngine.Rendering.BlendMode;True;0;False;10;1;False;0;1;INT;0
+Node;AmplifyShaderEditor.IntNode;34;-750.5512,-369.0815;Inherit;False;Property;_SrcBlend;SrcBlend;0;1;[Enum];Create;True;0;1;UnityEngine.Rendering.BlendMode;True;0;False;5;5;False;0;1;INT;0
 Node;AmplifyShaderEditor.ClipNode;25;693.6459,10.03131;Inherit;False;3;0;FLOAT4;0,0,0,0;False;1;FLOAT;0;False;2;FLOAT;0;False;1;FLOAT4;0
-Node;AmplifyShaderEditor.IntNode;33;-752.1362,-279.3159;Inherit;False;Property;_DstBlend;DstBlend;1;1;[Enum];Create;True;0;0;1;UnityEngine.Rendering.BlendMode;True;0;False;10;1;False;0;1;INT;0
-Node;AmplifyShaderEditor.IntNode;34;-750.5512,-369.0815;Inherit;False;Property;_SrcBlend;SrcBlend;0;1;[Enum];Create;True;0;0;1;UnityEngine.Rendering.BlendMode;True;0;False;5;5;False;0;1;INT;0
 Node;AmplifyShaderEditor.SaturateNode;29;190.9022,-57.78777;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;50;909.4606,8.845862;Float;False;True;-1;2;ASEMaterialInspector;0;14;QFX/ProjectilesFX/Particles Cutout;91fd38b9dd01e8241bb4853244f909b3;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;2;False;True;2;5;False;-1;10;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;True;True;True;True;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;2;False;-1;True;3;False;-1;False;True;4;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;False;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;0;0;;0;0;Standard;0;0;1;True;False;;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;35;909.4606,8.845862;Float;False;True;-1;2;ASEMaterialInspector;0;9;QFX/ProjectilesFX/Particles Cutout;0b6a9f8b4f707c74ca64c0be8e590de0;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;2;True;2;0;True;34;0;True;33;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;True;2;False;-1;True;True;True;True;False;0;False;-1;False;False;False;False;True;2;False;-1;True;3;False;-1;False;True;4;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;False;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;0;0;;0;0;Standard;0;0;1;True;False;;False;0
 WireConnection;1;0;2;0
 WireConnection;6;0;4;0
 WireConnection;6;1;1;0
@@ -192,10 +191,10 @@ WireConnection;6;3;44;0
 WireConnection;41;0;42;4
 WireConnection;41;1;40;0
 WireConnection;8;0;6;0
+WireConnection;22;1;41;0
 WireConnection;9;0;6;0
 WireConnection;7;0;12;0
 WireConnection;7;1;8;0
-WireConnection;22;1;41;0
 WireConnection;11;0;7;0
 WireConnection;11;3;9;0
 WireConnection;36;0;28;3
@@ -206,6 +205,6 @@ WireConnection;25;0;11;0
 WireConnection;25;1;30;0
 WireConnection;25;2;36;0
 WireConnection;29;0;9;0
-WireConnection;50;0;25;0
+WireConnection;35;0;25;0
 ASEEND*/
-//CHKSM=1531BC1D081366D1B83A32AE10CB211D5C788AEC
+//CHKSM=53729AF01973C4F2EE4EFAB0F4BD2CB47FD3899F

@@ -77,7 +77,9 @@ public class DroneScaner : MonoBehaviour
 
                 if (Mathf.Acos(Vector3.Dot(scanForward, (scanObjPosition - startPosition).normalized)) * Mathf.Rad2Deg < arc)
                 {
-                    if ((scanObjPosition - startPosition).magnitude <= _range)
+                    float mag = (scanObjPosition - startPosition).magnitude;
+
+                    if (mag <= _range && mag >= _range - 3f)
                     {
                         //Physics.Raycast(scanStartPosition, scanableObjects[i].transform.position - scanStartPosition, out hit, maxRange);
 
@@ -90,8 +92,16 @@ public class DroneScaner : MonoBehaviour
 
                         if (scanableObjects[i].CheckInAngle(scanStartPosition))
                         {
-                            scanableObjects[i].Scanned();
-                            scanableObjects.Remove(scanableObjects[i]);
+                            if(!scanableObjects[i].IsTriggered())
+                                scanableObjects[i].Scanned();
+                            
+                            if(scanableObjects[i].removeCheck)
+                                scanableObjects.Remove(scanableObjects[i]);
+                            else
+                            {
+                                ++i;
+                            }
+                            
                             continue;
                         }
 
