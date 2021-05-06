@@ -983,6 +983,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         dotY *= 0.6f;
         //dot = Mathf.Clamp(MathEx.abs(dot),0.2f,1f);
 
+        legBlur.gameObject.SetActive(speedFactor > 0f);
+
         legBlur.material.SetFloat("_XOffset",speedFactor * dot);
         legBlur.material.SetFloat("_YOffset",speedFactor * dotY);
 
@@ -1269,7 +1271,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             currentSpeed = runSpeed;
                             moveDir *= currentSpeed;
                             currentJumpPower = jumpPower * 0.5f;
-                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                            //transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
 
                             animator.SetBool("IsGrab", false);
 
