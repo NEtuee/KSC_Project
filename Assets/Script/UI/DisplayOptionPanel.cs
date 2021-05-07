@@ -12,6 +12,7 @@ public class DisplayOptionPanel : EscMenu
 
     public TMP_Dropdown screenModeDropdown;
     public TMP_Dropdown resolutionDropdown;
+    public TMP_Dropdown vsyncDropdown;
     public Vector2[] respondResolutionsVectors;
     public List<string> resolutionStrings = new List<string>();
     
@@ -115,6 +116,18 @@ public class DisplayOptionPanel : EscMenu
         }
     }
 
+    public void ChangeVsync()
+    {
+        if(vsyncDropdown.value == 0)
+        {
+            QualitySettings.vSyncCount = 0;
+        }
+        else
+        {
+            QualitySettings.vSyncCount = 1;
+        }
+    }
+
     public void ChangeResolution()
     {
         Resolution currentResolution = _respondResolutions[resolutionDropdown.value];
@@ -143,6 +156,10 @@ public class DisplayOptionPanel : EscMenu
 
             screenModeDropdown.interactable = false;
             resolutionDropdown.interactable = false;
+
+            DisplaySettingData displaySettingData = new DisplaySettingData();
+            displaySettingData.activeVsync = QualitySettings.vSyncCount != 0;
+            SaveDataHelper.SaveSetting(displaySettingData);
         }
     }
 

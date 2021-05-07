@@ -15,6 +15,16 @@ public class MainMenuCtrl : MonoBehaviour
         FadeIn(null);
     }
 
+    private void Update()
+    {
+        if (InputManager.Instance.GetInput(KeybindingActions.Option))
+        {
+            GameManager.Instance.optionMenuCtrl.InputEsc();
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+
     public void LoadPlayerScene()
     {
         FadeOut(() =>

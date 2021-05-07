@@ -32,13 +32,13 @@ public class OptionMenuCtrl : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.Instance.GetInput(KeybindingActions.Option))
-        {
-            InputEsc();
-        }
+        //if (InputManager.Instance.GetInput(KeybindingActions.Option))
+        //{
+        //    InputEsc();
+        //}
     }
 
-    private void InputEsc()
+    public void InputEsc()
     {
         switch(_currentMenu)
         {
@@ -46,6 +46,7 @@ public class OptionMenuCtrl : MonoBehaviour
                 {
                     _currentMenu = MenuType.Option;
                     GameManager.Instance.PAUSE = true;
+                    if(GameManager.Instance.cameraManager != null)
                     GameManager.Instance.cameraManager.ActiveAimCamera();
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
@@ -61,8 +62,12 @@ public class OptionMenuCtrl : MonoBehaviour
             case MenuType.Option:
                 {
                     _currentMenu = MenuType.None;
+
+                    if(GameManager.Instance.player != null)
                     GameManager.Instance.player.Resume();
+                    if(GameManager.Instance.followTarget)
                     GameManager.Instance.followTarget.Resume();
+
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
 
@@ -72,7 +77,8 @@ public class OptionMenuCtrl : MonoBehaviour
                         backGroundImage.DOFade(0.0f, 0.3f).OnComplete(() =>
                         {
                             GameManager.Instance.PAUSE = false;
-                            GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+                            if (GameManager.Instance.cameraManager != null)
+                                GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
                         });
                     });
                 }

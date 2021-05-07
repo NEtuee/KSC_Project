@@ -110,8 +110,11 @@ public class PlayerRagdoll : MonoBehaviour
         _ragdollContainer = new GameObject("RagdollContainer " + gameObject.name);
         CreateHandPoint();
 
-        copyTargetCharacter.whenEndHangShake += DisableHangShake;
-        copyTargetCharacter.gameObject.SetActive(false);
+        if (copyTargetCharacter != null)
+        {
+            copyTargetCharacter.whenEndHangShake += DisableHangShake;
+            copyTargetCharacter.gameObject.SetActive(false);
+        }
     }
 
     private void FixedUpdate()

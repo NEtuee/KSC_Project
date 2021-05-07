@@ -32,8 +32,9 @@ public class ControlOptionPanel : EscMenu
             _canvas.enabled = true;
             _canvas.sortingOrder = 3;
 
-            pitchRotateSpeedSlider.value = GameManager.Instance.followTarget.PitchRotateSpeed / MaxRotateSpeed;
-            yawRotateSpeedSlider.value = GameManager.Instance.followTarget.YawRotateSpeed / MaxRotateSpeed;
+            ControlSettingData controlSettingData = SaveDataHelper.LoadSetting<ControlSettingData>();
+            pitchRotateSpeedSlider.value = controlSettingData.pitchRotateSpeed / MaxRotateSpeed;
+            yawRotateSpeedSlider.value = controlSettingData.yawRotateSpeed / MaxRotateSpeed;
             UpdateYawRotateSpeedText();
             UpdatePitchRotateSpeedText();
 
@@ -42,8 +43,22 @@ public class ControlOptionPanel : EscMenu
         }
         else
         {
-            GameManager.Instance.followTarget.PitchRotateSpeed = pitchRotateSpeedSlider.value * MaxRotateSpeed;
-            GameManager.Instance.followTarget.YawRotateSpeed = yawRotateSpeedSlider.value * MaxRotateSpeed;
+            if (GameManager.Instance.followTarget != null)
+            {
+                GameManager.Instance.followTarget.PitchRotateSpeed = pitchRotateSpeedSlider.value * MaxRotateSpeed;
+                GameManager.Instance.followTarget.YawRotateSpeed = yawRotateSpeedSlider.value * MaxRotateSpeed;
+            }
+
+            if(SaveDataHelper.streamingAssetsPath == null)
+            {
+                SaveDataHelper.streamingAssetsPath = Application.streamingAssetsPath;
+            }
+
+            ControlSettingData saveData = new ControlSettingData();
+            saveData.yawRotateSpeed = yawRotateSpeedSlider.value * MaxRotateSpeed;
+            saveData.pitchRotateSpeed = pitchRotateSpeedSlider.value * MaxRotateSpeed;
+            SaveDataHelper.SaveSetting(saveData);
+
             _canvas.enabled = false;
             _canvas.sortingOrder = 2;
 

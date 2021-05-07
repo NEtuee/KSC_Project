@@ -46,6 +46,7 @@ public class InputManager : MonoBehaviour
     private static InputManager instance;
     [SerializeField] public KeyBindings keyBindings;
     [SerializeField] public KeyBindingsToggle keyBindingsToggle;
+    [SerializeField] public KeyBindingsToggle defaultKeyBinding;
     [SerializeField] public KeyBindingsToggle saveTarget;
     [SerializeField] private float joystickSenstive = 10f;
     [SerializeField] private float DebugAxis;
@@ -270,6 +271,16 @@ public class InputManager : MonoBehaviour
             }
             actionBindingXbox.Add(keyBindingsToggle.keybindingChecks[count].action, xboxInputSet);      
         }
+    }
+
+    public void SetDefaultKeyBinding()
+    {
+        for(int i = 0; i<keyBindingsToggle.keybindingChecks.Length; i++)
+        {
+            keyBindingsToggle.keybindingChecks[i] = (KeybindingCheckToggle)defaultKeyBinding.keybindingChecks[i].Clone();
+        }
+
+        InitializeKeyBind_Toggle();
     }
 
     public bool GetInput(KeybindingActions actions)

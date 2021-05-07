@@ -28,7 +28,7 @@ public class PlayerRePositionor : MonoBehaviour
             bip.position = respawn.position;
         }
 
-        whenFall.Invoke();
+        whenFall?.Invoke();
 
         // else if(coll.gameObject.layer == LayerMask.NameToLayer("Player"))
         // {

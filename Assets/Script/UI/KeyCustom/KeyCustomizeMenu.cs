@@ -17,7 +17,19 @@ public class KeyCustomizeMenu : EscMenu
 
     void Start()
     {
-        foreach(var item in keyboardKeycustomItems)
+        InitKeyItem();
+
+        canvas.enabled = false;
+    }
+
+    void Update()
+    {
+        
+    }
+
+    private void InitKeyItem()
+    {
+        foreach (var item in keyboardKeycustomItems)
         {
             item.Initialize(InputType.Keyboard);
         }
@@ -31,13 +43,6 @@ public class KeyCustomizeMenu : EscMenu
         {
             item.Initialize(InputType.XboxPad);
         }
-
-        canvas.enabled = false;
-    }
-
-    void Update()
-    {
-        
     }
 
     public void OnKeyboardPanel()
@@ -75,6 +80,12 @@ public class KeyCustomizeMenu : EscMenu
             item.Initialize(InputType.XboxPad);
         }
 
+    }
+
+    public void OnButtonDefaultKeySetting()
+    {
+        InputManager.Instance.SetDefaultKeyBinding();
+        InitKeyItem();
     }
 
     public override void Appear(float duration)

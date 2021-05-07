@@ -63,6 +63,18 @@ public class SoundOptionPanel : EscMenu
         }
         else
         {
+            if (SaveDataHelper.streamingAssetsPath == null)
+            {
+                SaveDataHelper.streamingAssetsPath = Application.streamingAssetsPath;
+            }
+
+            SoundSettingData saveData = new SoundSettingData();
+            saveData.masterVolume = (masterVolumeSlider.value * 100f);
+            saveData.sfxVolume = (sfxVolumeSlider.value * 100f);
+            saveData.ambientVolume = (ambientVolumeSlider.value * 100f);
+            saveData.bgmVolume = (bgmVolumeSlider.value * 100f);
+            SaveDataHelper.SaveSetting(saveData);
+
             _canvas.enabled = false;
             _canvas.sortingOrder = 2;
 
@@ -104,6 +116,7 @@ public class SoundOptionPanel : EscMenu
                 break;
         }
         GameManager.Instance.soundManager.SetGlobalParam(id,value);
+        //Debug.Log(GameManager.Instance.soundManager.GetGlobalParam(id));
     }
 
     public override void Appear(float duration)

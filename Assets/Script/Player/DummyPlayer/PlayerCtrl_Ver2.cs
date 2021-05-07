@@ -212,6 +212,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     void Update()
     {
+        if(InputManager.Instance.GetInput(KeybindingActions.Option))
+        {
+            GameManager.Instance.optionMenuCtrl.InputEsc();   
+        }
+
         if(Input.GetKeyDown(KeyCode.L))
         {
             AddJumpPower(10f);
@@ -981,8 +986,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         dotY *= 0.6f;
         //dot = Mathf.Clamp(MathEx.abs(dot),0.2f,1f);
 
-        legBlur.material.SetFloat("_XOffset",speedFactor * dot);
-        legBlur.material.SetFloat("_YOffset",speedFactor * dotY);
+        if (legBlur != null)
+        {
+            legBlur.material.SetFloat("_XOffset", speedFactor * dot);
+            legBlur.material.SetFloat("_YOffset", speedFactor * dotY);
+        }
 
         if(state == PlayerState.Grab || state == PlayerState.RunToStop)
         {

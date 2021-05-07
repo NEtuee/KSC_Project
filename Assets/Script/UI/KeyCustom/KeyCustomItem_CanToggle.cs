@@ -59,7 +59,7 @@ public class KeyCustomItem_CanToggle : KeyCustomItem
 
                     waitHoldInput = false;
                     waitToggleInput = false;
-                    InputManager.Instance.ChangeKeyBindings(action, inputKey, InputType.Keyboard);
+                    InputManager.Instance.ChangeKeyBindings(action, inputKey, inputType);
                     break;
                 }
             }
