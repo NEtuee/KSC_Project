@@ -22,7 +22,7 @@ public class CrossHair : MonoBehaviour
 
     private int stage = 0;
 
-    private void Start()
+    private void Awake()
     {
         _canvas = GetComponent<Canvas>();
         SetActive(false);

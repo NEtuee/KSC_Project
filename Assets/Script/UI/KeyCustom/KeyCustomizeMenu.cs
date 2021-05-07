@@ -2,7 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.IO;
 public class KeyCustomizeMenu : EscMenu
 {
     public Canvas canvas;
@@ -112,6 +112,7 @@ public class KeyCustomizeMenu : EscMenu
             canvas.enabled = false;
             canvas.sortingOrder = 2;
             InputManager.Instance.InitializeKeyBind_Toggle();
+            InputManager.Instance.SaveKeyBinding();
         }
     }
 }

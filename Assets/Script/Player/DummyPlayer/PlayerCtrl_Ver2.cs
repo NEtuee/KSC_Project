@@ -1079,6 +1079,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if(changeState == PlayerState.Default)
                     {
                         GameManager.Instance.soundManager.Play(1000, Vector3.zero, transform);
+                        animator.SetTrigger("Landing");
                     }
                 }
                 break;
@@ -1099,7 +1100,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.applyRootMotion = false;
                     animator.SetBool("IsGrab", false);
                     animator.SetBool("IsLedge", false);
-                    animator.SetTrigger("Landing");
                     footIK.EnableFeetIk();
                     handIK.DisableHandIK();
                     GameManager.Instance.stateManager.Visible(false);

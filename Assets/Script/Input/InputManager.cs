@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XInputDotNetPure;
+using System.IO;
 public enum InputType
 {
     Keyboard,
@@ -45,6 +46,7 @@ public class InputManager : MonoBehaviour
     private static InputManager instance;
     [SerializeField] public KeyBindings keyBindings;
     [SerializeField] public KeyBindingsToggle keyBindingsToggle;
+    [SerializeField] public KeyBindingsToggle saveTarget;
     [SerializeField] private float joystickSenstive = 10f;
     [SerializeField] private float DebugAxis;
     private Dictionary<KeybindingActions, KeyCode> pc_keyDict = new Dictionary<KeybindingActions, KeyCode>();
@@ -68,8 +70,11 @@ public class InputManager : MonoBehaviour
 
     private ConnectGamePad currentConnectGamepad;
 
+    private const string keyBindingJsonDataPath ="/KeyBinding.json";
+
     private void Awake()
     {
+        LoadKeyBinding();
         if (null == instance)
         {         
             InitializeKeyBind_Toggle();
@@ -81,6 +86,31 @@ public class InputManager : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
+        }
+    }
+
+    public void SaveKeyBinding()
+    {
+        string path = Application.streamingAssetsPath + keyBindingJsonDataPath;
+        if (File.Exists(path) == false)
+        {
+            File.Create(path);
+        }
+
+        string keyData = JsonHelper.ToJson<KeybindingCheckToggle>(keyBindingsToggle.keybindingChecks, true);
+        File.WriteAllText(path, keyData);
+    }
+
+    public void LoadKeyBinding()
+    {
+        string path = Application.streamingAssetsPath + keyBindingJsonDataPath;
+        if (File.Exists(path) == false)
+            return;
+
+        KeybindingCheckToggle[] loadKey = JsonHelper.FromJson<KeybindingCheckToggle>(File.ReadAllText(path));
+        for (int i = 0; i < loadKey.Length; i++)
+        {
+            keyBindingsToggle.keybindingChecks[i] = loadKey[i];
         }
     }
 
