@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000002, guid: e862709e82d89b540b13b66f6e20233d,
+  m_LightingDataAsset: {fileID: 112000002, guid: 17266b00a6a67644ab38f7fa390d961b,
     type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 8087c7ea39509f44c95e16de9c46ef11,
     type: 2}
@@ -2081,10 +2081,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - AD_0419_VisualMake
-  - B00GIE_main
+  - levelCode: 
+    scenesToLoad: []
+  - levelCode: 
+    scenesToLoad: []
   currentLevel: 0
   currentStageManager: {fileID: 0}
+  fadeScreen: {fileID: 0}
 --- !u!114 &112632220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28681,6 +28684,7 @@ MonoBehaviour:
   insideSurfaceRadius: 0.5
   outsideSurfaceRadius: 0.5
   outSideRotateDetectionAngle: 15
+  ledgeOutSideRotateDetectionAngle: 40
   ledgeLeftLeftHandCurve:
     serializedVersion: 2
     m_Curve:
@@ -29875,6 +29879,7 @@ MonoBehaviour:
   hpRestoreSpeed: 5
   relativeVec: {x: 0, y: 0, z: 0}
   lookAtAim: {fileID: 0}
+  checkObj: {fileID: 0}
 --- !u!136 &467032923266050944
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36887,6 +36892,7 @@ MonoBehaviour:
   insideSurfaceRadius: 0.5
   outsideSurfaceRadius: 0.5
   outSideRotateDetectionAngle: 15
+  ledgeOutSideRotateDetectionAngle: 40
   ledgeLeftLeftHandCurve:
     serializedVersion: 2
     m_Curve:
@@ -38081,6 +38087,7 @@ MonoBehaviour:
   hpRestoreSpeed: 5
   relativeVec: {x: 4.5, y: 180, z: 0}
   lookAtAim: {fileID: 931792777}
+  checkObj: {fileID: 0}
 --- !u!136 &7578834775685743533
 CapsuleCollider:
   m_ObjectHideFlags: 0
