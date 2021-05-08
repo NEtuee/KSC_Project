@@ -27,11 +27,11 @@ public class KeyInputChangeTest : MonoBehaviour
         if (InputManager.Instance.GetBindingIsToggle(action) == true)
         {
             holdKeyText.text = "";
-            toggleKeyText.text = InputManager.Instance.GetBindingKeycode(action,InputType.Keyboard).ToString();
+            toggleKeyText.text = InputManager.Instance.GetBindingKeycode(action,InputType.Keyboard);
         }
         else
         {
-            holdKeyText.text = InputManager.Instance.GetBindingKeycode(action, InputType.Keyboard).ToString();
+            holdKeyText.text = InputManager.Instance.GetBindingKeycode(action, InputType.Keyboard);
             toggleKeyText.text = "";
         }
     }

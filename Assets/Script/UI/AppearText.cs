@@ -4,11 +4,12 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using UniRx;
+using UnityEngine.Events;
 
 public class AppearText : MonoBehaviour
 {
     private TextMeshProUGUI text;
-
+    public UnityEvent OnEndAppear;
 
     private FloatReactiveProperty currentCharacterSpacing = new FloatReactiveProperty();
 
@@ -21,7 +22,7 @@ public class AppearText : MonoBehaviour
         currentCharacterSpacing.Value = -70f;
 
         DOTween.To(()=>currentCharacterSpacing.Value, x => { currentCharacterSpacing.Value = x;
-            text.characterSpacing = currentCharacterSpacing.Value; }, 50f, 2f).SetEase(Ease.OutQuint);
+            text.characterSpacing = currentCharacterSpacing.Value; }, 50f, 2f).SetEase(Ease.OutQuint).OnComplete(()=> { OnEndAppear?.Invoke(); });
     }
 
     void Update()

@@ -48,6 +48,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] public KeyBindingsToggle keyBindingsToggle;
     [SerializeField] public KeyBindingsToggle defaultKeyBinding;
     [SerializeField] public KeyBindingsToggle saveTarget;
+    [SerializeField] public GamePadKeyTranslate dualshockTranslateData;
+    [SerializeField] public GamePadKeyTranslate xboxTranslateData;
     [SerializeField] private float joystickSenstive = 10f;
     [SerializeField] private float DebugAxis;
     private Dictionary<KeybindingActions, KeyCode> pc_keyDict = new Dictionary<KeybindingActions, KeyCode>();
@@ -73,8 +75,12 @@ public class InputManager : MonoBehaviour
 
     private const string keyBindingJsonDataPath ="/KeyBinding.json";
 
+    private Dictionary<KeyCode, string> dualShockKeycodeTranslateDict = new Dictionary<KeyCode, string>();
+    private Dictionary<KeyCode, string> xboxKeycodeTranslateDict = new Dictionary<KeyCode, string>();
+
     private void Awake()
     {
+        LoadTranslateData();
         LoadKeyBinding();
         if (null == instance)
         {         
@@ -114,6 +120,20 @@ public class InputManager : MonoBehaviour
             keyBindingsToggle.keybindingChecks[i] = loadKey[i];
         }
     }
+
+    public void LoadTranslateData()
+    {
+        for(int i = 0; i< dualshockTranslateData.keyTranslatePairs.Length;i++)
+        {
+            dualShockKeycodeTranslateDict.Add(dualshockTranslateData.keyTranslatePairs[i].keycode, dualshockTranslateData.keyTranslatePairs[i].translateString);
+        }
+
+        for (int i = 0; i < xboxTranslateData.keyTranslatePairs.Length; i++)
+        {
+            xboxKeycodeTranslateDict.Add(xboxTranslateData.keyTranslatePairs[i].keycode, xboxTranslateData.keyTranslatePairs[i].translateString);
+        }
+    }
+
 
     private void Update()
     {
@@ -326,18 +346,50 @@ public class InputManager : MonoBehaviour
         //return (actionBindingToggle[actions].GetKeep(actions) || actionBindingDualShock[actions].GetKeep(actions) || actionBindingXbox[actions].GetKeep(actions));
     }
 
-    public KeyCode GetBindingKeycode(KeybindingActions action,InputType inputType)
+    public string GetBindingKeycode(KeybindingActions action,InputType inputType)
     {
         switch (inputType)
         {
             case InputType.Keyboard:
-                return actionData[action].keyboard.key;
+                return actionData[action].keyboard.key.ToString();
             case InputType.DualShock:
-                return actionData[action].dualshock.key;
+                {
+                    if (actionData[action].dualshock.valueType == PadValueType.Button)
+                        return dualShockKeycodeTranslateDict[actionData[action].dualshock.key];
+                    else
+                        return actionData[action].dualshock.axisName;
+                }
             case InputType.XboxPad:
-                return actionData[action].xbox.key;
+                {
+                    if (actionData[action].xbox.valueType == PadValueType.Button)
+                        return xboxKeycodeTranslateDict[actionData[action].xbox.key];
+                    else
+                    {
+                        switch (actionData[action].xbox.axisName)
+                        {
+                            case "LeftTrigger_Xbox":
+                                return "LT";
+                            case "RightTrigger_Xbox":
+                                return "RT";
+                            default:
+                                return "ERROR";
+                        }
+                    }
+                }
             default:
-                return actionData[action].keyboard.key;
+                return actionData[action].keyboard.key.ToString();
+        }
+    }
+
+    public string TranslateKeycode(KeyCode keyCode,InputType inputType)
+    {
+        if(inputType == InputType.DualShock)
+        {
+            return dualShockKeycodeTranslateDict[keyCode];
+        }
+        else
+        {
+            return xboxKeycodeTranslateDict[keyCode];
         }
     }
 
@@ -362,6 +414,29 @@ public class InputManager : MonoBehaviour
                         return;
                     case InputType.XboxPad:
                         keybinding.xbox.key = keycode;
+                        return;
+                }
+            }
+        }
+    }
+
+    public void ChangeKeyBindings(KeybindingActions action, string axisName, InputType inputType)
+    {
+        foreach (var keybinding in keyBindingsToggle.keybindingChecks)
+        {
+            if (keybinding.action == action)
+            {
+                switch (inputType)
+                {
+                    case InputType.Keyboard:
+                        return;
+                    case InputType.DualShock:
+                        keybinding.dualshock.valueType = PadValueType.Axis;
+                        keybinding.dualshock.axisName = axisName;
+                        return;
+                    case InputType.XboxPad:
+                        keybinding.xbox.valueType = PadValueType.Axis;
+                        keybinding.xbox.axisName = axisName;
                         return;
                 }
             }

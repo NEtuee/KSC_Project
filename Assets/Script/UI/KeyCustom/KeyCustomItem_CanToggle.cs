@@ -27,11 +27,11 @@ public class KeyCustomItem_CanToggle : KeyCustomItem
         if (InputManager.Instance.GetBindingIsToggle(action) == true)
         {
             holdKeyText.text = "";
-            toggleKeyText.text = InputManager.Instance.GetBindingKeycode(action, inputType).ToString();
+            toggleKeyText.text = InputManager.Instance.GetBindingKeycode(action, inputType);
         }
         else
         {
-            holdKeyText.text = InputManager.Instance.GetBindingKeycode(action, inputType).ToString();
+            holdKeyText.text = InputManager.Instance.GetBindingKeycode(action, inputType);
             toggleKeyText.text = "";
         }
     }
@@ -41,6 +41,48 @@ public class KeyCustomItem_CanToggle : KeyCustomItem
         if (waitHoldInput == false && waitToggleInput == false)
             return;
 
+        if (inputType == InputType.XboxPad)
+        {
+            if (Input.GetAxis("LeftTrigger_Xbox") == 1f)
+            {
+                string keyString = "LT";
+
+                if (waitHoldInput == true)
+                {
+                    holdKeyText.text = keyString;
+                }
+                else
+                {
+                    toggleKeyText.text = keyString;
+                    InputManager.Instance.SetKeyToggle(action, true);
+                }
+
+                waitHoldInput = false;
+                InputManager.Instance.ChangeKeyBindings(action, "LeftTrigger_Xbox", inputType);
+
+                return;
+            }
+
+            if (Input.GetAxis("RightTrigger_Xbox") == 1f)
+            {
+                string keyString = "RT";
+
+                if (waitHoldInput == true)
+                {
+                    holdKeyText.text = keyString;
+                }
+                else
+                {
+                    toggleKeyText.text = keyString;
+                    InputManager.Instance.SetKeyToggle(action, true);
+                }
+
+                waitHoldInput = false;
+                InputManager.Instance.ChangeKeyBindings(action, "RightTrigger_Xbox", inputType);
+                return;
+            }
+        }
+
         if (Input.anyKey)
         {
             foreach (KeyCode inputKeycode in Enum.GetValues(typeof(KeyCode)))
@@ -49,11 +91,16 @@ public class KeyCustomItem_CanToggle : KeyCustomItem
                 {
                     KeyCode inputKey = KeyCode.None;
                     inputKey = inputKeycode;
+
+                    string keyString = inputType == InputType.Keyboard ? inputKey.ToString() : InputManager.Instance.TranslateKeycode(inputKey, inputType);
+
                     if (waitHoldInput == true)
-                        holdKeyText.text = inputKey.ToString();
+                    {
+                        holdKeyText.text = keyString;
+                    }
                     else
                     {
-                        toggleKeyText.text = inputKey.ToString();
+                        toggleKeyText.text = keyString;
                         InputManager.Instance.SetKeyToggle(action, true);
                     }
 
