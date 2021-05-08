@@ -25,6 +25,12 @@ public class TimeCounterEx
         return time;
     }
 
+    public float IncreaseTimerSelf(string target, out bool overLimit, float factor)
+    {
+        float limit = _timeLimitSet[target];
+        return IncreaseTimerSelf(target,limit,out overLimit,factor);
+    }
+
     public float IncreaseTimerSelf(string target, float limit, out bool overLimit, float factor)
     {
         if(!_timerSet.ContainsKey(target))
@@ -86,6 +92,18 @@ public class TimeCounterEx
         }
 
         return curr;
+    }
+
+    public float GetTimeLimit(string target)
+    {
+        if(_timeLimitSet.ContainsKey(target))
+        {
+            return _timeLimitSet[target];
+        }
+        else
+        {
+            return -1f;
+        }
     }
 
     public float GetDeltaTime()

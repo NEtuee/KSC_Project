@@ -73,6 +73,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: InputHorizon
     m_EventTreshold: 0.91
+  - m_ConditionMode: 3
+    m_ConditionEvent: Speed
+    m_EventTreshold: 5.5
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8601597089269573535}
   m_Solo: 0
@@ -185,7 +188,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 2366118179097542248, guid: 9191afaef9e26cd43ab78288e0eab10b,
+  m_Motion: {fileID: 7439077123463342762, guid: 359cb651af8f9b94a970c682831af7af,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -910,7 +913,7 @@ AnimatorStateTransition:
   m_ExitTime: 0.7222222
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 2
+  m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1101 &-5844068217438870579
@@ -2582,7 +2585,7 @@ AnimatorStateTransition:
   m_ExitTime: 0.7222222
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 2
+  m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1102 &-665080681739037197
@@ -3090,7 +3093,7 @@ AnimatorController:
     m_Behaviours: []
     m_BlendingMode: 1
     m_SyncedLayerIndex: -1
-    m_DefaultWeight: 0
+    m_DefaultWeight: 1
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -3679,6 +3682,18 @@ AnimatorStateTransition:
   m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &1980810068360352187
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76a737d22478b494db47e9a1aa68a3f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1101 &2113506156317677645
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -4022,6 +4037,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: InputVertical
     m_EventTreshold: 0.91
+  - m_ConditionMode: 3
+    m_ConditionEvent: Speed
+    m_EventTreshold: 5.5
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8601597089269573535}
   m_Solo: 0
@@ -4518,7 +4536,7 @@ AnimatorStateTransition:
   m_ExitTime: 0.7222222
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 2
+  m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1101 &4698980735357467675
@@ -4541,7 +4559,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.1
   m_TransitionOffset: 0
   m_ExitTime: 0.747191
   m_HasExitTime: 0
@@ -5083,7 +5101,7 @@ BlendTree:
     m_DirectBlendParameter: Speed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -3252914681719383421, guid: 9ba99067b7454764198925472c6b9db3,
+    m_Motion: {fileID: -1714710056708624618, guid: ac90a7fa042c4e44c8c1b2a222b17be8,
       type: 3}
     m_Threshold: 5.5
     m_Position: {x: 5.5, y: 0}
@@ -6003,7 +6021,8 @@ AnimatorState:
   - {fileID: -3081915005165543055}
   - {fileID: -3881753533671601286}
   - {fileID: -548710053769628864}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 1980810068360352187}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1

@@ -33,6 +33,9 @@ public class CameraManager : MonoBehaviour
     private float targetDistance;
     private float distanceBlendStartTime;
     private float distanceBlendDuration;
+
+    private float aimDistanceOrigin;
+    private float aimDistanceBlendStartTime;
     private bool isRunningCallBackCoroutine;
     private CinemachineVirtualCameraBase currentActiveCam = null;
     private CinemachineVirtualCameraBase prevActiveCam = null;
@@ -80,6 +83,7 @@ public class CameraManager : MonoBehaviour
         }
 
         SetFollowCameraDistance("Default");
+        aimDistanceOrigin = playerAimCam3rdPersonComponent.CameraDistance;
     }
 
     private void Update()
@@ -100,6 +104,7 @@ public class CameraManager : MonoBehaviour
     private void FixedUpdate()
     {
         BlendDistanceFollowCamera();
+        BlendDistanceAimCamera();
     }
 
     /// <summary>
@@ -397,6 +402,12 @@ public class CameraManager : MonoBehaviour
     //     playerFollowCam3rdPersonComponent.CameraSide = Mathf.SmoothDamp(playerFollowCam3rdPersonComponent.CameraSide, 0.5f + targetFactor, ref cameraSideSmoothVelocity, 300f*Time.deltaTime);
     // }
 
+    public void AddAimCameraDistance(float distance)
+    {
+        playerAimCam3rdPersonComponent.CameraDistance += distance;
+        aimDistanceBlendStartTime = Time.time;
+    }
+
     public void SetFollowCameraDistance(float targetDistance, float blendDuration)
     {
         isBlendCameraDistance = true;
@@ -443,6 +454,12 @@ public class CameraManager : MonoBehaviour
                 playerFollowCam3rdPersonComponent.CameraDistance = dist;
         }
 
+    }
+
+    private void BlendDistanceAimCamera()
+    {
+        float time = (Time.time - aimDistanceBlendStartTime) / 5f;
+        playerAimCam3rdPersonComponent.CameraDistance = Mathf.Lerp(playerAimCam3rdPersonComponent.CameraDistance,aimDistanceOrigin,time);
     }
 
     public void ZeroDamping()

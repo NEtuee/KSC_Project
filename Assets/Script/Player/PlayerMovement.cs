@@ -96,8 +96,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move_Nodelta(Vector3 direction)
     {
-        if (Physics.Raycast(transform.position + collider.center, direction, direction.magnitude) == false)
+        if (Physics.Raycast(transform.position + collider.center, direction, collider.radius + direction.magnitude) == true)
+        {
             return;
+        }
 
         transform.position += direction;
     }
@@ -404,4 +406,5 @@ public class PlayerMovement : MonoBehaviour
 
         }
     }
+
 }

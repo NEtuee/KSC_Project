@@ -23,6 +23,11 @@ public class SoundOptionPanel : EscMenu
     {
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = false;
+
+        masterVolumeSlider.interactable = false;
+        sfxVolumeSlider.interactable = false;
+        ambientVolumeSlider.interactable = false;
+        bgmVolumeSlider.interactable = false;
     }
 
     public override void Active(bool active)
@@ -35,6 +40,7 @@ public class SoundOptionPanel : EscMenu
             //GameManager.Instance.soundManager.Play(4003, Vector3.zero);
 
             _canvas.enabled = true;
+            _canvas.sortingOrder = 3;
 
             float value = 0;
             value = GameManager.Instance.soundManager.GetGlobalParam(1);
@@ -49,10 +55,33 @@ public class SoundOptionPanel : EscMenu
             value = GameManager.Instance.soundManager.GetGlobalParam(4);
             bgmVolumeText.text = ((int)value).ToString();
             bgmVolumeSlider.value = value / 100f;
+
+            masterVolumeSlider.interactable = true;
+            sfxVolumeSlider.interactable = true;
+            ambientVolumeSlider.interactable = true;
+            bgmVolumeSlider.interactable = true;
         }
         else
         {
+            if (SaveDataHelper.streamingAssetsPath == null)
+            {
+                SaveDataHelper.streamingAssetsPath = Application.streamingAssetsPath;
+            }
+
+            SoundSettingData saveData = new SoundSettingData();
+            saveData.masterVolume = (masterVolumeSlider.value * 100f);
+            saveData.sfxVolume = (sfxVolumeSlider.value * 100f);
+            saveData.ambientVolume = (ambientVolumeSlider.value * 100f);
+            saveData.bgmVolume = (bgmVolumeSlider.value * 100f);
+            SaveDataHelper.SaveSetting(saveData);
+
             _canvas.enabled = false;
+            _canvas.sortingOrder = 2;
+
+            masterVolumeSlider.interactable = false;
+            sfxVolumeSlider.interactable = false;
+            ambientVolumeSlider.interactable = false;
+            bgmVolumeSlider.interactable = false;
         }
     }
 
@@ -87,6 +116,7 @@ public class SoundOptionPanel : EscMenu
                 break;
         }
         GameManager.Instance.soundManager.SetGlobalParam(id,value);
+        //Debug.Log(GameManager.Instance.soundManager.GetGlobalParam(id));
     }
 
     public override void Appear(float duration)

@@ -2,7 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.IO;
 public class KeyCustomizeMenu : EscMenu
 {
     public Canvas canvas;
@@ -17,7 +17,19 @@ public class KeyCustomizeMenu : EscMenu
 
     void Start()
     {
-        foreach(var item in keyboardKeycustomItems)
+        InitKeyItem();
+
+        canvas.enabled = false;
+    }
+
+    void Update()
+    {
+        
+    }
+
+    private void InitKeyItem()
+    {
+        foreach (var item in keyboardKeycustomItems)
         {
             item.Initialize(InputType.Keyboard);
         }
@@ -31,13 +43,6 @@ public class KeyCustomizeMenu : EscMenu
         {
             item.Initialize(InputType.XboxPad);
         }
-
-        canvas.enabled = false;
-    }
-
-    void Update()
-    {
-        
     }
 
     public void OnKeyboardPanel()
@@ -77,6 +82,12 @@ public class KeyCustomizeMenu : EscMenu
 
     }
 
+    public void OnButtonDefaultKeySetting()
+    {
+        InputManager.Instance.SetDefaultKeyBinding();
+        InitKeyItem();
+    }
+
     public override void Appear(float duration)
     {
         canvas.enabled = true;
@@ -105,11 +116,14 @@ public class KeyCustomizeMenu : EscMenu
         if(active)
         {
             canvas.enabled = true;
+            canvas.sortingOrder = 3;
         }
         else
         {
             canvas.enabled = false;
+            canvas.sortingOrder = 2;
             InputManager.Instance.InitializeKeyBind_Toggle();
+            InputManager.Instance.SaveKeyBinding();
         }
     }
 }

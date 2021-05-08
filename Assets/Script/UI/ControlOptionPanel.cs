@@ -20,6 +20,9 @@ public class ControlOptionPanel : EscMenu
     {
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = false;
+
+        pitchRotateSpeedSlider.interactable = false;
+        yawRotateSpeedSlider.interactable = false;
     }
 
     public override void Active(bool active)
@@ -27,16 +30,40 @@ public class ControlOptionPanel : EscMenu
         if (active)
         {
             _canvas.enabled = true;
-            pitchRotateSpeedSlider.value = GameManager.Instance.followTarget.PitchRotateSpeed / MaxRotateSpeed;
-            yawRotateSpeedSlider.value = GameManager.Instance.followTarget.YawRotateSpeed / MaxRotateSpeed;
+            _canvas.sortingOrder = 3;
+
+            ControlSettingData controlSettingData = SaveDataHelper.LoadSetting<ControlSettingData>();
+            pitchRotateSpeedSlider.value = controlSettingData.pitchRotateSpeed / MaxRotateSpeed;
+            yawRotateSpeedSlider.value = controlSettingData.yawRotateSpeed / MaxRotateSpeed;
             UpdateYawRotateSpeedText();
             UpdatePitchRotateSpeedText();
+
+            pitchRotateSpeedSlider.interactable = true;
+            yawRotateSpeedSlider.interactable = true;
         }
         else
         {
-            GameManager.Instance.followTarget.PitchRotateSpeed = pitchRotateSpeedSlider.value * MaxRotateSpeed;
-            GameManager.Instance.followTarget.YawRotateSpeed = yawRotateSpeedSlider.value * MaxRotateSpeed;
+            if (GameManager.Instance.followTarget != null)
+            {
+                GameManager.Instance.followTarget.PitchRotateSpeed = pitchRotateSpeedSlider.value * MaxRotateSpeed;
+                GameManager.Instance.followTarget.YawRotateSpeed = yawRotateSpeedSlider.value * MaxRotateSpeed;
+            }
+
+            if(SaveDataHelper.streamingAssetsPath == null)
+            {
+                SaveDataHelper.streamingAssetsPath = Application.streamingAssetsPath;
+            }
+
+            ControlSettingData saveData = new ControlSettingData();
+            saveData.yawRotateSpeed = yawRotateSpeedSlider.value * MaxRotateSpeed;
+            saveData.pitchRotateSpeed = pitchRotateSpeedSlider.value * MaxRotateSpeed;
+            SaveDataHelper.SaveSetting(saveData);
+
             _canvas.enabled = false;
+            _canvas.sortingOrder = 2;
+
+            pitchRotateSpeedSlider.interactable = false;
+            yawRotateSpeedSlider.interactable = false;
         }
     }
 

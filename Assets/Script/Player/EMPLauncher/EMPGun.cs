@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using DG.Tweening;
-
+using UniRx;
 
 public class EMPGun : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class EMPGun : MonoBehaviour
     [SerializeField] private Transform launchPos;
     [SerializeField] private Transform laserEffectPos;
     [SerializeField] private Transform lookAim;
+    [SerializeField] private CrossHair crossHair;
 
     private float aimWeight;
     
@@ -24,6 +25,16 @@ public class EMPGun : MonoBehaviour
         mainCamera = Camera.main.transform;
         _gunObject.SetActive(false);
         playerAnim = GetComponent<Animator>();
+        GetComponent<PlayerCtrl_Ver2>().chargeTime.Subscribe(value => { 
+            if(value >= 3f)
+            {
+                crossHair.Second();
+            }
+            else if(value >= 2f)
+            {
+                crossHair.First();
+            }
+        });
     }
 
     void Update()
@@ -78,6 +89,11 @@ public class EMPGun : MonoBehaviour
         {
             gunAnim.SetTrigger("ToZero");
         }
+
+        if(crossHair != null)
+        {
+            crossHair.ActiveAnimation();
+        }
     }
 
     public void LaunchLaser(float damage, out bool destroyed)
@@ -119,6 +135,11 @@ public class EMPGun : MonoBehaviour
         if (_gunObject != null)
         {
             _gunObject.SetActive(active);
+        }
+
+        if(crossHair != null)
+        {
+            crossHair.SetActive(active);
         }
 
         if(gunAnim != null)

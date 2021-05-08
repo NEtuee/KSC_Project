@@ -325,12 +325,16 @@ public class HandIKCtrl : MonoBehaviour
         {
             animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPointObjet.position);
             animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftWeight);
+            animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandPointObjet.rotation);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, leftWeight);
         }
 
         if (enableRightHandIk)
         {
             animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPointObject.position);
             animator.SetIKPositionWeight(AvatarIKGoal.RightHand, rightWeight);
+            animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandPointObject.rotation);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightHand, rightWeight);
         }
     }
 
@@ -344,11 +348,13 @@ public class HandIKCtrl : MonoBehaviour
             leftHandPointObjet = CreatePointObject("LeftHandPoint");
         leftHandPointObjet.SetParent(llHit.transform);
         leftHandPointObjet.position = llHit.point - transform.TransformDirection(hangLedgeOffset);
+        leftHandPointObjet.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
 
         if (nextRightHandPointObject == null)
             nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
         nextRightHandPointObject.SetParent(lrHit.transform);
         nextRightHandPointObject.position = lrHit.point - transform.TransformDirection(hangLedgeOffset);
+        nextRightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
     }
 
     private void UpdateLeftHandPos()
@@ -357,7 +363,8 @@ public class HandIKCtrl : MonoBehaviour
         if (leftHandPointObjet == null)
             leftHandPointObjet = CreatePointObject("LeftHandPoint");
         leftHandPointObjet.SetParent(nextLeftHandPointObject.parent);
-        leftHandPointObjet.position = nextLeftHandPointObject.position;
+        //leftHandPointObjet.position = nextLeftHandPointObject.position;
+        leftHandPointObjet.SetPositionAndRotation(nextLeftHandPointObject.position, nextLeftHandPointObject.rotation);
     }
 
     private void RightTrace()
@@ -371,10 +378,13 @@ public class HandIKCtrl : MonoBehaviour
             rightHandPointObject = CreatePointObject("RightHandPoint");
         rightHandPointObject.SetParent(rrHit.transform);
         rightHandPointObject.position = rrHit.point - transform.TransformDirection(hangLedgeOffset);
+        rightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
+
         if (nextLeftHandPointObject == null)
             nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
         nextLeftHandPointObject.SetParent(rlHit.transform);
         nextLeftHandPointObject.position = rlHit.point - transform.TransformDirection(hangLedgeOffset);
+        nextLeftHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
     }
 
     private void UpdateRightHandPos()
@@ -383,7 +393,8 @@ public class HandIKCtrl : MonoBehaviour
         if (rightHandPointObject == null)
             rightHandPointObject = CreatePointObject("RightHandPoint");
         rightHandPointObject.SetParent(nextRightHandPointObject.parent);
-        rightHandPointObject.position = nextRightHandPointObject.position;
+        //rightHandPointObject.position = nextRightHandPointObject.position;
+        rightHandPointObject.SetPositionAndRotation(nextRightHandPointObject.position, nextRightHandPointObject.rotation);
     }
 
     private void TraceLedge()
@@ -395,12 +406,14 @@ public class HandIKCtrl : MonoBehaviour
         {
             leftHandPointObjet.SetParent(hit.transform);
             leftHandPointObjet.position = hit.point - transform.TransformDirection(leftHandOffset);
+            leftHandPointObjet.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
         }
 
         if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3.0f, 0.6f)), transform.TransformDirection(new Vector3(0.15f, -1.0f, 0.0f)), out hit, 3f, climbingLayer))
         {
             rightHandPointObject.SetParent(hit.transform);
-           rightHandPointObject.position = hit.point - transform.TransformDirection(rightHandOffset);
+            rightHandPointObject.position = hit.point - transform.TransformDirection(rightHandOffset);
+            rightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
         }
     }
 
@@ -746,22 +759,28 @@ public class HandIKCtrl : MonoBehaviour
                 leftHandPointObjet = CreatePointObject("LeftHandPoint");
             leftHandPointObjet.SetParent(upLeftHit.transform);
             leftHandPointObjet.position = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            leftHandPointObjet.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
+
             if (nextRightHandPointObject == null)
                 nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
             nextRightHandPointObject.SetParent(upRightHit.transform);
             nextRightHandPointObject.position = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextRightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
         }
         else
-        {       
+        {
             enableRightHandIk = true;
             if (rightHandPointObject == null)
                 rightHandPointObject = CreatePointObject("RightHandPoint");
             rightHandPointObject.SetParent(upRightHit.transform);
             rightHandPointObject.position = upRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            rightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
+
             if (nextLeftHandPointObject == null)
                 nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
             nextLeftHandPointObject.SetParent(upLeftHit.transform);
             nextLeftHandPointObject.position = upLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextLeftHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
         }
     }
 
@@ -777,10 +796,13 @@ public class HandIKCtrl : MonoBehaviour
                 nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
             nextLeftHandPointObject.SetParent(downLeftHit.transform);
             nextLeftHandPointObject.position = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextLeftHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
+
             if (nextRightHandPointObject == null)
                 nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
             nextRightHandPointObject.SetParent(downRightHit.transform);
             nextRightHandPointObject.position = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextRightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
         }
         else
         {
@@ -788,10 +810,13 @@ public class HandIKCtrl : MonoBehaviour
                 nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
             nextRightHandPointObject.SetParent(downRightHit.transform);
             nextRightHandPointObject.position = downRightHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextRightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
+
             if (nextLeftHandPointObject == null)
                 nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
             nextLeftHandPointObject.SetParent(downLeftHit.transform);
             nextLeftHandPointObject.position = downLeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+            nextLeftHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
         }
     }
 
@@ -804,10 +829,13 @@ public class HandIKCtrl : MonoBehaviour
             leftHandPointObjet = CreatePointObject("LeftHandPoint");
         leftHandPointObjet.SetParent(upLeft_LeftHit.transform);
         leftHandPointObjet.position = upLeft_LeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+        leftHandPointObjet.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
+
         if (nextRightHandPointObject == null)
             nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
         nextRightHandPointObject.SetParent(upLeft_RightHit.transform);
         nextRightHandPointObject.position = upLeft_RightHit.point - transform.TransformDirection(upClimbingIKOffset);
+        nextRightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
     }
 
     private void TraceUpRight()
@@ -819,10 +847,13 @@ public class HandIKCtrl : MonoBehaviour
             rightHandPointObject = CreatePointObject("LeftHandPoint");
         rightHandPointObject.SetParent(upRight_RightHit.transform);
         rightHandPointObject.position = upRight_RightHit.point - transform.TransformDirection(upClimbingIKOffset);
+        rightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
+
         if (nextLeftHandPointObject == null)
             nextLeftHandPointObject = CreatePointObject("NextRightHandPoint");
         nextLeftHandPointObject.SetParent(upRight_LeftHit.transform);
         nextLeftHandPointObject.position = upRight_LeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+        nextLeftHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
     }
 
     private void TraceDownLeft()
@@ -834,11 +865,14 @@ public class HandIKCtrl : MonoBehaviour
             nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
         nextLeftHandPointObject.SetParent(downLeft_LeftHit.transform);
         nextLeftHandPointObject.position = downLeft_LeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+        nextLeftHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
+
         enableRightHandIk = true;
         if (nextRightHandPointObject == null)
             nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
         nextRightHandPointObject.SetParent(downLeft_RightHit.transform);
         nextRightHandPointObject.position = downLeft_RightHit.point - transform.TransformDirection(upClimbingIKOffset);
+        nextRightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
     }
 
     private void TraceDownRight()
@@ -850,10 +884,13 @@ public class HandIKCtrl : MonoBehaviour
             nextRightHandPointObject = CreatePointObject("NextRightHandPoint");
         nextRightHandPointObject.SetParent(downRight_RightHit.transform);
         nextRightHandPointObject.position = downRight_RightHit.point - transform.TransformDirection(upClimbingIKOffset);
+        nextRightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
+
         if (nextLeftHandPointObject == null)
             nextLeftHandPointObject = CreatePointObject("NextLeftHandPoint");
         nextLeftHandPointObject.SetParent(downRight_LeftHit.transform);
         nextLeftHandPointObject.position = downRight_LeftHit.point - transform.TransformDirection(upClimbingIKOffset);
+        nextLeftHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
     }
 
     public void TraceCenter()
@@ -864,6 +901,7 @@ public class HandIKCtrl : MonoBehaviour
             enableLeftHandIk = true;
             leftHandPointObjet.SetParent(llHit.transform);
             leftHandPointObjet.position = llHit.point - transform.TransformDirection(upClimbingIKOffset);
+            leftHandPointObjet.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
         }
 
         detected = Physics.SphereCast(center_R.position, outsideSurfaceRadius, transform.forward, out rrHit, 1.5f, climbingLayer);
@@ -872,6 +910,7 @@ public class HandIKCtrl : MonoBehaviour
             enableRightHandIk = true;
             rightHandPointObject.SetParent(rrHit.transform);
             rightHandPointObject.position = rrHit.point - transform.TransformDirection(upClimbingIKOffset);
+            rightHandPointObject.rotation = Quaternion.LookRotation(transform.up, -transform.forward);
         }
     }
 
