@@ -6207,36 +6207,6 @@ Transform:
   m_Father: {fileID: 1686531147}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 20, z: 0}
---- !u!1 &203769318
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 203769319}
-  m_Layer: 0
-  m_Name: RespawnPoint (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &203769319
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 203769318}
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000004023313}
-  m_LocalPosition: {x: -0.000028163191, y: 13.6, z: -106.12}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1948393768}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1001 &207146204
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9317,7 +9287,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1948393768}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &341321903
 GameObject:
@@ -22290,6 +22260,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  triggerExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   afterTriggerEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -22325,7 +22298,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1948393768}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &767759844 stripped
 GameObject:
@@ -38517,6 +38490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: {x: 0, y: -8, z: 0}
   play: 0
+  fall: 0
 --- !u!4 &1356158043
 Transform:
   m_ObjectHideFlags: 0
@@ -40160,6 +40134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: {x: 0, y: 15, z: 0}
   play: 0
+  fall: 0
 --- !u!4 &1433171479
 Transform:
   m_ObjectHideFlags: 0
@@ -41758,6 +41733,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: {x: 0, y: 16, z: 0}
   play: 1
+  fall: 0
 --- !u!4 &1485166740
 Transform:
   m_ObjectHideFlags: 0
@@ -49342,7 +49318,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1948393768}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1001 &1701832299
 PrefabInstance:
@@ -52281,80 +52257,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &1768654345
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1768654348}
-  - component: {fileID: 1768654347}
-  - component: {fileID: 1768654346}
-  m_Layer: 0
-  m_Name: GroundArea (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1768654346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1768654345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da794969a2591a1479cf003b829f005b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  whenFall:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BrokenMedusa_AI, Assembly-CSharp
-        m_MethodName: UpdateMoveLine
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  respawn: {fileID: 203769319}
-  bip: {fileID: 0}
---- !u!65 &1768654347
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1768654345}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 500, y: 100, z: 500}
-  m_Center: {x: 0, y: -8.0053005, z: 0}
---- !u!4 &1768654348
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1768654345}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -66, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1948393768}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1772124606 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8569184403511391131, guid: ccb3dc35d43446c42b51a881dd80ce29,
@@ -52485,7 +52387,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1948393768}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1790192763 stripped
 Transform:
@@ -58590,8 +58492,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 203769319}
-  - {fileID: 1768654348}
   - {fileID: 2028853219}
   - {fileID: 761923822}
   - {fileID: 1694708595}
@@ -61163,7 +61063,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1948393768}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2029121685
 PrefabInstance:
@@ -61424,7 +61324,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 46573cd1c14571c4eb3f21fcfe8da570,
         type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 46573cd1c14571c4eb3f21fcfe8da570,
         type: 3}
@@ -62809,6 +62709,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: {x: 0, y: -10, z: 0}
   play: 0
+  fall: 0
 --- !u!4 &2106354976
 Transform:
   m_ObjectHideFlags: 0
