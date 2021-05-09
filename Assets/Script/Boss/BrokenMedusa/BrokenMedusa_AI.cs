@@ -316,7 +316,7 @@ public class BrokenMedusa_AI : IKBossBase
             if(!IsPlaying(0,"Anim_Medusa_Box_Open"))
             {
                 SetIKActive(true);
-                ChangeState(State.Idle);
+                ChangeState(State.SearchScan);
 
                 animatorControll.SetLayerWeight(1,1f);
                 animatorControll.SetLayerWeight(2,1f);

@@ -977,13 +977,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         prevForward.Normalize();
 
         //if(currentSpeed > 0f)
-        float speedFactor = (currentSpeed / runSpeed) * 0.004f;
+        float speedFactor = (currentSpeed / runSpeed) * 0.002f;
         float dot = Vector3.Dot(transform.forward,camRight);
         float dotY = Vector3.Dot(transform.forward,camForward);
         dotY *= 0.6f;
         //dot = Mathf.Clamp(MathEx.abs(dot),0.2f,1f);
 
-        legBlur.gameObject.SetActive(speedFactor > 0f);
+        legBlur.gameObject.SetActive(currentSpeed > 7f);
 
         legBlur.material.SetFloat("_XOffset",speedFactor * dot);
         legBlur.material.SetFloat("_YOffset",speedFactor * dotY);
