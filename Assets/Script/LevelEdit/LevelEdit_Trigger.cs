@@ -16,6 +16,7 @@ public class LevelEdit_Trigger : MonoBehaviour
 
     [SerializeField]private TriggerType triggerType;
     [SerializeField]private UnityEvent triggerEvent;
+    [SerializeField]private UnityEvent triggerExitEvent;
     [SerializeField]private UnityEvent afterTriggerEvent = new UnityEvent();
     [SerializeField]private LayerMask targetLayer;
     [SerializeField]private bool isTriggered = false;
@@ -75,11 +76,22 @@ public class LevelEdit_Trigger : MonoBehaviour
         if (isTriggered || !collisionTrigger || !_timeOut)
             return;
 
-        if ((coll.gameObject.layer & targetLayer.value) != 0)
+        // Debug.Log(LayerMask.LayerToName(coll.gameObject.layer));
+        // Debug.Log(LayerMask.LayerToName(targetLayer));
+
+        if ((coll.gameObject.layer & targetLayer) != 0)
         {
             Debug.Log(gameObject.name);
             gameObject.name = "triggered";
             TriggerEnable();
+        }
+    }
+
+    public void OnTriggerExit(Collider coll)
+    {
+        if ((coll.gameObject.layer & targetLayer.value) != 0)
+        {
+            triggerExitEvent.Invoke();
         }
     }
 

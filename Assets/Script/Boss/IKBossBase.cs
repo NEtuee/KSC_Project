@@ -52,6 +52,14 @@ public class IKBossBase : Hitable
     {
     }
 
+    protected void SetIKActive(bool value)
+    {
+        foreach(var ik in legs)
+        {
+            ik.SetIKActive(value);
+        }
+    }
+
     protected void GetSoundManager()
     {
         _soundManager = GameManager.Instance.soundManager;
@@ -80,14 +88,17 @@ public class IKBossBase : Hitable
         }
     }
 
-    public void CenterMove(float deltaTime)
+    public bool CenterMove(float deltaTime)
     {
         var dir = (_centerPosition - transform.position).normalized;
         var centerDist = Vector3.Distance(_centerPosition,transform.position);
         if(centerDist >= 1f)
         {
             Move(dir, frontMoveSpeed, deltaTime);
+            return false;
         }
+
+        return true;
     }
 
     public void SetLegMovementSpeed(float speed)
@@ -122,6 +133,16 @@ public class IKBossBase : Hitable
     public void Turn(bool isLeft, Transform target, float deltaTime)
     {
         Turn(target, rotationSpeed * deltaTime * (isLeft ? 1f : -1f));
+    }
+
+    public void Turn(bool isLeft, Transform target, float deltaTime, Vector3 axis)
+    {
+        Turn(target, rotationSpeed * deltaTime * (isLeft ? 1f : -1f),axis);
+    }
+
+    public void Turn(Transform target, float factor, Vector3 axis)
+    {
+        target.RotateAround(target.position,axis,factor);
     }
 
     public void Turn(Transform target, float factor)

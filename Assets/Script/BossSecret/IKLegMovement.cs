@@ -7,6 +7,7 @@ public class IKLegMovement : MonoBehaviour
     public delegate void LegHitToGround(Vector3 v);
     
     public IKLegMovement oppositeLeg;
+    public DitzelGames.FastIK.FastIKFabric iKFabric;
 
     public ParticlePool particlePool;
     public LegHitToGround legHitToGround = (v) => { };
@@ -117,6 +118,11 @@ public class IKLegMovement : MonoBehaviour
             }
         }
         
+    }
+
+    public void SetIKActive(bool value)
+    {
+        iKFabric.enabled = value;
     }
 
     public void Hold(bool value)

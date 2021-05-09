@@ -65,14 +65,18 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
 
-        if(((PlayerCtrl_Ver2)player).updateMethod == UpdateMethod.Update)
+        if(player != null)
         {
-            GAMEUPDATE = GameUpdate.Update;
+            if(((PlayerCtrl_Ver2)player).updateMethod == UpdateMethod.Update)
+            {
+                GAMEUPDATE = GameUpdate.Update;
+            }
+            else
+            {
+                GAMEUPDATE = GameUpdate.Fixed;
+            }
         }
-        else
-        {
-            GAMEUPDATE = GameUpdate.Fixed;
-        }
+        
     }
 
     private void Start()

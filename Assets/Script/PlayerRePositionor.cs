@@ -19,6 +19,7 @@ public class PlayerRePositionor : MonoBehaviour
         if(coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
         {
             ctrl.transform.position = respawn.position;
+            whenFall.Invoke();
             return;
         }
         

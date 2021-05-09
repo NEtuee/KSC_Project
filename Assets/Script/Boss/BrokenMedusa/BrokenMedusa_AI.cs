@@ -16,6 +16,8 @@ public class BrokenMedusa_AI : IKBossBase
     public enum State
     {
         Idle,
+        TransformOpen,
+        TransformClose,
         Scanned,
         LockOnMove,
         LockOnLook,
@@ -23,6 +25,7 @@ public class BrokenMedusa_AI : IKBossBase
         SearchIdle,
         SearchRotate,
         SearchScan,
+        CenterMove,
         Dead
     }
 
@@ -33,7 +36,9 @@ public class BrokenMedusa_AI : IKBossBase
     public float scanYLimit = 10f;
     public float lookDistance = 20f;
 
-    public Animation animationControll;
+    public Animator animatorControll;
+
+    //public Animation animationControll;
     public GraphAnimator graphAnimator;
     public BossScan scanner;
     public FloorControl floorControl;
@@ -50,11 +55,14 @@ public class BrokenMedusa_AI : IKBossBase
     private Vector3 _perpendicularPoint;
     private Vector3 _searchDirection;
     private Vector3 _scannedPosition;
-    
+
+    private Quaternion _headRotation;
+
     private float _pointDistance;
     private float _direction;//1 = right, -1 = left
 
     private bool _scanCheck = false;
+    private bool _armPushLerpBack = false;
 
     public UnityEvent scannedEvent;
     public UnityEvent whenSearch;
@@ -76,10 +84,13 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("FrontWalk");
         _timeCounter.InitTimer("FrontWalk_Init");
         _timeCounter.InitTimer("timer");
+        _timeCounter.InitTimer("pushStand");
 
         scannedEvent.AddListener(() => { GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelperRoot>().HelpEvent("Scanned"); });
         
         GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
+
+        ChangeState(State.TransformOpen);
     }
 
     public void Update()
@@ -96,6 +107,12 @@ public class BrokenMedusa_AI : IKBossBase
             return;
         
         UpdateProcess(Time.fixedDeltaTime);
+    }
+
+    public void LateUpdate()
+    {
+        head.rotation = _headRotation;
+
     }
 
     private void UpdateProcess(float deltaTime)
@@ -122,12 +139,25 @@ public class BrokenMedusa_AI : IKBossBase
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            animationControll.Play("Anim_Medusa_Hit");
+            //animationControll.Play("Anim_Medusa_Hit");
         }
         
         if (Input.GetKeyDown(KeyCode.K))
         {
             Dead();
+        }
+
+
+        _timeCounter.IncreaseTimer("pushStand",out bool pushLimit);
+        if(pushLimit)
+        {
+            _armPushLerpBack = !(IsPlaying(2,"Anim_Medusa_Push") || IsPlaying(2,"Anim_Medusa_PushUp"));
+
+            if(_armPushLerpBack)
+            {
+                var value = Mathf.Lerp(animatorControll.GetLayerWeight(2),0f,0.02f);
+                animatorControll.SetLayerWeight(2,value);
+            }
         }
         
 
@@ -165,6 +195,10 @@ public class BrokenMedusa_AI : IKBossBase
         {
             LookLineForward_Body(deltaTime);
             LineMove(deltaTime);
+            if(Vector3.Angle(transform.forward,MathEx.DeleteYPos(_target.position - transform.position)) >= 100f)
+            {
+                UpdateMoveLine();
+            }
             
             if(lookDistance + 2f < _targetDistance)
                 ChangeState(State.LockOnLook);
@@ -179,6 +213,10 @@ public class BrokenMedusa_AI : IKBossBase
         else if(currentState == State.LockOnFrontWalk)
         {
             TargetFrontMove(deltaTime);
+            if(Vector3.Angle(transform.forward,MathEx.DeleteYPos(_target.position - transform.position)) >= 100f)
+            {
+                UpdateMoveLine();
+            }
         }
         else if(currentState == State.Scanned)
         {
@@ -225,7 +263,7 @@ public class BrokenMedusa_AI : IKBossBase
             BodyTurn(false,deltaTime);
             //BodyRotateForHead();
 
-            var angle = Vector3.Angle(_searchDirection,head.forward);
+            var angle = Vector3.Angle(_searchDirection,GetHeadForward());
             if(angle >= 90f)
             {
                 ChangeState(State.SearchIdle);
@@ -268,14 +306,40 @@ public class BrokenMedusa_AI : IKBossBase
             }
             else if(animationType == AnimationType.KeyFrame)
             {
-                graphAnimator.Stop();
-                graphAnimator.Play("Dead",body);
-
-                
+                MainAnimationPlay(2);
             }
 
             this.enabled = false;
         }
+        else if(currentState == State.TransformOpen)
+        {
+            if(!IsPlaying(0,"Anim_Medusa_Box_Open"))
+            {
+                SetIKActive(true);
+                ChangeState(State.Idle);
+
+                animatorControll.SetLayerWeight(1,1f);
+                animatorControll.SetLayerWeight(2,1f);
+                MainAnimationPlay(3);
+                //animationControll.Play("Anim_Medusa_Finding");
+            }
+            // if(!animationControll.isPlaying)
+            // {
+            //     SetIKActive(true);
+            //     ChangeState(State.Idle);
+            //     animationControll.Play("Anim_Medusa_Finding");
+            // }
+        }
+        else if(currentState == State.CenterMove)
+        {
+            if(CenterMove(deltaTime))
+            {
+                ChangeState(State.LockOnLook);
+            }
+        }
+
+
+        _headRotation = head.rotation;
     }
 
     public void ChangeState(State state)
@@ -316,44 +380,101 @@ public class BrokenMedusa_AI : IKBossBase
 
         currentState = state;
 
-        if(currentState == State.SearchIdle)
+        if(currentState == State.Idle)
+        {
+            if(!IsPlaying(0,"Anim_Medusa_Idle"))
+            {
+                MainAnimationPlay(5);
+            }
+        }
+        else if(currentState == State.SearchIdle)
         {
             _moveLine = Vector3.zero;
             _timeCounter.InitTimer("SearchIdle");
 
-            if(animationType == AnimationType.KeyFrame && !animationControll.IsPlaying("Anim_Medusa_Finding"))
+            if(animationType == AnimationType.KeyFrame && !IsPlaying(0, "Anim_Medusa_Finding"))
             {
-                animationControll.Play("Anim_Medusa_Finding");
+                MainAnimationPlay(3);
             }
+
+            // if(animationType == AnimationType.KeyFrame && !animationControll.IsPlaying("Anim_Medusa_Finding"))
+            // {
+            //     animationControll.Play("Anim_Medusa_Finding");
+            // }
         }
         else if(currentState == State.SearchRotate)
         {
-            _searchDirection = head.forward;
+            _searchDirection = GetHeadForward();
             _timeCounter.InitTimer("SearchRotate");
 
-            if(animationType == AnimationType.KeyFrame && !animationControll.IsPlaying("Anim_Medusa_Finding"))
+            if(animationType == AnimationType.KeyFrame && !IsPlaying(0, "Anim_Medusa_Finding"))
             {
-                animationControll.Play("Anim_Medusa_Finding");
+                MainAnimationPlay(3);
             }
+
+            // if(animationType == AnimationType.KeyFrame && !animationControll.IsPlaying("Anim_Medusa_Finding"))
+            // {
+            //     animationControll.Play("Anim_Medusa_Finding");
+            // }
         }
         else if(currentState == State.SearchScan)
         {
             scanner.scaning = false;
             _timeCounter.InitTimer("SearchScan");
 
-            if(animationType == AnimationType.KeyFrame && !animationControll.IsPlaying("Anim_Medusa_Finding"))
-            {
-                animationControll.Play("Anim_Medusa_Finding");
-            }
+            // if(animationType == AnimationType.KeyFrame && !animationControll.IsPlaying("Anim_Medusa_Finding"))
+            // {
+            //     animationControll.Play("Anim_Medusa_Finding");
+            // }
         }
         else if(currentState == State.LockOnLook)
         {
-            animationControll.PlayQueued("Anim_Medusa_Close");
+            if(!IsPlaying(0,"Anim_Medusa_Idle"))
+            {
+                MainAnimationPlay(5);
+            }
+
+            ArmStateAnimationPlay(1);
+            //animationControll.PlayQueued("Anim_Medusa_Close");
         }
         else if(currentState == State.LockOnMove)
         {
-            animationControll.PlayQueued("Anim_Medusa_Open");
+            if(!IsPlaying(0,"Anim_Medusa_Idle"))
+            {
+                MainAnimationPlay(5);
+            }
+
+            ArmStateAnimationPlay(0);
+            //animationControll.PlayQueued("Anim_Medusa_Open");
         }
+        else if(currentState == State.TransformOpen)
+        {
+            SetIKActive(false);
+            MainAnimationPlay(0);
+            animatorControll.SetLayerWeight(1,0f);
+            animatorControll.SetLayerWeight(2,0f);
+            //animationControll.Play("Anim_Medusa_Box_Open");
+        }
+        else if(currentState == State.TransformClose)
+        {
+            SetIKActive(false);
+            this.enabled = false;
+            MainAnimationPlay(1);
+            animatorControll.SetLayerWeight(1,0f);
+            animatorControll.SetLayerWeight(2,0f);
+            //animationControll.Play("Anim_Medusa_Box_Close");
+        }
+
+
+
+    }
+
+    public void WhenPushFall()
+    {
+        if(currentState == State.TransformOpen || currentState == State.TransformClose)
+            return;
+
+        ChangeState(State.CenterMove);
     }
 
     public override void Hit()
@@ -362,7 +483,8 @@ public class BrokenMedusa_AI : IKBossBase
             graphAnimator.Play("Hit",body);
         else if(animationType == AnimationType.KeyFrame)
         {
-            animationControll.Play("Anim_Medusa_Hit");
+            MainAnimationPlay(4);
+            //animationControll.Play("Anim_Medusa_Hit");
         }
         _soundManager.Play(1701,transform.position);
     }
@@ -371,6 +493,7 @@ public class BrokenMedusa_AI : IKBossBase
     {
         _soundManager.Play(1510,transform.position);
         _soundManager.Play(1501,transform.position);
+        SetIKActive(false);
         ChangeState(State.Dead);
     }
 
@@ -411,7 +534,7 @@ public class BrokenMedusa_AI : IKBossBase
     {
         _soundManager.Play(1511,transform.position);
         scanner.SetHeight(transform.position.y + scanYLimit);
-        scanner.ScanSetup(transform.position,head.forward);
+        scanner.ScanSetup(transform.position,GetHeadForward());
     }
 
     public bool ScanCheck()
@@ -429,7 +552,7 @@ public class BrokenMedusa_AI : IKBossBase
 
         scanObjPosition.y = startPosition.y = 0.0f;
 
-        if (Mathf.Acos(Vector3.Dot(head.forward, (scanObjPosition - startPosition).normalized)) * Mathf.Rad2Deg < scanner.arc)
+        if (Mathf.Acos(Vector3.Dot(GetHeadForward(), (scanObjPosition - startPosition).normalized)) * Mathf.Rad2Deg < scanner.arc)
         {
             float mag = (scanObjPosition - startPosition).magnitude;
             if (mag <= scanner.range && mag >= scanner.range - 3f)
@@ -475,7 +598,8 @@ public class BrokenMedusa_AI : IKBossBase
             graphAnimator.Play("ShildAttack",shildGraphic);
         else if(animationType == AnimationType.KeyFrame)
         {
-            animationControll.Play("Anim_Medusa_Push");
+            ArmPushAnimationPlay(0);
+           // animationControll.Play("Anim_Medusa_Push");
         }
 
         Collider[] playerColl = Physics.OverlapSphere(shildTransform.position, 10f,targetLayer);
@@ -500,7 +624,8 @@ public class BrokenMedusa_AI : IKBossBase
             graphAnimator.Play("ShildAttack",shildGraphic);
         else if(animationType == AnimationType.KeyFrame)
         {
-            animationControll.Play("Anim_Medusa_PushUp");
+            ArmPushAnimationPlay(1);
+         //   animationControll.Play("Anim_Medusa_PushUp");
         }
 
         Collider[] playerColl = Physics.OverlapSphere(shildTransform.position, 10f,targetLayer);
@@ -574,8 +699,8 @@ public class BrokenMedusa_AI : IKBossBase
 
     public bool HeadLook(Vector3 direction,float deltaTime)
     {
-        var plane = Vector3.ProjectOnPlane(direction,head.up).normalized;
-        var headAngle = Vector3.SignedAngle(head.forward,plane,head.up);
+        var plane = Vector3.ProjectOnPlane(direction,GetHeadUp()).normalized;
+        var headAngle = Vector3.SignedAngle(GetHeadForward(),plane,GetHeadUp());
         bool look = false;
 
         //head.RotateAround(head.position,head.up,headAngle);
@@ -608,10 +733,11 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void HeadTurn(bool isLeft, float deltaTime)
     {
-        var forward = head.forward;
+        var forward = GetHeadForward();
         var rotation = head.rotation;
         
-        Turn(isLeft,head,deltaTime);
+        //Turn(isLeft,head,deltaTime);
+        Turn(isLeft,head,deltaTime,GetHeadUp());
 
         // var angle = Vector3.Angle(body.forward, forward);
         // if (angle > headRotationLock)
@@ -624,10 +750,10 @@ public class BrokenMedusa_AI : IKBossBase
     public bool BodyRotateForHead(float deltaTime)
     {
         //var angle = Vector3.Angle(transform.forward, head.forward);
-        var angle = Vector3.SignedAngle(head.forward,transform.forward,head.up);
+        var angle = Vector3.SignedAngle(GetHeadForward(),transform.forward,GetHeadUp());
         if(MathEx.abs(angle) > headRotationLock)
         {
-            BodyTurn(Vector3.SignedAngle(head.forward,transform.forward,head.up) < 0, deltaTime);//_direction < 0);
+            BodyTurn(Vector3.SignedAngle(GetHeadForward(),transform.forward,GetHeadUp()) < 0, deltaTime);//_direction < 0);
             return true;
         }
 
@@ -638,5 +764,47 @@ public class BrokenMedusa_AI : IKBossBase
     {
         Turn(isLeft,transform,deltaTime);
         //transform.RotateAround(transform.position,transform.up,rotationSpeed * Time.deltaTime * (isLeft ? 1f : -1f));
+    }
+
+    public bool IsPlaying(int layer, string n)
+    {
+        return animatorControll.GetCurrentAnimatorStateInfo(layer).normalizedTime < 1f && animatorControll.GetCurrentAnimatorStateInfo(layer).IsName(n);
+        //return animatorControll.GetCurrentAnimatorStateInfo(layer).IsName(n);
+    }
+
+    public void MainAnimationPlay(int code)
+    {
+        animatorControll.SetInteger("MainState",code);
+        animatorControll.SetTrigger("MainChange");
+    }
+
+    public void ArmStateAnimationPlay(int code)
+    {
+        animatorControll.SetInteger("ArmState",code);
+        animatorControll.SetTrigger("ArmChange");
+    }
+
+    public void ArmPushAnimationPlay(int code)
+    {
+        animatorControll.SetInteger("ArmPush",code);
+        animatorControll.SetTrigger("ArmPushChange");
+
+        animatorControll.SetLayerWeight(2,1f);
+        _timeCounter.InitTimer("pushStand");
+    }
+
+    public Vector3 GetHeadForward()
+    {
+        return head.up;
+    }
+
+    public Vector3 GetHeadUp()
+    {
+        return -head.right;
+    }
+
+    public Vector3 GetHeadRight()
+    {
+        return -head.forward;
     }
 }
