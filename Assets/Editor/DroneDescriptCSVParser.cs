@@ -45,7 +45,7 @@ public class DroneDescriptCSVParser : EditorWindow
         List<Descript> descripts = new List<Descript>();
 
         string[] lines = Regex.Split(source, LINE_SPLIT_RE);
-        Debug.Log(lines.Length);
+        //Debug.Log(lines.Length);
         if (lines.Length <= 1) return;
 
         string[] header = Regex.Split(lines[0], SPLIT_RE);
