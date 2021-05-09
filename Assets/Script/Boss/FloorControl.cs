@@ -33,6 +33,14 @@ public class FloorControl : MonoBehaviour
         }
     }
 
+    public void Fall()
+    {
+        foreach(var floor in floors)
+        {
+            floor.Fall();
+        }
+    }
+
 
     public void Launch()
     {

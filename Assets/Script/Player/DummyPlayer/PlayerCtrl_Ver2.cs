@@ -56,7 +56,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Transform headTransfrom;
     [SerializeField] public bool isCanReadyClimbingCancel = false;
     [SerializeField] private bool isCanClimbingCancel = false;
-    private bool _alreadyInputJump = false;
 
     [Header("Movement Speed Value")]
     [SerializeField] private float walkSpeed = 15.0f;
@@ -151,8 +150,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public GameObject checkObj;
 
-    public CrossHair crossHair;
-
     private float _turnOverTime = 0.0f;
 
     public delegate void ActiveAimEvent();
@@ -212,11 +209,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     void Update()
     {
-        if(InputManager.Instance.GetInput(KeybindingActions.Option))
-        {
-            GameManager.Instance.optionMenuCtrl.InputEsc();   
-        }
-
         if(Input.GetKeyDown(KeyCode.L))
         {
             AddJumpPower(10f);
@@ -274,16 +266,24 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         UpdateInputValue(inputVertical, inputHorizontal);
 
+        //if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+        //{
+        //    isRun = true;
+        //}
+        //else
+        //{
+        //    isRun = false;
+        //}
+
         InputRun();
 
         switch (state)
         {
             case PlayerState.Default:
                 {
-                    if (InputManager.Instance.GetInput(KeybindingActions.Jump) && _alreadyInputJump == false)
+                    if (InputManager.Instance.GetInput(KeybindingActions.Jump))
                     {
                         animator.SetTrigger("Jump");
-                        _alreadyInputJump = true;
                         return;
                     }
 
@@ -365,7 +365,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
 
-                   gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
+                    gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
 
                    InputChargeShot();
 
@@ -473,10 +473,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     if (Physics.Raycast(transform.position + collider.center, moveDir, collider.radius + currentSpeed * deltaTime) == false)
                     {
-                        if (currentSpeed != 0.0f)
-                        {
-                            movement.Move(moveDir);
-                        }
+                        movement.Move(moveDir);
                     }
                 }
                 break;
@@ -980,17 +977,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         prevForward.Normalize();
 
         //if(currentSpeed > 0f)
-        float speedFactor = (currentSpeed / runSpeed) * 0.004f;
+        float speedFactor = (currentSpeed / runSpeed) * 0.002f;
         float dot = Vector3.Dot(transform.forward,camRight);
         float dotY = Vector3.Dot(transform.forward,camForward);
         dotY *= 0.6f;
         //dot = Mathf.Clamp(MathEx.abs(dot),0.2f,1f);
 
-        if (legBlur != null)
-        {
-            legBlur.material.SetFloat("_XOffset", speedFactor * dot);
-            legBlur.material.SetFloat("_YOffset", speedFactor * dotY);
-        }
+        legBlur.gameObject.SetActive(currentSpeed > 7f);
+
+        legBlur.material.SetFloat("_XOffset",speedFactor * dot);
+        legBlur.material.SetFloat("_YOffset",speedFactor * dotY);
 
         if(state == PlayerState.Grab || state == PlayerState.RunToStop)
         {
@@ -1087,7 +1083,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if(changeState == PlayerState.Default)
                     {
                         GameManager.Instance.soundManager.Play(1000, Vector3.zero, transform);
-                        animator.SetTrigger("Landing");
                     }
                 }
                 break;
@@ -1108,11 +1103,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.applyRootMotion = false;
                     animator.SetBool("IsGrab", false);
                     animator.SetBool("IsLedge", false);
+                    animator.SetTrigger("Landing");
                     footIK.EnableFeetIk();
                     handIK.DisableHandIK();
                     GameManager.Instance.stateManager.Visible(false);
-
-                    collider.height = 1.898009f;
 
                     if (transform.parent == null)
                         GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
@@ -1136,9 +1130,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.ActiveLedgeIK(false);
                     footIK.DisableFeetIk();
                     isClimbingMove = false;
-
-                    collider.height = 1.13f;
-
                     movement.SetGrab();
                     GameManager.Instance.cameraManager.SetFollowCameraDistance("Grab");
                 }
@@ -1166,7 +1157,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if(prevState != PlayerState.ClimbingJump)
                        moveDir = transform.forward * currentSpeed;
                     horizonWeight = 0.0f;
-                    _alreadyInputJump = false;
                     animator.SetFloat("HorizonWeight", horizonWeight);
                 }
                 break;
@@ -1281,7 +1271,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             currentSpeed = runSpeed;
                             moveDir *= currentSpeed;
                             currentJumpPower = jumpPower * 0.5f;
-                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                            //transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
 
                             animator.SetBool("IsGrab", false);
 
@@ -1901,10 +1891,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 movement.SetParent(wallHit.collider.transform);
             }
-        }
-        else
-        {
-            ChangeState(PlayerState.Default);
         }
         
     }
