@@ -154,7 +154,7 @@ public class InputManager : MonoBehaviour
         {
             for (int i = 0; i < xboxShockReleaseList.Count; i++)
             {
-                if (Input.GetAxis(actionData[xboxShockReleaseList[i]].dualshock.axisName) == 0.0f)
+                if (Input.GetAxis(actionData[xboxShockReleaseList[i]].xbox.axisName) == 0.0f)
                 {
                     xboxAxisDownFlag[xboxShockReleaseList[i]] = false;
                     xboxShockReleaseList.Remove(xboxShockReleaseList[i]);
@@ -410,9 +410,11 @@ public class InputManager : MonoBehaviour
                         keybinding.keyboard.key = keycode;
                         return;
                     case InputType.DualShock:
+                        keybinding.dualshock.valueType = PadValueType.Button;
                         keybinding.dualshock.key = keycode;
                         return;
                     case InputType.XboxPad:
+                        keybinding.xbox.valueType = PadValueType.Button;
                         keybinding.xbox.key = keycode;
                         return;
                 }

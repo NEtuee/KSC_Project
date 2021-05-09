@@ -45,11 +45,11 @@ public class DroneDescriptCSVParser : EditorWindow
         List<Descript> descripts = new List<Descript>();
 
         string[] lines = Regex.Split(source, LINE_SPLIT_RE);
-
+        Debug.Log(lines.Length);
         if (lines.Length <= 1) return;
 
         string[] header = Regex.Split(lines[0], SPLIT_RE);
-        for(int i = 0; i < lines.Length; i++)
+        for(int i = 1; i < lines.Length; i++)
         {
             string[] values = Regex.Split(lines[i], SPLIT_RE);
             if (values.Length == 0 || values[0] == "") continue;
@@ -60,6 +60,8 @@ public class DroneDescriptCSVParser : EditorWindow
 
             descripts.Add(entry);
         }
+
+        Debug.Log(descripts.Count);
 
         if(targetDroneDescript != null)
         {
