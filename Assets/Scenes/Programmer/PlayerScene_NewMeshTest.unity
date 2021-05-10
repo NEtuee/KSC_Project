@@ -2081,10 +2081,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - AD_0419_VisualMake
-  - B00GIE_main
+  - levelCode: 
+    scenesToLoad: []
+  - levelCode: 
+    scenesToLoad: []
   currentLevel: 0
   currentStageManager: {fileID: 0}
+  sceneLoadUI: {fileID: 0}
 --- !u!114 &112632219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21397,6 +21400,7 @@ MonoBehaviour:
   launchPos: {fileID: 243699740}
   laserEffectPos: {fileID: 725905501}
   lookAim: {fileID: 0}
+  crossHair: {fileID: 0}
 --- !u!224 &1562240847 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3553560693595122284, guid: 8c59b0500547e4147a841cecc34fe633,
@@ -28693,6 +28697,7 @@ MonoBehaviour:
   insideSurfaceRadius: 0.5
   outsideSurfaceRadius: 0.5
   outSideRotateDetectionAngle: 15
+  ledgeOutSideRotateDetectionAngle: 40
   ledgeLeftLeftHandCurve:
     serializedVersion: 2
     m_Curve:
@@ -29727,6 +29732,7 @@ MonoBehaviour:
   updateMethod: 1
   hitMaker: {fileID: 0}
   playerDebug: 1
+  legBlur: {fileID: 0}
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -29887,6 +29893,8 @@ MonoBehaviour:
   hpRestoreSpeed: 5
   relativeVec: {x: 0, y: 0, z: 0}
   lookAtAim: {fileID: 0}
+  checkObj: {fileID: 0}
+  crossHair: {fileID: 0}
 --- !u!136 &467032923266050944
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36899,6 +36907,7 @@ MonoBehaviour:
   insideSurfaceRadius: 0.5
   outsideSurfaceRadius: 0.5
   outSideRotateDetectionAngle: 15
+  ledgeOutSideRotateDetectionAngle: 40
   ledgeLeftLeftHandCurve:
     serializedVersion: 2
     m_Curve:
@@ -37933,6 +37942,7 @@ MonoBehaviour:
   updateMethod: 0
   hitMaker: {fileID: 0}
   playerDebug: 1
+  legBlur: {fileID: 0}
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -38093,6 +38103,8 @@ MonoBehaviour:
   hpRestoreSpeed: 5
   relativeVec: {x: 4.5, y: 180, z: 0}
   lookAtAim: {fileID: 931792777}
+  checkObj: {fileID: 0}
+  crossHair: {fileID: 0}
 --- !u!136 &7578834775685743533
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38160,6 +38172,7 @@ MonoBehaviour:
   launchPos: {fileID: 243699740}
   laserEffectPos: {fileID: 725905501}
   lookAim: {fileID: 931792777}
+  crossHair: {fileID: 0}
 --- !u!1 &7609571149889234648
 GameObject:
   m_ObjectHideFlags: 0

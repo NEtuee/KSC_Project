@@ -71,16 +71,12 @@ public class GameManager : MonoBehaviour
 
         if(((PlayerCtrl_Ver2)player).updateMethod == UpdateMethod.Update)
         {
-            if(((PlayerCtrl_Ver2)player).updateMethod == UpdateMethod.Update)
-            {
-                GAMEUPDATE = GameUpdate.Update;
-            }
-            else
-            {
-                GAMEUPDATE = GameUpdate.Fixed;
-            }
+            GAMEUPDATE = GameUpdate.Update;
         }
-        
+        else
+        {
+            GAMEUPDATE = GameUpdate.Fixed;
+        }
     }
 
     private void Start()
