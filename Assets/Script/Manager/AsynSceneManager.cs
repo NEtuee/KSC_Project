@@ -108,10 +108,13 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadNextlevel()
     {
-        currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
-        _currentScene = levels[currentLevel];
+        sceneLoadUI.StartLoad(() =>
+        {
+            currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
+            _currentScene = levels[currentLevel];
 
-        StartCoroutine(SceneLoadingProgress(false));
+            StartCoroutine(SceneLoadingProgress(false));
+        });
     }
 
     public LevelInfo FindLevel(string code)

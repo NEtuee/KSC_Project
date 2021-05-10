@@ -209,9 +209,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.L))
+        //if(Input.GetKeyDown(KeyCode.L))
+        //{
+        //    AddJumpPower(10f);
+        //}
+        if (InputManager.Instance.GetInput(KeybindingActions.Option))
         {
-            AddJumpPower(10f);
+            GameManager.Instance.optionMenuCtrl.InputEsc();
         }
 
         if (GameManager.Instance.PAUSE == true)
