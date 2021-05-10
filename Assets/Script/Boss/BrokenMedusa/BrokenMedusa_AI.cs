@@ -16,6 +16,7 @@ public class BrokenMedusa_AI : IKBossBase
     public enum State
     {
         Idle,
+        TransformIdle,
         TransformOpen,
         TransformClose,
         Scanned,
@@ -90,7 +91,7 @@ public class BrokenMedusa_AI : IKBossBase
         
         GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
 
-        ChangeState(State.TransformOpen);
+        ChangeState(State.TransformIdle);
     }
 
     public void Update()
@@ -464,9 +465,21 @@ public class BrokenMedusa_AI : IKBossBase
             animatorControll.SetLayerWeight(2,0f);
             //animationControll.Play("Anim_Medusa_Box_Close");
         }
+        else if(currentState == State.TransformIdle)
+        {
+            SetIKActive(false);
+            animatorControll.SetLayerWeight(1,0f);
+            animatorControll.SetLayerWeight(2,0f);
+            //animationControll.Play("Anim_Medusa_Box_Close");
+        }
 
 
 
+    }
+
+    public void OpenTrigger()
+    {
+        ChangeState(State.TransformOpen);
     }
 
     public void WhenPushFall()
