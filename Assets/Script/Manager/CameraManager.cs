@@ -180,6 +180,19 @@ public class CameraManager : MonoBehaviour
         return true;
     }
 
+    public bool ActiveVirtualCamera(CinemachineVirtualCameraBase cam, Cinemachine3rdPersonFollow follow = null)
+    {
+        if (cam == null)
+            return false;
+
+        prevActiveCam = currentActiveCam;
+        prevActiveCam.gameObject.SetActive(false);
+        currentActiveCam = cam;
+        currentActiveCam.gameObject.SetActive(true);
+        current3rdPersonComponent = follow;
+        return true;
+    }
+
     public bool ActiveAimCamera(Action doneBlendCall)
     {
         if (playerAimCam == null)
