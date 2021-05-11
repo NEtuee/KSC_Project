@@ -156,7 +156,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float climbingJumpConsumeValue = 5f;
     [SerializeField] private float wallJumpConsumeValue = 5f;
     [SerializeField] private float staminaRestoreValue = 2f;
-    [SerializeField] private float staminaRestoreDelayValue = 2f;
+    [SerializeField] private float staminaRestoreDelayTime = 2f;
+    private TimeCounterEx _staminaTimer;
 
 
     private float _turnOverTime = 0.0f;
@@ -212,6 +213,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         // }
 
         spine = animator.GetBoneTransform(HumanBodyBones.Spine);
+
+        _staminaTimer = new TimeCounterEx();
+        _staminaTimer.InitTimer("Stamina",0.0f, staminaRestoreDelayTime);
 
         StartCoroutine(StopCheck());
     }
@@ -1256,6 +1260,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         currentClimbingJumpPower = climbingHorizonJumpPower;
                     else
                         currentClimbingJumpPower = climbingUpJumpPower;
+
+                    stamina.Value -= climbingJumpConsumeValue;
+                    stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
                 }
                 break;
             case PlayerState.ReadyClimbingJump:
@@ -1295,9 +1302,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                             animator.SetBool("IsGrab", false);
 
+                            stamina.Value -= climbingJumpConsumeValue;
+                            stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
+
                             handIK.DisableHandIK();
                             Jump();
                             ChangeState(PlayerState.Jump);
+
 
                             return;
                         }
@@ -2011,7 +2022,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         if(IsNowClimbingBehavior() == true)
         {
-            if(isClimbingMove == false)
+            _staminaTimer.InitTimer("Stamina",0.0f, staminaRestoreDelayTime);
+
+            if (isClimbingMove == false)
             {
                 stamina.Value -= idleConsumeValue * deltaTime;
             }
@@ -2020,6 +2033,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 stamina.Value -= climbingMoveConsumeValue * deltaTime;
             }
             stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
+        }
+        else
+        {  
+            _staminaTimer.IncreaseTimerSelf("Stamina", out bool limit, deltaTime);
+            if(limit && stamina.Value < maxStamina)
+            {
+                stamina.Value += staminaRestoreValue * deltaTime;
+                stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
+            }
         }
     }
 
