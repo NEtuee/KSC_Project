@@ -149,7 +149,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Transform lookAtAim;
     private Quaternion storeSpineRotation;
 
-    public GameObject checkObj;
+    [Header("Stamina")]
+    [SerializeField] private float maxStamina = 100.0f;
+    [SerializeField] private float idleConsumeValue = 1f;
+    [SerializeField] private float climbingMoveConsumeValue = 2f;
+    [SerializeField] private float climbingJumpConsumeValue = 5f;
+    [SerializeField] private float wallJumpConsumeValue = 5f;
+    [SerializeField] private float staminaRestoreValue = 2f;
+    [SerializeField] private float staminaRestoreDelayValue = 2f;
+
 
     private float _turnOverTime = 0.0f;
 
@@ -250,6 +258,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             return;
         }
+
+        UpdateStamina(Time.fixedDeltaTime);
 
         if (updateMethod == UpdateMethod.FixedUpdate)
         {
@@ -1380,21 +1390,35 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     var p = transform.position;
                     p += animator.deltaPosition;
-                    transform.position = p;
+                    //transform.position = p;
+
+                    if (isClimbingGround == false)
+                    {
+                        transform.position = p;
+                        break;
+                    }
 
                     var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
+                    bool detect = false;
                     if (stateInfo.IsName("Climbing.Up_LtoR") || stateInfo.IsName("Climbing.Up_RtoL"))
                     {
+                        if (Physics.Raycast(p + transform.up * collider.height, transform.forward, 3f))
+                            detect = true;
+
                     }
                     else if (stateInfo.IsName("Climbing.Down_LtoR") || stateInfo.IsName("Climbing.Down_RtoL"))
                     {
-                        
+                        if (Physics.Raycast(p, transform.forward, 3f))
+                            detect = true;
                     }
                     else if (stateInfo.IsName("Climb_Left") || stateInfo.IsName("Climb_Right"))
                     {
-                        
+                        if (Physics.Raycast(p + transform.up * collider.height*0.5f, transform.forward, 3f))
+                            detect = true;
                     }
+
+                    if (detect == true)
+                        transform.position = p;
                     
                     break;
                 }
@@ -1955,19 +1979,20 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void RestoreEnergy(float deltaTime)
     {
-        if (state == PlayerState.Aiming)
+        if (state == PlayerState.Aiming 
+            || (state == PlayerState.Default && currentSpeed == 0.0f)
+            || (state == PlayerState.Grab && isClimbingMove == false))
             return;
-
-        if (IsNowClimbingBehavior() == true)
-        {
-            if (isClimbingMove == false)
-                return;
-        }
-        else
-        {
-            if (state == PlayerState.Ragdoll || state == PlayerState.HangRagdoll || currentSpeed == 0.0f)
-                return;
-        }
+        //if (IsNowClimbingBehavior() == true)
+        //{
+        //    if (isClimbingMove == false)
+        //        return;
+        //}
+        //else
+        //{
+        //    if (state == PlayerState.Ragdoll || state == PlayerState.HangRagdoll || currentSpeed == 0.0f)
+        //        return;
+        //}
         
         energy.Value += restoreValuePerSecond * deltaTime;
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
@@ -1982,6 +2007,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
+    private void UpdateStamina(float deltaTime)
+    {
+        if(IsNowClimbingBehavior() == true)
+        {
+            if(isClimbingMove == false)
+            {
+                stamina.Value -= idleConsumeValue * deltaTime;
+            }
+            else
+            {
+                stamina.Value -= climbingMoveConsumeValue * deltaTime;
+            }
+            stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
+        }
+    }
+
     private void AdjustLedgeOffset()
     {
         Vector3 start = transform.position + transform.up * (collider.height * 2);
@@ -1992,10 +2033,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             finalPosition = upHit.point + (transform.up * dectionOffset.y);
             finalPosition += transform.forward * dectionOffset.z;
             transform.position = finalPosition;
-            if (checkObj != null)
-            {
-                checkObj.transform.position = finalPosition;
-            }
+           
             StartCoroutine(ForceSnap(0.5f, finalPosition, transform.localPosition));
             //Debug.Log("AdjustLedgeOffset");
         }
