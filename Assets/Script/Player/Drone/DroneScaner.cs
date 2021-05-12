@@ -28,25 +28,30 @@ public class DroneScaner : MonoBehaviour
         SceneManager.sceneLoaded += (s,w)=>{FindScanableObjects();};
     }
 
+    public void Scanning()
+    {
+        scaning = true;
+        _range = 0f;
+        scanMat.SetFloat("_ScanArc", arc);
+        scanStartPosition = scanStart.position;
+        scanMat.SetVector("_WorldSpaceScannerPos", scanStart.position);
+        scanForward = forward.forward;
+        scanForward.y = 0.0f;
+        scanForward.Normalize();
+        scanMat.SetVector("_ForwardDirection", scanForward);
+            
+        GameManager.Instance.soundManager.Play(1301, Vector3.zero, transform);
+    }
+
     void Update()
     {
         if (GameManager.Instance.PAUSE == true)
             return;
 
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            scaning = true;
-            _range = 0f;
-            scanMat.SetFloat("_ScanArc", arc);
-            scanStartPosition = scanStart.position;
-            scanMat.SetVector("_WorldSpaceScannerPos", scanStart.position);
-            scanForward = forward.forward;
-            scanForward.y = 0.0f;
-            scanForward.Normalize();
-            scanMat.SetVector("_ForwardDirection", scanForward);
-            
-            GameManager.Instance.soundManager.Play(1301, Vector3.zero, transform);
-        }
+        // if (Input.GetKeyDown(KeyCode.V))
+        // {
+        //     Scanning();
+        // }
 
         if (scaning == true)
         {

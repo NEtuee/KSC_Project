@@ -56,6 +56,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Transform headTransfrom;
     [SerializeField] public bool isCanReadyClimbingCancel = false;
     [SerializeField] private bool isCanClimbingCancel = false;
+    [SerializeField] private bool isClimbingGround = false;
 
     [Header("Movement Speed Value")]
     [SerializeField] private float walkSpeed = 15.0f;
@@ -209,9 +210,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.L))
+        //if(Input.GetKeyDown(KeyCode.L))
+        //{
+        //    AddJumpPower(10f);
+        //}
+        if (InputManager.Instance.GetInput(KeybindingActions.Option))
         {
-            AddJumpPower(10f);
+            GameManager.Instance.optionMenuCtrl.InputEsc();
         }
 
         if (GameManager.Instance.PAUSE == true)
@@ -751,7 +756,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         return;
                     }
 
-                    if (Vector3.Dot(Vector3.Cross(transform.up, Vector3.right), Vector3.forward) >= 0.3f)
+                    float climbingPlaneAngle = Vector3.Dot(Vector3.Cross(transform.up, Vector3.right), Vector3.forward);
+                    
+                    //Debug.Log(climbingPlaneAngle*Mathf.Rad2Deg);
+                    isClimbingGround = climbingPlaneAngle > -15f * Mathf.Deg2Rad;
+                    
+                    if (climbingPlaneAngle >= 0.3f)
                     {
                         _turnOverTime += Time.fixedDeltaTime;
                     }
@@ -1271,7 +1281,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             currentSpeed = runSpeed;
                             moveDir *= currentSpeed;
                             currentJumpPower = jumpPower * 0.5f;
-                            //transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
+                            transform.position = transform.position + (moveDir + (Vector3.up * currentJumpPower)) * Time.deltaTime;
 
                             animator.SetBool("IsGrab", false);
 
@@ -1371,6 +1381,21 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     var p = transform.position;
                     p += animator.deltaPosition;
                     transform.position = p;
+
+                    var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+                    if (stateInfo.IsName("Climbing.Up_LtoR") || stateInfo.IsName("Climbing.Up_RtoL"))
+                    {
+                    }
+                    else if (stateInfo.IsName("Climbing.Down_LtoR") || stateInfo.IsName("Climbing.Down_RtoL"))
+                    {
+                        
+                    }
+                    else if (stateInfo.IsName("Climb_Left") || stateInfo.IsName("Climb_Right"))
+                    {
+                        
+                    }
+                    
                     break;
                 }
             case PlayerState.LedgeUp:
@@ -1876,10 +1901,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (Physics.SphereCast(startPos, collider.radius, transform.forward, out wallHit, 3.0f, adjustAbleLayer))
         {
-            float distToWall = (wallHit.point - (transform.position + transform.up * (collider.height * 0.5f))).magnitude;
+            float distToWall = (wallHit.point - (transform.position + transform.up * (collider.height * 0.5f)))
+                .magnitude;
             if (distToWall > 0.6f || distToWall < 0.35f)
             {
-               transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.35f;
+                transform.position = (wallHit.point - transform.up * (collider.height * 0.5f)) + wallHit.normal * 0.35f;
             }
 
             if (isClimbingMove == true)
@@ -1892,7 +1918,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 movement.SetParent(wallHit.collider.transform);
             }
         }
-        
+        else
+        {
+            ChangeState(PlayerState.Default);
+        }
     }
 
     private void CheckLedge()
@@ -1912,7 +1941,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (currentVerticalValue.Equals(-1.0f))
             return;
         
-        if (ledgeChecker.IsDetectedLedge() == true && (currentVerticalValue.Equals(-1.0f)== false))
+        if (ledgeChecker.IsDetectedLedge() == true && (currentVerticalValue.Equals(-1.0f)== false) && isClimbingGround == false)
         {
             if(DetectLedgeCanHangLedgeByVertexColor() == true)
             {

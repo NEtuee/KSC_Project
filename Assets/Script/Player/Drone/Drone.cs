@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Drone : MonoBehaviour
 {
-    public enum DroneState { Default, Approach, Collect, Return , AimHelp ,Help}
+    public enum DroneState { Default, Approach, Collect, Return , AimHelp ,Help,Scan}
 
     [SerializeField] private Transform target;
     [SerializeField] private DroneState state;
@@ -26,7 +26,11 @@ public class Drone : MonoBehaviour
     private PlayerCtrl_Ver2 player;
 
     private DroneHelperRoot droneHelperRoot;
-
+    
+    //스캔
+    private Quaternion _scanTargetRotation;
+    private float _rotationSpeed = 200.0f;
+    private DroneScaner _droneScaner;
     public delegate void WhenAimHelp();
     public WhenAimHelp whenAimHelp;
     public delegate void WhenHelp();
@@ -40,6 +44,7 @@ public class Drone : MonoBehaviour
         player = (PlayerCtrl_Ver2)GameManager.Instance.player;
         target = player.transform;
         droneHelperRoot = GetComponent<DroneHelperRoot>();
+        _droneScaner = GetComponent<DroneScaner>();
         
         GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);
     }
@@ -61,6 +66,11 @@ public class Drone : MonoBehaviour
         if (GameManager.Instance.PAUSE == true)
             return;
 
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Scan();
+        }
+        
         if (Input.GetKeyDown(KeyCode.N))
         {
             OrderHelp();
@@ -184,7 +194,34 @@ public class Drone : MonoBehaviour
                     }
                 }
                 break;
+            case DroneState.Scan:
+                {
+                    Vector3 targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                    targetPosition = Vector3.Lerp(transform.position, targetPosition, deltaTime * 5f);
+
+                    Quaternion targetRot;
+                    targetRot = Quaternion.RotateTowards(transform.rotation,_scanTargetRotation,_rotationSpeed * deltaTime);
+
+                    transform.SetPositionAndRotation(targetPosition, targetRot);
+
+                    if (targetRot == _scanTargetRotation)
+                    {
+                        _droneScaner.Scanning();
+                        state = DroneState.Default;
+                    }
+                }
+                break;
         }
+    }
+
+    public void Scan()
+    {
+        Vector3 targetDir = Camera.main.transform.forward;
+        targetDir.y = 0;
+        targetDir.Normalize();
+
+        _scanTargetRotation = Quaternion.LookRotation(targetDir,Vector3.up);
+        state = DroneState.Scan;
     }
 
     public void OrderApproch(Transform target)
