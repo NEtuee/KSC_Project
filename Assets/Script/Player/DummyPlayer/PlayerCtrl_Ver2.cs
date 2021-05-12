@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AmplifyShaderEditor;
 using UnityEngine;
 using UniRx;
 using UnityEngine.UI;
@@ -28,7 +29,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         Aiming,
         ClimbingJump,
         ReadyClimbingJump,
-        HangShake
+        HangShake,
+        Dead
     }
 
     public enum ClimbingJumpDirection
@@ -122,33 +124,34 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private EMPGun empGun;
     [SerializeField] private float restoreValuePerSecond = 10f;
     [SerializeField] private float costValue = 25f;
-    [SerializeField] private float chargeNecessryTime = 1f;
+    [SerializeField] private float chargeNecessaryTime = 1f;
     public FloatReactiveProperty chargeTime = new FloatReactiveProperty(0.0f);
     [SerializeField] private float hitEnergyRestoreValue = 0.0f;
-    [SerializeField] private float impectPower = 50.0f;
-    [SerializeField] private ParticleSystem impectEffect;
     [SerializeField] private GameObject destroyEffect;
     [SerializeField] public IntReactiveProperty loadCount = new IntReactiveProperty(0);
     [SerializeField] private float loadTerm = 2f;
-    [SerializeField] private float impactTerm = 2.5f;
     [SerializeField] private float loadTime = 0f;
     [SerializeField] private bool loading = false;
-    private bool impactLoading = false;
+    [SerializeField] private float chargeDelayTime = 1f;
+    private TimeCounterEx _chargeDelayTimer = new TimeCounterEx();
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
     [SerializeField] private Animator gunAnim;
-
-    [Header("HpState")]
-    private float latestHitTime;
-    [SerializeField] private float hpRestoreCoolTime = 5f;
-    [SerializeField] private float hpRestoreSpeed = 5f;
-
+    
     [Header("Spine")]
     private Transform spine;
     [SerializeField] private Vector3 relativeVec;
     [SerializeField] private Transform lookAtAim;
     private Quaternion storeSpineRotation;
 
+    [Header("HpPack")] 
+    public IntReactiveProperty hpPackCount = new IntReactiveProperty(0);
+    [SerializeField] private float hpPackRestoreValue = 6.0f;
+    private float _hpPackRestoreDuration = 10.0f;
+    [SerializeField]private bool isHpRestore = false;
+    private IEnumerator restoreHpPackCoroutine;
+
+    
     [Header("Stamina")]
     [SerializeField] private float maxStamina = 100.0f;
     [SerializeField] private float idleConsumeValue = 1f;
@@ -158,14 +161,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float staminaRestoreValue = 2f;
     [SerializeField] private float staminaRestoreDelayTime = 2f;
     private TimeCounterEx _staminaTimer;
-
-
+    
     private float _turnOverTime = 0.0f;
 
     public delegate void ActiveAimEvent();
     public ActiveAimEvent activeAimEvent;
     public delegate void ReleaseAimEvent();
     public ReleaseAimEvent releaseAimEvent;
+    
 
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
@@ -217,6 +220,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         _staminaTimer = new TimeCounterEx();
         _staminaTimer.InitTimer("Stamina",0.0f, staminaRestoreDelayTime);
 
+        _chargeDelayTimer.InitTimer("ChargeDelay", chargeDelayTime, chargeDelayTime);
+
+        restoreHpPackCoroutine = HpRestore();
+
         StartCoroutine(StopCheck());
     }
 
@@ -226,7 +233,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //{
         //    AddJumpPower(10f);
         //}
-        if (InputManager.Instance.GetInput(KeybindingActions.Option))
+        if (InputManager.Instance.GetInput(KeybindingActions.Option) && state != PlayerState.Dead)
         {
             GameManager.Instance.optionMenuCtrl.InputEsc();
         }
@@ -293,7 +300,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //{
         //    isRun = false;
         //}
-
+        InputUseHpPack();
         InputRun();
 
         switch (state)
@@ -379,12 +386,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                    //     loadTime = 0f;
                    //      empGun.GunLoad();
                    // }
-                   
-                   chargeTime.Value += Time.deltaTime;
-                   chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
-                   chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
+                   _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
+                   if (limit)
+                   {
+                       chargeTime.Value += Time.deltaTime;
+                       chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
+                       chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
 
-                    gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
+                       gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
+                   }
 
                    InputChargeShot();
 
@@ -425,7 +435,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             currentJumpPower = 0.0f;
         }
 
-        RestoreHp(deltaTime);
         RestoreEnergy(deltaTime);
 
         switch (state)
@@ -604,17 +613,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         loading = false;
                     }
                 }
-
-                if(impactLoading == true)
-                { 
-                    loadTime += deltaTime; 
-                    if (loadTime > impactTerm) 
-                    { 
-                        loadTime = 0;
-                        impactLoading = false;
-                    }
-                }
-                    
+                
                     RaycastHit hit;
             
                     if (movement.isGrounded == true)
@@ -1324,6 +1323,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     ragdoll.ActiveHangShake();
                 }
                 break;
+            case PlayerState.Dead:
+                {
+                    whenPlayerDead?.Invoke();
+                }
+                break;
         }
     }
 
@@ -1754,6 +1758,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             GameManager.Instance.soundManager.Play(1009,Vector3.zero,transform);
             _charge.Stop();
             
+            int loadCount = (int)(chargeTime.Value);
+            if (loadCount == 3)
+            {
+                
+            }
+            
             ChangeState(PlayerState.Default);
             ActiveAim(false);
             chargeTime.Value = 0.0f;
@@ -1777,6 +1787,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             empGun.LaunchLaser(loadCount * 40.0f);
             chargeTime.Value = 0.0f;
             energy.Value -= loadCount * costValue;
+
+            _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, chargeDelayTime);
 
             if(loadCount >= 2)
             {
@@ -1830,6 +1842,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         return false;
     }
 
+    private void InputUseHpPack()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && hpPackCount.Value > 0 && isHpRestore == false)
+        {
+            hpPackCount.Value--;
+            StartCoroutine(restoreHpPackCoroutine);
+        }
+    }
+
     #endregion
 
     #region 겟터
@@ -1880,34 +1901,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     }
 
     #endregion
-
-    #region EMP 레이저
-    private void LaunchImpect()
-    {
-        energy.Value -= 50.0f;
-        impectEffect.Play();
-        impactLoading = true;
-        loadTime = 0f;
-        Collider[] coll = Physics.OverlapSphere(transform.position + transform.forward * 3f, 3f);
-        for (int i = 0; i < coll.Length; i++)
-        {
-            if (coll[i].CompareTag("Moveable"))
-            {
-                coll[i].GetComponent<Rigidbody>().AddForce(transform.forward * impectPower, ForceMode.Impulse);
-            }
-            else if (coll[i].CompareTag("Destroyable"))
-            {
-                Instantiate(destroyEffect, coll[i].transform.position, Quaternion.identity);
-                Destroy(coll[i].gameObject);
-            }
-            else if(coll[i].CompareTag("ImpactTarget"))
-            {
-                coll[i].GetComponent<ImpactTarget>().TriggerOn();
-            }
-        }
-    }
-    #endregion
-
+    
     public void ActiveAim(bool active)
     {
         if(active == true)
@@ -2009,15 +2003,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }
 
-    private void RestoreHp(float deltaTime)
-    {
-        if(hp.Value != 100.0f && Time.time - latestHitTime > hpRestoreCoolTime)
-        {
-            hp.Value += hpRestoreSpeed * deltaTime;
-            hp.Value = Mathf.Clamp(hp.Value, 0.0f, 100.0f);
-        }
-    }
-
     private void UpdateStamina(float deltaTime)
     {
         if(IsNowClimbingBehavior() == true)
@@ -2089,9 +2074,42 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     public override void TakeDamage(float damage)
     {
         hp.Value -= damage;
-        latestHitTime = Time.time;
         energy.Value += hitEnergyRestoreValue;
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+
+        if (isHpRestore == true)
+        {
+            isHpRestore = false;
+            StopCoroutine(restoreHpPackCoroutine);
+        }
+
+        if (hp.Value == 0.0f)
+        {
+            ChangeState(PlayerState.Dead);
+        }
+    }
+
+    private IEnumerator HpRestore()
+    {
+        float time = 0.0f;
+        isHpRestore = true;
+        while (time < _hpPackRestoreDuration && hp.Value < 100.0f)
+        {
+            time += Time.fixedDeltaTime;
+            hp.Value += hpPackRestoreValue * Time.fixedDeltaTime;
+            hp.Value = Mathf.Clamp(hp.Value, 0.0f, 100.0f);
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        isHpRestore = false;
+    }
+
+    public override void InitStatus()
+    {
+        base.InitStatus();
+        hpPackCount.Value = 0;
+        ChangeState(PlayerState.Default);
     }
 
 

@@ -281,4 +281,11 @@ public class AsynSceneManager : MonoBehaviour
         _beforeLoadRegisterLine.Clear();
     }
 
+    public void MovePlayerObjectToUnloadScene()
+    {
+        Scene activeScene = SceneManager.GetActiveScene();
+        SceneManager.MoveGameObjectToScene(Camera.main.gameObject,activeScene);
+        SceneManager.MoveGameObjectToScene(GameManager.Instance.followTarget.gameObject,activeScene);
+        SceneManager.MoveGameObjectToScene(GameManager.Instance.player.gameObject,activeScene);
+    }
 }
