@@ -1,8 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-class MyBlitRenderPass : ScriptableRenderPass
+public class RadialBlurBlitRenderPass : ScriptableRenderPass
 {
     // used to label this pass in Unity's Frame Debug utility
     string profilerTag;
@@ -11,7 +13,7 @@ class MyBlitRenderPass : ScriptableRenderPass
     RenderTargetIdentifier cameraColorTargetIdent;
     RenderTargetHandle tempTexture;
 
-    public MyBlitRenderPass(string profilerTag,
+    public RadialBlurBlitRenderPass(string profilerTag,
       RenderPassEvent renderPassEvent, Material materialToBlit)
     {
       this.profilerTag = profilerTag;
@@ -52,8 +54,8 @@ class MyBlitRenderPass : ScriptableRenderPass
 
       cmd.Blit(cameraColorTargetIdent, tempTexture.Identifier(), materialToBlit, -1);
 
-		  materialToBlit.SetMatrix("_InvProjectionMatrix",_camera.projectionMatrix.inverse);
-      materialToBlit.SetMatrix("_ViewToWorld",_camera.cameraToWorldMatrix);
+		  // materialToBlit.SetMatrix("_InvProjectionMatrix",_camera.projectionMatrix.inverse);
+    //   materialToBlit.SetMatrix("_ViewToWorld",_camera.cameraToWorldMatrix);
 
       // // ...then blit it back again 
       cmd.Blit(tempTexture.Identifier(), cameraColorTargetIdent);

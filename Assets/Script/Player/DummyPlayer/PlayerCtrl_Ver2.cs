@@ -47,7 +47,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     public GameObject hitMaker;
     public bool playerDebug;
 
-    [SerializeField] private MeshRenderer legBlur;
+    [SerializeField] private List<MeshRenderer> legBlur = new List<MeshRenderer>();
 
     [Header("State")]
     [SerializeField] private bool isRun = false;
@@ -1005,11 +1005,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         float dotY = Vector3.Dot(transform.forward,camForward);
         dotY *= 0.6f;
         //dot = Mathf.Clamp(MathEx.abs(dot),0.2f,1f);
+        bool active = currentSpeed > 7f && movement.isGrounded;
 
-        legBlur.gameObject.SetActive(currentSpeed > 7f);
-
-        legBlur.material.SetFloat("_XOffset",speedFactor * dot);
-        legBlur.material.SetFloat("_YOffset",speedFactor * dotY);
+        foreach (var leg in legBlur)
+        {
+            leg.gameObject.SetActive(active);
+            leg.material.SetFloat("_XOffset",speedFactor * dot);
+            leg.material.SetFloat("_YOffset",speedFactor * dotY);
+        }
 
         if(state == PlayerState.Grab || state == PlayerState.RunToStop)
         {
@@ -1787,13 +1790,17 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             empGun.LaunchLaser(loadCount * 40.0f);
             chargeTime.Value = 0.0f;
             energy.Value -= loadCount * costValue;
-
+            GameManager.Instance.cameraManager.SetAimCameraDistance(0.333f * (float)loadCount);
             _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, chargeDelayTime);
 
             if(loadCount >= 2)
             {
-                GameManager.Instance.cameraManager.AddAimCameraDistance(-.5f);
-                TimeManager.instance.SetTimeScale(0f,.5f,0f,0.2f);
+                TimeManager.instance.SetTimeScale(0f,.4f,0.2f,0.02f);
+            }
+
+            if (loadCount == 3)
+            {
+                GameManager.Instance.cameraManager.SetRadialBlur(1f,0.2f,0.4f);
             }
         }
     }
