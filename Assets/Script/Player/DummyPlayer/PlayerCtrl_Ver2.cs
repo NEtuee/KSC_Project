@@ -134,6 +134,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private bool loading = false;
     [SerializeField] private float chargeDelayTime = 1f;
     private TimeCounterEx _chargeDelayTimer = new TimeCounterEx();
+    [SerializeField] private GameObject pelvisGunObject;
+    private Material pelvisGunMaterial;
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
     [SerializeField] private Animator gunAnim;
@@ -223,6 +225,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         _chargeDelayTimer.InitTimer("ChargeDelay", chargeDelayTime, chargeDelayTime);
 
         restoreHpPackCoroutine = HpRestore();
+
+        pelvisGunMaterial = pelvisGunObject.GetComponent<Renderer>().material;
 
         StartCoroutine(StopCheck());
     }
