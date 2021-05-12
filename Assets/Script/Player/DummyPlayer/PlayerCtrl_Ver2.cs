@@ -135,7 +135,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float chargeDelayTime = 1f;
     private TimeCounterEx _chargeDelayTimer = new TimeCounterEx();
     [SerializeField] private GameObject pelvisGunObject;
+    [SerializeField] private float dechargingDuration = 2.5f;
+    private float _emissionTargetValue = 10f;
+    private Color _originalEmissionColor;
+    [SerializeField] private bool decharging = false;
     private Material pelvisGunMaterial;
+    private IEnumerator _dechargingCoroutine;
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
     [SerializeField] private Animator gunAnim;
@@ -224,9 +229,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         _chargeDelayTimer.InitTimer("ChargeDelay", chargeDelayTime, chargeDelayTime);
 
-        restoreHpPackCoroutine = HpRestore();
-
         pelvisGunMaterial = pelvisGunObject.GetComponent<Renderer>().material;
+        _originalEmissionColor = pelvisGunMaterial.GetColor("_EmissionColor");
 
         StartCoroutine(StopCheck());
     }
@@ -311,7 +315,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
-                    if (InputManager.Instance.GetInput(KeybindingActions.Jump))
+                    if (InputManager.Instance.GetRelease(KeybindingActions.Jump))
                     {
                         animator.SetTrigger("Jump");
                         return;
@@ -326,6 +330,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Jump:
                 {
+                    if (InputAiming())
+                        return;
+
                     if (InputTryGrab())
                         return;
                 }
@@ -393,7 +400,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                    _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
                    if (limit)
                    {
-                       chargeTime.Value += Time.deltaTime;
+                       chargeTime.Value += Time.deltaTime * (decharging ? 0.5f : 1f);
                        chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                        chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
 
@@ -1768,7 +1775,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             int loadCount = (int)(chargeTime.Value);
             if (loadCount == 3)
             {
-                
+                if (decharging == true)
+                    StopCoroutine(_dechargingCoroutine);
+
+                _dechargingCoroutine = DechargingCoroutine();
+                StartCoroutine(_dechargingCoroutine);
             }
             
             ChangeState(PlayerState.Default);
@@ -1812,7 +1823,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private bool InputLedgeUp()
     {
         //if (InputManager.Instance.GetAction(KeybindingActions.Jump))
-        if(InputManager.Instance.GetInput(KeybindingActions.Jump))
+        if(InputManager.Instance.GetRelease(KeybindingActions.Jump))
         {
             if(currentVerticalValue == 1.0f)
             {
@@ -1844,7 +1855,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputClimbingJump()
     {
-        if (InputManager.Instance.GetInput(KeybindingActions.Jump))
+        if (InputManager.Instance.GetRelease(KeybindingActions.Jump))
         {
             ChangeState(PlayerState.ReadyClimbingJump);
             return true;
@@ -1855,9 +1866,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputUseHpPack()
     {
-        if (Input.GetKeyDown(KeyCode.E) && hpPackCount.Value > 0 && isHpRestore == false)
+        if (Input.GetKeyDown(KeyCode.E) && hp.Value < 100.0f && hpPackCount.Value > 0 && isHpRestore == false)
         {
             hpPackCount.Value--;
+
+            restoreHpPackCoroutine = HpRestore();
             StartCoroutine(restoreHpPackCoroutine);
         }
     }
@@ -2123,6 +2136,35 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ChangeState(PlayerState.Default);
     }
 
+    private IEnumerator DechargingCoroutine()
+    {
+        decharging = true;
+        float time = 0;
+        while (time < dechargingDuration)
+        {
+            time += Time.deltaTime;
+            float intencity = (dechargingDuration - time) / dechargingDuration * _emissionTargetValue;
+            pelvisGunMaterial.SetColor("_EmissionColor", _originalEmissionColor * intencity);
+
+            yield return null;
+        }
+        decharging = false;
+    }
+
+    public void DropHpPack()
+    {
+        hpPackCount.Value++;
+        hpPackCount.Value = Mathf.Clamp(hpPackCount.Value, 0, 3);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.CompareTag("HpPack"))
+        {
+            DropHpPack();
+            Destroy(collision.gameObject);
+        }
+    }
 
     #region 디버그
     private void OnDrawGizmos()
