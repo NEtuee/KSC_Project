@@ -1865,7 +1865,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputUseHpPack()
     {
-        if (Input.GetKeyDown(KeyCode.E) && hp.Value < 100.0f && hpPackCount.Value > 0 && isHpRestore == false)
+        if (InputManager.Instance.GetInput(KeybindingActions.UseHpPack) && hp.Value < 100.0f && hpPackCount.Value > 0 && isHpRestore == false)
         {
             hpPackCount.Value--;
 
