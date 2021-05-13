@@ -15,7 +15,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     IsEnabled: 1
-    WhenToInsert: 1000
+    WhenToInsert: 550
     MaterialToBlit: {fileID: 2100000, guid: be78dc8f28480fd4590c08271db29252, type: 2}
 --- !u!114 &-2877383220050679863
 MonoBehaviour:
@@ -49,7 +49,8 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: -2877383220050679863}
   - {fileID: -6700337797871008266}
-  m_RendererFeatureMap: c9a735d6347b11d8f685c6d2459e03a3
+  - {fileID: 3646472070441128035}
+  m_RendererFeatureMap: c9a735d6347b11d8f685c6d2459e03a363d0063a07df9a32
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:
@@ -79,3 +80,20 @@ MonoBehaviour:
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
   m_AccurateGbufferNormals: 0
+--- !u!114 &3646472070441128035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b928edceeff6459408eca0e4454da822, type: 3}
+  m_Name: NewRadialBlurBlitFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    IsEnabled: 1
+    WhenToInsert: 1000
+    MaterialToBlit: {fileID: 2100000, guid: eb11e483165d66c4583ebfbde9ce354c, type: 2}

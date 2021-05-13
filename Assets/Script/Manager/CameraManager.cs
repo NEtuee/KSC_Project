@@ -21,13 +21,17 @@ public class CameraManager : MonoBehaviour
     private Cinemachine3rdPersonFollow playerAimCam3rdPersonComponent;
     private Cinemachine3rdPersonFollow current3rdPersonComponent;
     [SerializeField] private CinemachineVirtualCameraBase playerAimCam;
+    [SerializeField] private CinemachineVirtualCamera playerAimCamOrigin;
     [SerializeField] private List<CinemachineVirtualCameraBase> otherCameras = new List<CinemachineVirtualCameraBase>();
     [SerializeField] private Transform spearLunchPos;
+    [SerializeField] private Material radialBlur;
     [SerializeField] private bool isBlend;
     [SerializeField] private bool isAttentionCamera;
     [SerializeField] private CinemachineImpulseSource _recoilImpulseSource;
     [SerializeField] private float collisionRadius;
     [SerializeField] private LayerMask collisionLayer;
+    [SerializeField] private AnimationCurve animationCurve;
+    [SerializeField] private AnimationCurve blurCurve;
     
     private bool isBlendCameraDistance;
     private float targetDistance;
@@ -35,16 +39,24 @@ public class CameraManager : MonoBehaviour
     private float distanceBlendDuration;
 
     private float aimDistanceOrigin;
-    private float aimDistanceBlendStartTime;
+    private float aimDistanceFactor;
+    private float aimDistanceBlendStartTimer;
     private bool isRunningCallBackCoroutine;
     private CinemachineVirtualCameraBase currentActiveCam = null;
     private CinemachineVirtualCameraBase prevActiveCam = null;
+    
+    private float radialBlurTimer = 0f;
+    private float radialBlurTime = 0f;
+    private float radialBlurFactor = 0f;
+    private bool radialBlurLerp = false;
 
     private DirectionCollisionEx collisionEx;
     private bool isCameraCollision;
     
     private Dictionary<string, CinemachineVirtualCameraBase> cameraDictionary = new Dictionary<string, CinemachineVirtualCameraBase>();
 
+    private Dictionary<string, bool> renderPassActivation = new Dictionary<string, bool>();
+    
     private float cameraSideSmoothVelocity;
 
     public DistanceBlendProfile[] distanceBlendProfiles;
@@ -83,7 +95,7 @@ public class CameraManager : MonoBehaviour
         }
 
         SetFollowCameraDistance("Default");
-        aimDistanceOrigin = playerAimCam3rdPersonComponent.CameraDistance;
+        aimDistanceOrigin = playerAimCamOrigin.m_Lens.FieldOfView;
     }
 
     private void Update()
@@ -99,6 +111,8 @@ public class CameraManager : MonoBehaviour
         var currSide = playerFollowCam3rdPersonComponent.CameraSide;
 
         playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
+
+        RadialBlurLerpZero(Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -107,6 +121,55 @@ public class CameraManager : MonoBehaviour
         BlendDistanceAimCamera();
     }
 
+    public void SetActiveScreenEffect(string target, bool value)
+    {
+        if (!renderPassActivation.ContainsKey(target))
+            renderPassActivation.Add(target, value);
+        else
+            renderPassActivation[target] = value;
+    }
+
+    public bool CheckScreenEffectActive(string target)
+    {
+        if (!renderPassActivation.ContainsKey(target))
+            renderPassActivation.Add(target, true);
+        else
+            return renderPassActivation[target];
+
+        return false;
+    }
+    
+    
+    
+    public void RadialBlurLerpZero(float deltaTime)
+    {
+        if (!radialBlurLerp)
+            return;
+        
+        radialBlurTimer += deltaTime;
+        float factor = blurCurve.Evaluate(radialBlurTimer) * radialBlurFactor;
+        // var factor = Mathf.Lerp(radialBlurFactor, 0f, radialBlurTimer / radialBlurTime);
+        //
+        // if (radialBlurTimer >= radialBlurTime)
+        // {
+        //     factor = 0f;
+        //     radialBlurLerp = false;
+        //  }
+        radialBlur.SetFloat("_EffectAmount",factor);
+
+        radialBlurLerp = radialBlurTimer < 1f;
+    }
+    
+    public void SetRadialBlur(float factor = 0.2f, float radius = 0.1f, float time = 0.8f)
+    {
+        radialBlurFactor = factor;
+        radialBlurTimer = 0f;
+        radialBlurTime = time;
+        radialBlurLerp = true;
+        //radialBlur.SetFloat("_EffectAmount",factor);
+        radialBlur.SetFloat("_Radius", radius);
+    }
+    
     /// <summary>
     /// ���� ���۽� �÷��̾� ķ ���� ���� ��Ȱ��ȭ �մϴ�.
     /// </summary>
@@ -415,10 +478,11 @@ public class CameraManager : MonoBehaviour
     //     playerFollowCam3rdPersonComponent.CameraSide = Mathf.SmoothDamp(playerFollowCam3rdPersonComponent.CameraSide, 0.5f + targetFactor, ref cameraSideSmoothVelocity, 300f*Time.deltaTime);
     // }
 
-    public void AddAimCameraDistance(float distance)
+    public void SetAimCameraDistance(float factor)
     {
-        playerAimCam3rdPersonComponent.CameraDistance += distance;
-        aimDistanceBlendStartTime = Time.time;
+        //playerAimCamOrigin.m_Lens.FieldOfView += distance;
+        aimDistanceFactor = factor;
+        aimDistanceBlendStartTimer = 0f;
     }
 
     public void SetFollowCameraDistance(float targetDistance, float blendDuration)
@@ -471,8 +535,12 @@ public class CameraManager : MonoBehaviour
 
     private void BlendDistanceAimCamera()
     {
-        float time = (Time.time - aimDistanceBlendStartTime) / 5f;
-        playerAimCam3rdPersonComponent.CameraDistance = Mathf.Lerp(playerAimCam3rdPersonComponent.CameraDistance,aimDistanceOrigin,time);
+        if (aimDistanceBlendStartTimer >= 1f)
+            return;
+        
+        aimDistanceBlendStartTimer += Time.deltaTime;
+        float factor = animationCurve.Evaluate(aimDistanceBlendStartTimer) * aimDistanceFactor;
+        playerAimCamOrigin.m_Lens.FieldOfView = aimDistanceOrigin + factor;
     }
 
     public void ZeroDamping()

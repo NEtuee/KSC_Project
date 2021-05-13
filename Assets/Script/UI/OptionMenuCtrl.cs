@@ -22,12 +22,16 @@ public class OptionMenuCtrl : MonoBehaviour
     public EscMenu controlPanel;
     public EscMenu displayPanel;
     public EscMenu keyBindingPanel;
-
+    public EscMenu gameOverPanel;
+    
     void Start()
     {
         Color color=backGroundImage.color;
         color.a = 0;
         backGroundImage.color = color;
+
+        if( GameManager.Instance.player != null)
+        GameManager.Instance.player.whenPlayerDead += () => { gameOverPanel.Active(true);};
     }
 
     void Update()

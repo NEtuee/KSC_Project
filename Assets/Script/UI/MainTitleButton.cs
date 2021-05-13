@@ -19,6 +19,11 @@ public class MainTitleButton : MonoBehaviour
 
     private void Start()
     {
+        Init();
+    }
+
+    public void Init()
+    {
         buttonRect.sizeDelta = startSize;
         Color alpha = buttonImage.color;
         alpha.a = 0;

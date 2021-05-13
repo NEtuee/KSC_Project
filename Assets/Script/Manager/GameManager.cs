@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -123,6 +125,9 @@ public class GameManager : MonoBehaviour
 
         DisplaySettingData displaySettingData = SaveDataHelper.LoadSetting<DisplaySettingData>();
         QualitySettings.vSyncCount = displaySettingData.activeVsync == true ? 1 : 0;
+
+        if(player != null)
+        player.whenPlayerDead += () => { PAUSE = true;};
     }
 
     private IEnumerator LateStart()
@@ -227,9 +232,19 @@ public class GameManager : MonoBehaviour
         player.Resume();
     }
 
+    public void RestartLevel()
+    {
+        player.InitStatus();
+        PAUSE = false;
+        AsynSceneManager.LoadCurrentlevel();
+    }
 
- 
-
+    public void LoadTitleScene()
+    {
+        AsynSceneManager.MovePlayerObjectToUnloadScene();
+        SceneManager.LoadScene(0);
+    }
+    
     public LevelEdit_BehaviorControll.State GetBossState()
     {
         if (bossControll != null)
