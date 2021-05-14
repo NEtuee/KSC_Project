@@ -23,6 +23,8 @@ public class OptionMenuCtrl : MonoBehaviour
     public EscMenu displayPanel;
     public EscMenu keyBindingPanel;
     public EscMenu gameOverPanel;
+
+    public TutorialVideoPlayer tutorialVideoPlayer;
     
     void Start()
     {
@@ -40,6 +42,25 @@ public class OptionMenuCtrl : MonoBehaviour
         //{
         //    InputEsc();
         //}
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            tutorialVideoPlayer.SetVideo(1);
+            tutorialVideoPlayer.Active(true);
+            tutorialVideoPlayer.SetAndPrepareVideo(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            tutorialVideoPlayer.SetVideo(0);
+            tutorialVideoPlayer.Active(true);
+            tutorialVideoPlayer.SetAndPrepareVideo(2);
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            tutorialVideoPlayer.Active(false);
+        }
     }
 
     public void InputEsc()
