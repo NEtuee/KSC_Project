@@ -61,19 +61,19 @@ public class LeftOptionTitle : EscMenu
                 switch(menuType)
                 {
                     case OptionMenuCtrl.MenuType.Sound:
-                        optionMenuText.text = "»ç¿îµå";
+                        optionMenuText.text = "ì‚¬ìš´ë“œ";
                         break;
                     case OptionMenuCtrl.MenuType.Control:
-                        optionMenuText.text = "Á¶ÀÛ";
+                        optionMenuText.text = "ì¡°ì‘";
                         break;
                     case OptionMenuCtrl.MenuType.Display:
-                        optionMenuText.text = "µğ½ºÇÃ·¹ÀÌ";
+                        optionMenuText.text = "ë””ìŠ¤í”Œë ˆì´";
                         break;
                     case OptionMenuCtrl.MenuType.Key:
-                        optionMenuText.text = "Å° ¹ÙÀÎµù";
+                        optionMenuText.text = "í‚¤ ë°”ì¸ë”©";
                         break;
                     case OptionMenuCtrl.MenuType.Option:
-                        optionMenuText.text = "ÀÏ½ÃÁ¤Áö";
+                        optionMenuText.text = "ì¼ì‹œì •ì§€";
                         break;
                 }
             }

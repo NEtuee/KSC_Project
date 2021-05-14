@@ -4,18 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
-
+using TMPro;
 public class TutorialVideoPlayer : MonoBehaviour
 {
     private Canvas _canvas;
+    [SerializeField] private TutorialVideoClipAndDescriptSet tutorialVideoClipAndDescriptSet;
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private RawImage targetImage;
+    [SerializeField] private TextMeshProUGUI descriptionText;
 
     [SerializeField]private bool _isPrepared = false;
     
     public VideoClip startClimbingVideo;
     public VideoClip secondVideo;
 
+    private Dictionary<string, VideoClipAndDescripts> _tutorialData =
+        new Dictionary<string, VideoClipAndDescripts>();
+    
     private void Start()
     {
         if (videoPlayer == null)
@@ -32,8 +37,18 @@ public class TutorialVideoPlayer : MonoBehaviour
 
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = false;
+        
+        InitTutorialData();
 
         //StartCoroutine(PrepareVideo());
+    }
+
+    private void InitTutorialData()
+    {
+        for (int i = 0; i < tutorialVideoClipAndDescriptSet.VideoClipAndDescripts.Length; i++)
+        {
+            _tutorialData.Add(tutorialVideoClipAndDescriptSet.VideoClipAndDescripts[i].key,tutorialVideoClipAndDescriptSet.VideoClipAndDescripts[i]);
+        }
     }
 
     public void Active(bool active)
@@ -107,5 +122,20 @@ public class TutorialVideoPlayer : MonoBehaviour
         }
 
         StartCoroutine(PrepareVideo());
+    }
+
+    public bool SetAndPrepareVideo(string key)
+    {
+        if (_tutorialData.ContainsKey(key) == false)
+            return false;
+        
+        var data = _tutorialData[key];
+        videoPlayer.clip = data.videoClip;
+        string description = data.description;
+        description = description.Replace("\\n", "\n");
+        descriptionText.text = data.description;
+        
+        StartCoroutine(PrepareVideo());
+        return true;
     }
 }

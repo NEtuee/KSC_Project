@@ -126,6 +126,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float chargeNecessaryTime = 1f;
     public FloatReactiveProperty chargeTime = new FloatReactiveProperty(0.0f);
     [SerializeField] private float hitEnergyRestoreValue = 0.0f;
+    [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
     [SerializeField] private GameObject destroyEffect;
     [SerializeField] public IntReactiveProperty loadCount = new IntReactiveProperty(0);
     [SerializeField] private float loadTerm = 2f;
@@ -314,7 +315,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
-                    if (InputManager.Instance.GetRelease(KeybindingActions.Jump))
+                    if (InputManager.Instance.GetInput(KeybindingActions.Jump))
                     {
                         animator.SetTrigger("Jump");
                         return;
@@ -1096,6 +1097,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         movement.Jump();
         prevSpeed = currentSpeed;
         climbingJumpDirection = ClimbingJumpDirection.Up;
+        energy.Value += jumpEnergyRestoreValue;
         ChangeState(PlayerState.Jump);
     }
 
@@ -2007,9 +2009,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void RestoreEnergy(float deltaTime)
     {
-        if (state == PlayerState.Aiming 
+        if ((state == PlayerState.Aiming &&  currentSpeed == 0.0f)
             || (state == PlayerState.Default && currentSpeed == 0.0f)
-            || (state == PlayerState.Grab && isClimbingMove == false))
+            || (state == PlayerState.Grab && isClimbingMove == false)
+            || state == PlayerState.Jump)
             return;
         //if (IsNowClimbingBehavior() == true)
         //{
