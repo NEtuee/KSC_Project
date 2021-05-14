@@ -21,6 +21,7 @@ public class ParticlePool : ObjectPoolBase<ParticleSystem>
         _deleteProgressDelegate += t =>
         {
             t.gameObject.SetActive(false);
+            t.transform.SetParent(this.transform);
             t.Stop();
         };
         

@@ -47,6 +47,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     public bool playerDebug;
 
     [SerializeField] private List<MeshRenderer> legBlur = new List<MeshRenderer>();
+    [SerializeField] private Transform steamPosition;
 
     [Header("State")]
     [SerializeField] private bool isRun = false;
@@ -578,8 +579,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         targetRotation = Quaternion.LookRotation(transform.forward, Vector3.up);
                         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * rotateSpeed);
                     }
-                    
+
                     moveDir *= currentSpeed;
+                    
+                    if (rigidbody.velocity != Vector3.zero && moveDir != Vector3.zero)
+                    {
+                        if (Vector3.Angle(moveDir.normalized,rigidbody.velocity.normalized) >= 90f)
+                        {
+                            AddVelocity((-rigidbody.velocity) * deltaTime);
+                            
+                            Debug.Log("check");
+                        }
+                    }
 
                     if (Physics.Raycast(transform.position + collider.center, moveDir, collider.radius + currentSpeed * deltaTime))
                     {
@@ -1785,6 +1796,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                 _dechargingCoroutine = DechargingCoroutine();
                 StartCoroutine(_dechargingCoroutine);
+                
+                GameManager.Instance.effectManager.
+                    Active("SteamSmoke",steamPosition.position,Quaternion.LookRotation(steamPosition.up)).transform.
+                    SetParent(steamPosition);
             }
             
             ChangeState(PlayerState.Default);
