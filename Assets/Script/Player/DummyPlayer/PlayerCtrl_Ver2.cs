@@ -423,10 +423,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void ProcessUpdate(float deltaTime)
     {        
-        if (rigidbody.velocity != Vector3.zero)
-        {
-            rigidbody.velocity = Vector3.zero;
-        }
+        // if (rigidbody.velocity != Vector3.zero)
+        // {
+        //     rigidbody.velocity = Vector3.zero;
+        // }
 
         animator.SetBool("IsGround", movement.isGrounded);
 
@@ -443,6 +443,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         else
         {
             currentJumpPower = 0.0f;
+            InitVelocity();
         }
 
         RestoreEnergy(deltaTime);
@@ -1317,10 +1318,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             stamina.Value -= climbingJumpConsumeValue;
                             stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
 
+                            SetVelocity(moveDir);
+                            
                             handIK.DisableHandIK();
                             Jump();
                             ChangeState(PlayerState.Jump);
 
+                            
 
                             return;
                         }
@@ -1625,7 +1629,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 transform.rotation = Quaternion.LookRotation(-hit.normal);
                 transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
 
-                rigidbody.velocity = Vector3.zero;
+                InitVelocity();
                 prevSpeed = currentSpeed;
                 moveDir = Vector3.zero;
 
@@ -1675,7 +1679,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     ChangeState(PlayerState.Grab);
                     ChangeState(PlayerState.HangEdge);
 
-                    rigidbody.velocity = Vector3.zero;
+                    InitVelocity();
                     prevSpeed = currentSpeed;
                     moveDir = Vector3.zero;
 
@@ -2164,6 +2168,27 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             Destroy(collision.gameObject);
         }
     }
+
+    public void AddForce(Vector3 force,ForceMode mode = ForceMode.Acceleration)
+    {
+        rigidbody.AddForce(force,mode);
+    }
+
+    public void SetVelocity(Vector3 velocity)
+    {
+        rigidbody.velocity = velocity;
+    }
+
+    public void AddVelocity(Vector3 velocity)
+    {
+        rigidbody.velocity += velocity;
+    }
+
+    public void InitVelocity()
+    {
+        SetVelocity(Vector3.zero);
+    }
+    
 
     #region 디버그
     private void OnDrawGizmos()

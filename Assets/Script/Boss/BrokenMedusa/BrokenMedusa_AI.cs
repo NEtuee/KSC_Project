@@ -136,7 +136,7 @@ public class BrokenMedusa_AI : IKBossBase
 
         UpdateDirection();
         UpdatePerpendicularPoint();
-        Push(false);
+        Push();
 
         if (Input.GetKeyDown(KeyCode.L))
         {
@@ -579,8 +579,11 @@ public class BrokenMedusa_AI : IKBossBase
         return false;
     }
 
-    public void Push(bool up)
+    public void Push()
     {
+        if (IsPlaying(2, "Anim_Medusa_Push") || IsPlaying(2, "Anim_Medusa_PushUp"))
+            return;
+        
         if(pushDistance >= _targetDistance/* && graphAnimator.IsPlaying("ShildAttack") == null*/)
         {
             var dist = Vector3.Distance(transform.position, _target.position);
@@ -641,19 +644,24 @@ public class BrokenMedusa_AI : IKBossBase
          //   animationControll.Play("Anim_Medusa_PushUp");
         }
 
-        Collider[] playerColl = Physics.OverlapSphere(shildTransform.position, 10f,targetLayer);
-
-        if(playerColl.Length != 0)
-        {
-            foreach(Collider curr in playerColl)
-            {
-                PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
-                if(ragdoll != null)
-                {
-                    ragdoll.ExplosionRagdoll(300.0f,_perpendicularPoint,1000f);
-                }
-            }
-        }
+        var dir = (MathEx.DeleteYPos(_target.position) - MathEx.DeleteYPos(_perpendicularPoint)).normalized;
+        var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
+        player.SetJumpPower(20f);
+        player.SetVelocity(dir * 15f);
+        
+        // Collider[] playerColl = Physics.OverlapSphere(shildTransform.position, 10f,targetLayer);
+        //
+        // if(playerColl.Length != 0)
+        // {
+        //     foreach(Collider curr in playerColl)
+        //     {
+        //         PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
+        //         if(ragdoll != null)
+        //         {
+        //             ragdoll.ExplosionRagdoll(300.0f,_perpendicularPoint,1000f);
+        //         }
+        //     }
+        // }
     }
 
     public void LineMove(float deltaTime)
