@@ -32605,7 +32605,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -25795.5, y: 20329.902}
+  m_AnchoredPosition: {x: -0.00008799744, y: -0.000013418565}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1003871476
@@ -40859,6 +40859,36 @@ Transform:
   m_Children:
   - {fileID: 1121018924}
   m_Father: {fileID: 335101061}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1243733558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1243733559}
+  m_Layer: 9
+  m_Name: SmokePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1243733559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243733558}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.079, y: -0.161, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2451036479545078698}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1245249825
@@ -67357,6 +67387,7 @@ MonoBehaviour:
   hitMaker: {fileID: 0}
   playerDebug: 1
   legBlur: []
+  steamPosition: {fileID: 0}
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -67521,6 +67552,7 @@ MonoBehaviour:
   hpPackCount:
     value: 0
   hpPackRestoreValue: 6
+  _hpPackRestoreDuration: 10
   isHpRestore: 0
   maxStamina: 100
   idleConsumeValue: 1
@@ -71401,6 +71433,7 @@ MonoBehaviour:
   hitMaker: {fileID: 0}
   playerDebug: 1
   legBlur: []
+  steamPosition: {fileID: 0}
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -71565,6 +71598,7 @@ MonoBehaviour:
   hpPackCount:
     value: 0
   hpPackRestoreValue: 6
+  _hpPackRestoreDuration: 10
   isHpRestore: 0
   maxStamina: 100
   idleConsumeValue: 1
@@ -74507,6 +74541,7 @@ MonoBehaviour:
   hitMaker: {fileID: 0}
   playerDebug: 0
   legBlur: []
+  steamPosition: {fileID: 0}
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -74671,6 +74706,7 @@ MonoBehaviour:
   hpPackCount:
     value: 0
   hpPackRestoreValue: 6
+  _hpPackRestoreDuration: 10
   isHpRestore: 0
   maxStamina: 100
   idleConsumeValue: 1
@@ -81801,6 +81837,7 @@ Transform:
   - {fileID: 3532788725625468375}
   - {fileID: 3536624356069858695}
   - {fileID: 2004408998}
+  - {fileID: 1243733559}
   m_Father: {fileID: 5797275331792026992}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -101008,6 +101045,7 @@ MonoBehaviour:
   hitMaker: {fileID: 0}
   playerDebug: 1
   legBlur: []
+  steamPosition: {fileID: 0}
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -101172,6 +101210,7 @@ MonoBehaviour:
   hpPackCount:
     value: 0
   hpPackRestoreValue: 6
+  _hpPackRestoreDuration: 10
   isHpRestore: 0
   maxStamina: 100
   idleConsumeValue: 1
@@ -106342,6 +106381,7 @@ MonoBehaviour:
   - {fileID: 1424545532}
   - {fileID: 497767917}
   - {fileID: 2004409000}
+  steamPosition: {fileID: 1243733559}
   isRun: 0
   state: 0
   isClimbingMove: 0
@@ -106506,6 +106546,7 @@ MonoBehaviour:
   hpPackCount:
     value: 0
   hpPackRestoreValue: 6
+  _hpPackRestoreDuration: 10
   isHpRestore: 0
   maxStamina: 100
   idleConsumeValue: 1
