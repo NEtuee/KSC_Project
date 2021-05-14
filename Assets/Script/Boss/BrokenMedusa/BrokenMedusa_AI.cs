@@ -627,7 +627,7 @@ public class BrokenMedusa_AI : IKBossBase
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
                 if(ragdoll != null)
                 {
-                    ragdoll.ExplosionRagdoll(200.0f, 
+                    ragdoll.ExplosionRagdoll(250.0f, 
                         Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
                 }
             }

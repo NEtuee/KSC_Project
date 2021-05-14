@@ -29,7 +29,7 @@ public class ObjectPoolBase<T> : MonoBehaviour
             if(_deleteCondition(_progressList[i]))
             {
                 _deleteProgressDelegate(_progressList[i]);
-        
+                
                 _cache.Enqueue(_progressList[i]);
                 _progressList.RemoveAt(i);
             }
@@ -40,12 +40,14 @@ public class ObjectPoolBase<T> : MonoBehaviour
         }
     }
 
-    public void Active(Vector3 position, Quaternion rotation)
+    public T Active(Vector3 position, Quaternion rotation)
     {
         var t = GetCachedItem();
         _activeDelegate(t,position,rotation);
 
         _progressList.Add(t);
+
+        return t;
     }
 
     public void Init(int count = 1)
