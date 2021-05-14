@@ -604,6 +604,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Grab:
                 {                
+                    if(stamina.Value <= 0.0f)
+                    {
+                        ChangeState(PlayerState.Default);
+                        return;
+                    }
+
                     CheckLedge();            
                 }
                 break;
@@ -1617,7 +1623,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         Vector3 point1;
         RaycastHit hit;
         //if (InputManager.Instance.GetAction(KeybindingActions.Grab))
-        if(InputManager.Instance.GetInput(KeybindingActions.Grab))
+        if(InputManager.Instance.GetInput(KeybindingActions.Grab) && stamina.Value >= 0.0f)
         {
             point1 = transform.position + collider.center - transform.forward;
             //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
