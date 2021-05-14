@@ -46,9 +46,10 @@ public class OptionMenuCtrl : MonoBehaviour
 
         if (_currentTutorial != true)
             return;
-        if (Input.GetKeyDown(KeyCode.Mouse1)) 
+        if (InputManager.Instance.GetInput(KeybindingActions.Cancel)) 
         { 
             tutorialVideoPlayer.Active(false);
+            _currentTutorial = false;
         }
         
     }
@@ -141,6 +142,7 @@ public class OptionMenuCtrl : MonoBehaviour
     {
         if (tutorialVideoPlayer.SetAndPrepareVideo(key) == false)
             return false;
+        
         tutorialVideoPlayer.Active(true);
         _currentTutorial = true;
         return true;

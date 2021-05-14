@@ -154,7 +154,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [Header("HpPack")] 
     public IntReactiveProperty hpPackCount = new IntReactiveProperty(0);
     [SerializeField] private float hpPackRestoreValue = 6.0f;
-    private float _hpPackRestoreDuration = 10.0f;
+    [SerializeField] private float _hpPackRestoreDuration = 10.0f;
     [SerializeField]private bool isHpRestore = false;
     private IEnumerator restoreHpPackCoroutine;
 

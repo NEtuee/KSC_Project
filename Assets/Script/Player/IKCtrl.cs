@@ -79,20 +79,20 @@ public class IKCtrl : MonoBehaviour
         float leftRotWeight = animator.GetFloat("LeftRotationWeight");
         float rightRotWeight = animator.GetFloat("RightRotationWeight");
 
-        animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1.0f);
+        animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, rightWeight);
 
         if (useProIkFeature)
         {
-            animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, rightRotWeight);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, rightWeight);
         }
 
         MoveFeetToIkPoint(AvatarIKGoal.RightFoot, rightFootIkPosition, rightFootIkRotation, ref lastRightFootPositionY);
 
-        animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1.0f);
+        animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, leftWeight);
 
         if (useProIkFeature)
         {
-            animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, leftRotWeight);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, leftWeight);
         }
 
         MoveFeetToIkPoint(AvatarIKGoal.LeftFoot, leftFootIkPosition, leftFootIkRotation, ref lastLeftFootPositionY);

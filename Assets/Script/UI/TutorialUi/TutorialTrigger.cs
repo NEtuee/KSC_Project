@@ -40,9 +40,9 @@ public class TutorialTrigger : MonoBehaviour
         if (other.CompareTag("Player") == false)
             return;
         
-        if(_uiManager.TutorialEvent(key) == false);
+        if (_uiManager.TutorialEvent(key) == false)
             return;
-            
+        
         isOver = true;
         gameObject.SetActive(false);
     }

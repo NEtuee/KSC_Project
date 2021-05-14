@@ -16,5 +16,6 @@ public enum KeybindingActions
     Equiment2th,
     Option,
     Scan,
-    UseHpPack
+    UseHpPack,
+    Cancel
 }

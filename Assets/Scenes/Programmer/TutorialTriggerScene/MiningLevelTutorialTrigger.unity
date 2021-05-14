@@ -182,3 +182,62 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 32.373, z: 0}
+--- !u!1 &569116613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 569116616}
+  - component: {fileID: 569116615}
+  - component: {fileID: 569116614}
+  m_Layer: 0
+  m_Name: TutorialTrigger_ClimbingJump
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &569116614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569116613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3aa13d90f8035e40a39a960dfeff956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: ClimbingJump
+  isOver: 0
+--- !u!65 &569116615
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569116613}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.60162616, z: 2.4484928}
+  m_Center: {x: -3.817856e-10, y: 0.19918673, z: 0.3721661}
+--- !u!4 &569116616
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569116613}
+  m_LocalRotation: {x: -0, y: -0.019158548, z: -0, w: 0.9998165}
+  m_LocalPosition: {x: -7.93, y: -4.22, z: 16.84}
+  m_LocalScale: {x: 8.489669, y: 9.99939, z: 4.1482}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -2.196, z: 0}
