@@ -14,5 +14,8 @@ public enum KeybindingActions
     EMPAimRelease,
     Equiment1th,
     Equiment2th,
-    Option
+    Option,
+    Scan,
+    UseHpPack,
+    Cancel
 }

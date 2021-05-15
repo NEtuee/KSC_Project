@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using AmplifyShaderEditor;
 using UnityEngine;
 using UniRx;
 using UnityEngine.UI;
@@ -48,6 +47,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     public bool playerDebug;
 
     [SerializeField] private List<MeshRenderer> legBlur = new List<MeshRenderer>();
+    [SerializeField] private Transform steamPosition;
 
     [Header("State")]
     [SerializeField] private bool isRun = false;
@@ -127,6 +127,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float chargeNecessaryTime = 1f;
     public FloatReactiveProperty chargeTime = new FloatReactiveProperty(0.0f);
     [SerializeField] private float hitEnergyRestoreValue = 0.0f;
+    [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
     [SerializeField] private GameObject destroyEffect;
     [SerializeField] public IntReactiveProperty loadCount = new IntReactiveProperty(0);
     [SerializeField] private float loadTerm = 2f;
@@ -135,7 +136,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float chargeDelayTime = 1f;
     private TimeCounterEx _chargeDelayTimer = new TimeCounterEx();
     [SerializeField] private GameObject pelvisGunObject;
+    [SerializeField] private float dechargingDuration = 2.5f;
+    private float _emissionTargetValue = 10f;
+    private Color _originalEmissionColor;
+    [SerializeField] private bool decharging = false;
     private Material pelvisGunMaterial;
+    private IEnumerator _dechargingCoroutine;
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
     [SerializeField] private Animator gunAnim;
@@ -149,7 +155,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [Header("HpPack")] 
     public IntReactiveProperty hpPackCount = new IntReactiveProperty(0);
     [SerializeField] private float hpPackRestoreValue = 6.0f;
-    private float _hpPackRestoreDuration = 10.0f;
+    [SerializeField] private float _hpPackRestoreDuration = 10.0f;
     [SerializeField]private bool isHpRestore = false;
     private IEnumerator restoreHpPackCoroutine;
 
@@ -224,9 +230,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         _chargeDelayTimer.InitTimer("ChargeDelay", chargeDelayTime, chargeDelayTime);
 
-        restoreHpPackCoroutine = HpRestore();
-
         pelvisGunMaterial = pelvisGunObject.GetComponent<Renderer>().material;
+        _originalEmissionColor = pelvisGunMaterial.GetColor("_EmissionColor");
 
         StartCoroutine(StopCheck());
     }
@@ -326,6 +331,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Jump:
                 {
+                    if (InputAiming())
+                        return;
+
                     if (InputTryGrab())
                         return;
                 }
@@ -393,7 +401,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                    _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
                    if (limit)
                    {
-                       chargeTime.Value += Time.deltaTime;
+                       chargeTime.Value += Time.deltaTime * (decharging ? 0.5f : 1f);
                        chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                        chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
 
@@ -417,10 +425,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void ProcessUpdate(float deltaTime)
     {        
-        if (rigidbody.velocity != Vector3.zero)
-        {
-            rigidbody.velocity = Vector3.zero;
-        }
+        // if (rigidbody.velocity != Vector3.zero)
+        // {
+        //     rigidbody.velocity = Vector3.zero;
+        // }
 
         animator.SetBool("IsGround", movement.isGrounded);
 
@@ -437,6 +445,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         else
         {
             currentJumpPower = 0.0f;
+            InitVelocity();
         }
 
         RestoreEnergy(deltaTime);
@@ -570,8 +579,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         targetRotation = Quaternion.LookRotation(transform.forward, Vector3.up);
                         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * rotateSpeed);
                     }
-                    
+
                     moveDir *= currentSpeed;
+                    
+                    if (rigidbody.velocity != Vector3.zero && moveDir != Vector3.zero)
+                    {
+                        if (Vector3.Angle(moveDir.normalized,rigidbody.velocity.normalized) >= 90f)
+                        {
+                            AddVelocity((-rigidbody.velocity) * deltaTime);
+                            
+                            Debug.Log("check");
+                        }
+                    }
 
                     if (Physics.Raycast(transform.position + collider.center, moveDir, collider.radius + currentSpeed * deltaTime))
                     {
@@ -585,6 +604,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Grab:
                 {                
+                    if(stamina.Value <= 0.0f)
+                    {
+                        ChangeState(PlayerState.Default);
+                        return;
+                    }
+
                     CheckLedge();            
                 }
                 break;
@@ -1090,6 +1115,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         movement.Jump();
         prevSpeed = currentSpeed;
         climbingJumpDirection = ClimbingJumpDirection.Up;
+        energy.Value += jumpEnergyRestoreValue;
         ChangeState(PlayerState.Jump);
     }
 
@@ -1311,11 +1337,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             stamina.Value -= climbingJumpConsumeValue;
                             stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
 
+                            SetVelocity(moveDir);
+                            
                             handIK.DisableHandIK();
                             Jump();
                             ChangeState(PlayerState.Jump);
-
-
+                            
                             return;
                         }
                     }
@@ -1594,7 +1621,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         Vector3 point1;
         RaycastHit hit;
         //if (InputManager.Instance.GetAction(KeybindingActions.Grab))
-        if(InputManager.Instance.GetInput(KeybindingActions.Grab))
+        if(InputManager.Instance.GetInput(KeybindingActions.Grab) && stamina.Value >= 0.0f)
         {
             point1 = transform.position + collider.center - transform.forward;
             //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
@@ -1604,7 +1631,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     return false;
                 }
-
+                
+                movement.SetParent(hit.collider.transform);
+                movement.Attach();
+                
                 if (ledgeChecker.IsDetectedLedge() == false)
                 {
                     //ChangeState(PlayerState.Grab);
@@ -1619,12 +1649,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 transform.rotation = Quaternion.LookRotation(-hit.normal);
                 transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
 
-                rigidbody.velocity = Vector3.zero;
                 prevSpeed = currentSpeed;
                 moveDir = Vector3.zero;
 
-                movement.SetParent(hit.collider.transform);
-                movement.Attach();
+                // movement.SetParent(hit.collider.transform);
+                // movement.Attach();
 
                 //Debug.Log("default");
 
@@ -1669,7 +1698,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     ChangeState(PlayerState.Grab);
                     ChangeState(PlayerState.HangEdge);
 
-                    rigidbody.velocity = Vector3.zero;
+                    InitVelocity();
                     prevSpeed = currentSpeed;
                     moveDir = Vector3.zero;
 
@@ -1768,7 +1797,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             int loadCount = (int)(chargeTime.Value);
             if (loadCount == 3)
             {
+                if (decharging == true)
+                    StopCoroutine(_dechargingCoroutine);
+
+                _dechargingCoroutine = DechargingCoroutine();
+                StartCoroutine(_dechargingCoroutine);
                 
+                GameManager.Instance.effectManager.
+                    Active("SteamSmoke",steamPosition.position,Quaternion.LookRotation(steamPosition.up)).transform.
+                    SetParent(steamPosition);
             }
             
             ChangeState(PlayerState.Default);
@@ -1812,7 +1849,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private bool InputLedgeUp()
     {
         //if (InputManager.Instance.GetAction(KeybindingActions.Jump))
-        if(InputManager.Instance.GetInput(KeybindingActions.Jump))
+        if(InputManager.Instance.GetRelease(KeybindingActions.Jump))
         {
             if(currentVerticalValue == 1.0f)
             {
@@ -1844,7 +1881,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private bool InputClimbingJump()
     {
-        if (InputManager.Instance.GetInput(KeybindingActions.Jump))
+        if (InputManager.Instance.GetRelease(KeybindingActions.Jump))
         {
             ChangeState(PlayerState.ReadyClimbingJump);
             return true;
@@ -1855,9 +1892,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputUseHpPack()
     {
-        if (Input.GetKeyDown(KeyCode.E) && hpPackCount.Value > 0 && isHpRestore == false)
+        if (InputManager.Instance.GetInput(KeybindingActions.UseHpPack) && hp.Value < 100.0f && hpPackCount.Value > 0 && isHpRestore == false)
         {
             hpPackCount.Value--;
+
+            restoreHpPackCoroutine = HpRestore();
             StartCoroutine(restoreHpPackCoroutine);
         }
     }
@@ -1995,9 +2034,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void RestoreEnergy(float deltaTime)
     {
-        if (state == PlayerState.Aiming 
+        if ((state == PlayerState.Aiming &&  currentSpeed == 0.0f)
             || (state == PlayerState.Default && currentSpeed == 0.0f)
-            || (state == PlayerState.Grab && isClimbingMove == false))
+            || (state == PlayerState.Grab && isClimbingMove == false)
+            || state == PlayerState.Jump)
             return;
         //if (IsNowClimbingBehavior() == true)
         //{
@@ -2009,6 +2049,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //    if (state == PlayerState.Ragdoll || state == PlayerState.HangRagdoll || currentSpeed == 0.0f)
         //        return;
         //}
+        if (energy.Value.Equals( 100.0f))
+            return;
         
         energy.Value += restoreValuePerSecond * deltaTime;
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
@@ -2051,7 +2093,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             finalPosition = upHit.point + (transform.up * dectionOffset.y);
             finalPosition += transform.forward * dectionOffset.z;
             transform.position = finalPosition;
-           
+            
             StartCoroutine(ForceSnap(0.5f, finalPosition, transform.localPosition));
             //Debug.Log("AdjustLedgeOffset");
         }
@@ -2123,6 +2165,56 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ChangeState(PlayerState.Default);
     }
 
+    private IEnumerator DechargingCoroutine()
+    {
+        decharging = true;
+        float time = 0;
+        while (time < dechargingDuration)
+        {
+            time += Time.deltaTime;
+            float intencity = (dechargingDuration - time) / dechargingDuration * _emissionTargetValue;
+            pelvisGunMaterial.SetColor("_EmissionColor", _originalEmissionColor * intencity);
+
+            yield return null;
+        }
+        decharging = false;
+    }
+
+    public void DropHpPack()
+    {
+        hpPackCount.Value++;
+        hpPackCount.Value = Mathf.Clamp(hpPackCount.Value, 0, 3);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.CompareTag("HpPack"))
+        {
+            DropHpPack();
+            Destroy(collision.gameObject);
+        }
+    }
+
+    public void AddForce(Vector3 force,ForceMode mode = ForceMode.Acceleration)
+    {
+        rigidbody.AddForce(force,mode);
+    }
+
+    public void SetVelocity(Vector3 velocity)
+    {
+        rigidbody.velocity = velocity;
+    }
+
+    public void AddVelocity(Vector3 velocity)
+    {
+        rigidbody.velocity += velocity;
+    }
+
+    public void InitVelocity()
+    {
+        SetVelocity(Vector3.zero);
+    }
+    
 
     #region 디버그
     private void OnDrawGizmos()

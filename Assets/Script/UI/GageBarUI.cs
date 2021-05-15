@@ -7,8 +7,8 @@ using DG.Tweening;
 using UnityEngine.Events;
 using TMPro;
 /// <summary>
-/// °ÔÀÌÁö¹Ù¸¦ Ç¥½ÃÇÏ´Â UI ÀÔ´Ï´Ù.
-/// ´Ü¼øÈ÷ ¿ÜºÎ¿¡¼­ °ªÀ» ¹Ş¾Æ¿Í¼­ ÀÚ±â°¡ °¡Áø ImageÀÇ fillAmount°ªÀ» °»½ÅÇÕ´Ï´Ù.
+/// ê²Œì´ì§€ë°”ë¥¼ í‘œì‹œí•˜ëŠ” UI ì…ë‹ˆë‹¤.
+/// ë‹¨ìˆœíˆ ì™¸ë¶€ì—ì„œ ê°’ì„ ë°›ì•„ì™€ì„œ ìê¸°ê°€ ê°€ì§„ Imageì˜ fillAmountê°’ì„ ê°±ì‹ í•©ë‹ˆë‹¤.
 /// </summary>
 public class GageBarUI : MonoBehaviour
 {
@@ -143,6 +143,9 @@ public class GageBarUI : MonoBehaviour
 
     public void Visible(bool result)
     {
+        if (visible == result)
+            return;
+        
         visible = result;
         if (result == true)
         {

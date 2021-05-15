@@ -19,23 +19,23 @@ public class EffectManager : MonoBehaviour
         }
     }
 
-    public void Active(string key,Vector3 position, Quaternion rotation)
+    public ParticleSystem Active(string key,Vector3 position, Quaternion rotation)
     {
         if (_particleDic.ContainsKey(key) == false)
         {
             Debug.LogWarning("Not Exist EffectKey");
-            return;
+            return null;
         }
 
-        _particleDic[key].Active(position,rotation);
+        return _particleDic[key].Active(position,rotation);
     }
     
-    public void Active(string key,Vector3 position)
+    public ParticleSystem Active(string key,Vector3 position)
     {
         if (_particleDic.ContainsKey(key) == false)
-            return;
+            return null;
         
-        _particleDic[key].Active(position, Quaternion.identity);
+        return _particleDic[key].Active(position, Quaternion.identity);
     }
 }
 
