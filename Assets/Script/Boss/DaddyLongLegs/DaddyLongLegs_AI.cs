@@ -59,13 +59,26 @@ public class DaddyLongLegs_AI : IKBossBase
 
         MoveForward(frontMoveSpeed,deltaTime);
 
-        if (transform.position.z <= -168.82f)
+        
+        if (transform.position.z <= -268.82f)
         {
             var pos = transform.position;
             pos.z += 590.22f;
             transform.position = pos;
         }
     }
+
+   // private void OnTriggerEnter(Collider other)
+   // {
+        
+       // if(other.gameObject.name=="DaddyLongLegEND")
+       // {
+           // var pos = transform.position;
+            //pos.z += 590.22f;
+            //transform.position = pos;
+       // }
+
+    //}
 
     public void Update()
     {
