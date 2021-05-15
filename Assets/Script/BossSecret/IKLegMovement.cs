@@ -42,6 +42,7 @@ public class IKLegMovement : MonoBehaviour
 
     private bool _isMove = false;
     private bool _hold = false;
+    private bool _holdGroundCheck = false;
     private float _timer = 0f;
 
     private void Awake()
@@ -62,7 +63,7 @@ public class IKLegMovement : MonoBehaviour
         {
             if(ikHolder == null)
                 return;
-            if(_downRay.Cast(rayPoint.position,out RaycastHit check))
+            if(_holdGroundCheck && _downRay.Cast(rayPoint.position,out RaycastHit check))
             {
                 var rayDist = Vector3.Distance(ik.transform.position,check.point);
                 var dist = Vector3.Distance(ik.transform.position,ikHolder.position);
@@ -125,9 +126,10 @@ public class IKLegMovement : MonoBehaviour
         iKFabric.enabled = value;
     }
 
-    public void Hold(bool value)
+    public void Hold(bool value, bool groundCheck = true)
     {
         _hold = value;
+        _holdGroundCheck = groundCheck;
     }
 
 }

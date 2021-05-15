@@ -279,6 +279,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             return;
         }
 
+        InitVelocity();
+
         UpdateStamina(Time.fixedDeltaTime);
 
         if (updateMethod == UpdateMethod.FixedUpdate)
@@ -425,10 +427,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void ProcessUpdate(float deltaTime)
     {        
-        // if (rigidbody.velocity != Vector3.zero)
-        // {
-        //     rigidbody.velocity = Vector3.zero;
-        // }
+        if (rigidbody.velocity != Vector3.zero)
+        {
+            rigidbody.velocity = Vector3.zero;
+        }
 
         animator.SetBool("IsGround", movement.isGrounded);
 
@@ -2200,12 +2202,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public void SetVelocity(Vector3 velocity)
     {
-        rigidbody.velocity = velocity;
+        //rigidbody.velocity = velocity;
     }
 
     public void AddVelocity(Vector3 velocity)
     {
-        rigidbody.velocity += velocity;
+        //rigidbody.velocity += velocity;
     }
 
     public void InitVelocity()
