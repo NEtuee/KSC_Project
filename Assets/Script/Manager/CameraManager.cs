@@ -189,10 +189,7 @@ public class CameraManager : MonoBehaviour
         playerAimCam3rdPersonComponent = playerAimCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         current3rdPersonComponent = playerFollowCam3rdPersonComponent;
     }
-
-    /// <summary>
-    /// ī�޶� �÷��̾� ķ���� �ٲߴϴ�.
-    /// </summary>
+    
     public bool ActivePlayerFollowCamera()
     {
         if (playerFollowCam == null)

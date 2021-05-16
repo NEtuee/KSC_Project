@@ -23,7 +23,10 @@ public class OptionMenuCtrl : MonoBehaviour
     public EscMenu displayPanel;
     public EscMenu keyBindingPanel;
     public EscMenu gameOverPanel;
-    
+
+    public TutorialVideoPlayer tutorialVideoPlayer;
+
+    private bool _currentTutorial = false;
     void Start()
     {
         Color color=backGroundImage.color;
@@ -40,10 +43,28 @@ public class OptionMenuCtrl : MonoBehaviour
         //{
         //    InputEsc();
         //}
+
+        if (_currentTutorial != true)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            tutorialVideoPlayer.ThroughPage();
+        }
+        
+        if (InputManager.Instance.GetInput(KeybindingActions.Cancel)) 
+        { 
+            tutorialVideoPlayer.Active(false);
+            _currentTutorial = false;
+        }
+        
     }
 
     public void InputEsc()
     {
+        if (_currentTutorial == true)
+            return;
+        
         switch(_currentMenu)
         {
             case MenuType.None:
@@ -121,6 +142,16 @@ public class OptionMenuCtrl : MonoBehaviour
             prevPanel.Active (false);
             _currnetPanel.Active (true);
         }, 1f);
+    }
+
+    public bool TutorialEvent(string key)
+    {
+        if (tutorialVideoPlayer.SetPage(key) == false)
+            return false;
+        
+        tutorialVideoPlayer.Active(true);
+        _currentTutorial = true;
+        return true;
     }
     
     public void GameQuit()
