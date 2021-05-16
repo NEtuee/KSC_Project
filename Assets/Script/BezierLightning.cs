@@ -21,7 +21,7 @@ public class BezierLightning : MonoBehaviour
         public Transform startPoint;
         public Transform endPoint;
 
-        public void Set(float t,float updateTime = 0f,bool update = true)
+        public void Set(float t,float updateTime = 0f,bool update = false)
         {
             _time = t;
             timer = 0f;
@@ -40,7 +40,7 @@ public class BezierLightning : MonoBehaviour
             timer = 0f;
             updateTimer = 0f;
 
-            update = keepUpdate;
+            keepUpdate = update;
         }
 
         public bool UpdateTimeProgress(float deltaTime)
@@ -119,6 +119,8 @@ public class BezierLightning : MonoBehaviour
     {
         var pack = CreateLightningPack(start.position,end.position,accur,randomFactor);
         pack.Set(start,end,time,updateTime,update);
+        pack.accuracy = accur;
+        pack.randomFactor = randomFactor;
         _progressPack.Add(pack);
     }
 

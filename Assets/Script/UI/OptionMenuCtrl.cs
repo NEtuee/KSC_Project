@@ -46,6 +46,12 @@ public class OptionMenuCtrl : MonoBehaviour
 
         if (_currentTutorial != true)
             return;
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            tutorialVideoPlayer.ThroughPage();
+        }
+        
         if (InputManager.Instance.GetInput(KeybindingActions.Cancel)) 
         { 
             tutorialVideoPlayer.Active(false);
@@ -140,7 +146,7 @@ public class OptionMenuCtrl : MonoBehaviour
 
     public bool TutorialEvent(string key)
     {
-        if (tutorialVideoPlayer.SetAndPrepareVideo(key) == false)
+        if (tutorialVideoPlayer.SetPage(key) == false)
             return false;
         
         tutorialVideoPlayer.Active(true);

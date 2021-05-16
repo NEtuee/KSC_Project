@@ -9,6 +9,7 @@ public class TutorialVideoPlayer : MonoBehaviour
 {
     private Canvas _canvas;
     [SerializeField] private TutorialVideoClipAndDescriptSet tutorialVideoClipAndDescriptSet;
+    [SerializeField] private TutorialPageSet tutorialPageSet;
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private RawImage targetImage;
     [SerializeField] private TextMeshProUGUI descriptionText;
@@ -20,7 +21,11 @@ public class TutorialVideoPlayer : MonoBehaviour
 
     private Dictionary<string, VideoClipAndDescripts> _tutorialData =
         new Dictionary<string, VideoClipAndDescripts>();
-    
+
+    private Dictionary<string, List<string>> _pageList = new Dictionary<string, List<string>>();
+    private List<string> currentTutorialList;
+    private int _currentPageNum = 0;
+    private bool _tutorialActive;
     private void Start()
     {
         if (videoPlayer == null)
@@ -38,6 +43,8 @@ public class TutorialVideoPlayer : MonoBehaviour
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = false;
         
+        _tutorialActive = false;
+        
         InitTutorialData();
 
         //StartCoroutine(PrepareVideo());
@@ -49,10 +56,16 @@ public class TutorialVideoPlayer : MonoBehaviour
         {
             _tutorialData.Add(tutorialVideoClipAndDescriptSet.VideoClipAndDescripts[i].key,tutorialVideoClipAndDescriptSet.VideoClipAndDescripts[i]);
         }
+
+        foreach (var page in tutorialPageSet.pages) 
+        {
+            _pageList.Add(page.pageName,page.tutorialList);
+        }
     }
 
     public void Active(bool active)
     {
+        _tutorialActive = active;
         if(active)
         {
             PlayVideo();
@@ -136,6 +149,33 @@ public class TutorialVideoPlayer : MonoBehaviour
         descriptionText.text = data.description;
         
         StartCoroutine(PrepareVideo());
+        return true;
+    }
+
+    public bool SetPage(string key)
+    {
+        if (_pageList.ContainsKey(key) == false)
+            return false;
+        
+        currentTutorialList = _pageList[key];
+        _currentPageNum = 0;
+        SetAndPrepareVideo(currentTutorialList[_currentPageNum]);
+        return true;
+    }
+
+    public bool ThroughPage()
+    {
+        if (_tutorialActive == false)
+            return false;
+
+        if (currentTutorialList == null)
+            return false;
+
+        _currentPageNum++;
+        if (_currentPageNum >= currentTutorialList.Count)
+            _currentPageNum = 0;
+        SetAndPrepareVideo(currentTutorialList[_currentPageNum]);
+
         return true;
     }
 }

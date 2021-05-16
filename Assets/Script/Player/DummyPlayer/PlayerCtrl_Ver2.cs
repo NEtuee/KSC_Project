@@ -279,8 +279,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             return;
         }
 
-        InitVelocity();
-
         UpdateStamina(Time.fixedDeltaTime);
 
         if (updateMethod == UpdateMethod.FixedUpdate)
@@ -427,10 +425,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void ProcessUpdate(float deltaTime)
     {        
-        if (rigidbody.velocity != Vector3.zero)
-        {
-            rigidbody.velocity = Vector3.zero;
-        }
+        // if (rigidbody.velocity != Vector3.zero)
+        // {
+        //     rigidbody.velocity = Vector3.zero;
+        // }
 
         animator.SetBool("IsGround", movement.isGrounded);
 
@@ -590,7 +588,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         {
                             AddVelocity((-rigidbody.velocity) * deltaTime);
                             
-                            Debug.Log("check");
                         }
                     }
 
@@ -1344,9 +1341,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             handIK.DisableHandIK();
                             Jump();
                             ChangeState(PlayerState.Jump);
-
                             
-
                             return;
                         }
                     }
@@ -1635,7 +1630,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     return false;
                 }
-
+                
+                movement.SetParent(hit.collider.transform);
+                movement.Attach();
+                
                 if (ledgeChecker.IsDetectedLedge() == false)
                 {
                     //ChangeState(PlayerState.Grab);
@@ -1650,12 +1648,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 transform.rotation = Quaternion.LookRotation(-hit.normal);
                 transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
 
-                InitVelocity();
                 prevSpeed = currentSpeed;
                 moveDir = Vector3.zero;
 
-                movement.SetParent(hit.collider.transform);
-                movement.Attach();
+                // movement.SetParent(hit.collider.transform);
+                // movement.Attach();
 
                 //Debug.Log("default");
 
@@ -2051,6 +2048,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //    if (state == PlayerState.Ragdoll || state == PlayerState.HangRagdoll || currentSpeed == 0.0f)
         //        return;
         //}
+        if (energy.Value.Equals( 100.0f))
+            return;
         
         energy.Value += restoreValuePerSecond * deltaTime;
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
@@ -2093,7 +2092,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             finalPosition = upHit.point + (transform.up * dectionOffset.y);
             finalPosition += transform.forward * dectionOffset.z;
             transform.position = finalPosition;
-           
+            
             StartCoroutine(ForceSnap(0.5f, finalPosition, transform.localPosition));
             //Debug.Log("AdjustLedgeOffset");
         }
@@ -2202,12 +2201,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public void SetVelocity(Vector3 velocity)
     {
-        //rigidbody.velocity = velocity;
+        rigidbody.velocity = velocity;
     }
 
     public void AddVelocity(Vector3 velocity)
     {
-        //rigidbody.velocity += velocity;
+        rigidbody.velocity += velocity;
     }
 
     public void InitVelocity()

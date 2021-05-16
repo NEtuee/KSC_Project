@@ -76,7 +76,7 @@ public class IKLegMovement : MonoBehaviour
 
             }
             
-            ik.transform.position = Vector3.Lerp(ik.transform.position,ikHolder.position,.2f);
+            ik.transform.position = Vector3.Lerp(ik.transform.position,ikHolder.position,10f * Time.deltaTime);
             return;
         }
 
