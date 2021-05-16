@@ -5,12 +5,49 @@ using TMPro;
 public class DroneHelper_Medusa : DroneHelper
 {
     [SerializeField] private bool scanned = false;
+    [SerializeField] private bool tip1 = false;
+    [SerializeField] private bool tip2 = false;
+    [SerializeField] private bool checkingTip3 = false;
+    [SerializeField] private bool destroyedShield = false;
+    [SerializeField] private bool destoryedMedusa = false;
+
     [SerializeField] private bool hint1Complete = false;
     [SerializeField] private bool hint2Complete = false;
     
     public void ScanFlag()
     {
         scanned = true;
+        root.HelpEvent("Medusa_Start");
+        root.timer.InitTimer("Tip01Timer", 0.0f, 120.0f);
+    }
+
+    public void NoEscape()
+    {
+        root.HelpEvent("Medusa_NoEscape");
+    }
+
+    public void LockOff()
+    {
+        root.HelpEvent("Medusa_Lockoff");
+        checkingTip3 = true;
+        root.timer.InitTimer("Tip03Timer", 0.0f, 10.0f);
+    }
+
+    public void HitShild()
+    {
+        root.HelpEvent("Medusa_ShieldAttackFeedback01");
+    }
+
+    public void DestroyShiled()
+    {
+        root.HelpEvent("Medusa_ShieldAttackFeedback02");
+        destroyedShield = true;
+    }
+
+    public void DestroyMedusa()
+    {
+        root.HelpEvent("Medusa_Death");
+        destoryedMedusa = true;
     }
 
     public void Hint1Flag()
@@ -39,8 +76,8 @@ public class DroneHelper_Medusa : DroneHelper
         if (root.active == false)
             return;
 
-        CheckScan();
-        CheckLevelTime();
+        //CheckScan();
+        //CheckLevelTime();
 
         if (root.helping == true)
         {
@@ -56,19 +93,40 @@ public class DroneHelper_Medusa : DroneHelper
         }
         else
         {
-            bool limit;
-            root.timer.IncreaseTimer("HintTime", 10.0f, out limit);
-            if (limit)
+            if (destoryedMedusa == true)
+                return;
+
+            if(tip1 == false)
             {
-                if (hint1Complete == false)
+                root.timer.IncreaseTimer("Tip01Timer",out bool limit);
+                if(limit == true)
                 {
-                    root.HelpEvent("Hint1");
-                    Hint1Flag();
+                    tip1 = true;
+                    root.HelpEvent("Medusa_Tip01");
+                    root.timer.InitTimer("Tip02Timer");
                 }
-                else
+            }
+            else
+            {
+                if(tip2 == false)
                 {
-                    root.HelpEvent("Hint2");
-                    Hint2Flag();
+                    root.timer.IncreaseTimer("Tip02Timer", out bool limit);
+                    if (limit == true)
+                    {
+                        tip2 = true;
+                        root.HelpEvent("Medusa_Tip02");
+                    }
+                }
+
+            }
+
+            if(checkingTip3 == true)
+            {
+                root.timer.IncreaseTimer("Tip03Timer", out bool limit);
+                if(limit == true)
+                {
+                    checkingTip3 = false;
+                    root.HelpEvent("Medusa_Tip03");
                 }
             }
         }

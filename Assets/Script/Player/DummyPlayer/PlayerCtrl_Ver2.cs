@@ -1164,6 +1164,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     handIK.DisableHandIK();
                     GameManager.Instance.stateManager.Visible(false);
 
+                    //임시
+                    collider.height = 1.898009f;
+                    collider.center = new Vector3(0.0f, 0.95622f, 0.0f);
+
                     if (transform.parent == null)
                         GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
                     // else
@@ -1181,6 +1185,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         currentVerticalValue = 0.0f;
                         currentHorizontalValue = 0.0f;
                     }
+
+                    //임시
+                    collider.height = 1f;
+                    collider.center = new Vector3(0.0f, 0.5f, 0.0f);
 
                     handIK.ActiveHandIK(true);
                     handIK.ActiveLedgeIK(false);
