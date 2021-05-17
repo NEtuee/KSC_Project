@@ -8,25 +8,32 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     public enum State
     {
         LaunchReady,
+        LaunchReadyTimer,
         Launch,
         TransformOpen,
         TransformClose,
         WallMove,
         FloorWhip,
         WallMoveExit,
+        Hit,
         Stun,
         Recovery
     };
     public State currentState;
     public BossHead head;
     public EMPShield shield;
-
+    public Core core;
+    public LevelEdit_PlayerShockEvent shockEvent;
+    
     public Transform rollSphere;
     public Animator animatorControll;
+
+    public Vector3 lastPosition;
 
     public int whipPath = 0;
     public bool canFloorWhip = false;
     public bool lowCheck = false;
+    public bool isDead = false;
 
     public LayerMask obstacleLayer;
 
@@ -34,12 +41,16 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
 
     public UnityEvent whenReactiveshield;
     public UnityEvent whenRecover;
+    public UnityEvent whenLaunch;
 
     private SphereRayEx _forwardRay;
     private SphereRayEx _sideRay;
 
     private State _nextState;
     private State _prevState;
+
+    private Vector3 _spawnPosition;
+    private Quaternion _spawnRotation;
 
     private bool _roll = false;
     private bool _shieldBroke = false;
@@ -49,6 +60,9 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
 
     public void Start()
     {
+        _spawnPosition = transform.position;
+        _spawnRotation = transform.rotation;
+        
         ChangeState(currentState);
         _pathLoop = true;
 
@@ -79,6 +93,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
 
     public void UpdateProcess(float deltaTime)
     {
+        shockEvent.progress = !_shieldBroke;
         if(currentState == State.WallMove)
         {
             FollowPath(deltaTime);
@@ -123,7 +138,13 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             _timeCounter.IncreaseTimer("whipTime",out bool limit);
             if(limit)
             {
-                if(SphereUpCheck(_rolledAngle))
+                if (!_roll)
+                {
+                    canFloorWhip = false;
+                    ChangeState(State.WallMove);
+                    SetSphereRotationIdentity();
+                }
+                else if(SphereUpCheck(_rolledAngle))
                 {
                     canFloorWhip = false;
                     ChangeState(State.WallMove);
@@ -203,9 +224,27 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
                 ChangeState(State.Recovery);
             }
         }
+        else if (currentState == State.LaunchReadyTimer)
+        {
+            _timeCounter.IncreaseTimer("launchTime",out bool limit);
+            if(limit)
+            {
+                ChangeState(State.Launch);
+            }
+        }
+        else if (currentState == State.Hit)
+        {
+            _timeCounter.IncreaseTimer("hitTime",out bool limit);
+            if(limit)
+            {
+                ChangeState(_prevState);
+            }
+        }
 
     }
 
+    
+    
     public void SetShieldBroke()
     {
         _shieldBroke = true;
@@ -226,6 +265,21 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             leg.Hold(false,false);
         }
     }
+
+    public void Hit()
+    {
+        ChangeState(State.Hit);
+    }
+    
+    public void Dead()
+    {
+        isDead = true;
+        lastPosition = transform.position;
+        transform.SetPositionAndRotation(_spawnPosition,_spawnRotation);
+        rollSphere.localRotation = Quaternion.identity;
+        ChangeState(State.LaunchReadyTimer);
+    }
+    
 
     public void Stun()
     {
@@ -277,13 +331,33 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         _prevState = currentState;
         currentState = state;
 
-        if(state == State.LaunchReady)
+        if (state == State.Hit)
+        {
+            if (_prevState == State.TransformClose || _prevState == State.TransformOpen)
+            {
+                currentState = _prevState;
+                return;
+            }
+            
+            _timeCounter.InitTimer("hitTime", 0f, 2f);
+        }
+        else if(state == State.LaunchReadyTimer)
+        {
+            animatorControll.SetInteger("AnimationCode",2);
+            animatorControll.SetTrigger("ChangeAnimation");
+
+            _timeCounter.InitTimer("launchTime", 0f, 15f);
+        }
+        else if(state == State.LaunchReady)
         {
             animatorControll.SetInteger("AnimationCode",2);
             animatorControll.SetTrigger("ChangeAnimation");
         }
         else if(state == State.Launch)
         {
+            shield.Reactive();
+            core.Reactive();
+            
             _timeCounter.InitTimer("stunTime",0f,6f);
             foreach(var rig in bodys)
             {
@@ -301,10 +375,13 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             {
                 leg.Hold(true);
             }
+            
+            whenLaunch.Invoke();
     
             head.enabled = false;
             _launched = false;
-            
+            isDead = false;
+
         }
         else if(state == State.WallMove)
         {
@@ -323,6 +400,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         {
             if(_shieldBroke && !_roll)
             {
+                Debug.Log("?");
                 _nextState = State.FloorWhip;
                 ChangeState(State.TransformClose);
                 return;

@@ -11,13 +11,15 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
 
     public UnityEvent whenAllShieldDestroy;
 
+    public float explosionRadius = 3f;
+    
     private int shieldCount = 0;
 
     private TimeCounterEx _timeCounterEx = new TimeCounterEx();
 
     public void Start()
     {
-        Recovery();
+        //Recovery();
 
         _timeCounterEx.InitTimer("time",0f,Random.Range(1f,2f));
     }
@@ -43,6 +45,9 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
         bool whip = false;
         foreach(var jirung in aIs)
         {
+            if (jirung.isDead)
+                continue;
+            
             if(jirung.currentState == ImmortalJirungE_V2_AI.State.FloorWhip)
             {
                 whip = true;
@@ -54,6 +59,9 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
         {
             foreach(var jirung in aIs)
             {
+                if (jirung.isDead)
+                    continue;
+                
                 if(jirung.canFloorWhip && jirung.currentState == ImmortalJirungE_V2_AI.State.WallMove)
                 {
                     jirung.ChangeState(ImmortalJirungE_V2_AI.State.FloorWhip);
@@ -65,6 +73,41 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
         
     }
 
+    public void Explosion(int target)
+    {
+        Explosion(aIs[target].lastPosition, explosionRadius);
+    }
+    
+    public void Explosion(Vector3 position, float radius)
+    {
+        var player = GameManager.Instance.player;
+        
+        foreach (var jirung in aIs)
+        {
+            var dist = Vector3.Distance(position, jirung.transform.position);
+
+            if (dist <= radius)
+            {
+                if (jirung.shield.isOver)
+                {
+                    jirung.Dead();
+                }
+                else
+                {
+                    jirung.shield.Destroy();
+                }
+            }
+        }
+
+        if (Vector3.Distance(player.transform.position, position) <= radius)
+        {
+            var ragdoll = player.GetComponent<PlayerRagdoll>();
+            ragdoll.ExplosionRagdoll(340f,(player.transform.position - position).normalized);
+        }
+        
+    }
+    
+    
     public void Launch()
     {
         foreach(var jirung in aIs)
@@ -75,9 +118,18 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
 
     public void Recovery()
     {
-        shieldCount = aIs.Count;
+        foreach (var ai in aIs)
+        {
+            if(!ai.isDead)
+                shieldCount++;
+        }
     }
 
+    public void AddShieldCount()
+    {
+        shieldCount++;
+    }
+    
     public void DecreaseShieldCount()
     {
         --shieldCount;
@@ -85,6 +137,9 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
         {
             foreach(var ai in aIs)
             {
+                if(ai.isDead)
+                    continue;
+                
                 ai.ChangeState(ImmortalJirungE_V2_AI.State.Stun);
 
                 Recovery();
