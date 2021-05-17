@@ -192,6 +192,9 @@ public class EMPShield : Hitable
     public override void Scanned()
     {
         //mat.SetColor("_BaseColor", scanColor);
+        if(!gameObject.activeSelf)
+            return;
+            
         if (isActive == false)
         {
             StartCoroutine(ActiveEffect());

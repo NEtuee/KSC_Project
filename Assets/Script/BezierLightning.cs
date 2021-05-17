@@ -8,22 +8,61 @@ public class BezierLightning : MonoBehaviour
     {
         public List<LineRenderer> usingLineRenderers = new List<LineRenderer>();
         public float timer = 0f;
+        public float updateTimer = 0f;
 
         private float _time = 0f;
-        public void Set(float t)
+        private float _updateTime = 0f;
+
+        public bool keepUpdate = false;
+
+        public int accuracy;
+        public float randomFactor;
+
+        public Transform startPoint;
+        public Transform endPoint;
+
+        public void Set(float t,float updateTime = 0f,bool update = false)
         {
             _time = t;
             timer = 0f;
+
+            _updateTime = updateTime;
+            updateTimer = 0f;
+            keepUpdate = update;
+        }
+
+        public void Set(Transform start, Transform end,float time, float updateTime,bool update = true)
+        {
+            startPoint = start;
+            endPoint = end;
+            _time = time;
+            _updateTime = updateTime;
+            timer = 0f;
+            updateTimer = 0f;
+
+            keepUpdate = update;
+        }
+
+        public bool UpdateTimeProgress(float deltaTime)
+        {
+            updateTimer += deltaTime;
+            if(_updateTime <= updateTimer)
+            {
+                updateTimer = 0f;
+                return true;
+            }
+
+            return false;
         }
 
         public bool Progress(float deltaTime)
         {
             _time -= deltaTime;
 
-            foreach(var line in usingLineRenderers)
-            {
+            // foreach(var line in usingLineRenderers)
+            // {
 
-            }
+            // }
 
             if(_time <= 0f)
             {
@@ -51,9 +90,22 @@ public class BezierLightning : MonoBehaviour
 
         for(int i = 0; i < _progressPack.Count;)
         {
-            if(_progressPack[i].Progress(Time.deltaTime))
+            var progress = _progressPack[i];
+
+            if(progress.keepUpdate)
             {
-                ReturnCache(_progressPack[i]);
+                if(progress.UpdateTimeProgress(Time.deltaTime))
+                {
+                    foreach(var line in progress.usingLineRenderers)
+                    {
+                        CreateLightning(line,progress.startPoint.position,progress.endPoint.position,progress.accuracy,progress.randomFactor);
+                    }
+                }
+            }
+
+            if(progress.Progress(Time.deltaTime))
+            {
+                ReturnCache(progress);
                 _progressPack.RemoveAt(i);
             }
             else
@@ -63,9 +115,18 @@ public class BezierLightning : MonoBehaviour
         }
     }
 
+    public void Active(Transform start, Transform end, int accur, float time, float randomFactor, float updateTime, bool update = true)
+    {
+        var pack = CreateLightningPack(start.position,end.position,accur,randomFactor);
+        pack.Set(start,end,time,updateTime,update);
+        pack.accuracy = accur;
+        pack.randomFactor = randomFactor;
+        _progressPack.Add(pack);
+    }
+
     public void Active(Vector3 start,Vector3 end, int accur, float time, float randomFactor)
     {
-        var pack = CreateLightning(start,end,accur,randomFactor);
+        var pack = CreateLightningPack(start,end,accur,randomFactor);
         pack.Set(time);
         _progressPack.Add(pack);
     }
@@ -90,9 +151,8 @@ public class BezierLightning : MonoBehaviour
         lines.Clear();
     }
 
-    private LightningPack CreateLightning(Vector3 start, Vector3 end,int accur, float randomFactor)
+    private LineRenderer CreateLightning(LineRenderer line, Vector3 start, Vector3 end,int accur, float randomFactor)
     {
-        var line = GetLineRenderer();
         var bezier_0 = Vector3.Lerp(start,end,0.3f) + MathEx.RandomCircle(randomFactor);
         var bezier_1 = Vector3.Lerp(start,end,0.6f) + MathEx.RandomCircle(randomFactor);
 
@@ -101,6 +161,14 @@ public class BezierLightning : MonoBehaviour
         {
             line.SetPosition(i,MathEx.GetPointOnBezierCurve(start,bezier_0,bezier_1,end,(float)i / (float)accur));
         }
+
+        return line;
+    }
+
+    private LightningPack CreateLightningPack(Vector3 start, Vector3 end,int accur, float randomFactor)
+    {
+        var line = GetLineRenderer();
+        CreateLightning(line, start,end,accur,randomFactor);
 
         var pack = GetPack();
         pack.usingLineRenderers.Add(line);

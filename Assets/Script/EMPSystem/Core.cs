@@ -26,6 +26,13 @@ public class Core : Hitable
         whenDestroy.Invoke();
     }
 
+    public void Reactive()
+    {
+        collider.enabled = true;
+        renderer.enabled = true;
+        isOver = false;
+    }
+
     public override void Hit()
     {
     }

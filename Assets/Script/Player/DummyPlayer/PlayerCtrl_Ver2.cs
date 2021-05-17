@@ -588,7 +588,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         {
                             AddVelocity((-rigidbody.velocity) * deltaTime);
                             
-                            Debug.Log("check");
                         }
                     }
 
