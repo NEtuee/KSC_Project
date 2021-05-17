@@ -375,9 +375,8 @@ public class BrokenMedusa_AI : IKBossBase
             case State.SearchIdle:
             case State.SearchScan:
             {
-                if (prevState == State.SearchIdle || prevState == State.SearchScan || prevState == State.SearchRotate)
-                    break;
-                whenSearchIdle.Invoke();
+                if (prevState == State.LockOnMove || prevState == State.LockOnLook || prevState == State.LockOnFrontWalk)
+                    whenSearchIdle?.Invoke();
             } 
                 break;
             case State.Dead:
@@ -634,7 +633,9 @@ public class BrokenMedusa_AI : IKBossBase
             foreach(Collider curr in playerColl)
             {
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
-                if(ragdoll != null)
+                var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
+                player.TakeDamage(5f);
+                if (ragdoll != null)
                 {
                     ragdoll.ExplosionRagdoll(250.0f, 
                         Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
@@ -655,6 +656,7 @@ public class BrokenMedusa_AI : IKBossBase
 
         var dir = (MathEx.DeleteYPos(_target.position) - MathEx.DeleteYPos(_perpendicularPoint)).normalized;
         var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
+        player.TakeDamage(5f);
         player.SetJumpPower(20f);
         player.SetVelocity(dir * 15f);
         

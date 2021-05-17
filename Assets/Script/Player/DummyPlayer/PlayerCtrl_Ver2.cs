@@ -70,9 +70,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [Range(0, 5)] [SerializeField] private float fallingControlSensitive = 1f;
     [SerializeField] private float horizonWeight = 0.0f;
     [SerializeField] private float rotAngle = 0.0f;
-    [SerializeField] private float airRotateSpeed = 2.5f; 
+    [SerializeField] private float airRotateSpeed = 2.5f;
 
     [Header("Jump Value")]
+    private bool _pressJump = false;
     [SerializeField] private float currentJumpPower = 0f;
     [SerializeField] private float minJumpPower = -10.0f;
     [SerializeField] private float jumpPower = 10f;
@@ -316,8 +317,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
-                    if (InputManager.Instance.GetInput(KeybindingActions.Jump))
+                    if (InputManager.Instance.GetInput(KeybindingActions.Jump) && _pressJump == false)
                     {
+                        _pressJump = true;
                         animator.SetTrigger("Jump");
                         return;
                     }
@@ -1111,11 +1113,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public void Jump()
     {
+        _pressJump = false;
         currentJumpPower = jumpPower;
         movement.Jump();
         prevSpeed = currentSpeed;
         climbingJumpDirection = ClimbingJumpDirection.Up;
         energy.Value += jumpEnergyRestoreValue;
+        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
         ChangeState(PlayerState.Jump);
     }
 

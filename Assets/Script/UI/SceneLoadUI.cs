@@ -15,7 +15,7 @@ public class SceneLoadUI : MonoBehaviour
     public Image loadingSlider;
 
     private float _loadingTime = 0.0f;
-    private float _minLoadUiShowTime = 5f;
+    private float _minLoadUiShowTime = 1f;
 
     private void Start()
     {

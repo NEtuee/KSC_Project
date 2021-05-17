@@ -24,6 +24,7 @@ public class DroneHelper_Medusa : DroneHelper
     {
         if (destroyedMedusa == true)
             return;
+
         root.HelpEvent("Medusa_NoEscape");
     }
 
