@@ -20,8 +20,8 @@ public class FMODSoundManager : MonoBehaviour
     {
         Init();
         
-        if(GameManager.Instance.AsynSceneManager != null)
-        GameManager.Instance.AsynSceneManager.RegisterBeforeLoadOnStart(ReturnAllCache);
+        if(GameManager.Instance.asynSceneManager != null)
+        GameManager.Instance.asynSceneManager.RegisterBeforeLoadOnStart(ReturnAllCache);
 
         Play(4000, Vector3.zero);
         Play(4001, Vector3.zero);

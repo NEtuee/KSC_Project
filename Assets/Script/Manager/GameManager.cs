@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public FMODSoundManager soundManager;
     [SerializeField] public StateManager stateManager;
     [SerializeField] public TextMeshProUGUI sceneNameText;
-    [SerializeField] public AsynSceneManager AsynSceneManager;
+    [SerializeField] public AsynSceneManager asynSceneManager;
     [SerializeField] public GameObject endBackGround;
     [SerializeField] public EffectManager effectManager;
     [SerializeField] public OptionMenuCtrl optionMenuCtrl;
@@ -127,15 +127,18 @@ public class GameManager : MonoBehaviour
         QualitySettings.vSyncCount = displaySettingData.activeVsync == true ? 1 : 0;
 
         if(player != null)
-        player.whenPlayerDead += () => { PAUSE = true;};
+            player.whenPlayerDead += () => { PAUSE = true;};
+        
+        if(asynSceneManager.enabled == false)
+            optionMenuCtrl.DisableSceneLoadUI();
     }
 
     private IEnumerator LateStart()
     {
         yield return new WaitForSeconds(1.0f);
-        AsynSceneManager.RegisterAfterLoad(() =>
+        asynSceneManager.RegisterAfterLoad(() =>
         {
-            switch (AsynSceneManager.currentStageManager.SceneTitle)
+            switch (asynSceneManager.currentStageManager.SceneTitle)
             {
                 case "Outdoor_Main":
                     sceneNameText.text = "지상";
@@ -196,17 +199,17 @@ public class GameManager : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.O))
         {
-            AsynSceneManager.LoadPrevlevel();
+            asynSceneManager.LoadPrevlevel();
         }
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            AsynSceneManager.LoadNextlevelFrom();
+            asynSceneManager.LoadNextlevelFrom();
         }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            AsynSceneManager.LoadCurrentlevel();
+            asynSceneManager.LoadCurrentlevel();
         }
     }
 
@@ -236,12 +239,12 @@ public class GameManager : MonoBehaviour
     {
         player.InitStatus();
         PAUSE = false;
-        AsynSceneManager.LoadCurrentlevel();
+        asynSceneManager.LoadCurrentlevel();
     }
 
     public void LoadTitleScene()
     {
-        AsynSceneManager.MovePlayerObjectToUnloadScene();
+        asynSceneManager.MovePlayerObjectToUnloadScene();
         SceneManager.LoadScene(0);
     }
     

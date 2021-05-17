@@ -24,6 +24,8 @@ public class OptionMenuCtrl : MonoBehaviour
     public EscMenu keyBindingPanel;
     public EscMenu gameOverPanel;
 
+    public SceneLoadUI sceneLoadUi;
+    
     public TutorialVideoPlayer tutorialVideoPlayer;
 
     private bool _currentTutorial = false;
@@ -33,8 +35,8 @@ public class OptionMenuCtrl : MonoBehaviour
         color.a = 0;
         backGroundImage.color = color;
 
-        if( GameManager.Instance.player != null)
-        GameManager.Instance.player.whenPlayerDead += () => { gameOverPanel.Active(true);};
+        if (GameManager.Instance.player != null)
+            GameManager.Instance.player.whenPlayerDead += () => { gameOverPanel.Active(true); };
     }
 
     void Update()
@@ -152,6 +154,13 @@ public class OptionMenuCtrl : MonoBehaviour
         tutorialVideoPlayer.Active(true);
         _currentTutorial = true;
         return true;
+    }
+
+    public void DisableSceneLoadUI()
+    {
+        if (sceneLoadUi == null)
+            return;
+        sceneLoadUi.EndLoad();
     }
     
     public void GameQuit()
