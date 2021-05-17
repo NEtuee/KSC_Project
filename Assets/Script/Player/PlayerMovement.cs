@@ -108,7 +108,8 @@ public class PlayerMovement : MonoBehaviour
     public void Jump()
     {
         isJumping = true;
-        isGrounded = false;
+        //isGrounded = false;
+        SetGrounded(false);
         jumpTime = Time.time;
 
         keepSpeed = true;
@@ -279,7 +280,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (groundAngle < invalidityAngle)
             {
-                isGrounded = true;
+                //isGrounded = true;
+                SetGrounded(true);
                 isJumping = false;
 
                 if (detectObject != null && detectObject.CompareTag("Enviroment"))
@@ -304,7 +306,8 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                isGrounded = false;
+                //isGrounded = false;
+                SetGrounded(false);
             }
             
         }
@@ -330,7 +333,8 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
 
-                isGrounded = false;
+                //isGrounded = false;
+                SetGrounded(false);
                 if (player.GetState() != PlayerCtrl_Ver2.PlayerState.Grab &&
                     player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp && 
                     player.GetState() != PlayerCtrl_Ver2.PlayerState.Ragdoll && 
@@ -370,7 +374,8 @@ public class PlayerMovement : MonoBehaviour
     public void Attach()
     {
         keepSpeed = false;
-        isGrounded = false;
+        //isGrounded = false;
+        SetGrounded(false);
     }
 
     public float GetGroundAngle()
@@ -389,6 +394,15 @@ public class PlayerMovement : MonoBehaviour
     public void SetGrab()
     {
         isJumping = false;
+    }
+
+    public void SetGrounded(bool value)
+    {
+        isGrounded = value;
+        if(value == false)
+        {
+            Debug.Log("Set IsGrounded False" + " Current Ground Angle"+groundAngle);
+        }
     }
 
     private void OnGUI()
