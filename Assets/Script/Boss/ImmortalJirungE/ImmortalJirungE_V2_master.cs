@@ -13,6 +13,8 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
 
     public float explosionRadius = 3f;
     
+    private bool allShieldBroke = false;
+
     private int shieldCount = 0;
 
     private TimeCounterEx _timeCounterEx = new TimeCounterEx();
@@ -43,15 +45,44 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
         }
 
         bool whip = false;
+        shieldCount = 0;
+        foreach(var jirung in aIs)
+        {
+            if(!jirung.shield.isOver)
+            {
+                allShieldBroke = false;
+                ++shieldCount;
+            }
+        }
+        
         foreach(var jirung in aIs)
         {
             if (jirung.isDead)
+            {
                 continue;
+            }
             
             if(jirung.currentState == ImmortalJirungE_V2_AI.State.FloorWhip)
             {
                 whip = true;
                 break;
+            }
+        }
+
+        if(shieldCount == 0)
+        {
+            if(!allShieldBroke)
+            {
+                foreach(var ai in aIs)
+                {
+                    if(ai.isDead)
+                        continue;
+                    
+                    ai.ChangeState(ImmortalJirungE_V2_AI.State.Stun);
+                }
+
+                whenAllShieldDestroy?.Invoke();
+                allShieldBroke = true;
             }
         }
 
@@ -118,34 +149,34 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
 
     public void Recovery()
     {
-        foreach (var ai in aIs)
-        {
-            if(!ai.isDead)
-                shieldCount++;
-        }
+        // foreach (var ai in aIs)
+        // {
+        //     if(!ai.isDead)
+        //         shieldCount++;
+        // }
     }
 
     public void AddShieldCount()
     {
-        shieldCount++;
+        //shieldCount++;
     }
     
     public void DecreaseShieldCount()
     {
-        --shieldCount;
-        if(shieldCount == 0)
-        {
-            foreach(var ai in aIs)
-            {
-                if(ai.isDead)
-                    continue;
+        // --shieldCount;
+        // if(shieldCount == 0)
+        // {
+        //     foreach(var ai in aIs)
+        //     {
+        //         if(ai.isDead)
+        //             continue;
                 
-                ai.ChangeState(ImmortalJirungE_V2_AI.State.Stun);
+        //         ai.ChangeState(ImmortalJirungE_V2_AI.State.Stun);
 
-                Recovery();
-            }
+        //         Recovery();
+        //     }
 
-            whenAllShieldDestroy?.Invoke();
-        }
+        //     whenAllShieldDestroy?.Invoke();
+        // }
     }
 }

@@ -158,6 +158,7 @@ public class PlayerRagdoll : MonoBehaviour
                 }
                 
                 _timeCounter.InitTimer("shock", 0f, UnityEngine.Random.Range(0.05f,0.2f));
+                GameManager.Instance.effectManager.Active("ElectricSpark",transform.position,Quaternion.identity);
             }
             
             _timeCounter.IncreaseTimer("shockProgress", out limit);
