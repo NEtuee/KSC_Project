@@ -788,8 +788,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 17370248}
   scanned: 0
-  hint1Complete: 0
-  hint2Complete: 0
+  tip1: 0
+  tip2: 0
+  checkingTip3: 0
+  destroyedShield: 0
+  destroyedMedusa: 0
 --- !u!114 &17370248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,7 +810,7 @@ MonoBehaviour:
   descriptText: {fileID: 118266296}
   helpStateScale: {x: 0.01, y: 0.01, z: 0.01}
   aimHelpStateScale: {x: 0.004, y: 0.004, z: 0.004}
-  droneDescript: {fileID: 11400000, guid: 264d30d2d349bac4c9cffe2239d0d4a4, type: 2}
+  droneDescript: {fileID: 11400000, guid: c8f9335d12ae128498681ca5f95142a8, type: 2}
   hintTime: 5
   helping: 0
   active: 0
@@ -32605,7 +32608,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00015720307, y: 0.00012389466}
+  m_AnchoredPosition: {x: -5830.6616, y: 4595.254}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1003871476
@@ -34285,6 +34288,7 @@ MonoBehaviour:
   displayPanel: {fileID: 1514165414}
   keyBindingPanel: {fileID: 64542817}
   gameOverPanel: {fileID: 461279630}
+  sceneLoadUi: {fileID: 1245251671}
   tutorialVideoPlayer: {fileID: 1815303900}
 --- !u!1 &1057935356
 GameObject:
@@ -105107,6 +105111,11 @@ PrefabInstance:
     - target: {fileID: 8611312563200437170, guid: a9419146eeb5b164487363a6b9a3b978,
         type: 3}
       propertyPath: AsynSceneManager
+      value: 
+      objectReference: {fileID: 112632218}
+    - target: {fileID: 8611312563200437170, guid: a9419146eeb5b164487363a6b9a3b978,
+        type: 3}
+      propertyPath: asynSceneManager
       value: 
       objectReference: {fileID: 112632218}
     m_RemovedComponents: []

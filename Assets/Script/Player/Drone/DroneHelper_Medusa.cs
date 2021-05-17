@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Serialization;
+
 public class DroneHelper_Medusa : DroneHelper
 {
     [SerializeField] private bool scanned = false;
@@ -9,10 +11,7 @@ public class DroneHelper_Medusa : DroneHelper
     [SerializeField] private bool tip2 = false;
     [SerializeField] private bool checkingTip3 = false;
     [SerializeField] private bool destroyedShield = false;
-    [SerializeField] private bool destoryedMedusa = false;
-
-    [SerializeField] private bool hint1Complete = false;
-    [SerializeField] private bool hint2Complete = false;
+    [SerializeField] private bool destroyedMedusa = false;
     
     public void ScanFlag()
     {
@@ -23,6 +22,8 @@ public class DroneHelper_Medusa : DroneHelper
 
     public void NoEscape()
     {
+        if (destroyedMedusa == true)
+            return;
         root.HelpEvent("Medusa_NoEscape");
     }
 
@@ -33,12 +34,12 @@ public class DroneHelper_Medusa : DroneHelper
         root.timer.InitTimer("Tip03Timer", 0.0f, 10.0f);
     }
 
-    public void HitShild()
+    public void HitShield()
     {
         root.HelpEvent("Medusa_ShieldAttackFeedback01");
     }
 
-    public void DestroyShiled()
+    public void DestroyShield()
     {
         root.HelpEvent("Medusa_ShieldAttackFeedback02");
         destroyedShield = true;
@@ -47,30 +48,10 @@ public class DroneHelper_Medusa : DroneHelper
     public void DestroyMedusa()
     {
         root.HelpEvent("Medusa_Death");
-        destoryedMedusa = true;
+        destroyedMedusa = true;
     }
-
-    public void Hint1Flag()
-    {
-        hint1Complete = true;
-    }
-
-    public void Hint2Flag()
-    {
-        hint2Complete = true;
-    }
-
-    public void CheckExitEvent()
-    {
-        if(root != null)
-        root.HelpEvent("CheckExit");
-    }
-
-    public void ReleaseLockOnFlag()
-    {
-        root.HelpEvent("MD_ReleaseLockOn");
-    }
-
+    
+    
     public override void HelperUpdate()
     {
         if (root.active == false)
@@ -93,7 +74,7 @@ public class DroneHelper_Medusa : DroneHelper
         }
         else
         {
-            if (destoryedMedusa == true)
+            if (scanned == false || destroyedMedusa == true)
                 return;
 
             if(tip1 == false)
@@ -103,7 +84,7 @@ public class DroneHelper_Medusa : DroneHelper
                 {
                     tip1 = true;
                     root.HelpEvent("Medusa_Tip01");
-                    root.timer.InitTimer("Tip02Timer");
+                    root.timer.InitTimer("Tip02Timer",0.0f,60.0f);
                 }
             }
             else

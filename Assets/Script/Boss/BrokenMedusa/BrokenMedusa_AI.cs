@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class BrokenMedusa_AI : IKBossBase
 {
@@ -67,6 +68,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public UnityEvent scannedEvent;
     public UnityEvent whenSearch;
+    public UnityEvent whenSearchIdle;
     public UnityEvent deadEvent;
 
     public void Start()
@@ -86,8 +88,6 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("FrontWalk_Init");
         _timeCounter.InitTimer("timer");
         _timeCounter.InitTimer("pushStand");
-
-        scannedEvent.AddListener(() => { GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelperRoot>().HelpEvent("Scanned"); });
         
         GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
 
@@ -369,8 +369,16 @@ public class BrokenMedusa_AI : IKBossBase
                 {
                     _scanCheck = false;
                     _scannedPosition = _target.position;
-                    scannedEvent.Invoke();
                 }
+                break;
+            case State.SearchRotate:
+            case State.SearchIdle:
+            case State.SearchScan:
+            {
+                if (prevState == State.SearchIdle || prevState == State.SearchScan || prevState == State.SearchRotate)
+                    break;
+                whenSearchIdle.Invoke();
+            } 
                 break;
             case State.Dead:
                 {
@@ -572,6 +580,7 @@ public class BrokenMedusa_AI : IKBossBase
             {
                 //scan
                 Debug.Log("scanned");
+                scannedEvent?.Invoke();
                 return true;
             }
         }

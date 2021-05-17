@@ -429,9 +429,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         // {
         //     rigidbody.velocity = Vector3.zero;
         // }
-
-        animator.SetBool("IsGround", movement.isGrounded);
-
+        
         if (state != PlayerState.Grab &&
             state != PlayerState.HangLedge && 
             state != PlayerState.HangEdge &&
@@ -785,6 +783,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void ProcessFixedUpdate()
     {
+        animator.SetBool("IsGround", movement.isGrounded);
+
         switch(state)
         {
             case PlayerState.Grab:
