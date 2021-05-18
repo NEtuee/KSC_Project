@@ -130,8 +130,15 @@ public class AsynSceneManager : MonoBehaviour
         GameManager.Instance.PAUSE = true;
         _isLoaded = false;
 
-        if(currentStageManager != null)
+        if (currentStageManager != null)
+        {
             UpdateLocalTargets(currentStageManager.exitElevator.transform);
+            if (currentStageManager.entranceElevator == null)
+            {
+                setPos = true;
+            }
+            
+        }
 
         SetTargetObjectParent(null);
         
