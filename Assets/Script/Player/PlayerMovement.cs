@@ -224,7 +224,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (capsuleCollider != null)
         {
-            float radius = capsuleCollider.radius * 0.9f;
+            float radius = capsuleCollider.radius;
             float dist = 10f;
 
             Ray ray2 = new Ray(transform.position + new Vector3(0, colliderHeight / 2, 0), Vector3.down);

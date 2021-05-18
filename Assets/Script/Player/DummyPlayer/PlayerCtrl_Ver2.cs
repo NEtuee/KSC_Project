@@ -576,8 +576,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     }
                     else
                     {
-                        targetRotation = Quaternion.LookRotation(transform.forward, Vector3.up);
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * rotateSpeed);
+                        Vector3 targetDir = transform.forward;
+                        if(Vector3.Cross(transform.up,Vector3.up).normalized.x != 0.0f)
+                        {
+                            targetDir.Set(transform.up.x, 0.0f, transform.up.z);
+                            targetDir.Normalize();
+                        }
+
+                        targetRotation = Quaternion.LookRotation(targetDir, Vector3.up);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, deltaTime * rotateSpeed);
                     }
 
                     moveDir *= currentSpeed;
@@ -1686,6 +1693,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 point1 = transform.position + Vector3.up;
                 if(Physics.Raycast(point1, -transform.up, out hit, 1.5f, detectionLayer))
                 {
+                    point1 += transform.forward;
+                    if (Physics.Raycast(point1, -transform.up, 1.5f, detectionLayer) == false)
+                        return false;
+
                     transform.rotation = Quaternion.LookRotation(-hit.normal, transform.forward);
                     transform.position = (hit.point) + (hit.normal) * collider.radius;
 
