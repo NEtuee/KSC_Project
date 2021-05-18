@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 
@@ -129,7 +130,7 @@ public class GameManager : MonoBehaviour
         if(player != null)
             player.whenPlayerDead += () => { PAUSE = true;};
         
-        if(asynSceneManager.enabled == false)
+        if(asynSceneManager != null && asynSceneManager.enabled == false)
             optionMenuCtrl.DisableSceneLoadUI();
     }
 
@@ -209,7 +210,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            asynSceneManager.LoadCurrentlevel();
+            asynSceneManager.LoadCurrentLevel();
         }
     }
 
@@ -239,7 +240,9 @@ public class GameManager : MonoBehaviour
     {
         player.InitStatus();
         PAUSE = false;
-        asynSceneManager.LoadCurrentlevel();
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        asynSceneManager.LoadCurrentLevel();
     }
 
     public void LoadTitleScene()

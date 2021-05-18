@@ -36,7 +36,7 @@ public class SceneLoadUI : MonoBehaviour
             loadingCanvas.enabled = true;
             tipCanvas.enabled = true;
             tipText.DOFade(1f, 0.5f);
-            complete.Invoke();
+            complete?.Invoke();
         });
     }
 

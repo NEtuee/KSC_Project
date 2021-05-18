@@ -62,7 +62,7 @@ public class AsynSceneManager : MonoBehaviour
         _follow = GameManager.Instance.followTarget.transform;
         _player = GameManager.Instance.player;
 
-        LoadCurrentlevel();
+        LoadCurrentLevel();
     }
 
     public void LoadLevel(int level)
@@ -72,8 +72,9 @@ public class AsynSceneManager : MonoBehaviour
         StartCoroutine(SceneLoadingProgress(true));
     }
 
-    public void LoadCurrentlevel()
+    public void LoadCurrentLevel()
     {
+        Debug.Log("LoadCurrentLevel");
         sceneLoadUI.StartLoad(()=> {
             _currentScene = levels[currentLevel];
             RegisterProgress();
