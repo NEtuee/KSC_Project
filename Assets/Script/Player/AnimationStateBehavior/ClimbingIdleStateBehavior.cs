@@ -12,7 +12,6 @@ public class ClimbingIdleStateBehavior : StateMachineBehaviour
         if(player == null)
         {
             player = (PlayerCtrl_Ver2)GameManager.Instance.player;
-            return;
         }
 
         player.SetClimbMove(false);

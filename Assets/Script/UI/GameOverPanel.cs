@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,12 +11,16 @@ public class GameOverPanel : EscMenu
     private Canvas _canvas;
     public MainTitleButton restartButton;
     public MainTitleButton titleButton;
+    public Button restartButtonUgui;
+    public Button titleButtonUgui;
 
     private void Start()
     {
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = false;
         _canvas.sortingOrder = 0;
+        restartButtonUgui.interactable = false;
+        titleButtonUgui.interactable = false;
     }
 
     public void OnRestartButton()
@@ -36,6 +41,9 @@ public class GameOverPanel : EscMenu
             _canvas.sortingOrder = 5;
             _canvas.enabled = true;
             
+            restartButtonUgui.interactable = true;
+            titleButtonUgui.interactable = true;
+            
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             
@@ -45,6 +53,9 @@ public class GameOverPanel : EscMenu
         {
             _canvas.sortingOrder = 0;
             _canvas.enabled = false;
+            
+            restartButtonUgui.interactable = false;
+            titleButtonUgui.interactable = false;
             
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

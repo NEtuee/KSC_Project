@@ -2400,7 +2400,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 60
+  field of view: 70
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -2426,7 +2426,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69449274}
   m_LocalRotation: {x: 0, y: 0.008726558, z: 0, w: 0.999962}
-  m_LocalPosition: {x: 4.603684, y: 3.7800002, z: -24.535479}
+  m_LocalPosition: {x: 3.66019, y: 4.4300003, z: -27.019392}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1690922439}
@@ -16096,6 +16096,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   restartButton: {fileID: 5810175765659056999}
   titleButton: {fileID: 720007470}
+  restartButtonUgui: {fileID: 5810175764694717842}
+  titleButtonUgui: {fileID: 1066975587}
 --- !u!1 &461834930
 GameObject:
   m_ObjectHideFlags: 0
@@ -32732,7 +32734,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00008870424, y: 0.00000053640775}
+  m_AnchoredPosition: {x: -5408.523, y: 4262.5586}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1003871476
@@ -40747,8 +40749,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1222321470}
-  m_LocalRotation: {x: 0.8090872, y: 0.11133028, z: -0.18251061, w: 0.54742426}
-  m_LocalPosition: {x: -0.999, y: 0.136, z: 0.201}
+  m_LocalRotation: {x: 0.67059714, y: 0.14189442, z: -0.35688883, w: 0.634662}
+  m_LocalPosition: {x: -0.853, y: 0.3, z: 0.422}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1085464039}
@@ -40759,7 +40761,7 @@ Transform:
   - {fileID: 1155033017}
   m_Father: {fileID: 4568090882291302893}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 67.89, y: -152.56, z: -177.004}
+  m_LocalEulerAnglesHint: {x: 72.267, y: -78.575, z: -120.403}
 --- !u!95 &1222321472
 Animator:
   serializedVersion: 3
@@ -67521,7 +67523,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 7342017682793667067}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -67535,6 +67537,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 1.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -71569,7 +71572,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 7200974181457240118}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -71583,6 +71586,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 2.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -74678,7 +74682,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 7342017682793667067}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -74692,6 +74696,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 1.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -74949,7 +74954,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.26906484, y: -0.036081374, z: -0.000000029860114}
+  m_ConnectedAnchor: {x: -0.26906484, y: -0.036073744, z: -0.000000029828367}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -78574,7 +78579,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.37299046, y: 0.025862971, z: 0.0000005066395}
+  m_ConnectedAnchor: {x: -0.37299046, y: 0.025855342, z: 0.0000005066395}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -79230,7 +79235,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.22654805, y: 0.0000060502016, z: -0.00000009784821}
+  m_ConnectedAnchor: {x: -0.22654805, y: -0.0000015792381, z: -0.00000015745289}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -86376,17 +86381,17 @@ PrefabInstance:
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.603684
+      value: 4.594958
       objectReference: {fileID: 0}
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7800002
+      value: 3.9300003
       objectReference: {fileID: 0}
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.535479
+      value: -25.035402
       objectReference: {fileID: 0}
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
@@ -86461,7 +86466,12 @@ PrefabInstance:
     - target: {fileID: 7669254717060169732, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: ShoulderOffset.y
-      value: 0.25
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7669254717060169732, guid: e4ab1a28654fc114cb49b9515016be77,
+        type: 3}
+      propertyPath: ShoulderOffset.z
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7669254717060169732, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
@@ -89864,7 +89874,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.44308728, y: -0.00000512565, z: -0.000000078231096}
+  m_ConnectedAnchor: {x: -0.44308707, y: 0.0000025003828, z: -0.000000052154064}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -96041,7 +96051,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.22654817, y: 0.0000076003153, z: -0.000000021361096}
+  m_ConnectedAnchor: {x: -0.22654817, y: -0.000000029077313, z: -0.000000021361059}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -97218,7 +97228,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.11278285, y: -0.05583916, z: 0.18972418}
+  m_ConnectedAnchor: {x: -0.11278285, y: -0.05583153, z: 0.18972418}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: -1, z: 0}
   m_TwistLimitSpring:
@@ -97859,7 +97869,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.26213592, y: 0.0000063088855, z: -0.000000018343966}
+  m_ConnectedAnchor: {x: -0.26213592, y: -0.0000013205073, z: -0.000000018344004}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -101183,7 +101193,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 916669678494648549}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -101197,6 +101207,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 1.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -103004,7 +103015,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.11278285, y: -0.055838652, z: -0.18972448}
+  m_ConnectedAnchor: {x: -0.11278285, y: -0.055831023, z: -0.18972448}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: -1, z: 0}
   m_TwistLimitSpring:
@@ -104103,7 +104114,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8673833695794640053}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.55963504, y: 1.543, z: 128.92}
+  m_LocalPosition: {x: -0.55963504, y: 1.543, z: -70.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3733096906860704736}
@@ -106525,7 +106536,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 7342017682793667067}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -106539,6 +106550,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 1.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -106680,7 +106692,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   gunAnim: {fileID: 1222321472}
-  relativeVec: {x: 4.5, y: 180, z: 0}
+  relativeVec: {x: 2.9, y: 188.2, z: 0}
   lookAtAim: {fileID: 931792777}
   hpPackCount:
     value: 0
@@ -107710,7 +107722,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.2621358, y: 0.00000725307, z: -0.000000041260677}
+  m_ConnectedAnchor: {x: -0.2621358, y: -0.00000037632228, z: -0.000000041260638}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -107850,7 +107862,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.4430871, y: -0.0000047045432, z: 0.000000059604645}
+  m_ConnectedAnchor: {x: -0.4430869, y: 0.0000029214862, z: 0.000000033527613}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:

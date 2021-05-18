@@ -55,7 +55,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private PlayerState prevState;
     [SerializeField] private bool isClimbingMove = false;
     [SerializeField] private bool isLedge = false;
-    [SerializeField] private Transform headTransfrom;
+    [SerializeField] private Transform headTransform;
     [SerializeField] public bool isCanReadyClimbingCancel = false;
     [SerializeField] private bool isCanClimbingCancel = false;
     [SerializeField] private bool isClimbingGround = false;
@@ -73,7 +73,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float airRotateSpeed = 2.5f;
 
     [Header("Jump Value")]
-    private bool _pressJump = false;
+    public bool pressJump = false;
     [SerializeField] private float currentJumpPower = 0f;
     [SerializeField] private float minJumpPower = -10.0f;
     [SerializeField] private float jumpPower = 10f;
@@ -205,7 +205,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
      
         if(animator != null)
         {
-            headTransfrom = animator.GetBoneTransform(HumanBodyBones.Head);
+            headTransform = animator.GetBoneTransform(HumanBodyBones.Head);
         }
 
         if(empGun != null)
@@ -317,9 +317,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
-                    if (InputManager.Instance.GetInput(KeybindingActions.Jump))
+                    if (InputManager.Instance.GetInput(KeybindingActions.Jump) && pressJump == false)
                     {
-                        _pressJump = true;
+                        pressJump = true;
                         animator.SetTrigger("Jump");
                         return;
                     }
@@ -1124,7 +1124,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public void Jump()
     {
-        _pressJump = false;
         currentJumpPower = jumpPower;
         movement.Jump();
         prevSpeed = currentSpeed;
@@ -1628,7 +1627,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private bool LedgeDetection()
     {
         RaycastHit hit;
-        Vector3 point1 = headTransfrom.position;
+        Vector3 point1 = headTransform.position;
         if (Physics.Raycast(point1,transform.forward, out hit, 2f, detectionLayer))
         {
             return true;
@@ -2159,7 +2158,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             StopCoroutine(restoreHpPackCoroutine);
         }
 
-        if (hp.Value == 0.0f)
+        if (hp.Value <= 0.0f)
         {
             ChangeState(PlayerState.Dead);
         }
@@ -2264,7 +2263,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             Gizmos.DrawRay(start, -transform.up * collider.height * 2);
         }
 
-        Vector3 point1 = headTransfrom.position;
+        Vector3 point1 = headTransform.position;
         DebugCastDetection.Instance.DebugSphereCastDetection(point1, collider.radius, transform.forward, 2f, climbingPaintLayer, Color.blue, Color.red);
 
         //start = transform.position + transform.up * collider.height * 2;
