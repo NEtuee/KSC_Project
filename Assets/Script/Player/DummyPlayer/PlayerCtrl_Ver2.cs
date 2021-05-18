@@ -317,7 +317,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
-                    if (InputManager.Instance.GetInput(KeybindingActions.Jump) && _pressJump == false)
+                    if (InputManager.Instance.GetInput(KeybindingActions.Jump))
                     {
                         _pressJump = true;
                         animator.SetTrigger("Jump");
@@ -605,6 +605,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {                
                     if(stamina.Value <= 0.0f)
                     {
+                        isClimbingMove = false;
+                        isLedge = false;
+
+                        Vector3 currentRot = transform.rotation.eulerAngles;
+                        currentRot.x = 0.0f;
+                        currentRot.z = 0.0f;
+                        transform.rotation = Quaternion.Euler(currentRot);
+
+                        climbingJumpDirection = ClimbingJumpDirection.Falling;
+                        
+                        movement.Detach();
+
                         ChangeState(PlayerState.Default);
                         return;
                     }
