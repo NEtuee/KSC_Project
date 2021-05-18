@@ -399,10 +399,10 @@ public class PlayerMovement : MonoBehaviour
     public void SetGrounded(bool value)
     {
         isGrounded = value;
-        if(value == false)
-        {
-            Debug.Log("Set IsGrounded False" + " Current Ground Angle"+groundAngle);
-        }
+        // if(value == false)
+        // {
+        //     Debug.Log("Set IsGrounded False" + " Current Ground Angle"+groundAngle);
+        // }
     }
 
     private void OnGUI()
