@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]private Transform prevParent;
     [SerializeField]private float detachTime;
-    private float speedKeepTime = 5f;
+    [SerializeField]private float speedKeepTime = 5f;
     private Vector3 prevParentPrevPos;
     [SerializeField]private bool keepSpeed;
     [SerializeField] private float amount;

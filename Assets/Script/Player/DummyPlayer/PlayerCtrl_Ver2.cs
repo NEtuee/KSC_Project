@@ -454,7 +454,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Default:
                 {
-                    if(movement.isGrounded == false)
+                    if(movement.isGrounded == false && pressJump == false)
                     {
                         ChangeState(PlayerState.Jump);
                         return;
@@ -1142,6 +1142,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public void ChangeState(PlayerState changeState)
     {
+
         prevState = state;
         state = changeState;
 
