@@ -56,6 +56,7 @@ public class DroneDescriptCSVParser : EditorWindow
 
             Descript entry = new Descript();
             entry.key = values[0];
+            values[1] = string.Join("", values[1].Split('"'));
             entry.descript = values[1];
 
             descripts.Add(entry);

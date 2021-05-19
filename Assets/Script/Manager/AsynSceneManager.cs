@@ -62,7 +62,7 @@ public class AsynSceneManager : MonoBehaviour
         _follow = GameManager.Instance.followTarget.transform;
         _player = GameManager.Instance.player;
 
-        LoadCurrentlevel();
+        LoadCurrentLevel();
     }
 
     public void LoadLevel(int level)
@@ -72,8 +72,9 @@ public class AsynSceneManager : MonoBehaviour
         StartCoroutine(SceneLoadingProgress(true));
     }
 
-    public void LoadCurrentlevel()
+    public void LoadCurrentLevel()
     {
+        Debug.Log("LoadCurrentLevel");
         sceneLoadUI.StartLoad(()=> {
             _currentScene = levels[currentLevel];
             RegisterProgress();
@@ -130,8 +131,17 @@ public class AsynSceneManager : MonoBehaviour
         GameManager.Instance.PAUSE = true;
         _isLoaded = false;
 
-        if(currentStageManager != null)
-            UpdateLocalTargets(currentStageManager.exitElevator.transform);
+        if (currentStageManager != null)
+        {
+            if (currentStageManager.entranceElevator == null)
+            {
+                setPos = true;
+            }
+            else
+            {
+                UpdateLocalTargets(currentStageManager.exitElevator.transform);
+            }
+        }
 
         SetTargetObjectParent(null);
         
@@ -220,7 +230,7 @@ public class AsynSceneManager : MonoBehaviour
 
         if(stage != null)
         {
-            if(setPos)
+            if(setPos || stage.entranceElevator == null)
             {
                 stage.ObjectTeleportToLoadedPos(_player.transform,_player.transform.position);
                 stage.ObjectTeleportToLoadedPos(_cam.transform,_player.transform.position);

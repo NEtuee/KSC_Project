@@ -2,16 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public class PlayerRagdoll : MonoBehaviour
 {
     public enum RagdollState
     { Animated, Ragdoll, BlendToAnim }
+
+    public enum RagdollSimulateState
+    {
+        Default, Shock
+    }
+    
+    
     private Animator anim;
     private Collider collider;
     private Rigidbody rigidbody;
 
     [SerializeField] public RagdollState state;
+    [SerializeField] public RagdollSimulateState simulateState;
     [SerializeField] private Rigidbody leftHandRigidBody;
     [SerializeField] private Rigidbody rightHandRigidBody;
     [SerializeField] private Transform leftHandTransform;
@@ -59,6 +68,8 @@ public class PlayerRagdoll : MonoBehaviour
 
     private GameObject _ragdollContainer;
     private PlayerCtrl_Ver2 player;
+
+    private TimeCounterEx _timeCounter;
 
     void Start()
     {
@@ -115,11 +126,15 @@ public class PlayerRagdoll : MonoBehaviour
             copyTargetCharacter.whenEndHangShake += DisableHangShake;
             copyTargetCharacter.gameObject.SetActive(false);
         }
+
+        _timeCounter = new TimeCounterEx();
+        _timeCounter.InitTimer("shock", 0f, 0.1f);
+        _timeCounter.InitTimer("shockProgress", 0f, 1f);
     }
 
     private void FixedUpdate()
     {
-        if (isFlyRagdoll == true && Time.time - ragdollTime > 0.1f && hipTransform.GetComponent<Rigidbody>().velocity.magnitude < 0.05f)
+        if (isFlyRagdoll == true && Time.time - ragdollTime > 0.1f && hipTransform.GetComponent<Rigidbody>().velocity.magnitude < 0.05f && simulateState != RagdollSimulateState.Shock)
         {
             ReturnAnimated();
         }
@@ -128,6 +143,32 @@ public class PlayerRagdoll : MonoBehaviour
         {
             transform.position = hipTransform.position;
         }
+
+        if (state == RagdollState.Ragdoll && simulateState == RagdollSimulateState.Shock)
+        {
+            _timeCounter.IncreaseTimer("shock", out bool limit);
+            if (limit)
+            {
+                int rand = UnityEngine.Random.Range(1,3);
+                for (int i = 0; i < ragdollRigids.Count; i += rand)
+                {
+                    ragdollRigids[i].AddForce(Vector3.up * 180f,ForceMode.Force);
+                    ragdollRigids[i].AddTorque(MathEx.RandomCircle(270f));
+                    rand = UnityEngine.Random.Range(1,3);
+                }
+                
+                _timeCounter.InitTimer("shock", 0f, UnityEngine.Random.Range(0.05f,0.2f));
+                GameManager.Instance.effectManager.Active("ElectricSpark",transform.position,Quaternion.identity);
+            }
+            
+            _timeCounter.IncreaseTimer("shockProgress", out limit);
+            if (limit)
+            {
+                simulateState = RagdollSimulateState.Default;
+            }
+            
+        }
+        
 
 
         if (isLeftHandFix)
@@ -247,6 +288,12 @@ public class PlayerRagdoll : MonoBehaviour
         //{
         //    rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
         //}
+    }
+
+    public void SetPlayerShock(float time)
+    {
+        _timeCounter.InitTimer("shockProgress", 0f, time);
+        simulateState = RagdollSimulateState.Shock;
     }
 
     public void ActiveLeftHandFixRagdoll()

@@ -78,8 +78,8 @@ public class LevelEdit_Trigger : MonoBehaviour
 
         // Debug.Log(LayerMask.LayerToName(coll.gameObject.layer));
         // Debug.Log(LayerMask.LayerToName(targetLayer));
-
-        if ((coll.gameObject.layer & targetLayer) != 0)
+       
+        if (targetLayer == (targetLayer | (1<<coll.gameObject.layer)))
         {
             Debug.Log(gameObject.name);
             gameObject.name = "triggered";

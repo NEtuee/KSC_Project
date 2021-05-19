@@ -16,7 +16,7 @@ public class OptionMenuCtrl : MonoBehaviour
     public EscMenu optionItemPanel;
     [SerializeField]private MenuType _currentMenu = MenuType.None;
 
-    private EscMenu _currnetPanel = null;
+    private EscMenu _currentPanel = null;
     public EscMenu optionPanel;
     public EscMenu soundPanel;
     public EscMenu controlPanel;
@@ -24,6 +24,8 @@ public class OptionMenuCtrl : MonoBehaviour
     public EscMenu keyBindingPanel;
     public EscMenu gameOverPanel;
 
+    public SceneLoadUI sceneLoadUi;
+    
     public TutorialVideoPlayer tutorialVideoPlayer;
 
     private bool _currentTutorial = false;
@@ -33,8 +35,8 @@ public class OptionMenuCtrl : MonoBehaviour
         color.a = 0;
         backGroundImage.color = color;
 
-        if( GameManager.Instance.player != null)
-        GameManager.Instance.player.whenPlayerDead += () => { gameOverPanel.Active(true);};
+        if (GameManager.Instance.player != null)
+            GameManager.Instance.player.whenPlayerDead += () => { gameOverPanel.Active(true); };
     }
 
     void Update()
@@ -75,7 +77,7 @@ public class OptionMenuCtrl : MonoBehaviour
                     GameManager.Instance.cameraManager.ActiveAimCamera();
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
-                    _currnetPanel = optionPanel;
+                    _currentPanel = optionPanel;
 
                     backGroundImage.DOFade(0.09f, 0.3f).OnComplete(() =>
                     {
@@ -118,29 +120,30 @@ public class OptionMenuCtrl : MonoBehaviour
 
     public void Change(int menuType)
     {
+        Debug.Log("OptionChange");
         _currentMenu = (MenuType)menuType;
-        EscMenu prevPanel = _currnetPanel;
+        EscMenu prevPanel = _currentPanel;
         switch ((MenuType)menuType)
         {
             case MenuType.Sound:
-                _currnetPanel = soundPanel;
+                _currentPanel = soundPanel;
                 break;
             case MenuType.Control:
-                _currnetPanel = controlPanel;
+                _currentPanel = controlPanel;
                 break;
             case MenuType.Display:
-                _currnetPanel = displayPanel;
+                _currentPanel = displayPanel;
                 break;
             case MenuType.Key:
-                _currnetPanel = keyBindingPanel;
+                _currentPanel = keyBindingPanel;
                 break;
             case MenuType.Option:
-                _currnetPanel = optionPanel;
+                _currentPanel = optionPanel;
                 break;
         }
         titlePanel.ChangeOption((MenuType)menuType, () => {
             prevPanel.Active (false);
-            _currnetPanel.Active (true);
+            _currentPanel.Active (true);
         }, 1f);
     }
 
@@ -152,6 +155,13 @@ public class OptionMenuCtrl : MonoBehaviour
         tutorialVideoPlayer.Active(true);
         _currentTutorial = true;
         return true;
+    }
+
+    public void DisableSceneLoadUI()
+    {
+        if (sceneLoadUi == null)
+            return;
+        sceneLoadUi.EndLoad();
     }
     
     public void GameQuit()

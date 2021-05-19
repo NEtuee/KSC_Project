@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class BrokenMedusa_AI : IKBossBase
 {
@@ -67,6 +68,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public UnityEvent scannedEvent;
     public UnityEvent whenSearch;
+    public UnityEvent whenSearchIdle;
     public UnityEvent deadEvent;
 
     public void Start()
@@ -86,8 +88,6 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("FrontWalk_Init");
         _timeCounter.InitTimer("timer");
         _timeCounter.InitTimer("pushStand");
-
-        scannedEvent.AddListener(() => { GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneHelperRoot>().HelpEvent("Scanned"); });
         
         GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
 
@@ -369,8 +369,15 @@ public class BrokenMedusa_AI : IKBossBase
                 {
                     _scanCheck = false;
                     _scannedPosition = _target.position;
-                    scannedEvent.Invoke();
                 }
+                break;
+            case State.SearchRotate:
+            case State.SearchIdle:
+            case State.SearchScan:
+            {
+                if (prevState == State.LockOnMove || prevState == State.LockOnLook || prevState == State.LockOnFrontWalk)
+                    whenSearchIdle?.Invoke();
+            } 
                 break;
             case State.Dead:
                 {
@@ -572,6 +579,7 @@ public class BrokenMedusa_AI : IKBossBase
             {
                 //scan
                 Debug.Log("scanned");
+                scannedEvent?.Invoke();
                 return true;
             }
         }
@@ -625,7 +633,9 @@ public class BrokenMedusa_AI : IKBossBase
             foreach(Collider curr in playerColl)
             {
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
-                if(ragdoll != null)
+                var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
+                player.TakeDamage(5f);
+                if (ragdoll != null)
                 {
                     ragdoll.ExplosionRagdoll(250.0f, 
                         Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
@@ -646,6 +656,7 @@ public class BrokenMedusa_AI : IKBossBase
 
         var dir = (MathEx.DeleteYPos(_target.position) - MathEx.DeleteYPos(_perpendicularPoint)).normalized;
         var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
+        player.TakeDamage(5f);
         player.SetJumpPower(20f);
         player.SetVelocity(dir * 15f);
         

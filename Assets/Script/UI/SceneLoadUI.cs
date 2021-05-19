@@ -13,7 +13,9 @@ public class SceneLoadUI : MonoBehaviour
     public TextMeshProUGUI tipText;
     public Canvas loadingCanvas;
     public Image loadingSlider;
-   
+
+    private float _loadingTime = 0.0f;
+    private float _minLoadUiShowTime = 1f;
 
     private void Start()
     {
@@ -25,25 +27,49 @@ public class SceneLoadUI : MonoBehaviour
         loadingSlider.fillAmount = 0.0f;
     }
 
-    public void StartLoad(TweenCallback complte)
+    public void StartLoad(TweenCallback complete)
     {
         loadCanvas.enabled = true;
+        _loadingTime = 0.0f;
         fadeImage.DOFade(1f, 0.5f).OnComplete(()=>
         {
             loadingCanvas.enabled = true;
             tipCanvas.enabled = true;
             tipText.DOFade(1f, 0.5f);
-            complte.Invoke();
+            complete?.Invoke();
         });
     }
 
     public void SetLoadingValue(float value)
     {
         loadingSlider.fillAmount = value;
+        _loadingTime += Time.deltaTime;
     }
 
     public void EndLoad()
     {
+        SetLoadingValue(1.0f);
+
+        if (_loadingTime >= _minLoadUiShowTime)
+        {
+            loadingCanvas.enabled = false;
+            tipCanvas.enabled = false;
+            tipText.DOFade(0f, 0.1f);
+            loadingSlider.fillAmount = 0.0f;
+
+            fadeImage.DOFade(0f, 2f).OnComplete(() => loadCanvas.enabled = false);
+        }
+        else
+        {
+            StartCoroutine(DelayLoadUI(_minLoadUiShowTime - _loadingTime));
+        }
+    }
+
+    IEnumerator DelayLoadUI(float time)
+    {
+        yield return new WaitForSeconds(time);
+        
+        SetLoadingValue(1.0f);
         loadingCanvas.enabled = false;
         tipCanvas.enabled = false;
         tipText.DOFade(0f, 0.1f);
@@ -51,5 +77,5 @@ public class SceneLoadUI : MonoBehaviour
 
         fadeImage.DOFade(0f, 2f).OnComplete(() => loadCanvas.enabled = false);
     }
-
+    
 }

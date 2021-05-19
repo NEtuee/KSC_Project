@@ -788,8 +788,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 17370248}
   scanned: 0
-  hint1Complete: 0
-  hint2Complete: 0
+  tip1: 0
+  tip2: 0
+  checkingTip3: 0
+  destroyedShield: 0
+  destroyedMedusa: 0
 --- !u!114 &17370248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,7 +810,7 @@ MonoBehaviour:
   descriptText: {fileID: 118266296}
   helpStateScale: {x: 0.01, y: 0.01, z: 0.01}
   aimHelpStateScale: {x: 0.004, y: 0.004, z: 0.004}
-  droneDescript: {fileID: 11400000, guid: 264d30d2d349bac4c9cffe2239d0d4a4, type: 2}
+  droneDescript: {fileID: 11400000, guid: c8f9335d12ae128498681ca5f95142a8, type: 2}
   hintTime: 5
   helping: 0
   active: 0
@@ -2342,6 +2345,7 @@ MonoBehaviour:
   m_CameraType: 0
   m_Cameras:
   - {fileID: 1190799503}
+  - {fileID: 221051649}
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
@@ -2402,7 +2406,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 393183
+    m_Bits: 384991
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2427,6 +2431,7 @@ Transform:
   m_Children:
   - {fileID: 1690922439}
   - {fileID: 931792777}
+  - {fileID: 221051646}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3727,8 +3732,14 @@ MonoBehaviour:
     - MiningLevelTutorialTrigger
   - levelCode: 
     scenesToLoad:
-    - AD_0428_VisualMake 1
+    - BrokenMedusa_Lab
     - BrokenMedusa_main_Animation
+  - levelCode: 
+    scenesToLoad:
+    - DaddyLongLegs_Upgrade
+  - levelCode: 
+    scenesToLoad:
+    - ImmortalJirungE_main_V2
   currentLevel: 0
   currentStageManager: {fileID: 0}
   sceneLoadUI: {fileID: 1245251671}
@@ -7743,6 +7754,122 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 218577710}
   m_CullTransparentMesh: 1
+--- !u!1 &221051645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 221051646}
+  - component: {fileID: 221051649}
+  - component: {fileID: 221051648}
+  - component: {fileID: 221051647}
+  m_Layer: 0
+  m_Name: WorldUICamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &221051646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221051645}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 69449279}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &221051647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221051645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 0
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 1
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+--- !u!81 &221051648
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221051645}
+  m_Enabled: 1
+--- !u!20 &221051649
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221051645}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 0
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1 &221680165
 GameObject:
   m_ObjectHideFlags: 0
@@ -9243,7 +9370,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 256384518}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -15969,6 +16096,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   restartButton: {fileID: 5810175765659056999}
   titleButton: {fileID: 720007470}
+  restartButtonUgui: {fileID: 5810175764694717842}
+  titleButtonUgui: {fileID: 1066975587}
 --- !u!1 &461834930
 GameObject:
   m_ObjectHideFlags: 0
@@ -32605,7 +32734,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00015720307, y: 0.00012389466}
+  m_AnchoredPosition: {x: -5408.523, y: 4262.5586}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1003871476
@@ -34285,6 +34414,7 @@ MonoBehaviour:
   displayPanel: {fileID: 1514165414}
   keyBindingPanel: {fileID: 64542817}
   gameOverPanel: {fileID: 461279630}
+  sceneLoadUi: {fileID: 1245251671}
   tutorialVideoPlayer: {fileID: 1815303900}
 --- !u!1 &1057935356
 GameObject:
@@ -40034,7 +40164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 1
@@ -40619,8 +40749,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1222321470}
-  m_LocalRotation: {x: 0.8090872, y: 0.11133028, z: -0.18251061, w: 0.54742426}
-  m_LocalPosition: {x: -0.999, y: 0.136, z: 0.201}
+  m_LocalRotation: {x: 0.67059714, y: 0.14189442, z: -0.35688883, w: 0.634662}
+  m_LocalPosition: {x: -0.853, y: 0.3, z: 0.422}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1085464039}
@@ -40631,7 +40761,7 @@ Transform:
   - {fileID: 1155033017}
   m_Father: {fileID: 4568090882291302893}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 67.89, y: -152.56, z: -177.004}
+  m_LocalEulerAnglesHint: {x: 72.267, y: -78.575, z: -120.403}
 --- !u!95 &1222321472
 Animator:
   serializedVersion: 3
@@ -41135,7 +41265,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245251666}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4e340c0ee6b63448921e33f8be92fcf, type: 3}
   m_Name: 
@@ -66678,15 +66808,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.14223719, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.1411767, g: 0, b: 1, a: 0.34901962}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 8bc5190186a5ff54ba8fe3ce7ccd7bbf, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -67393,7 +67523,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 7342017682793667067}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -67407,6 +67537,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 1.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -68642,6 +68773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  simulateState: 0
   leftHandRigidBody: {fileID: 0}
   rightHandRigidBody: {fileID: 0}
   leftHandTransform: {fileID: 0}
@@ -71331,6 +71463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  simulateState: 0
   leftHandRigidBody: {fileID: 0}
   rightHandRigidBody: {fileID: 0}
   leftHandTransform: {fileID: 0}
@@ -71439,7 +71572,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 7200974181457240118}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -71453,6 +71586,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 2.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -74439,6 +74573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  simulateState: 0
   leftHandRigidBody: {fileID: 0}
   rightHandRigidBody: {fileID: 0}
   leftHandTransform: {fileID: 0}
@@ -74547,7 +74682,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 7342017682793667067}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -74561,6 +74696,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 1.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -79099,7 +79235,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.22654817, y: -0.0000015792381, z: -0.00000015745289}
+  m_ConnectedAnchor: {x: -0.22654805, y: -0.0000015792381, z: -0.00000015745289}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -83254,7 +83390,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000006705483, y: -0.00000043958426, z: -0.10558053}
+  m_ConnectedAnchor: {x: -0.00000006705483, y: -0.00000043958426, z: -0.1055805}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -85957,7 +86093,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00000018626447, y: 0.00000017136335, z: 0.1055805}
+  m_ConnectedAnchor: {x: 0.00000018626447, y: 0.00000017136335, z: 0.10558053}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -86245,17 +86381,17 @@ PrefabInstance:
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.603684
+      value: 4.594958
       objectReference: {fileID: 0}
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7800002
+      value: 3.9300003
       objectReference: {fileID: 0}
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.535479
+      value: -25.035402
       objectReference: {fileID: 0}
     - target: {fileID: 3271436134468206627, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
@@ -86330,7 +86466,12 @@ PrefabInstance:
     - target: {fileID: 7669254717060169732, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
       propertyPath: ShoulderOffset.y
-      value: 0.25
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7669254717060169732, guid: e4ab1a28654fc114cb49b9515016be77,
+        type: 3}
+      propertyPath: ShoulderOffset.z
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7669254717060169732, guid: e4ab1a28654fc114cb49b9515016be77,
         type: 3}
@@ -89733,7 +89874,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.44308707, y: 0.0000025002591, z: 0.000000007450581}
+  m_ConnectedAnchor: {x: -0.44308707, y: 0.0000025003828, z: -0.000000052154064}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -95910,7 +96051,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.22654828, y: -0.000000029124774, z: 0.00000003824358}
+  m_ConnectedAnchor: {x: -0.22654817, y: -0.000000029077313, z: -0.000000021361059}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -100943,6 +101084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  simulateState: 0
   leftHandRigidBody: {fileID: 0}
   rightHandRigidBody: {fileID: 0}
   leftHandTransform: {fileID: 0}
@@ -101051,7 +101193,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 916669678494648549}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -101065,6 +101207,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 1.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -103970,8 +104113,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8673833695794640053}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.55963504, y: 1.543, z: -67.761}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -0.55963504, y: 1.543, z: -70.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3733096906860704736}
@@ -103985,7 +104128,7 @@ Transform:
   - {fileID: 1475911556}
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &8294352619539537759
 GameObject:
   m_ObjectHideFlags: 0
@@ -105107,6 +105250,11 @@ PrefabInstance:
     - target: {fileID: 8611312563200437170, guid: a9419146eeb5b164487363a6b9a3b978,
         type: 3}
       propertyPath: AsynSceneManager
+      value: 
+      objectReference: {fileID: 112632218}
+    - target: {fileID: 8611312563200437170, guid: a9419146eeb5b164487363a6b9a3b978,
+        type: 3}
+      propertyPath: asynSceneManager
       value: 
       objectReference: {fileID: 112632218}
     m_RemovedComponents: []
@@ -106274,6 +106422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  simulateState: 0
   leftHandRigidBody: {fileID: 0}
   rightHandRigidBody: {fileID: 0}
   leftHandTransform: {fileID: 0}
@@ -106387,7 +106536,7 @@ MonoBehaviour:
   state: 0
   isClimbingMove: 0
   isLedge: 0
-  headTransfrom: {fileID: 7342017682793667067}
+  headTransform: {fileID: 0}
   isCanReadyClimbingCancel: 0
   isCanClimbingCancel: 0
   isClimbingGround: 0
@@ -106401,6 +106550,7 @@ MonoBehaviour:
   horizonWeight: 0
   rotAngle: 0
   airRotateSpeed: 1.5
+  pressJump: 0
   currentJumpPower: 0
   minJumpPower: -20
   jumpPower: 12
@@ -106542,7 +106692,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   gunAnim: {fileID: 1222321472}
-  relativeVec: {x: 4.5, y: 180, z: 0}
+  relativeVec: {x: 2.9, y: 188.2, z: 0}
   lookAtAim: {fileID: 931792777}
   hpPackCount:
     value: 0
@@ -106554,8 +106704,8 @@ MonoBehaviour:
   climbingMoveConsumeValue: 2
   climbingJumpConsumeValue: 5
   wallJumpConsumeValue: 5
-  staminaRestoreValue: 2
-  staminaRestoreDelayTime: 2
+  staminaRestoreValue: 50
+  staminaRestoreDelayTime: 3
 --- !u!136 &8673833695794640061
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -137,11 +137,12 @@ public class EMPShield : Hitable
         if (hp <= 0f)
         {
             Destroy();
-
             //Destroy(gameObject);
         }
-
-        whenHit.Invoke();
+        else
+        {
+            whenHit.Invoke();
+        }
     }
 
     public override void Hit(float damage, out bool isDestroy)
@@ -191,6 +192,9 @@ public class EMPShield : Hitable
     public override void Scanned()
     {
         //mat.SetColor("_BaseColor", scanColor);
+        if(!gameObject.activeSelf)
+            return;
+            
         if (isActive == false)
         {
             StartCoroutine(ActiveEffect());
