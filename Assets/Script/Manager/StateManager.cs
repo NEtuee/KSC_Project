@@ -5,9 +5,9 @@ using UniRx;
 
 public class StateManager : MonoBehaviour
 {
-    public GageBarUI hpUI;
-    public GageBarUI staminaUI;
-    public GageBarUI energyUI;
+    public FadeUI hpUI;
+    public FadeUI staminaUI;
+    public FadeUI energyUI;
     void Start()
     {
         GameManager.Instance.player.hp.Subscribe(value =>
@@ -28,8 +28,8 @@ public class StateManager : MonoBehaviour
 
     public void Visible(bool result)
     {
-        hpUI.Visible(result);
-        staminaUI.Visible(result);
-        energyUI.Visible(result);
+        hpUI.SetVisible(result);
+        staminaUI.SetVisible(result);
+        energyUI.SetVisible(result);
     }
 }

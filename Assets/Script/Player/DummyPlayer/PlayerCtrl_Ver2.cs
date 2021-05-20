@@ -594,7 +594,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         if (Vector3.Angle(moveDir.normalized,rigidbody.velocity.normalized) >= 90f)
                         {
                             AddVelocity((-rigidbody.velocity) * deltaTime);
-                            
                         }
                     }
 
