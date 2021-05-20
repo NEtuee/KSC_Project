@@ -1183,7 +1183,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetTrigger("Landing");
                     footIK.EnableFeetIk();
                     handIK.DisableHandIK();
-                    GameManager.Instance.stateManager.Visible(false);
+                    //GameManager.Instance.stateManager.Visible(false);
 
                     //임시
                     collider.height = 1.898009f;
@@ -1291,7 +1291,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Aiming:
                 {
                     GameManager.Instance.cameraManager.ActiveAimCamera();
-                    GameManager.Instance.stateManager.Visible(true);
+                    GameManager.Instance.stateManager.Visible(false);
                     footIK.DisableFeetIk();
                     drone.OrderAimHelp(true);
                     activeAimEvent?.Invoke();

@@ -13,24 +13,31 @@ public class FadeUI : MonoBehaviour
 {
     [SerializeField] private Image fillTargetImage;
     [SerializeField] private Image[] images;
-    [SerializeField] private bool visible = false;
-    [SerializeField] private float updateSpeed = 0.3f;
-    [SerializeField] private float remainingVisibleTime = 5.0f;
+    [SerializeField] protected bool visible = false;
+    [SerializeField] protected float updateSpeed = 0.3f;
+    [SerializeField] protected float remainingVisibleTime = 5.0f;
     private float _updateValue;
-    private float _currentVisibleTime = 0.0f;
-    private bool _isFade = false;
+    [SerializeField] protected float _currentVisibleTime = 0.0f;
+    protected bool _isFade = false;
     
-    private void Start()
+    protected void Start()
     {
+        if(visible == false)
+        {
+            visible = true;
+            _currentVisibleTime = remainingVisibleTime;
+        }
+
         this.UpdateAsObservable()
             .Subscribe(_ => 
             {
                 fillTargetImage.fillAmount = Mathf.MoveTowards(fillTargetImage.fillAmount, _updateValue, updateSpeed * Time.deltaTime);
-                _currentVisibleTime -= Time.deltaTime;
-                if (_currentVisibleTime <= 0.0f) _currentVisibleTime = 0.0f;
 
                 if (visible == false)
                     return;
+
+                _currentVisibleTime -= Time.deltaTime;
+                if (_currentVisibleTime < 0.0f) _currentVisibleTime = 0.0f;
 
                 if (_currentVisibleTime <= 0.0f)
                 {
@@ -40,7 +47,7 @@ public class FadeUI : MonoBehaviour
             });
     }
 
-    private void Fade(float alpha, float duration, Action whenEnd = null)
+    protected virtual void Fade(float alpha, float duration, Action whenEnd = null)
     {
         if (_isFade == true)
         {
@@ -62,16 +69,34 @@ public class FadeUI : MonoBehaviour
         }
     }
 
-    public void SetValue(float value)
+    public void SetValue(float value, bool setVisible = true)
     {
         _updateValue = value / 100;
-        if (visible)
-            _currentVisibleTime = remainingVisibleTime;
-        else
+
+
+        if (setVisible == false)
+            return;
+
+
+        _currentVisibleTime = remainingVisibleTime;
+
+        if (visible == false)
         {
             visible = true;
-            Fade(1f,0.5f);
+             Fade(1f, 0.5f);
         }
+   
+
+        //if (visible)
+        //{
+        //    _currentVisibleTime = remainingVisibleTime;
+        //    Debug.Log(_currentVisibleTime);
+        //}
+        //else
+        //{
+        //    visible = true;
+        //    Fade(1f, 0.5f);
+        //}
     }
 
     public void SetVisible(bool active)
