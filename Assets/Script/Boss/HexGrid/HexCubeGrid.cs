@@ -9,32 +9,94 @@ using UnityEditor;
 public class HexCubeGrid : MonoBehaviour
 {
     public GameObject gridOrigin;
-    public int gridMapSize;
-    public float gridSize;
+    public int mapSize;
+    public float cubeSize;
 
     [SerializeField] private List<HexCube> _serializedCubeMap;
-    private Dictionary<int,int> _cubeMap;
-    private int _mapSize;
+    private Dictionary<int,HexCube> _cubeMap;
     private float _cubeWidth;
     private float _cubeHeight;
+    private List<Vector3Int> _cubeSaveList;
 
-    public void CreateCubeMap(int mapSize)
+    public void Start()
     {
-        if(_cubeMap == null)
-            _cubeMap = new Dictionary<int, int>();
+        _cubeSaveList = new List<Vector3Int>();
+        CubeListToDictionary();
+    }
+
+    public void CubeListToDictionary()
+    {
+        _cubeMap = new Dictionary<int, HexCube>();
+        foreach(var cube in _serializedCubeMap)
+        {
+            AddCube(cube);
+        }
+    }
+
+    public void GetRangeHexs(ref List<HexCube> list,Vector3 position,int range)
+    {
+        var cube = GetCubeFromWorld(position);
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeRange(ref _cubeSaveList,cube.cubePoint,range);
+
+        foreach(var hex in _cubeSaveList)
+        {
+            var target = GetCube(hex);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetRingHexs(ref List<HexCube> list,Vector3 position,float radius)
+    {
+        var cube = GetCubeFromWorld(position);
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeRing(ref _cubeSaveList,cube.cubePoint,radius);
+
+        foreach(var hex in _cubeSaveList)
+        {
+            var target = GetCube(hex);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetNearHexs(ref List<HexCube> list,Vector3 position, int direction, int rotation = 1)
+    {
+        var cube = GetCubeFromWorld(position);
+        _cubeSaveList.Clear();
+        for(int i = direction; i < direction + rotation; ++i)
+        {
+            var cubePoint = HexGridHelperEx.GetCubeNeighbor(cube.cubePoint,i);
+            var target = GetCube(cubePoint);
+            if(target == null)
+                continue;
+                
+            list.Add(target);
+        }
+        
+    }
+
+    public void CreateCubeMap()
+    {
+        if(_serializedCubeMap == null)
+            _serializedCubeMap = new List<HexCube>();
         else
             DisposeGrid();
 
-        _mapSize = mapSize;
-        _mapSize = _mapSize % 2 == 0 ? _mapSize + 1 : _mapSize;
-        _cubeWidth = HexGridHelperEx.GetWidth(gridSize);
-        _cubeHeight = HexGridHelperEx.GetHeight(gridSize);
+        mapSize = mapSize % 2 == 0 ? mapSize + 1 : mapSize;
+        _cubeWidth = HexGridHelperEx.GetWidth(cubeSize);
+        _cubeHeight = HexGridHelperEx.GetHeight(cubeSize);
         
-        for(int i = 0; i < _mapSize; ++i)
+        for(int i = 0; i < mapSize; ++i)
         {
-            int max = ((_mapSize - 1) / 2) - i;
+            int max = ((mapSize - 1) / 2) - i;
             int j = Mathf.Max(0,max);
-            int size = _mapSize + Mathf.Min(0,max);
+            int size = mapSize + Mathf.Min(0,max);
             for(; j < size; ++j)
             {
                 AddCubeToList(j,i);
@@ -44,23 +106,79 @@ public class HexCubeGrid : MonoBehaviour
 
     public void AddCubeToList(int q, int r)
     {
-        var obj = Instantiate(gridOrigin);
-        var cube = obj.GetComponent<HexCube>();
-
-        cube.Init(q,r,gridSize);
-        cube.transform.position = HexGridHelperEx.CubeToWorld(_cubeWidth,_cubeHeight,cube.cubePoint);
+        var cube = CreateCube(q,r);
+        _serializedCubeMap.Add(cube);
     }
-    
     
     public void AddCube(int q,int r)
     {
-        Debug.Log(q + "," + r);
-        _cubeMap.Add(HexGridHelperEx.GetKeyFromAxial(q,r,_mapSize),1);
+        var cube = CreateCube(q,r);
+        AddCube(cube);
+    }
+
+    public void AddCube(HexCube cube)
+    {
+        _cubeMap.Add(cube.key,cube);
     }
 
     public void DisposeGrid()
     {
-        _cubeMap.Clear();
+        foreach(var cube in _serializedCubeMap)
+        {
+            DestroyImmediate(cube.gameObject);
+        }
+
+        if(_cubeMap != null)
+            _cubeMap.Clear();
+        _serializedCubeMap.Clear();
+    }
+
+    public HexCube GetCubeFromWorld(Vector3 world)
+    {
+        world = world - transform.position;
+        var hex = HexGridHelperEx.WorldToAxial(cubeSize * .5f, world);
+        return GetCube(hex);
+        
+    }
+
+    public HexCube GetCube(Vector3Int cube)
+    {
+        var hex = HexGridHelperEx.CubeToAxial(cube);
+        return GetCube(hex);
+    }
+
+    public HexCube GetCube(Vector2Int hex)
+    {
+        var key = HexGridHelperEx.GetKeyFromAxial(hex.x,hex.y,mapSize);
+
+        if(_cubeMap.ContainsKey(key))
+            return _cubeMap[key];
+        else
+        {
+            Debug.Log("Out Of Range");
+            return null;
+        }
+    }
+
+    public HexCube CreateCube(int q,int r)
+    {
+        var cube = CreateCube();
+        int half = (mapSize - 1) / 2;
+
+        cube.Init(q - half,r - half,mapSize,cubeSize);
+        cube.transform.position = HexGridHelperEx.AxialToWorld(_cubeWidth,_cubeHeight,cube.axialPoint);
+
+        return cube;
+    }
+
+    public HexCube CreateCube()
+    {
+        var obj = Instantiate(gridOrigin);
+        var cube = obj.GetComponent<HexCube>();
+
+        obj.transform.SetParent(this.transform);
+
+        return cube;
     }
 }
 
@@ -75,7 +193,11 @@ public class HexCubeGridEdit : Editor
         HexCubeGrid changer = (HexCubeGrid)target;
         if (GUILayout.Button("Create"))
         {
-            changer.CreateCubeMap(changer.gridMapSize);
+            changer.CreateCubeMap();
+        }
+        if (GUILayout.Button("Delete"))
+        {
+            changer.DisposeGrid();
         }
     }
 }
