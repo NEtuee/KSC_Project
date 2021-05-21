@@ -62,7 +62,24 @@ public class LevelEdit_PathMovement : MonoBehaviour
 
     public void Update()
     {
-        LinearMovement();
+        if(GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
+            return;
+        Debug.Log("one");
+        Progress(Time.deltaTime);
+    }
+
+    public void FixedUpdate()
+    {
+        if(GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+            return;
+        Debug.Log("two");
+        Progress(Time.fixedDeltaTime);
+    }
+
+
+    public void Progress(float deltaTime)
+    {
+        LinearMovement(deltaTime);
 
         if(rotate)
         {
@@ -71,17 +88,16 @@ public class LevelEdit_PathMovement : MonoBehaviour
             if(MathEx.abs(angle) > turnAccuracy)
             {
                 if(angle > 0)
-                    Turn(true);
+                    Turn(true,deltaTime);
                 else
-                    Turn(false);
+                    Turn(false,deltaTime);
             }
         }
     }
 
-
-    public void LinearMovement()
+    public void LinearMovement(float deltaTime)
     {
-        float factor = moveSpeed * Time.deltaTime / _targetLen;
+        float factor = moveSpeed * deltaTime / _targetLen;
         float time = _timeCounter.IncreaseTimerSelf("timer",1f,out bool limit, factor);
 
         if(limit)
@@ -100,9 +116,9 @@ public class LevelEdit_PathMovement : MonoBehaviour
         transform.position = Vector3.Lerp(_startPoint.GetPoint(), _endPoint.GetPoint(),time);
     }
 
-    public void Turn(bool isLeft)
+    public void Turn(bool isLeft, float deltaTime)
     {
-        transform.RotateAround(transform.position,transform.up,turnAngle * Time.deltaTime * (isLeft ? 1f : -1f));
+        transform.RotateAround(transform.position,transform.up,turnAngle * deltaTime * (isLeft ? 1f : -1f));
     }
 
     public bool SetNextPoint()
