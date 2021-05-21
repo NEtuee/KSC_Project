@@ -16,6 +16,22 @@ public static class HexGridHelperEx
         return q * size + r;
     }
 
+    // public static Vector3Int WorldToCube(float cubeWidth, float cubeHeight, Vector3 world)
+    // {
+    //     int z = (int)(world.z / (cubeHeight * .75f));
+    //     int x = (int)(world.x / (cubeWidth * .5f) - world.z / (cubeWidth * .5f));
+    //     int y = (int)(world.z / (cubeWidth * .5f) + 
+    // }
+    //
+    public static Vector3 CubeToWorld(float cubeWidth, float cubeHeight, Vector3Int cube)
+    {
+        float cubeZ = ((float) cube.z);
+        float z = -cubeZ * (cubeHeight * .75f);
+        float x = cubeZ * (cubeWidth * .5f) + ((float)cube.x) * (cubeWidth * .5f);
+
+        return new Vector3(x, 0f, z);
+    }
+
     public static Vector3Int AxialToCube(Vector2Int hex)
     {
         return new Vector3Int(hex.x,-hex.x - hex.y,hex.y);
@@ -63,8 +79,8 @@ public static class HexGridHelperEx
     }
 
 
-    public static float GetWidth(float size){return 2f * size;}
-    public static float GetHeight(float size){return Mathf.Sqrt(3f) * size;}
+    public static float GetWidth(float size){return Mathf.Sqrt(3f) * size;}
+    public static float GetHeight(float size){return size;}
     public static float GetHorizontalDistance(float width) {return width * (3f / 4f);}
     public static float GetVerticalDistance(float height) {return height;}
 }

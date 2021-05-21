@@ -8,10 +8,15 @@ using UnityEditor;
 
 public class HexCubeGrid : MonoBehaviour
 {
+    public GameObject gridOrigin;
     public int gridMapSize;
+    public float gridSize;
 
+    [SerializeField] private List<HexCube> _serializedCubeMap;
     private Dictionary<int,int> _cubeMap;
     private int _mapSize;
+    private float _cubeWidth;
+    private float _cubeHeight;
 
     public void CreateCubeMap(int mapSize)
     {
@@ -22,7 +27,8 @@ public class HexCubeGrid : MonoBehaviour
 
         _mapSize = mapSize;
         _mapSize = _mapSize % 2 == 0 ? _mapSize + 1 : _mapSize;
-
+        _cubeWidth = HexGridHelperEx.GetWidth(gridSize);
+        _cubeHeight = HexGridHelperEx.GetHeight(gridSize);
         
         for(int i = 0; i < _mapSize; ++i)
         {
@@ -31,11 +37,21 @@ public class HexCubeGrid : MonoBehaviour
             int size = _mapSize + Mathf.Min(0,max);
             for(; j < size; ++j)
             {
-                AddCube(j,i);
+                AddCubeToList(j,i);
             }
         }
     }
 
+    public void AddCubeToList(int q, int r)
+    {
+        var obj = Instantiate(gridOrigin);
+        var cube = obj.GetComponent<HexCube>();
+
+        cube.Init(q,r,gridSize);
+        cube.transform.position = HexGridHelperEx.CubeToWorld(_cubeWidth,_cubeHeight,cube.cubePoint);
+    }
+    
+    
     public void AddCube(int q,int r)
     {
         Debug.Log(q + "," + r);
