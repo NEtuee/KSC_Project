@@ -136,6 +136,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private TimeCounterEx _chargeDelayTimer = new TimeCounterEx();
     [SerializeField] private GameObject pelvisGunObject;
     [SerializeField] private float dechargingDuration = 2.5f;
+    [SerializeField] private float dechargingRatio = 0.5f;
     private float _emissionTargetValue = 10f;
     private Color _originalEmissionColor;
     [SerializeField] private bool decharging = false;
@@ -410,7 +411,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                    _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
                    if (limit)
                    {
-                       chargeTime.Value += Time.deltaTime * (decharging ? 0.5f : 1f);
+                       chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
                        chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                        chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
 
