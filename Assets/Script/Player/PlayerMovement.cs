@@ -108,9 +108,25 @@ public class PlayerMovement : MonoBehaviour
     public void Jump()
     {
         isJumping = true;
-        //isGrounded = false;
         SetGrounded(false);
         jumpTime = Time.time;
+
+        keepSpeed = true;
+        prevParent = transform.parent;
+        
+        detachTime = Time.time;
+        if (prevParent != null)
+        {
+            prevParentPrevPos = prevParent.position;
+            keepSpeed = true;
+        }
+
+        SetParent(null);
+    }
+
+    public void ClimbingJump()
+    {
+        SetGrounded(false);
 
         keepSpeed = true;
         prevParent = transform.parent;

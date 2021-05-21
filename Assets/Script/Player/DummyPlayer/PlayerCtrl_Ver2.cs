@@ -63,7 +63,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [Header("Movement Speed Value")]
     [SerializeField] private float walkSpeed = 15.0f;
     [SerializeField] private float runSpeed = 25.0f;
-    [SerializeField] private float rollingSpeed = 10.0f;
+    [SerializeField] private float aimingWalkSpeed = 5.5f;
     [SerializeField] private float currentSpeed;
     [SerializeField] private float prevSpeed;
     [SerializeField] private float rotateSpeed = 6.0f;
@@ -127,8 +127,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float costValue = 25f;
     [SerializeField] private float chargeNecessaryTime = 1f;
     public FloatReactiveProperty chargeTime = new FloatReactiveProperty(0.0f);
-    [SerializeField] private float hitEnergyRestoreValue = 0.0f;
-    [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
     [SerializeField] private GameObject destroyEffect;
     [SerializeField] public IntReactiveProperty loadCount = new IntReactiveProperty(0);
     [SerializeField] private float loadTerm = 2f;
@@ -146,7 +144,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
     [SerializeField] private Animator gunAnim;
-    
+
+    [Header("EnergyRestore")]
+    [SerializeField] private float walkRestoreEnergyValue;
+    [SerializeField] private float runRestoreEnergyValue;
+    [SerializeField] private float aimRestoreEnergyValue;
+    [SerializeField] private float climbingRestoreEnergyValue;
+    [SerializeField] private float hitEnergyRestoreValue = 0.0f;
+    [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
+    [SerializeField] private float climbingJumpEnergyRestoreValue;
+
     [Header("Spine")]
     private Transform spine;
     [SerializeField] private Vector3 relativeVec;
@@ -714,6 +721,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.ClimbingJump:
                 {
+                    if(movement.isGrounded == true)
+                    {
+                        ChangeState(PlayerState.Default);
+                        return;
+                    }
+                    
                     Vector3 climbingJumpDir = Vector3.zero;
                     Vector3 upDirect = Vector3.zero;
                     switch (climbingJumpDirection)
@@ -786,7 +799,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if (Time.time - climbingJumpStartTime >= keepClimbingJumpTime)
                     {
                         moveDir = moveDir.normalized * finalDir.magnitude;
-                        movement.Jump();
+                        movement.ClimbingJump();
                         ChangeState(PlayerState.Jump);
                         if (climbingJumpDirection != ClimbingJumpDirection.Left && climbingJumpDirection != ClimbingJumpDirection.Right)
                             currentJumpPower = currentClimbingJumpPower;
@@ -1091,7 +1104,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, deltaTime * 20.0f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, aimingWalkSpeed, deltaTime * 20.0f);
             }
         }
         else
@@ -1324,6 +1337,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                     stamina.Value -= climbingJumpConsumeValue;
                     stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
+                    energy.Value += climbingJumpEnergyRestoreValue;
                 }
                 break;
             case PlayerState.ReadyClimbingJump:
@@ -2067,25 +2081,45 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void RestoreEnergy(float deltaTime)
     {
-        if ((state == PlayerState.Aiming &&  currentSpeed == 0.0f)
-            || (state == PlayerState.Default && currentSpeed == 0.0f)
-            || (state == PlayerState.Grab && isClimbingMove == false)
-            || state == PlayerState.Jump)
-            return;
-        //if (IsNowClimbingBehavior() == true)
-        //{
-        //    if (isClimbingMove == false)
-        //        return;
-        //}
-        //else
-        //{
-        //    if (state == PlayerState.Ragdoll || state == PlayerState.HangRagdoll || currentSpeed == 0.0f)
-        //        return;
-        //}
+        // if ((state == PlayerState.Aiming &&  currentSpeed == 0.0f)
+        //     || (state == PlayerState.Default && currentSpeed == 0.0f)
+        //     || (state == PlayerState.Grab && isClimbingMove == false)
+        //     || state == PlayerState.Jump)
+        //     return;
+
+        float restoreValue;
+        switch (state)
+        {
+            case PlayerState.Default:
+            {
+                if (currentSpeed >= runSpeed)
+                    restoreValue = runRestoreEnergyValue;
+                else if (currentSpeed >= walkSpeed)
+                    restoreValue = walkRestoreEnergyValue;
+                else
+                    restoreValue = 0.0f;
+            }
+                break;
+            case PlayerState.Grab:
+            {
+                restoreValue = isClimbingMove == true ? climbingRestoreEnergyValue : 0.0f;
+            }
+                break;
+            case PlayerState.Aiming:
+            {
+                restoreValue = currentSpeed == 0.0f ? 0.0f : aimRestoreEnergyValue;
+            }
+                break;
+            default:
+                restoreValue = 0.0f;
+                break;
+        }
+        
+        
         if (energy.Value.Equals( 100.0f))
             return;
         
-        energy.Value += restoreValuePerSecond * deltaTime;
+        energy.Value += restoreValue * deltaTime;
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }
 
