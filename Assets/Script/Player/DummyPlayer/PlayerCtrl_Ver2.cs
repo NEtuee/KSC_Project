@@ -1067,7 +1067,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         float dotY = Vector3.Dot(transform.forward,camForward);
         dotY *= 0.6f;
         //dot = Mathf.Clamp(MathEx.abs(dot),0.2f,1f);
-        bool active = currentSpeed > 7f && movement.isGrounded;
+        bool active = false;//currentSpeed > 7f && movement.isGrounded;
 
         foreach (var leg in legBlur)
         {
