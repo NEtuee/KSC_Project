@@ -313,7 +313,8 @@ public class PlayerMovement : MonoBehaviour
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangRagdoll
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangLedge
                         && player.GetState() != PlayerCtrl_Ver2.PlayerState.LedgeUp
-                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangShake)
+                        && player.GetState() != PlayerCtrl_Ver2.PlayerState.HangShake
+                        && player.pressJump == false)
                     {
                         SetParent(null);
                     }
