@@ -1,0 +1,361 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+public class HexCubeGrid : MonoBehaviour
+{
+    public GameObject gridOrigin;
+    public int mapSize;
+    public float cubeSize;
+
+    [SerializeField] private List<HexCube> _serializedCubeMap;
+    private Dictionary<int,HexCube> _cubeMap;
+    private float _cubeWidth;
+    private float _cubeHeight;
+    private List<Vector3Int> _cubeSaveList;
+    private Dictionary<int,Vector3Int> _overlapCheckList;
+
+    public void Awake()
+    {
+        _cubeSaveList = new List<Vector3Int>();
+        _overlapCheckList = new Dictionary<int, Vector3Int>();
+        CubeListToDictionary();
+    }
+
+    public void CubeListToDictionary()
+    {
+        _cubeMap = new Dictionary<int, HexCube>();
+        foreach(var cube in _serializedCubeMap)
+        {
+            AddCube(cube);
+        }
+    }
+
+    public void GetCubeLineHeavy(ref List<HexCube> list,Vector3Int start ,Vector3Int end, int loopCount)
+    {
+        GetCubeLine(ref list,start,end);
+        _overlapCheckList.Clear();
+
+        foreach(var item in list)
+        {
+            _cubeSaveList.Clear();
+            HexGridHelperEx.GetCubeNear(ref _cubeSaveList,item.cubePoint,0,loopCount);
+
+            foreach(var cube in _cubeSaveList)
+            {
+                var key = HexGridHelperEx.GetKeyFromCube(cube,mapSize);
+
+                if(!_overlapCheckList.ContainsKey(key))
+                {
+                    _overlapCheckList.Add(key,cube);
+                }
+            }
+            
+        }
+
+        foreach(var item in _overlapCheckList)
+        {
+            var target = GetCube(item.Value);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetCubeLine(ref List<HexCube> list,Vector3 start ,Vector3 end)
+    {
+        var startInt = HexGridHelperEx.WorldToCube(cubeSize * .5f, start);
+        var endInt = HexGridHelperEx.WorldToCube(cubeSize * .5f, end);
+
+        GetCubeLine(ref list, startInt, endInt);
+    }
+
+    public void GetCubeLine(ref List<HexCube> list,Vector3Int start ,Vector3Int end)
+    {
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeLine(ref _cubeSaveList,start,end);
+
+        foreach(var cube in _cubeSaveList)
+        {
+            var target = GetCube(cube);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetCubeRange(ref List<HexCube> list,Vector3 position,int range)
+    {
+        var cubeObj = GetCubeFromWorld(position);
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeRange(ref _cubeSaveList,cubeObj.cubePoint,range);
+
+        foreach(var cube in _cubeSaveList)
+        {
+            var target = GetCube(cube);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetCubeSectorCycle(ref List<HexCube> list,Vector3Int point,int sector, int radius)
+    {
+        var cubeObj = GetCube(point,false);
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeSectorCycle(ref _cubeSaveList,cubeObj.cubePoint,sector,radius);
+
+        foreach(var cube in _cubeSaveList)
+        {
+            var target = GetCube(cube);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetCubeSectorCycle(ref List<HexCube> list,Vector3 position,int sector, int radius)
+    {
+        var cubeObj = GetCubeFromWorld(position,false);
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeSectorCycle(ref _cubeSaveList,cubeObj.cubePoint,sector,radius);
+
+        foreach(var cube in _cubeSaveList)
+        {
+            var target = GetCube(cube);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetCubeSectorRing(ref List<HexCube> list,Vector3 position,int sector, int radius)
+    {
+        var cubeObj = GetCubeFromWorld(position,false);
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeSectorRing(ref _cubeSaveList,cubeObj.cubePoint,sector,radius);
+
+        foreach(var cube in _cubeSaveList)
+        {
+            var target = GetCube(cube);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetCubeRing(ref List<HexCube> list,Vector3Int point,int radius)
+    {
+        var cubeObj = GetCube(point,false);
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeRing(ref _cubeSaveList,cubeObj.cubePoint,radius);
+
+        foreach(var cube in _cubeSaveList)
+        {
+            var target = GetCube(cube);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetCubeRing(ref List<HexCube> list,Vector3 position,int radius)
+    {
+        var cubeObj = GetCubeFromWorld(position,false);
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeRing(ref _cubeSaveList,cubeObj.cubePoint,radius);
+
+        foreach(var cube in _cubeSaveList)
+        {
+            var target = GetCube(cube);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+    }
+
+    public void GetCubeNear(ref List<HexCube> list,Vector3Int point, int direction, int rotation = 1)
+    {
+        _cubeSaveList.Clear();
+        HexGridHelperEx.GetCubeNear(ref _cubeSaveList,point,direction,rotation);
+        foreach(var cube in _cubeSaveList)
+        {
+            var target = GetCube(cube);
+            if(target == null)
+                continue;
+
+            list.Add(target);
+        }
+        
+    }
+
+    public HexCube GetCubeReflectMirror(Vector3Int point)
+    {
+        return GetCube(HexGridHelperEx.GetCubeReflectMirror(point),false);
+    }
+
+    public HexCube GetCubeReflectX(Vector3Int point)
+    {
+        return GetCube(HexGridHelperEx.GetCubeReflectX(point),false);
+    }
+
+    public HexCube GetCubeReflectY(Vector3Int point)
+    {
+        return GetCube(HexGridHelperEx.GetCubeReflectY(point),false);
+    }
+
+    public HexCube GetCubeReflectZ(Vector3Int point)
+    {
+        return GetCube(HexGridHelperEx.GetCubeReflectZ(point),false);
+    }
+
+    public void CreateCubeMap()
+    {
+        if(_serializedCubeMap == null)
+            _serializedCubeMap = new List<HexCube>();
+        else
+            DisposeGrid();
+
+        mapSize = mapSize % 2 == 0 ? mapSize + 1 : mapSize;
+        _cubeWidth = HexGridHelperEx.GetWidth(cubeSize);
+        _cubeHeight = HexGridHelperEx.GetHeight(cubeSize);
+        
+        for(int i = 0; i < mapSize; ++i)
+        {
+            int max = ((mapSize - 1) / 2) - i;
+            int j = Mathf.Max(0,max);
+            int size = mapSize + Mathf.Min(0,max);
+            for(; j < size; ++j)
+            {
+                AddCubeToList(j,i);
+            }
+        }
+    }
+
+    public void AddCubeToList(int q, int r)
+    {
+        var cube = CreateCube(q,r);
+        _serializedCubeMap.Add(cube);
+    }
+    
+    public void AddCube(int q,int r)
+    {
+        var cube = CreateCube(q,r);
+        AddCube(cube);
+    }
+
+    public void AddCube(HexCube cube)
+    {
+        _cubeMap.Add(cube.key,cube);
+    }
+
+    public void DisposeGrid()
+    {
+        foreach(var cube in _serializedCubeMap)
+        {
+            DestroyImmediate(cube.gameObject);
+        }
+
+        if(_cubeMap != null)
+            _cubeMap.Clear();
+        _serializedCubeMap.Clear();
+    }
+
+    public Vector3Int GetCubePointFromWorld(Vector3 world)
+    {
+        world = world - transform.position;
+        var cube = HexGridHelperEx.WorldToCube(cubeSize * .5f, world);
+        return cube;
+    }
+
+    public HexCube GetCubeFromWorld(Vector3 world, bool ignoreSpecial = true)
+    {
+        world = world - transform.position;
+        var hex = HexGridHelperEx.WorldToAxial(cubeSize * .5f, world);
+        return GetCube(hex,ignoreSpecial);
+        
+    }
+
+    public HexCube GetCube(Vector3Int cube, bool ignoreSpecial = true)
+    {
+        var hex = HexGridHelperEx.CubeToAxial(cube);
+        return GetCube(hex,ignoreSpecial);
+    }
+
+    public HexCube GetCube(Vector2Int hex, bool ignoreSpecial = true)
+    {
+        if(MathEx.abs(hex.x) >= mapSize / 2f || MathEx.abs(hex.y) >= mapSize /2f)
+            return null;
+        
+        var key = HexGridHelperEx.GetKeyFromAxial(hex.x,hex.y,mapSize);
+
+        if(_cubeMap.ContainsKey(key))
+        {
+            var cube = _cubeMap[key];
+            if(cube.special && ignoreSpecial)
+                return null;
+            else
+                return cube;
+        }
+        else
+        {
+            //Debug.Log("Out Of Range");
+            return null;
+        }
+    }
+
+    public HexCube CreateCube(int q,int r)
+    {
+        var cube = CreateCube();
+        int half = (mapSize - 1) / 2;
+
+        cube.Init(q - half,r - half,mapSize,cubeSize);
+        cube.transform.position = HexGridHelperEx.AxialToWorld(_cubeWidth,_cubeHeight,cube.axialPoint);
+
+        return cube;
+    }
+
+    public HexCube CreateCube()
+    {
+        var obj = Instantiate(gridOrigin);
+        var cube = obj.GetComponent<HexCube>();
+
+        obj.transform.SetParent(this.transform);
+
+        return cube;
+    }
+}
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(HexCubeGrid)),CanEditMultipleObjects]
+public class HexCubeGridEdit : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        HexCubeGrid changer = (HexCubeGrid)target;
+        if (GUILayout.Button("Create"))
+        {
+            changer.CreateCubeMap();
+        }
+        if (GUILayout.Button("Delete"))
+        {
+            changer.DisposeGrid();
+        }
+    }
+}
+
+#endif

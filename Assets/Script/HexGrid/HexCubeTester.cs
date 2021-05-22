@@ -9,6 +9,9 @@ public class HexCubeTester : MonoBehaviour
 
     public HexCubeGrid grid;
 
+    public int radius = 0;
+    public int sector = 0;
+
     private HexCube currentCube;
     private List<HexCube> _nearHex;
 
@@ -19,8 +22,10 @@ public class HexCubeTester : MonoBehaviour
 
     void Update()
     {
-        var cube = grid.GetCubeFromWorld(transform.position);
-        if(cube != null && currentCube != cube)
+        Debug.Log(Vector3.Distance(Vector3.zero,transform.position));
+        //var cube = grid.GetCubeFromWorld(transform.position);
+        var cubePoint = HexGridHelperEx.WorldToCube(grid.cubeSize * .5f,transform.position);
+        //if(cube != null && currentCube != cube)
         {
             if(currentCube != null)
             {
@@ -33,14 +38,21 @@ public class HexCubeTester : MonoBehaviour
             }
             _nearHex.Clear();
 
-            grid.GetRangeHexs(ref _nearHex,transform.position,3);
+            var reflect = grid.GetCubeReflectMirror((cubePoint));
+            //grid.GetCubeLineHeavy(ref _nearHex,Vector3Int.zero,cubePoint,6);
+            grid.GetCubeNear(ref _nearHex,cubePoint,0,6);
+
+            // if(reflect != null)
+            //     _nearHex.Add(reflect);
+
+                
             foreach(var n in _nearHex)
             {
                 n.GetComponent<MeshRenderer>().material = curr;
             }
 
-            cube.GetComponent<MeshRenderer>().material = curr;
-            currentCube = cube;
+            //cube.GetComponent<MeshRenderer>().material = curr;
+            //currentCube = cube;
         }
     }
 }
