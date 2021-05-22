@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 public class MainMenuCtrl : MonoBehaviour
 {
+    public Canvas mainTitleCanvas;
     public Canvas fadePanel;
     public Image fadeImage;
 
@@ -17,7 +18,7 @@ public class MainMenuCtrl : MonoBehaviour
 
     private void Update()
     {
-        if (InputManager.Instance.GetInput(KeybindingActions.Option))
+        if (InputManager.Instance.GetInput(KeybindingActions.Option) && GameManager.Instance.optionMenuCtrl.CurrentMenuState != OptionMenuCtrl.MenuType.None)
         {
             GameManager.Instance.optionMenuCtrl.InputEsc();
             Cursor.visible = true;
@@ -42,5 +43,15 @@ public class MainMenuCtrl : MonoBehaviour
     {
         fadePanel.enabled = true;
         fadeImage.DOFade(1f, 1f).OnComplete(complete);
+    }
+
+    public void OnOptionButton()
+    {
+        mainTitleCanvas.sortingOrder = 2;
+    }
+
+    public void OffOption()
+    {
+        mainTitleCanvas.sortingOrder = 4;
     }
 }

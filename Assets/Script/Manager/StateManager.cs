@@ -19,6 +19,8 @@ public class StateManager : MonoBehaviour
             {
                 hpPackUI.SetValue(value);
                 hpUI.SetVisible(true);
+                staminaUI.SetVisible(true);
+                energyUI.SetVisible(true);
             }
         });
 
@@ -30,6 +32,8 @@ public class StateManager : MonoBehaviour
             {
                 hpUI.SetValue(value);
                 hpPackUI.SetVisible(true);
+                staminaUI.SetVisible(true);
+                energyUI.SetVisible(true);
             }
         });
 
@@ -38,7 +42,12 @@ public class StateManager : MonoBehaviour
             if (((PlayerCtrl_Ver2)(GameManager.Instance.player)).GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
                 staminaUI.SetValue(value,false);
             else
+            {
                 staminaUI.SetValue(value);
+                hpUI.SetVisible(true);
+                energyUI.SetVisible(true);
+                hpPackUI.SetVisible(true);
+            }
         });
 
         GameManager.Instance.player.energy.Subscribe(value =>
@@ -46,7 +55,12 @@ public class StateManager : MonoBehaviour
             if (((PlayerCtrl_Ver2)(GameManager.Instance.player)).GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
                 energyUI.SetValue(value,false);
             else
+            {
                 energyUI.SetValue(value);
+                hpUI.SetVisible(true);
+                staminaUI.SetVisible(true);
+                hpPackUI.SetVisible(true);
+            }
         });
     }
 

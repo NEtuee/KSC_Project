@@ -13,6 +13,7 @@ public class LeftOptionTitle : EscMenu
     public float initRectXpos = -2162f;
     public float appearRectXpos = -1680f;
     public float changeRectXpos;
+    public string optionTitleString = "일시정지";
 
     private void Start()
     {
@@ -73,7 +74,7 @@ public class LeftOptionTitle : EscMenu
                         optionMenuText.text = "키 바인딩";
                         break;
                     case OptionMenuCtrl.MenuType.Option:
-                        optionMenuText.text = "일시정지";
+                        optionMenuText.text = optionTitleString;
                         break;
                 }
             }

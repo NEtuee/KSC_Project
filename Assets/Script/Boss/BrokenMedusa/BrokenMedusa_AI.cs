@@ -650,6 +650,7 @@ public class BrokenMedusa_AI : IKBossBase
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
                 var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
                 player.TakeDamage(5f);
+                
                 if (ragdoll != null)
                 {
                     ragdoll.ExplosionRagdoll(250.0f, 

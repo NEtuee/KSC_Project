@@ -84,11 +84,11 @@ public class DisplayOptionPanel : EscMenu
 
         resolutionDropdown.AddOptions(resolutionStrings);
 
-        Resolution currenResolution = Screen.currentResolution;
+        Resolution currentResolution = Screen.currentResolution;
         for (int i = 0; i < _respondResolutions.Count; i++)
         {
-            if (currenResolution.height == _respondResolutions[i].height &&
-                currenResolution.width == _respondResolutions[i].width)
+            if (currentResolution.height == _respondResolutions[i].height &&
+                currentResolution.width == _respondResolutions[i].width)
             {
                 resolutionDropdown.value = i;
                 break;
@@ -118,14 +118,7 @@ public class DisplayOptionPanel : EscMenu
 
     public void ChangeVsync()
     {
-        if(vsyncDropdown.value == 0)
-        {
-            QualitySettings.vSyncCount = 0;
-        }
-        else
-        {
-            QualitySettings.vSyncCount = 1;
-        }
+        QualitySettings.vSyncCount = vsyncDropdown.value == 0 ? 0 : 1;
     }
 
     public void ChangeResolution()
@@ -136,6 +129,12 @@ public class DisplayOptionPanel : EscMenu
         //{
         //    Screen.SetResolution(currentResolution.width,currentResolution.height,Screen.fullScreen);
         //}
+
+        //Debug.Log("Current : " + Screen.currentResolution + "  Target"+currentResolution);
+
+        // if (Screen.currentResolution.height == currentResolution.height && Screen.currentResolution.width == currentResolution.width)
+        //         return;
+        //     
         Screen.SetResolution(currentResolution.width, currentResolution.height, Screen.fullScreen);
     }
 
