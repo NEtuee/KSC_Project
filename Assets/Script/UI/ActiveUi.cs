@@ -13,10 +13,10 @@ public class ActiveUi : MonoBehaviour
 {
     [SerializeField] private Image fillTargetImage;
     [SerializeField] private Image[] images;
-    [SerializeField] private bool visible = false;
-    [SerializeField] private float updateSpeed = 0.3f;
-    private float _updateValue;
-    private bool _isFade = false;
+    [SerializeField] protected bool visible = false;
+    [SerializeField] protected float updateSpeed = 0.3f;
+    protected float _updateValue;
+    protected bool _isFade = false;
 
     public bool Visible { get { return visible; } }
 
@@ -34,7 +34,7 @@ public class ActiveUi : MonoBehaviour
         _updateValue = value / 100;
     }
 
-    private void Fade(float alpha, float duration, Action whenEnd = null)
+    protected void Fade(float alpha, float duration, Action whenEnd = null)
     {
         if (_isFade == true)
         {

@@ -2213,7 +2213,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             transform.position = finalPosition;
 
             StartCoroutine(ForceSnap(0.5f, finalPosition, transform.localPosition));
-            //Debug.Log("AdjustLedgeOffset");
+            Debug.Log("AdjustLedgeOffset");
         }
     }
 
