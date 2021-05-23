@@ -60,6 +60,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     public UnityEvent whenReactiveshield;
     public UnityEvent whenRecover;
     public UnityEvent whenLaunch;
+    public UnityEvent whenAfterLaunch;
 
     private SphereRayEx _forwardRay;
     private SphereRayEx _sideRay;
@@ -373,6 +374,15 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     {
         _prevState = currentState;
         currentState = state;
+
+        switch(_prevState)
+        {
+            case State.Launch:
+                {
+                    whenAfterLaunch?.Invoke();
+                }
+                break;
+        }
 
         if (state == State.Hit)
         {
