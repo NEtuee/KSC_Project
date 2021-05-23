@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -216,10 +217,27 @@ public class GraphAnimator : MonoBehaviour
 
     public void Update()
     {
+        if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
+            return;
+        
+        Progress(Time.deltaTime);
+
+    }
+
+    public void FixedUpdate()
+    {
+        if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+            return;
+
+        Progress(Time.fixedDeltaTime);
+    }
+
+    public void Progress(float deltaTime)
+    {
         for(int i = 0; i < _playList.Count;)
         {
             int curr = i;
-            var time = _timeCounter.IncreaseTimer(_playList[i].name,out bool limit, _playList[i].speed);
+            var time = _timeCounter.IncreaseTimerSelf(_playList[i].name,1f,out bool limit, _playList[i].speed * deltaTime);
             bool remove = false;
             if(limit)
             {
@@ -253,6 +271,5 @@ public class GraphAnimator : MonoBehaviour
             
             i = curr;
         }
-
     }
 }

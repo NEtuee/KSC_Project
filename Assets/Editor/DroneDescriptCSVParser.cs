@@ -23,7 +23,7 @@ public class DroneDescriptCSVParser : EditorWindow
 
     private void OnGUI()
     {
-        if (GUILayout.Button("ÆÄ½Ì", GUILayout.Width(90)))
+        if (GUILayout.Button("ì—´ê¸°", GUILayout.Width(90)))
         {
             string dir = EditorUtility.OpenFilePanel("ddd", "", "csv");
             if(File.Exists(dir) == true)
@@ -43,6 +43,7 @@ public class DroneDescriptCSVParser : EditorWindow
         sr.Close();
 
         List<Descript> descripts = new List<Descript>();
+        DroneDescript descriptScriptable = targetDroneDescript as DroneDescript;
 
         string[] lines = Regex.Split(source, LINE_SPLIT_RE);
         //Debug.Log(lines.Length);
@@ -59,19 +60,35 @@ public class DroneDescriptCSVParser : EditorWindow
             values[1] = string.Join("", values[1].Split('"'));
             entry.descript = values[1];
 
-            descripts.Add(entry);
+            bool duplicate = false;
+            foreach (var descript in descriptScriptable.descripts)
+            {
+                if (descript.key == entry.key)
+                {
+                    duplicate = true;
+                    break;
+                }
+            }
+            
+            if(duplicate == false)
+                descripts.Add(entry);
         }
 
-        Debug.Log(descripts.Count);
+        //Debug.Log(descripts.Count);
 
         if(targetDroneDescript != null)
         {
-            DroneDescript descriptScriptable = targetDroneDescript as DroneDescript;
-            descriptScriptable.descripts = new Descript[descripts.Count];
+            //DroneDescript descriptScriptable = targetDroneDescript as DroneDescript;
+            //descriptScriptable.descripts = new Descript[descripts.Count];
 
-            for(int i = 0; i<descriptScriptable.descripts.Length;i++)
+            // for(int i = 0; i<descriptScriptable.descripts.Count;i++)
+            // {
+            //     descriptScriptable.descripts[i] = descripts[i];
+            // }
+            
+            for(int i = 0; i<descripts.Count;i++)
             {
-                descriptScriptable.descripts[i] = descripts[i];
+                descriptScriptable.descripts.Add(descripts[i]);
             }
         }
     }

@@ -74,7 +74,6 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadCurrentLevel()
     {
-        Debug.Log("LoadCurrentLevel");
         sceneLoadUI.StartLoad(()=> {
             _currentScene = levels[currentLevel];
             RegisterProgress();

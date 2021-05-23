@@ -28,7 +28,7 @@ public class DroneHelperRoot : MonoBehaviour
     {
         droneDiscriptCanvas.enabled = false;
 
-        for (int i = 0; i < droneDescript.descripts.Length; i++)
+        for (int i = 0; i < droneDescript.descripts.Count; i++)
         {
             descriptDictionary.Add(droneDescript.descripts[i].key, droneDescript.descripts[i].descript);
         }

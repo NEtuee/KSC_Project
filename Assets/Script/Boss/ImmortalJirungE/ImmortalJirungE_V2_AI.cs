@@ -48,6 +48,11 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     public float whipSpeed = 12f;
     public float rollSpeed = 15f;
 
+    public float whipDamage = 5f;
+    public float rollDamage = 5f;
+    public float explosionDamage = 10f;
+    public float shockDamage = 5f;
+
     public LayerMask obstacleLayer;
 
     public List<Rigidbody> bodys = new List<Rigidbody>();
@@ -55,6 +60,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     public UnityEvent whenReactiveshield;
     public UnityEvent whenRecover;
     public UnityEvent whenLaunch;
+    public UnityEvent whenAfterLaunch;
 
     private SphereRayEx _forwardRay;
     private SphereRayEx _sideRay;
@@ -107,6 +113,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     public void UpdateProcess(float deltaTime)
     {
         shockEvent.progress = !_shieldBroke;
+        shockEvent.damage = shockDamage;
         if(currentState == State.WallMove)
         {
             FollowPath(deltaTime);
@@ -138,19 +145,19 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
                 FollowPath(deltaTime);
             }
 
-            Collider[] playerColl = Physics.OverlapSphere(transform.position, 2.5f,targetLayer);
-
-            if(playerColl.Length != 0)
-            {
-                foreach(Collider curr in playerColl)
-                {
-                    PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
-                    if(ragdoll != null)
-                    {
-                        ragdoll.ExplosionRagdoll(300.0f, transform.forward);
-                    }
-                }
-            }
+            // Collider[] playerColl = Physics.OverlapSphere(transform.position, 2.5f,targetLayer);
+            //
+            // if(playerColl.Length != 0)
+            // {
+            //     foreach(Collider curr in playerColl)
+            //     {
+            //         PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
+            //         if(ragdoll != null)
+            //         {
+            //             ragdoll.ExplosionRagdoll(300.0f, transform.forward);
+            //         }
+            //     }
+            // }
 
             _timeCounter.IncreaseTimer("whipTime",out bool limit);
             if(limit)
@@ -367,6 +374,15 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     {
         _prevState = currentState;
         currentState = state;
+
+        switch(_prevState)
+        {
+            case State.Launch:
+                {
+                    whenAfterLaunch?.Invoke();
+                }
+                break;
+        }
 
         if (state == State.Hit)
         {
@@ -604,7 +620,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             }
         }
 
-        var moveDist = (speed * Time.deltaTime);
+        var moveDist = (speed * deltaTime);
         transform.position += direction * moveDist;
         if(_roll)
         {
@@ -657,5 +673,17 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         {
             coll.gameObject.SetActive(false);
         }
+
+        if (currentState == State.FloorWhip)
+        {
+            var ragdoll = GameManager.Instance.player.GetComponent<PlayerRagdoll>();
+            if (ragdoll.state != PlayerRagdoll.RagdollState.Ragdoll)
+            {
+                GameManager.Instance.player.TakeDamage(_roll ? rollDamage : whipDamage);
+                ragdoll.ExplosionRagdoll(300f,transform.forward);   
+            }
+        }
+        
+        
     }
 }
