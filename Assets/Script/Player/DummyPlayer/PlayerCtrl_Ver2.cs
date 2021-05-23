@@ -2056,7 +2056,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             //if (rigCtrl != null)
             empGun.Active(true);
             animator.SetLayerWeight(2, 1.0f);
-            animator.SetLayerWeight(3, 1.0f);
+            animator.SetLayerWeight(4, 1.0f);
         }
         else
         {
@@ -2064,7 +2064,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             empGun.Active(false);
             animator.SetLayerWeight(2, 0.0f);
-            animator.SetLayerWeight(3, 0.0f);
+            animator.SetLayerWeight(4, 0.0f);
         }
     }
 
