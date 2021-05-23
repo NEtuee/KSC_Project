@@ -9,8 +9,12 @@ public class HexCube : MonoBehaviour
     public float cubeSize;
     public int key;
     public bool special = false;
+    public float moveSpeed = 1f;
 
+    private Vector3 _targetLocalPosition;
+    private Vector3 _originalLocalPosition;
     private float _disapearTime;
+    private float _moveTime;
     private bool _timer = false;
     private bool _isActive = true;
 
@@ -21,6 +25,9 @@ public class HexCube : MonoBehaviour
     {
         _collider = GetComponent<Collider>();
         _renderer = GetComponent<MeshRenderer>();
+
+        _originalLocalPosition = transform.localPosition;
+        _moveTime = 1f;
     }
 
     public void FixedUpdate()
@@ -30,6 +37,15 @@ public class HexCube : MonoBehaviour
 
     public void Progress(float deltaTime)
     {
+        if(_moveTime < 1f)
+        {
+            _moveTime += deltaTime * moveSpeed;
+            if(_moveTime >= 1f)
+                _moveTime = 1f;
+            transform.localPosition = Vector3.Lerp(_originalLocalPosition,_originalLocalPosition + _targetLocalPosition,_moveTime);    
+        }
+        
+
         if(_timer)
         {
             _disapearTime -= deltaTime;
@@ -40,6 +56,17 @@ public class HexCube : MonoBehaviour
                 SetActive(true,false);
             }
         }
+    }
+
+    public MeshRenderer GetRenderer()
+    {
+        return _renderer;
+    }
+
+    public void SetTargetPosition(Vector3 local)
+    {
+        _targetLocalPosition = local;
+        _moveTime = 0;
     }
 
     public bool IsActive()

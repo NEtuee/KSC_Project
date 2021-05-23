@@ -35,7 +35,7 @@ public class HexCubeGrid : MonoBehaviour
         }
     }
 
-    public void GetCubeLineHeavy(ref List<HexCube> list,Vector3Int start ,Vector3Int end, int loopCount)
+    public void GetCubeLineHeavy(ref List<HexCube> list,Vector3Int start ,Vector3Int end, int loopStart, int loopCount)
     {
         GetCubeLine(ref list,start,end);
         _overlapCheckList.Clear();
@@ -43,7 +43,7 @@ public class HexCubeGrid : MonoBehaviour
         foreach(var item in list)
         {
             _cubeSaveList.Clear();
-            HexGridHelperEx.GetCubeNear(ref _cubeSaveList,item.cubePoint,0,loopCount);
+            HexGridHelperEx.GetCubeNear(ref _cubeSaveList,item.cubePoint,loopStart,loopCount);
 
             foreach(var cube in _cubeSaveList)
             {
@@ -186,19 +186,33 @@ public class HexCubeGrid : MonoBehaviour
         }
     }
 
-    public void GetCubeNear(ref List<HexCube> list,Vector3Int point, int direction, int rotation = 1)
+    public void GetCubeNear(ref List<HexCube> list,Vector3Int point, int direction, int rotation = 1, bool ignoreSpecial = true)
     {
         _cubeSaveList.Clear();
         HexGridHelperEx.GetCubeNear(ref _cubeSaveList,point,direction,rotation);
         foreach(var cube in _cubeSaveList)
         {
-            var target = GetCube(cube);
+            var target = GetCube(cube,ignoreSpecial);
             if(target == null)
                 continue;
 
             list.Add(target);
         }
         
+    }
+
+    public HexCube GetRandomActiveCube(bool ignoreSpecial)
+    {
+        _cubeSaveList.Clear();
+        foreach(var cube in _cubeMap.Values)
+        {
+            if(cube.IsActive() && (ignoreSpecial ? !cube.special : true))
+            {
+                _cubeSaveList.Add(cube.cubePoint);
+            }
+        }
+
+        return GetCube(_cubeSaveList[Random.Range(0,_cubeSaveList.Count)],false);
     }
 
     public HexCube GetCubeReflectMirror(Vector3Int point)

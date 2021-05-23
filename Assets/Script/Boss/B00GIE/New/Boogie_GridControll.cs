@@ -19,6 +19,8 @@ public class Boogie_GridControll : MonoBehaviour
 
     private HexCube _coreCube;
 
+    private float _pathAngle = 0f;
+
 
     public void Init()
     {
@@ -34,12 +36,12 @@ public class Boogie_GridControll : MonoBehaviour
 
     public void Progress(float deltaTime)
     {
-        CoreCubeUpdate(deltaTime);
-        // if(_prevCheck != _target.position)
-        // {
-        //     _prevTargetPosition = _prevCheck;
-        //     _prevCheck = _target.position;
-        // }
+        //CoreCubeUpdate(deltaTime);
+        if(_prevCheck != _target.position)
+        {
+            _prevTargetPosition = _prevCheck;
+            _prevCheck = _target.position;
+        }
         
         // foreach(var n in _targetCubes)
         // {
@@ -56,7 +58,9 @@ public class Boogie_GridControll : MonoBehaviour
         // }
     }
 
+    public HexCube GetRandomActiveCube(bool ignoreSpecial) {return cubeGrid.GetRandomActiveCube(ignoreSpecial);}
     public List<HexCube> GetTargetCubes() {return _targetCubes;}
+    public HexCube GetCoreCube() {return _coreCube;}
 
     public void SetCubesActive(bool active, bool timer = false,float time = 0f)
     {
@@ -84,21 +88,34 @@ public class Boogie_GridControll : MonoBehaviour
         }
     }
 
+    public void GetCube_Near(Vector3Int target,int loopCount, bool ignoreSpecial)
+    {
+        _targetCubes.Clear();
+        cubeGrid.GetCubeNear(ref _targetCubes,target,0,loopCount,ignoreSpecial);
+    }
+
     public void GetCube_WeekPoint()
     {
         _targetCubes.Clear();
         var dir = -(MathEx.DeleteYPos(_target.position) - MathEx.DeleteYPos(centerCube.transform.position)).normalized;
         var point = cubeGrid.GetCubePointFromWorld(dir * (cubeGrid.mapSize * (cubeGrid.cubeSize * 0.5f)));
-        cubeGrid.GetCubeLineHeavy(ref _targetCubes,centerCube.cubePoint,point,6);
+        cubeGrid.GetCubeLineHeavy(ref _targetCubes,centerCube.cubePoint,point,0,6);
 
         if(_coreCube != null)
         {
             _coreCube.special = false;
+            _coreCube.SetTargetPosition(Vector3.zero);
+        }
+
+        if(_targetCubes.Count == 0)
+        {
+            _coreCube = null;
+            return;
         }
 
         _coreCube = _targetCubes[Random.Range(0, _targetCubes.Count)];
         _coreCube.special = true;
-        _coreOriginPosition = _coreCube.transform.localPosition;
+        _coreCube.SetTargetPosition(new Vector3(0f,3f,0f));
     }
 
     public void GetCube_CurrentPoint()
@@ -158,11 +175,15 @@ public class Boogie_GridControll : MonoBehaviour
         var prevDir = (MathEx.DeleteYPos(_prevTargetPosition) - MathEx.DeleteYPos(centerCube.transform.position)).normalized;
 
         var angle = Vector3.SignedAngle(currDir,prevDir,Vector3.up);
+        if(angle != 0f)
+        {
+            _pathAngle = angle;
+        }
 
-        var rotateDir = Quaternion.Euler(0f,MathEx.normalize(angle) * -60f,0f) * currDir;
+        var rotateDir = Quaternion.Euler(0f,MathEx.normalize(_pathAngle) * -20f,0f) * currDir;
 
         var startPoint = cubeGrid.GetCubePointFromWorld(-rotateDir * (cubeGrid.mapSize * (cubeGrid.cubeSize * 0.5f)));
         var endPoint = cubeGrid.GetCubePointFromWorld(rotateDir * (cubeGrid.mapSize * (cubeGrid.cubeSize * 0.5f)));
-        cubeGrid.GetCubeLineHeavy(ref _targetCubes,startPoint,endPoint,2);
+        cubeGrid.GetCubeLineHeavy(ref _targetCubes,startPoint,endPoint,_pathAngle < 0 ? 3 : 0, 2);
     }
 }
