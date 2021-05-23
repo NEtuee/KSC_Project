@@ -61,6 +61,10 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     public UnityEvent whenRecover;
     public UnityEvent whenLaunch;
     public UnityEvent whenAfterLaunch;
+    public UnityEvent whenStartRolling;
+    public UnityEvent whenWallMoveExit;
+    public UnityEvent whenEndWallMoveExit;
+    public UnityEvent whenEndRecover;
 
     private SphereRayEx _forwardRay;
     private SphereRayEx _sideRay;
@@ -382,6 +386,16 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
                     whenAfterLaunch?.Invoke();
                 }
                 break;
+            case State.Recovery:
+                {
+                    whenEndRecover?.Invoke();
+                }
+                break;
+            case State.WallMoveExit:
+                {
+                    whenEndWallMoveExit?.Invoke();
+                }
+                break;
         }
 
         if (state == State.Hit)
@@ -465,6 +479,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
 
                 if(whipState == Whip.Sphere)
                 {
+                    whenStartRolling?.Invoke();
                     ChangeState(State.TransformClose);
                 }
                 else if(whipState == Whip.Capsule)
@@ -490,6 +505,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if(state == State.WallMoveExit)
         {
+            whenWallMoveExit?.Invoke();
             GetPath("WallMoveExit");
             _timeCounter.InitTimer("wallMoveTime",0f,Random.Range(21f,28f));
             _pathLoop = true;
