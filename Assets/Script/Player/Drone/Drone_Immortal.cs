@@ -5,6 +5,7 @@ using UnityEngine;
 public class Drone_Immortal : DroneHelper
 {
     [SerializeField] private bool entranceFlag = false;
+    [SerializeField] private bool scanFlag = false;
     [SerializeField] private bool shieldDestroy = false;
 
     public override void HelperUpdate()
@@ -32,8 +33,16 @@ public class Drone_Immortal : DroneHelper
         if (entranceFlag == false)
         {
             entranceFlag = true;
-            root.HelpEvent("IJ_Entrance");
+            root.HelpEvent("JirungE_Start");
         }
+    }
+
+    public void ScanStart()
+    {
+        if (scanFlag == true)
+            return;
+        scanFlag = true;
+        root.HelpEvent("JirungE_Scan");
     }
 
     public void ShieldDestroyFlag()

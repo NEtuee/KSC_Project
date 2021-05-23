@@ -21203,7 +21203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -23610,7 +23610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -27841,7 +27841,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC77C\uC2DC\uC815\uC9C0"
+  m_text: "\uC635 \uC158"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: edea5662afa3f9540b11f1f03a9ae434, type: 2}
   m_sharedMaterial: {fileID: 3588933272388356170, guid: edea5662afa3f9540b11f1f03a9ae434,
@@ -31827,12 +31827,30 @@ MonoBehaviour:
   backGroundImage: {fileID: 627559244}
   titlePanel: {fileID: 1737011385}
   optionItemPanel: {fileID: 1317404841}
-  _currentMenu: 5
+  currentMenu: 5
   optionPanel: {fileID: 1317404841}
   soundPanel: {fileID: 254059866}
   controlPanel: {fileID: 171770699}
   displayPanel: {fileID: 1514165414}
   keyBindingPanel: {fileID: 64542817}
+  gameOverPanel: {fileID: 0}
+  sceneLoadUi: {fileID: 0}
+  tutorialVideoPlayer: {fileID: 0}
+  WhenCloseOption:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1947991462}
+        m_TargetAssemblyTypeName: MainMenuCtrl, Assembly-CSharp
+        m_MethodName: OffOption
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &774901452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31863,7 +31881,7 @@ MonoBehaviour:
   soundManager: {fileID: 774901450}
   stateManager: {fileID: 0}
   sceneNameText: {fileID: 0}
-  AsynSceneManager: {fileID: 0}
+  asynSceneManager: {fileID: 0}
   endBackGround: {fileID: 0}
   effectManager: {fileID: 0}
   optionMenuCtrl: {fileID: 774901451}
@@ -40985,7 +41003,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2231.125, y: 1758.3914}
+  m_AnchoredPosition: {x: -11129.405, y: 8771.288}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1003871476
@@ -51777,6 +51795,7 @@ MonoBehaviour:
   initRectXpos: 1681
   appearRectXpos: 240
   changeRectXpos: 0
+  optionTitleString: "\uC77C\uC2DC\uC815\uC9C0"
 --- !u!114 &1317404842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51801,7 +51820,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1317404840}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
@@ -51845,7 +51864,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1317404840}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
@@ -70109,6 +70128,7 @@ MonoBehaviour:
   initRectXpos: -2162
   appearRectXpos: -1680
   changeRectXpos: 240
+  optionTitleString: "\uC635 \uC158"
 --- !u!114 &1737011386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73038,7 +73058,7 @@ MonoBehaviour:
   inputBlock: 0
   keyBindings: {fileID: 11400000, guid: 29ce426e60411f44297520c4afa1b0f2, type: 2}
   keyBindingsToggle: {fileID: 11400000, guid: 46a933562e6da404d86be73c500142c3, type: 2}
-  defaultKeyBinding: {fileID: 11400000, guid: dad216f9bbf1229479cd71f5347013c3, type: 2}
+  defaultKeyBinding: {fileID: 0}
   saveTarget: {fileID: 0}
   dualshockTranslateData: {fileID: 11400000, guid: f1e1eeca7b3779c4995f3e4244a28b62,
     type: 2}
@@ -75152,6 +75172,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1947991462}
+        m_TargetAssemblyTypeName: MainMenuCtrl, Assembly-CSharp
+        m_MethodName: OnOptionButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1845920336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75166,7 +75198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -80962,6 +80994,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fe11a698b1445f49b3125532c59f0a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainTitleCanvas: {fileID: 1947991460}
   fadePanel: {fileID: 1701458014}
   fadeImage: {fileID: 217348711}
 --- !u!1001 &1948362005
@@ -84610,8 +84643,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 0}
   scanned: 0
-  hint1Complete: 0
-  hint2Complete: 0
+  tip1: 0
+  tip2: 0
+  checkingTip3: 0
+  destroyedShield: 0
+  destroyedMedusa: 0
 --- !u!4 &2028853219
 Transform:
   m_ObjectHideFlags: 0

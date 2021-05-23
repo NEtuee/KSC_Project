@@ -64,7 +64,7 @@ public class Follow : MonoBehaviour
         }
         else
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-(mainCam.position - transform.position)), Time.fixedDeltaTime * billBoardRotationSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Camera.main.transform.forward), Time.fixedDeltaTime * billBoardRotationSpeed);
         }
     }
 

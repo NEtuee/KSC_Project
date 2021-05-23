@@ -12,6 +12,6 @@ public class Descript
 [CreateAssetMenu(fileName = "DroneDescript", menuName = "DroneDescript")]
 public class DroneDescript : ScriptableObject
 {
-    public Descript[] descripts;
+    public List<Descript> descripts = new List<Descript>();
     
 }
