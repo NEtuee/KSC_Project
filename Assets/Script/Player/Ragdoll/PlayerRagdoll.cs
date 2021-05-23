@@ -562,6 +562,14 @@ public class PlayerRagdoll : MonoBehaviour
         ActiveRagdoll(false);
     }
 
+    public void ResetRagdoll()
+    {
+        SetRagdollContainer(false);
+        anim.enabled = true;
+        state = RagdollState.Animated;
+        ActiveRagdoll(false);
+    }
+
     private void CopyAnimCharacterTransformToRagdoll(Transform origin, Transform rag)
     {
         for (int i = 0; i < origin.transform.childCount; i++)

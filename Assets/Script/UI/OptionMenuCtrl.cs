@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Events;
 
 public class OptionMenuCtrl : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class OptionMenuCtrl : MonoBehaviour
     public Image backGroundImage;
     public LeftOptionTitle titlePanel;
     public EscMenu optionItemPanel;
-    [SerializeField]private MenuType _currentMenu = MenuType.None;
+    [SerializeField]private MenuType currentMenu = MenuType.None;
+    public MenuType CurrentMenuState => currentMenu;
 
     private EscMenu _currentPanel = null;
     public EscMenu optionPanel;
@@ -27,6 +29,8 @@ public class OptionMenuCtrl : MonoBehaviour
     public SceneLoadUI sceneLoadUi;
     
     public TutorialVideoPlayer tutorialVideoPlayer;
+
+    public UnityEvent WhenCloseOption;
 
     private bool _currentTutorial = false;
     void Start()
@@ -67,11 +71,11 @@ public class OptionMenuCtrl : MonoBehaviour
         if (_currentTutorial == true)
             return;
         
-        switch(_currentMenu)
+        switch(currentMenu)
         {
             case MenuType.None:
                 {
-                    _currentMenu = MenuType.Option;
+                    currentMenu = MenuType.Option;
                     GameManager.Instance.PAUSE = true;
                     if(GameManager.Instance.cameraManager != null)
                     GameManager.Instance.cameraManager.ActiveAimCamera();
@@ -88,7 +92,7 @@ public class OptionMenuCtrl : MonoBehaviour
                 break;
             case MenuType.Option:
                 {
-                    _currentMenu = MenuType.None;
+                    currentMenu = MenuType.None;
 
                     if(GameManager.Instance.player != null)
                     GameManager.Instance.player.Resume();
@@ -108,6 +112,8 @@ public class OptionMenuCtrl : MonoBehaviour
                                 GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
                         });
                     });
+                    
+                    WhenCloseOption?.Invoke();
                 }
                 break;
             default:
@@ -121,7 +127,7 @@ public class OptionMenuCtrl : MonoBehaviour
     public void Change(int menuType)
     {
         Debug.Log("OptionChange");
-        _currentMenu = (MenuType)menuType;
+        currentMenu = (MenuType)menuType;
         EscMenu prevPanel = _currentPanel;
         switch ((MenuType)menuType)
         {

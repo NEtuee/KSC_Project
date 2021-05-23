@@ -106,10 +106,10 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
 
     public void Explosion(int target)
     {
-        Explosion(aIs[target].lastPosition, explosionRadius);
+        Explosion(aIs[target].lastPosition, explosionRadius,aIs[target].explosionDamage);
     }
     
-    public void Explosion(Vector3 position, float radius)
+    public void Explosion(Vector3 position, float radius,float damage)
     {
         var player = GameManager.Instance.player;
         
@@ -132,6 +132,7 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
 
         if (Vector3.Distance(player.transform.position, position) <= radius)
         {
+            player.TakeDamage(damage);
             var ragdoll = player.GetComponent<PlayerRagdoll>();
             ragdoll.ExplosionRagdoll(340f,(player.transform.position - position).normalized);
         }

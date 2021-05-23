@@ -6,7 +6,6 @@ public class ClickCheck : MonoBehaviour,IPointerClickHandler
 {
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log(this.name+"Click");
     }
 
     // Start is called before the first frame update

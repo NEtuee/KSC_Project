@@ -53,8 +53,7 @@ public class LevelEdit_PathMovement : MonoBehaviour
 
         _timeCounter = new TimeCounterEx();
         _timeCounter.InitTimer("timer",1f);
-
-
+        
         _currentPoint = 0;
         _endPoint = _path.GetPoint(0);
         SetNextPoint();
@@ -64,7 +63,6 @@ public class LevelEdit_PathMovement : MonoBehaviour
     {
         if(GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
             return;
-        
         Progress(Time.deltaTime);
     }
 
@@ -72,7 +70,6 @@ public class LevelEdit_PathMovement : MonoBehaviour
     {
         if(GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
             return;
-        
         Progress(Time.fixedDeltaTime);
     }
 

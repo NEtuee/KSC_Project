@@ -6,6 +6,7 @@ public class EffectTestSceneControll : MonoBehaviour
 {
     public PlayerCtrl_Ver2 player;
     public EMPGun gun;
+    public Transform explosionPoint;
 
     void Start()
     {
@@ -26,6 +27,10 @@ public class EffectTestSceneControll : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.Alpha3))
         {
             gun.LaunchLaser(120.0f);
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            GameManager.Instance.effectManager.Active("CannonShotExplosion", explosionPoint.position, Quaternion.identity);
         }
     }
 

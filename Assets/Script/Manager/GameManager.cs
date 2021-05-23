@@ -243,6 +243,7 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         asynSceneManager.LoadCurrentLevel();
+        Debug.Log("RestartLevel");
     }
 
     public void LoadTitleScene()
