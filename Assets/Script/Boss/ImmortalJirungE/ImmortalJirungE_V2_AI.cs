@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AmplifyShaderEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,7 +20,8 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         WallMoveExit,
         Hit,
         Stun,
-        Recovery
+        Recovery,
+        Dead
     };
 
     public enum Whip
@@ -28,6 +30,15 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         Capsule
     }
 
+    public struct LocalPositionAndRotation
+    {
+        public Vector3 localPosition;
+        public Quaternion localRotation;
+        public Transform parent;
+    }
+
+    public List<GameObject> bodyParts; 
+    
     public State currentState;
     public Whip whipState;
     public BossHead head;
@@ -37,6 +48,9 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     
     public Transform rollSphere;
     public Animator animatorControll;
+    public MeshRenderer eyeRenderer;
+    public Material defaultEyeball;
+    public Material angryEyeball;
 
     public Vector3 lastPosition;
 
@@ -75,6 +89,8 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     private Vector3 _spawnPosition;
     private Quaternion _spawnRotation;
 
+    private List<LocalPositionAndRotation> _bodyTransforms = new List<LocalPositionAndRotation>();
+
     private bool _roll = false;
     private bool _shieldBroke = false;
     private bool _launched = false;
@@ -94,6 +110,8 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
 
         GetSoundManager();
         SetLegHitGroundSound(1509);
+        
+        SaveBodyTransform();
 
         //ChangeState(State.TransformClose);
     }
@@ -288,6 +306,14 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
                 ChangeState(_prevState);
             }
         }
+        else if (currentState == State.Dead)
+        {
+            _timeCounter.IncreaseTimer("DeadTime",out bool limit);
+            if(limit)
+            {
+                Respawn();
+            }
+        }
 
     }
 
@@ -321,11 +347,20 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     
     public void Dead()
     {
+        animatorControll.enabled = false;
+        ExplosionBody();
         isDead = true;
+        ChangeState(State.Dead);
+    }
+
+    public void Respawn()
+    {
         lastPosition = transform.position;
         transform.SetPositionAndRotation(_spawnPosition,_spawnRotation);
         rollSphere.localRotation = Quaternion.identity;
+        SetBody();
         ChangeState(State.LaunchReadyTimer);
+        animatorControll.enabled = true;
     }
     
 
@@ -349,6 +384,8 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             leg.Hold(true);
         }
 
+        GameManager.Instance.effectManager.Active("ElectricExplosion", transform.position);
+        
         head.enabled = false;
     }
 
@@ -398,6 +435,15 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
                 break;
         }
 
+        if (_prevState == State.FloorWhip)
+        {
+            eyeRenderer.material = defaultEyeball;
+        }
+        else
+        {
+            eyeRenderer.material = angryEyeball;
+        }
+
         if (state == State.Hit)
         {
             if (_prevState == State.TransformClose || _prevState == State.TransformOpen)
@@ -413,7 +459,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             animatorControll.SetInteger("AnimationCode",2);
             animatorControll.SetTrigger("ChangeAnimation");
 
-            _timeCounter.InitTimer("launchTime", 0f, 15f);
+            _timeCounter.InitTimer("launchTime", 0f, 8f);
         }
         else if(state == State.LaunchReady)
         {
@@ -517,6 +563,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             if(_nextState != State.Stun)
             {   
                 Stun();
+                
                 _timeCounter.InitTimer("stunTime");
                 _nextState = State.Stun;
                 ChangeState(State.TransformClose);
@@ -560,7 +607,8 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if(state == State.TransformOpen)
         {
-            _timeCounter.InitTimer("TransformTime",0f,4f);
+            var waitTime = 4f + (_nextState == State.WallMoveExit ? 0.5f : 0f);
+            _timeCounter.InitTimer("TransformTime",0f,waitTime);
             animatorControll.SetInteger("AnimationCode",0);
             animatorControll.SetTrigger("ChangeAnimation");
 
@@ -596,8 +644,54 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     
             _roll = false;
         }
+        else if(state == State.Dead)
+        {
+            _timeCounter.InitTimer("DeadTime",0f,7f);
+        }
     }
 
+    public void ExplosionBody()
+    {
+        foreach (var body in bodyParts)
+        {
+            body.transform.SetParent(null);
+            var rig = body.AddComponent<Rigidbody>();
+            rig.useGravity = true;
+            rig.isKinematic = false;
+
+            var dir = body.transform.position - transform.position;
+            rig.AddForce(dir.normalized * 20f,ForceMode.Impulse);
+        }
+    }
+
+    public void SetBody()
+    {
+        for(int i = 0; i < bodyParts.Count; ++i)
+        {
+            if (bodyParts[i].TryGetComponent<Rigidbody>(out var rig))
+            {
+                Destroy(rig);
+            }
+            var tp = _bodyTransforms[i];
+            bodyParts[i].transform.SetParent(tp.parent);
+            bodyParts[i].transform.localPosition = tp.localPosition;
+            bodyParts[i].transform.localRotation = tp.localRotation;
+
+        }
+    }
+    
+    public void SaveBodyTransform()
+    {
+        foreach (var body in bodyParts)
+        {
+            var tp = new LocalPositionAndRotation();
+            tp.localPosition = body.transform.localPosition;
+            tp.localRotation = body.transform.localRotation;
+            tp.parent = body.transform.parent;
+            _bodyTransforms.Add(tp);
+        }
+    }
+    
     public override bool Move(Vector3 direction, float speed, float deltaTime,float legMovementSpeed = 4f)
     {
         //transform.position += transform.forward * _movementSpeed * Time.deltaTime;

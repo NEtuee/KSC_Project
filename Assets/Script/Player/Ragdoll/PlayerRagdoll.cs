@@ -21,6 +21,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     [SerializeField] public RagdollState state;
     [SerializeField] public RagdollSimulateState simulateState;
+    [SerializeField] public GameObject[] lightningEffect;
     [SerializeField] private Rigidbody leftHandRigidBody;
     [SerializeField] private Rigidbody rightHandRigidBody;
     [SerializeField] private Transform leftHandTransform;
@@ -158,13 +159,15 @@ public class PlayerRagdoll : MonoBehaviour
                 }
                 
                 _timeCounter.InitTimer("shock", 0f, UnityEngine.Random.Range(0.05f,0.2f));
-                GameManager.Instance.effectManager.Active("ElectricSpark",transform.position,Quaternion.identity);
+                //GameManager.Instance.effectManager.Active("ElectricSpark",transform.position,Quaternion.identity);
             }
             
             _timeCounter.IncreaseTimer("shockProgress", out limit);
             if (limit)
             {
                 simulateState = RagdollSimulateState.Default;
+                foreach(var effect in lightningEffect)
+                    effect.SetActive(false);
             }
             
         }
@@ -293,6 +296,8 @@ public class PlayerRagdoll : MonoBehaviour
     public void SetPlayerShock(float time)
     {
         _timeCounter.InitTimer("shockProgress", 0f, time);
+        foreach(var effect in lightningEffect)
+            effect.SetActive(true);
         simulateState = RagdollSimulateState.Shock;
     }
 
