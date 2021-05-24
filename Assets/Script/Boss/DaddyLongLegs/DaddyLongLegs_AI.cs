@@ -63,7 +63,7 @@ public class DaddyLongLegs_AI : IKBossBase
         if (transform.position.z <= -268.82f)
         {
             var pos = transform.position;
-            pos.z += 590.22f;
+            pos.z += 580.22f;
             transform.position = pos;
         }
     }
