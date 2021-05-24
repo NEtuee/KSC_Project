@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LevelEdit_PlayerShockEvent : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class LevelEdit_PlayerShockEvent : MonoBehaviour
     public bool progress = true;
 
     private float _timer = 0f;
+
+    public UnityEvent whenPlayerShock;
 
     public void Update()
     {
@@ -40,6 +43,7 @@ public class LevelEdit_PlayerShockEvent : MonoBehaviour
                 GameManager.Instance.player.TakeDamage(damage);
                 ragdoll.SetPlayerShock(shockTime);
                 ragdoll.ExplosionRagdoll(100f,(ragdoll.transform.position - transform.position).normalized);
+                whenPlayerShock?.Invoke();
             }
         }
     }

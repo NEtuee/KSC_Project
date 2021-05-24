@@ -6,7 +6,7 @@ public abstract class Scanable : MonoBehaviour
 {
     [SerializeField] protected LayerMask visibleCastLayer;
     [SerializeField]protected Renderer renderer;
-    protected Collider collider;
+    [SerializeField] protected Collider collider;
 
     public bool visible;
     public bool removeCheck = true;

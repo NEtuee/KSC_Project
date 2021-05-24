@@ -9,6 +9,7 @@ public class EMPShield : Hitable
     public bool isActive = false;
     public bool shieldEffect = true;
     [SerializeField] private bool debug;
+    private Color _initColor;
     public Color secondColor;
     public Color thirdColor;
     public float intencity;
@@ -19,6 +20,7 @@ public class EMPShield : Hitable
     private Vector3 originalPosition;
     private float originalWpo;
     private int _hitCount = 0;
+    private float _initWpo;
 
     private ParticleSystem shieldParticle;
     //private Collider collider;
@@ -34,10 +36,12 @@ public class EMPShield : Hitable
         if(shieldEffect)
         {
             Color color2 = mat.GetColor("_color2");
+            _initColor = mat.GetColor("_color");;
             color2.a = 0f;
             mat.SetColor("_color2",color2);
 
             originalWpo = mat.GetFloat("_WPO");
+            _initWpo = originalWpo;
         }
 
         factor = Mathf.Pow(2, intencity);
@@ -189,6 +193,8 @@ public class EMPShield : Hitable
         collider.enabled = true;
         renderer.enabled = true;
         isOver = false;
+        mat.SetColor("_color",_initColor);
+        mat.SetFloat("_WPO",_initWpo);
     }
 
     public override void Destroy()
