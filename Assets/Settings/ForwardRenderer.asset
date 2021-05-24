@@ -50,7 +50,8 @@ MonoBehaviour:
   - {fileID: -2877383220050679863}
   - {fileID: -6700337797871008266}
   - {fileID: 3646472070441128035}
-  m_RendererFeatureMap: c9a735d6347b11d8f685c6d2459e03a363d0063a07df9a32
+  - {fileID: 8575505741597240493}
+  m_RendererFeatureMap: c9a735d6347b11d8f685c6d2459e03a363d0063a07df9a32adec397909510277
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:
@@ -97,3 +98,25 @@ MonoBehaviour:
     IsEnabled: 1
     WhenToInsert: 1000
     MaterialToBlit: {fileID: 2100000, guid: eb11e483165d66c4583ebfbde9ce354c, type: 2}
+--- !u!114 &8575505741597240493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
+  m_Name: NewScreenSpaceAmbientOcclusion
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  m_Shader: {fileID: 4800000, guid: 0849e84e3d62649e8882e9d6f056a017, type: 3}
+  m_Settings:
+    Downsample: 0
+    Source: 1
+    NormalSamples: 1
+    Intensity: 0.3
+    DirectLightingStrength: 0.198
+    Radius: 0.27
+    SampleCount: 6
