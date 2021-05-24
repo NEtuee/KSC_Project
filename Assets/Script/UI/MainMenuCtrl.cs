@@ -10,6 +10,10 @@ public class MainMenuCtrl : MonoBehaviour
     public Canvas fadePanel;
     public Image fadeImage;
 
+    public MainTitleButton startButton;
+    public MainTitleButton optionButton;
+    public MainTitleButton exitButton;
+
     private void Start()
     {
         fadeImage.color = Color.black;
@@ -53,5 +57,12 @@ public class MainMenuCtrl : MonoBehaviour
     public void OffOption()
     {
         mainTitleCanvas.sortingOrder = 4;
+    }
+
+    public void SetButtonInteractable(bool active)
+    {
+        startButton.interactable = active;
+        optionButton.interactable = active;
+        exitButton.interactable = active;
     }
 }
