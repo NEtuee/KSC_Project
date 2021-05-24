@@ -473,13 +473,15 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if(state == State.FloorWhip)
         {
+            if(_roll)
+                whenStartRolling?.Invoke();
+            
             if(_shieldBroke && !_roll)
             {
                 _nextState = State.FloorWhip;
 
                 if(whipState == Whip.Sphere)
                 {
-                    whenStartRolling?.Invoke();
                     ChangeState(State.TransformClose);
                 }
                 else if(whipState == Whip.Capsule)

@@ -93,4 +93,8 @@ public class Drone_Immortal : DroneHelper
         root.HelpEvent("JirungE_Recharge");
     }
 
+    public void ElectricShock()
+    {
+        root.HelpEvent("JirungE_ElectricShock");
+    }
 }
