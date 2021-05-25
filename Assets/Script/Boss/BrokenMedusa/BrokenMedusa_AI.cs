@@ -38,6 +38,7 @@ public class BrokenMedusa_AI : IKBossBase
     public float scanYLimit = 10f;
     public float lookDistance = 20f;
     public float pushUpDist = 3f;
+    public float jumpPushDist = 2f;
     
     public Animator animatorControll;
 
@@ -608,26 +609,23 @@ public class BrokenMedusa_AI : IKBossBase
                 UpdateMoveLine();
                 return;
             }
-            
-            GameManager.Instance.soundManager.Play(1015,_target.position);
 
             var upDist = MathEx.distance(transform.position.y, _target.position.y);
-            _jumpPush = _jumpPush && upDist >= pushUpDist;
-            
-            if(upDist >= pushUpDist)
+
+            if(upDist >= pushUpDist && !_jumpPush)
             {
-                if(_jumpPush)
-                    PushBack();
-                else
-                {
-                    _jumpPush = true;
-                    PushBackUp();
-                }
+                _jumpPush = true;
+                PushBackUp();
+                GameManager.Instance.soundManager.Play(1015,_target.position);
             }
-            else
+            else if((upDist <= jumpPushDist && _jumpPush) || !_jumpPush)
             {
                 PushBack();
+                _jumpPush = false;
+                GameManager.Instance.soundManager.Play(1015,_target.position);
             }
+            
+            _jumpPush = _jumpPush && jumpPushDist <= upDist;
         }
     }
 
