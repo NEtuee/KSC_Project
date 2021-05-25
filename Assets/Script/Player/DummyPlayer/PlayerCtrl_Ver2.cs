@@ -422,6 +422,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
+                    
+                    Debug.Log(chargeTime.Value);
+                    
+                    GameManager.Instance.soundManager.SetParam(1013,10131,(chargeTime.Value / 3f) * 100f);
 
                     gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
                 }
@@ -1180,6 +1184,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ChangeState(PlayerState.Jump);
     }
 
+    public void ClimbingSound()
+    {
+        GameManager.Instance.soundManager.Play(1006, Vector3.zero, transform);
+    }
+
     public void ChangeState(PlayerState changeState)
     {
         prevState = state;
@@ -1199,7 +1208,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 if (changeState == PlayerState.Default)
                 {
-                    GameManager.Instance.soundManager.Play(1000, Vector3.zero, transform);
+                    GameManager.Instance.soundManager.Play(1004, Vector3.zero, transform);
                 }
             }
                 break;
@@ -1288,6 +1297,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.TurnBack:
             {
                 animator.applyRootMotion = true;
+                GameManager.Instance.soundManager.Play(1002, Vector3.zero, transform);
                 animator.SetTrigger("TurnBack");
             }
                 break;
@@ -1358,6 +1368,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.ClimbingJump:
             {
                 climbingJumpStartTime = Time.time;
+                
+                GameManager.Instance.soundManager.Play(1007, Vector3.zero, transform);
 
                 if (climbingJumpDirection == ClimbingJumpDirection.Left ||
                     climbingJumpDirection == ClimbingJumpDirection.Right)
@@ -1908,6 +1920,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //if (InputManager.Instance.GetAction(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
         if (InputManager.Instance.GetInput(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
         {
+            _charge.Stop();
             GameManager.Instance.soundManager.Play(1010, Vector3.zero, transform);
             GameManager.Instance.soundManager.Play(1011, Vector3.zero, transform);
 
