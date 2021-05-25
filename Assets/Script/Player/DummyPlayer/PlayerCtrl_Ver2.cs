@@ -1433,11 +1433,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Respawn:
             {
+                    currentSpeed = 0.0f;
+                    animator.SetFloat("Speed", 0.0f);
+
                 if (prevState == PlayerState.Ragdoll)
                 {
                     ragdoll.ResetRagdoll();
                 }
-                GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => { animator.SetTrigger("Respawn");});
+                GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() =>
+                { 
+                    animator.SetTrigger("Respawn");
+                    drone.Respawn(transform);
+                });
             }
                 break;
         }

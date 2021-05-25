@@ -16,6 +16,15 @@ public class Drone : MonoBehaviour
     [SerializeField] private float collectRequiredTime = 1f;
     [SerializeField] private FloatingMove floatingMove;
     [SerializeField] private bool help = false;
+
+    [Header("DroneVisual")]
+    [SerializeField] private Transform droneVisual;
+    [SerializeField] private Transform droneBody;
+    private Vector3 droneBodyOriginPos;
+    private Animator _droneAnim;
+    private FloatingMove _floatingMoveComponent;
+    private bool _respawn = false;
+
     private float collectStartTime;
     
     private Transform approachTarget;
@@ -47,6 +56,16 @@ public class Drone : MonoBehaviour
         _droneScaner = GetComponent<DroneScaner>();
         
         GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);
+
+        if (droneVisual == null)
+        {
+            Debug.LogWarning("Not Set DroneVisual");
+            return;
+        }
+
+        _droneAnim = droneVisual.GetComponent<Animator>();
+        _floatingMoveComponent = droneVisual.GetComponent<FloatingMove>();
+        droneBodyOriginPos = droneBody.localPosition;
     }
 
     // Update is called once per frame
@@ -84,6 +103,9 @@ public class Drone : MonoBehaviour
 
     private void UpdateDrone(float deltaTime)
     {
+        if (_respawn)
+            return;
+
         switch(state)
         {
             case DroneState.Default:
@@ -242,7 +264,7 @@ public class Drone : MonoBehaviour
         if (value == true)
         {
             state = DroneState.AimHelp;
-            floatingMove.SetRangeRatio(0.2f);
+            _floatingMoveComponent.SetRangeRatio(0.2f);
             whenAimHelp?.Invoke();
         }
         else
@@ -250,13 +272,13 @@ public class Drone : MonoBehaviour
             if(help == true)
             {
                 state = DroneState.Help;
-                floatingMove.SetRangeRatio(1.0f);
+                _floatingMoveComponent.SetRangeRatio(1.0f);
                 whenHelp?.Invoke();
             }
             else
             {
                 state = DroneState.Default;
-                floatingMove.SetRangeRatio(1.0f);
+                _floatingMoveComponent.SetRangeRatio(1.0f);
             }
         }
     }
@@ -267,7 +289,7 @@ public class Drone : MonoBehaviour
         if (state != DroneState.AimHelp)
         {
             state = DroneState.Default;
-            floatingMove.SetRangeRatio(1.0f);
+            _floatingMoveComponent.SetRangeRatio(1.0f);
         }
     }
 
@@ -291,5 +313,28 @@ public class Drone : MonoBehaviour
         {
             droneHelperRoot.HelpEvent(key);
         }
+    }
+
+    public void Respawn(Transform playerTransform)
+    {
+        _respawn = true;
+        transform.SetParent(playerTransform);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        droneVisual.localPosition = Vector3.zero;
+        droneVisual.localRotation = Quaternion.identity;
+
+        _droneAnim.enabled = true;
+        _floatingMoveComponent.enabled = false;
+
+        _droneAnim.SetTrigger("Respawn");
+    }
+
+    public void CompleteRespawn()
+    {
+        transform.SetParent(null);
+        transform.position = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+        droneBody.localPosition = droneBodyOriginPos;
+        _respawn = false;
     }
 }
