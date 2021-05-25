@@ -29,6 +29,7 @@ public class OptionMenuCtrl : MonoBehaviour
     public SceneLoadUI sceneLoadUi;
     
     public TutorialVideoPlayer tutorialVideoPlayer;
+    public RespawnFadeCtrl respawnFadeCtrl;
 
     public UnityEvent WhenCloseOption;
 
@@ -95,9 +96,9 @@ public class OptionMenuCtrl : MonoBehaviour
                     currentMenu = MenuType.None;
 
                     if(GameManager.Instance.player != null)
-                    GameManager.Instance.player.Resume();
+                      GameManager.Instance.player.Resume();
                     if(GameManager.Instance.followTarget)
-                    GameManager.Instance.followTarget.Resume();
+                      GameManager.Instance.followTarget.Resume();
 
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
@@ -169,6 +170,7 @@ public class OptionMenuCtrl : MonoBehaviour
             return;
         sceneLoadUi.EndLoad();
     }
+    
     
     public void GameQuit()
     {
