@@ -24,7 +24,6 @@ public class PlayerRePositionor : MonoBehaviour
             return;
         }
         
-        
         {
             GameManager.Instance.player.transform.position = respawn.position;
             bip.position = respawn.position;

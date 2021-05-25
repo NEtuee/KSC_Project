@@ -29,7 +29,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         Aiming,
         ClimbingJump,
         ReadyClimbingJump,
-        HangShake
+        HangShake,
+        Respawn
     }
 
     public enum ClimbingJumpDirection
@@ -1428,6 +1429,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.HangShake:
             {
                 ragdoll.ActiveHangShake();
+            }
+                break;
+            case PlayerState.Respawn:
+            {
+                if (prevState == PlayerState.Ragdoll)
+                {
+                    ragdoll.ResetRagdoll();
+                }
+                GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => { animator.SetTrigger("Respawn");});
             }
                 break;
         }

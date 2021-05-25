@@ -12,8 +12,8 @@ public class PlayerCtrl : MonoBehaviour
     public FloatReactiveProperty energy = new FloatReactiveProperty(0.0f);
     protected bool dead = false;
     public bool Dead => dead;
-    public delegate void WhenPlayerDead();
 
+    public delegate void WhenPlayerDead();
     public WhenPlayerDead whenPlayerDead;
     
     public void Pause() { isPause = true; }
