@@ -42,6 +42,8 @@ public class BrokenMedusa_AI : IKBossBase
     
     public Animator animatorControll;
 
+    public LayerMask pushObstacleLayer;
+
     //public Animation animationControll;
     public GraphAnimator graphAnimator;
     public BossScan scanner;
@@ -64,6 +66,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     private float _pointDistance;
     private float _direction;//1 = right, -1 = left
+    private float _pushCooldown;
 
     private bool _scanCheck = false;
     private bool _armPushLerpBack = false;
@@ -91,6 +94,7 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("FrontWalk_Init");
         _timeCounter.InitTimer("timer");
         _timeCounter.InitTimer("pushStand");
+        _timeCounter.InitTimer("pushCooldown");
         
         GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
 
@@ -598,6 +602,12 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void Push()
     {
+        _timeCounter.IncreaseTimer("pushCooldown",out var limit);
+        if(!limit)
+        {
+            return;
+        }
+
         if (IsPlaying(2, "Anim_Medusa_Push") || IsPlaying(2, "Anim_Medusa_PushUp"))
             return;
         
@@ -610,6 +620,18 @@ public class BrokenMedusa_AI : IKBossBase
                 return;
             }
 
+            var rayPos = transform.position;
+            rayPos.y += 2f;
+            var rayDir = (_target.position - rayPos).normalized;
+            var rayDist = Vector3.Distance(_target.position,rayPos);
+            if(Physics.Raycast(rayPos,rayDir,rayDist,pushObstacleLayer))
+            {
+                return;
+            }
+
+            Debug.Log("Check");
+
+
             var upDist = MathEx.distance(transform.position.y, _target.position.y);
 
             if(upDist >= pushUpDist && !_jumpPush)
@@ -617,12 +639,14 @@ public class BrokenMedusa_AI : IKBossBase
                 _jumpPush = true;
                 PushBackUp();
                 GameManager.Instance.soundManager.Play(1015,_target.position);
+                _timeCounter.InitTimer("pushCooldown");
             }
-            else if((upDist <= jumpPushDist && _jumpPush) || !_jumpPush)
+            else if(((upDist <= jumpPushDist) && _jumpPush) || !_jumpPush)
             {
                 PushBack();
                 _jumpPush = false;
                 GameManager.Instance.soundManager.Play(1015,_target.position);
+                _timeCounter.InitTimer("pushCooldown");
             }
             
             _jumpPush = _jumpPush && jumpPushDist <= upDist;
@@ -737,8 +761,9 @@ public class BrokenMedusa_AI : IKBossBase
 
     public override bool Move(Vector3 direction, float speed, float deltaTime,float legSpeed = 4f)
     {
-        if(base.Move(direction,speed,deltaTime,legSpeed))
-            body.localRotation = body.localRotation * Quaternion.Euler(0f,0f,speed * deltaTime * 10f);
+        base.Move(direction,speed,deltaTime,legSpeed);
+        //if(base.Move(direction,speed,deltaTime,legSpeed))
+            //body.localRotation = body.localRotation * Quaternion.Euler(0f,0f,speed * deltaTime * 10f);
         
         return true;
     }
