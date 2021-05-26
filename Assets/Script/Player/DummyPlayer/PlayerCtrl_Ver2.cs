@@ -330,6 +330,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         InputUseHpPack();
         InputRun();
 
+        if (Input.GetKeyDown(KeyCode.U))
+            drone.Visible = true;
+
         switch (state)
         {
             case PlayerState.Default:
@@ -1239,8 +1242,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 collider.height = 1.898009f;
                 collider.center = new Vector3(0.0f, 0.95622f, 0.0f);
 
-                if (transform.parent == null)
-                    GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
+                GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
                 // else
                 //     GameManager.Instance.cameraManager.SetFollowCameraDistance("ExistParent");
             }
@@ -1445,11 +1447,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Respawn:
             {
+                currentSpeed = 0.0f;
+                animator.SetFloat("Speed", 0.0f);
+
                 if (prevState == PlayerState.Ragdoll)
                 {
                     ragdoll.ResetRagdoll();
                 }
-                GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => { animator.SetTrigger("Respawn");});
+                GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() =>
+                { 
+                    animator.SetTrigger("Respawn");
+                    drone.Respawn(transform);
+                });
             }
                 break;
         }

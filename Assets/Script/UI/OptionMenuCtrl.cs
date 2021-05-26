@@ -181,4 +181,9 @@ public class OptionMenuCtrl : MonoBehaviour
         Application.Quit(); 
 #endif
     }
+
+    public void OnTitleButton()
+    {
+        sceneLoadUi.FadeScreen(1.0f, 1.0f, GameManager.Instance.LoadTitleScene);
+    }
 }

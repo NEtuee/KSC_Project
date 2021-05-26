@@ -354,4 +354,5 @@ public class GameManager : MonoBehaviour
     {
         return screenHeight;
     }
+
 }
