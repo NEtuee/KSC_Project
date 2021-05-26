@@ -6,18 +6,25 @@ using UnityEngine.UI;
 using DG.Tweening;
 public class MainMenuCtrl : MonoBehaviour
 {
+    public Canvas mainTitleCanvas;
     public Canvas fadePanel;
     public Image fadeImage;
 
+    public TitleLogoCtrl title;
+    public MainTitleButton startButton;
+    public MainTitleButton optionButton;
+    public MainTitleButton exitButton;
+
     private void Start()
     {
+        title.Init();
         fadeImage.color = Color.black;
-        FadeIn(null);
+        FadeIn(()=> { title.Appear(); });
     }
 
     private void Update()
     {
-        if (InputManager.Instance.GetInput(KeybindingActions.Option))
+        if (InputManager.Instance.GetInput(KeybindingActions.Option) && GameManager.Instance.optionMenuCtrl.CurrentMenuState != OptionMenuCtrl.MenuType.None)
         {
             GameManager.Instance.optionMenuCtrl.InputEsc();
             Cursor.visible = true;
@@ -42,5 +49,22 @@ public class MainMenuCtrl : MonoBehaviour
     {
         fadePanel.enabled = true;
         fadeImage.DOFade(1f, 1f).OnComplete(complete);
+    }
+
+    public void OnOptionButton()
+    {
+        mainTitleCanvas.sortingOrder = 2;
+    }
+
+    public void OffOption()
+    {
+        mainTitleCanvas.sortingOrder = 4;
+    }
+
+    public void SetButtonInteractable(bool active)
+    {
+        startButton.interactable = active;
+        optionButton.interactable = active;
+        exitButton.interactable = active;
     }
 }

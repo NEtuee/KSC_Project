@@ -37,7 +37,9 @@ public class BrokenMedusa_AI : IKBossBase
     public float pushDistance = 3f;
     public float scanYLimit = 10f;
     public float lookDistance = 20f;
-
+    public float pushUpDist = 3f;
+    public float jumpPushDist = 2f;
+    
     public Animator animatorControll;
 
     //public Animation animationControll;
@@ -65,6 +67,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     private bool _scanCheck = false;
     private bool _armPushLerpBack = false;
+    private bool _jumpPush = false;
 
     public UnityEvent scannedEvent;
     public UnityEvent whenSearch;
@@ -137,6 +140,12 @@ public class BrokenMedusa_AI : IKBossBase
         UpdateDirection();
         UpdatePerpendicularPoint();
         Push();
+
+        if (_targetDistance <= 3f && (currentState == State.SearchIdle || currentState == State.SearchRotate || currentState == State.SearchScan))
+        {
+            UpdateMoveLine();
+            ChangeState(State.LockOnMove);
+        }
 
         if (Input.GetKeyDown(KeyCode.L))
         {
@@ -600,19 +609,23 @@ public class BrokenMedusa_AI : IKBossBase
                 UpdateMoveLine();
                 return;
             }
-            
-            GameManager.Instance.soundManager.Play(1015,_target.position);
 
             var upDist = MathEx.distance(transform.position.y, _target.position.y);
 
-            if(upDist >= 3f)
+            if(upDist >= pushUpDist && !_jumpPush)
             {
+                _jumpPush = true;
                 PushBackUp();
+                GameManager.Instance.soundManager.Play(1015,_target.position);
             }
-            else
+            else if((upDist <= jumpPushDist && _jumpPush) || !_jumpPush)
             {
                 PushBack();
+                _jumpPush = false;
+                GameManager.Instance.soundManager.Play(1015,_target.position);
             }
+            
+            _jumpPush = _jumpPush && jumpPushDist <= upDist;
         }
     }
 
@@ -635,6 +648,7 @@ public class BrokenMedusa_AI : IKBossBase
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
                 var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
                 player.TakeDamage(5f);
+                
                 if (ragdoll != null)
                 {
                     ragdoll.ExplosionRagdoll(250.0f, 

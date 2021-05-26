@@ -9,10 +9,18 @@ public class EMPShield : Hitable
     public bool isActive = false;
     public bool shieldEffect = true;
     [SerializeField] private bool debug;
-    public Color scanColor;
+    private Color _initColor;
+    public Color secondColor;
+    public Color thirdColor;
+    public float intencity;
+    private float factor;
+    public float secondWpoValue = 0.5f;
+    public float thirdWpoValue = 0.8f;
     private float shakeTime = 0.0f;
     private Vector3 originalPosition;
     private float originalWpo;
+    private int _hitCount = 0;
+    private float _initWpo;
 
     private ParticleSystem shieldParticle;
     //private Collider collider;
@@ -28,13 +36,15 @@ public class EMPShield : Hitable
         if(shieldEffect)
         {
             Color color2 = mat.GetColor("_color2");
+            _initColor = mat.GetColor("_color");;
             color2.a = 0f;
             mat.SetColor("_color2",color2);
 
             originalWpo = mat.GetFloat("_WPO");
+            _initWpo = originalWpo;
         }
 
-        
+        factor = Mathf.Pow(2, intencity);
 
         //shieldParticle = GetComponent<ParticleSystem>();
     }
@@ -114,6 +124,8 @@ public class EMPShield : Hitable
         originalPosition = transform.localPosition;
         hp -= 100f;
         shakeTime = 0.1f;
+        _hitCount++;
+        SetDistortion();
         StartCoroutine(HitEffect());
         if (hp <= 0f)
         {
@@ -132,6 +144,8 @@ public class EMPShield : Hitable
 
         originalPosition = transform.localPosition;
         hp -= damage;
+        _hitCount++;
+        SetDistortion();
         StartCoroutine(HitEffect());
         //shakeTime = 0.1f;
         if (hp <= 0f)
@@ -161,6 +175,8 @@ public class EMPShield : Hitable
             hp -= damage;
         }
         //shakeTime = 0.1f;
+        _hitCount++;
+        SetDistortion();
         StartCoroutine(HitEffect());
         isDestroy = false;
         if (hp <= 0f)
@@ -177,6 +193,8 @@ public class EMPShield : Hitable
         collider.enabled = true;
         renderer.enabled = true;
         isOver = false;
+        mat.SetColor("_color",_initColor);
+        mat.SetFloat("_WPO",_initWpo);
     }
 
     public override void Destroy()
@@ -423,5 +441,19 @@ public class EMPShield : Hitable
 
         visible = false;
         return;
+    }
+
+    private void SetDistortion()
+    {
+        if(hp <= 20.0f)
+        {
+            originalWpo = secondWpoValue;
+            mat.SetColor("_color", new Color(thirdColor.r * factor, thirdColor.g * factor, thirdColor.b * factor, 1.0f));
+        }
+        else if(hp <= 60.0f)
+        {
+            originalWpo = thirdWpoValue;
+            mat.SetColor("_color", new Color(secondColor.r * factor, secondColor.g * factor, secondColor.b * factor, 1.0f));
+        }
     }
 }

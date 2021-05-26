@@ -28,9 +28,13 @@ public class EMPGun : MonoBehaviour
         GetComponent<PlayerCtrl_Ver2>().chargeTime.Subscribe(value => { 
             if(value >= 3f)
             {
-                crossHair.Second();
+                crossHair.Third();
             }
             else if(value >= 2f)
+            {
+                crossHair.Second();
+            }
+            else if (value >= 1f)
             {
                 crossHair.First();
             }
@@ -82,17 +86,15 @@ public class EMPGun : MonoBehaviour
             if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
             {
                 hitable.Hit(damage);
+                crossHair.ActiveHitMark();
             }
         }
+
+        crossHair.ActiveAnimation();
 
         if (gunAnim != null)
         {
             gunAnim.SetTrigger("ToZero");
-        }
-
-        if(crossHair != null)
-        {
-            crossHair.ActiveAnimation();
         }
     }
 

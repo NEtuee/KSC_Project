@@ -5,7 +5,10 @@ using UnityEngine;
 public class Drone_Immortal : DroneHelper
 {
     [SerializeField] private bool entranceFlag = false;
+    [SerializeField] private bool scanFlag = false;
+    [SerializeField] private bool scanning = false;
     [SerializeField] private bool shieldDestroy = false;
+    [SerializeField] private bool rolling = false;
 
     public override void HelperUpdate()
     {
@@ -32,8 +35,24 @@ public class Drone_Immortal : DroneHelper
         if (entranceFlag == false)
         {
             entranceFlag = true;
-            root.HelpEvent("IJ_Entrance");
+            root.HelpEvent("JirungE_Start");
         }
+    }
+
+    public void ScanStart()
+    {
+        if (scanFlag == true)
+            return;
+        scanFlag = true;
+        root.HelpEvent("JirungE_Scan");
+    }
+
+    public void Scanning()
+    {
+        if (scanning == true)
+            return;
+        scanning = true;
+        root.HelpEvent("JirungE_Tip01");
     }
 
     public void ShieldDestroyFlag()
@@ -41,23 +60,41 @@ public class Drone_Immortal : DroneHelper
         if(shieldDestroy == false)
         {
             shieldDestroy = true;
-            root.HelpEvent("IJ_ShieldDestroy");
+            root.HelpEvent("JirungE_ShieldCrack");
         }
     }
 
-    public void AllShieldDestroyFlag()
+    public void RollingFlag()
     {
-        Debug.Log("AllDestroy");
-        root.HelpEvent("IJ_AllShieldDestroy");
+        if (rolling == false)
+        {
+            rolling = true;
+            root.HelpEvent("JirungE_RollRush");
+        }
     }
 
-    public void RecoveryFlag()
+    public void ShiledDestroy()
     {
-        root.HelpEvent("IJ_Recovery");
+        root.HelpEvent("JirungE_Explosion");
     }
 
-    public void RestoreShieldFlag()
+    public void Grogy()
     {
-        root.HelpEvent("IJ_RestroeShield");
+        root.HelpEvent("JirungE_Groggy");
+    }
+
+    public void Run()
+    {
+        root.HelpEvent("JirungE_Run");
+    }
+
+    public void RestoreShield()
+    {
+        root.HelpEvent("JirungE_Recharge");
+    }
+
+    public void ElectricShock()
+    {
+        root.HelpEvent("JirungE_ElectricShock");
     }
 }
