@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -78,4 +79,10 @@ public class SceneLoadUI : MonoBehaviour
         fadeImage.DOFade(0f, 2f).OnComplete(() => loadCanvas.enabled = false);
     }
     
+
+    public void FadeScreen(float fadeTarget, float duration, Action fadeEndAction)
+    {
+        loadCanvas.enabled = true;
+        fadeImage.DOFade(fadeTarget, duration).OnComplete(() => fadeEndAction?.Invoke());
+    }
 }

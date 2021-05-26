@@ -6,6 +6,22 @@ public class Drone : MonoBehaviour
 {
     public enum DroneState { Default, Approach, Collect, Return , AimHelp ,Help,Scan}
 
+    [SerializeField] private bool visible;
+    public bool Visible
+    {
+        get { return visible; }
+        set
+        {
+            if (value == visible)
+                return;
+            visible = value;
+            if(visible)          
+                droneVisual.gameObject.SetActive(true);          
+            else        
+                droneVisual.gameObject.SetActive(false);           
+        }
+    }
+
     [SerializeField] private Transform target;
     [SerializeField] private DroneState state;
     [SerializeField] private float moveSpeed = 10f;
@@ -16,6 +32,8 @@ public class Drone : MonoBehaviour
     [SerializeField] private float collectRequiredTime = 1f;
     [SerializeField] private FloatingMove floatingMove;
     [SerializeField] private bool help = false;
+    [SerializeField] private float scanCoolTime = 3f;
+    private float _scanLeftTime = 0.0f;
 
     [Header("DroneVisual")]
     [SerializeField] private Transform droneVisual;
@@ -38,7 +56,7 @@ public class Drone : MonoBehaviour
     
     //스캔
     private Quaternion _scanTargetRotation;
-    private float _rotationSpeed = 200.0f;
+    private float _rotationSpeed = 800.0f;
     private DroneScaner _droneScaner;
     public delegate void WhenAimHelp();
     public WhenAimHelp whenAimHelp;
@@ -66,6 +84,11 @@ public class Drone : MonoBehaviour
         _droneAnim = droneVisual.GetComponent<Animator>();
         _floatingMoveComponent = droneVisual.GetComponent<FloatingMove>();
         droneBodyOriginPos = droneBody.localPosition;
+
+        if (visible)
+            droneVisual.gameObject.SetActive(true);
+        else
+            droneVisual.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -85,7 +108,7 @@ public class Drone : MonoBehaviour
         if (GameManager.Instance.PAUSE == true)
             return;
 
-        if (InputManager.Instance.GetInput(KeybindingActions.Scan))
+        if (InputManager.Instance.GetInput(KeybindingActions.Scan) && _scanLeftTime <= 0.0f)
         {
             Scan();
         }
@@ -103,8 +126,14 @@ public class Drone : MonoBehaviour
 
     private void UpdateDrone(float deltaTime)
     {
-        if (_respawn)
+        if (visible == false || _respawn)
             return;
+
+        if(_scanLeftTime > 0.0f)
+        {
+            _scanLeftTime -= deltaTime;
+            _scanLeftTime = Mathf.Clamp(_scanLeftTime, 0.0f, 10.0f);
+        }
 
         switch(state)
         {
@@ -238,6 +267,7 @@ public class Drone : MonoBehaviour
 
     public void Scan()
     {
+        _scanLeftTime = scanCoolTime;
         Vector3 targetDir = Camera.main.transform.forward;
         targetDir.y = 0;
         targetDir.Normalize();
