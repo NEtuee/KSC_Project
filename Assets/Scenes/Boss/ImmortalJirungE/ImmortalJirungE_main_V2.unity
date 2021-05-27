@@ -11431,7 +11431,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh973888
+  m_Name: pb_Mesh70732
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -13000,7 +13000,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh971214
+  m_Name: pb_Mesh68058
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -17169,7 +17169,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh974796
+  m_Name: pb_Mesh71640
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -33070,6 +33070,8 @@ MonoBehaviour:
   canFloorWhip: 0
   lowCheck: 0
   isDead: 0
+  whipNearDistance: 20
+  whipFarDistance: 20
   whipSpeed: 20
   rollSpeed: 25
   whipDamage: 5
@@ -33153,6 +33155,7 @@ MonoBehaviour:
   whenEndRecover:
     m_PersistentCalls:
       m_Calls: []
+  _whipNearCheck: 0
 --- !u!54 &975925007
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -34217,7 +34220,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh974954
+  m_Name: pb_Mesh71798
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -42009,6 +42012,8 @@ MonoBehaviour:
   canFloorWhip: 0
   lowCheck: 0
   isDead: 0
+  whipNearDistance: 20
+  whipFarDistance: 20
   whipSpeed: 20
   rollSpeed: 25
   whipDamage: 5
@@ -42068,6 +42073,7 @@ MonoBehaviour:
   whenEndRecover:
     m_PersistentCalls:
       m_Calls: []
+  _whipNearCheck: 0
 --- !u!54 &1091609540
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -43093,6 +43099,8 @@ MonoBehaviour:
   canFloorWhip: 0
   lowCheck: 0
   isDead: 0
+  whipNearDistance: 20
+  whipFarDistance: 20
   whipSpeed: 20
   rollSpeed: 25
   whipDamage: 5
@@ -43164,6 +43172,7 @@ MonoBehaviour:
   whenEndRecover:
     m_PersistentCalls:
       m_Calls: []
+  _whipNearCheck: 0
 --- !u!54 &1123011796
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -43611,6 +43620,8 @@ GameObject:
   - component: {fileID: 1165197422}
   - component: {fileID: 1165197421}
   - component: {fileID: 1165197423}
+  - component: {fileID: 1165197425}
+  - component: {fileID: 1165197424}
   m_Layer: 0
   m_Name: EnteranceTrigger
   m_TagString: Untagged
@@ -43639,7 +43650,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1165197420}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 47.1, z: -28.05}
+  m_LocalPosition: {x: 0, y: 47.1, z: -22.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -43698,6 +43709,32 @@ MonoBehaviour:
   collisionTrigger: 1
   reloadTime: 0
   afterTriggerTime: 0
+--- !u!65 &1165197424
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165197420}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2353401, y: 10, z: 4.9894447}
+  m_Center: {x: 3.88233, y: 0, z: -1.9947224}
+--- !u!65 &1165197425
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165197420}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2353401, y: 10, z: 4.9894447}
+  m_Center: {x: -3.88233, y: 0, z: -1.9947224}
 --- !u!1 &1167734319
 GameObject:
   m_ObjectHideFlags: 0
@@ -50557,7 +50594,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh974370
+  m_Name: pb_Mesh71214
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -65472,7 +65509,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh972524
+  m_Name: pb_Mesh69368
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
