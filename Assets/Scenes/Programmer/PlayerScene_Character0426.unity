@@ -97,8 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000004, guid: 72152f48ae3823c4c9deda26f89df545,
-    type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 8087c7ea39509f44c95e16de9c46ef11,
     type: 2}
 --- !u!196 &4
@@ -2400,7 +2399,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 70
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -2426,7 +2425,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69449274}
   m_LocalRotation: {x: 0, y: 0.008726558, z: 0, w: 0.999962}
-  m_LocalPosition: {x: 3.66019, y: 4.4300003, z: -27.019392}
+  m_LocalPosition: {x: 4.594958, y: 3.9300003, z: -25.035402}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1690922439}
@@ -11689,8 +11688,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7630345a96cd66448525910aca8131c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateUi: {fileID: 0}
   valueText: {fileID: 329046632}
   chargeText: {fileID: 1256313396}
+  aimEnergyBar: {fileID: 0}
 --- !u!114 &329046632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11928,8 +11929,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7630345a96cd66448525910aca8131c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateUi: {fileID: 0}
   valueText: {fileID: 341672325}
   chargeText: {fileID: 1898785984}
+  aimEnergyBar: {fileID: 0}
 --- !u!114 &341672325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19198,8 +19201,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7630345a96cd66448525910aca8131c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateUi: {fileID: 0}
   valueText: {fileID: 599408793}
   chargeText: {fileID: 17606176}
+  aimEnergyBar: {fileID: 0}
 --- !u!114 &599408793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26304,8 +26309,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7630345a96cd66448525910aca8131c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateUi: {fileID: 0}
   valueText: {fileID: 798581455}
   chargeText: {fileID: 1798667162}
+  aimEnergyBar: {fileID: 0}
 --- !u!114 &798581455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32734,7 +32741,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1192543.6, y: 939857.4}
+  m_AnchoredPosition: {x: -0.000045018332, y: -0.00000403937}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1003871476
@@ -34407,7 +34414,7 @@ MonoBehaviour:
   backGroundImage: {fileID: 627559244}
   titlePanel: {fileID: 1737011385}
   optionItemPanel: {fileID: 1317404841}
-  _currentMenu: 5
+  currentMenu: 5
   optionPanel: {fileID: 1317404841}
   soundPanel: {fileID: 254059866}
   controlPanel: {fileID: 171770699}
@@ -34416,6 +34423,9 @@ MonoBehaviour:
   gameOverPanel: {fileID: 461279630}
   sceneLoadUi: {fileID: 1245251671}
   tutorialVideoPlayer: {fileID: 1815303900}
+  WhenCloseOption:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1057935356
 GameObject:
   m_ObjectHideFlags: 0
@@ -38893,8 +38903,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7630345a96cd66448525910aca8131c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateUi: {fileID: 0}
   valueText: {fileID: 329046632}
   chargeText: {fileID: 1256313396}
+  aimEnergyBar: {fileID: 0}
 --- !u!1 &1155494504
 GameObject:
   m_ObjectHideFlags: 0
@@ -41671,8 +41683,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7630345a96cd66448525910aca8131c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateUi: {fileID: 0}
   valueText: {fileID: 798581455}
   chargeText: {fileID: 1798667162}
+  aimEnergyBar: {fileID: 0}
 --- !u!1 &1256313394
 GameObject:
   m_ObjectHideFlags: 0
@@ -41853,8 +41867,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7630345a96cd66448525910aca8131c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateUi: {fileID: 0}
   valueText: {fileID: 599408793}
   chargeText: {fileID: 17606176}
+  aimEnergyBar: {fileID: 0}
 --- !u!1 &1260750570
 GameObject:
   m_ObjectHideFlags: 0
@@ -43072,6 +43088,7 @@ MonoBehaviour:
   initRectXpos: 1681
   appearRectXpos: 240
   changeRectXpos: 0
+  optionTitleString: "\uC77C\uC2DC\uC815\uC9C0"
 --- !u!114 &1317404842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51298,6 +51315,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ae3720c539a448b0a8728a7c37c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftCross: {fileID: 0}
+  rightCross: {fileID: 0}
+  upCross: {fileID: 0}
+  downCross: {fileID: 0}
+  leftUpLine: {fileID: 0}
+  leftDownLine: {fileID: 0}
+  RightUpLine: {fileID: 0}
+  RightDownLine: {fileID: 0}
+  hitMark: {fileID: 0}
+  centerOffset: 190
+  firstStageOffset: 600
+  secondStageOffset: 250
+  thirdStageOffset: 350
   left: {fileID: 1625661219}
   right: {fileID: 728804180}
   leftImage: {fileID: 0}
@@ -53405,8 +53435,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7630345a96cd66448525910aca8131c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateUi: {fileID: 0}
   valueText: {fileID: 341672325}
   chargeText: {fileID: 1898785984}
+  aimEnergyBar: {fileID: 0}
 --- !u!1 &1726797067
 GameObject:
   m_ObjectHideFlags: 0
@@ -53951,6 +53983,7 @@ MonoBehaviour:
   initRectXpos: -2162
   appearRectXpos: -1680
   changeRectXpos: 240
+  optionTitleString: "\uC77C\uC2DC\uC815\uC9C0"
 --- !u!114 &1737011386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61146,9 +61179,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df63f6c42963f1d42af841c6fc93b801, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpUI: {fileID: 1634082129}
-  staminaUI: {fileID: 1954207246}
-  energyUI: {fileID: 913653953}
+  hpUI: {fileID: 0}
+  staminaUI: {fileID: 0}
+  energyUI: {fileID: 0}
+  hpPackUI: {fileID: 0}
 --- !u!1 &1934624343 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4b9d874b9e4f444448523705b96e0d3a,
@@ -67529,7 +67563,7 @@ MonoBehaviour:
   isClimbingGround: 0
   walkSpeed: 5.5
   runSpeed: 9
-  rollingSpeed: 12
+  aimingWalkSpeed: 5.5
   currentSpeed: 0
   prevSpeed: 0
   rotateSpeed: 6
@@ -67597,7 +67631,7 @@ MonoBehaviour:
   adjustAbleLayer:
     serializedVersion: 2
     m_Bits: 133184
-  dectionOffset: {x: 0, y: -0.95, z: -0.35}
+  detectionOffset: {x: 0, y: 0, z: 0}
   currentVerticalValue: 0
   currentHorizontalValue: 0
   inputVertical: 0
@@ -67622,8 +67656,6 @@ MonoBehaviour:
   chargeNecessaryTime: 1
   chargeTime:
     value: 0
-  hitEnergyRestoreValue: 0
-  jumpEnergyRestoreValue: 5
   destroyEffect: {fileID: 3901721362512671319, guid: e7012121af2e1d0459223eabcb739017,
     type: 3}
   loadCount:
@@ -67634,7 +67666,9 @@ MonoBehaviour:
   chargeDelayTime: 1
   pelvisGunObject: {fileID: 0}
   dechargingDuration: 2.5
+  dechargingRatio: 0.5
   decharging: 0
+  playerPelvisGunObject: {fileID: 0}
   drone: {fileID: 17370244}
   reloadWeightCurve:
     serializedVersion: 2
@@ -67679,6 +67713,13 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   gunAnim: {fileID: 335101062}
+  walkRestoreEnergyValue: 0
+  runRestoreEnergyValue: 0
+  aimRestoreEnergyValue: 0
+  climbingRestoreEnergyValue: 0
+  hitEnergyRestoreValue: 0
+  jumpEnergyRestoreValue: 5
+  climbingJumpEnergyRestoreValue: 0
   relativeVec: {x: 4.5, y: 180, z: 0}
   lookAtAim: {fileID: 931792777}
   hpPackCount:
@@ -68828,6 +68869,7 @@ MonoBehaviour:
   jumpMinTime: 0.5
   prevParent: {fileID: 0}
   detachTime: 0
+  speedKeepTime: 5
   keepSpeed: 0
   amount: 0
   groundAngle: 0
@@ -71518,6 +71560,7 @@ MonoBehaviour:
   jumpMinTime: 0.5
   prevParent: {fileID: 0}
   detachTime: 0
+  speedKeepTime: 5
   keepSpeed: 0
   amount: 0
   groundAngle: 0
@@ -71578,7 +71621,7 @@ MonoBehaviour:
   isClimbingGround: 0
   walkSpeed: 5.5
   runSpeed: 9
-  rollingSpeed: 12
+  aimingWalkSpeed: 5.5
   currentSpeed: 0
   prevSpeed: 0
   rotateSpeed: 6
@@ -71646,7 +71689,7 @@ MonoBehaviour:
   adjustAbleLayer:
     serializedVersion: 2
     m_Bits: 133184
-  dectionOffset: {x: 0, y: -0.95, z: -0.35}
+  detectionOffset: {x: 0, y: 0, z: 0}
   currentVerticalValue: 0
   currentHorizontalValue: 0
   inputVertical: 0
@@ -71671,8 +71714,6 @@ MonoBehaviour:
   chargeNecessaryTime: 1
   chargeTime:
     value: 0
-  hitEnergyRestoreValue: 0
-  jumpEnergyRestoreValue: 5
   destroyEffect: {fileID: 3901721362512671319, guid: e7012121af2e1d0459223eabcb739017,
     type: 3}
   loadCount:
@@ -71683,7 +71724,9 @@ MonoBehaviour:
   chargeDelayTime: 1
   pelvisGunObject: {fileID: 0}
   dechargingDuration: 2.5
+  dechargingRatio: 0.5
   decharging: 0
+  playerPelvisGunObject: {fileID: 0}
   drone: {fileID: 17370244}
   reloadWeightCurve:
     serializedVersion: 2
@@ -71728,6 +71771,13 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   gunAnim: {fileID: 0}
+  walkRestoreEnergyValue: 0
+  runRestoreEnergyValue: 0
+  aimRestoreEnergyValue: 0
+  climbingRestoreEnergyValue: 0
+  hitEnergyRestoreValue: 0
+  jumpEnergyRestoreValue: 5
+  climbingJumpEnergyRestoreValue: 0
   relativeVec: {x: 0, y: 0, z: 0}
   lookAtAim: {fileID: 0}
   hpPackCount:
@@ -74628,6 +74678,7 @@ MonoBehaviour:
   jumpMinTime: 0.5
   prevParent: {fileID: 0}
   detachTime: 0
+  speedKeepTime: 5
   keepSpeed: 0
   amount: 0
   groundAngle: 0
@@ -74688,7 +74739,7 @@ MonoBehaviour:
   isClimbingGround: 0
   walkSpeed: 5.5
   runSpeed: 9
-  rollingSpeed: 12
+  aimingWalkSpeed: 5.5
   currentSpeed: 0
   prevSpeed: 0
   rotateSpeed: 6
@@ -74756,7 +74807,7 @@ MonoBehaviour:
   adjustAbleLayer:
     serializedVersion: 2
     m_Bits: 133184
-  dectionOffset: {x: 0, y: -0.95, z: -0.35}
+  detectionOffset: {x: 0, y: 0, z: 0}
   currentVerticalValue: 0
   currentHorizontalValue: 0
   inputVertical: 0
@@ -74781,8 +74832,6 @@ MonoBehaviour:
   chargeNecessaryTime: 1
   chargeTime:
     value: 0
-  hitEnergyRestoreValue: 0
-  jumpEnergyRestoreValue: 5
   destroyEffect: {fileID: 3901721362512671319, guid: e7012121af2e1d0459223eabcb739017,
     type: 3}
   loadCount:
@@ -74793,7 +74842,9 @@ MonoBehaviour:
   chargeDelayTime: 1
   pelvisGunObject: {fileID: 0}
   dechargingDuration: 2.5
+  dechargingRatio: 0.5
   decharging: 0
+  playerPelvisGunObject: {fileID: 0}
   drone: {fileID: 17370244}
   reloadWeightCurve:
     serializedVersion: 2
@@ -74838,6 +74889,13 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   gunAnim: {fileID: 1925221080}
+  walkRestoreEnergyValue: 0
+  runRestoreEnergyValue: 0
+  aimRestoreEnergyValue: 0
+  climbingRestoreEnergyValue: 0
+  hitEnergyRestoreValue: 0
+  jumpEnergyRestoreValue: 5
+  climbingJumpEnergyRestoreValue: 0
   relativeVec: {x: 4.5, y: 180, z: 0}
   lookAtAim: {fileID: 931792777}
   hpPackCount:
@@ -101139,6 +101197,7 @@ MonoBehaviour:
   jumpMinTime: 0.5
   prevParent: {fileID: 0}
   detachTime: 0
+  speedKeepTime: 5
   keepSpeed: 0
   amount: 0
   groundAngle: 0
@@ -101199,7 +101258,7 @@ MonoBehaviour:
   isClimbingGround: 0
   walkSpeed: 5.5
   runSpeed: 9
-  rollingSpeed: 12
+  aimingWalkSpeed: 5.5
   currentSpeed: 0
   prevSpeed: 0
   rotateSpeed: 6
@@ -101267,7 +101326,7 @@ MonoBehaviour:
   adjustAbleLayer:
     serializedVersion: 2
     m_Bits: 133184
-  dectionOffset: {x: 0, y: -0.95, z: -0.35}
+  detectionOffset: {x: 0, y: 0, z: 0}
   currentVerticalValue: 0
   currentHorizontalValue: 0
   inputVertical: 0
@@ -101292,8 +101351,6 @@ MonoBehaviour:
   chargeNecessaryTime: 1
   chargeTime:
     value: 0
-  hitEnergyRestoreValue: 0
-  jumpEnergyRestoreValue: 5
   destroyEffect: {fileID: 3901721362512671319, guid: e7012121af2e1d0459223eabcb739017,
     type: 3}
   loadCount:
@@ -101304,7 +101361,9 @@ MonoBehaviour:
   chargeDelayTime: 1
   pelvisGunObject: {fileID: 0}
   dechargingDuration: 2.5
+  dechargingRatio: 0.5
   decharging: 0
+  playerPelvisGunObject: {fileID: 0}
   drone: {fileID: 17370244}
   reloadWeightCurve:
     serializedVersion: 2
@@ -101349,6 +101408,13 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   gunAnim: {fileID: 1391229954}
+  walkRestoreEnergyValue: 0
+  runRestoreEnergyValue: 0
+  aimRestoreEnergyValue: 0
+  climbingRestoreEnergyValue: 0
+  hitEnergyRestoreValue: 0
+  jumpEnergyRestoreValue: 5
+  climbingJumpEnergyRestoreValue: 0
   relativeVec: {x: 4.5, y: 180, z: 0}
   lookAtAim: {fileID: 931792777}
   hpPackCount:
@@ -106477,6 +106543,7 @@ MonoBehaviour:
   jumpMinTime: 0.5
   prevParent: {fileID: 0}
   detachTime: 0
+  speedKeepTime: 5
   keepSpeed: 0
   amount: 0
   groundAngle: 0
@@ -106542,7 +106609,7 @@ MonoBehaviour:
   isClimbingGround: 0
   walkSpeed: 5.5
   runSpeed: 9
-  rollingSpeed: 12
+  aimingWalkSpeed: 5.5
   currentSpeed: 0
   prevSpeed: 0
   rotateSpeed: 6
@@ -106610,7 +106677,7 @@ MonoBehaviour:
   adjustAbleLayer:
     serializedVersion: 2
     m_Bits: 133184
-  dectionOffset: {x: 0, y: -0.95, z: -0.35}
+  detectionOffset: {x: 0, y: 0, z: 0}
   currentVerticalValue: 0
   currentHorizontalValue: 0
   inputVertical: 0
@@ -106635,8 +106702,6 @@ MonoBehaviour:
   chargeNecessaryTime: 1
   chargeTime:
     value: 0
-  hitEnergyRestoreValue: 0
-  jumpEnergyRestoreValue: 5
   destroyEffect: {fileID: 3901721362512671319, guid: e7012121af2e1d0459223eabcb739017,
     type: 3}
   loadCount:
@@ -106647,7 +106712,9 @@ MonoBehaviour:
   chargeDelayTime: 1
   pelvisGunObject: {fileID: 2455858695675795494}
   dechargingDuration: 2.5
+  dechargingRatio: 0.5
   decharging: 0
+  playerPelvisGunObject: {fileID: 0}
   drone: {fileID: 17370244}
   reloadWeightCurve:
     serializedVersion: 2
@@ -106692,6 +106759,13 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   gunAnim: {fileID: 1222321472}
+  walkRestoreEnergyValue: 0
+  runRestoreEnergyValue: 0
+  aimRestoreEnergyValue: 0
+  climbingRestoreEnergyValue: 0
+  hitEnergyRestoreValue: 0
+  jumpEnergyRestoreValue: 5
+  climbingJumpEnergyRestoreValue: 0
   relativeVec: {x: 2.9, y: 188.2, z: 0}
   lookAtAim: {fileID: 931792777}
   hpPackCount:
