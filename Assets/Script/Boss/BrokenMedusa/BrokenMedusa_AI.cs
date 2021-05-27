@@ -144,6 +144,8 @@ public class BrokenMedusa_AI : IKBossBase
         UpdateDirection();
         UpdatePerpendicularPoint();
         Push();
+        var upDist = MathEx.distance(transform.position.y, _target.position.y);
+        _jumpPush = _jumpPush && jumpPushDist <= upDist;
 
         if (_targetDistance <= 3f && (currentState == State.SearchIdle || currentState == State.SearchRotate || currentState == State.SearchScan))
         {
@@ -648,8 +650,6 @@ public class BrokenMedusa_AI : IKBossBase
                 GameManager.Instance.soundManager.Play(1015,_target.position);
                 _timeCounter.InitTimer("pushCooldown");
             }
-            
-            _jumpPush = _jumpPush && jumpPushDist <= upDist;
         }
     }
 
@@ -671,13 +671,17 @@ public class BrokenMedusa_AI : IKBossBase
             {
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
                 var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
-                player.TakeDamage(5f);
                 
                 if (ragdoll != null)
                 {
-                    ragdoll.ExplosionRagdoll(250.0f, 
-                        Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
+                    ragdoll.ExplosionRagdoll(250.0f, transform.forward);
+                        //Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
+                    
+                    player.TakeDamage(5f);
+                    break;
                 }
+
+                
             }
         }
     }

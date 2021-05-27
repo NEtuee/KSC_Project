@@ -14,6 +14,7 @@ public class DaddyLongLegs_AI : IKBossBase
     public float startTime = 0.1f;
     public bool randomStart = false;
     private bool _animate = false;
+    private bool _prevActive = false;
 
     public void Start()
     {
@@ -57,17 +58,34 @@ public class DaddyLongLegs_AI : IKBossBase
         var dist = MathEx.distance(transform.position.z, cam.transform.position.z);
         var active = (Vector3.Angle(cam.transform.forward, dir) <= 100f);
         active = active ? dist <= 150f : dist <= 10f;
-        
-        graphicRoot.gameObject.SetActive(active);
+
+        if(_prevActive != active)
+        {
+            graphicRoot.gameObject.SetActive(active);
+            foreach(var leg in legs)
+            {
+                leg.ik.SetParent(active ? null : this.transform);
+            }
+            _prevActive = active;
+        }
 
         MoveForward(frontMoveSpeed,deltaTime);
 
         
         if (transform.position.z <= -268.82f)
         {
+            foreach(var leg in legs)
+            {
+                leg.ik.SetParent(this.transform);
+            }
             var pos = transform.position;
             pos.z += 580.22f;
             transform.position = pos;
+
+            foreach(var leg in legs)
+            {
+                leg.ik.SetParent(null);
+            }
         }
     }
 

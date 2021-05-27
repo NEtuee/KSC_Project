@@ -393,7 +393,11 @@ public class PlayerRagdoll : MonoBehaviour
     public void ExplosionRagdoll(float power, Vector3 exlosionPos, float radius)
     {
         if (isFlyRagdoll == true)
+        {
+            hipTransform.GetComponent<Rigidbody>().velocity = (hipTransform.position - exlosionPos).normalized;
+            hipTransform.GetComponent<Rigidbody>().AddForce(((hipTransform.position - exlosionPos).normalized + Vector3.up).normalized * power, ForceMode.Impulse);
             return;
+        }
         //GameManager.Instance.PauseControl(true);
         isFlyRagdoll = true;
         ActiveRagdoll(true);
@@ -413,8 +417,10 @@ public class PlayerRagdoll : MonoBehaviour
     public void ExplosionRagdoll(float power, Vector3 dir)
     {
         if (isFlyRagdoll == true)
+        {
+            hipTransform.GetComponent<Rigidbody>().AddForce(dir * power, ForceMode.Impulse);
             return;
-
+        }
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);

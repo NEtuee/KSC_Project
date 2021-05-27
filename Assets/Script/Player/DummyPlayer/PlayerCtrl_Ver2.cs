@@ -423,11 +423,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
                 if (limit)
                 {
-                    if(_charge == null)
-                    {
-                        _charge = GameManager.Instance.soundManager.Play(1013, Vector3.zero, transform);
-                    }
-
+                    if(_charge != null)
+                        _charge.Stop();
+                    _charge = GameManager.Instance.soundManager.Play(1013, Vector3.zero, transform);
+                    
                     chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
