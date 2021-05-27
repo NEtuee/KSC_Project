@@ -10,10 +10,16 @@ public class MainMenuCtrl : MonoBehaviour
     public Canvas fadePanel;
     public Image fadeImage;
 
+    public TitleLogoCtrl title;
+    public MainTitleButton startButton;
+    public MainTitleButton optionButton;
+    public MainTitleButton exitButton;
+
     private void Start()
     {
+        title.Init();
         fadeImage.color = Color.black;
-        FadeIn(null);
+        FadeIn(()=> { title.Appear(); });
     }
 
     private void Update()
@@ -53,5 +59,12 @@ public class MainMenuCtrl : MonoBehaviour
     public void OffOption()
     {
         mainTitleCanvas.sortingOrder = 4;
+    }
+
+    public void SetButtonInteractable(bool active)
+    {
+        startButton.interactable = active;
+        optionButton.interactable = active;
+        exitButton.interactable = active;
     }
 }

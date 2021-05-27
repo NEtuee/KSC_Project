@@ -55,7 +55,10 @@ public class DaddyLongLegs_AI : IKBossBase
         var cam = Camera.main;
         var dir = (transform.position - cam.transform.position);
         var dist = MathEx.distance(transform.position.z, cam.transform.position.z);
-        graphicRoot.gameObject.SetActive((Vector3.Angle(cam.transform.forward, dir) <= 100f) && dist <= 150f);
+        var active = (Vector3.Angle(cam.transform.forward, dir) <= 100f);
+        active = active ? dist <= 150f : dist <= 10f;
+        
+        graphicRoot.gameObject.SetActive(active);
 
         MoveForward(frontMoveSpeed,deltaTime);
 
@@ -63,7 +66,7 @@ public class DaddyLongLegs_AI : IKBossBase
         if (transform.position.z <= -268.82f)
         {
             var pos = transform.position;
-            pos.z += 590.22f;
+            pos.z += 580.22f;
             transform.position = pos;
         }
     }

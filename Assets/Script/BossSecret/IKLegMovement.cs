@@ -24,9 +24,11 @@ public class IKLegMovement : MonoBehaviour
 
     public float ikHeight = 0f;
 
+    public bool firstMove = false;
     public bool ikDetach = false;
 
     public bool isMove{get{return _isMove;}}
+    public bool moving = false;
 
     public Transform ik;
     public Transform ikHolder;
@@ -84,14 +86,19 @@ public class IKLegMovement : MonoBehaviour
         {
             float dist = Vector3.Distance(ik.position,hit.point);
             _targetPosition = hit.point + (hit.normal * ikHeight);
-            
             _targetRotation = Quaternion.LookRotation(hit.normal);
 
+            moving = true;
             if(dist >= limitDistance && !_isMove && !oppositeLeg.isMove)
             {
-                _isMove = true;
-                _stratPosition = ik.position;
-                _startRotation = ik.rotation;
+                bool moveCheck = (firstMove || (oppositeLeg.firstMove == firstMove)) || oppositeLeg.moving;
+                if (moveCheck)
+                {
+                    _isMove = true;
+                    _stratPosition = ik.position;
+                    _startRotation = ik.rotation;
+                }
+                
             }
         }
 
