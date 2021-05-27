@@ -26,6 +26,7 @@ public class Drone : MonoBehaviour
     [SerializeField] private DroneState state;
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Vector3 defaultFollowOffset;
+    [SerializeField] private float defaultFollowSpeed = 10.0f;
     [SerializeField] private Vector3 aimHelpOffset;
     [SerializeField] private Vector3 helpOffset;
     [SerializeField] private Vector3 helpGrabStateOffset;
@@ -34,6 +35,8 @@ public class Drone : MonoBehaviour
     [SerializeField] private bool help = false;
     [SerializeField] private float scanCoolTime = 3f;
     private float _scanLeftTime = 0.0f;
+    private Vector3 _targetPosition;
+    private Vector3 _prevTargetPosition;
 
     [Header("DroneVisual")]
     [SerializeField] private Transform droneVisual;
@@ -89,6 +92,12 @@ public class Drone : MonoBehaviour
             droneVisual.gameObject.SetActive(true);
         else
             droneVisual.gameObject.SetActive(false);
+
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
+        camForward.y = 0;
+        camRight.y = 0;
+        _targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
     }
 
     // Update is called once per frame
@@ -112,11 +121,6 @@ public class Drone : MonoBehaviour
         {
             Scan();
         }
-        
-        // if (Input.GetKeyDown(KeyCode.N))
-        // {
-        //     OrderHelp();
-        // }
 
         if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.Update)
             return;
@@ -139,9 +143,23 @@ public class Drone : MonoBehaviour
         {
             case DroneState.Default:
                 {
-                    Vector3 targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
-                    targetPosition = Vector3.Lerp(transform.position, targetPosition, deltaTime * 5f);
-                    Vector3 lookDir = targetPosition - transform.position;
+
+                    Vector3 camForward = Camera.main.transform.forward;
+                    Vector3 camRight = Camera.main.transform.right;
+                    camForward.y = 0;
+                    camRight.y = 0;
+
+                    if (player.IsMove)
+                    {
+                        _targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
+                        //_targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                    }
+                    if (Vector3.Distance(_targetPosition, transform.position) == 0.0f)
+                        return;
+
+                    //Vector3 targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                    //Vector3 lookDir = targetPosition - transform.position;
+                    Vector3 lookDir = target.forward;
                     lookDir.y = 0.0f;
                     Quaternion targetRot;
                     if (lookDir != Vector3.zero)
@@ -149,7 +167,9 @@ public class Drone : MonoBehaviour
                     else
                         targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), 10.0f * deltaTime);
 
-                    transform.SetPositionAndRotation(targetPosition, targetRot);
+                    transform.SetPositionAndRotation(Vector3.Lerp(transform.position, _targetPosition, deltaTime * defaultFollowSpeed), targetRot);
+                    //transform.SetPositionAndRotation(_targetPosition, targetRot);
+
                 }
                 break;
             case DroneState.AimHelp:
