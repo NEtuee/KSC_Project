@@ -67,6 +67,9 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadLevel(int level)
     {
+        if(!_isLoaded)
+            return;
+            
         currentLevel = level;
         RegisterProgress();
         StartCoroutine(SceneLoadingProgress(true));
@@ -74,6 +77,9 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadCurrentLevel()
     {
+        if(!_isLoaded)
+            return;
+
         sceneLoadUI.StartLoad(()=> {
             _currentScene = levels[currentLevel];
             RegisterProgress();
@@ -87,6 +93,9 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadPrevlevel()
     {
+        if(!_isLoaded)
+            return;
+
         sceneLoadUI.StartLoad(() =>
         {
             currentLevel = (--currentLevel < 0 ? levels.Count - 1 : currentLevel);
@@ -98,6 +107,9 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadNextlevelFrom()
     {
+        if(!_isLoaded)
+            return;
+
         sceneLoadUI.StartLoad(() =>
         {
             currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
@@ -108,6 +120,9 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadNextlevel()
     {
+        if(!_isLoaded)
+            return;
+
         sceneLoadUI.StartLoad(() =>
         {
             currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
@@ -182,10 +197,12 @@ public class AsynSceneManager : MonoBehaviour
         _afterLoad();
 
         GameManager.Instance.PAUSE = false;
-        _isLoaded = true;
 
         yield return new WaitForSeconds(2f);
         sceneLoadUI.EndLoad();
+
+        yield return new WaitForSeconds(4f);
+        _isLoaded = true;
     }
 
     IEnumerator UnloadSceneCoroutine(Scene scene)
