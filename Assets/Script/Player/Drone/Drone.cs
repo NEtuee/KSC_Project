@@ -151,15 +151,23 @@ public class Drone : MonoBehaviour
 
                     if (player.IsMove)
                     {
-                        _targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
-                        //_targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                        //if (Vector3.Dot(Vector3.Cross(camForward.normalized, target.forward), Vector3.up) > 0.5f)
+                        //{
+                        //    Debug.Log("Right");
+                        //}
+                        //else if (Vector3.Dot(Vector3.Cross(camForward.normalized, target.forward), Vector3.up) < -0.5f)
+                        //{
+                        //    Debug.Log("Left");
+                        //}
+                        //_targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
+                        _targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
                     }
                     if (Vector3.Distance(_targetPosition, transform.position) == 0.0f)
                         return;
 
                     //Vector3 targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
                     //Vector3 lookDir = targetPosition - transform.position;
-                    Vector3 lookDir = target.forward;
+                    Vector3 lookDir = target.position - transform.position;
                     lookDir.y = 0.0f;
                     Quaternion targetRot;
                     if (lookDir != Vector3.zero)

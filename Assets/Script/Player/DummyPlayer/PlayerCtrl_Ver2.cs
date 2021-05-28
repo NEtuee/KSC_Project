@@ -2105,6 +2105,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             empGun.Active(false);
             animator.SetLayerWeight(2, 0.0f);
+            animator.SetLayerWeight(3, 0.0f);
             animator.SetLayerWeight(4, 0.0f);
         }
     }
