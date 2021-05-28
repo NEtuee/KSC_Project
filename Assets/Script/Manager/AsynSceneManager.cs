@@ -51,16 +51,19 @@ public class AsynSceneManager : MonoBehaviour
     private LocalInfo _playerLocalTarget;
     private LocalInfo _cameraLocalTarget;
     private LocalInfo _followLocalTarget;
+    private LocalInfo _droneLocalTarget;
 
-    private PlayerCtrl _player;
+    private PlayerCtrl_Ver2 _player;
     private Camera _cam;
     private Transform _follow;
+    private Transform _drone;
 
     public void Start()
     {
         _cam = Camera.main;
         _follow = GameManager.Instance.followTarget.transform;
-        _player = GameManager.Instance.player;
+        _player = (PlayerCtrl_Ver2)GameManager.Instance.player;
+        _drone = _player.GetDrone().transform;
 
         LoadCurrentLevel();
     }
@@ -270,11 +273,13 @@ public class AsynSceneManager : MonoBehaviour
         var player = _player.transform;
         var cam = _cam.transform;
         var follow = _follow.transform;
+        var drone = _drone;
 
         SetTargetObjectParent(target);
         _playerLocalTarget = new LocalInfo(player.localPosition,player.localScale,player.localRotation);
         _cameraLocalTarget = new LocalInfo(cam.localPosition,cam.localScale,cam.localRotation);
         _followLocalTarget = new LocalInfo(follow.localPosition,follow.localScale,follow.localRotation);
+        _droneLocalTarget = new LocalInfo(drone.localPosition,drone.localScale,drone.localRotation);
     }
 
     public void SetTargetObjectParent(Transform parent)
@@ -282,6 +287,7 @@ public class AsynSceneManager : MonoBehaviour
         _cam.transform.SetParent(parent);
         _follow.transform.SetParent(parent);
         _player.transform.SetParent(parent);
+        _drone.SetParent(parent);
     }
 
     public void RegisterBeforeLoadOnStart(del_SceneLoaded func){_beforeLoadRegisterLine.Add(func);}
@@ -313,5 +319,6 @@ public class AsynSceneManager : MonoBehaviour
         SceneManager.MoveGameObjectToScene(Camera.main.gameObject,activeScene);
         SceneManager.MoveGameObjectToScene(GameManager.Instance.followTarget.gameObject,activeScene);
         SceneManager.MoveGameObjectToScene(GameManager.Instance.player.gameObject,activeScene);
+        SceneManager.MoveGameObjectToScene(_drone.gameObject,activeScene);
     }
 }
