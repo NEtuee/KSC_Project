@@ -1481,6 +1481,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 loadTime = 0.0f;
                 animator.SetFloat("Speed", 0.0f);
+                InitVelocity();
 
                 if (prevState == PlayerState.Ragdoll)
                 {
