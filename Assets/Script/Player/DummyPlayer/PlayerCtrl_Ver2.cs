@@ -431,9 +431,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
                 if (limit)
                 {
-                    if(_charge != null)
-                        _charge.Stop();
-                    _charge = GameManager.Instance.soundManager.Play(1013, Vector3.zero, transform);
+                    if(_charge == null)
+                        _charge = GameManager.Instance.soundManager.Play(1013, Vector3.zero, transform);
                     
                     chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
@@ -1213,6 +1212,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         prevState = state;
         state = changeState;
 
+        if(changeState != PlayerState.Aiming)
+        {
+            if(_charge != null)
+            {
+                _charge.Stop();
+                _charge = null;
+            }
+        }
+
         switch (prevState)
         {
             case PlayerState.Aiming:
@@ -1355,12 +1363,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 else
                 {
                     transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
-                }
-
-                if(_charge != null)
-                {
-                    _charge.Stop();
-                    _charge = null;
                 }
 
                 movement.SetParent(null);
