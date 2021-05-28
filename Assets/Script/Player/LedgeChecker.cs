@@ -57,23 +57,36 @@ public class LedgeChecker : MonoBehaviour
 
         isDetectLedge = false;
 
+        //if (downCollision == true)
+        //{
+        //    if(upCollision == false)
+        //    {
+        //        //isDetectLedge = true;
+        //        ledgeDetectCount++;
+        //    }
+        //    else
+        //    {
+        //        ledgeDetectCount = 0;
+        //    }
+        //}
+       
+        //if(ledgeDetectCount >= 2)
+        //{
+        //    isDetectLedge = true;
+        //}
+
         if (downCollision == true)
         {
-            if(upCollision == false)
+            if (upCollision == false)
             {
-                //isDetectLedge = true;
-                ledgeDetectCount++;
-            }
-            else
-            {
-                ledgeDetectCount = 0;
+                isDetectLedge = true;
             }
         }
-       
-        if(ledgeDetectCount >= 2)
-        {
-            isDetectLedge = true;
-        }
+
+        //if (ledgeDetectCount >= 2)
+        //{
+        //    isDetectLedge = true;
+        //}
 
         //foreach (GameObject obj in collider1.collidedObjects)
         //{

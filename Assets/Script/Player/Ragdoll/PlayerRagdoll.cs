@@ -577,6 +577,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     public void ResetRagdoll()
     {
+        isFlyRagdoll = false;
         SetRagdollContainer(false);
         anim.enabled = true;
         state = RagdollState.Animated;

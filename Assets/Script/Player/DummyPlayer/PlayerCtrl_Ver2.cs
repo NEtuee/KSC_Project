@@ -1479,7 +1479,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Respawn:
             {
-                currentSpeed = 0.0f;
+                loadTime = 0.0f;
                 animator.SetFloat("Speed", 0.0f);
 
                 if (prevState == PlayerState.Ragdoll)
@@ -1907,15 +1907,26 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputRun()
     {
-        if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+        if(isRun)
         {
-            isRun = true;
+            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
+                isRun = false;
+        }
+        else
+        {
+            if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+                isRun = true;
         }
 
-        if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
-        {
-            isRun = false;
-        }
+        //if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+        //{
+        //    isRun = true;
+        //}
+
+        //if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
+        //{
+        //    isRun = false;
+        //}
     }
 
     private bool InputAiming()
@@ -2133,7 +2144,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         else
         {
             loadCount.Value = 0;
-
+            chargeTime.Value = 0.0f;
             empGun.Active(false);
             animator.SetLayerWeight(2, 0.0f);
             animator.SetLayerWeight(3, 0.0f);
