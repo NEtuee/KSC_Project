@@ -52,6 +52,9 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     public Material angryEyeball;
 
     public Vector3 lastPosition;
+    public Light eyeLight;
+    public Color angryColor;
+    public Color defaultColor;
 
     public int whipPath = 0;
     public bool canFloorWhip = false;
@@ -456,11 +459,9 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
 
         if (_prevState == State.FloorWhip)
         {
+            eyeLight.enabled = true;
             eyeRenderer.material = defaultEyeball;
-        }
-        else
-        {
-            eyeRenderer.material = angryEyeball;
+            eyeLight.color = defaultColor;
         }
 
         if (state == State.Hit)
@@ -469,6 +470,13 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             {
                 currentState = _prevState;
                 return;
+            }
+            else
+            {
+                if(_prevState == State.FloorWhip)
+                {
+                    _prevState = State.WallMove;
+                }
             }
             
             _timeCounter.InitTimer("hitTime", 0f, 2f);
@@ -516,6 +524,10 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             isDead = false;
             _roll = false;
 
+            eyeLight.enabled = true;
+            eyeRenderer.material = defaultEyeball;
+            eyeLight.color = defaultColor;
+
             shield.gameObject.SetActive(false);
             core.gameObject.SetActive(false);
 
@@ -552,7 +564,9 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
                 else if(whipState == Whip.Capsule)
                 {
                     ChangeState(State.TransformFoldLeg);
+                    eyeLight.enabled = false;
                 }
+
                 return;
             }
 
@@ -569,6 +583,8 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
                 
             _timeCounter.InitTimer("whipTime",0f,Random.Range(8f,12f));
             _pathLoop = true;
+            eyeRenderer.material = angryEyeball;
+            eyeLight.color = angryColor;
         }
         else if(state == State.WallMoveExit)
         {
