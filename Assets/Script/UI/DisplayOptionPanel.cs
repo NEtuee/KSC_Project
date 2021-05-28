@@ -17,7 +17,7 @@ public class DisplayOptionPanel : EscMenu
     public List<string> resolutionStrings = new List<string>();
     
     private List<Resolution> _respondResolutions = new List<Resolution>();
-
+    private Resolution _currentResolution;
     private void Awake()
     {
         // _canvas = GetComponent<Canvas>();
@@ -84,11 +84,11 @@ public class DisplayOptionPanel : EscMenu
 
         resolutionDropdown.AddOptions(resolutionStrings);
 
-        Resolution currentResolution = Screen.currentResolution;
+        _currentResolution = Screen.currentResolution;
         for (int i = 0; i < _respondResolutions.Count; i++)
         {
-            if (currentResolution.height == _respondResolutions[i].height &&
-                currentResolution.width == _respondResolutions[i].width)
+            if (_currentResolution.height == _respondResolutions[i].height &&
+                _currentResolution.width == _respondResolutions[i].width)
             {
                 resolutionDropdown.value = i;
                 break;
@@ -123,7 +123,7 @@ public class DisplayOptionPanel : EscMenu
 
     public void ChangeResolution()
     {
-        Resolution currentResolution = _respondResolutions[resolutionDropdown.value];
+        _currentResolution = _respondResolutions[resolutionDropdown.value];
 
         //if (Screen.currentResolution.height != currentResolution.height || Screen.currentResolution.width != currentResolution.width)
         //{
@@ -135,7 +135,7 @@ public class DisplayOptionPanel : EscMenu
         // if (Screen.currentResolution.height == currentResolution.height && Screen.currentResolution.width == currentResolution.width)
         //         return;
         //     
-        Screen.SetResolution(currentResolution.width, currentResolution.height, Screen.fullScreen);
+        Screen.SetResolution(_currentResolution.width, _currentResolution.height, Screen.fullScreen);
     }
 
     public override void Active(bool active)
@@ -158,6 +158,8 @@ public class DisplayOptionPanel : EscMenu
 
             DisplaySettingData displaySettingData = new DisplaySettingData();
             displaySettingData.activeVsync = QualitySettings.vSyncCount != 0;
+            displaySettingData.screenWidth = _currentResolution.width;
+            displaySettingData.screenHeight = _currentResolution.height;
             SaveDataHelper.SaveSetting(displaySettingData);
         }
     }

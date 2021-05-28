@@ -127,7 +127,7 @@ public class OptionMenuCtrl : MonoBehaviour
 
     public void Change(int menuType)
     {
-        Debug.Log("OptionChange");
+        //Debug.Log("OptionChange");
         currentMenu = (MenuType)menuType;
         EscMenu prevPanel = _currentPanel;
         switch ((MenuType)menuType)
