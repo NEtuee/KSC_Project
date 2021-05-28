@@ -398,6 +398,8 @@ public class CameraManager : MonoBehaviour
         cameraDictionary.Add(key, camera);
     }
 
+    public CinemachineBrain GetCinemachineBrain() {return brain;}
+
     public bool IsCameraBlending()
     {
         return brain.IsBlending;

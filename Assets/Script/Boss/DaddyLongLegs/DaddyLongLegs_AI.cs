@@ -65,6 +65,10 @@ public class DaddyLongLegs_AI : IKBossBase
             foreach(var leg in legs)
             {
                 leg.ik.SetParent(active ? null : this.transform);
+                if(active)
+                {
+                    leg.SetStartPosition(leg.ik.position);
+                }
             }
             _prevActive = active;
         }
@@ -84,6 +88,7 @@ public class DaddyLongLegs_AI : IKBossBase
 
             foreach(var leg in legs)
             {
+                leg.SetStartPosition(leg.ik.position);
                 leg.ik.SetParent(null);
             }
         }
