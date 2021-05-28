@@ -165,6 +165,7 @@ public class AsynSceneManager : MonoBehaviour
         DontDestroyOnLoad(Camera.main.transform);
         DontDestroyOnLoad(GameManager.Instance.followTarget.transform);
         DontDestroyOnLoad(GameManager.Instance.player.transform);
+        DontDestroyOnLoad(_drone);
 
         _beforeLoad();
 
@@ -254,12 +255,14 @@ public class AsynSceneManager : MonoBehaviour
                 stage.ObjectTeleportToLoadedPos(_player.transform,_player.transform.position);
                 stage.ObjectTeleportToLoadedPos(_cam.transform,_player.transform.position);
                 stage.ObjectTeleportToLoadedPos(_follow,_player.transform.position);
+                stage.ObjectTeleportToLoadedPos(_drone,_drone.transform.position);
             }
             else
             {
                 stage.entranceElevator.ObjectTeleport(_playerLocalTarget.localPosition,_playerLocalTarget.localRotation,_player.transform);
                 stage.entranceElevator.ObjectTeleport(_cameraLocalTarget.localPosition,_cameraLocalTarget.localRotation,_cam.transform);
                 stage.entranceElevator.ObjectTeleport(_followLocalTarget.localPosition,_followLocalTarget.localRotation,_follow.transform);
+                stage.entranceElevator.ObjectTeleport(_droneLocalTarget.localPosition,_droneLocalTarget.localRotation,_drone.transform);
             }
             
             currentStageManager = stage;
