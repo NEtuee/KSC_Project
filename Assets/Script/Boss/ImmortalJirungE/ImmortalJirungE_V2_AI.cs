@@ -58,6 +58,9 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     public bool lowCheck = false;
     public bool isDead = false;
 
+    public float whipNearDistance = 20f;
+    public float whipFarDistance = 20f;
+
     public float whipSpeed = 12f;
     public float rollSpeed = 15f;
 
@@ -93,6 +96,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
     private bool _roll = false;
     private bool _shieldBroke = false;
     private bool _launched = false;
+    public bool _whipNearCheck = false;
 
     private float _rolledAngle = 0f;
 
@@ -154,12 +158,28 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
                 dir = _roll ? dir : transform.forward;
 
                 var speed = _roll ? rollSpeed : whipSpeed;
-                Move(dir,speed,deltaTime);
+                MoveAngle(dir,speed,deltaTime,4f,!_whipNearCheck);
                 _targetDistance = Vector3.Distance(GameManager.Instance.player.transform.position,transform.position);
-                if(_targetDistance >= 20f)
+
+                if(!_whipNearCheck)
                 {
-                    SetTarget(GameManager.Instance.player.transform.position);
+                    if(_targetDistance >= whipNearDistance)
+                    {
+                        SetTarget(GameManager.Instance.player.transform.position);
+                    }
+                    else
+                    {
+                        _whipNearCheck = true;
+                    }
                 }
+                else
+                {
+                    if(_targetDistance >= whipFarDistance)
+                    {
+                        _whipNearCheck = false;
+                    }
+                }
+                
             }   
             else
             {
@@ -691,7 +711,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
     }
     
-    public override bool Move(Vector3 direction, float speed, float deltaTime,float legMovementSpeed = 4f)
+    public bool MoveAngle(Vector3 direction, float speed, float deltaTime,float legMovementSpeed = 4f, bool turn = true)
     {
         //transform.position += transform.forward * _movementSpeed * Time.deltaTime;
 
@@ -720,15 +740,19 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else
         {
-            var angle = Vector3.SignedAngle(dir,_targetDirection,transform.up);
-
-            if(MathEx.abs(angle) > _turnAccuracy)
+            if(turn)
             {
-                if(angle > 0)
-                    Turn(true,this.transform,deltaTime);
-                else
-                    Turn(false,this.transform,deltaTime);
+                var angle = Vector3.SignedAngle(dir,_targetDirection,transform.up);
+
+                if(MathEx.abs(angle) > _turnAccuracy)
+                {
+                    if(angle > 0)
+                        Turn(true,this.transform,deltaTime);
+                    else
+                        Turn(false,this.transform,deltaTime);
+                }
             }
+            
         }
 
         var moveDist = (speed * deltaTime);

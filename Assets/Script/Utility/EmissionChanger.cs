@@ -5,8 +5,12 @@ using UnityEngine;
 public class EmissionChanger : MonoBehaviour
 {
     [SerializeField]private List<Renderer> targetList = new List<Renderer>();
+    [ColorUsage(true, true)]
     [SerializeField]private Color start;
+    [ColorUsage(true, true)]
     [SerializeField]private Color end;
+
+    
     [SerializeField]private float speed = 1f;
 
     private float timer = 0f;
@@ -18,6 +22,8 @@ public class EmissionChanger : MonoBehaviour
         value = start;
         timer = 0f;
         active = true;
+
+        SetEmission(start);
 
         this.enabled = true;
     }

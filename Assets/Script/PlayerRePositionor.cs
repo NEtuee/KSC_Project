@@ -51,6 +51,7 @@ public class PlayerRePositionor : MonoBehaviour
             yield break;
         }
 
+        if(ctrl != null)
         {
             ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
             yield return new WaitForSeconds(1.0f);
