@@ -51,12 +51,15 @@ public class PlayerRePositionor : MonoBehaviour
             yield break;
         }
 
-        if(ctrl != null)
+        if(ctrl == null)
         {
-            ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
+            ((PlayerCtrl_Ver2)(GameManager.Instance.player)).ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
             yield return new WaitForSeconds(1.0f);
-            GameManager.Instance.player.transform.position = respawn.position;
-            bip.position = respawn.position;
+            //GameManager.Instance.player.transform.position = respawn.position;
+            //bip.position = respawn.position;
+            ((PlayerCtrl_Ver2)(GameManager.Instance.player)).transform.position = respawn.position;
+            ((PlayerCtrl_Ver2)(GameManager.Instance.player)).TakeDamage(5.0f);
+            whenFall.Invoke();
         }
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FollowTargetCtrl : MonoBehaviour
 {
+    [SerializeField] private bool visible = true;
+    public bool Visible => visible;
     [SerializeField] private Transform target;
     [SerializeField] private float yawRotateSpeed = 120f;
     [SerializeField] private float pitchRotateSpeed = 120f;
@@ -65,6 +67,8 @@ public class FollowTargetCtrl : MonoBehaviour
         if (GameManager.Instance.PAUSE == true)
             return;
 
+        if (!visible)
+            return;
         //if (Input.GetKeyDown(KeyCode.Alpha0))
         //{
         //    transform.rotation = Camera.main.transform.rotation;
@@ -73,11 +77,6 @@ public class FollowTargetCtrl : MonoBehaviour
         //    targetRot = Camera.main.transform.rotation.eulerAngles;
         //    Resume();
         //}
-
-        if (isPause == true)
-        {
-            return;
-        }
 
         //transform.position = Vector3.SmoothDamp(transform.position, target.position + Vector3.up, ref smoothVelocity, 3.0f * Time.deltaTime);
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, Time.unscaledDeltaTime * followSmooth);
@@ -112,10 +111,8 @@ public class FollowTargetCtrl : MonoBehaviour
         if (updateMode == true)
             return;
 
-        if (isPause == true)
-        {
+        if (!visible)
             return;
-        }
 
         transform.position = target.position + Vector3.up;
 
@@ -179,5 +176,12 @@ public class FollowTargetCtrl : MonoBehaviour
     public void SetPitchRotateSpeed(float speed)
     {
         pitchRotateSpeed = speed;
+    }
+
+    public void SetPitchYaw(float pitch, float yaw)
+    {
+        transform.rotation = Quaternion.Euler(pitch, yaw, 0.0f);
+        currentRot = transform.localRotation.eulerAngles;
+        targetRot = currentRot;
     }
 }

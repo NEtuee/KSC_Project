@@ -66,6 +66,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] public bool isCanReadyClimbingCancel = false;
     [SerializeField] private bool isCanClimbingCancel = false;
     [SerializeField] private bool isClimbingGround = false;
+    public bool IsMove{ get { return movement.Speed == 0.0f ? false : true; } }
 
     [Header("Movement Speed Value")] [SerializeField]
     private float walkSpeed = 15.0f;
@@ -362,6 +363,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Grab:
             {
+                if(InputManager.Instance.GetInput(KeybindingActions.Jump))
+                {
+                    animator.SetTrigger("ClimbingCancel");
+                        handIK.DisableHandIK();
+                    return;
+                }
+
                 if (InputClimbingJump())
                     return;
 
@@ -922,11 +930,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (state == PlayerState.Default)
         {
-            if (vertical > 0.0f)
+            if (vertical == 1.0f)
             {
                 currentVerticalValue = 1.0f;
             }
-            else if (vertical < 0.0f)
+            else if (vertical == -1.0f)
             {
                 currentVerticalValue = -1.0f;
             }
@@ -935,11 +943,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 currentVerticalValue = 0.0f;
             }
 
-            if (horizontal > 0.0f)
+            if (horizontal == 1.0f)
             {
                 currentHorizontalValue = 1.0f;
             }
-            else if (horizontal < 0.0f)
+            else if (horizontal == -1.0f)
             {
                 currentHorizontalValue = -1.0f;
             }
@@ -954,6 +962,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if ((state == PlayerState.Grab || state == PlayerState.HangLedge || state == PlayerState.HangEdge) &&
             isClimbingMove == false)
         {
+            if(InputManager.Instance.GetKeep(KeybindingActions.Jump))
+            {
+                return;
+            }
+
             if (vertical == 0.0f)
             {
                 currentVerticalValue = 0.0f;
@@ -1297,6 +1310,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 currentHorizontalValue = 0.0f;
                 isClimbingMove = false;
                 movement.SetGrab();
+
+                    animator.ResetTrigger("RightClimbing");
+                    animator.ResetTrigger("LeftClimbing");
+                    animator.ResetTrigger("UpClimbing");
+                    animator.ResetTrigger("DownClimbing");
+                    animator.ResetTrigger("UpLeftClimbing");
+                    animator.ResetTrigger("UpRightClimbing");
+                    animator.ResetTrigger("DownLeftClimbing");
+                    animator.ResetTrigger("DownRightClimbing");
             }
                 break;
             case PlayerState.Jump:
@@ -1457,7 +1479,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Respawn:
             {
-                currentSpeed = 0.0f;
+                loadTime = 0.0f;
                 animator.SetFloat("Speed", 0.0f);
 
                 if (prevState == PlayerState.Ragdoll)
@@ -1885,15 +1907,26 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputRun()
     {
-        if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+        if(isRun)
         {
-            isRun = true;
+            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
+                isRun = false;
+        }
+        else
+        {
+            if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+                isRun = true;
         }
 
-        if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
-        {
-            isRun = false;
-        }
+        //if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+        //{
+        //    isRun = true;
+        //}
+
+        //if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
+        //{
+        //    isRun = false;
+        //}
     }
 
     private bool InputAiming()
@@ -2111,9 +2144,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         else
         {
             loadCount.Value = 0;
-
+            chargeTime.Value = 0.0f;
             empGun.Active(false);
             animator.SetLayerWeight(2, 0.0f);
+            animator.SetLayerWeight(3, 0.0f);
             animator.SetLayerWeight(4, 0.0f);
         }
     }
@@ -2263,7 +2297,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             transform.position = finalPosition;
 
             StartCoroutine(ForceSnap(0.5f, finalPosition, transform.localPosition));
-            Debug.Log("AdjustLedgeOffset");
+            //Debug.Log("AdjustLedgeOffset");
         }
     }
 

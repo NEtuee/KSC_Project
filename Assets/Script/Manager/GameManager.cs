@@ -126,6 +126,7 @@ public class GameManager : MonoBehaviour
 
         DisplaySettingData displaySettingData = SaveDataHelper.LoadSetting<DisplaySettingData>();
         QualitySettings.vSyncCount = displaySettingData.activeVsync == true ? 1 : 0;
+        Screen.SetResolution(displaySettingData.screenWidth, displaySettingData.screenHeight,Screen.fullScreen);
 
         if(player != null)
             player.whenPlayerDead += () => { PAUSE = true;};
