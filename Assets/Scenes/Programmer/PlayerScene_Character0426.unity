@@ -2518,8 +2518,6 @@ GameObject:
   - component: {fileID: 69449278}
   - component: {fileID: 69449276}
   - component: {fileID: 69449275}
-  - component: {fileID: 69449280}
-  - component: {fileID: 69449277}
   - component: {fileID: 69449281}
   m_Layer: 0
   m_Name: Camera
@@ -2596,20 +2594,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!114 &69449277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 69449274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attenuationObject: {fileID: 0}
-  ListenerNumber: -1
 --- !u!20 &69449278
 Camera:
   m_ObjectHideFlags: 0
@@ -2670,26 +2654,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &69449280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 69449274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 052d599a015141b47a4d10676f2dac29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useAllProbeBoxes: 0
-  probeBoxes: []
-  bakedProbeNames: []
-  bakedProbeDataSizes: 
-  bakedDataSize: 0
-  bakedStatsFoldout: 0
-  bakeToggle: 0
-  currentStaticListenerNode: {fileID: 0}
 --- !u!114 &69449281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3963,6 +3927,10 @@ MonoBehaviour:
   levels:
   - levelCode: 
     scenesToLoad:
+    - BrokenMedusa_Lab 1
+    - BrokenMedusa_main_FInal
+  - levelCode: 
+    scenesToLoad:
     - CutsceneProgress
   - levelCode: 
     scenesToLoad:
@@ -3971,10 +3939,6 @@ MonoBehaviour:
   - levelCode: 
     scenesToLoad:
     - Birdy_meet
-  - levelCode: 
-    scenesToLoad:
-    - BrokenMedusa_Lab 1
-    - BrokenMedusa_main_FInal
   - levelCode: 
     scenesToLoad:
     - DaddyLongLegs_Upgrade 1
@@ -8796,7 +8760,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 3142794748728612794}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 413750725}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c76afa53b7aa0745ab7d874644c53dd, type: 3}
@@ -15132,6 +15096,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 413542273}
   m_CullTransparentMesh: 1
+--- !u!1 &413750725 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3142794748548094870, guid: 8c14b2e5e67740e40850985192548d06,
+    type: 3}
+  m_PrefabInstance: {fileID: 3142794748728612794}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &413750726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413750725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 052d599a015141b47a4d10676f2dac29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useAllProbeBoxes: 0
+  probeBoxes: []
+  bakedProbeNames: []
+  bakedProbeDataSizes: 
+  bakedDataSize: 0
+  bakedStatsFoldout: 0
+  bakeToggle: 0
+  currentStaticListenerNode: {fileID: 0}
+--- !u!114 &413750727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413750725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 0}
+  ListenerNumber: -1
 --- !u!1 &415454877
 GameObject:
   m_ObjectHideFlags: 0
@@ -34402,7 +34406,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0000343817, y: -0.0000038652533}
+  m_AnchoredPosition: {x: -144137.61, y: 113597.39}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1003871476
