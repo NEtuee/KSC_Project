@@ -5,6 +5,7 @@ using UnityEngine;
 public class DronePropeller : MonoBehaviour
 {
     private Transform transform;
+    [SerializeField] private Transform propellerSphereJoint;
     [SerializeField] private float speed;
 
     private void Start()
@@ -15,5 +16,6 @@ public class DronePropeller : MonoBehaviour
     public void FixedUpdate()
     {
         transform.Rotate(Vector3.forward, speed * Time.fixedDeltaTime);
+        propellerSphereJoint.rotation = Quaternion.Lerp(propellerSphereJoint.rotation,Quaternion.LookRotation(Vector3.up),10.0f*Time.fixedDeltaTime );
     }
 }
