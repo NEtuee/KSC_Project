@@ -152,6 +152,21 @@ public class TutorialVideoPlayer : MonoBehaviour
         return true;
     }
 
+    public void GetAndPrepareVideo(string key, out VideoClip videoClip, out string description)
+    {
+        if (_tutorialData.ContainsKey(key) == false)
+        {
+            videoClip = null;
+            description = null;
+            return;
+        }    
+        
+        var data = _tutorialData[key];
+        videoClip = data.videoClip;
+        description = data.description;
+        description = description.Replace("\\n", "\n");
+    }
+
     public bool SetPage(string key)
     {
         if (_pageList.ContainsKey(key) == false)

@@ -199,13 +199,21 @@ public class Drone : MonoBehaviour
                         if (_followState == DroneFollowState.Forward )
                         {
                             if (_prevFollowState == DroneFollowState.Left)
+                            {
+                                if (player.HorizonWeight < 0.0f)
+                                    _prevFollowState = DroneFollowState.Right;
                                 _targetPosition =
                                     (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x +
                                      target.up * defaultFollowOffset.y) + target.position;
+                            }
                             else
+                            {
+                                if (player.HorizonWeight > 0.0f)
+                                    _prevFollowState = DroneFollowState.Left;
                                 _targetPosition =
                                     (target.forward * defaultFollowOffset.z + target.right * -defaultFollowOffset.x +
                                      target.up * defaultFollowOffset.y) + target.position;
+                            }
                         }
                         else if (_followState == DroneFollowState.Backward)
                         {
