@@ -16,7 +16,9 @@ public class LevelEdit_TimelinePlayer : MonoBehaviour
 
     public void Play()
     {
-        GameManager.Instance.PAUSE = true;
+        //GameManager.Instance.PAUSE = true;
+        GameManager.Instance.cameraManager.SetUpdateMethod(CinemachineBrain.UpdateMethod.SmartUpdate,CinemachineBrain.BrainUpdateMethod.LateUpdate);
+
         if(playerDisable)
         {
             GameManager.Instance.player.gameObject.SetActive(false);
@@ -29,14 +31,14 @@ public class LevelEdit_TimelinePlayer : MonoBehaviour
         CinemachineBrain brain = GameManager.Instance.cameraManager.GetCinemachineBrain();
         TimelineAsset timelineAsset = (TimelineAsset) playableDirector.playableAsset;
         TrackAsset track = timelineAsset.GetOutputTrack(1) ;
-        Debug.Log(track.name);
         playableDirector.SetGenericBinding (track, brain);
         playableDirector.Play();
     }
 
     public void End()
     {
-        GameManager.Instance.PAUSE = false;
+        //GameManager.Instance.PAUSE = false;
+        GameManager.Instance.cameraManager.SetUpdateMethod();
         GameManager.Instance.player.transform.position = endTransform.position;
         if(playerDisable)
         {
