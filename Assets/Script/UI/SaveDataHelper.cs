@@ -23,6 +23,8 @@ public class SoundSettingData
 public class DisplaySettingData
 {
     public bool activeVsync;
+    public int screenWidth;
+    public int screenHeight;
 }
 
 public static class SaveDataHelper

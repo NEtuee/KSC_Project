@@ -51,22 +51,28 @@ public class AsynSceneManager : MonoBehaviour
     private LocalInfo _playerLocalTarget;
     private LocalInfo _cameraLocalTarget;
     private LocalInfo _followLocalTarget;
+    private LocalInfo _droneLocalTarget;
 
-    private PlayerCtrl _player;
+    private PlayerCtrl_Ver2 _player;
     private Camera _cam;
     private Transform _follow;
+    private Transform _drone;
 
     public void Start()
     {
         _cam = Camera.main;
         _follow = GameManager.Instance.followTarget.transform;
-        _player = GameManager.Instance.player;
+        _player = (PlayerCtrl_Ver2)GameManager.Instance.player;
+        _drone = _player.GetDrone().transform;
 
         LoadCurrentLevel();
     }
 
     public void LoadLevel(int level)
     {
+        if(!_isLoaded)
+            return;
+            
         currentLevel = level;
         RegisterProgress();
         StartCoroutine(SceneLoadingProgress(true));
@@ -74,6 +80,9 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadCurrentLevel()
     {
+        if(!_isLoaded)
+            return;
+
         sceneLoadUI.StartLoad(()=> {
             _currentScene = levels[currentLevel];
             RegisterProgress();
@@ -87,6 +96,9 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadPrevlevel()
     {
+        if(!_isLoaded)
+            return;
+
         sceneLoadUI.StartLoad(() =>
         {
             currentLevel = (--currentLevel < 0 ? levels.Count - 1 : currentLevel);
@@ -98,6 +110,9 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadNextlevelFrom()
     {
+        if(!_isLoaded)
+            return;
+
         sceneLoadUI.StartLoad(() =>
         {
             currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
@@ -108,6 +123,9 @@ public class AsynSceneManager : MonoBehaviour
 
     public void LoadNextlevel()
     {
+        if(!_isLoaded)
+            return;
+
         sceneLoadUI.StartLoad(() =>
         {
             currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
@@ -147,6 +165,7 @@ public class AsynSceneManager : MonoBehaviour
         DontDestroyOnLoad(Camera.main.transform);
         DontDestroyOnLoad(GameManager.Instance.followTarget.transform);
         DontDestroyOnLoad(GameManager.Instance.player.transform);
+        DontDestroyOnLoad(_drone);
 
         _beforeLoad();
 
@@ -182,10 +201,12 @@ public class AsynSceneManager : MonoBehaviour
         _afterLoad();
 
         GameManager.Instance.PAUSE = false;
-        _isLoaded = true;
 
         yield return new WaitForSeconds(2f);
         sceneLoadUI.EndLoad();
+
+        yield return new WaitForSeconds(4f);
+        _isLoaded = true;
     }
 
     IEnumerator UnloadSceneCoroutine(Scene scene)
@@ -234,12 +255,14 @@ public class AsynSceneManager : MonoBehaviour
                 stage.ObjectTeleportToLoadedPos(_player.transform,_player.transform.position);
                 stage.ObjectTeleportToLoadedPos(_cam.transform,_player.transform.position);
                 stage.ObjectTeleportToLoadedPos(_follow,_player.transform.position);
+                stage.ObjectTeleportToLoadedPos(_drone,_drone.transform.position);
             }
             else
             {
                 stage.entranceElevator.ObjectTeleport(_playerLocalTarget.localPosition,_playerLocalTarget.localRotation,_player.transform);
                 stage.entranceElevator.ObjectTeleport(_cameraLocalTarget.localPosition,_cameraLocalTarget.localRotation,_cam.transform);
                 stage.entranceElevator.ObjectTeleport(_followLocalTarget.localPosition,_followLocalTarget.localRotation,_follow.transform);
+                stage.entranceElevator.ObjectTeleport(_droneLocalTarget.localPosition,_droneLocalTarget.localRotation,_drone.transform);
             }
             
             currentStageManager = stage;
@@ -253,11 +276,13 @@ public class AsynSceneManager : MonoBehaviour
         var player = _player.transform;
         var cam = _cam.transform;
         var follow = _follow.transform;
+        var drone = _drone;
 
         SetTargetObjectParent(target);
         _playerLocalTarget = new LocalInfo(player.localPosition,player.localScale,player.localRotation);
         _cameraLocalTarget = new LocalInfo(cam.localPosition,cam.localScale,cam.localRotation);
         _followLocalTarget = new LocalInfo(follow.localPosition,follow.localScale,follow.localRotation);
+        _droneLocalTarget = new LocalInfo(drone.localPosition,drone.localScale,drone.localRotation);
     }
 
     public void SetTargetObjectParent(Transform parent)
@@ -265,6 +290,7 @@ public class AsynSceneManager : MonoBehaviour
         _cam.transform.SetParent(parent);
         _follow.transform.SetParent(parent);
         _player.transform.SetParent(parent);
+        _drone.SetParent(parent);
     }
 
     public void RegisterBeforeLoadOnStart(del_SceneLoaded func){_beforeLoadRegisterLine.Add(func);}
@@ -296,5 +322,6 @@ public class AsynSceneManager : MonoBehaviour
         SceneManager.MoveGameObjectToScene(Camera.main.gameObject,activeScene);
         SceneManager.MoveGameObjectToScene(GameManager.Instance.followTarget.gameObject,activeScene);
         SceneManager.MoveGameObjectToScene(GameManager.Instance.player.gameObject,activeScene);
+        SceneManager.MoveGameObjectToScene(_drone.gameObject,activeScene);
     }
 }

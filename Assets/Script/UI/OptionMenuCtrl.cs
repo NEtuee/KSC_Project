@@ -29,6 +29,7 @@ public class OptionMenuCtrl : MonoBehaviour
     public SceneLoadUI sceneLoadUi;
     
     public TutorialVideoPlayer tutorialVideoPlayer;
+    public RespawnFadeCtrl respawnFadeCtrl;
 
     public UnityEvent WhenCloseOption;
 
@@ -95,9 +96,9 @@ public class OptionMenuCtrl : MonoBehaviour
                     currentMenu = MenuType.None;
 
                     if(GameManager.Instance.player != null)
-                    GameManager.Instance.player.Resume();
+                      GameManager.Instance.player.Resume();
                     if(GameManager.Instance.followTarget)
-                    GameManager.Instance.followTarget.Resume();
+                      GameManager.Instance.followTarget.Resume();
 
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
@@ -126,7 +127,7 @@ public class OptionMenuCtrl : MonoBehaviour
 
     public void Change(int menuType)
     {
-        Debug.Log("OptionChange");
+        //Debug.Log("OptionChange");
         currentMenu = (MenuType)menuType;
         EscMenu prevPanel = _currentPanel;
         switch ((MenuType)menuType)
@@ -170,6 +171,7 @@ public class OptionMenuCtrl : MonoBehaviour
         sceneLoadUi.EndLoad();
     }
     
+    
     public void GameQuit()
     {
         Debug.Log("Exit");
@@ -178,5 +180,10 @@ public class OptionMenuCtrl : MonoBehaviour
 #else
         Application.Quit(); 
 #endif
+    }
+
+    public void OnTitleButton()
+    {
+        sceneLoadUi.FadeScreen(1.0f, 1.0f, GameManager.Instance.LoadTitleScene);
     }
 }

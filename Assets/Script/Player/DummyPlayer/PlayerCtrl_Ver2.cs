@@ -29,7 +29,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         Aiming,
         ClimbingJump,
         ReadyClimbingJump,
-        HangShake
+        HangShake,
+        Respawn
     }
 
     public enum ClimbingJumpDirection
@@ -65,6 +66,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] public bool isCanReadyClimbingCancel = false;
     [SerializeField] private bool isCanClimbingCancel = false;
     [SerializeField] private bool isClimbingGround = false;
+    public bool IsMove{ get { return movement.Speed == 0.0f ? false : true; } }
 
     [Header("Movement Speed Value")] [SerializeField]
     private float walkSpeed = 15.0f;
@@ -329,6 +331,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         InputUseHpPack();
         InputRun();
 
+        if (Input.GetKeyDown(KeyCode.U))
+            drone.Visible = true;
+
         switch (state)
         {
             case PlayerState.Default:
@@ -358,6 +363,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Grab:
             {
+                if(InputManager.Instance.GetInput(KeybindingActions.Jump))
+                {
+                    animator.SetTrigger("ClimbingCancel");
+                        handIK.DisableHandIK();
+                    return;
+                }
+
                 if (InputClimbingJump())
                     return;
 
@@ -419,9 +431,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
                 if (limit)
                 {
+                    if(_charge == null)
+                        _charge = GameManager.Instance.soundManager.Play(1013, Vector3.zero, transform);
+                    
                     chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
+                    
+                    GameManager.Instance.soundManager.SetParam(1013,10131,(chargeTime.Value / 3f) * 100f);
 
                     gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
                 }
@@ -913,11 +930,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (state == PlayerState.Default)
         {
-            if (vertical > 0.0f)
+            if (vertical == 1.0f)
             {
                 currentVerticalValue = 1.0f;
             }
-            else if (vertical < 0.0f)
+            else if (vertical == -1.0f)
             {
                 currentVerticalValue = -1.0f;
             }
@@ -926,11 +943,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 currentVerticalValue = 0.0f;
             }
 
-            if (horizontal > 0.0f)
+            if (horizontal == 1.0f)
             {
                 currentHorizontalValue = 1.0f;
             }
-            else if (horizontal < 0.0f)
+            else if (horizontal == -1.0f)
             {
                 currentHorizontalValue = -1.0f;
             }
@@ -945,6 +962,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if ((state == PlayerState.Grab || state == PlayerState.HangLedge || state == PlayerState.HangEdge) &&
             isClimbingMove == false)
         {
+            if(InputManager.Instance.GetKeep(KeybindingActions.Jump))
+            {
+                return;
+            }
+
             if (vertical == 0.0f)
             {
                 currentVerticalValue = 0.0f;
@@ -1180,10 +1202,24 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ChangeState(PlayerState.Jump);
     }
 
+    public void ClimbingSound()
+    {
+        GameManager.Instance.soundManager.Play(1006, Vector3.zero, transform);
+    }
+
     public void ChangeState(PlayerState changeState)
     {
         prevState = state;
         state = changeState;
+
+        if(changeState != PlayerState.Aiming)
+        {
+            if(_charge != null)
+            {
+                _charge.Stop();
+                _charge = null;
+            }
+        }
 
         switch (prevState)
         {
@@ -1199,7 +1235,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 if (changeState == PlayerState.Default)
                 {
-                    GameManager.Instance.soundManager.Play(1000, Vector3.zero, transform);
+                    GameManager.Instance.soundManager.Play(1004, Vector3.zero, transform);
                 }
             }
                 break;
@@ -1229,8 +1265,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 collider.height = 1.898009f;
                 collider.center = new Vector3(0.0f, 0.95622f, 0.0f);
 
-                if (transform.parent == null)
-                    GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
+                GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
                 // else
                 //     GameManager.Instance.cameraManager.SetFollowCameraDistance("ExistParent");
             }
@@ -1275,6 +1310,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 currentHorizontalValue = 0.0f;
                 isClimbingMove = false;
                 movement.SetGrab();
+
+                    animator.ResetTrigger("RightClimbing");
+                    animator.ResetTrigger("LeftClimbing");
+                    animator.ResetTrigger("UpClimbing");
+                    animator.ResetTrigger("DownClimbing");
+                    animator.ResetTrigger("UpLeftClimbing");
+                    animator.ResetTrigger("UpRightClimbing");
+                    animator.ResetTrigger("DownLeftClimbing");
+                    animator.ResetTrigger("DownRightClimbing");
             }
                 break;
             case PlayerState.Jump:
@@ -1288,6 +1332,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.TurnBack:
             {
                 animator.applyRootMotion = true;
+                GameManager.Instance.soundManager.Play(1002, Vector3.zero, transform);
                 animator.SetTrigger("TurnBack");
             }
                 break;
@@ -1358,6 +1403,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.ClimbingJump:
             {
                 climbingJumpStartTime = Time.time;
+                
+                GameManager.Instance.soundManager.Play(1007, Vector3.zero, transform);
 
                 if (climbingJumpDirection == ClimbingJumpDirection.Left ||
                     climbingJumpDirection == ClimbingJumpDirection.Right)
@@ -1428,6 +1475,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.HangShake:
             {
                 ragdoll.ActiveHangShake();
+            }
+                break;
+            case PlayerState.Respawn:
+            {
+                loadTime = 0.0f;
+                animator.SetFloat("Speed", 0.0f);
+
+                if (prevState == PlayerState.Ragdoll)
+                {
+                    ragdoll.ResetRagdoll();
+                }
+                GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() =>
+                { 
+                    animator.SetTrigger("Respawn");
+                    drone.Respawn(transform);
+                });
             }
                 break;
         }
@@ -1844,15 +1907,26 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputRun()
     {
-        if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+        if(isRun)
         {
-            isRun = true;
+            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
+                isRun = false;
+        }
+        else
+        {
+            if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+                isRun = true;
         }
 
-        if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
-        {
-            isRun = false;
-        }
+        //if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+        //{
+        //    isRun = true;
+        //}
+
+        //if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
+        //{
+        //    isRun = false;
+        //}
     }
 
     private bool InputAiming()
@@ -1877,7 +1951,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (InputManager.Instance.GetRelease(KeybindingActions.EMPAim))
         {
             GameManager.Instance.soundManager.Play(1009, Vector3.zero, transform);
-            _charge.Stop();
+
+            if(_charge != null)
+                _charge.Stop();
 
             int loadCount = (int) (chargeTime.Value);
             if (loadCount == 3)
@@ -1908,6 +1984,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //if (InputManager.Instance.GetAction(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
         if (InputManager.Instance.GetInput(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
         {
+            if(_charge != null)
+            {
+                _charge.Stop();
+                _charge = null;
+
+            }
+
             GameManager.Instance.soundManager.Play(1010, Vector3.zero, transform);
             GameManager.Instance.soundManager.Play(1011, Vector3.zero, transform);
 
@@ -2061,9 +2144,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         else
         {
             loadCount.Value = 0;
-
+            chargeTime.Value = 0.0f;
             empGun.Active(false);
             animator.SetLayerWeight(2, 0.0f);
+            animator.SetLayerWeight(3, 0.0f);
             animator.SetLayerWeight(4, 0.0f);
         }
     }
@@ -2213,7 +2297,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             transform.position = finalPosition;
 
             StartCoroutine(ForceSnap(0.5f, finalPosition, transform.localPosition));
-            Debug.Log("AdjustLedgeOffset");
+            //Debug.Log("AdjustLedgeOffset");
         }
     }
 
@@ -2306,6 +2390,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
 
         decharging = false;
+    }
+
+    public Drone GetDrone()
+    {
+        return drone;
     }
 
     public void DropHpPack()

@@ -15,20 +15,21 @@ public class PlayerRePositionor : MonoBehaviour
     }
 
     public void OnTriggerEnter(Collider coll)
-    {        
-        if(coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
-        {
-            ctrl.transform.position = respawn.position;
-            ctrl.TakeDamage(5.0f);
-            whenFall.Invoke();
-            return;
-        }
-        
-        
-        {
-            GameManager.Instance.player.transform.position = respawn.position;
-            bip.position = respawn.position;
-        }
+    {
+        //if(coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
+        //{
+        //    ctrl.transform.position = respawn.position;
+        //    ctrl.TakeDamage(5.0f);
+        //    ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
+        //    whenFall.Invoke();
+        //    return;
+        //}
+
+        //{
+        //    GameManager.Instance.player.transform.position = respawn.position;
+        //    bip.position = respawn.position;
+        //}
+        StartCoroutine(Defferd(coll));
 
         whenFall?.Invoke();
 
@@ -36,5 +37,29 @@ public class PlayerRePositionor : MonoBehaviour
         // {
 
         // }
+    }
+
+    IEnumerator Defferd(Collider coll)
+    {
+        if (coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
+        {
+            ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
+            yield return new WaitForSeconds(1.0f);
+            ctrl.transform.position = respawn.position;
+            ctrl.TakeDamage(5.0f);
+            whenFall.Invoke();
+            yield break;
+        }
+
+        if(ctrl == null)
+        {
+            ((PlayerCtrl_Ver2)(GameManager.Instance.player)).ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
+            yield return new WaitForSeconds(1.0f);
+            //GameManager.Instance.player.transform.position = respawn.position;
+            //bip.position = respawn.position;
+            ((PlayerCtrl_Ver2)(GameManager.Instance.player)).transform.position = respawn.position;
+            ((PlayerCtrl_Ver2)(GameManager.Instance.player)).TakeDamage(5.0f);
+            whenFall.Invoke();
+        }
     }
 }

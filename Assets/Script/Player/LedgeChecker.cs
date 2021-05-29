@@ -18,6 +18,8 @@ public class LedgeChecker : MonoBehaviour
     [SerializeField] private bool upCollision = false;
     [SerializeField] private bool downCollision = false;
 
+    private int ledgeDetectCount = 0;
+
     private Collider[] collisionBuffer = new Collider[10];
 
     private bool preValue;
@@ -55,15 +57,36 @@ public class LedgeChecker : MonoBehaviour
 
         isDetectLedge = false;
 
+        //if (downCollision == true)
+        //{
+        //    if(upCollision == false)
+        //    {
+        //        //isDetectLedge = true;
+        //        ledgeDetectCount++;
+        //    }
+        //    else
+        //    {
+        //        ledgeDetectCount = 0;
+        //    }
+        //}
+       
+        //if(ledgeDetectCount >= 2)
+        //{
+        //    isDetectLedge = true;
+        //}
+
         if (downCollision == true)
         {
-            if(upCollision == false)
+            if (upCollision == false)
             {
                 isDetectLedge = true;
             }
         }
-       
 
+        //if (ledgeDetectCount >= 2)
+        //{
+        //    isDetectLedge = true;
+        //}
 
         //foreach (GameObject obj in collider1.collidedObjects)
         //{
