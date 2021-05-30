@@ -5,6 +5,7 @@ using UnityEngine;
 public class Drone : MonoBehaviour
 {
     public enum DroneState { Default, Approach, Collect, Return , AimHelp ,Help,Scan}
+    public enum DroneFollowState{Left,Right,Forward,Backward}
 
     [SerializeField] private bool visible;
     public bool Visible
@@ -27,16 +28,22 @@ public class Drone : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Vector3 defaultFollowOffset;
     [SerializeField] private float defaultFollowSpeed = 10.0f;
+    [SerializeField] private float finalTargetLerpSpeed = 5.0f;
+    private Vector3 _currentVelocity;
     [SerializeField] private Vector3 aimHelpOffset;
     [SerializeField] private Vector3 helpOffset;
     [SerializeField] private Vector3 helpGrabStateOffset;
+    [SerializeField] private Vector3 respawnOffset;
     [SerializeField] private float collectRequiredTime = 1f;
     [SerializeField] private FloatingMove floatingMove;
     [SerializeField] private bool help = false;
     [SerializeField] private float scanCoolTime = 3f;
     private float _scanLeftTime = 0.0f;
     private Vector3 _targetPosition;
+    private Vector3 _finalTargetPosition;
     private Vector3 _prevTargetPosition;
+    [SerializeField]private DroneFollowState _followState = DroneFollowState.Forward;
+    [SerializeField]private DroneFollowState _prevFollowState = DroneFollowState.Right;
 
     [Header("DroneVisual")]
     [SerializeField] private Transform droneVisual;
@@ -98,6 +105,7 @@ public class Drone : MonoBehaviour
         camForward.y = 0;
         camRight.y = 0;
         _targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
+        _finalTargetPosition = _targetPosition;
     }
 
     // Update is called once per frame
@@ -149,33 +157,97 @@ public class Drone : MonoBehaviour
                     camForward.y = 0;
                     camRight.y = 0;
 
+                    
+                    
                     if (player.IsMove)
                     {
-                        //if (Vector3.Dot(Vector3.Cross(camForward.normalized, target.forward), Vector3.up) > 0.5f)
-                        //{
-                        //    Debug.Log("Right");
-                        //}
-                        //else if (Vector3.Dot(Vector3.Cross(camForward.normalized, target.forward), Vector3.up) < -0.5f)
-                        //{
-                        //    Debug.Log("Left");
-                        //}
+                        if (Vector3.Dot(Vector3.Cross(camForward.normalized, target.forward), Vector3.up) > 0.9f )
+                        {
+                            if (_followState != DroneFollowState.Right)
+                            {
+                                _prevFollowState = _followState;
+                                _followState = DroneFollowState.Right;
+                            }
+                        }
+                        else if (Vector3.Dot(Vector3.Cross(camForward.normalized, target.forward), Vector3.up) < -0.9f )
+                        {
+                            if (_followState != DroneFollowState.Left)
+                            {
+                                _prevFollowState = _followState;
+                                _followState = DroneFollowState.Left;
+                            }
+                        }
+                        else if(Vector3.Dot(Vector3.Cross(camRight.normalized, target.forward), Vector3.up) < 0.0f)
+                        {
+                            if (_followState != DroneFollowState.Forward)
+                            {
+                                _prevFollowState = _followState;
+                                _followState = DroneFollowState.Forward;
+                            }
+                        }
+                        else
+                        {
+                            if (_followState != DroneFollowState.Backward)
+                            {
+                                _prevFollowState = _followState;
+                                _followState = DroneFollowState.Backward;
+                            }
+                        }
                         //_targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
-                        _targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                        //_targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+
+                        if (_followState == DroneFollowState.Forward )
+                        {
+                            if (_prevFollowState == DroneFollowState.Left)
+                                _targetPosition =
+                                    (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x +
+                                     target.up * defaultFollowOffset.y) + target.position;
+                            else
+                                _targetPosition =
+                                    (target.forward * defaultFollowOffset.z + target.right * -defaultFollowOffset.x +
+                                     target.up * defaultFollowOffset.y) + target.position;
+                        }
+                        else if (_followState == DroneFollowState.Backward)
+                        {
+                            if (_prevFollowState == DroneFollowState.Left)
+                                _targetPosition =
+                                    (target.forward * defaultFollowOffset.z + target.right * -defaultFollowOffset.x +
+                                     target.up * defaultFollowOffset.y) + target.position;
+                            else
+                                _targetPosition =
+                                    (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x +
+                                     target.up * defaultFollowOffset.y) + target.position;
+                        }
+                        else if(_followState == DroneFollowState.Left)
+                        {
+                            if(_prevFollowState == DroneFollowState.Backward)
+                                _targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                            else 
+                                _targetPosition = (target.forward * defaultFollowOffset.z + target.right * -defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                        }
+                        else if (_followState == DroneFollowState.Right)
+                        {
+                            if(_prevFollowState == DroneFollowState.Backward)
+                                _targetPosition = (target.forward * defaultFollowOffset.z + target.right * -defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                            else
+                                _targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                        }
                     }
                     if (Vector3.Distance(_targetPosition, transform.position) == 0.0f)
                         return;
 
                     //Vector3 targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
                     //Vector3 lookDir = targetPosition - transform.position;
-                    Vector3 lookDir = target.position - transform.position;
-                    lookDir.y = 0.0f;
+                    Vector3 lookDir = target.position+Vector3.up*1.5f - transform.position;
+                    //lookDir.y = 0.0f;
                     Quaternion targetRot;
                     if (lookDir != Vector3.zero)
                         targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir, Vector3.up), 10.0f * deltaTime);
                     else
                         targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), 10.0f * deltaTime);
 
-                    transform.SetPositionAndRotation(Vector3.Lerp(transform.position, _targetPosition, deltaTime * defaultFollowSpeed), targetRot);
+                    _finalTargetPosition = Vector3.Lerp(_finalTargetPosition, _targetPosition, finalTargetLerpSpeed * deltaTime);
+                    transform.SetPositionAndRotation(Vector3.SmoothDamp(transform.position, _finalTargetPosition,ref _currentVelocity, deltaTime * defaultFollowSpeed), targetRot);
                     //transform.SetPositionAndRotation(_targetPosition, targetRot);
 
                 }
@@ -384,15 +456,17 @@ public class Drone : MonoBehaviour
 
         _droneAnim.enabled = true;
         _floatingMoveComponent.enabled = false;
-
+        
         _droneAnim.SetTrigger("Respawn");
     }
 
     public void CompleteRespawn()
     {
         transform.SetParent(null);
-        transform.position = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
         droneBody.localPosition = droneBodyOriginPos;
         _respawn = false;
+        _targetPosition = (target.forward * respawnOffset.z + target.right * respawnOffset.x + Vector3.up * respawnOffset.y) + target.position;
+        _finalTargetPosition = _targetPosition;
+        transform.position = _finalTargetPosition;
     }
 }

@@ -570,8 +570,6 @@ public class PlayerRagdoll : MonoBehaviour
             string getUpAnimation = CheckIfLieOnBack() ? standUpBackAnimation : standUpBallyAnimation;
             anim.Play(getUpAnimation, 0, 0);
         }
-
-        player.InitVelocity();
         ActiveRagdoll(false);
     }
 
