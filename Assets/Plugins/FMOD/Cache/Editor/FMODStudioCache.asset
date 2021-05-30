@@ -82,7 +82,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Ambient.bank
   Name: FmodBank_Ambient
   StudioPath: bank:/Other/FmodBank_Ambient
-  lastModified: 637578955800000000
+  lastModified: 637551648769923446
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -676,8 +676,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 100
+  MinDistance: 15
+  MaxDistance: 500
   Length: 1557
 --- !u!114 &-7785817301680777307
 MonoBehaviour:
@@ -1244,8 +1244,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: -4351281354807970006}
-  MinDistance: 1
+  - {fileID: 7653580558391741440}
+  MinDistance: 0
   MaxDistance: 20
   Length: 0
 --- !u!114 &-6580548308077522525
@@ -2006,8 +2006,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 100
+  MinDistance: 15
+  MaxDistance: 500
   Length: 1468
 --- !u!114 &-5407469470568958058
 MonoBehaviour:
@@ -2193,7 +2193,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_JirungE.bank
   Name: FmodBank_JirungE
   StudioPath: bank:/Mob/FmodBank_JirungE
-  lastModified: 637578955800000000
+  lastModified: 637580173328609823
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -3484,7 +3484,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 850
 --- !u!114 &-2703301356309087663
@@ -3818,8 +3818,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 100
+  MinDistance: 15
+  MaxDistance: 500
   Length: 2704
 --- !u!114 &-2119178563123981053
 MonoBehaviour:
@@ -3841,7 +3841,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 1128
 --- !u!114 &-2088787589753010506
@@ -3866,7 +3866,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 950
+  Length: 627
 --- !u!114 &-2081385797751099185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4452,7 +4452,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 1128
 --- !u!114 &-1214021026222306934
@@ -5006,7 +5006,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 1311
 --- !u!114 &-365422642024390798
@@ -5280,7 +5280,7 @@ MonoBehaviour:
   - {fileID: 671042849421839407}
   StringsBanks:
   - {fileID: 4882249567238266424}
-  stringsBankWriteTime: 637578955800000000
+  stringsBankWriteTime: 637580173328619823
   cacheVersion: 6
 --- !u!114 &50726842375340322
 MonoBehaviour:
@@ -5492,7 +5492,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Medusa.bank
   Name: FmodBank_Medusa
   StudioPath: bank:/Mob/FmodBank_Medusa
-  lastModified: 637578955800000000
+  lastModified: 637580173328789865
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -5516,7 +5516,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 2080
 --- !u!114 &514482866510798105
@@ -5687,7 +5687,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Master.bank
   Name: FmodBank_Master
   StudioPath: bank:/FmodBank_Master
-  lastModified: 637578955800000000
+  lastModified: 637580173328619823
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -6005,7 +6005,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 1750
 --- !u!114 &1398806056361078001
@@ -6724,7 +6724,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Drone.bank
   Name: FmodBank_Drone
   StudioPath: bank:/Player/FmodBank_Drone
-  lastModified: 637578955800000000
+  lastModified: 637580173328304563
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -6781,6 +6781,26 @@ MonoBehaviour:
   m_Name: parameter:/Test_Specializing_FMODSteam/PC_Charging
   m_EditorClassIdentifier: 
   Name: PC_Charging
+  Min: 0
+  Max: 100
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
+--- !u!114 &3001393709792216515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_Weapon_Fire/SoundCompressRecovery
+  m_EditorClassIdentifier: 
+  Name: SoundCompressRecovery
   Min: 0
   Max: 100
   Default: 0
@@ -7240,7 +7260,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_PlayerCharacter.bank
   Name: FmodBank_PlayerCharacter
   StudioPath: bank:/Player/FmodBank_PlayerCharacter
-  lastModified: 637578955800000000
+  lastModified: 637580173334280467
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -7404,7 +7424,7 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 649208076307869832}
+  - {fileID: 3001393709792216515}
   MinDistance: 0
   MaxDistance: 0
   Length: 0
@@ -7702,7 +7722,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 4920
 --- !u!114 &4303747562359609281
@@ -7720,7 +7740,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Mob.bank
   Name: FmodBank_Mob
   StudioPath: bank:/Mob/FmodBank_Mob
-  lastModified: 637578955800000000
+  lastModified: 637580173329580041
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -7969,7 +7989,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Master.strings.bank
   Name: FmodBank_Master.strings
   StudioPath: bank:/FmodBank_Master.strings
-  lastModified: 637578955800000000
+  lastModified: 637580173328619823
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -7995,8 +8015,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
+  MinDistance: 15
+  MaxDistance: 150
   Length: 669
 --- !u!114 &4947918670988896732
 MonoBehaviour:
@@ -8158,7 +8178,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 334
 --- !u!114 &5370279300566150934
@@ -8814,8 +8834,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
+  MinDistance: 15
+  MaxDistance: 150
   Length: 3077
 --- !u!114 &6300156821763659211
 MonoBehaviour:
@@ -9078,7 +9098,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_SFX.bank
   Name: FmodBank_SFX
   StudioPath: bank:/Other/FmodBank_SFX
-  lastModified: 637578955800000000
+  lastModified: 637580173334320480
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -9560,6 +9580,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &7653580558391741440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_Railgun_Charging/PC_Charging
+  m_EditorClassIdentifier: 
+  Name: PC_Charging
+  Min: 0
+  Max: 300
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &7668269090534475527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9575,7 +9615,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Arachne.bank
   Name: FmodBank_Arachne
   StudioPath: bank:/Mob/FmodBank_Arachne
-  lastModified: 637578955800000000
+  lastModified: 637580173327454370
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -10519,7 +10559,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Daddy.bank
   Name: FmodBank_Daddy
   StudioPath: bank:/Mob/FmodBank_Daddy
-  lastModified: 637578955800000000
+  lastModified: 637580173327644419
   LoadResult: 0
   FileSizes: []
   Exists: 1
