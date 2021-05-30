@@ -30,10 +30,16 @@ public class RespawnFadeCtrl : MonoBehaviour
         canvas.enabled = true;
         fadeImage.DOFade(1f, fadeInDuration).OnComplete(() =>
         {
+            StartCoroutine(DeferredCallFadeOutAction(blackOutDuration * 0.8f, fadeOutActon));
             fadeImage.DOFade(0.0f, fadeOutDuration).SetDelay(blackOutDuration)
-                .OnStart(()=>fadeOutActon?.Invoke())
                 .OnComplete(()=>canvas.enabled=false);
         });
         
+    }
+
+    IEnumerator DeferredCallFadeOutAction(float duration,Action fadeOutAction)
+    {
+        yield return new WaitForSeconds(duration);
+        fadeOutAction?.Invoke();
     }
 }

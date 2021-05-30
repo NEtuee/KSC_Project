@@ -39,9 +39,10 @@ public class TutorialTrigger : MonoBehaviour
         
         if (other.CompareTag("Player") == false)
             return;
-        
-        if (_uiManager.TutorialEvent(key) == false)
-            return;
+
+        //if (_uiManager.TutorialEvent(key) == false)
+        //    return;
+        _uiManager.InGameTutorial();
         
         isOver = true;
         gameObject.SetActive(false);

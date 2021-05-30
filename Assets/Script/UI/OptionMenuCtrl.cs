@@ -9,7 +9,7 @@ public class OptionMenuCtrl : MonoBehaviour
 {
     public enum MenuType
     {
-        Sound = 0, Control, Display, Key, Option,None
+        Sound = 0, Control, Display, Key, Option,Tutorial,None
     }
 
     public Image backGroundImage;
@@ -25,6 +25,7 @@ public class OptionMenuCtrl : MonoBehaviour
     public EscMenu displayPanel;
     public EscMenu keyBindingPanel;
     public EscMenu gameOverPanel;
+    public EscMenu tutorialPanel;
 
     public SceneLoadUI sceneLoadUi;
     
@@ -33,7 +34,10 @@ public class OptionMenuCtrl : MonoBehaviour
 
     public UnityEvent WhenCloseOption;
 
+    public InGameTutorialPanel inGameTutorialPanel;
+
     private bool _currentTutorial = false;
+    public bool CurrentTutorial { get => _currentTutorial; set { _currentTutorial = value; }}
     void Start()
     {
         Color color=backGroundImage.color;
@@ -54,17 +58,17 @@ public class OptionMenuCtrl : MonoBehaviour
         if (_currentTutorial != true)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        //if (Input.GetKeyDown(KeyCode.Mouse0))
+        //{
+        //    tutorialVideoPlayer.ThroughPage();
+        //}
+
+        if (InputManager.Instance.GetInput(KeybindingActions.Cancel))
         {
-            tutorialVideoPlayer.ThroughPage();
-        }
-        
-        if (InputManager.Instance.GetInput(KeybindingActions.Cancel)) 
-        { 
-            tutorialVideoPlayer.Active(false);
+            inGameTutorialPanel.Active(false);
             _currentTutorial = false;
         }
-        
+
     }
 
     public void InputEsc()
@@ -147,6 +151,9 @@ public class OptionMenuCtrl : MonoBehaviour
             case MenuType.Option:
                 _currentPanel = optionPanel;
                 break;
+            case MenuType.Tutorial:
+                _currentPanel = tutorialPanel;
+                break;
         }
         titlePanel.ChangeOption((MenuType)menuType, () => {
             prevPanel.Active (false);
@@ -156,11 +163,11 @@ public class OptionMenuCtrl : MonoBehaviour
 
     public bool TutorialEvent(string key)
     {
-        if (tutorialVideoPlayer.SetPage(key) == false)
-            return false;
+        //if (tutorialVideoPlayer.SetPage(key) == false)
+        //    return false;
         
-        tutorialVideoPlayer.Active(true);
-        _currentTutorial = true;
+        //tutorialVideoPlayer.Active(true);
+        //_currentTutorial = true;
         return true;
     }
 
@@ -169,6 +176,11 @@ public class OptionMenuCtrl : MonoBehaviour
         if (sceneLoadUi == null)
             return;
         sceneLoadUi.EndLoad();
+    }
+
+    public void InGameTutorial()
+    {
+        inGameTutorialPanel.Active(true);
     }
     
     
