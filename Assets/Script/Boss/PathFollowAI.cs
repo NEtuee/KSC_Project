@@ -13,6 +13,7 @@ public class PathFollowAI : IKPathFollowBossBase
     public string path;
     public bool progress;
     public bool loop;
+    public bool canPause = false;
 
     public void Start()
     {
@@ -24,6 +25,9 @@ public class PathFollowAI : IKPathFollowBossBase
     {
         if (GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
             return;
+
+        if(canPause && GameManager.Instance.PAUSE)
+            return;
         
         Progress(Time.deltaTime);
     }
@@ -31,6 +35,9 @@ public class PathFollowAI : IKPathFollowBossBase
     private void FixedUpdate()
     {
         if (GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+            return;
+
+        if(canPause && GameManager.Instance.PAUSE)
             return;
         
         Progress(Time.fixedDeltaTime);
