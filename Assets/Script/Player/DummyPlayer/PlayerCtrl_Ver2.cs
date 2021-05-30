@@ -78,6 +78,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float rotateSpeed = 6.0f;
     [Range(0, 5)] [SerializeField] private float fallingControlSensitive = 1f;
     [SerializeField] private float horizonWeight = 0.0f;
+    public float HorizonWeight => horizonWeight;
     [SerializeField] private float rotAngle = 0.0f;
     [SerializeField] private float airRotateSpeed = 2.5f;
 
