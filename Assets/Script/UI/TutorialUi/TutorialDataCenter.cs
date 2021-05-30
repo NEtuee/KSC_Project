@@ -17,7 +17,7 @@ public class TutorialDataCenter : MonoBehaviour
         }
     }
 
-    public void GetAndPrepareVideo(string key, out VideoClip videoClip, out string description)
+    public void GetVideo(string key, out VideoClip videoClip, out string description)
     {
         if (_tutorialData.ContainsKey(key) == false)
         {

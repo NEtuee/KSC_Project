@@ -22,6 +22,7 @@ public class TextBaseButtonUi : MonoBehaviour,IPointerEnterHandler, IPointerExit
      [SerializeField] private Color imageSelectedColor;
 
      public UnityEvent onSelect;
+     public UnityEvent onRelease;
      public UnityEvent onClick;
 
      public bool Interactable { get => interactable; set => interactable = value; }
@@ -30,16 +31,7 @@ public class TextBaseButtonUi : MonoBehaviour,IPointerEnterHandler, IPointerExit
           get => selected;
           set
           {
-               if (value == true )
-               {
-                    if(!selected)
-                         Select(true);
-               }
-               else
-               {
-                    if(selected)
-                         Select(true);
-               }
+            Select(value);
           }
      }
      
@@ -71,7 +63,7 @@ public class TextBaseButtonUi : MonoBehaviour,IPointerEnterHandler, IPointerExit
 
      public void OnPointerExit(PointerEventData eventData)
      {
-          if (interactable == false)
+          if (interactable == false || selected == true)
                return;
           
           baseText.color = textDefaultColor;
@@ -121,7 +113,10 @@ public class TextBaseButtonUi : MonoBehaviour,IPointerEnterHandler, IPointerExit
 
      public void Select(bool value)
      {
-          selected = true;
+        if (value == selected)
+            return;
+
+          selected = value;
           if (value)
           {
                onSelect?.Invoke();
@@ -134,6 +129,7 @@ public class TextBaseButtonUi : MonoBehaviour,IPointerEnterHandler, IPointerExit
           }
           else
           {
+               onRelease?.Invoke();
                baseText.color = textDefaultColor;
                if (backGroundImage == null)
                     return;
