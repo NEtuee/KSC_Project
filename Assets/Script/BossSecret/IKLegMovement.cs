@@ -128,6 +128,11 @@ public class IKLegMovement : MonoBehaviour
         
     }
 
+    public void SetStartPosition(Vector3 pos)
+    {
+        _stratPosition = pos;
+    }
+
     public void SetIKActive(bool value)
     {
         iKFabric.enabled = value;

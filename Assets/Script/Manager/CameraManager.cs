@@ -61,7 +61,7 @@ public class CameraManager : MonoBehaviour
 
     public DistanceBlendProfile[] distanceBlendProfiles;
     private Dictionary<string, DistanceBlendProfile> distanceDic = new Dictionary<string, DistanceBlendProfile>();
-
+    private string _currentCameraDistanceProfileKey;
     //Damping
     private Vector3 prevDamping = Vector3.zero;
 
@@ -398,6 +398,8 @@ public class CameraManager : MonoBehaviour
         cameraDictionary.Add(key, camera);
     }
 
+    public CinemachineBrain GetCinemachineBrain() {return brain;}
+
     public bool IsCameraBlending()
     {
         return brain.IsBlending;
@@ -494,6 +496,11 @@ public class CameraManager : MonoBehaviour
     {
         if (distanceDic.ContainsKey(key) == false)
             return;
+
+        if (_currentCameraDistanceProfileKey == key)
+            return;
+
+        _currentCameraDistanceProfileKey = key;
 
         isBlendCameraDistance = true;
         targetDistance = distanceDic[key].targetDistance;

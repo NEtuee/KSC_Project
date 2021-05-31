@@ -6,16 +6,46 @@ public class Drone : MonoBehaviour
 {
     public enum DroneState { Default, Approach, Collect, Return , AimHelp ,Help,Scan}
 
+    [SerializeField] private bool visible;
+    public bool Visible
+    {
+        get { return visible; }
+        set
+        {
+            if (value == visible)
+                return;
+            visible = value;
+            if(visible)          
+                droneVisual.gameObject.SetActive(true);          
+            else        
+                droneVisual.gameObject.SetActive(false);           
+        }
+    }
+
     [SerializeField] private Transform target;
     [SerializeField] private DroneState state;
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Vector3 defaultFollowOffset;
+    [SerializeField] private float defaultFollowSpeed = 10.0f;
     [SerializeField] private Vector3 aimHelpOffset;
     [SerializeField] private Vector3 helpOffset;
     [SerializeField] private Vector3 helpGrabStateOffset;
     [SerializeField] private float collectRequiredTime = 1f;
     [SerializeField] private FloatingMove floatingMove;
     [SerializeField] private bool help = false;
+    [SerializeField] private float scanCoolTime = 3f;
+    private float _scanLeftTime = 0.0f;
+    private Vector3 _targetPosition;
+    private Vector3 _prevTargetPosition;
+
+    [Header("DroneVisual")]
+    [SerializeField] private Transform droneVisual;
+    [SerializeField] private Transform droneBody;
+    private Vector3 droneBodyOriginPos;
+    private Animator _droneAnim;
+    private FloatingMove _floatingMoveComponent;
+    private bool _respawn = false;
+
     private float collectStartTime;
     
     private Transform approachTarget;
@@ -29,7 +59,7 @@ public class Drone : MonoBehaviour
     
     //스캔
     private Quaternion _scanTargetRotation;
-    private float _rotationSpeed = 200.0f;
+    private float _rotationSpeed = 800.0f;
     private DroneScaner _droneScaner;
     public delegate void WhenAimHelp();
     public WhenAimHelp whenAimHelp;
@@ -47,6 +77,27 @@ public class Drone : MonoBehaviour
         _droneScaner = GetComponent<DroneScaner>();
         
         GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);
+
+        if (droneVisual == null)
+        {
+            Debug.LogWarning("Not Set DroneVisual");
+            return;
+        }
+
+        _droneAnim = droneVisual.GetComponent<Animator>();
+        _floatingMoveComponent = droneVisual.GetComponent<FloatingMove>();
+        droneBodyOriginPos = droneBody.localPosition;
+
+        if (visible)
+            droneVisual.gameObject.SetActive(true);
+        else
+            droneVisual.gameObject.SetActive(false);
+
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
+        camForward.y = 0;
+        camRight.y = 0;
+        _targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
     }
 
     // Update is called once per frame
@@ -66,15 +117,10 @@ public class Drone : MonoBehaviour
         if (GameManager.Instance.PAUSE == true)
             return;
 
-        if (InputManager.Instance.GetInput(KeybindingActions.Scan))
+        if (InputManager.Instance.GetInput(KeybindingActions.Scan) && _scanLeftTime <= 0.0f)
         {
             Scan();
         }
-        
-        // if (Input.GetKeyDown(KeyCode.N))
-        // {
-        //     OrderHelp();
-        // }
 
         if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.Update)
             return;
@@ -84,13 +130,44 @@ public class Drone : MonoBehaviour
 
     private void UpdateDrone(float deltaTime)
     {
+        if (visible == false || _respawn)
+            return;
+
+        if(_scanLeftTime > 0.0f)
+        {
+            _scanLeftTime -= deltaTime;
+            _scanLeftTime = Mathf.Clamp(_scanLeftTime, 0.0f, 10.0f);
+        }
+
         switch(state)
         {
             case DroneState.Default:
                 {
-                    Vector3 targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
-                    targetPosition = Vector3.Lerp(transform.position, targetPosition, deltaTime * 5f);
-                    Vector3 lookDir = targetPosition - transform.position;
+
+                    Vector3 camForward = Camera.main.transform.forward;
+                    Vector3 camRight = Camera.main.transform.right;
+                    camForward.y = 0;
+                    camRight.y = 0;
+
+                    if (player.IsMove)
+                    {
+                        //if (Vector3.Dot(Vector3.Cross(camForward.normalized, target.forward), Vector3.up) > 0.5f)
+                        //{
+                        //    Debug.Log("Right");
+                        //}
+                        //else if (Vector3.Dot(Vector3.Cross(camForward.normalized, target.forward), Vector3.up) < -0.5f)
+                        //{
+                        //    Debug.Log("Left");
+                        //}
+                        //_targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
+                        _targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                    }
+                    if (Vector3.Distance(_targetPosition, transform.position) == 0.0f)
+                        return;
+
+                    //Vector3 targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+                    //Vector3 lookDir = targetPosition - transform.position;
+                    Vector3 lookDir = target.position - transform.position;
                     lookDir.y = 0.0f;
                     Quaternion targetRot;
                     if (lookDir != Vector3.zero)
@@ -98,7 +175,9 @@ public class Drone : MonoBehaviour
                     else
                         targetRot = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.forward, Vector3.up), 10.0f * deltaTime);
 
-                    transform.SetPositionAndRotation(targetPosition, targetRot);
+                    transform.SetPositionAndRotation(Vector3.Lerp(transform.position, _targetPosition, deltaTime * defaultFollowSpeed), targetRot);
+                    //transform.SetPositionAndRotation(_targetPosition, targetRot);
+
                 }
                 break;
             case DroneState.AimHelp:
@@ -216,6 +295,7 @@ public class Drone : MonoBehaviour
 
     public void Scan()
     {
+        _scanLeftTime = scanCoolTime;
         Vector3 targetDir = Camera.main.transform.forward;
         targetDir.y = 0;
         targetDir.Normalize();
@@ -242,7 +322,7 @@ public class Drone : MonoBehaviour
         if (value == true)
         {
             state = DroneState.AimHelp;
-            floatingMove.SetRangeRatio(0.2f);
+            _floatingMoveComponent.SetRangeRatio(0.2f);
             whenAimHelp?.Invoke();
         }
         else
@@ -250,13 +330,13 @@ public class Drone : MonoBehaviour
             if(help == true)
             {
                 state = DroneState.Help;
-                floatingMove.SetRangeRatio(1.0f);
+                _floatingMoveComponent.SetRangeRatio(1.0f);
                 whenHelp?.Invoke();
             }
             else
             {
                 state = DroneState.Default;
-                floatingMove.SetRangeRatio(1.0f);
+                _floatingMoveComponent.SetRangeRatio(1.0f);
             }
         }
     }
@@ -267,7 +347,7 @@ public class Drone : MonoBehaviour
         if (state != DroneState.AimHelp)
         {
             state = DroneState.Default;
-            floatingMove.SetRangeRatio(1.0f);
+            _floatingMoveComponent.SetRangeRatio(1.0f);
         }
     }
 
@@ -291,5 +371,28 @@ public class Drone : MonoBehaviour
         {
             droneHelperRoot.HelpEvent(key);
         }
+    }
+
+    public void Respawn(Transform playerTransform)
+    {
+        _respawn = true;
+        transform.SetParent(playerTransform);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        droneVisual.localPosition = Vector3.zero;
+        droneVisual.localRotation = Quaternion.identity;
+
+        _droneAnim.enabled = true;
+        _floatingMoveComponent.enabled = false;
+
+        _droneAnim.SetTrigger("Respawn");
+    }
+
+    public void CompleteRespawn()
+    {
+        transform.SetParent(null);
+        transform.position = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
+        droneBody.localPosition = droneBodyOriginPos;
+        _respawn = false;
     }
 }
