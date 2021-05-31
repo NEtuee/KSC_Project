@@ -61,6 +61,7 @@ public class Boogie_GridControll : MonoBehaviour
     public HexCube GetRandomActiveCube(bool ignoreSpecial) {return cubeGrid.GetRandomActiveCube(ignoreSpecial);}
     public List<HexCube> GetTargetCubes() {return _targetCubes;}
     public HexCube GetCoreCube() {return _coreCube;}
+    public void SetCoreCube(HexCube cube) {_coreCube = cube;}
 
     public void SetCubesActive(bool active, bool timer = false,float time = 0f)
     {
@@ -71,7 +72,7 @@ public class Boogie_GridControll : MonoBehaviour
     {
         foreach(var cube in list)
         {
-            if(cube.special || cube.IsActive() == active)
+            if(cube.special)// || cube.IsActive() == active)
                 continue;
 
             cube.SetActive(active,timer,time);
@@ -86,6 +87,12 @@ public class Boogie_GridControll : MonoBehaviour
             var targetPosition = _coreOriginPosition + (_coreCube.special ? new Vector3(0f,3f,0f) : Vector3.zero);
             _coreCube.transform.localPosition = Vector3.Lerp(_coreCube.transform.localPosition,targetPosition,deltaTime * 20f);
         }
+    }
+
+    public void GetCube_All(bool ignoreSpecial)
+    {
+        _targetCubes.Clear();
+        cubeGrid.GetAllCube(ref _targetCubes,ignoreSpecial);
     }
 
     public void GetCube_Near(Vector3Int target,int loopCount, bool ignoreSpecial)
@@ -113,7 +120,24 @@ public class Boogie_GridControll : MonoBehaviour
             return;
         }
 
-        _coreCube = _targetCubes[Random.Range(0, _targetCubes.Count)];
+        bool find = false;
+        for(int i = 0; i < _targetCubes.Count; ++i)
+        {
+            if(_targetCubes[i].IsActive())
+            {
+                _coreCube = _targetCubes[i];
+                find = true;
+                break;
+            }
+        }
+
+        if(!find)
+        {
+            _coreCube = null;
+            return;
+        }
+
+        //_coreCube = _targetCubes[0];//Random.Range(0, _targetCubes.Count)];
         _coreCube.special = true;
         _coreCube.SetTargetPosition(new Vector3(0f,3f,0f));
     }
@@ -140,31 +164,45 @@ public class Boogie_GridControll : MonoBehaviour
         int sector = 4;
         int range = (cubeGrid.mapSize) / 2 + 1;
 
-        if(angle <= 60f && angle >= -60f)
+        if(angle <= 0f && angle >= -60f)
             sector = 1;
+        else if(angle <= 60f && angle >= 0f)
+        {
+            sector = 2;
+        }
         else if(angle <= 120f && angle >= 60f)
             sector = 3;
+        else if(angle <= 180f && angle >= 120f)
+        {
+            sector = 4;
+        }
+        else if(angle <= -120f && angle >= -180f)
+        {
+            sector = 5;
+        }
         else if(angle <= -60f && angle >= -120f)
             sector = 0;
 
-        if(sector == 0)
-        {
-            cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
-        }
-        else if(sector == 1)
-        {
-            cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
-            cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector + 1,range);
-        }
-        else if(sector == 3)
-        {
-            cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
-        }
-        else if(sector == 4)
-        {
-            cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
-            cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector + 1,range);
-        }
+        cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
+
+        // if(sector == 0)
+        // {
+        //     cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
+        // }
+        // else if(sector == 1)
+        // {
+        //     cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
+        //     cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
+        // }
+        // else if(sector == 3)
+        // {
+        //     cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
+        // }
+        // else if(sector == 4)
+        // {
+        //     cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
+        //     cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector + 1,range);
+        // }
     }
 
     public void GetCube_Walkway()

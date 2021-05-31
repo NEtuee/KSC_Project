@@ -201,6 +201,19 @@ public class HexCubeGrid : MonoBehaviour
         
     }
 
+    public void GetAllCube(ref List<HexCube> list,bool ignoreSpecial)
+    {
+        _cubeSaveList.Clear();
+        foreach(var cube in _cubeMap.Values)
+        {
+            if((ignoreSpecial ? !cube.special : true))
+            {
+                list.Add(cube);
+            }
+        }
+
+    }
+
     public HexCube GetRandomActiveCube(bool ignoreSpecial)
     {
         _cubeSaveList.Clear();
