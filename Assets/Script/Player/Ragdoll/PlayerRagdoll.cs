@@ -576,6 +576,9 @@ public class PlayerRagdoll : MonoBehaviour
 
         player.InitVelocity();
         ActiveRagdoll(false);
+
+        foreach(var effect in lightningEffect)
+            effect.SetActive(false);
     }
 
     public void ResetRagdoll()
