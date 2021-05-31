@@ -10,7 +10,7 @@ public class PlayerCtrl : MonoBehaviour
     public FloatReactiveProperty hp = new FloatReactiveProperty(100f);
     public FloatReactiveProperty charge = new FloatReactiveProperty(0.0f);
     public FloatReactiveProperty energy = new FloatReactiveProperty(0.0f);
-    protected bool dead = false;
+    [SerializeField] protected bool dead = false;
     public bool Dead => dead;
 
     public delegate void WhenPlayerDead();

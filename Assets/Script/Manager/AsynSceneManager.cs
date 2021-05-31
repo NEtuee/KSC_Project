@@ -65,6 +65,7 @@ public class AsynSceneManager : MonoBehaviour
         _player = (PlayerCtrl_Ver2)GameManager.Instance.player;
         _drone = _player.GetDrone().transform;
 
+        _afterLoad += _player.InitStatus;
         LoadCurrentLevel();
     }
 
@@ -82,7 +83,6 @@ public class AsynSceneManager : MonoBehaviour
     {
         if(!_isLoaded)
             return;
-
         sceneLoadUI.StartLoad(()=> {
             _currentScene = levels[currentLevel];
             RegisterProgress();
@@ -199,8 +199,6 @@ public class AsynSceneManager : MonoBehaviour
         }
 
         _afterLoad();
-
-        GameManager.Instance.PAUSE = false;
 
         yield return new WaitForSeconds(2f);
         sceneLoadUI.EndLoad();

@@ -135,6 +135,9 @@ public class PlayerRagdoll : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (player.Dead == true)
+            return;
+
         if (isFlyRagdoll == true && Time.time - ragdollTime > 0.1f && hipTransform.GetComponent<Rigidbody>().velocity.magnitude < 0.05f && simulateState != RagdollSimulateState.Shock)
         {
             ReturnAnimated();

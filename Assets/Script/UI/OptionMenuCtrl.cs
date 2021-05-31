@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Events;
 
+public enum TutorialType { Climbing, Move, Special, Scan, Emp}
+
 public class OptionMenuCtrl : MonoBehaviour
 {
     public enum MenuType
@@ -34,7 +36,12 @@ public class OptionMenuCtrl : MonoBehaviour
 
     public UnityEvent WhenCloseOption;
 
-    public InGameTutorialPanel inGameTutorialPanel;
+    public InGameTutorialPanel currnetInGameTutorial;
+    public InGameTutorialPanel climbingTutorialPanel;
+    public InGameTutorialPanel moveTutorialPanel;
+    public InGameTutorialPanel specialTutorial;
+    public InGameTutorialPanel scanTutorial;
+    public InGameTutorialPanel empTutorial;
 
     private bool _currentTutorial = false;
     public bool CurrentTutorial { get => _currentTutorial; set { _currentTutorial = value; }}
@@ -65,7 +72,7 @@ public class OptionMenuCtrl : MonoBehaviour
 
         if (InputManager.Instance.GetInput(KeybindingActions.Cancel))
         {
-            inGameTutorialPanel.Active(false);
+            currnetInGameTutorial.Active(false);
             _currentTutorial = false;
         }
 
@@ -178,12 +185,41 @@ public class OptionMenuCtrl : MonoBehaviour
         sceneLoadUi.EndLoad();
     }
 
-    public void InGameTutorial()
+    public void InGameTutorial(TutorialType type)
     {
-        inGameTutorialPanel.Active(true);
+        switch(type)
+        {
+            case TutorialType.Climbing:
+                {
+                    currnetInGameTutorial = climbingTutorialPanel;
+                }
+                break;
+            case TutorialType.Move:
+                {
+                    currnetInGameTutorial = moveTutorialPanel;
+                }
+                break;
+            case TutorialType.Special:
+                {
+                    currnetInGameTutorial = specialTutorial;
+                }
+                break;
+            case TutorialType.Scan:
+                {
+                    currnetInGameTutorial = scanTutorial;
+                }
+                break;
+            case TutorialType.Emp:
+                {
+                    currnetInGameTutorial = empTutorial;
+                }
+                break;
+        }
+
+        currnetInGameTutorial.Active(true);
     }
-    
-    
+
+
     public void GameQuit()
     {
         Debug.Log("Exit");
