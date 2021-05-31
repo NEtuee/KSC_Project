@@ -261,6 +261,8 @@ public class AsynSceneManager : MonoBehaviour
                 stage.entranceElevator.ObjectTeleport(_cameraLocalTarget.localPosition,_cameraLocalTarget.localRotation,_cam.transform);
                 stage.entranceElevator.ObjectTeleport(_followLocalTarget.localPosition,_followLocalTarget.localRotation,_follow.transform);
                 stage.entranceElevator.ObjectTeleport(_droneLocalTarget.localPosition,_droneLocalTarget.localRotation,_drone.transform);
+
+                ((PlayerCtrl_Ver2)GameManager.Instance.player).InitVelocity();
             }
             
             currentStageManager = stage;

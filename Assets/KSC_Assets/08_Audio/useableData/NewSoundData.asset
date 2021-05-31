@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
   m_Name: NewSoundData
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: f91709099811d144ebb21048425c9c42, type: 3}
+  csvData: {fileID: 4900000, guid: 09a0e434ecf442546bea0ef4c03ba3b0, type: 3}
   soundData:
   - path: global data
     id: 0
@@ -37,7 +37,7 @@ MonoBehaviour:
     - name: PC_GroundID
       id: 5
       min: 0
-      max: 2
+      max: 3
   - path: event:/PlayerCharacter/Movement/PC_Jogging
     id: 1000
     type: SFX
@@ -78,15 +78,15 @@ MonoBehaviour:
     id: 1009
     type: SFX
     parameters: []
-  - path: event:/PlayerCharacter/Weapon/PC_Weapon_Trigger
+  - path: event:/PlayerCharacter/Weapon/PC_Laser_Fire_1st
     id: 1010
     type: SFX
     parameters: []
-  - path: event:/PlayerCharacter/Weapon/PC_Laser_Fire_1st
+  - path: event:/PlayerCharacter/Weapon/PC_Laser_Fire_2nd
     id: 1011
     type: SFX
     parameters: []
-  - path: event:/PlayerCharacter/Weapon/PC_Impulse_Fire
+  - path: event:/PlayerCharacter/Weapon/PC_Laser_Fire_3rd
     id: 1012
     type: SFX
     parameters: []
@@ -97,7 +97,7 @@ MonoBehaviour:
     - name: PC_Charging
       id: 10131
       min: 0
-      max: 100
+      max: 300
   - path: event:/PlayerCharacter/Movement/Hit/PC_Down_Ground
     id: 1014
     type: SFX
@@ -112,6 +112,22 @@ MonoBehaviour:
     parameters: []
   - path: event:/PlayerCharacter/Movement/Standing/PC_StandUp
     id: 1017
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/PC_TurnBack
+    id: 1018
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_1st
+    id: 1019
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_2nd
+    id: 1020
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_3rd
+    id: 1021
     type: SFX
     parameters: []
   - path: event:/Drone/Movement/DR_Flying
@@ -178,6 +194,14 @@ MonoBehaviour:
     id: 1512
     type: SFX
     parameters: []
+  - path: event:/Mob/Medusa/Medusa_Discover
+    id: 1513
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Medusa/Medusa_Miss
+    id: 1514
+    type: SFX
+    parameters: []
   - path: event:/SFX/Explosion
     id: 1700
     type: SFX
@@ -212,5 +236,9 @@ MonoBehaviour:
     parameters: []
   - path: snapshot:/Local_Setting/DaddyLevelReverb
     id: 4004
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/Local_Setting/MedusaLevelReverb
+    id: 4005
     type: Snapshot
     parameters: []

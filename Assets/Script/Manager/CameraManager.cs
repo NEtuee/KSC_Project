@@ -537,6 +537,26 @@ public class CameraManager : MonoBehaviour
 
     }
 
+    public void SetUpdateMethod(CinemachineBrain.UpdateMethod update,CinemachineBrain.BrainUpdateMethod blend)
+    {
+        brain.m_UpdateMethod = update;
+        brain.m_BlendUpdateMethod = blend;
+    }
+
+    public void SetUpdateMethod()
+    {
+        if(((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod == UpdateMethod.FixedUpdate)
+        {
+            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
+            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+        }
+        else
+        {
+            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
+            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
+        }
+    }
+
     private void BlendDistanceAimCamera()
     {
         if (aimDistanceBlendStartTimer >= 1f)

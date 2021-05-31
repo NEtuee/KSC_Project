@@ -96,7 +96,7 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("pushStand");
         _timeCounter.InitTimer("pushCooldown");
         
-        GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
+        //GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
 
         ChangeState(State.TransformIdle);
     }
@@ -202,6 +202,7 @@ public class BrokenMedusa_AI : IKBossBase
 
             if(!IsOnGrounded())
             {
+                GameManager.Instance.soundManager.Play(1514, Vector3.zero, transform);
                 ChangeState(State.SearchIdle);
             }
 
@@ -221,6 +222,7 @@ public class BrokenMedusa_AI : IKBossBase
             
             if(!IsOnGrounded())
             {
+                GameManager.Instance.soundManager.Play(1514, Vector3.zero, transform);
                 ChangeState(State.SearchIdle);
             }
 
@@ -593,7 +595,7 @@ public class BrokenMedusa_AI : IKBossBase
             if (mag <= scanner.range && mag >= scanner.range - 3f)
             {
                 //scan
-                Debug.Log("scanned");
+                GameManager.Instance.soundManager.Play(1513, Vector3.zero, transform);
                 scannedEvent?.Invoke();
                 return true;
             }
