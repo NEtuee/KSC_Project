@@ -16,6 +16,7 @@ public class DronePropeller : MonoBehaviour
     public void FixedUpdate()
     {
         transform.Rotate(Vector3.forward, speed * Time.fixedDeltaTime);
-        propellerSphereJoint.rotation = Quaternion.Lerp(propellerSphereJoint.rotation,Quaternion.LookRotation(Vector3.up),10.0f*Time.fixedDeltaTime );
+        if(propellerSphereJoint != null)
+            propellerSphereJoint.rotation = Quaternion.Lerp(propellerSphereJoint.rotation,Quaternion.LookRotation(Vector3.up),10.0f*Time.fixedDeltaTime );
     }
 }
