@@ -282,7 +282,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Mob.bank
   Name: FmodBank_Mob
   StudioPath: bank:/Mob/FmodBank_Mob
-  lastModified: 637548783094414531
+  lastModified: 637581003020211830
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -348,6 +348,26 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &-8606032428614630494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_Railgun_Charging/PC_Charging
+  m_EditorClassIdentifier: 
+  Name: PC_Charging
+  Min: 0
+  Max: 300
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-8576365012512993781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -362,7 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: PC_GroundID
   Min: 0
-  Max: 2
+  Max: 3
   Default: 0
   ID:
     data1: 280802902
@@ -454,7 +474,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 2000
 --- !u!114 &-8380028936650939178
@@ -1039,6 +1059,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-7359829664953942751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Mob/Medusa/Medusa_Discover
+  m_EditorClassIdentifier: 
+  Path: event:/Mob/Medusa/Medusa_Discover
+  guid: c061c3ceb0a7a24e81be2abf9db5bf0b
+  Banks:
+  - {fileID: 9167585124432856212}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 15
+  MaxDistance: 150
+  Length: 3077
 --- !u!114 &-7263262953838030657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1325,7 +1368,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_JirungE.bank
   Name: FmodBank_JirungE
   StudioPath: bank:/Mob/FmodBank_JirungE
-  lastModified: 637548783094304505
+  lastModified: 637581003020121795
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1562,7 +1605,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_PlayerCharacter.bank
   Name: FmodBank_PlayerCharacter
   StudioPath: bank:/Player/FmodBank_PlayerCharacter
-  lastModified: 637548783094584584
+  lastModified: 637581003020401855
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1872,13 +1915,13 @@ MonoBehaviour:
   guid: 48fe806379a80e4abf51905e6c73bea1
   Banks:
   - {fileID: -6126670350051478680}
-  IsStream: 0
+  IsStream: 1
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
-  Length: 1750
+  Length: 2080
 --- !u!114 &-5646371980126365797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1919,6 +1962,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &-5557829779222981129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Movement/PC_TurnBack
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Movement/PC_TurnBack
+  guid: eaecc6ed203bab438ccccc2e53eea8a2
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 5
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-5553620650591621400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2359,7 +2425,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Master.bank
   Name: FmodBank_Master
   StudioPath: bank:/FmodBank_Master
-  lastModified: 637548783094314503
+  lastModified: 637581003020131802
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2503,6 +2569,29 @@ MonoBehaviour:
     data1: 1637281684
     data2: 3201562855
   Exists: 1
+--- !u!114 &-4570629480926701354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Mob/Medusa/Medusa_Miss
+  m_EditorClassIdentifier: 
+  Path: event:/Mob/Medusa/Medusa_Miss
+  guid: 7e0483e34d5b3d42aca0ced784c470a0
+  Banks:
+  - {fileID: 9167585124432856212}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 15
+  MaxDistance: 150
+  Length: 669
 --- !u!114 &-4557304669758287595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2518,7 +2607,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Drone.bank
   Name: FmodBank_Drone
   StudioPath: bank:/Player/FmodBank_Drone
-  lastModified: 637548783094294501
+  lastModified: 637581003020111800
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2582,7 +2671,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 1893
 --- !u!114 &-4461738846059376957
@@ -2600,7 +2689,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Ambient.bank
   Name: FmodBank_Ambient
   StudioPath: bank:/Other/FmodBank_Ambient
-  lastModified: 637548783094184559
+  lastModified: 637546081278025368
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2685,7 +2774,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Arachne.bank
   Name: FmodBank_Arachne
   StudioPath: bank:/Mob/FmodBank_Arachne
-  lastModified: 637548783094204482
+  lastModified: 637581003020041772
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2775,7 +2864,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 0
 --- !u!114 &-4222788082860835005
@@ -3077,9 +3166,9 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
-  Length: 1750
+  Length: 4920
 --- !u!114 &-3524276723072632871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3120,7 +3209,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 1128
 --- !u!114 &-3463751573445583736
@@ -3249,7 +3338,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 1128
 --- !u!114 &-3282648488769425227
@@ -3399,8 +3488,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 100
+  MinDistance: 15
+  MaxDistance: 500
   Length: 1468
 --- !u!114 &-3047120982921037061
 MonoBehaviour:
@@ -3461,9 +3550,9 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
-  Length: 450
+  Length: 960
 --- !u!114 &-2793696652038961260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4090,7 +4179,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 627
 --- !u!114 &-1731692383105302159
@@ -4222,6 +4311,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-1642089030888393421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/Local_Setting/MedusaLevelReverb
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Local_Setting/MedusaLevelReverb
+  guid: d6f873fa837a5842ad7dfece2a6db26a
+  Banks:
+  - {fileID: -5021835153761381509}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
 --- !u!114 &-1641152429954897606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4428,7 +4540,7 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 6442300512102341155}
+  - {fileID: 7417795265298896658}
   MinDistance: 0
   MaxDistance: 0
   Length: 0
@@ -5206,81 +5318,81 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 4882249567238266424}
-  - {fileID: -9144878015188765736}
-  - {fileID: 7668269090534475527}
-  - {fileID: 9159085702566738655}
-  - {fileID: 2753873356362073888}
-  - {fileID: -5212142518147842063}
-  - {fileID: 671042849421839407}
-  - {fileID: 497455537709858363}
-  - {fileID: 4303747562359609281}
-  - {fileID: 3718900219299735025}
-  - {fileID: 6612301716196429772}
+  - {fileID: 4824111326059105211}
+  - {fileID: -4461738846059376957}
+  - {fileID: -4379664360270856703}
+  - {fileID: 5541389487673814892}
+  - {fileID: -4557304669758287595}
+  - {fileID: -6464861342809320929}
+  - {fileID: -5021835153761381509}
+  - {fileID: 9167585124432856212}
+  - {fileID: -8666824198971837986}
+  - {fileID: -6126670350051478680}
+  - {fileID: 7293183480586007849}
   EditorEvents:
-  - {fileID: -999205159747162592}
-  - {fileID: 2723302912336370952}
-  - {fileID: -5478640353214770275}
-  - {fileID: 1346752673536588182}
-  - {fileID: 1759887858329792587}
-  - {fileID: 4426785977688236946}
-  - {fileID: 1427119633908873343}
-  - {fileID: -5052060627140000242}
-  - {fileID: 5497966237010790994}
-  - {fileID: -2257902327600128563}
-  - {fileID: -5220232022889619922}
-  - {fileID: -6299639635830807308}
-  - {fileID: 7435083167117748784}
-  - {fileID: 9067694797653896165}
-  - {fileID: -4428829413310689196}
-  - {fileID: 3985814406713942401}
-  - {fileID: 7976129162275832023}
-  - {fileID: -6281653989923637618}
-  - {fileID: 4928882137366692300}
-  - {fileID: -2152434057108407794}
-  - {fileID: -5421041003828140406}
-  - {fileID: -7816204195464145775}
-  - {fileID: 6299364970537485144}
-  - {fileID: 7987862791013425396}
-  - {fileID: -2550760276176797654}
-  - {fileID: -3321104223541539092}
-  - {fileID: -4300922651526130763}
-  - {fileID: 6219615349045081873}
-  - {fileID: -377918000297893040}
-  - {fileID: 4301349116359695910}
-  - {fileID: -8502559626191537192}
-  - {fileID: 508629371034538150}
-  - {fileID: 2012572606231845866}
-  - {fileID: 324427363487171249}
-  - {fileID: -6151436980792381578}
-  - {fileID: 1370362495497896992}
-  - {fileID: 3125874909853628646}
-  - {fileID: 3045517224651567369}
-  - {fileID: -2088787589753010506}
-  - {fileID: -4338696578648823938}
-  - {fileID: -2119178563123981053}
-  - {fileID: -1731692383105302159}
-  - {fileID: -3282648488769425227}
-  - {fileID: -6672308926328348196}
-  - {fileID: 847821018705481981}
-  - {fileID: 5365057229513476490}
-  - {fileID: -1226585807486451076}
-  - {fileID: 3481844429332901733}
-  - {fileID: -5117260142134478683}
-  - {fileID: -2793696652038961260}
-  - {fileID: 3508439642192521470}
-  - {fileID: -4222788082860835005}
+  - {fileID: -6124697354610661422}
+  - {fileID: 359433898742662828}
+  - {fileID: -7502257195118738623}
+  - {fileID: -6580548308077522525}
+  - {fileID: 8871602318181806557}
+  - {fileID: -5035011206659414137}
+  - {fileID: -3775980470257596304}
+  - {fileID: 5715863864926733065}
+  - {fileID: -7517969810406638535}
+  - {fileID: -122029795847290282}
+  - {fileID: -848189413611234207}
+  - {fileID: 1398806056361078001}
+  - {fileID: -3103112026064264734}
+  - {fileID: 1775924576511278825}
+  - {fileID: 4097313529133159506}
+  - {fileID: 6521145975156008077}
+  - {fileID: 306626705549342346}
+  - {fileID: -1666437094276605032}
+  - {fileID: 7897313035152053291}
+  - {fileID: -2912222169421369423}
+  - {fileID: -8415476760832167042}
+  - {fileID: 1854616466565324662}
+  - {fileID: -3515323382902835672}
+  - {fileID: -4253991884990955601}
+  - {fileID: 4160592538859259248}
+  - {fileID: 383550790775463524}
+  - {fileID: -3287203319501896096}
+  - {fileID: 4328411754106530124}
+  - {fileID: -8822166376360120688}
+  - {fileID: 9105620082605525767}
+  - {fileID: -7216900344081006189}
+  - {fileID: -6434993554169212473}
+  - {fileID: -8520066946889837701}
+  - {fileID: 5881282645547204679}
+  - {fileID: -1270317428111756698}
+  - {fileID: 1943711013665372289}
+  - {fileID: -3675208132136714339}
+  - {fileID: 668444438512979127}
+  - {fileID: -5714308008542548095}
+  - {fileID: 7708884649360134160}
+  - {fileID: 4132376368795886034}
+  - {fileID: -1738730179838070547}
+  - {fileID: 6005209211001054730}
+  - {fileID: -4485949981727578735}
+  - {fileID: -1642089030888393421}
+  - {fileID: -4570629480926701354}
+  - {fileID: -7359829664953942751}
+  - {fileID: 2709993887424656046}
+  - {fileID: 8449672661187112243}
+  - {fileID: 2714769210772699040}
+  - {fileID: -5557829779222981129}
+  - {fileID: 1386976486810882442}
   EditorParameters:
-  - {fileID: 1951736279251982622}
-  - {fileID: -4695138119111519925}
-  - {fileID: 6012106319736998550}
-  - {fileID: -2081385797751099185}
-  - {fileID: 4379695543094737010}
+  - {fileID: -7453750545899047080}
+  - {fileID: -1974181441772043774}
+  - {fileID: -8576365012512993781}
+  - {fileID: 1966041006138128655}
+  - {fileID: -5128389755687673973}
   MasterBanks:
-  - {fileID: 671042849421839407}
+  - {fileID: -5021835153761381509}
   StringsBanks:
-  - {fileID: 4882249567238266424}
-  stringsBankWriteTime: 637578955800000000
+  - {fileID: 4824111326059105211}
+  stringsBankWriteTime: 637581003020141796
   cacheVersion: 6
 --- !u!114 &50726842375340322
 MonoBehaviour:
@@ -5474,7 +5586,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 0
 --- !u!114 &497455537709858363
@@ -5669,7 +5781,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 0
 --- !u!114 &671042849421839407
@@ -6008,6 +6120,29 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1750
+--- !u!114 &1386976486810882442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_2nd
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_2nd
+  guid: fb460deab0089844bb2c76df7cd6a95d
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 20
+  Length: 850
 --- !u!114 &1398806056361078001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6028,8 +6163,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 100
+  MinDistance: 15
+  MaxDistance: 500
   Length: 2704
 --- !u!114 &1427119633908873343
 MonoBehaviour:
@@ -6249,8 +6384,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 100
+  MinDistance: 15
+  MaxDistance: 500
   Length: 1557
 --- !u!114 &1854616466565324662
 MonoBehaviour:
@@ -6272,7 +6407,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 0
 --- !u!114 &1855539459513260140
@@ -6686,6 +6821,52 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &2709993887424656046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_3rd
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_3rd
+  guid: 1124ccc7bb7cd148a8b113d7e3a76047
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 20
+  Length: 1311
+--- !u!114 &2714769210772699040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_1st
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_1st
+  guid: cda2bab732d8fa40a1b3a003772d7f4a
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 20
+  Length: 334
 --- !u!114 &2723302912336370952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7534,7 +7715,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 20
   Length: 1750
 --- !u!114 &4155146939116293893
@@ -7577,7 +7758,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 2000
 --- !u!114 &4177001685456926103
@@ -7737,14 +7918,14 @@ MonoBehaviour:
   m_Name: event:/PlayerCharacter/Movement/PC_Running_Stop
   m_EditorClassIdentifier: 
   Path: event:/PlayerCharacter/Movement/PC_Running_Stop
-  guid: eaecc6ed203bab438ccccc2e53eea8a2
+  guid: 066d102b144eb74d9778184121bd24c2
   Banks:
   - {fileID: -6126670350051478680}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 0
 --- !u!114 &4379695543094737010
@@ -7928,11 +8109,11 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Master.strings.bank
   Name: FmodBank_Master.strings
   StudioPath: bank:/FmodBank_Master.strings
-  lastModified: 637548783094324508
+  lastModified: 637581003020141796
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 4436
+    Value: 4614
   Exists: 1
 --- !u!114 &4871559215664390465
 MonoBehaviour:
@@ -8348,7 +8529,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Daddy.bank
   Name: FmodBank_Daddy
   StudioPath: bank:/Mob/FmodBank_Daddy
-  lastModified: 637548783094214484
+  lastModified: 637581003020061776
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -8586,8 +8767,8 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: -8269635645828650550}
-  MinDistance: 1
+  - {fileID: -8606032428614630494}
+  MinDistance: 0
   MaxDistance: 20
   Length: 0
 --- !u!114 &6012106319736998550
@@ -9387,11 +9568,31 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_SFX.bank
   Name: FmodBank_SFX
   StudioPath: bank:/Other/FmodBank_SFX
-  lastModified: 637548783094624583
+  lastModified: 637581003020451868
   LoadResult: 0
   FileSizes: []
   Exists: 1
 --- !u!114 &7371702243839717849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_Weapon_Fire/SoundCompressRecovery
+  m_EditorClassIdentifier: 
+  Name: SoundCompressRecovery
+  Min: 0
+  Max: 100
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
+--- !u!114 &7417795265298896658
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9642,7 +9843,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 340
 --- !u!114 &7763450715579989840
@@ -9731,7 +9932,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
+  MinDistance: 5
   MaxDistance: 20
   Length: 0
 --- !u!114 &7906190782314534792
@@ -9972,6 +10173,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &8449672661187112243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerCharacter/Movement/Rattling
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerCharacter/Movement/Rattling
+  guid: aeab1f3adc0dd54a9d82b18240cec641
+  Banks:
+  - {fileID: -6126670350051478680}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 627
 --- !u!114 &8484746672392527955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10538,7 +10762,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Medusa.bank
   Name: FmodBank_Medusa
   StudioPath: bank:/Mob/FmodBank_Medusa
-  lastModified: 637548783094344512
+  lastModified: 637581003020161807
   LoadResult: 0
   FileSizes: []
   Exists: 1
