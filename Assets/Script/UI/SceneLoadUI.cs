@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,18 +13,24 @@ public class SceneLoadUI : MonoBehaviour
     public Canvas tipCanvas;
     public TextMeshProUGUI tipText;
     public Canvas loadingCanvas;
+    public Canvas loadingTextCanvas;
     public Image loadingSlider;
+    public Canvas loadingKeyGuideCanvas;
+    public Image loadingKeyGuideImage;
+    public LoadingTextImageCtrl loadingTextImageCtrl;
 
     private float _loadingTime = 0.0f;
-    private float _minLoadUiShowTime = 1f;
+    [SerializeField] private float _minLoadUiShowTime = 1f;
 
     private void Start()
     {
         loadCanvas.enabled = true;
         tipCanvas.enabled = false;
         loadingCanvas.enabled = false;
+        loadingTextCanvas.enabled = false;
+        loadingKeyGuideCanvas.enabled = false;
         fadeImage.color = Color.black;
-        tipText.DOFade(0f, 0.001f);
+        tipText.DOFade(0f, 0.0f);
         loadingSlider.fillAmount = 0.0f;
     }
 
@@ -34,8 +41,12 @@ public class SceneLoadUI : MonoBehaviour
         fadeImage.DOFade(1f, 0.5f).OnComplete(()=>
         {
             loadingCanvas.enabled = true;
+            loadingTextCanvas.enabled = true;
+            loadingTextImageCtrl.Active(true);
             tipCanvas.enabled = true;
-            tipText.DOFade(1f, 0.5f);
+            loadingKeyGuideCanvas.enabled = true;
+            tipText.DOFade(0.5f, 0.5f);
+            loadingKeyGuideImage.DOFade(1.0f,0.5f);
             complete?.Invoke();
         });
     }
@@ -56,6 +67,10 @@ public class SceneLoadUI : MonoBehaviour
             tipCanvas.enabled = false;
             tipText.DOFade(0f, 0.1f);
             loadingSlider.fillAmount = 0.0f;
+            loadingKeyGuideImage.DOFade(0.0f, 0.0f);
+            loadingTextImageCtrl.Active(false);
+            loadingTextCanvas.enabled = false;
+            loadingKeyGuideCanvas.enabled = false;
 
             fadeImage.DOFade(0f, 2f).OnComplete(() => loadCanvas.enabled = false);
         }
@@ -74,8 +89,18 @@ public class SceneLoadUI : MonoBehaviour
         tipCanvas.enabled = false;
         tipText.DOFade(0f, 0.1f);
         loadingSlider.fillAmount = 0.0f;
+        loadingKeyGuideImage.DOFade(0.0f, 0.0f);
+        loadingTextCanvas.enabled = false;
+        loadingTextImageCtrl.Active(false);
+        loadingKeyGuideCanvas.enabled = false;
 
         fadeImage.DOFade(0f, 2f).OnComplete(() => loadCanvas.enabled = false);
     }
     
+
+    public void FadeScreen(float fadeTarget, float duration, Action fadeEndAction)
+    {
+        loadCanvas.enabled = true;
+        fadeImage.DOFade(fadeTarget, duration).OnComplete(() => fadeEndAction?.Invoke());
+    }
 }
