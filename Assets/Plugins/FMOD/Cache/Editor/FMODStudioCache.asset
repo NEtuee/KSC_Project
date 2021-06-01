@@ -492,7 +492,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &-8502559626191537192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -973,6 +973,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &-7597641436774788374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Amb_Ground_Inside
+  m_EditorClassIdentifier: 
+  Name: Amb_Ground_Inside
+  Min: 0
+  Max: 100
+  Default: 0
+  ID:
+    data1: 3818370342
+    data2: 3596773688
+  Exists: 1
 --- !u!114 &-7586294972627560457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1290,6 +1310,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-7054204514000082506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_Railgun_Charging/PC_Charging
+  m_EditorClassIdentifier: 
+  Name: PC_Charging
+  Min: 0
+  Max: 300
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-6946334753132765492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1353,6 +1393,30 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &-6873751934904912584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Medusa/Rim_Rotate
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Medusa/Rim_Rotate
+  guid: 0c0eea96b1cd8942b6266028c4042710
+  Banks:
+  - {fileID: -4461738846059376957}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -1262998342787676747}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 30068
 --- !u!114 &-6870347512333801082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1754,7 +1818,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_PlayerCharacter.bank
   Name: FmodBank_PlayerCharacter
   StudioPath: bank:/Player/FmodBank_PlayerCharacter
-  lastModified: 637581431393431880
+  lastModified: 637581677976347738
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1772,8 +1836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Ambient/Test_Outside
   guid: 296789b61ec28d4a99ca9de90ea1b464
-  Banks:
-  - {fileID: -4461738846059376957}
+  Banks: []
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
@@ -1801,6 +1864,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-6073700469325111837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Ground/UnderTheCliff
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Ground/UnderTheCliff
+  guid: 9ede1059566c3245b85823029c1e73ba
+  Banks:
+  - {fileID: -4461738846059376957}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 183791
 --- !u!114 &-6017769170578811136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2618,7 +2704,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Master.bank
   Name: FmodBank_Master
   StudioPath: bank:/FmodBank_Master
-  lastModified: 637581431393291850
+  lastModified: 637581677976227711
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2637,7 +2723,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/Test.bank
   Name: Test
   StudioPath: bank:/Test
-  lastModified: 637581431393471903
+  lastModified: 637581677976387749
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2840,7 +2926,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Drone.bank
   Name: FmodBank_Drone
   StudioPath: bank:/Player/FmodBank_Drone
-  lastModified: 637581431393281852
+  lastModified: 637581677976217716
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2922,7 +3008,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Ambient.bank
   Name: FmodBank_Ambient
   StudioPath: bank:/Other/FmodBank_Ambient
-  lastModified: 637581431393241838
+  lastModified: 637581677976177697
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -3484,6 +3570,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-3489192289981277029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Medusa/Vent_Side
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Medusa/Vent_Side
+  guid: 1f3d643dad6c53488edef0d1406b7392
+  Banks:
+  - {fileID: -4461738846059376957}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 10
+  MaxDistance: 150
+  Length: 90742
 --- !u!114 &-3463751573445583736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4478,6 +4587,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-1810486323943311620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Amb_Ground_Height
+  m_EditorClassIdentifier: 
+  Name: Amb_Ground_Height
+  Min: 0
+  Max: 100
+  Default: 0
+  ID:
+    data1: 3572262651
+    data2: 1179700509
+  Exists: 1
 --- !u!114 &-1774454065309946843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4918,10 +5047,30 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 1302853890307656336}
+  - {fileID: 8678050675289915745}
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &-1262998342787676747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Rim_Rotate/Rim_End
+  m_EditorClassIdentifier: 
+  Name: Rim_End
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-1226585807486451076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5625,6 +5774,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-309096956339897484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/MasterVolume
+  m_EditorClassIdentifier: 
+  Name: MasterVolume
+  Min: 0
+  Max: 100
+  Default: 100
+  ID:
+    data1: 1280667968
+    data2: 3765002864
+  Exists: 1
 --- !u!114 &-275997614803559842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5795,8 +5964,6 @@ MonoBehaviour:
   - {fileID: 7293183480586007849}
   - {fileID: -4909601498087569231}
   EditorEvents:
-  - {fileID: -6124697354610661422}
-  - {fileID: 359433898742662828}
   - {fileID: -7502257195118738623}
   - {fileID: -6580548308077522525}
   - {fileID: 8871602318181806557}
@@ -5847,12 +6014,27 @@ MonoBehaviour:
   - {fileID: 1912304522844103349}
   - {fileID: 2786761537956502606}
   - {fileID: -6946334753132765492}
-  EditorParameters: []
+  - {fileID: -6873751934904912584}
+  - {fileID: -3489192289981277029}
+  - {fileID: 3821682217511692166}
+  - {fileID: 3603159596979680491}
+  - {fileID: 2865480091455025776}
+  - {fileID: -6073700469325111837}
+  - {fileID: 3405362113008172076}
+  - {fileID: 7913819990169998061}
+  EditorParameters:
+  - {fileID: 3768884350274532078}
+  - {fileID: -7597641436774788374}
+  - {fileID: 3871294106665500781}
+  - {fileID: -1810486323943311620}
+  - {fileID: 2518384230334831542}
+  - {fileID: -309096956339897484}
+  - {fileID: 4288095774997038194}
   MasterBanks:
   - {fileID: -5021835153761381509}
   StringsBanks:
   - {fileID: 4824111326059105211}
-  stringsBankWriteTime: 637581431393301852
+  stringsBankWriteTime: 637581677976237717
   cacheVersion: 6
 --- !u!114 &12185597574904443
 MonoBehaviour:
@@ -6017,8 +6199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Ambient/Test_Inside
   guid: 94fa5d0d50793f4a8ac468759a9ec45d
-  Banks:
-  - {fileID: -4461738846059376957}
+  Banks: []
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
@@ -6619,7 +6800,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &1346752673536588182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7365,6 +7546,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &2518384230334831542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_GroundID
+  m_EditorClassIdentifier: 
+  Name: PC_GroundID
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 280802902
+    data2: 3015445898
+  Exists: 1
 --- !u!114 &2544938883847421509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7579,6 +7780,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &2865480091455025776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Ground/OnTheCliff
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Ground/OnTheCliff
+  guid: 6ca3d1d8d3c38b4f92a7539c75bf1a08
+  Banks:
+  - {fileID: -4461738846059376957}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 183791
 --- !u!114 &2967610942485791856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7907,6 +8131,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &3405362113008172076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Medusa/Vent_Ceiling
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Medusa/Vent_Ceiling
+  guid: b7c2fc20649d5c44823f051a397217ac
+  Banks:
+  - {fileID: -4461738846059376957}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 5
+  MaxDistance: 40
+  Length: 8940
 --- !u!114 &3458539373962467003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8059,6 +8306,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &3603159596979680491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Medusa/Light_Ceiling
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Medusa/Light_Ceiling
+  guid: 36d1069ff9254647b7a33358ab69374f
+  Banks:
+  - {fileID: -4461738846059376957}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
 --- !u!114 &3676363537955235769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8117,6 +8387,69 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
+  Exists: 1
+--- !u!114 &3768884350274532078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/SFXVolume
+  m_EditorClassIdentifier: 
+  Name: SFXVolume
+  Min: 0
+  Max: 100
+  Default: 100
+  ID:
+    data1: 1430903995
+    data2: 1577623729
+  Exists: 1
+--- !u!114 &3821682217511692166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Medusa/Light_Guide
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Medusa/Light_Guide
+  guid: 24807dcfee61ce49a579735705e1f5f8
+  Banks:
+  - {fileID: -4461738846059376957}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 80
+  Length: 7800
+--- !u!114 &3871294106665500781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/AmbVolume
+  m_EditorClassIdentifier: 
+  Name: AmbVolume
+  Min: 0
+  Max: 100
+  Default: 100
+  ID:
+    data1: 1637281684
+    data2: 3201562855
   Exists: 1
 --- !u!114 &3905902961858396787
 MonoBehaviour:
@@ -8536,6 +8869,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &4288095774997038194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/BGMVolume
+  m_EditorClassIdentifier: 
+  Name: BGMVolume
+  Min: 0
+  Max: 100
+  Default: 100
+  ID:
+    data1: 3436483495
+    data2: 902226675
+  Exists: 1
 --- !u!114 &4293262280704810338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8868,7 +9221,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Master.strings.bank
   Name: FmodBank_Master.strings
   StudioPath: bank:/FmodBank_Master.strings
-  lastModified: 637581431393301852
+  lastModified: 637581677976237717
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -9613,7 +9966,7 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: -8506393308229588307}
+  - {fileID: -7054204514000082506}
   MinDistance: 0
   MaxDistance: 20
   Length: 0
@@ -10504,7 +10857,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_SFX.bank
   Name: FmodBank_SFX
   StudioPath: bank:/Other/FmodBank_SFX
-  lastModified: 637581431393461896
+  lastModified: 637581677976387749
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -10939,6 +11292,29 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &7913819990169998061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/Medusa/Vent_Background
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/Medusa/Vent_Background
+  guid: eb7186875ef8884bb68aeab0ade8c664
+  Banks:
+  - {fileID: -4461738846059376957}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 51275
 --- !u!114 &7931488372552481174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11468,6 +11844,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 41476
+--- !u!114 &8678050675289915745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PC_Weapon_Fire/SoundCompressRecovery
+  m_EditorClassIdentifier: 
+  Name: SoundCompressRecovery
+  Min: 0
+  Max: 100
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &8703614079223778173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11805,7 +12201,7 @@ MonoBehaviour:
   Path: Assets/KSC_Assets/08_Audio/Bank/FmodBank_Medusa.bank
   Name: FmodBank_Medusa
   StudioPath: bank:/Mob/FmodBank_Medusa
-  lastModified: 637581431393311854
+  lastModified: 637581677976247712
   LoadResult: 0
   FileSizes: []
   Exists: 1

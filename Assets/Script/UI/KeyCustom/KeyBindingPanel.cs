@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class KeyBindingPanel : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<ImageBaseButton> imageBaseButtons = new List<ImageBaseButton>();
+
+    void Awake()
     {
-        
+        foreach(var button in imageBaseButtons)
+        {
+            button.Init();
+            button.Interactable = false;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         
