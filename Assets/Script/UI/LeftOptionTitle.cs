@@ -89,4 +89,9 @@ public class LeftOptionTitle : EscMenu
     {
         _canvas.enabled = active;
     }
+
+    public override void Init()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -84,4 +84,9 @@ public class GameOverPanel : EscMenu
     {
         throw new System.NotImplementedException();
     }
+
+    public override void Init()
+    {
+        throw new NotImplementedException();
+    }
 }

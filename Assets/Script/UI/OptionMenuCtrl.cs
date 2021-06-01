@@ -11,9 +11,10 @@ public class OptionMenuCtrl : MonoBehaviour
 {
     public enum MenuType
     {
-        Sound = 0, Control, Display, Key, Option,Tutorial,None
+        Sound = 0, Control, Display, Key, Option, Pause, Tutorial, None
     }
 
+    public Canvas escMenuCanvas;
     public Image backGroundImage;
     public LeftOptionTitle titlePanel;
     public EscMenu optionItemPanel;
@@ -21,6 +22,8 @@ public class OptionMenuCtrl : MonoBehaviour
     public MenuType CurrentMenuState => currentMenu;
 
     private EscMenu _currentPanel = null;
+    private EscMenu _prevPanel = null;
+    public EscMenu pausePanel;
     public EscMenu optionPanel;
     public EscMenu soundPanel;
     public EscMenu controlPanel;
@@ -53,6 +56,15 @@ public class OptionMenuCtrl : MonoBehaviour
 
         if (GameManager.Instance.player != null)
             GameManager.Instance.player.whenPlayerDead += () => { gameOverPanel.Active(true); };
+
+        escMenuCanvas.enabled = false;
+
+        pausePanel.Init();
+        optionPanel.Init();
+        soundPanel.Init();
+        controlPanel.Init();
+        displayPanel.Init();
+        keyBindingPanel.Init();
     }
 
     void Update()
@@ -87,22 +99,24 @@ public class OptionMenuCtrl : MonoBehaviour
         {
             case MenuType.None:
                 {
-                    currentMenu = MenuType.Option;
+                    currentMenu = MenuType.Pause;
                     GameManager.Instance.PAUSE = true;
                     if(GameManager.Instance.cameraManager != null)
                     GameManager.Instance.cameraManager.ActiveAimCamera();
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
-                    _currentPanel = optionPanel;
+                    escMenuCanvas.enabled = true;
+                    _currentPanel = pausePanel;
 
-                    backGroundImage.DOFade(0.09f, 0.3f).OnComplete(() =>
-                    {
-                        titlePanel.Appear(0.25f);
-                        optionItemPanel.Appear(0.25f);
-                    });
+                    //backGroundImage.DOFade(0.09f, 0.3f).OnComplete(() =>
+                    //{
+                    //    titlePanel.Appear(0.25f);
+                    //    optionItemPanel.Appear(0.25f);
+                    //});
+                    pausePanel.Active(true);
                 }
                 break;
-            case MenuType.Option:
+            case MenuType.Pause:
                 {
                     currentMenu = MenuType.None;
 
@@ -114,18 +128,37 @@ public class OptionMenuCtrl : MonoBehaviour
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
 
-                    titlePanel.Disappear(0.25f);
-                    optionItemPanel.Disappear(0.25f,()=>
-                    {
-                        backGroundImage.DOFade(0.0f, 0.3f).OnComplete(() =>
-                        {
-                            GameManager.Instance.PAUSE = false;
-                            if (GameManager.Instance.cameraManager != null)
-                                GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
-                        });
-                    });
-                    
+                    GameManager.Instance.PAUSE = false;
+                    if (GameManager.Instance.cameraManager != null)
+                        GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+                    //titlePanel.Disappear(0.25f);
+                    //optionItemPanel.Disappear(0.25f,()=>
+                    //{
+                    //    backGroundImage.DOFade(0.0f, 0.3f).OnComplete(() =>
+                    //    {
+                    //        GameManager.Instance.PAUSE = false;
+                    //        if (GameManager.Instance.cameraManager != null)
+                    //            GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+                    //    });
+                    //});
+                    pausePanel.Active(false);
+                    escMenuCanvas.enabled = false;
+
                     WhenCloseOption?.Invoke();
+                }
+                break;
+            case MenuType.Option:
+                {
+                    currentMenu = MenuType.Pause;
+                    optionPanel.Active(false);
+                    pausePanel.Active(true);
+                }
+                break;
+            case MenuType.Tutorial:
+                {
+                    currentMenu = MenuType.Pause;
+                    tutorialPanel.Active(false);
+                    pausePanel.Active(true);
                 }
                 break;
             default:
@@ -140,7 +173,9 @@ public class OptionMenuCtrl : MonoBehaviour
     {
         //Debug.Log("OptionChange");
         currentMenu = (MenuType)menuType;
-        EscMenu prevPanel = _currentPanel;
+        _prevPanel = _currentPanel;
+        _prevPanel.Active(false);
+        
         switch ((MenuType)menuType)
         {
             case MenuType.Sound:
@@ -158,14 +193,14 @@ public class OptionMenuCtrl : MonoBehaviour
             case MenuType.Option:
                 _currentPanel = optionPanel;
                 break;
+            case MenuType.Pause:
+                _currentPanel = pausePanel;
+                break;
             case MenuType.Tutorial:
                 _currentPanel = tutorialPanel;
                 break;
         }
-        titlePanel.ChangeOption((MenuType)menuType, () => {
-            prevPanel.Active (false);
-            _currentPanel.Active (true);
-        }, 1f);
+        _currentPanel.Active(true);
     }
 
     public bool TutorialEvent(string key)

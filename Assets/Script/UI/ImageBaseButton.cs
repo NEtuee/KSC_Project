@@ -19,6 +19,8 @@ public class ImageBaseButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public UnityEvent onSelect;
     public UnityEvent onRelease;
     public UnityEvent onClick;
+    public UnityEvent onEnter;
+    public UnityEvent onExit;
 
     public bool Interactable { get => interactable; set => interactable = value; }
     public bool Selected
@@ -48,6 +50,7 @@ public class ImageBaseButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
             return;
 
         baseImage.sprite = selectedImage;
+        onEnter?.Invoke();
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -56,6 +59,7 @@ public class ImageBaseButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
             return;
 
         baseImage.sprite = defaultImage;
+        onExit?.Invoke();
     }
 
     public void OnPointerClick(PointerEventData pointerEventData)
