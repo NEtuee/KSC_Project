@@ -78,6 +78,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float rotateSpeed = 6.0f;
     [Range(0, 5)] [SerializeField] private float fallingControlSensitive = 1f;
     [SerializeField] private float horizonWeight = 0.0f;
+    public float HorizonWeight => horizonWeight;
     [SerializeField] private float rotAngle = 0.0f;
     [SerializeField] private float airRotateSpeed = 2.5f;
 
@@ -211,6 +212,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private FMODUnity.StudioEventEmitter _charge;
 
+    private int _transformCount = 0;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -255,12 +258,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         StartCoroutine(StopCheck());
     }
 
+    int ground = 0;
     void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.L))
-        //{
-        //    AddJumpPower(10f);
-        //}
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            ground = ++ground >= 3 ? 0 : ground;
+            GameManager.Instance.soundManager.SetGlobalParam(5,ground);
+        }
+
         if (InputManager.Instance.GetInput(KeybindingActions.Option) && dead == false)
         {
             GameManager.Instance.optionMenuCtrl.InputEsc();
@@ -432,15 +438,22 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 if (limit)
                 {
                     if(_charge == null)
-                        _charge = GameManager.Instance.soundManager.Play(1013, Vector3.zero, transform);
+                        _charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
                     
                     chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
                     
-                    GameManager.Instance.soundManager.SetParam(1013,10131,(chargeTime.Value / 3f) * 100f);
+                    GameManager.Instance.soundManager.SetParam(1013,10131,(chargeTime.Value) * 100f);
 
                     gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
+
+                    if(_transformCount < (int)chargeTime.Value)
+                    {
+                        GameManager.Instance.soundManager.Play(1019 + _transformCount, Vector3.up, transform);
+                        _transformCount = (int)chargeTime.Value;
+
+                    }
                 }
 
                 InputChargeShot();
@@ -1204,7 +1217,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public void ClimbingSound()
     {
-        GameManager.Instance.soundManager.Play(1006, Vector3.zero, transform);
+        GameManager.Instance.soundManager.Play(1006, Vector3.up, transform);
     }
 
     public void ChangeState(PlayerState changeState)
@@ -1235,7 +1248,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 if (changeState == PlayerState.Default)
                 {
-                    GameManager.Instance.soundManager.Play(1004, Vector3.zero, transform);
+                    GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
                 }
             }
                 break;
@@ -1332,13 +1345,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.TurnBack:
             {
                 animator.applyRootMotion = true;
-                GameManager.Instance.soundManager.Play(1002, Vector3.zero, transform);
+                GameManager.Instance.soundManager.Play(1018, Vector3.up, transform);
                 animator.SetTrigger("TurnBack");
             }
                 break;
             case PlayerState.RunToStop:
             {
                 animator.applyRootMotion = true;
+
+                GameManager.Instance.soundManager.Play(1002, Vector3.up, transform);
                 if (currentSpeed > walkSpeed)
                 {
                     animator.SetTrigger("FastStop");
@@ -1382,6 +1397,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 footIK.DisableFeetIk();
                 drone.OrderAimHelp(true);
                 activeAimEvent?.Invoke();
+                _transformCount = 0;
             }
                 break;
             case PlayerState.HangEdge:
@@ -1404,7 +1420,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 climbingJumpStartTime = Time.time;
                 
-                GameManager.Instance.soundManager.Play(1007, Vector3.zero, transform);
+                GameManager.Instance.soundManager.Play(1007, Vector3.up, transform);
 
                 if (climbingJumpDirection == ClimbingJumpDirection.Left ||
                     climbingJumpDirection == ClimbingJumpDirection.Right)
@@ -1481,6 +1497,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 loadTime = 0.0f;
                 animator.SetFloat("Speed", 0.0f);
+                InitVelocity();
 
                 if (prevState == PlayerState.Ragdoll)
                 {
@@ -1934,8 +1951,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //if (InputManager.Instance.GetAction(KeybindingActions.EMPAim))
         if (InputManager.Instance.GetInput(KeybindingActions.EMPAim))
         {
-            GameManager.Instance.soundManager.Play(1008, Vector3.zero, transform);
-            _charge = GameManager.Instance.soundManager.Play(1013, Vector3.zero, transform);
+            GameManager.Instance.soundManager.Play(1008, Vector3.up, transform);
+            _charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
             ChangeState(PlayerState.Aiming);
             ActiveAim(true);
             playerPelvisGunObject.SetActive(false);
@@ -1950,7 +1967,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //if (InputManager.Instance.GetAction(KeybindingActions.EMPAimRelease))
         if (InputManager.Instance.GetRelease(KeybindingActions.EMPAim))
         {
-            GameManager.Instance.soundManager.Play(1009, Vector3.zero, transform);
+            GameManager.Instance.soundManager.Play(1009, Vector3.up, transform);
 
             if(_charge != null)
                 _charge.Stop();
@@ -1991,17 +2008,17 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             }
 
-            GameManager.Instance.soundManager.Play(1010, Vector3.zero, transform);
-            GameManager.Instance.soundManager.Play(1011, Vector3.zero, transform);
-
             int loadCount = (int) (chargeTime.Value);
             loadCount = loadCount > 3 ? 3 : loadCount;
+            _transformCount = 0;
 
             empGun.LaunchLaser(loadCount * 40.0f);
             chargeTime.Value = 0.0f;
             energy.Value -= loadCount * costValue;
             GameManager.Instance.cameraManager.SetAimCameraDistance(0.333f * (float) loadCount);
             _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, chargeDelayTime);
+
+            GameManager.Instance.soundManager.Play(1009 + loadCount, Vector3.up, transform);
 
             if (loadCount >= 2)
             {
@@ -2369,9 +2386,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public override void InitStatus()
     {
+        Debug.Log("Player InitStatus");
         base.InitStatus();
         hpPackCount.Value = 0;
         ragdoll.ResetRagdoll();
+        rigidbody.velocity = Vector3.zero;
+        footIK.InitPelvisHeight();
         dead = false;
         ChangeState(PlayerState.Default);
     }

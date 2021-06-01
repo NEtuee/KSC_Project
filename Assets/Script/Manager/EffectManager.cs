@@ -15,6 +15,7 @@ public class EffectManager : MonoBehaviour
             ParticlePool particlePool = gameObject.AddComponent<ParticlePool>();
             particlePool.baseObject = particlePairReference.pairs[i].particle;
             particlePool.Init();
+            particlePool.Active(new Vector3(10000.0f,10000.0f,10000.0f), Quaternion.identity);
             _particleDic.Add(particlePairReference.pairs[i].key,particlePool);
         }
     }

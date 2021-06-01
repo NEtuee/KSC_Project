@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EMPBomb : MonoBehaviour
 {
+    public Material scanMat;
     public EMPShield shield;
     public Rigidbody rig;
     public LayerMask targetLayer;
@@ -46,6 +47,11 @@ public class EMPBomb : MonoBehaviour
             }
         }
 
+    }
+
+    public void ChangeMaterial()
+    {
+        GetComponent<MeshRenderer>().material = scanMat;
     }
 
     public void FixedUpdate()

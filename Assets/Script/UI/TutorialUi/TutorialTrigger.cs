@@ -7,6 +7,7 @@ public class TutorialTrigger : MonoBehaviour
 {
     public string key;
     public bool isOver = false;
+    public TutorialType tutorialType;
     private OptionMenuCtrl _uiManager;
     
     void Start()
@@ -39,9 +40,10 @@ public class TutorialTrigger : MonoBehaviour
         
         if (other.CompareTag("Player") == false)
             return;
-        
-        if (_uiManager.TutorialEvent(key) == false)
-            return;
+
+        //if (_uiManager.TutorialEvent(key) == false)
+        //    return;
+        _uiManager.InGameTutorial(tutorialType);
         
         isOver = true;
         gameObject.SetActive(false);

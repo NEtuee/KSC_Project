@@ -86,6 +86,11 @@ public class IKPathFollowBossBase : IKBossBase
         _targetDirection = Vector3.ProjectOnPlane(direction,transform.up).normalized;
     }
 
+    public void SetStartPointToTarget()
+    {
+        _targetTransform = _currentPath.GetPoint(0).transform;
+    }
+
     public void SetNearestPointToTarget()
     {
         _targetTransform = _currentPath.FindNearestPoint(transform.position,out _targetPoint).transform;
