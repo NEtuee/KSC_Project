@@ -322,6 +322,5 @@ public class PlayerAnimCtrl : MonoBehaviour
     private void EndGetUp()
     {
         GameManager.Instance.PauseControl(false);
-
     }
 }

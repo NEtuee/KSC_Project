@@ -2377,7 +2377,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             time += Time.fixedDeltaTime;
             hp.Value += hpPackRestoreValue * Time.fixedDeltaTime;
             hp.Value = Mathf.Clamp(hp.Value, 0.0f, 100.0f);
-
+            
             yield return new WaitForFixedUpdate();
         }
 
