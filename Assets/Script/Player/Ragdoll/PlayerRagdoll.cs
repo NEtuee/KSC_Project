@@ -295,7 +295,7 @@ public class PlayerRagdoll : MonoBehaviour
         //    rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
         //}
     }
-
+    
     public void SetPlayerShock(float time)
     {
         _timeCounter.InitTimer("shockProgress", 0f, time);
