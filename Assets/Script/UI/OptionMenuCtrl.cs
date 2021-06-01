@@ -50,14 +50,19 @@ public class OptionMenuCtrl : MonoBehaviour
     public bool CurrentTutorial { get => _currentTutorial; set { _currentTutorial = value; }}
     void Start()
     {
-        Color color=backGroundImage.color;
-        color.a = 0;
-        backGroundImage.color = color;
+        if (backGroundImage != null)
+        {
+            Color color = backGroundImage.color;
+            color.a = 0;
+            backGroundImage.color = color;
+        }
 
         if (GameManager.Instance.player != null)
             GameManager.Instance.player.whenPlayerDead += () => { gameOverPanel.Active(true); };
 
         escMenuCanvas.enabled = false;
+
+        currentMenu = MenuType.None;
 
         pausePanel.Init();
         optionPanel.Init();
