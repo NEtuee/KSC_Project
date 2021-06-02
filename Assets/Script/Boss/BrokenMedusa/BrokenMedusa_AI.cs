@@ -633,8 +633,6 @@ public class BrokenMedusa_AI : IKBossBase
                 return;
             }
 
-            Debug.Log("Check");
-
 
             var upDist = MathEx.distance(transform.position.y, _target.position.y);
 
