@@ -868,7 +868,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void ProcessFixedUpdate()
     {
-        animator.SetBool("IsGround", movement.isGrounded);
+          animator.SetBool("IsGround", pressJump == false ? movement.isGrounded : false);
 
         switch (state)
         {

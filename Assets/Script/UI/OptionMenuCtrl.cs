@@ -6,13 +6,13 @@ using DG.Tweening;
 using UnityEngine.Events;
 
 public enum TutorialType { Climbing, Move, Special, Scan, Emp}
+public enum MenuType
+{
+    Sound = 0, Control, Display, Key, Option, Pause, Tutorial, None
+}
 
 public class OptionMenuCtrl : MonoBehaviour
 {
-    public enum MenuType
-    {
-        Sound = 0, Control, Display, Key, Option, Pause, Tutorial, None
-    }
 
     public Canvas escMenuCanvas;
     public Image backGroundImage;
