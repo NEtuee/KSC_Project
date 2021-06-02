@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public abstract class DroneHelper : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public abstract class DroneHelper : MonoBehaviour
         root.timer.InitTimer("ScanCheckTimer");
         root.timer.InitTimer("LevelTimer");
         sceneStartTime = Time.time;
+
+        root.drone.whenCompleteRespawn = null;
     }
 
     public void InitHelper(DroneHelperRoot root)

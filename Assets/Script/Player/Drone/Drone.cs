@@ -72,6 +72,8 @@ public class Drone : MonoBehaviour
     public WhenAimHelp whenAimHelp;
     public delegate void WhenHelp();
     public WhenAimHelp whenHelp;
+    public delegate void WhenCompleteRespawn();
+    public WhenCompleteRespawn whenCompleteRespawn;
 
     // Start is called before the first frame update
     void Start()
@@ -476,5 +478,7 @@ public class Drone : MonoBehaviour
         _targetPosition = (target.forward * respawnOffset.z + target.right * respawnOffset.x + Vector3.up * respawnOffset.y) + target.position;
         _finalTargetPosition = _targetPosition;
         transform.position = _finalTargetPosition;
+
+        whenCompleteRespawn?.Invoke();
     }
 }
