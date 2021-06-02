@@ -295,7 +295,7 @@ public class PlayerRagdoll : MonoBehaviour
         //    rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
         //}
     }
-
+    
     public void SetPlayerShock(float time)
     {
         _timeCounter.InitTimer("shockProgress", 0f, time);
@@ -576,6 +576,9 @@ public class PlayerRagdoll : MonoBehaviour
 
         player.InitVelocity();
         ActiveRagdoll(false);
+
+        foreach(var effect in lightningEffect)
+            effect.SetActive(false);
     }
 
     public void ResetRagdoll()

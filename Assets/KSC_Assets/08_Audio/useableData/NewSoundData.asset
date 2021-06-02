@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
   m_Name: NewSoundData
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 09a0e434ecf442546bea0ef4c03ba3b0, type: 3}
+  csvData: {fileID: 4900000, guid: 8afd59fbeaf9e4d4fb2683b4c7df896d, type: 3}
   soundData:
   - path: global data
     id: 0
@@ -38,6 +38,14 @@ MonoBehaviour:
       id: 5
       min: 0
       max: 3
+    - name: Amb_Ground_Height
+      id: 6
+      min: 0
+      max: 100
+    - name: Amb_Ground_Inside
+      id: 7
+      min: 0
+      max: 100
   - path: event:/PlayerCharacter/Movement/PC_Jogging
     id: 1000
     type: SFX
@@ -216,6 +224,30 @@ MonoBehaviour:
     parameters: []
   - path: event:/Ambient/Test_Outside
     id: 1703
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Medusa/Vent_Side
+    id: 2000
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Medusa/Vent_Ceiling
+    id: 2001
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Medusa/Vent_Background
+    id: 2002
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Medusa/Light_Guide
+    id: 2003
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Ground/UnderTheCliff
+    id: 2006
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Ground/OnTheCliff
+    id: 2007
     type: AMB
     parameters: []
   - path: snapshot:/Global_Option/MasterVolume
