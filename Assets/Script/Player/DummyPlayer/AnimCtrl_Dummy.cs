@@ -72,6 +72,11 @@ public class AnimCtrl_Dummy : MonoBehaviour
         owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
     }
 
+    private void GetupSound()
+    {
+        GameManager.Instance.soundManager.Play(1017,Vector3.up,transform);
+    }
+
     private void JogFootStep(int left)
     {
         Vector3 footStepPosition;
