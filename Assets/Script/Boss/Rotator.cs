@@ -16,10 +16,11 @@ public class Rotator : MonoBehaviour
     private List<SubRotator> _subRotators;
     private List<Rigidbody> _bodys = new List<Rigidbody>();
 
-    private Vector3 _speed;
+    public Vector3 _speed;
     private float _startFactor = 0f;
 
     private bool _start = false;
+    public bool _stopMove = false;
 
     public void Start()
     {
@@ -54,12 +55,26 @@ public class Rotator : MonoBehaviour
         {
             if(lerpSpeed)
             {
-                _speed += lerpFactor * speed.normalized * Time.deltaTime;
-                if(_speed.magnitude >= speed.magnitude)
+                if(!_stopMove)
                 {
-                    _speed = speed;
-                    lerpSpeed = false;
+                    _speed += lerpFactor * speed.normalized * Time.deltaTime;
+                    if(_speed.magnitude >= speed.magnitude)
+                    {
+                        _speed = speed;
+                        lerpSpeed = false;
+                    }
                 }
+                else
+                {
+                    _speed -= lerpFactor * speed.normalized * Time.deltaTime;
+                    var angle = Vector3.Angle(_speed,speed);
+                    if(angle >= 160f)
+                    {
+                        _speed = Vector3.zero;;
+                        lerpSpeed = false;
+                    }
+                }
+                
             }
 
             transform.rotation *= Quaternion.Euler(_speed * Time.deltaTime);
@@ -97,12 +112,26 @@ public class Rotator : MonoBehaviour
         {
             if(lerpSpeed)
             {
-                _speed += lerpFactor * speed.normalized * Time.fixedDeltaTime;
-                if(_speed.magnitude >= speed.magnitude)
+                if(!_stopMove)
                 {
-                    _speed = speed;
-                    lerpSpeed = false;
+                    _speed += lerpFactor * speed.normalized * Time.fixedDeltaTime;
+                    if(_speed.magnitude >= speed.magnitude)
+                    {
+                        _speed = speed;
+                        lerpSpeed = false;
+                    }
                 }
+                else
+                {
+                    _speed -= lerpFactor * speed.normalized * Time.fixedDeltaTime;
+                    var angle = Vector3.Angle(_speed,speed);
+                    if(angle >= 160f)
+                    {
+                        _speed = Vector3.zero;;
+                        lerpSpeed = false;
+                    }
+                }
+                
             }
 
             transform.rotation *= Quaternion.Euler(_speed * Time.fixedDeltaTime);
@@ -129,6 +158,11 @@ public class Rotator : MonoBehaviour
             rig.AddTorque(MathEx.RandomVector3(-50f,50f,-50f,50f,-50f,50f));
             //rig.AddForce(MathEx.RandomVector3(0f,10f,0f,10f,0f,10f));
         }
+    }
+
+    public void SetStopMove(bool value)
+    {
+        _stopMove = value;
     }
 
     public void AddGravity(float deltaTime)

@@ -51,9 +51,20 @@ public class FloorControl : MonoBehaviour
         }
     }
 
+    public void StopMove()
+    {
+        foreach(var floor in floors)
+        {
+            floor.lerpSpeed = true;
+            floor.SetStopMove(true);
+        }
+    }
 
     public void Launch()
     {
+        if(_launch)
+            return;
+
         _launch = true;
         foreach(var floor in floors)
         {

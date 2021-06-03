@@ -102,6 +102,11 @@ public class IKLegMovement : MonoBehaviour
             }
         }
 
+        if(!_isMove && !oppositeLeg.isMove)
+        {
+            moving = false;
+        }
+
         if(_isMove)
         {
             _timer += legSpeed * Time.deltaTime;
