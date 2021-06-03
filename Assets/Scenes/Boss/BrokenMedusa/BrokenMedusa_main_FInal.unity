@@ -355,6 +355,9 @@ MonoBehaviour:
   speed: {x: 0, y: -17, z: 0}
   play: 0
   fall: 0
+  lerpSpeed: 0
+  lerpFactor: 0.1
+  startFactor: 1
 --- !u!4 &48263682
 Transform:
   m_ObjectHideFlags: 0
@@ -1079,6 +1082,9 @@ MonoBehaviour:
   speed: {x: 0, y: 16, z: 0}
   play: 1
   fall: 0
+  lerpSpeed: 0
+  lerpFactor: 0.1
+  startFactor: 1
 --- !u!4 &112422671
 Transform:
   m_ObjectHideFlags: 0
@@ -1162,6 +1168,9 @@ MonoBehaviour:
   speed: {x: 0, y: -8, z: 0}
   play: 0
   fall: 0
+  lerpSpeed: 0
+  lerpFactor: 0.1
+  startFactor: 1
 --- !u!4 &129409460
 Transform:
   m_ObjectHideFlags: 0
@@ -7561,6 +7570,9 @@ MonoBehaviour:
   speed: {x: 0, y: 5, z: 0}
   play: 0
   fall: 0
+  lerpSpeed: 0
+  lerpFactor: 0.1
+  startFactor: 1
 --- !u!4 &637890813
 Transform:
   m_ObjectHideFlags: 0
@@ -11493,6 +11505,9 @@ MonoBehaviour:
   speed: {x: 0, y: 12, z: 0}
   play: 0
   fall: 0
+  lerpSpeed: 0
+  lerpFactor: 0.1
+  startFactor: 1
 --- !u!4 &925096771
 Transform:
   m_ObjectHideFlags: 0
@@ -15452,6 +15467,9 @@ MonoBehaviour:
   speed: {x: 0, y: -10, z: 0}
   play: 0
   fall: 0
+  lerpSpeed: 0
+  lerpFactor: 0.1
+  startFactor: 1
 --- !u!1 &1174603156
 GameObject:
   m_ObjectHideFlags: 0
@@ -20329,6 +20347,9 @@ MonoBehaviour:
   speed: {x: 0, y: 15, z: 0}
   play: 0
   fall: 0
+  lerpSpeed: 0
+  lerpFactor: 0.1
+  startFactor: 1
 --- !u!4 &1312505311
 Transform:
   m_ObjectHideFlags: 0
@@ -21826,6 +21847,7 @@ MonoBehaviour:
   - {fileID: 1469768138}
   - {fileID: 637890812}
   firstPosition: {x: 0, y: -2, z: 0}
+  positionning: 0
   _launch: 0
 --- !u!1 &1444044955
 GameObject:
@@ -23096,6 +23118,9 @@ MonoBehaviour:
   speed: {x: 0, y: -10, z: 0}
   play: 0
   fall: 0
+  lerpSpeed: 0
+  lerpFactor: 0.1
+  startFactor: 1
 --- !u!4 &1469768139
 Transform:
   m_ObjectHideFlags: 0
@@ -31798,6 +31823,54 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1609418148}
+        m_TargetAssemblyTypeName: BrokenMedusa_AI, Assembly-CSharp
+        m_MethodName: SetPlayerRunningLock
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1609418148}
+        m_TargetAssemblyTypeName: BrokenMedusa_AI, Assembly-CSharp
+        m_MethodName: SetAimLock
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1609418148}
+        m_TargetAssemblyTypeName: BrokenMedusa_AI, Assembly-CSharp
+        m_MethodName: SetCameraZoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1609418148}
+        m_TargetAssemblyTypeName: BrokenMedusa_AI, Assembly-CSharp
+        m_MethodName: SetCamTargetToThis
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   triggerExitEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -31832,7 +31905,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919849454}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.56, y: -2.45, z: 57.31}
+  m_LocalPosition: {x: 0.56, y: -2.45, z: 20.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -33176,6 +33249,9 @@ MonoBehaviour:
   speed: {x: 15, y: 15, z: 15}
   play: 1
   fall: 0
+  lerpSpeed: 0
+  lerpFactor: 0.1
+  startFactor: 1
 --- !u!4 &2006275393
 Transform:
   m_ObjectHideFlags: 0

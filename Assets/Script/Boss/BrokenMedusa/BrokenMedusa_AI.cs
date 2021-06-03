@@ -334,11 +334,16 @@ public class BrokenMedusa_AI : IKBossBase
             if(!IsPlaying(0,"Anim_Medusa_Box_Open"))
             {
                 SetIKActive(true);
-                ChangeState(State.SearchScan);
+                ChangeState(State.LockOnLook);
 
                 animatorControll.SetLayerWeight(1,1f);
                 animatorControll.SetLayerWeight(2,1f);
                 MainAnimationPlay(3);
+
+                SetPlayerRunningLock(false);
+                SetAimLock(false);
+                SetCameraDefault();
+                SetCamTargetToNull();
                 //animationControll.Play("Anim_Medusa_Finding");
             }
             // if(!animationControll.isPlaying)
@@ -352,6 +357,11 @@ public class BrokenMedusa_AI : IKBossBase
         {
             if(CenterMove(deltaTime))
             {
+                SetPlayerRunningLock(false);
+                SetAimLock(false);
+                SetCameraDefault();
+                SetCamTargetToNull();
+
                 ChangeState(State.LockOnLook);
             }
         }
@@ -543,6 +553,10 @@ public class BrokenMedusa_AI : IKBossBase
 
             _timeCounter.InitTimer("scanTime",0f,2f);
         }
+        else if(currentState == State.TransformIdle)
+        {
+            ChangeState(State.TransformOpen);
+        }
     }
 
     public void FrontMoveProgress(float deltaTime)
@@ -715,6 +729,38 @@ public class BrokenMedusa_AI : IKBossBase
         //         }
         //     }
         // }
+    }
+
+    public void SetCameraDefault()
+    {
+        GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+    }
+
+    public void SetCameraZoom()
+    {
+        GameManager.Instance.cameraManager.ActiveLookAtCamera();
+    }
+
+    public void SetPlayerRunningLock(bool value)
+    {
+        var player = GameManager.Instance.player as PlayerCtrl_Ver2;
+        player.SetRunningLock(value);
+    }
+
+    public void SetAimLock(bool value)
+    {
+        var player = GameManager.Instance.player as PlayerCtrl_Ver2;
+        player.SetAimLock(value);
+    }
+
+    public void SetCamTargetToNull()
+    {
+        GameManager.Instance.cameraManager.SetLookAtCameraTarget(null);
+    }
+
+    public void SetCamTargetToThis()
+    {
+        GameManager.Instance.cameraManager.SetLookAtCameraTarget(transform);
     }
 
     public void LineMove(float deltaTime)

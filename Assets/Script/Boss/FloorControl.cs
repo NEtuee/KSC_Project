@@ -6,17 +6,23 @@ public class FloorControl : MonoBehaviour
 {
     public List<Rotator> floors = new List<Rotator>();
     public Vector3 firstPosition;
+
+    public bool positionning = false;
     private List<Vector3> origins = new List<Vector3>();
 
     public bool _launch = false;
 
     public void Start()
     {
-        for(int i = 0; i < floors.Count; ++i)
+        if(positionning)
         {
-            origins.Add(floors[i].transform.position);
-            floors[i].transform.position = firstPosition;
+            for(int i = 0; i < floors.Count; ++i)
+            {
+                origins.Add(floors[i].transform.position);
+                floors[i].transform.position = firstPosition;
+            }
         }
+        
     }
 
     public void Update()
@@ -26,10 +32,14 @@ public class FloorControl : MonoBehaviour
 
         if (_launch)
         {
-            for(int i = 0; i < floors.Count; ++i)
+            if(positionning)
             {
-                floors[i].transform.position = Vector3.Slerp(floors[i].transform.position,origins[i],0.01f);
+                for(int i = 0; i < floors.Count; ++i)
+                {
+                    floors[i].transform.position = Vector3.Slerp(floors[i].transform.position,origins[i],0.01f);
+                }
             }
+            
         }
     }
 

@@ -88,13 +88,13 @@ public class IKLegMovement : MonoBehaviour
             _targetPosition = hit.point + (hit.normal * ikHeight);
             _targetRotation = Quaternion.LookRotation(hit.normal);
 
-            moving = true;
             if(dist >= limitDistance && !_isMove && !oppositeLeg.isMove)
             {
                 bool moveCheck = (firstMove || (oppositeLeg.firstMove == firstMove)) || oppositeLeg.moving;
                 if (moveCheck)
                 {
                     _isMove = true;
+                    moving = true;
                     _stratPosition = ik.position;
                     _startRotation = ik.rotation;
                 }

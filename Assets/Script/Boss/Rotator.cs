@@ -5,14 +5,28 @@ using UnityEngine;
 public class Rotator : MonoBehaviour
 {
     public Vector3 speed;
+
     public bool play = true;
     public bool fall = false;
+    public bool lerpSpeed = false;
+
+    public float lerpFactor = 1f;
+    public float startFactor = 0f;
+
     private List<SubRotator> _subRotators;
     private List<Rigidbody> _bodys = new List<Rigidbody>();
+
+    private Vector3 _speed;
+    private float _startFactor = 0f;
+
+    private bool _start = false;
+
     public void Start()
     {
         _subRotators = new List<SubRotator>(transform.GetComponentsInChildren<SubRotator>(false));
         _bodys = new List<Rigidbody>(transform.GetComponentsInChildren<Rigidbody>(false));
+
+        _speed = lerpSpeed ? Vector3.zero : speed;
     }
 
     public void Update()
@@ -23,9 +37,32 @@ public class Rotator : MonoBehaviour
         if (GameManager.Instance.PAUSE == true)
             return;
 
+        if(play && !_start)
+        {
+            _startFactor += Time.deltaTime;
+            if(_startFactor >= startFactor)
+            {
+                _start = true;
+            }
+            else
+            {
+                return;
+            }
+        }
+
         if (play)
         {
-            transform.rotation *= Quaternion.Euler(speed * Time.deltaTime);
+            if(lerpSpeed)
+            {
+                _speed += lerpFactor * speed.normalized * Time.deltaTime;
+                if(_speed.magnitude >= speed.magnitude)
+                {
+                    _speed = speed;
+                    lerpSpeed = false;
+                }
+            }
+
+            transform.rotation *= Quaternion.Euler(_speed * Time.deltaTime);
             RotateSubRotators(Time.deltaTime);
         }
 
@@ -43,9 +80,32 @@ public class Rotator : MonoBehaviour
         if (GameManager.Instance.PAUSE == true)
             return;
 
+        if(play && !_start)
+        {
+            _startFactor += Time.fixedDeltaTime;
+            if(_startFactor >= startFactor)
+            {
+                _start = true;
+            }
+            else
+            {
+                return;
+            }
+        }
+
         if (play)
         {
-            transform.rotation *= Quaternion.Euler(speed * Time.fixedDeltaTime);
+            if(lerpSpeed)
+            {
+                _speed += lerpFactor * speed.normalized * Time.fixedDeltaTime;
+                if(_speed.magnitude >= speed.magnitude)
+                {
+                    _speed = speed;
+                    lerpSpeed = false;
+                }
+            }
+
+            transform.rotation *= Quaternion.Euler(_speed * Time.fixedDeltaTime);
             RotateSubRotators(Time.fixedDeltaTime);
         }
 
