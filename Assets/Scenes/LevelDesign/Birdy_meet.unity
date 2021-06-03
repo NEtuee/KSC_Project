@@ -2351,6 +2351,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 980238331}
+        m_TargetAssemblyTypeName: DroneHelper_Birdy, Assembly-CSharp
+        m_MethodName: Lever3
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   whenHit:
     m_PersistentCalls:
       m_Calls: []
@@ -14832,7 +14844,19 @@ MonoBehaviour:
       m_Calls: []
   whenScanned:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 980238331}
+        m_TargetAssemblyTypeName: DroneHelper_Birdy, Assembly-CSharp
+        m_MethodName: Lever2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   destroyEffect: {fileID: 1994668523941644695, guid: b053d268fd4f0ff4d8dc691f6a14ce8a,
     type: 3}
   isCore: 0
@@ -26861,6 +26885,92 @@ Transform:
   m_Father: {fileID: 1714454868}
   m_RootOrder: 97
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!1 &608890869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 608890870}
+  - component: {fileID: 608890872}
+  - component: {fileID: 608890871}
+  m_Layer: 0
+  m_Name: Birdy_Meet_Scan
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &608890870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608890869}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.09, y: 51.14, z: -47.89}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 980238332}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &608890871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608890869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8565ab475c4f7674b963f2ed061a2f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerType: 0
+  triggerEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 980238331}
+        m_TargetAssemblyTypeName: DroneHelper_Birdy, Assembly-CSharp
+        m_MethodName: Scan1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  afterTriggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  isTriggered: 0
+  collisionTrigger: 1
+  reloadTime: 0
+  afterTriggerTime: 0
+--- !u!65 &608890872
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608890869}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 22.619953, y: 9.150238, z: 4.4266796}
+  m_Center: {x: 3.361065, y: 1.1387062, z: 1.7133398}
 --- !u!1 &617379509
 GameObject:
   m_ObjectHideFlags: 0
@@ -28719,7 +28829,7 @@ PrefabInstance:
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
       propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
@@ -28729,6 +28839,11 @@ PrefabInstance:
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
       propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
+        type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
@@ -28743,12 +28858,22 @@ PrefabInstance:
       objectReference: {fileID: 1207066138}
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 980238331}
+    - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
+        type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
       propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
+        type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
@@ -28763,6 +28888,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Scan2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
+        type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: ObjectActivator, Assembly-CSharp
       objectReference: {fileID: 0}
@@ -28773,12 +28903,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: DroneHelper_Birdy, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
+        type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
       propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
+        type: 3}
+      propertyPath: whenScanned.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2415251833704064409, guid: 5d864589129a8274abb22f5bd23dcfe1,
@@ -41292,6 +41432,92 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 50
   m_LocalEulerAnglesHint: {x: 7.088, y: -177.971, z: 7.995}
+--- !u!1 &868865455
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 868865456}
+  - component: {fileID: 868865458}
+  - component: {fileID: 868865457}
+  m_Layer: 0
+  m_Name: Birdy_Meet_Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &868865456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868865455}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.71, y: 51.14, z: -30.87}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 980238332}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &868865457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868865455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8565ab475c4f7674b963f2ed061a2f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerType: 0
+  triggerEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 980238331}
+        m_TargetAssemblyTypeName: DroneHelper_Birdy, Assembly-CSharp
+        m_MethodName: Meet
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  afterTriggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  isTriggered: 0
+  collisionTrigger: 1
+  reloadTime: 0
+  afterTriggerTime: 0
+--- !u!65 &868865458
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868865455}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 17.910746, y: 9.150238, z: 4.4266796}
+  m_Center: {x: 3.3975534, y: 1.1387062, z: 1.7133398}
 --- !u!43 &870319676
 Mesh:
   m_ObjectHideFlags: 0
@@ -45223,6 +45449,59 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &980238330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 980238332}
+  - component: {fileID: 980238331}
+  m_Layer: 0
+  m_Name: DroneSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &980238331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980238330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cf33070b21614b4397eb0a14144b9cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  meet: 0
+  scan1: 0
+  scan2: 0
+  lever1: 0
+  lever2: 0
+  lever3: 0
+--- !u!4 &980238332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980238330}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 868865456}
+  - {fileID: 608890870}
+  - {fileID: 1663004595}
+  m_Father: {fileID: 0}
+  m_RootOrder: 65
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &992080459
 Mesh:
   m_ObjectHideFlags: 0
@@ -76147,6 +76426,92 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1663004594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1663004595}
+  - component: {fileID: 1663004597}
+  - component: {fileID: 1663004596}
+  m_Layer: 0
+  m_Name: Birdy_Meet_Lever1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1663004595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663004594}
+  m_LocalRotation: {x: -0, y: -0.70395947, z: -0, w: 0.7102402}
+  m_LocalPosition: {x: -41.1, y: 52.51, z: -122.92}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 980238332}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: -89.491, z: 0}
+--- !u!114 &1663004596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663004594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8565ab475c4f7674b963f2ed061a2f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerType: 0
+  triggerEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 980238331}
+        m_TargetAssemblyTypeName: DroneHelper_Birdy, Assembly-CSharp
+        m_MethodName: Lever1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  afterTriggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  isTriggered: 0
+  collisionTrigger: 1
+  reloadTime: 0
+  afterTriggerTime: 0
+--- !u!65 &1663004597
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663004594}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 22.619953, y: 14.035805, z: 4.4266796}
+  m_Center: {x: 3.361065, y: 3.5814896, z: 1.7133398}
 --- !u!1 &1665178721
 GameObject:
   m_ObjectHideFlags: 0
