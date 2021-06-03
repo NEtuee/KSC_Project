@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class TutorialTrigger : MonoBehaviour
 {
-    public string key;
     public bool isOver = false;
     public TutorialType tutorialType;
     private OptionMenuCtrl _uiManager;

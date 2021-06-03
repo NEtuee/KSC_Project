@@ -351,6 +351,7 @@ public class Drone : MonoBehaviour
 
                     if ((transform.position - destination).sqrMagnitude <=2.0f)
                     {
+                        _targetPosition = transform.position;
                         state = DroneState.Default;
                     }
                 }
@@ -369,6 +370,7 @@ public class Drone : MonoBehaviour
                     {
                         _droneScaner.Scanning();
                         state = DroneState.Default;
+                        _targetPosition = transform.position;
                     }
                 }
                 break;
@@ -428,6 +430,8 @@ public class Drone : MonoBehaviour
         help = false;
         if (state != DroneState.AimHelp)
         {
+            _targetPosition = transform.position;
+            _finalTargetPosition = _targetPosition;
             state = DroneState.Default;
             _floatingMoveComponent.SetRangeRatio(1.0f);
         }
@@ -480,5 +484,12 @@ public class Drone : MonoBehaviour
         transform.position = _finalTargetPosition;
 
         whenCompleteRespawn?.Invoke();
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        transform.position = position;
+        _targetPosition = position;
+        _finalTargetPosition = position;
     }
 }
