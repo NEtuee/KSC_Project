@@ -30,7 +30,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ClimbingJump,
         ReadyClimbingJump,
         HangShake,
-        Respawn
+        Respawn,
+        HighLanding
     }
 
     public enum ClimbingJumpDirection
@@ -58,6 +59,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Transform steamPosition;
 
     [Header("State")] [SerializeField] private bool isRun = false;
+    public bool IsRun { get=> isRun; set => isRun = value; }
     [SerializeField] private PlayerState state;
     private PlayerState prevState;
     [SerializeField] private bool isClimbingMove = false;
@@ -91,6 +93,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float climbingHorizonJumpPower = 5.0f;
     [SerializeField] private float climbingUpJumpPower = 8.0f;
     [SerializeField] private float keepClimbingJumpTime = 0.8f;
+    [SerializeField] private float airTime = 0.0f;
+    [SerializeField] private float landingFactor = 2.0f;
     [SerializeField] private AnimationCurve climbingHorizonJumpSpeedCurve;
     private float climbingJumpStartTime;
     private ClimbingJumpDirection climbingJumpDirection;
@@ -267,7 +271,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             GameManager.Instance.soundManager.SetGlobalParam(5,ground);
         }
 
-        if (InputManager.Instance.GetInput(KeybindingActions.Option) && dead == false)
+        if (GameManager.Instance.optionMenuCtrl.CurrentTutorial == false && 
+            InputManager.Instance.GetInput(KeybindingActions.Option) && 
+            dead == false)
         {
             GameManager.Instance.optionMenuCtrl.InputEsc();
         }
@@ -565,7 +571,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     movement.Move(moveDir);
                 }
-            }
+
+                    if(movement.GroundDistance > movement.groundMinDistance)
+                    {
+                        movement.Move(Vector3.down);
+                    }
+                }
                 break;
             case PlayerState.TurnBack:
             case PlayerState.RunToStop:
@@ -584,10 +595,21 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Jump:
             {
+                    airTime += deltaTime;
+
+
                 if (movement.isGrounded == true)
                 {
-                    ChangeState(PlayerState.Default);
-                    return;
+                        if(airTime >= landingFactor)
+                        {
+                            ChangeState(PlayerState.HighLanding);
+                            return;
+                        }
+                        else
+                        {
+                            ChangeState(PlayerState.Default);
+                            return;
+                        }
                 }
 
                 // Vector3 plusDir = ((camForward * inputVertical) + (camRight * inputHorizontal));
@@ -1279,6 +1301,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 collider.center = new Vector3(0.0f, 0.95622f, 0.0f);
 
                 GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
+
+                    airTime = 0.0f;
                 // else
                 //     GameManager.Instance.cameraManager.SetFollowCameraDistance("ExistParent");
             }
@@ -1305,7 +1329,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 isClimbingMove = false;
                 movement.SetGrab();
                 GameManager.Instance.cameraManager.SetFollowCameraDistance("Grab");
-            }
+
+                }
                 break;
             case PlayerState.ReadyGrab:
             {
@@ -1332,7 +1357,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.ResetTrigger("UpRightClimbing");
                     animator.ResetTrigger("DownLeftClimbing");
                     animator.ResetTrigger("DownRightClimbing");
-            }
+
+                    airTime = 0.0f;
+                }
                 break;
             case PlayerState.Jump:
             {
@@ -1382,13 +1409,17 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                 movement.SetParent(null);
                 handIK.DisableHandIK();
-            }
+
+                    airTime = 0.0f;
+                }
                 break;
             case PlayerState.HangRagdoll:
             {
                 handIK.DisableHandIK();
                 ragdoll.ActiveLeftHandFixRagdoll();
-            }
+
+                    airTime = 0.0f;
+                }
                 break;
             case PlayerState.Aiming:
             {
@@ -1509,6 +1540,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     drone.Respawn(transform);
                 });
             }
+                break;
+            case PlayerState.HighLanding:
+                {
+                    currentSpeed = 0.0f;
+                    animator.SetFloat("Speed", 0.0f);
+                    animator.SetBool("HighLanding",true);
+                }
                 break;
         }
     }
@@ -2393,6 +2431,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         rigidbody.velocity = Vector3.zero;
         footIK.InitPelvisHeight();
         dead = false;
+        airTime = 0.0f;
         ChangeState(PlayerState.Default);
     }
 

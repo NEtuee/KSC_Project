@@ -7,6 +7,7 @@ public class Drone_Immortal : DroneHelper
     [SerializeField] private bool entranceFlag = false;
     [SerializeField] private bool scanFlag = false;
     [SerializeField] private bool scanning = false;
+    [SerializeField] private bool scan2 = false;
     [SerializeField] private bool shieldDestroy = false;
     [SerializeField] private bool rolling = false;
 
@@ -26,6 +27,13 @@ public class Drone_Immortal : DroneHelper
                 root.helping = false;
                 root.ActiveDescriptCanvas(false);
                 root.drone.OrderDefault();
+            }
+        }
+        else
+        {
+            if(scanning && !scan2)
+            {
+                Scan2();
             }
         }
     }
@@ -53,6 +61,14 @@ public class Drone_Immortal : DroneHelper
             return;
         scanning = true;
         root.HelpEvent("JirungE_Tip01");
+    }
+
+    private void Scan2()
+    {
+        if (scan2 == true)
+            return;
+        scan2 = true;
+        root.HelpEvent("JirungE_Tip02");
     }
 
     public void ShieldDestroyFlag()

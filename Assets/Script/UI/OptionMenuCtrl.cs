@@ -46,7 +46,7 @@ public class OptionMenuCtrl : MonoBehaviour
     public InGameTutorialPanel scanTutorial;
     public InGameTutorialPanel empTutorial;
 
-    private bool _currentTutorial = false;
+    [SerializeField]private bool _currentTutorial = false;
     public bool CurrentTutorial { get => _currentTutorial; set { _currentTutorial = value; }}
     void Start()
     {
@@ -90,9 +90,15 @@ public class OptionMenuCtrl : MonoBehaviour
         if (InputManager.Instance.GetInput(KeybindingActions.Cancel))
         {
             currnetInGameTutorial.Active(false);
-            _currentTutorial = false;
+            StartCoroutine(DisableTutorial());
         }
 
+    }
+
+    IEnumerator DisableTutorial()
+    {
+        yield return new WaitForFixedUpdate();
+        CurrentTutorial = false;
     }
 
     public void InputEsc()
