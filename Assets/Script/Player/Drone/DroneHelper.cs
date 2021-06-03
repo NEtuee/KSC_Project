@@ -19,6 +19,8 @@ public abstract class DroneHelper : MonoBehaviour
         root.timer.InitTimer("LevelTimer");
         sceneStartTime = Time.time;
 
+        TimeCounterEx._isUpdate = true;
+
         root.drone.whenCompleteRespawn = null;
     }
 

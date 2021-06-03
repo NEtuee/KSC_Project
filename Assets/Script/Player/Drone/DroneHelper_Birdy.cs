@@ -10,8 +10,9 @@ public class DroneHelper_Birdy : DroneHelper
     [SerializeField] private bool lever1 = false;
     [SerializeField] private bool lever2 = false;
     [SerializeField] private bool lever3 = false;
+    public float currentHelpTime;
 
-    void Start()
+    new void Start()
     {
         base.Start();
     }
@@ -20,6 +21,8 @@ public class DroneHelper_Birdy : DroneHelper
     {
         if (root.active == false)
             return;
+
+        currentHelpTime = root.timer.GetCurrentTime("Help");
 
         CheckLevelTime();
 

@@ -201,6 +201,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public ReleaseAimEvent releaseAimEvent;
 
+    public delegate void WhenTakeDamage();
+    public WhenTakeDamage whenTakeDamage;
+
 
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
@@ -898,12 +901,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 UpdateGrab();
 
-                if (_turnOverTime > 0.5f)
-                {
-                    _turnOverTime = 0.0f;
-                    ChangeState(PlayerState.HangShake);
-                    return;
-                }
+                //if (_turnOverTime > 0.5f)
+                //{
+                //    _turnOverTime = 0.0f;
+                //    ChangeState(PlayerState.HangShake);
+                //    return;
+                //}
 
                 float climbingPlaneAngle = Vector3.Dot(Vector3.Cross(transform.up, Vector3.right), Vector3.forward);
 
@@ -1155,7 +1158,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             leg.material.SetFloat("_YOffset", speedFactor * dotY);
         }
 
-        if (state == PlayerState.Grab || state == PlayerState.RunToStop)
+        if (state == PlayerState.Grab || state == PlayerState.RunToStop || state == PlayerState.HighLanding)
         {
             return;
         }
@@ -1557,7 +1560,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         while (true)
         {
-            if (time >= 0.05f && currentSpeed > walkSpeed)
+            if (time >= 0.01f && currentSpeed > walkSpeed)
             {
                 ChangeState(PlayerState.RunToStop);
                 time = 0.0f;
@@ -2398,6 +2401,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             //ChangeState(PlayerState.Dead);
             PlayerDead();
         }
+
+        whenTakeDamage?.Invoke();
     }
 
     public void PlayerDead()

@@ -7,7 +7,7 @@ public class TimeCounterEx
     private Dictionary<string, float> _timerSet = new Dictionary<string, float>();
     private Dictionary<string, float> _timeLimitSet = new Dictionary<string, float>();
 
-    public static bool _IsUpdate;
+    public static bool _isUpdate;
 
     public float InitTimer(string target, float time = 0f, float timeLimit = 1f)
     {
@@ -94,6 +94,11 @@ public class TimeCounterEx
         return curr;
     }
 
+    public float GetCurrentTime(string target)
+    {
+        return _timerSet[target];
+    }
+
     public float GetTimeLimit(string target)
     {
         if(_timeLimitSet.ContainsKey(target))
@@ -108,6 +113,6 @@ public class TimeCounterEx
 
     public float GetDeltaTime()
     {
-        return _IsUpdate ? Time.deltaTime : Time.fixedDeltaTime;
+        return _isUpdate ? Time.deltaTime : Time.fixedDeltaTime;
     }
 }

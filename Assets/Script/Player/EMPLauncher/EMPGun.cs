@@ -81,8 +81,8 @@ public class EMPGun : MonoBehaviour
         }
         
         
-        //if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
-        if (Physics.SphereCast(mainCamera.position,layserRadius, mainCamera.forward, out hit, 1000.0f,hitLayer))
+        if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
+        //if (Physics.SphereCast(mainCamera.position,layserRadius, mainCamera.forward, out hit, 1000.0f,hitLayer))
            {
             GameManager.Instance.effectManager.Active("LaserHit",hit.point);
 
