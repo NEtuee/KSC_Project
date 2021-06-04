@@ -121,6 +121,11 @@ public class CameraManager : MonoBehaviour
         BlendDistanceAimCamera();
     }
 
+    public void SetBrainCameraPosition(Vector3 position)
+    {
+        brainCameraTransfrom.position = position;
+    }
+
     public void SetActiveScreenEffect(string target, bool value)
     {
         if (!renderPassActivation.ContainsKey(target))

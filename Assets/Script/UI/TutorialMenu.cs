@@ -63,10 +63,15 @@ public class TutorialMenu : EscMenu
             empGroup.Active(false);
             empLauncherGroup.Active(false);
             climbingTabButton.Interactable = false;
+            climbingTabButton.Select(false);
             moveTabButton.Interactable = false;
+            moveTabButton.Select(false);
             specialTabButton.Interactable = false;
+            specialTabButton.Select(false);
             empControlButton.Interactable = false;
+            empControlButton.Select(false);
             empButton.Interactable = false;
+            empButton.Select(false);
 
             videoPlayer.StopVideo();
         }

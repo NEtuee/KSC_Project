@@ -248,7 +248,8 @@ public class Drone : MonoBehaviour
 
                     //Vector3 targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
                     //Vector3 lookDir = targetPosition - transform.position;
-                    Vector3 lookDir = target.position+Vector3.up*1.5f - transform.position;
+                    //Vector3 lookDir = target.position+Vector3.up*1.5f - transform.position;
+                    Vector3 lookDir = camForward;
                     //lookDir.y = 0.0f;
                     Quaternion targetRot;
                     if (lookDir != Vector3.zero)

@@ -40,6 +40,7 @@ public class TutorialTrigger : MonoBehaviour
         if (other.CompareTag("Player") == false)
             return;
 
+        other.GetComponent<Animator>().SetFloat("Speed", 0.0f);
         //if (_uiManager.TutorialEvent(key) == false)
         //    return;
         _uiManager.InGameTutorial(tutorialType);

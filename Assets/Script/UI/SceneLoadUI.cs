@@ -24,7 +24,7 @@ public class SceneLoadUI : MonoBehaviour
     private float _loadingTime = 0.0f;
     [SerializeField] private float _minLoadUiShowTime = 1f;
 
-    
+    public List<string> loadingComments = new List<string>();
 
     private void Start()
     {
@@ -114,5 +114,13 @@ public class SceneLoadUI : MonoBehaviour
     {
         loadCanvas.enabled = true;
         fadeImage.DOFade(fadeTarget, duration).OnComplete(() => fadeEndAction?.Invoke());
+    }
+
+    public void SetLoadingComment(int num)
+    {
+        if (loadingComments.Count <= num)
+            return;
+
+        tipText.text = loadingComments[num];
     }
 }

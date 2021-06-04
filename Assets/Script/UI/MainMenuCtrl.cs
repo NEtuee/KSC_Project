@@ -142,8 +142,8 @@ public class MainMenuCtrl : MonoBehaviour
 
     public void SetButtonInteractable(bool active)
     {
-        startButton.interactable = active;
-        optionButton.interactable = active;
-        exitButton.interactable = active;
+        startButton.Interactable = active;
+        optionButton.Interactable = active;
+        exitButton.Interactable = active;
     }
 }

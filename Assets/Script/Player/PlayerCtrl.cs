@@ -21,7 +21,7 @@ public class PlayerCtrl : MonoBehaviour
     public void PauseControl(bool result) { isPause = result; }
     public void Resume() { isPause = false; }
 
-    public virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage, bool restoreDamage = true)
     {
         hp.Value -= damage;
     }

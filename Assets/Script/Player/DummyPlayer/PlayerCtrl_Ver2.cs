@@ -1235,8 +1235,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         movement.Jump();
         prevSpeed = currentSpeed;
         climbingJumpDirection = ClimbingJumpDirection.Up;
-        energy.Value += jumpEnergyRestoreValue;
-        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+        AddEnergyValue(jumpEnergyRestoreValue);
         ChangeState(PlayerState.Jump);
     }
 
@@ -1464,7 +1463,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                 stamina.Value -= climbingJumpConsumeValue;
                 stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
-                energy.Value += climbingJumpEnergyRestoreValue;
+                    AddEnergyValue(climbingJumpEnergyRestoreValue);
             }
                 break;
             case PlayerState.ReadyClimbingJump:
@@ -2055,7 +2054,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             empGun.LaunchLaser(loadCount * 40.0f);
             chargeTime.Value = 0.0f;
-            energy.Value -= loadCount * costValue;
+            AddEnergyValue(-loadCount * costValue);
             GameManager.Instance.cameraManager.SetAimCameraDistance(0.333f * (float) loadCount);
             _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, chargeDelayTime);
 
@@ -2160,6 +2159,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Aiming:
             case PlayerState.Ragdoll:
             case PlayerState.HangRagdoll:
+            case PlayerState.Respawn:
+            case PlayerState.HighLanding:
             {
                 return false;
             }
@@ -2306,12 +2307,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
         }
 
-
-        if (energy.Value.Equals(100.0f))
-            return;
-
-        energy.Value += restoreValue * deltaTime;
-        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+        AddEnergyValue(restoreValue * deltaTime);
     }
 
     private void UpdateStamina(float deltaTime)
@@ -2384,11 +2380,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, bool restoreEnergy = true)
     {
         hp.Value -= damage;
-        energy.Value += hitEnergyRestoreValue;
-        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+        if (restoreEnergy == true)
+        {
+            AddEnergyValue(hitEnergyRestoreValue);
+        }
 
         if (isHpRestore == true)
         {
@@ -2494,6 +2492,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     public void InitVelocity()
     {
         SetVelocity(Vector3.zero);
+    }
+
+    public void AddEnergyValue(float value)
+    {
+        if (value > 0.0f ? energy.Value >= 100.0f : energy.Value <= 0.0f)
+            return;
+
+        energy.Value += value;
+        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }
 
 

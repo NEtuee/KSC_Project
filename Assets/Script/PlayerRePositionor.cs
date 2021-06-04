@@ -46,7 +46,7 @@ public class PlayerRePositionor : MonoBehaviour
             ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
             yield return new WaitForSeconds(1.0f);
             ctrl.transform.position = respawn.position;
-            ctrl.TakeDamage(5.0f);
+            ctrl.TakeDamage(5.0f,false);
             whenFall.Invoke();
             yield break;
         }

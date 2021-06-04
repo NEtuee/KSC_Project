@@ -37,6 +37,7 @@ public class ButtonGroup : MonoBehaviour
                 button.Active(active);
                 button.Select(active);
             }
+            
         }
     }
 }

@@ -21,8 +21,8 @@ public class OptionMenuCtrl : MonoBehaviour
     [SerializeField]private MenuType currentMenu = MenuType.None;
     public MenuType CurrentMenuState => currentMenu;
 
-    private EscMenu _currentPanel = null;
-    private EscMenu _prevPanel = null;
+    public EscMenu _currentPanel = null;
+    public EscMenu _prevPanel = null;
     public EscMenu pausePanel;
     public EscMenu optionPanel;
     public EscMenu soundPanel;
@@ -160,6 +160,8 @@ public class OptionMenuCtrl : MonoBehaviour
                 break;
             case MenuType.Option:
                 {
+                    _prevPanel = optionPanel;
+                    _currentPanel = pausePanel;
                     currentMenu = MenuType.Pause;
                     optionPanel.Active(false);
                     pausePanel.Active(true);
@@ -167,6 +169,8 @@ public class OptionMenuCtrl : MonoBehaviour
                 break;
             case MenuType.Tutorial:
                 {
+                    _prevPanel = tutorialPanel;
+                    _currentPanel = pausePanel;
                     currentMenu = MenuType.Pause;
                     tutorialPanel.Active(false);
                     pausePanel.Active(true);
