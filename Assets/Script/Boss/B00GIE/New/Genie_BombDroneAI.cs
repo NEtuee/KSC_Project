@@ -108,6 +108,7 @@ public class Genie_BombDroneAI : DroneAIBase
         var rand = Quaternion.Euler(0f,Random.Range(0f,360f),Random.Range(0f,360f)) * Vector3.forward;
         _direction = rand.normalized;
         AddForce(rand.normalized * maxSpeed * 100f);
+        shield.gameObject.SetActive(true);
         this.gameObject.SetActive(true);
     }
 }

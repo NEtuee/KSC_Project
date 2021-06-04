@@ -21,6 +21,9 @@ public class Genie_AI : MonoBehaviour
     
     public State currentState;
 
+    public Material dangerMat;
+    public Material defaultMat;
+
     public Transform head;
     public Transform droneSpawnPoint;
     public Boogie_GridControll gridControll;
@@ -40,6 +43,7 @@ public class Genie_AI : MonoBehaviour
     public float groundHitAttackTime;
     public float groundHitWaitTime;
     public float groundDisapearTime;
+    public float groundHitAreaAngle;
 
     [Header("DroneSpawnPattern")]
     public float droneSpawnStartTime;
@@ -50,6 +54,8 @@ public class Genie_AI : MonoBehaviour
     
 
     private Dictionary<State, StateDel> _stateDic;
+    private List<HexCube> _areaList;
+
 
     private StateDel _currentStateDelegate;
 
@@ -79,6 +85,7 @@ public class Genie_AI : MonoBehaviour
         _animatorController = GetComponent<Animator>();
         _timeCounterEx = new TimeCounterEx();
 
+        _areaList = new List<HexCube>();
         _stateDic = new Dictionary<State, StateDel>();
         _stateDic.Add(State.Idle,State_Idle);
         _stateDic.Add(State.LookTarget,State_LookTarget);
@@ -120,9 +127,13 @@ public class Genie_AI : MonoBehaviour
         }
         else if(state == State.GroundHitReady)
         {
-            gridControll.GetCube_Sector();
-            _groundLookTarget = gridControll.GetTargetCubes()[1].transform;
-            gridControll.GetTargetCubes()[1].GetRenderer().material = null;
+            // gridControll.GetCube_Sector();
+            // _groundLookTarget = gridControll.GetTargetCubes()[1].transform;
+            // gridControll.GetTargetCubes()[1].GetRenderer().material = null;
+
+            _groundLookTarget = _target;
+            _areaList.Clear();
+            BodyTilt();
 
             _timeCounterEx.InitTimer("groundHitReady",0f,groundHitReadyTime);
             _timeCounterEx.InitTimer("groundHitAttack",0f,groundHitAttackTime);
@@ -192,7 +203,7 @@ public class Genie_AI : MonoBehaviour
 
     public void State_GroundHitReady(float deltaTime)
     {
-        LookTargetRotate(_groundLookTarget.position, deltaTime);
+        LookTargetRotate(_groundLookTarget.position, deltaTime,false);
         HeadLookTarget(_target.position);
 
         _timeCounterEx.IncreaseTimerSelf("groundHitReady",out var limit,deltaTime);
@@ -202,22 +213,66 @@ public class Genie_AI : MonoBehaviour
             _animator.Play("GroundAttackLeft",handIKs[0]);
             _animator.Play("GroundAttackRight",handIKs[1]);
             centerShield.ToTarget();
+            GetGroundArea();
+            SetGroundAreaMaterial(dangerMat);
             ChangeState(State.GroundHitAttack);
         }
     }
 
     public void State_GroundHitAttack(float deltaTime)
     {
-        HeadLookTarget(_target.position);
+        //HeadLookTarget(_target.position);
 
         _timeCounterEx.IncreaseTimerSelf("groundHitAttack",out var limit,deltaTime);
         if(limit)
         {
-            gridControll.GetCube_Sector(_groundLookTarget.position);
-            gridControll.SetCubesActive(false,true,groundDisapearTime);
+            gridControll.SetCubesActive(ref _areaList,false,true,groundDisapearTime);
+            SetGroundAreaMaterial(defaultMat);
+            // gridControll.GetCube_Sector(_groundLookTarget.position);
+            // gridControll.SetCubesActive(false,true,groundDisapearTime);
             centerShield.ToOrigin();
+
+            BodySpread();
             ChangeState(State.GroundHitWait);
         }
+    }
+
+    public void SetGroundAreaMaterial(Material mat)
+    {
+        foreach(var cube in _areaList)
+        {
+            cube.GetComponent<MeshRenderer>().material = mat;
+        }
+    }
+
+    public void GetGroundArea()
+    {
+        var factor = groundHitAreaAngle * 0.25f;
+        var dir = Vector3.ProjectOnPlane(_target.position - transform.position,Vector3.up).normalized;
+        var start = gridControll.cubeGrid.GetCubePointFromWorld(transform.position + dir * 8f);
+        var end = transform.position + dir * 30f;
+        var endPoint = gridControll.cubeGrid.GetCubePointFromWorld(end);
+        gridControll.cubeGrid.GetCubeLineHeavy(ref _areaList, start,endPoint,0,6);
+
+        var left = Quaternion.Euler(0f,factor,0f) * dir;
+        end = transform.position + left * 30f;
+        endPoint = gridControll.cubeGrid.GetCubePointFromWorld(end);
+        gridControll.cubeGrid.GetCubeLineHeavy(ref _areaList, start,endPoint,0,6,false);
+
+        left = Quaternion.Euler(0f,factor,0f) * left;
+        end = transform.position + left * 30f;
+        endPoint = gridControll.cubeGrid.GetCubePointFromWorld(end);
+        gridControll.cubeGrid.GetCubeLineHeavy(ref _areaList, start,endPoint,0,6,false);
+
+        var right = Quaternion.Euler(0f,-factor,0f) * dir;
+        end = transform.position + right * 30f;
+        endPoint = gridControll.cubeGrid.GetCubePointFromWorld(end);
+        gridControll.cubeGrid.GetCubeLineHeavy(ref _areaList, start,endPoint,0,6,false);
+
+        right = Quaternion.Euler(0f,-factor,0f) * right;
+        end = transform.position + right * 30f;
+        endPoint = gridControll.cubeGrid.GetCubePointFromWorld(end);
+        gridControll.cubeGrid.GetCubeLineHeavy(ref _areaList, start,endPoint,0,6,false);
     }
 
     public void State_GroundHitWait(float deltaTime)
@@ -236,6 +291,9 @@ public class Genie_AI : MonoBehaviour
 
     public void State_SpawnDrone(float deltaTime)
     {
+        LookTargetRotate(_target.position, deltaTime);
+        HeadLookTarget(_target.position);
+
         _timeCounterEx.IncreaseTimerSelf("droneSpawnTiming",out var limit,deltaTime);
         if(limit)
         {
@@ -326,19 +384,19 @@ public class Genie_AI : MonoBehaviour
 
     }
 
-    public void LookTargetRotate(Vector3 target, float deltaTime)
+    public void LookTargetRotate(Vector3 target, float deltaTime, bool bodyAnimation = true)
     {
         var dir = target - _originPos;
         dir = Vector3.ProjectOnPlane(dir,Vector3.up).normalized;
         var dist = Vector3.Distance(MathEx.DeleteYPos(transform.position),MathEx.DeleteYPos(target));
 
         var speed = deltaTime * bodyRotateSpeed;
-        if(dist <= headDownDistance)
+        if(dist <= headDownDistance && bodyAnimation)
         {
             speed += ((headDownDistance - dist) / headDownDistance) * 0.3f;
             BodyTilt();
         }
-        else
+        else if(bodyAnimation)
         {
             BodySpread();
         }
