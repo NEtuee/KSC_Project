@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,10 +7,17 @@ public class DroneHelper_DLL : DroneHelper
 {
     private int fallCount = 0;
 
+    [SerializeField] private bool _start1 = false;
+    [SerializeField] private bool _start2 = false;
+    [SerializeField] private bool _respawn = false;
+    [SerializeField] private bool _drone = false;
+
     private void Start()
     {
         base.Start();
         StartCoroutine(LateStart());
+
+        root.drone.whenCompleteRespawn += FirstRespawn;
     }
 
     public override void HelperUpdate()
@@ -28,38 +36,41 @@ public class DroneHelper_DLL : DroneHelper
                 root.helping = false;
                 root.ActiveDescriptCanvas(false);
                 root.drone.OrderDefault();
+
+                if(_start2 == false)
+                {
+                    root.HelpEvent("DaddyLongLeg_Start02");
+                    _start2 = true;
+                }
             }
         }
     }
 
-    public void NearPlatformFlag()
+    public void FirstRespawn()
     {
-        root.HelpEvent("DLL_NearPlatform");
+        if (_respawn)
+            return;
+        _respawn = true;
+        root.HelpEvent("DaddyLongLeg_Respawn");
     }
 
-    public void UpPlatformFlag()
+    public void EnterRotatorPattern()
     {
-        root.HelpEvent("DLL_UpPlatform");
+        root.HelpEvent("DaddyLongLeg_RotatorTrap");
     }
 
-    public void DeadCountThreeFlag()
+    public void EnterDoorPattern()
     {
-        root.HelpEvent("DLL_3Dead");
-    }
-
-    public void FallFlag()
-    {
-        fallCount++;
-
-        if(fallCount == 3)
-        {
-            DeadCountThreeFlag();
-        }
+        if (_drone)
+            return;
+        _drone = true;
+        root.HelpEvent("DaddyLongLeg_Drone");
     }
 
     IEnumerator LateStart()
     {
         yield return new WaitForSeconds(1f);
-        root.HelpEvent("DLL_Start");
+        root.HelpEvent("DaddyLongLeg_Start01");
+        _start1 = true;
     }
 }

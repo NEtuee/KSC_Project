@@ -11,7 +11,8 @@ using UnityEngine.EventSystems;
 
 public class MainTitleButton : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    public bool interactable = true;
+    [SerializeField] private bool interactable = true;
+    public bool Interactable { get => interactable; set => interactable = value; }
 
 
     public RectTransform buttonRect;
@@ -73,11 +74,15 @@ public class MainTitleButton : MonoBehaviour,IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (interactable == false)
+            return;
         buttonImage.sprite = selectedSprite;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (interactable == false)
+            return;
         buttonImage.sprite = defaultSprite;
     }
 

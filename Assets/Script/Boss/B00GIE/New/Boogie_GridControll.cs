@@ -154,11 +154,11 @@ public class Boogie_GridControll : MonoBehaviour
         cubeGrid.GetCubeRing(ref _targetCubes,centerCube.cubePoint,radius);
     }
 
-    public void GetCube_Sector()
+    public void GetCube_Sector(Vector3 position)
     {
         _targetCubes.Clear();
 
-        var dir = (MathEx.DeleteYPos(_target.position) - MathEx.DeleteYPos(centerCube.transform.position)).normalized;
+        var dir = (MathEx.DeleteYPos(position) - MathEx.DeleteYPos(centerCube.transform.position)).normalized;
         var angle = Vector3.SignedAngle(dir,Vector3.right,Vector3.up);
 
         int sector = 4;
@@ -203,6 +203,12 @@ public class Boogie_GridControll : MonoBehaviour
         //     cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
         //     cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector + 1,range);
         // }
+    }
+
+    public void GetCube_Sector()
+    {
+        GetCube_Sector(_target.position);
+        
     }
 
     public void GetCube_Walkway()

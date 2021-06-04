@@ -230,6 +230,11 @@ public class MathEx : MonoBehaviour {
 		return one.x == two.x ? (one.y == two.y ? (one.z == two.z) : false) : false;
 	}
 
+	public static Vector3 RandomVector3(Vector3 plusMinus)
+	{
+		return new Vector3(Random.Range(-plusMinus.x,plusMinus.x),Random.Range(-plusMinus.y,plusMinus.y),Random.Range(-plusMinus.z,plusMinus.z));
+	}
+
 	public static Vector3 RandomVector3(Vector3 min, Vector3 max)
 	{
 		return new Vector3(Random.Range(min.x,max.x),Random.Range(min.y,max.y),Random.Range(min.z,max.z));

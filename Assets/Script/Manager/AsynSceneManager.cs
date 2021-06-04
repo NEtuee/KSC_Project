@@ -148,6 +148,11 @@ public class AsynSceneManager : MonoBehaviour
         GameManager.Instance.PAUSE = true;
         _isLoaded = false;
 
+        if(GameManager.Instance.optionMenuCtrl != null)
+        {
+            GameManager.Instance.optionMenuCtrl.sceneLoadUi.SetLoadingComment(currentLevel);
+        }
+
         if (currentStageManager != null)
         {
             if (currentStageManager.entranceElevator == null)
@@ -322,6 +327,7 @@ public class AsynSceneManager : MonoBehaviour
         SceneManager.MoveGameObjectToScene(Camera.main.gameObject,activeScene);
         SceneManager.MoveGameObjectToScene(GameManager.Instance.followTarget.gameObject,activeScene);
         SceneManager.MoveGameObjectToScene(GameManager.Instance.player.gameObject,activeScene);
+        _drone.transform.SetParent(null);
         SceneManager.MoveGameObjectToScene(_drone.gameObject,activeScene);
     }
 }

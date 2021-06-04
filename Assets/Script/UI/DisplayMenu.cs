@@ -21,7 +21,7 @@ public class DisplayMenu : EscMenu
     private List<Resolution> _respondResolutions = new List<Resolution>();
     private Resolution _currentResolution;
 
-    public void Init()
+    public override void Init()
     {
         canvas.enabled = false;
 

@@ -72,6 +72,8 @@ public class Drone : MonoBehaviour
     public WhenAimHelp whenAimHelp;
     public delegate void WhenHelp();
     public WhenAimHelp whenHelp;
+    public delegate void WhenCompleteRespawn();
+    public WhenCompleteRespawn whenCompleteRespawn;
 
     // Start is called before the first frame update
     void Start()
@@ -246,7 +248,8 @@ public class Drone : MonoBehaviour
 
                     //Vector3 targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
                     //Vector3 lookDir = targetPosition - transform.position;
-                    Vector3 lookDir = target.position+Vector3.up*1.5f - transform.position;
+                    //Vector3 lookDir = target.position+Vector3.up*1.5f - transform.position;
+                    Vector3 lookDir = camForward;
                     //lookDir.y = 0.0f;
                     Quaternion targetRot;
                     if (lookDir != Vector3.zero)
@@ -349,6 +352,7 @@ public class Drone : MonoBehaviour
 
                     if ((transform.position - destination).sqrMagnitude <=2.0f)
                     {
+                        _targetPosition = transform.position;
                         state = DroneState.Default;
                     }
                 }
@@ -367,6 +371,7 @@ public class Drone : MonoBehaviour
                     {
                         _droneScaner.Scanning();
                         state = DroneState.Default;
+                        _targetPosition = transform.position;
                     }
                 }
                 break;
@@ -426,6 +431,8 @@ public class Drone : MonoBehaviour
         help = false;
         if (state != DroneState.AimHelp)
         {
+            _targetPosition = transform.position;
+            _finalTargetPosition = _targetPosition;
             state = DroneState.Default;
             _floatingMoveComponent.SetRangeRatio(1.0f);
         }
@@ -476,5 +483,14 @@ public class Drone : MonoBehaviour
         _targetPosition = (target.forward * respawnOffset.z + target.right * respawnOffset.x + Vector3.up * respawnOffset.y) + target.position;
         _finalTargetPosition = _targetPosition;
         transform.position = _finalTargetPosition;
+
+        whenCompleteRespawn?.Invoke();
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        transform.position = position;
+        _targetPosition = position;
+        _finalTargetPosition = position;
     }
 }

@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public abstract class EscMenu : MonoBehaviour
 {
+    public abstract void Init();
+
     public abstract void Appear(float duration);
 
     public abstract void Appear(float duration, TweenCallback tweenCallback);

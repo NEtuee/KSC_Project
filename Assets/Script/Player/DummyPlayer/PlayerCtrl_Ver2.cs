@@ -30,7 +30,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ClimbingJump,
         ReadyClimbingJump,
         HangShake,
-        Respawn
+        Respawn,
+        HighLanding
     }
 
     public enum ClimbingJumpDirection
@@ -58,6 +59,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private Transform steamPosition;
 
     [Header("State")] [SerializeField] private bool isRun = false;
+    public bool IsRun { get=> isRun; set => isRun = value; }
     [SerializeField] private PlayerState state;
     private PlayerState prevState;
     [SerializeField] private bool isClimbingMove = false;
@@ -91,6 +93,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float climbingHorizonJumpPower = 5.0f;
     [SerializeField] private float climbingUpJumpPower = 8.0f;
     [SerializeField] private float keepClimbingJumpTime = 0.8f;
+    [SerializeField] private float airTime = 0.0f;
+    [SerializeField] private float landingFactor = 2.0f;
     [SerializeField] private AnimationCurve climbingHorizonJumpSpeedCurve;
     private float climbingJumpStartTime;
     private ClimbingJumpDirection climbingJumpDirection;
@@ -197,6 +201,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public ReleaseAimEvent releaseAimEvent;
 
+    public delegate void WhenTakeDamage();
+    public WhenTakeDamage whenTakeDamage;
+
 
     private Rigidbody rigidbody;
     private CapsuleCollider collider;
@@ -213,6 +220,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private FMODUnity.StudioEventEmitter _charge;
 
     private int _transformCount = 0;
+    private bool _runLock = false;
+    private bool _aimLock = false;
 
     void Start()
     {
@@ -267,7 +276,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             GameManager.Instance.soundManager.SetGlobalParam(5,ground);
         }
 
-        if (InputManager.Instance.GetInput(KeybindingActions.Option) && dead == false)
+        if (GameManager.Instance.optionMenuCtrl.CurrentTutorial == false && 
+            InputManager.Instance.GetInput(KeybindingActions.Option) && 
+            dead == false)
         {
             GameManager.Instance.optionMenuCtrl.InputEsc();
         }
@@ -565,7 +576,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     movement.Move(moveDir);
                 }
-            }
+
+                    if(movement.GroundDistance > movement.groundMinDistance)
+                    {
+                        movement.Move(Vector3.down);
+                    }
+                }
                 break;
             case PlayerState.TurnBack:
             case PlayerState.RunToStop:
@@ -584,10 +600,21 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Jump:
             {
+                    airTime += deltaTime;
+
+
                 if (movement.isGrounded == true)
                 {
-                    ChangeState(PlayerState.Default);
-                    return;
+                        if(airTime >= landingFactor)
+                        {
+                            ChangeState(PlayerState.HighLanding);
+                            return;
+                        }
+                        else
+                        {
+                            ChangeState(PlayerState.Default);
+                            return;
+                        }
                 }
 
                 // Vector3 plusDir = ((camForward * inputVertical) + (camRight * inputHorizontal));
@@ -868,7 +895,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void ProcessFixedUpdate()
     {
-        animator.SetBool("IsGround", movement.isGrounded);
+          animator.SetBool("IsGround", pressJump == false ? movement.isGrounded : false);
 
         switch (state)
         {
@@ -876,12 +903,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 UpdateGrab();
 
-                if (_turnOverTime > 0.5f)
-                {
-                    _turnOverTime = 0.0f;
-                    ChangeState(PlayerState.HangShake);
-                    return;
-                }
+                //if (_turnOverTime > 0.5f)
+                //{
+                //    _turnOverTime = 0.0f;
+                //    ChangeState(PlayerState.HangShake);
+                //    return;
+                //}
 
                 float climbingPlaneAngle = Vector3.Dot(Vector3.Cross(transform.up, Vector3.right), Vector3.forward);
 
@@ -1133,7 +1160,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             leg.material.SetFloat("_YOffset", speedFactor * dotY);
         }
 
-        if (state == PlayerState.Grab || state == PlayerState.RunToStop)
+        if (state == PlayerState.Grab || state == PlayerState.RunToStop || state == PlayerState.HighLanding)
         {
             return;
         }
@@ -1210,8 +1237,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         movement.Jump();
         prevSpeed = currentSpeed;
         climbingJumpDirection = ClimbingJumpDirection.Up;
-        energy.Value += jumpEnergyRestoreValue;
-        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+        AddEnergyValue(jumpEnergyRestoreValue);
         ChangeState(PlayerState.Jump);
     }
 
@@ -1239,7 +1265,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Aiming:
             {
                 ActiveAim(false);
-                GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+
+                if(!_aimLock)
+                    GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
                 drone.OrderAimHelp(false);
                 releaseAimEvent?.Invoke();
             }
@@ -1279,6 +1307,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 collider.center = new Vector3(0.0f, 0.95622f, 0.0f);
 
                 GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
+
+                    airTime = 0.0f;
                 // else
                 //     GameManager.Instance.cameraManager.SetFollowCameraDistance("ExistParent");
             }
@@ -1305,7 +1335,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 isClimbingMove = false;
                 movement.SetGrab();
                 GameManager.Instance.cameraManager.SetFollowCameraDistance("Grab");
-            }
+
+                }
                 break;
             case PlayerState.ReadyGrab:
             {
@@ -1332,7 +1363,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.ResetTrigger("UpRightClimbing");
                     animator.ResetTrigger("DownLeftClimbing");
                     animator.ResetTrigger("DownRightClimbing");
-            }
+
+                    airTime = 0.0f;
+                }
                 break;
             case PlayerState.Jump:
             {
@@ -1382,13 +1415,17 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                 movement.SetParent(null);
                 handIK.DisableHandIK();
-            }
+
+                    airTime = 0.0f;
+                }
                 break;
             case PlayerState.HangRagdoll:
             {
                 handIK.DisableHandIK();
                 ragdoll.ActiveLeftHandFixRagdoll();
-            }
+
+                    airTime = 0.0f;
+                }
                 break;
             case PlayerState.Aiming:
             {
@@ -1430,7 +1467,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                 stamina.Value -= climbingJumpConsumeValue;
                 stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
-                energy.Value += climbingJumpEnergyRestoreValue;
+                    AddEnergyValue(climbingJumpEnergyRestoreValue);
             }
                 break;
             case PlayerState.ReadyClimbingJump:
@@ -1510,6 +1547,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 });
             }
                 break;
+            case PlayerState.HighLanding:
+                {
+                    currentSpeed = 0.0f;
+                    animator.SetFloat("Speed", 0.0f);
+                    animator.SetBool("HighLanding",true);
+                }
+                break;
         }
     }
 
@@ -1519,7 +1563,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         while (true)
         {
-            if (time >= 0.05f && currentSpeed > walkSpeed)
+            if (time >= 0.01f && currentSpeed > walkSpeed)
             {
                 ChangeState(PlayerState.RunToStop);
                 time = 0.0f;
@@ -1926,7 +1970,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         if(isRun)
         {
-            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
+            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle) || _runLock)
                 isRun = false;
         }
         else
@@ -1949,7 +1993,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private bool InputAiming()
     {
         //if (InputManager.Instance.GetAction(KeybindingActions.EMPAim))
-        if (InputManager.Instance.GetInput(KeybindingActions.EMPAim))
+        if (InputManager.Instance.GetInput(KeybindingActions.EMPAim) && !_aimLock)
         {
             GameManager.Instance.soundManager.Play(1008, Vector3.up, transform);
             _charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
@@ -2014,7 +2058,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             empGun.LaunchLaser(loadCount * 40.0f);
             chargeTime.Value = 0.0f;
-            energy.Value -= loadCount * costValue;
+            AddEnergyValue(-loadCount * costValue);
             GameManager.Instance.cameraManager.SetAimCameraDistance(0.333f * (float) loadCount);
             _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, chargeDelayTime);
 
@@ -2093,6 +2137,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     #region 겟터
 
+    public bool CheckAimLock()
+    {
+        return _aimLock;
+    }
+
     public PlayerState GetState()
     {
         return state;
@@ -2119,6 +2168,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Aiming:
             case PlayerState.Ragdoll:
             case PlayerState.HangRagdoll:
+            case PlayerState.Respawn:
+            case PlayerState.HighLanding:
             {
                 return false;
             }
@@ -2130,6 +2181,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     #endregion
 
     #region 셋터
+
+    public void SetAimLock(bool value)
+    {
+        _aimLock = value;
+    }
+
+    public void SetRunningLock(bool value)
+    {
+        _runLock = value;
+    }
 
     public void SetClimbMove(bool move)
     {
@@ -2265,12 +2326,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
         }
 
-
-        if (energy.Value.Equals(100.0f))
-            return;
-
-        energy.Value += restoreValue * deltaTime;
-        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+        AddEnergyValue(restoreValue * deltaTime);
     }
 
     private void UpdateStamina(float deltaTime)
@@ -2343,11 +2399,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, bool restoreEnergy = true)
     {
         hp.Value -= damage;
-        energy.Value += hitEnergyRestoreValue;
-        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+        if (restoreEnergy == true)
+        {
+            AddEnergyValue(hitEnergyRestoreValue);
+        }
 
         if (isHpRestore == true)
         {
@@ -2360,6 +2418,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             //ChangeState(PlayerState.Dead);
             PlayerDead();
         }
+
+        whenTakeDamage?.Invoke();
     }
 
     public void PlayerDead()
@@ -2393,6 +2453,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         rigidbody.velocity = Vector3.zero;
         footIK.InitPelvisHeight();
         dead = false;
+        airTime = 0.0f;
         ChangeState(PlayerState.Default);
     }
 
@@ -2450,6 +2511,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     public void InitVelocity()
     {
         SetVelocity(Vector3.zero);
+    }
+
+    public void AddEnergyValue(float value)
+    {
+        if (value > 0.0f ? energy.Value >= 100.0f : energy.Value <= 0.0f)
+            return;
+
+        energy.Value += value;
+        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }
 
 

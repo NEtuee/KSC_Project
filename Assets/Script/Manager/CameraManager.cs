@@ -121,6 +121,11 @@ public class CameraManager : MonoBehaviour
         BlendDistanceAimCamera();
     }
 
+    public void SetBrainCameraPosition(Vector3 position)
+    {
+        brainCameraTransfrom.position = position;
+    }
+
     public void SetActiveScreenEffect(string target, bool value)
     {
         if (!renderPassActivation.ContainsKey(target))
@@ -190,6 +195,7 @@ public class CameraManager : MonoBehaviour
         current3rdPersonComponent = playerFollowCam3rdPersonComponent;
     }
     
+
     public bool ActivePlayerFollowCamera()
     {
         if (playerFollowCam == null)

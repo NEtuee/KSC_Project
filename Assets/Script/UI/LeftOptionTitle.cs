@@ -50,7 +50,7 @@ public class LeftOptionTitle : EscMenu
         _canvas.enabled = active;
     }
 
-    public void ChangeOption(OptionMenuCtrl.MenuType menuType,Action changeMenu, float changeDuration = 0.5f)
+    public void ChangeOption(MenuType menuType,Action changeMenu, float changeDuration = 0.5f)
     {
         float waitTime = changeDuration * 0.3f;
         float tweenTime = (changeDuration - waitTime) * 0.5f;
@@ -61,19 +61,19 @@ public class LeftOptionTitle : EscMenu
             {
                 switch(menuType)
                 {
-                    case OptionMenuCtrl.MenuType.Sound:
+                    case MenuType.Sound:
                         optionMenuText.text = "사운드";
                         break;
-                    case OptionMenuCtrl.MenuType.Control:
+                    case MenuType.Control:
                         optionMenuText.text = "조작";
                         break;
-                    case OptionMenuCtrl.MenuType.Display:
+                    case MenuType.Display:
                         optionMenuText.text = "디스플레이";
                         break;
-                    case OptionMenuCtrl.MenuType.Key:
+                    case MenuType.Key:
                         optionMenuText.text = "키 바인딩";
                         break;
-                    case OptionMenuCtrl.MenuType.Option:
+                    case MenuType.Option:
                         optionMenuText.text = optionTitleString;
                         break;
                 }
@@ -88,5 +88,10 @@ public class LeftOptionTitle : EscMenu
     public override void Active(bool active)
     {
         _canvas.enabled = active;
+    }
+
+    public override void Init()
+    {
+        throw new NotImplementedException();
     }
 }

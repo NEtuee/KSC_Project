@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 public class DroneHelper_Medusa : DroneHelper
 {
     [SerializeField] private bool scanned = false;
+    [SerializeField] private bool scan1 = false;
+    [SerializeField] private bool scan2 = false;
     [SerializeField] private bool tip1 = false;
     [SerializeField] private bool tip2 = false;
     [SerializeField] private bool checkingTip3 = false;
@@ -18,6 +20,22 @@ public class DroneHelper_Medusa : DroneHelper
         scanned = true;
         root.HelpEvent("Medusa_Start");
         root.timer.InitTimer("Tip01Timer", 0.0f, 120.0f);
+    }
+
+    public void Scan1()
+    {
+        if (scan1)
+            return;
+        scan1 = true;
+        root.HelpEvent("Medusa_Scan01");
+    }
+
+    private void Scan2()
+    {
+        if (scan2)
+            return;
+        scan2 = true;
+        root.HelpEvent("Medusa_Scan02");
     }
 
     public void NoEscape()
@@ -77,6 +95,11 @@ public class DroneHelper_Medusa : DroneHelper
         {
             if (scanned == false || destroyedMedusa == true)
                 return;
+
+            if(scan1 == true && scan2 == false)
+            {
+                Scan2();
+            }
 
             if(tip1 == false)
             {

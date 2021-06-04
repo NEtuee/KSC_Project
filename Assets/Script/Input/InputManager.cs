@@ -44,7 +44,6 @@ public class InputManager : MonoBehaviour
     public bool inputBlock = false;
 
     private static InputManager instance;
-    [SerializeField] public KeyBindings keyBindings;
     [SerializeField] public KeyBindingsToggle keyBindingsToggle;
     [SerializeField] public KeyBindingsToggle defaultKeyBinding;
     [SerializeField] public KeyBindingsToggle saveTarget;
