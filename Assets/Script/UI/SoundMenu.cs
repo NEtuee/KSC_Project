@@ -15,7 +15,7 @@ public class SoundMenu : EscMenu
     public Slider ambientVolumeSlider;
     public Slider bgmVolumeSlider;
 
-    public void Init()
+    public override void Init()
     {
         canvas.enabled = false;
         foreach(var sliderItem in sliderItems)

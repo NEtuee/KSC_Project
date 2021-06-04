@@ -30,7 +30,7 @@ public class KeyBindingMenu : EscMenu
 
     }
 
-    public void Init()
+    public override void Init()
     {
         InitKeyItem();
         canvas.enabled = false;
@@ -115,6 +115,10 @@ public class KeyBindingMenu : EscMenu
             keyboardButton.Active(false);
             dualShockButton.Active(false);
             xboxButton.Active(false);
+
+            keyboardButton.Select(false);
+            dualShockButton.Select(false);
+            xboxButton.Select(false);
 
             keyboardPanel.SetActive(false);
             dualShockPanel.SetActive(false);

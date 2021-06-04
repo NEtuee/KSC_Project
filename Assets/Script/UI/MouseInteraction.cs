@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-public class MouseInteraction : MonoBehaviour, IPointerExitHandler, IPointerClickHandler
+public class MouseInteraction : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 {
     public UnityEvent onEnter;
     public UnityEvent onExit;
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
         onEnter?.Invoke();
     }

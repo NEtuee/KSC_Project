@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Ground")]
     [SerializeField] private float groundDistance;
+    public float GroundDistance => groundDistance;
     public float groundMinDistance = 0.1f;
     public float groundMaxDistance = 0.5f;
     public float groundSlopMinDistanc = 0.6f;
@@ -91,6 +92,11 @@ public class PlayerMovement : MonoBehaviour
         //rigidbody.position = transform.position + direction * Time.fixedDeltaTime;
 
         float deltaTime = player.updateMethod == UpdateMethod.FixedUpdate ? Time.fixedDeltaTime : Time.deltaTime;
+        transform.position += direction * deltaTime;
+    }
+
+    public void Move(Vector3 direction, float deltaTime)
+    {
         transform.position += direction * deltaTime;
     }
 
@@ -418,10 +424,10 @@ public class PlayerMovement : MonoBehaviour
     public void SetGrounded(bool value)
     {
         isGrounded = value;
-        // if(value == false)
-        // {
-        //     Debug.Log("Set IsGrounded False" + " Current Ground Angle"+groundAngle);
-        // }
+        //if (value == false)
+        //{
+        //    Debug.Log("Set IsGrounded False" + " Current Ground Angle" + groundAngle);
+        //}
     }
 
     private void OnGUI()

@@ -31,13 +31,13 @@ public class InGameTutorialPanel : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             GameManager.Instance.optionMenuCtrl.CurrentTutorial = true;
             videoPlayer.SetTargetImage(tutorialVideoRawImage);
+            ((PlayerCtrl_Ver2)GameManager.Instance.player).IsRun = false;
         }
         else
         {
             GameManager.Instance.PAUSE = false;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            GameManager.Instance.optionMenuCtrl.CurrentTutorial = false;
             videoPlayer.StopVideo();
         }
     }

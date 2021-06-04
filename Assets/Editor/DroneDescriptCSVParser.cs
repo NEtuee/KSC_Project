@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Text.RegularExpressions;
-
 public class DroneDescriptCSVParser : EditorWindow
 {
     static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
@@ -88,8 +87,22 @@ public class DroneDescriptCSVParser : EditorWindow
             
             for(int i = 0; i<descripts.Count;i++)
             {
-                descriptScriptable.descripts.Add(descripts[i]);
+                bool isNew = true;
+                foreach(var dest in descriptScriptable.descripts)
+                {
+                    if(dest.key == descripts[i].key)
+                    {
+                        dest.descript = descripts[i].descript;
+                        isNew = false;
+                        break;
+                    }
+                }
+
+                if(isNew)
+                    descriptScriptable.descripts.Add(descripts[i]);
             }
         }
+
+        EditorUtility.SetDirty(descriptScriptable);
     }
 }

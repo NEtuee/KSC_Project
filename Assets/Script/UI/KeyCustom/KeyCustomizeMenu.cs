@@ -126,4 +126,9 @@ public class KeyCustomizeMenu : EscMenu
             InputManager.Instance.SaveKeyBinding();
         }
     }
+
+    public override void Init()
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -121,22 +121,7 @@ public class DisplayOptionPanel : EscMenu
         QualitySettings.vSyncCount = vsyncDropdown.value == 0 ? 0 : 1;
     }
 
-    public void ChangeResolution()
-    {
-        _currentResolution = _respondResolutions[resolutionDropdown.value];
-
-        //if (Screen.currentResolution.height != currentResolution.height || Screen.currentResolution.width != currentResolution.width)
-        //{
-        //    Screen.SetResolution(currentResolution.width,currentResolution.height,Screen.fullScreen);
-        //}
-
-        //Debug.Log("Current : " + Screen.currentResolution + "  Target"+currentResolution);
-
-        // if (Screen.currentResolution.height == currentResolution.height && Screen.currentResolution.width == currentResolution.width)
-        //         return;
-        //     
-        Screen.SetResolution(_currentResolution.width, _currentResolution.height, Screen.fullScreen);
-    }
+   
 
     public override void Active(bool active)
     {
@@ -184,4 +169,8 @@ public class DisplayOptionPanel : EscMenu
         throw new System.NotImplementedException();
     }
 
+    public override void Init()
+    {
+        throw new NotImplementedException();
+    }
 }
