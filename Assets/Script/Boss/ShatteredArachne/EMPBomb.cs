@@ -15,12 +15,19 @@ public class EMPBomb : MonoBehaviour
     public bool teamKill = true;
 
     private float _speed = 0f;
+    private Material _matOrigin;
+
+    public void Start()
+    {
+        _matOrigin = GetComponent<MeshRenderer>().material;
+    }
 
     public void Hit()
     {
         gameObject.SetActive(false);
         Collider[] playerColl = Physics.OverlapSphere(transform.position, explosionRadius,targetLayer);
-
+        GetComponent<MeshRenderer>().material = _matOrigin;
+        
         if(destroy)
             Destroy(this.gameObject);
 

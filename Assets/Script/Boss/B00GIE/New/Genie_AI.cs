@@ -232,7 +232,6 @@ public class Genie_AI : MonoBehaviour
             // gridControll.SetCubesActive(false,true,groundDisapearTime);
             centerShield.ToOrigin();
 
-            BodySpread();
             ChangeState(State.GroundHitWait);
         }
     }
@@ -285,6 +284,7 @@ public class Genie_AI : MonoBehaviour
             _animator.Play("GroundAttackLeftReturn",handIKs[0]);
             _animator.Play("GroundAttackRightReturn",handIKs[1]);
             _animatorController.SetBool("RockHand",false);
+
             ChangeState(State.LookTarget);
         }
     }
@@ -333,6 +333,8 @@ public class Genie_AI : MonoBehaviour
     public void Hit()
     {
         --hitPoint;
+        SetGroundAreaMaterial(defaultMat);
+        centerShield.ToOrigin();
         if(hitPoint == 0)
         {
             ChangeState(State.Groggy);

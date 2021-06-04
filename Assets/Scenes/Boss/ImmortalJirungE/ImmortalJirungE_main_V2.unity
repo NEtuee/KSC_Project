@@ -10577,7 +10577,7 @@ MonoBehaviour:
   renderer: {fileID: 0}
   collider: {fileID: 0}
   visible: 0
-  removeCheck: 1
+  removeCheck: 0
   isOver: 0
   hp: 10
   whenDestroy:
@@ -10666,6 +10666,7 @@ MonoBehaviour:
   isCore: 0
   isActive: 0
   shieldEffect: 1
+  isImmortal: 0
   debug: 0
   secondColor: {r: 0, g: 0, b: 0, a: 0}
   thirdColor: {r: 0, g: 0, b: 0, a: 0}
@@ -12074,7 +12075,7 @@ MonoBehaviour:
   renderer: {fileID: 0}
   collider: {fileID: 0}
   visible: 0
-  removeCheck: 1
+  removeCheck: 0
   isOver: 0
   hp: 10
   whenDestroy:
@@ -12163,6 +12164,7 @@ MonoBehaviour:
   isCore: 0
   isActive: 0
   shieldEffect: 1
+  isImmortal: 0
   debug: 0
   secondColor: {r: 0, g: 0, b: 0, a: 0}
   thirdColor: {r: 0, g: 0, b: 0, a: 0}
@@ -33076,6 +33078,8 @@ MonoBehaviour:
   canFloorWhip: 0
   lowCheck: 0
   isDead: 0
+  whipNearDistance: 20
+  whipFarDistance: 20
   whipSpeed: 19
   rollSpeed: 25
   whipDamage: 5
@@ -33159,6 +33163,7 @@ MonoBehaviour:
   whenEndRecover:
     m_PersistentCalls:
       m_Calls: []
+  _whipNearCheck: 0
 --- !u!54 &975925007
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -41927,6 +41932,8 @@ MonoBehaviour:
   canFloorWhip: 0
   lowCheck: 0
   isDead: 0
+  whipNearDistance: 20
+  whipFarDistance: 20
   whipSpeed: 19
   rollSpeed: 25
   whipDamage: 5
@@ -41986,6 +41993,7 @@ MonoBehaviour:
   whenEndRecover:
     m_PersistentCalls:
       m_Calls: []
+  _whipNearCheck: 0
 --- !u!54 &1091609540
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -43016,6 +43024,8 @@ MonoBehaviour:
   canFloorWhip: 0
   lowCheck: 0
   isDead: 0
+  whipNearDistance: 20
+  whipFarDistance: 20
   whipSpeed: 19
   rollSpeed: 25
   whipDamage: 5
@@ -43087,6 +43097,7 @@ MonoBehaviour:
   whenEndRecover:
     m_PersistentCalls:
       m_Calls: []
+  _whipNearCheck: 0
 --- !u!54 &1123011796
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -71659,7 +71670,7 @@ MonoBehaviour:
   renderer: {fileID: 0}
   collider: {fileID: 0}
   visible: 0
-  removeCheck: 1
+  removeCheck: 0
   isOver: 0
   hp: 10
   whenDestroy:
@@ -71748,6 +71759,7 @@ MonoBehaviour:
   isCore: 0
   isActive: 0
   shieldEffect: 1
+  isImmortal: 0
   debug: 0
   secondColor: {r: 0, g: 0, b: 0, a: 0}
   thirdColor: {r: 0, g: 0, b: 0, a: 0}
