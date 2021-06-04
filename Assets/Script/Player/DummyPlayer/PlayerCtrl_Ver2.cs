@@ -577,10 +577,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     movement.Move(moveDir);
                 }
 
-                    if(movement.GroundDistance > movement.groundMinDistance)
-                    {
-                        movement.Move(Vector3.down);
-                    }
+                    //if(movement.GroundDistance > movement.groundMinDistance)
+                    //{
+                    //    movement.Move(Vector3.down);
+                    //}
                 }
                 break;
             case PlayerState.TurnBack:
@@ -1563,7 +1563,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         while (true)
         {
-            if (time >= 0.01f && currentSpeed > walkSpeed)
+            if (time >= 0.025f && currentSpeed > walkSpeed)
             {
                 ChangeState(PlayerState.RunToStop);
                 time = 0.0f;
