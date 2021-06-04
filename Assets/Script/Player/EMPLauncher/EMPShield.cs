@@ -11,8 +11,8 @@ public class EMPShield : Hitable
     public bool isImmortal = false;
     [SerializeField] private bool debug;
     private Color _initColor;
-    public Color secondColor;
-    public Color thirdColor;
+    [ColorUsage(true, true)] public Color secondColor;
+    [ColorUsage(true, true)] public Color thirdColor;
     public float intencity;
     private float factor;
     public float secondWpoValue = 0.5f;
@@ -274,12 +274,12 @@ public class EMPShield : Hitable
         if(!shieldEffect)
             yield break;
 
-        float wpo = 2.0f;
+        float wpo = 0.1f;
         mat.SetFloat("_WPO", wpo);
         
         while(wpo > originalWpo)
         {
-            wpo -= 1.5f * Time.deltaTime;
+            wpo -= 2.0f * Time.deltaTime;
             mat.SetFloat("_WPO", wpo);
 
             yield return null;
@@ -478,12 +478,12 @@ public class EMPShield : Hitable
         if(hp <= 20.0f)
         {
             originalWpo = secondWpoValue;
-            mat.SetColor("_color", new Color(thirdColor.r * factor, thirdColor.g * factor, thirdColor.b * factor, 1.0f));
+            mat.SetColor("_color", thirdColor );
         }
         else if(hp <= 60.0f)
         {
             originalWpo = thirdWpoValue;
-            mat.SetColor("_color", new Color(secondColor.r * factor, secondColor.g * factor, secondColor.b * factor, 1.0f));
+            mat.SetColor("_color", secondColor);
         }
     }
 }
