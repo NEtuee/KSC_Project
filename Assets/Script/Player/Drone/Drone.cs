@@ -243,6 +243,12 @@ public class Drone : MonoBehaviour
                                 _targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x + target.up * defaultFollowOffset.y) + target.position;
                         }
                     }
+
+                    if(player.IsNowClimbingBehavior() == true)
+                    {
+                        _targetPosition = (target.forward * helpGrabStateOffset.z + target.right * helpGrabStateOffset.x + Vector3.up * helpGrabStateOffset.y) + target.position;
+                    }
+
                     if (Vector3.Distance(_targetPosition, transform.position) == 0.0f)
                         return;
 

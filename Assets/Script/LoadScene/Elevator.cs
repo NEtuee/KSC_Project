@@ -36,11 +36,13 @@ public class Elevator : MonoBehaviour
     public void Open()
     {
         _animator.SetTrigger("OpenTrigger");
+        GameManager.Instance.soundManager.Play(2014, transform.position);
     }
 
     public void Close()
     {
         _animator.SetTrigger("CloseTrigger");
+        GameManager.Instance.soundManager.Play(2015, transform.position);
     }
 
     public void ObjectTeleport(Vector3 localPos, Quaternion localRot, Transform target, bool attatch = false)

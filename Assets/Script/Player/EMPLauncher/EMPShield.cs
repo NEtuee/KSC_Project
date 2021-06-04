@@ -223,6 +223,10 @@ public class EMPShield : Hitable
 
     public override void Destroy()
     {
+        GameManager.Instance.soundManager.Play(1515, new Vector3(0, 1, 0), transform);
+        GameManager.Instance.soundManager.Play(1518, new Vector3(0, 1, 0), transform);
+        GameManager.Instance.soundManager.Play(1501,transform.position);
+
         Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
         collider.enabled = false;
         if(renderer != null)
@@ -479,11 +483,13 @@ public class EMPShield : Hitable
         {
             originalWpo = secondWpoValue;
             mat.SetColor("_color", thirdColor );
+            GameManager.Instance.soundManager.Play(1516, new Vector3(0, 1, 0), transform);
         }
         else if(hp <= 60.0f)
         {
             originalWpo = thirdWpoValue;
             mat.SetColor("_color", secondColor);
+            GameManager.Instance.soundManager.Play(1517, new Vector3(0, 1, 0), transform);
         }
     }
 }

@@ -1552,6 +1552,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     currentSpeed = 0.0f;
                     animator.SetFloat("Speed", 0.0f);
                     animator.SetBool("HighLanding",true);
+                    GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
                 }
                 break;
         }
