@@ -83,6 +83,9 @@ public class AsynSceneManager : MonoBehaviour
     {
         if(!_isLoaded)
             return;
+
+        //GameManager.Instance.soundManager.Play(2009, new Vector3(0, 1, 0), GameManager.Instance.player.transform);
+
         sceneLoadUI.StartLoad(()=> {
             _currentScene = levels[currentLevel];
             RegisterProgress();
@@ -113,6 +116,8 @@ public class AsynSceneManager : MonoBehaviour
         if(!_isLoaded)
             return;
 
+        GameManager.Instance.soundManager.Play(2009, new Vector3(0, 1, 0), GameManager.Instance.player.transform);
+
         sceneLoadUI.StartLoad(() =>
         {
             currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
@@ -125,6 +130,8 @@ public class AsynSceneManager : MonoBehaviour
     {
         if(!_isLoaded)
             return;
+
+        GameManager.Instance.soundManager.Play(2009, new Vector3(0, 1, 0), GameManager.Instance.player.transform);
 
         sceneLoadUI.StartLoad(() =>
         {
@@ -148,7 +155,7 @@ public class AsynSceneManager : MonoBehaviour
         GameManager.Instance.PAUSE = true;
         _isLoaded = false;
 
-        if(GameManager.Instance.optionMenuCtrl != null)
+        if (GameManager.Instance.optionMenuCtrl != null)
         {
             GameManager.Instance.optionMenuCtrl.sceneLoadUi.SetLoadingComment(currentLevel);
         }

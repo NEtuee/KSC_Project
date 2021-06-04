@@ -80,6 +80,7 @@ public class SceneLoadUI : MonoBehaviour
             fadeImage.DOFade(0f, 2f).OnStart(() => {
                 GameManager.Instance.followTarget.SetPitchYaw(0.0f, 180.0f);
                 GameManager.Instance.PAUSE = false;
+                GameManager.Instance.soundManager.SetParam(2009, 20091, 1);
             }).OnComplete(() => loadCanvas.enabled = false);
         }
         else
@@ -105,6 +106,7 @@ public class SceneLoadUI : MonoBehaviour
         fadeImage.DOFade(0f, 2f)
             .OnStart(()=> { GameManager.Instance.followTarget.SetPitchYaw(0.0f, 180.0f);
                 GameManager.Instance.PAUSE = false;
+                GameManager.Instance.soundManager.SetParam(2009, 20091, 1);
             })
             .OnComplete(() => loadCanvas.enabled = false);
     }

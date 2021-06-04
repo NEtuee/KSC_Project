@@ -537,7 +537,7 @@ public class BrokenMedusa_AI : IKBossBase
     public void Dead()
     {
         _soundManager.Play(1510,transform.position);
-        _soundManager.Play(1501,transform.position);
+        _soundManager.Play(1700,transform.position);
         SetIKActive(false);
         ChangeState(State.Dead);
     }

@@ -12,6 +12,8 @@ public class FloorControl : MonoBehaviour
 
     public bool _launch = false;
 
+    public Transform rimSoundPosition;
+
     public void Start()
     {
         if(positionning)
@@ -66,9 +68,33 @@ public class FloorControl : MonoBehaviour
             return;
 
         _launch = true;
-        foreach(var floor in floors)
+        foreach (var floor in floors)
         {
             floor.play = true;
         }
+    }
+
+    public void SpecialLaunch()
+    {
+        StartCoroutine(SoundLaunch());
+    }
+
+    IEnumerator SoundLaunch()
+    {
+        GameManager.Instance.soundManager.Play(2010, rimSoundPosition.position);
+        yield return new WaitForSeconds(0.6f);
+
+        _launch = true;
+        foreach (var floor in floors)
+        {
+            floor.play = true;
+        }
+
+        yield return new WaitForSeconds(0.55f);
+        GameManager.Instance.soundManager.Play(2011, rimSoundPosition.position);
+        yield return new WaitForSeconds(0.65f);
+        GameManager.Instance.soundManager.Play(2012, rimSoundPosition.position);
+        yield return new WaitForSeconds(1.0f);
+        GameManager.Instance.soundManager.Play(2013, rimSoundPosition.position);
     }
 }
