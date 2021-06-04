@@ -49,6 +49,9 @@ public class EMPShield : Hitable
 
         factor = Mathf.Pow(2, intencity);
 
+        SetDistortion();
+        StartCoroutine(HitEffect());
+
         //shieldParticle = GetComponent<ParticleSystem>();
     }
 
@@ -204,6 +207,17 @@ public class EMPShield : Hitable
             mat.SetColor("_color",_initColor);
             mat.SetFloat("_WPO",_initWpo);
         }
+
+        if(shieldEffect)
+        {
+            Color color2 = mat.GetColor("_color2");
+            _initColor = mat.GetColor("_color");;
+            color2.a = 0f;
+            mat.SetColor("_color2",color2);
+
+            originalWpo = mat.GetFloat("_WPO");
+            _initWpo = originalWpo;
+        }
         
     }
 
@@ -226,8 +240,11 @@ public class EMPShield : Hitable
             
         if (isActive == false)
         {
+            SetDistortion();
+            StartCoroutine(HitEffect());
             StartCoroutine(ActiveEffect());
         }
+
         whenScanned?.Invoke();
     }
 

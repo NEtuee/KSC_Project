@@ -101,6 +101,7 @@ public class Genie_BombDroneAI : DroneAIBase
         _lifeTime = lifeTime;
 
         InitVelocity();
+        UpdateTargetDirection();
         shield.Reactive();
 
         transform.position = spawnPosition;
