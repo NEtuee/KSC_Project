@@ -12,6 +12,7 @@ public class EMPBomb : MonoBehaviour
     public float explosionForce = 300f;
 
     public bool destroy = false;
+    public bool teamKill = true;
 
     private float _speed = 0f;
 

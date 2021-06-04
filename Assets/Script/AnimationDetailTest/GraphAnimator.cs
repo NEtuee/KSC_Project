@@ -184,12 +184,13 @@ public class GraphAnimator : MonoBehaviour
         var play = IsPlaying(animation);
         if(play == null)
         {
+            // if(forcePlay)
+            // {
+            //     Stop();
+            // }
+
+            ani.ApplyCurve(0f);
             _playList.Add(ani);
-        }
-        else if(forcePlay)
-        {
-            play.ReturnOrigin();
-            
         }
     }
 
@@ -205,14 +206,13 @@ public class GraphAnimator : MonoBehaviour
         _timeCounter.InitTimer(animation);
 
         ani.Set(target);
-        if(IsPlaying(animation) == null)
+        var play = IsPlaying(animation);
+        if(play == null)
         {
+            ani.ApplyCurve(0f);
             _playList.Add(ani);
         }
-        else
-        {
-            
-        }
+
     }
 
     public void Update()

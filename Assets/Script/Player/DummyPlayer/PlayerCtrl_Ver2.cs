@@ -220,6 +220,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private FMODUnity.StudioEventEmitter _charge;
 
     private int _transformCount = 0;
+    private bool _runLock = false;
+    private bool _aimLock = false;
 
     void Start()
     {
@@ -1263,7 +1265,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Aiming:
             {
                 ActiveAim(false);
-                GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+
+                if(!_aimLock)
+                    GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
                 drone.OrderAimHelp(false);
                 releaseAimEvent?.Invoke();
             }
@@ -1966,7 +1970,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         if(isRun)
         {
-            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle))
+            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle) || _runLock)
                 isRun = false;
         }
         else
@@ -1989,7 +1993,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private bool InputAiming()
     {
         //if (InputManager.Instance.GetAction(KeybindingActions.EMPAim))
-        if (InputManager.Instance.GetInput(KeybindingActions.EMPAim))
+        if (InputManager.Instance.GetInput(KeybindingActions.EMPAim) && !_aimLock)
         {
             GameManager.Instance.soundManager.Play(1008, Vector3.up, transform);
             _charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
@@ -2133,6 +2137,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     #region 겟터
 
+    public bool CheckAimLock()
+    {
+        return _aimLock;
+    }
+
     public PlayerState GetState()
     {
         return state;
@@ -2172,6 +2181,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     #endregion
 
     #region 셋터
+
+    public void SetAimLock(bool value)
+    {
+        _aimLock = value;
+    }
+
+    public void SetRunningLock(bool value)
+    {
+        _runLock = value;
+    }
 
     public void SetClimbMove(bool move)
     {

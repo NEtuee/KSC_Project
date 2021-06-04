@@ -35,10 +35,12 @@ public class HexCubeGrid : MonoBehaviour
         }
     }
 
-    public void GetCubeLineHeavy(ref List<HexCube> list,Vector3Int start ,Vector3Int end, int loopStart, int loopCount)
+    public void GetCubeLineHeavy(ref List<HexCube> list,Vector3Int start ,Vector3Int end, int loopStart, int loopCount, bool overlapListClear = true)
     {
         GetCubeLine(ref list,start,end);
-        _overlapCheckList.Clear();
+
+        if(overlapListClear)
+            _overlapCheckList.Clear();
 
         foreach(var item in list)
         {

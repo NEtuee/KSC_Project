@@ -19,9 +19,11 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private CinemachineVirtualCameraBase playerFollowCam;
     [SerializeField] private Cinemachine3rdPersonFollow playerFollowCam3rdPersonComponent;
     private Cinemachine3rdPersonFollow playerAimCam3rdPersonComponent;
+    private Cinemachine3rdPersonFollow playerLookAtCam3rdPersonComponent;
     private Cinemachine3rdPersonFollow current3rdPersonComponent;
     [SerializeField] private CinemachineVirtualCameraBase playerAimCam;
     [SerializeField] private CinemachineVirtualCamera playerAimCamOrigin;
+    [SerializeField] private CinemachineVirtualCameraBase playerLookAtCam;
     [SerializeField] private List<CinemachineVirtualCameraBase> otherCameras = new List<CinemachineVirtualCameraBase>();
     [SerializeField] private Transform spearLunchPos;
     [SerializeField] private Material radialBlur;
@@ -192,7 +194,23 @@ public class CameraManager : MonoBehaviour
 
         playerFollowCam3rdPersonComponent = playerFollowCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         playerAimCam3rdPersonComponent = playerAimCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+        playerLookAtCam3rdPersonComponent = playerLookAtCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         current3rdPersonComponent = playerFollowCam3rdPersonComponent;
+    }
+    
+    public bool ActiveLookAtCamera()
+    {
+        if (playerFollowCam == null)
+            return false;
+
+        prevActiveCam = currentActiveCam;
+        prevActiveCam.gameObject.SetActive(false);
+        currentActiveCam = playerLookAtCam;
+        currentActiveCam.gameObject.SetActive(true);
+
+        current3rdPersonComponent = playerLookAtCam3rdPersonComponent;
+
+        return true;
     }
     
     public bool ActivePlayerFollowCamera()

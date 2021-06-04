@@ -83,7 +83,8 @@ public class FollowTargetCtrl : MonoBehaviour
         //transform.position = target.position + Vector3.up;
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
 
-
+        if((GameManager.Instance.player as PlayerCtrl_Ver2).CheckAimLock())
+            return;
 
         float mouseX = InputManager.Instance.GetCameraAxisX();
         float mouseY = InputManager.Instance.GetCameraAxisY();

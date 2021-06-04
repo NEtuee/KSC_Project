@@ -28,7 +28,7 @@ public class DirectionCollisionEx
 
         if (_ray.Cast(start, out var hit))
         {
-            collisionCenter = hit.point + hit.normal * 0.2f;// - dir * _collisionRadius;
+            collisionCenter = hit.point + hit.normal * 0.5f;// - dir * _collisionRadius;
             collisionDist = Vector3.Distance(start, collisionCenter);
 
             return true;
