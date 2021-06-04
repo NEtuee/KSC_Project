@@ -343,7 +343,6 @@ public class BrokenMedusa_AI : IKBossBase
                 SetPlayerRunningLock(false);
                 SetAimLock(false);
                 SetCameraDefault();
-                SetCamTargetToNull();
                 //animationControll.Play("Anim_Medusa_Finding");
             }
             // if(!animationControll.isPlaying)
@@ -360,7 +359,6 @@ public class BrokenMedusa_AI : IKBossBase
                 SetPlayerRunningLock(false);
                 SetAimLock(false);
                 SetCameraDefault();
-                SetCamTargetToNull();
 
                 ChangeState(State.LockOnLook);
             }
@@ -736,11 +734,6 @@ public class BrokenMedusa_AI : IKBossBase
         GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
     }
 
-    public void SetCameraZoom()
-    {
-        GameManager.Instance.cameraManager.ActiveLookAtCamera();
-    }
-
     public void SetPlayerRunningLock(bool value)
     {
         var player = GameManager.Instance.player as PlayerCtrl_Ver2;
@@ -751,16 +744,6 @@ public class BrokenMedusa_AI : IKBossBase
     {
         var player = GameManager.Instance.player as PlayerCtrl_Ver2;
         player.SetAimLock(value);
-    }
-
-    public void SetCamTargetToNull()
-    {
-        GameManager.Instance.cameraManager.SetLookAtCameraTarget(null);
-    }
-
-    public void SetCamTargetToThis()
-    {
-        GameManager.Instance.cameraManager.SetLookAtCameraTarget(transform);
     }
 
     public void LineMove(float deltaTime)
