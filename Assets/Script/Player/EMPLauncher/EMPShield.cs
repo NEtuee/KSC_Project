@@ -8,6 +8,7 @@ public class EMPShield : Hitable
     public bool isCore = false;
     public bool isActive = false;
     public bool shieldEffect = true;
+    public bool isImmortal = false;
     [SerializeField] private bool debug;
     private Color _initColor;
     public Color secondColor;
@@ -30,8 +31,10 @@ public class EMPShield : Hitable
     void Start()
     {
         base.Start();
+
         collider = GetComponent<Collider>();
-        mat = renderer.material;
+        if(renderer != null)
+            mat = renderer.material;
 
         if(shieldEffect)
         {
@@ -127,7 +130,7 @@ public class EMPShield : Hitable
         _hitCount++;
         SetDistortion();
         StartCoroutine(HitEffect());
-        if (hp <= 0f)
+        if (hp <= 0f && !isImmortal)
         {
             Destroy();
 
@@ -148,7 +151,7 @@ public class EMPShield : Hitable
         SetDistortion();
         StartCoroutine(HitEffect());
         //shakeTime = 0.1f;
-        if (hp <= 0f)
+        if (hp <= 0f && !isImmortal)
         {
             Destroy();
             //Destroy(gameObject);
@@ -179,7 +182,7 @@ public class EMPShield : Hitable
         SetDistortion();
         StartCoroutine(HitEffect());
         isDestroy = false;
-        if (hp <= 0f)
+        if (hp <= 0f && !isImmortal)
         {
             isDestroy = true;
             Destroy();
@@ -191,17 +194,25 @@ public class EMPShield : Hitable
     public void Reactive()
     {
         collider.enabled = true;
-        renderer.enabled = true;
+
+        if(renderer != null)
+            renderer.enabled = true;
         isOver = false;
-        mat.SetColor("_color",_initColor);
-        mat.SetFloat("_WPO",_initWpo);
+
+        if(mat != null)
+        {
+            mat.SetColor("_color",_initColor);
+            mat.SetFloat("_WPO",_initWpo);
+        }
+        
     }
 
     public override void Destroy()
     {
         Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
         collider.enabled = false;
-        renderer.enabled = false;
+        if(renderer != null)
+            renderer.enabled = false;
         isOver = true;
 
         whenDestroy.Invoke();
@@ -445,6 +456,8 @@ public class EMPShield : Hitable
 
     private void SetDistortion()
     {
+        if(!shieldEffect)
+            return;
         if(hp <= 20.0f)
         {
             originalWpo = secondWpoValue;
