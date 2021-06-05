@@ -46,6 +46,9 @@ public class PlayerRePositionor : MonoBehaviour
             ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
             yield return new WaitForSeconds(1.0f);
             ctrl.transform.position = respawn.position;
+            GameManager.Instance.cameraManager.SetBrainCameraPosition(respawn.position);
+            var rot = Quaternion.LookRotation(respawn.forward);
+            GameManager.Instance.followTarget.SetPitchYaw(rot.eulerAngles.x,rot.eulerAngles.y);
             ctrl.TakeDamage(5.0f,false);
             whenFall.Invoke();
             yield break;
@@ -59,6 +62,9 @@ public class PlayerRePositionor : MonoBehaviour
             //bip.position = respawn.position;
             ((PlayerCtrl_Ver2)(GameManager.Instance.player)).transform.position = respawn.position;
             ((PlayerCtrl_Ver2)(GameManager.Instance.player)).TakeDamage(5.0f);
+            GameManager.Instance.cameraManager.SetBrainCameraPosition(respawn.position);
+            var rot = Quaternion.LookRotation(respawn.forward);
+            GameManager.Instance.followTarget.SetPitchYaw(rot.eulerAngles.x,rot.eulerAngles.y);
             whenFall.Invoke();
         }
     }

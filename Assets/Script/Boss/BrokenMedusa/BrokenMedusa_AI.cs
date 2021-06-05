@@ -90,6 +90,8 @@ public class BrokenMedusa_AI : IKBossBase
 
         }
 
+        _timeCounter.InitTimer("transformTime");
+
         _timeCounter.InitTimer("FrontWalk");
         _timeCounter.InitTimer("FrontWalk_Init");
         _timeCounter.InitTimer("timer");
@@ -331,7 +333,8 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.TransformOpen)
         {
-            if(!IsPlaying(0,"Anim_Medusa_Box_Open"))
+            _timeCounter.IncreaseTimerSelf("transformTime",out var limit, deltaTime);
+            if(limit && !IsPlaying(0,"Anim_Medusa_Box_Open"))
             {
                 SetIKActive(true);
                 ChangeState(State.LockOnLook);
@@ -486,6 +489,8 @@ public class BrokenMedusa_AI : IKBossBase
             MainAnimationPlay(0);
             animatorControll.SetLayerWeight(1,0f);
             animatorControll.SetLayerWeight(2,0f);
+            _timeCounter.InitTimer("transformTime");
+            
             //animationControll.Play("Anim_Medusa_Box_Open");
         }
         else if(currentState == State.TransformClose)
