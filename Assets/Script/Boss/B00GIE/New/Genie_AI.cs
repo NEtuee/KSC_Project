@@ -23,9 +23,17 @@ public class Genie_AI : MonoBehaviour
 
     public Material dangerMat;
     public Material defaultMat;
+    public Material safeZoneMat;
+
+    [ColorUsage(true,true)]
+    public List<Color> eyeColor;
+    public List<Renderer> eyes;
 
     public Transform head;
     public Transform droneSpawnPoint;
+
+    public Transform leftChest;
+    public Transform rightChest;
     public Boogie_GridControll gridControll;
     public Genie_CenterShield centerShield;
 
@@ -55,6 +63,7 @@ public class Genie_AI : MonoBehaviour
 
     private Dictionary<State, StateDel> _stateDic;
     private List<HexCube> _areaList;
+    private List<HexCube> _safeArea;
 
 
     private StateDel _currentStateDelegate;
@@ -70,6 +79,7 @@ public class Genie_AI : MonoBehaviour
     private string _currentAnimation;
     private int _currentDroneCount;
     private int _droneSpawnCount;
+    private int _droneSpawnLimit;
 
     public void Start()
     {
@@ -99,6 +109,9 @@ public class Genie_AI : MonoBehaviour
         _animator.IsPlaying("BodySpread");
         _currentAnimation = "BodySpread";
 
+        _safeArea = new List<HexCube>();
+        //SetSafeZone();
+
         ChangeState(currentState);
     }
 
@@ -123,7 +136,14 @@ public class Genie_AI : MonoBehaviour
             _timeCounterEx.InitTimer("droneSpawnTiming",0f,droneSpawnTiming);
             _animator.Play("DroneSpawn",handIKs[1]);
 
+            _droneSpawnLimit = _currentDroneCount;
             _droneSpawnCount = 0;
+            UpdateDroneCount();
+
+            if(_currentDroneCount == 0)
+            {
+                SetSafeZone();
+            }
         }
         else if(state == State.GroundHitReady)
         {
@@ -138,6 +158,10 @@ public class Genie_AI : MonoBehaviour
             _timeCounterEx.InitTimer("groundHitReady",0f,groundHitReadyTime);
             _timeCounterEx.InitTimer("groundHitAttack",0f,groundHitAttackTime);
             _timeCounterEx.InitTimer("groundHitWait",0f,groundHitWaitTime);
+
+            _animator.Play("ChestOpenLeft",leftChest);
+            _animator.Play("ChestOpenRight",rightChest);
+            
         }
         else if(state == State.Hit)
         {
@@ -167,7 +191,10 @@ public class Genie_AI : MonoBehaviour
         if(currentState == State.GroundHitAttack)
         {
             ChangeState(State.Hit);
+            SetGroundAreaMaterial(defaultMat);
             centerShield.ToOrigin();
+            _animator.Play("ChestCloseLeft",leftChest);
+            _animator.Play("ChestCloseRight",rightChest);
         }
     }
 
@@ -212,6 +239,7 @@ public class Genie_AI : MonoBehaviour
             _animatorController.SetBool("RockHand",true);
             _animator.Play("GroundAttackLeft",handIKs[0]);
             _animator.Play("GroundAttackRight",handIKs[1]);
+
             centerShield.ToTarget();
             GetGroundArea();
             SetGroundAreaMaterial(dangerMat);
@@ -231,9 +259,43 @@ public class Genie_AI : MonoBehaviour
             // gridControll.GetCube_Sector(_groundLookTarget.position);
             // gridControll.SetCubesActive(false,true,groundDisapearTime);
             centerShield.ToOrigin();
+            _animator.Play("ChestCloseLeft",leftChest);
+            _animator.Play("ChestCloseRight",rightChest);
 
             ChangeState(State.GroundHitWait);
         }
+    }
+
+    public void SetSafeZone()
+    {
+        foreach(var cube in _safeArea)
+        {
+            cube.GetComponent<MeshRenderer>().material = defaultMat;
+            cube.special = false;
+        }
+
+        for(int i = 0; i < 6; ++i)
+        {
+            gridControll.GetCube_Sector(transform.position,i);
+
+            AddSafeZone(gridControll.GetRandomTargetCube());
+            AddSafeZone(gridControll.GetRandomTargetCube());
+            AddSafeZone(gridControll.GetRandomTargetCube());
+        }
+
+        
+
+    }
+
+    public void AddSafeZone(HexCube cube)
+    {
+        if(!_safeArea.Find((x)=>{return cube == x;}))
+        {
+            cube.special = true;
+            cube.GetComponent<MeshRenderer>().material = safeZoneMat;
+            _safeArea.Add(cube);
+        }
+
     }
 
     public void SetGroundAreaMaterial(Material mat)
@@ -299,7 +361,7 @@ public class Genie_AI : MonoBehaviour
         {
             _timeCounterEx.InitTimer("droneSpawnTiming",0f,droneSpawnTiming);
             RespawnDrone(_droneSpawnCount++);
-            if(_droneSpawnCount >= droneAIs.Count)
+            if(_droneSpawnCount >= droneAIs.Count - _droneSpawnLimit)
             {
                 ChangeState(State.LookTarget);
             }
@@ -313,7 +375,7 @@ public class Genie_AI : MonoBehaviour
         LookTargetRotate(_target.position, deltaTime);
         HeadLookTarget(_target.position);
 
-        if(_currentDroneCount == 0)
+        if(_currentDroneCount <= 1)
         {
             _timeCounterEx.IncreaseTimerSelf("droneSpawnStart",out var spawn,deltaTime);
             if(spawn)
@@ -333,8 +395,12 @@ public class Genie_AI : MonoBehaviour
     public void Hit()
     {
         --hitPoint;
+        UpdateEyeColor();
         SetGroundAreaMaterial(defaultMat);
         centerShield.ToOrigin();
+
+        var currState = currentState;
+
         if(hitPoint == 0)
         {
             ChangeState(State.Groggy);
@@ -343,8 +409,24 @@ public class Genie_AI : MonoBehaviour
         {
             ChangeState(State.Hit);
         }
+
+        if(currState == State.GroundHitAttack || currState == State.GroundHitReady)
+        {
+            _animator.Play("ChestCloseLeft",leftChest);
+            _animator.Play("ChestCloseRight",rightChest);
+        }
+        
         
     }
+
+    public void UpdateEyeColor()
+    {
+        foreach(var eye in eyes)
+        {
+            eye.material.color = eyeColor[hitPoint];
+        }
+    }
+
 
     public void DeleteAllDrone()
     {

@@ -92,15 +92,15 @@ public class HexCubeGrid : MonoBehaviour
         }
     }
 
-    public void GetCubeRange(ref List<HexCube> list,Vector3 position,int range)
+    public void GetCubeRange(ref List<HexCube> list,Vector3 position,int range, bool ignoreSpecial)
     {
-        var cubeObj = GetCubeFromWorld(position);
+        var cubeObj = GetCubeFromWorld(position,ignoreSpecial);
         _cubeSaveList.Clear();
         HexGridHelperEx.GetCubeRange(ref _cubeSaveList,cubeObj.cubePoint,range);
 
         foreach(var cube in _cubeSaveList)
         {
-            var target = GetCube(cube);
+            var target = GetCube(cube,ignoreSpecial);
             if(target == null)
                 continue;
 
