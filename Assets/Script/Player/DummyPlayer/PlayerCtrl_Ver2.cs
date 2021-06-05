@@ -2043,7 +2043,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             StartCoroutine(_dechargingCoroutine);
 
             GameManager.Instance.effectManager
-                .Active("SteamSmoke", steamPosition.position, Quaternion.LookRotation(steamPosition.up)).transform
+                .Active("SteamSmoke", steamPosition.position, Quaternion.LookRotation(-steamPosition.up)).transform
                 .SetParent(steamPosition);
         }
 
