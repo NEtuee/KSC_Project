@@ -475,7 +475,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                 InputChargeShot();
 
-                if (InputAimingRelease())
+                if (InputReleaseAiming())
                     return;
             }
                 break;
@@ -1559,6 +1559,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetFloat("Speed", 0.0f);
                     animator.SetBool("HighLanding",true);
                     GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
+                    GameManager.Instance.cameraManager.GenerateRecoilImpulse();
                 }
                 break;
         }
@@ -2013,38 +2014,43 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         return false;
     }
 
-    private bool InputAimingRelease()
+    private bool InputReleaseAiming()
     {
         //if (InputManager.Instance.GetAction(KeybindingActions.EMPAimRelease))
         if (InputManager.Instance.GetRelease(KeybindingActions.EMPAim))
         {
             GameManager.Instance.soundManager.Play(1009, Vector3.up, transform);
 
-            if(_charge != null)
-                _charge.Stop();
-
-            int loadCount = (int) (chargeTime.Value);
-            if (loadCount == 3)
-            {
-                if (decharging == true)
-                    StopCoroutine(_dechargingCoroutine);
-
-                _dechargingCoroutine = DechargingCoroutine();
-                StartCoroutine(_dechargingCoroutine);
-
-                GameManager.Instance.effectManager
-                    .Active("SteamSmoke", steamPosition.position, Quaternion.LookRotation(steamPosition.up)).transform
-                    .SetParent(steamPosition);
-            }
-
-            ChangeState(PlayerState.Default);
-            ActiveAim(false);
-            chargeTime.Value = 0.0f;
-            playerPelvisGunObject.SetActive(true);
+            ReleaseAiming();
             return true;
         }
 
         return false;
+    }
+
+    public void ReleaseAiming()
+    {
+        if (_charge != null)
+            _charge.Stop();
+
+        int loadCount = (int)(chargeTime.Value);
+        if (loadCount == 3)
+        {
+            if (decharging == true)
+                StopCoroutine(_dechargingCoroutine);
+
+            _dechargingCoroutine = DechargingCoroutine();
+            StartCoroutine(_dechargingCoroutine);
+
+            GameManager.Instance.effectManager
+                .Active("SteamSmoke", steamPosition.position, Quaternion.LookRotation(steamPosition.up)).transform
+                .SetParent(steamPosition);
+        }
+
+        ChangeState(PlayerState.Default);
+        ActiveAim(false);
+        chargeTime.Value = 0.0f;
+        playerPelvisGunObject.SetActive(true);
     }
 
     private void InputChargeShot()
@@ -2534,7 +2540,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }
 
-
+    public void InitializeMove()
+    {
+        animator.SetFloat("Speed", 0.0f);
+        if (state == PlayerState.Aiming)
+        {
+            ReleaseAiming();
+            ChangeState(PlayerState.Default);
+        }
+    }
     #region 디버그
 
     private void OnDrawGizmos()

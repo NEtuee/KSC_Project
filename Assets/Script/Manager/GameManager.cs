@@ -199,7 +199,7 @@ public class GameManager : MonoBehaviour
         //    }
         //}
 
-        if (optionMenuCtrl.sceneLoadUi.Loading == false)
+        if (optionMenuCtrl.sceneLoadUi != null && optionMenuCtrl.sceneLoadUi.Loading == false)
         {
             if (Input.GetKeyDown(KeyCode.O))
             {
