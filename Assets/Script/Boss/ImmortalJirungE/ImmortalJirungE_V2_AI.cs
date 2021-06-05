@@ -726,6 +726,46 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             _bodyTransforms.Add(tp);
         }
     }
+
+    public override bool Move(Vector3 direction, float speed, float deltaTime, float legMovementSpeed = 4f)
+    {
+        _accelSpeed = Mathf.Lerp(_accelSpeed,speed,0.2f);
+        var angle = Vector3.SignedAngle(transform.forward,_targetDirection,transform.up);
+
+
+        if(ForwardRayCheck(out var hit))
+        {
+            // var dir = hit.point - transform.position;
+            // dir = Vector3.ProjectOnPlane(dir,transform.up).normalized;
+            // var angle = Vector3.Angle(transform.forward,dir);
+
+            //Turn(angle < 0,this.transform);
+            Turn(false,this.transform, deltaTime);
+            speed *= 0.5f;
+        }
+        else if(LeftRayCheck(out hit))
+        {
+            Turn(true,this.transform,deltaTime);
+        }
+        else if(RightRayCheck(out hit))
+        {
+            Turn(false,this.transform,deltaTime);
+        }
+        else if(MathEx.abs(angle) > _turnAccuracy)
+        {
+            if(angle > 0)
+                Turn(true,this.transform,deltaTime);
+            else
+                Turn(false,this.transform,deltaTime);
+        }
+        
+
+
+        transform.position += direction * (_accelSpeed * deltaTime);
+        
+
+        return true;
+    }
     
     public bool MoveAngle(Vector3 direction, float speed, float deltaTime,float legMovementSpeed = 4f, bool turn = true)
     {

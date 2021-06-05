@@ -266,6 +266,9 @@ public class AsynSceneManager : MonoBehaviour
                 stage.ObjectTeleportToLoadedPos(_cam.transform,_player.transform.position);
                 stage.ObjectTeleportToLoadedPos(_follow,_player.transform.position);
                 stage.ObjectTeleportToLoadedPos(_drone,_drone.transform.position);
+
+                var rot = Quaternion.LookRotation(stage.loadedPlayerPosition.forward);
+                GameManager.Instance.followTarget.SetPitchYaw(rot.eulerAngles.x,rot.eulerAngles.y);
             }
             else
             {
