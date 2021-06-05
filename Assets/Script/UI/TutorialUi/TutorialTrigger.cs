@@ -6,6 +6,7 @@ using UnityEngine;
 public class TutorialTrigger : MonoBehaviour
 {
     public bool isOver = false;
+    public bool IsOver { get => IsOver; set => isOver = value; }
     public TutorialType tutorialType;
     private OptionMenuCtrl _uiManager;
     

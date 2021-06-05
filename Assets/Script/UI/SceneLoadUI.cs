@@ -20,6 +20,7 @@ public class SceneLoadUI : MonoBehaviour
     public Image loadingKeyGuideImage;
     public LoadingTextImageCtrl loadingTextImageCtrl;
     public UnityEvent whenEndLoad;
+    public bool Loading { get; set; }
 
     private float _loadingTime = 0.0f;
     [SerializeField] private float _minLoadUiShowTime = 1f;
@@ -41,6 +42,7 @@ public class SceneLoadUI : MonoBehaviour
     public void StartLoad(TweenCallback complete)
     {
         GameManager.Instance.PAUSE = true;
+        Loading = true;
         loadCanvas.enabled = true;
         _loadingTime = 0.0f;
         fadeImage.DOFade(1f, 0.5f).OnComplete(()=>
@@ -81,7 +83,8 @@ public class SceneLoadUI : MonoBehaviour
                 GameManager.Instance.followTarget.SetPitchYaw(0.0f, 180.0f);
                 GameManager.Instance.PAUSE = false;
                 GameManager.Instance.soundManager.SetParam(2009, 20091, 1);
-            }).OnComplete(() => loadCanvas.enabled = false);
+            }).OnComplete(() => { loadCanvas.enabled = false; Loading = false;
+            });
         }
         else
         {
@@ -108,7 +111,9 @@ public class SceneLoadUI : MonoBehaviour
                 GameManager.Instance.PAUSE = false;
                 GameManager.Instance.soundManager.SetParam(2009, 20091, 1);
             })
-            .OnComplete(() => loadCanvas.enabled = false);
+            .OnComplete(() => {
+                loadCanvas.enabled = false; Loading = false;
+            });
     }
     
 

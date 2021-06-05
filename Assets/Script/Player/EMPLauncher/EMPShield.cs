@@ -28,6 +28,8 @@ public class EMPShield : Hitable
 
     private Material mat;
 
+    public delegate void WhenReactive(GameObject scanable);
+    private WhenReactive whenReactive;
     void Start()
     {
         base.Start();
@@ -51,6 +53,8 @@ public class EMPShield : Hitable
 
         SetDistortion();
         StartCoroutine(HitEffect());
+
+        whenReactive += GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneScaner>().AddScanableObjets;
 
         //shieldParticle = GetComponent<ParticleSystem>();
     }
@@ -196,11 +200,14 @@ public class EMPShield : Hitable
 
     public void Reactive()
     {
+        //whenReactive(this.gameObject);
+
         collider.enabled = true;
 
         if(renderer != null)
             renderer.enabled = true;
         isOver = false;
+        isActive = false;
 
         if(mat != null)
         {

@@ -106,6 +106,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private LayerMask climbingPaintLayer;
     [SerializeField] private LayerMask ledgeAbleLayer;
     [SerializeField] private LayerMask adjustAbleLayer;
+    [SerializeField] private LayerMask frontCheckLayer;
     [SerializeField] private Vector3 detectionOffset;
 
     [Header("Input Record")] [SerializeField]
@@ -577,7 +578,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.SetFloat("HorizonWeight", horizonWeight);
 
                 if (Physics.Raycast(transform.position + collider.center, moveDir,
-                    collider.radius + currentSpeed * deltaTime) == false)
+                    collider.radius + currentSpeed * deltaTime, frontCheckLayer) == false)
                 {
                     movement.Move(moveDir);
                 }
@@ -680,7 +681,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 }
 
                 if (Physics.Raycast(transform.position + collider.center, moveDir,
-                    collider.radius + currentSpeed * deltaTime))
+                    collider.radius + currentSpeed * deltaTime, frontCheckLayer))
                 {
                     movement.Move(Vector3.up * currentJumpPower);
                 }
