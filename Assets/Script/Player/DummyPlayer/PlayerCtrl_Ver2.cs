@@ -153,6 +153,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private float _emissionTargetValue = 10f;
     private Color _originalEmissionColor;
     [SerializeField] private bool decharging = false;
+    [SerializeField] private TMPro.TextMeshProUGUI chargingCountText;
+    private Color _chargingCountTextColor;
     private Material pelvisGunMaterial;
     private IEnumerator _dechargingCoroutine;
     [SerializeField] private GameObject playerPelvisGunObject;
@@ -263,6 +265,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         pelvisGunMaterial = pelvisGunObject.GetComponent<Renderer>().material;
         _originalEmissionColor = pelvisGunMaterial.GetColor("_EmissionColor");
+
+        if (chargingCountText != null)
+            _chargingCountTextColor = chargingCountText.color;
 
         StartCoroutine(StopCheck());
     }
@@ -2461,6 +2466,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private IEnumerator DechargingCoroutine()
     {
         decharging = true;
+        if (chargingCountText != null)
+            chargingCountText.color = Color.red;
+
         float time = 0;
         while (time < dechargingDuration)
         {
@@ -2472,6 +2480,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
 
         decharging = false;
+        if (chargingCountText != null)
+            chargingCountText.color = _chargingCountTextColor;
     }
 
     public Drone GetDrone()
