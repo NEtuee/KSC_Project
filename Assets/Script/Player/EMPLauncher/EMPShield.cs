@@ -45,7 +45,7 @@ public class EMPShield : Hitable
             color2.a = 0f;
             mat.SetColor("_color2",color2);
 
-            originalWpo = mat.GetFloat("_WPO");
+            originalWpo = mat.GetFloat("_wpo");
             _initWpo = originalWpo;
         }
 
@@ -212,7 +212,7 @@ public class EMPShield : Hitable
         if(mat != null)
         {
             mat.SetColor("_color",_initColor);
-            mat.SetFloat("_WPO",_initWpo);
+            mat.SetFloat("_wpo",_initWpo);
         }
 
         if(shieldEffect)
@@ -222,7 +222,7 @@ public class EMPShield : Hitable
             color2.a = 0f;
             mat.SetColor("_color2",color2);
 
-            originalWpo = mat.GetFloat("_WPO");
+            originalWpo = mat.GetFloat("_wpo");
             _initWpo = originalWpo;
         }
         
@@ -234,7 +234,8 @@ public class EMPShield : Hitable
         GameManager.Instance.soundManager.Play(1518, new Vector3(0, 1, 0), transform);
         GameManager.Instance.soundManager.Play(1501,transform.position);
 
-        Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
+        //Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
+        GameManager.Instance.effectManager.Active("CannonExplosion", transform.position);
         collider.enabled = false;
         if(renderer != null)
             renderer.enabled = false;
@@ -286,17 +287,17 @@ public class EMPShield : Hitable
             yield break;
 
         float wpo = 0.1f;
-        mat.SetFloat("_WPO", wpo);
+        mat.SetFloat("_wpo", wpo);
         
         while(wpo > originalWpo)
         {
             wpo -= 2.0f * Time.deltaTime;
-            mat.SetFloat("_WPO", wpo);
+            mat.SetFloat("_wpo", wpo);
 
             yield return null;
         }
 
-        mat.SetFloat("_WPO", originalWpo);
+        mat.SetFloat("_wpo", originalWpo);
     }
 
     //private void OnBecameVisible()

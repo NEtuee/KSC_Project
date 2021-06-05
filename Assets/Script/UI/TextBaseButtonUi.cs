@@ -59,7 +59,10 @@ public class TextBaseButtonUi : MonoBehaviour,IPointerEnterHandler, IPointerExit
           if (backGroundImage == null)
                return;
           backGroundImage.color = imageSelectedColor;
-     }
+
+        GameManager.Instance.soundManager.Play(3000, Vector3.zero);
+        GameManager.Instance.soundManager.SetParam(3000, 30001, 0);
+    }
 
      public void OnPointerExit(PointerEventData eventData)
      {
@@ -78,6 +81,9 @@ public class TextBaseButtonUi : MonoBehaviour,IPointerEnterHandler, IPointerExit
                return;
           
           Select(true);
+
+               GameManager.Instance.soundManager.Play(3000, Vector3.zero);
+        GameManager.Instance.soundManager.SetParam(3000, 30001, 1);
      }
 
      public void Appear(float duration, TweenCallback endCallback = null)

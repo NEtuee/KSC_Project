@@ -51,6 +51,9 @@ public class ImageBaseButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         baseImage.sprite = selectedImage;
         onEnter?.Invoke();
+
+        GameManager.Instance.soundManager.Play(3000, Vector3.zero);
+        GameManager.Instance.soundManager.SetParam(3000, 30001, 0);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -68,6 +71,9 @@ public class ImageBaseButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
             return;
 
         Select(true);
+
+        GameManager.Instance.soundManager.Play(3000, Vector3.zero);
+        GameManager.Instance.soundManager.SetParam(3000, 30001, 1);
     }
 
     public void Active(bool active)

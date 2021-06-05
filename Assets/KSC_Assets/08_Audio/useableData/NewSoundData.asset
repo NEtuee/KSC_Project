@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
   m_Name: NewSoundData
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: d5d85b6c0168d5d4496f7b03267616c0, type: 3}
+  csvData: {fileID: 4900000, guid: 08fafd28dc7c2b149ab3f1716df04995, type: 3}
   soundData:
   - path: global data
     id: 0
@@ -242,6 +242,18 @@ MonoBehaviour:
     id: 1518
     type: SFX
     parameters: []
+  - path: event:/Mob/Medusa/Medusa_Transform
+    id: 1519
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Medusa/Medusa_Shield_Open
+    id: 1520
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Medusa/Medusa_Shield_Close
+    id: 1521
+    type: SFX
+    parameters: []
   - path: event:/SFX/Explosion
     id: 1700
     type: SFX
@@ -293,7 +305,11 @@ MonoBehaviour:
   - path: event:/Ambient/Elevator/Elevator_Inside
     id: 2008
     type: AMB
-    parameters: []
+    parameters:
+    - name: Elevator_In
+      id: 20081
+      min: 0
+      max: 1
   - path: event:/Ambient/Elevator/Elevator_Move
     id: 2009
     type: AMB
@@ -326,6 +342,18 @@ MonoBehaviour:
     id: 2015
     type: AMB
     parameters: []
+  - path: event:/Ambient/Medusa/Conveyor_Move
+    id: 2016
+    type: AMB
+    parameters: []
+  - path: event:/UI/Button
+    id: 3000
+    type: UI
+    parameters:
+    - name: Bt_State
+      id: 30001
+      min: 0
+      max: 3
   - path: snapshot:/Global_Option/MasterVolume
     id: 4000
     type: Snapshot

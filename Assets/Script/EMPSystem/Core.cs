@@ -18,7 +18,7 @@ public class Core : Hitable
 
     public override void Destroy()
     {
-        Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
+        GameManager.Instance.effectManager.Active("CannonExplosion", transform.position);
         collider.enabled = false;
         renderer.enabled = false;
         isOver = true;
