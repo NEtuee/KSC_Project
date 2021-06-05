@@ -40,8 +40,11 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
     {
         var player = gridControll.cubeGrid.GetCubeFromWorld(GameManager.Instance.player.transform.position);
         if(player == null)
+        {
+            _direction = (transform.position - GameManager.Instance.player.transform.position).normalized;
             return;
-        
+        }
+
         var mirror = gridControll.cubeGrid.GetCubeReflectMirror(player.cubePoint);
         if(mirror != null)
         {
