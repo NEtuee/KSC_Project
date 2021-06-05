@@ -25,6 +25,13 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
             AddForce(dist * 2f * Vector3.up * deltaTime);
         }
 
+        var centerDist = Vector3.Distance(centerPosition.position,transform.position);
+        if(centerDist >= maxDistance)
+        {
+            var dir = (centerPosition.position - transform.position).normalized;
+            AddForce(dir * maxSpeed * deltaTime * 3f);
+        }
+
         if(_target != null)
             UpdateTargetDirection(deltaTime);
 
