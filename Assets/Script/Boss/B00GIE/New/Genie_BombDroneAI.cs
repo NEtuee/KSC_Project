@@ -76,6 +76,8 @@ public class Genie_BombDroneAI : DroneAIBase
         if(!limit)
         {
             UpdateVelocity(deltaTime);
+            if(directionRotation)
+                DirectionRotation();
             return;
         }
 
