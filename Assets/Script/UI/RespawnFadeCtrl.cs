@@ -24,6 +24,30 @@ public class RespawnFadeCtrl : MonoBehaviour
         canvas.enabled = false;
     }
 
+    public void FadeOut(Action fadeOutActon = null)
+    {
+        canvas.enabled = true;
+
+        fadeImage.DOFade(1.0f, 0.0f);
+        fadeImage.DOFade(0.0f, fadeOutDuration).OnComplete(() =>
+        {
+            StartCoroutine(DeferredCallFadeOutAction(blackOutDuration * 0.8f, fadeOutActon));
+        });
+
+    }
+
+    public void FadeIn(Action fadeOutActon = null)
+    {
+        canvas.enabled = true;
+
+        fadeImage.DOFade(0.0f, 0.0f);
+        fadeImage.DOFade(1.0f, fadeInDuration).OnComplete(() =>
+        {
+            StartCoroutine(DeferredCallFadeOutAction(blackOutDuration * 0.8f, fadeOutActon));
+        });
+
+    }
+
     public void FadeInOut(Action fadeOutActon = null)
     {
         fadeImage.DOFade(0.0f, 0.0f);

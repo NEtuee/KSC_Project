@@ -521,7 +521,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void WhenPushFall()
     {
-        if(currentState == State.TransformOpen || currentState == State.TransformClose)
+        if(currentState == State.TransformIdle || currentState == State.TransformOpen || currentState == State.TransformClose)
             return;
 
         ChangeState(State.CenterMove);
@@ -556,10 +556,10 @@ public class BrokenMedusa_AI : IKBossBase
 
             _timeCounter.InitTimer("scanTime",0f,2f);
         }
-        else if(currentState == State.TransformIdle)
-        {
-            ChangeState(State.TransformOpen);
-        }
+        // else if(currentState == State.TransformIdle)
+        // {
+        //     ChangeState(State.TransformOpen);
+        // }
     }
 
     public void FrontMoveProgress(float deltaTime)

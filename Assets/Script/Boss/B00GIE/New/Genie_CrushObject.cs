@@ -21,6 +21,7 @@ public class Genie_CrushObject : MonoBehaviour
         
         foreach(var rig in rigidbodies)
         {
+            rig.transform.SetParent(null);
             rig.gameObject.layer = 1 << changeLayer.value;
             rig.isKinematic = false;
             rig.useGravity = true;
@@ -43,6 +44,7 @@ public class Genie_CrushObject : MonoBehaviour
 
         foreach(var rig in rigidbodies)
         {
+            rig.transform.SetParent(null);
             rig.gameObject.layer = 1 << changeLayer.value;
             rig.isKinematic = false;
             rig.useGravity = true;
