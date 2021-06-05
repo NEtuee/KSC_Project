@@ -57,7 +57,7 @@ public class PlayerRePositionor : MonoBehaviour
             yield break;
         }
 
-        if(coll.gameObject.layer == (1 << playerLayer.value))
+        if(playerLayer == (playerLayer | (1<<coll.gameObject.layer)))
         {
             ((PlayerCtrl_Ver2)(GameManager.Instance.player)).ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
             yield return new WaitForSeconds(1.0f);
