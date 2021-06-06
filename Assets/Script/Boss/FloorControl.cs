@@ -76,6 +76,8 @@ public class FloorControl : MonoBehaviour
 
     public void SpecialLaunch()
     {
+        if(_launch)
+            return;
         StartCoroutine(SoundLaunch());
     }
 

@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class PlayerRePositionor : MonoBehaviour
 {
+    public LayerMask playerLayer;
     public UnityEvent whenFall;
     public Transform respawn;
     public Transform bip;
@@ -56,7 +57,7 @@ public class PlayerRePositionor : MonoBehaviour
             yield break;
         }
 
-        if(ctrl == null && coll.gameObject.layer == (1 << LayerMask.NameToLayer("Player")))
+        if(playerLayer == (playerLayer | (1<<coll.gameObject.layer)))
         {
             ((PlayerCtrl_Ver2)(GameManager.Instance.player)).ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
             yield return new WaitForSeconds(1.0f);

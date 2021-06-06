@@ -32423,6 +32423,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2415251833704064409, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
+      propertyPath: damage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2415251833704064409, guid: 5d864589129a8274abb22f5bd23dcfe1,
+        type: 3}
       propertyPath: scanMat
       value: 
       objectReference: {fileID: 2100000, guid: 3179a4096a1855841ac11f6c13cf2aa2, type: 2}
@@ -32778,6 +32783,7 @@ GameObject:
   - component: {fileID: 684731079}
   - component: {fileID: 684731085}
   - component: {fileID: 684731086}
+  - component: {fileID: 684731087}
   m_Layer: 15
   m_Name: MiniSpider_0 (1)
   m_TagString: Untagged
@@ -33162,6 +33168,28 @@ MonoBehaviour:
   changeLayer:
     serializedVersion: 2
     m_Bits: 262145
+--- !u!114 &684731087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684731078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0197609a213fa3b4bb46b57225067b21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventType: 0
+  ragdollType: 0
+  hitForcePointType: 0
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  hitDamage: 5
+  shockTime: 1
+  hitForce: 50
+  collisionDistance: 1
 --- !u!43 &689635270
 Mesh:
   m_ObjectHideFlags: 0
@@ -45676,7 +45704,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877066712}
   m_LocalRotation: {x: -0, y: 0.71524286, z: -0, w: 0.69887596}
-  m_LocalPosition: {x: -125.534294, y: 53.38, z: -115.86488}
+  m_LocalPosition: {x: -39.63, y: 53.38, z: -117.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -106210,6 +106238,7 @@ GameObject:
   - component: {fileID: 3528801645828655660}
   - component: {fileID: 3528801645828656596}
   - component: {fileID: 3528801645828656595}
+  - component: {fileID: 3528801645828656597}
   m_Layer: 0
   m_Name: Trigger
   m_TagString: Untagged
@@ -106277,6 +106306,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objList:
   - {fileID: 277090320}
+--- !u!114 &3528801645828656597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528801645828656592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f9e124567d7b3d4087997bf9e47986a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!33 &6532390012885030974
 MeshFilter:
   m_ObjectHideFlags: 0

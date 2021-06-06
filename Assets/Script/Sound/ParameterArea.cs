@@ -22,6 +22,7 @@ public class ParameterArea : MonoBehaviour
         {
             _timer += Time.deltaTime;
             GameManager.Instance.soundManager.SetGlobalParam(parameterCode,Mathf.Lerp(enterValue, exitValue,_timer));
+
             if(_timer >= 1f)
             {
                 _fade = false;
@@ -31,7 +32,7 @@ public class ParameterArea : MonoBehaviour
 
     public void OnTriggerEnter(Collider coll)
     {
-        if(coll.gameObject.layer == 1 << targetLayer.value)
+        if(targetLayer == (targetLayer | (1<<coll.gameObject.layer)))
         {
             _fade = false;
             _collsionList.Add(coll.transform);
@@ -42,7 +43,7 @@ public class ParameterArea : MonoBehaviour
 
     public void OnTriggerExit(Collider coll)
     {
-        if(coll.gameObject.layer == 1 << targetLayer.value)
+        if(targetLayer == (targetLayer | (1<<coll.gameObject.layer)))
         {
             _collsionList.Remove(coll.transform);
             if(_collsionList.Count == 0)

@@ -98,7 +98,7 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("pushStand");
         _timeCounter.InitTimer("pushCooldown");
         
-        //GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
+        GameManager.Instance.soundManager.Play(4005,Vector3.zero,transform);
 
         ChangeState(State.TransformIdle);
     }
@@ -265,7 +265,7 @@ public class BrokenMedusa_AI : IKBossBase
 
                 if(!floorControl._launch)
                 {
-                    floorControl.Launch();
+                    floorControl.SpecialLaunch();
                 }
             }
         }
@@ -304,7 +304,7 @@ public class BrokenMedusa_AI : IKBossBase
 
                     if(!floorControl._launch)
                     {
-                        floorControl.Launch();
+                        floorControl.SpecialLaunch();
                     }
                 }
                 else
@@ -490,6 +490,8 @@ public class BrokenMedusa_AI : IKBossBase
             animatorControll.SetLayerWeight(1,0f);
             animatorControll.SetLayerWeight(2,0f);
             _timeCounter.InitTimer("transformTime");
+
+            //_soundManager.Play(1519,transform.position);
             
             //animationControll.Play("Anim_Medusa_Box_Open");
         }
