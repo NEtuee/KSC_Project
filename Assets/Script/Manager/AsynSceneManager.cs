@@ -270,6 +270,7 @@ public class AsynSceneManager : MonoBehaviour
                 var rot = Quaternion.LookRotation(stage.loadedPlayerPosition.forward);
                 GameManager.Instance.followTarget.SetPitchYaw(rot.eulerAngles.x,rot.eulerAngles.y);
                 GameManager.Instance.player.transform.rotation = rot;
+                (GameManager.Instance.player as PlayerCtrl_Ver2).SetRunningLock(false);
             }
             else
             {
@@ -283,6 +284,7 @@ public class AsynSceneManager : MonoBehaviour
                 GameManager.Instance.player.transform.rotation = rot;
 
                 ((PlayerCtrl_Ver2)GameManager.Instance.player).InitVelocity();
+                (GameManager.Instance.player as PlayerCtrl_Ver2).SetRunningLock(false);
             }
             
             currentStageManager = stage;
