@@ -25,6 +25,7 @@ public class ParameterVolume : MonoBehaviour
     public CenterAlign align;
 
     public int paramterCode;
+    public bool parameterClear = true;
     public float max;
 
     public float radius;
@@ -38,7 +39,7 @@ public class ParameterVolume : MonoBehaviour
         {
             SetParameter();
         }
-        else
+        else if(parameterClear)
         {
             float velo = 0f;
             _factor = Mathf.SmoothDamp(_factor,0f,ref velo,0.2f);
