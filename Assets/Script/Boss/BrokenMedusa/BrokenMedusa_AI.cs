@@ -90,13 +90,15 @@ public class BrokenMedusa_AI : IKBossBase
 
         }
 
+        _timeCounter.InitTimer("transformTime");
+
         _timeCounter.InitTimer("FrontWalk");
         _timeCounter.InitTimer("FrontWalk_Init");
         _timeCounter.InitTimer("timer");
         _timeCounter.InitTimer("pushStand");
         _timeCounter.InitTimer("pushCooldown");
         
-        //GameManager.Instance.soundManager.Play(4004,Vector3.zero,transform);
+        GameManager.Instance.soundManager.Play(4005,Vector3.zero,transform);
 
         ChangeState(State.TransformIdle);
     }
@@ -263,7 +265,7 @@ public class BrokenMedusa_AI : IKBossBase
 
                 if(!floorControl._launch)
                 {
-                    floorControl.Launch();
+                    floorControl.SpecialLaunch();
                 }
             }
         }
@@ -302,7 +304,7 @@ public class BrokenMedusa_AI : IKBossBase
 
                     if(!floorControl._launch)
                     {
-                        floorControl.Launch();
+                        floorControl.SpecialLaunch();
                     }
                 }
                 else
@@ -331,14 +333,19 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.TransformOpen)
         {
-            if(!IsPlaying(0,"Anim_Medusa_Box_Open"))
+            _timeCounter.IncreaseTimerSelf("transformTime",out var limit, deltaTime);
+            if(limit && !IsPlaying(0,"Anim_Medusa_Box_Open"))
             {
                 SetIKActive(true);
-                ChangeState(State.SearchScan);
+                ChangeState(State.LockOnLook);
 
                 animatorControll.SetLayerWeight(1,1f);
                 animatorControll.SetLayerWeight(2,1f);
                 MainAnimationPlay(3);
+
+                SetPlayerRunningLock(false);
+                SetAimLock(false);
+                SetCameraDefault();
                 //animationControll.Play("Anim_Medusa_Finding");
             }
             // if(!animationControll.isPlaying)
@@ -352,6 +359,10 @@ public class BrokenMedusa_AI : IKBossBase
         {
             if(CenterMove(deltaTime))
             {
+                SetPlayerRunningLock(false);
+                SetAimLock(false);
+                SetCameraDefault();
+
                 ChangeState(State.LockOnLook);
             }
         }
@@ -478,6 +489,10 @@ public class BrokenMedusa_AI : IKBossBase
             MainAnimationPlay(0);
             animatorControll.SetLayerWeight(1,0f);
             animatorControll.SetLayerWeight(2,0f);
+            _timeCounter.InitTimer("transformTime");
+
+            //_soundManager.Play(1519,transform.position);
+            
             //animationControll.Play("Anim_Medusa_Box_Open");
         }
         else if(currentState == State.TransformClose)
@@ -508,7 +523,7 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void WhenPushFall()
     {
-        if(currentState == State.TransformOpen || currentState == State.TransformClose)
+        if(currentState == State.TransformIdle || currentState == State.TransformOpen || currentState == State.TransformClose)
             return;
 
         ChangeState(State.CenterMove);
@@ -529,7 +544,7 @@ public class BrokenMedusa_AI : IKBossBase
     public void Dead()
     {
         _soundManager.Play(1510,transform.position);
-        _soundManager.Play(1501,transform.position);
+        _soundManager.Play(1700,transform.position);
         SetIKActive(false);
         ChangeState(State.Dead);
     }
@@ -543,6 +558,10 @@ public class BrokenMedusa_AI : IKBossBase
 
             _timeCounter.InitTimer("scanTime",0f,2f);
         }
+        // else if(currentState == State.TransformIdle)
+        // {
+        //     ChangeState(State.TransformOpen);
+        // }
     }
 
     public void FrontMoveProgress(float deltaTime)
@@ -715,6 +734,23 @@ public class BrokenMedusa_AI : IKBossBase
         //         }
         //     }
         // }
+    }
+
+    public void SetCameraDefault()
+    {
+        GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+    }
+
+    public void SetPlayerRunningLock(bool value)
+    {
+        var player = GameManager.Instance.player as PlayerCtrl_Ver2;
+        player.SetRunningLock(value);
+    }
+
+    public void SetAimLock(bool value)
+    {
+        var player = GameManager.Instance.player as PlayerCtrl_Ver2;
+        player.SetAimLock(value);
     }
 
     public void LineMove(float deltaTime)

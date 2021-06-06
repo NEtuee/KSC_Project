@@ -10,16 +10,25 @@ public class EMPBomb : MonoBehaviour
     public LayerMask targetLayer;
     public float explosionRadius = 2f;
     public float explosionForce = 300f;
+    public float damage;
 
     public bool destroy = false;
+    public bool teamKill = true;
 
     private float _speed = 0f;
+    private Material _matOrigin;
+
+    public void Start()
+    {
+        _matOrigin = GetComponent<MeshRenderer>().material;
+    }
 
     public void Hit()
     {
         gameObject.SetActive(false);
         Collider[] playerColl = Physics.OverlapSphere(transform.position, explosionRadius,targetLayer);
-
+        GetComponent<MeshRenderer>().material = _matOrigin;
+        
         if(destroy)
             Destroy(this.gameObject);
 
@@ -31,6 +40,9 @@ public class EMPBomb : MonoBehaviour
                 if(ragdoll != null)
                 {
                     ragdoll.ExplosionRagdoll(explosionForce, (ragdoll.transform.position - transform.position).normalized);
+                    (GameManager.Instance.player as PlayerCtrl_Ver2).TakeDamage(damage);
+
+                    break;
                 }
                 else
                 {

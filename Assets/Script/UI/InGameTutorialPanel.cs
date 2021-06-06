@@ -14,7 +14,7 @@ public class InGameTutorialPanel : MonoBehaviour
     [SerializeField] private RawImage tutorialVideoRawImage;
     [SerializeField] private TextMeshProUGUI descritionText;
     [SerializeField] private ButtonGroup buttonGroup;
-
+    public bool notVideo;
     private void Awake()
     {
         _canvas = GetComponent<Canvas>();
@@ -30,15 +30,19 @@ public class InGameTutorialPanel : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             GameManager.Instance.optionMenuCtrl.CurrentTutorial = true;
-            videoPlayer.SetTargetImage(tutorialVideoRawImage);
+            ((PlayerCtrl_Ver2)GameManager.Instance.player).IsRun = false;
+
+            if(!notVideo)
+              videoPlayer.SetTargetImage(tutorialVideoRawImage);
+
         }
         else
         {
             GameManager.Instance.PAUSE = false;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            GameManager.Instance.optionMenuCtrl.CurrentTutorial = false;
-            videoPlayer.StopVideo();
+            if (!notVideo)
+                videoPlayer.StopVideo();
         }
     }
 

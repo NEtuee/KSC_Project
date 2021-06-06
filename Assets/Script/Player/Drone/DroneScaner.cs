@@ -22,7 +22,7 @@ public class DroneScaner : MonoBehaviour
     [SerializeField] private List<Scanable> scanableObjects = new List<Scanable>();
 
     private RaycastHit hit;
-    private void Start()
+    private void Awake()
     {
         FindScanableObjects();
         SceneManager.sceneLoaded += (s,w)=>{FindScanableObjects();};
@@ -132,6 +132,17 @@ public class DroneScaner : MonoBehaviour
                     scanableObjects.Add(currentScanable);
                 }
             }
+        }
+    }
+
+    public void AddScanableObjets(GameObject scanable)
+    {
+        if (scanable == null)
+            return;
+
+        if (scanable.TryGetComponent<Scanable>(out Scanable currentScanable))
+        {
+            scanableObjects.Add(currentScanable);
         }
     }
 }

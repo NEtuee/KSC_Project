@@ -38,4 +38,9 @@ public class OptionPanel : EscMenu
     public override void Disappear(float duration, TweenCallback tweenCallback)
     {
     }
+
+    public override void Init()
+    {
+        throw new System.NotImplementedException();
+    }
 }

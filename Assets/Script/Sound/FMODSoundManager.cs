@@ -112,6 +112,17 @@ public class FMODSoundManager : MonoBehaviour
         return emitter;
     }
 
+    public void Play(int id, Vector3 position, float deferredTime)
+    {
+        StartCoroutine(DeferredPlay(id, position, deferredTime));
+    }
+
+    IEnumerator DeferredPlay(int id, Vector3 position, float deferredTime)
+    {
+        yield return new WaitForSeconds(deferredTime);
+        Play(id, position);
+    }
+
     private void AddActiveMap(int id, FMODUnity.StudioEventEmitter emitter)
     {
         if(_activeMap.ContainsKey(id))

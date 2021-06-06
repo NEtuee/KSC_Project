@@ -9,7 +9,7 @@ public class PauseMenu : EscMenu
 
     public List<ImageBaseButton> imageBaseButtons = new List<ImageBaseButton>();
 
-    public void Init()
+    public override void Init()
     {
         foreach(var button in imageBaseButtons)
         {
@@ -25,6 +25,7 @@ public class PauseMenu : EscMenu
         foreach (var button in imageBaseButtons)
         {
             button.Active(active);
+            button.Select(false);
         }
     }
 

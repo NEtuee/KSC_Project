@@ -35,10 +35,12 @@ public class HexCubeGrid : MonoBehaviour
         }
     }
 
-    public void GetCubeLineHeavy(ref List<HexCube> list,Vector3Int start ,Vector3Int end, int loopStart, int loopCount)
+    public void GetCubeLineHeavy(ref List<HexCube> list,Vector3Int start ,Vector3Int end, int loopStart, int loopCount, bool overlapListClear = true)
     {
         GetCubeLine(ref list,start,end);
-        _overlapCheckList.Clear();
+
+        if(overlapListClear)
+            _overlapCheckList.Clear();
 
         foreach(var item in list)
         {
@@ -90,15 +92,15 @@ public class HexCubeGrid : MonoBehaviour
         }
     }
 
-    public void GetCubeRange(ref List<HexCube> list,Vector3 position,int range)
+    public void GetCubeRange(ref List<HexCube> list,Vector3 position,int range, bool ignoreSpecial)
     {
-        var cubeObj = GetCubeFromWorld(position);
+        var cubeObj = GetCubeFromWorld(position,ignoreSpecial);
         _cubeSaveList.Clear();
         HexGridHelperEx.GetCubeRange(ref _cubeSaveList,cubeObj.cubePoint,range);
 
         foreach(var cube in _cubeSaveList)
         {
-            var target = GetCube(cube);
+            var target = GetCube(cube,ignoreSpecial);
             if(target == null)
                 continue;
 

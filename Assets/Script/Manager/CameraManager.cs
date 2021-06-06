@@ -121,6 +121,11 @@ public class CameraManager : MonoBehaviour
         BlendDistanceAimCamera();
     }
 
+    public void SetBrainCameraPosition(Vector3 position)
+    {
+        brainCameraTransfrom.position = position;
+    }
+
     public void SetActiveScreenEffect(string target, bool value)
     {
         if (!renderPassActivation.ContainsKey(target))
@@ -190,6 +195,7 @@ public class CameraManager : MonoBehaviour
         current3rdPersonComponent = playerFollowCam3rdPersonComponent;
     }
     
+
     public bool ActivePlayerFollowCamera()
     {
         if (playerFollowCam == null)
@@ -526,7 +532,8 @@ public class CameraManager : MonoBehaviour
         var dir = -(Camera.main.transform.rotation * Vector3.forward).normalized;
         
         isCameraCollision =
-            collisionEx.Cast(GameManager.Instance.followTarget.transform.position + offset,dir,playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
+                        //collisionEx.Cast(GameManager.Instance.followTarget.transform.position + offset,dir,playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
+                        collisionEx.Cast(GameManager.Instance.followTarget.transform.position, dir, playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
 
         if (isCameraCollision)
         {

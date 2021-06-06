@@ -14,6 +14,8 @@ public class EMPGun : MonoBehaviour
     [SerializeField] private Transform laserEffectPos;
     [SerializeField] private Transform lookAim;
     [SerializeField] private CrossHair crossHair;
+    [SerializeField] private float layserRadius = 1.0f;
+    [SerializeField] private LayerMask hitLayer;
 
     private float aimWeight;
     
@@ -80,7 +82,8 @@ public class EMPGun : MonoBehaviour
         
         
         if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
-        {
+        //if (Physics.SphereCast(mainCamera.position,layserRadius, mainCamera.forward, out hit, 1000.0f,hitLayer))
+           {
             GameManager.Instance.effectManager.Active("LaserHit",hit.point);
 
             if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
@@ -88,7 +91,7 @@ public class EMPGun : MonoBehaviour
                 hitable.Hit(damage);
                 crossHair.ActiveHitMark();
             }
-        }
+           }
 
         crossHair.ActiveAnimation();
 
@@ -115,6 +118,11 @@ public class EMPGun : MonoBehaviour
             if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
             {
                 hitable.Hit(damage);
+                GameManager.Instance.soundManager.Play(1022, hit.point);
+            }
+            else
+            {
+                GameManager.Instance.soundManager.Play(1023, hit.point);
             }
 
             destroyed = true;

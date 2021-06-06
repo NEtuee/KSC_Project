@@ -23,7 +23,7 @@ public class IKCtrl : MonoBehaviour
     [SerializeField] private float newPelvisOffset = 0f;
     [Range(0, 1)] [SerializeField] private float pelvisUpAndDownSpeed = 0.28f;
     [Range(0, 1)] [SerializeField] private float feetToIkPositionSpeed = 0.5f;
-    [SerializeField] private Vector3 positionToPelvisDifference;
+    [SerializeField] private Vector3 positionToPelvisDifference = Vector3.zero;
 
     public bool useProIkFeature = false;
     public bool showSolverDebug = true;
@@ -34,8 +34,6 @@ public class IKCtrl : MonoBehaviour
         animator = GetComponent<Animator>();
         player = GetComponent<PlayerCtrl_Ver2>();
         movement = GetComponent<PlayerMovement>();
-
-        positionToPelvisDifference = animator.bodyPosition - transform.position;
     }
 
     private void FixedUpdate()
@@ -62,6 +60,11 @@ public class IKCtrl : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
+        if (positionToPelvisDifference == Vector3.zero)
+        {
+            positionToPelvisDifference = animator.bodyPosition - transform.position;
+        }
+
         if (animator == null)
         {
             return;

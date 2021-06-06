@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class TutorialTrigger : MonoBehaviour
 {
-    public string key;
     public bool isOver = false;
+    public bool IsOver { get => IsOver; set => isOver = value; }
     public TutorialType tutorialType;
     private OptionMenuCtrl _uiManager;
     
@@ -41,6 +41,7 @@ public class TutorialTrigger : MonoBehaviour
         if (other.CompareTag("Player") == false)
             return;
 
+        other.GetComponent<PlayerCtrl_Ver2>().InitializeMove();
         //if (_uiManager.TutorialEvent(key) == false)
         //    return;
         _uiManager.InGameTutorial(tutorialType);
