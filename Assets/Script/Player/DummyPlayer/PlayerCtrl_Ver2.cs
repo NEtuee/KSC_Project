@@ -31,7 +31,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ReadyClimbingJump,
         HangShake,
         Respawn,
-        HighLanding
+        HighLanding,
+        Gesture
     }
 
     public enum ClimbingJumpDirection
@@ -356,6 +357,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         if (Input.GetKeyDown(KeyCode.U))
             drone.Visible = true;
+
+        if(Input.GetKeyDown(KeyCode.Alpha1) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
+        {
+            ChangeState(PlayerState.Gesture);
+        }
 
         switch (state)
         {
@@ -1410,6 +1416,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Ragdoll:
             {
+                    if (prevState == PlayerState.Gesture)
+                        drone.CompleteRespawn();
+
                 if (lookDir == Vector3.zero)
                 {
                     transform.rotation = Quaternion.LookRotation(transform.forward, Vector3.up);
@@ -1445,13 +1454,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.HangEdge:
             case PlayerState.HangLedge:
-            {
-                isLedge = true;
-                isClimbingMove = false;
-                animator.SetBool("IsLedge", true);
-                handIK.ActiveLedgeIK(true);
-                AdjustLedgeOffset();
-            }
+                {
+                    isLedge = true;
+                    isClimbingMove = false;
+                    animator.SetBool("IsLedge", true);
+                    handIK.ActiveLedgeIK(true);
+                    AdjustLedgeOffset();
+                }
                 break;
             case PlayerState.LedgeUp:
             {
@@ -1560,6 +1569,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetBool("HighLanding",true);
                     GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
                     GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+                }
+                break;
+            case PlayerState.Gesture:
+                {
+                    animator.SetTrigger("Gesture1");
+                    drone.Gesture(transform);
                 }
                 break;
         }

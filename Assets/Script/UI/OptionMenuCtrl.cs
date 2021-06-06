@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Events;
 
-public enum TutorialType { Climbing, Move, Special, Scan, Emp}
+public enum TutorialType { Climbing, Move, Special, Scan, Emp, Guide}
 public enum MenuType
 {
     Sound = 0, Control, Display, Key, Option, Pause, Tutorial, None
@@ -45,6 +45,7 @@ public class OptionMenuCtrl : MonoBehaviour
     public InGameTutorialPanel specialTutorial;
     public InGameTutorialPanel scanTutorial;
     public InGameTutorialPanel empTutorial;
+    public InGameTutorialPanel guideInfoTutorial;
 
     [SerializeField]private bool _currentTutorial = false;
     public bool CurrentTutorial { get => _currentTutorial; set { _currentTutorial = value; }}
@@ -262,6 +263,11 @@ public class OptionMenuCtrl : MonoBehaviour
             case TutorialType.Emp:
                 {
                     currnetInGameTutorial = empTutorial;
+                }
+                break;
+            case TutorialType.Guide:
+                {
+                    currnetInGameTutorial = guideInfoTutorial;
                 }
                 break;
         }

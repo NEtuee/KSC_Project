@@ -14,12 +14,12 @@ public class AnimCtrl_Dummy : MonoBehaviour
     public EMPGun gun;
 
     private void Start()
-    { 
-        owner=GetComponent<PlayerCtrl_Ver2>();
+    {
+        owner = GetComponent<PlayerCtrl_Ver2>();
         animator = GetComponent<Animator>();
         handIk = GetComponent<HandIKCtrl>();
 
-        if(animator != null)
+        if (animator != null)
         {
             leftFootTransform = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
             rightFootTransform = animator.GetBoneTransform(HumanBodyBones.RightFoot);
@@ -39,7 +39,7 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private void JumpTiming()
     {
         owner.Jump();
-        GameManager.Instance.soundManager.Play(1003, Vector3.zero,transform);
+        GameManager.Instance.soundManager.Play(1003, Vector3.zero, transform);
     }
 
     private void EndClimbMove()
@@ -48,7 +48,7 @@ public class AnimCtrl_Dummy : MonoBehaviour
     }
     private void Left()
     {
-        animator.SetBool("Left",false);
+        animator.SetBool("Left", false);
     }
 
     private void Right()
@@ -74,7 +74,7 @@ public class AnimCtrl_Dummy : MonoBehaviour
 
     private void GetupSound()
     {
-        GameManager.Instance.soundManager.Play(1017,Vector3.up,transform);
+        GameManager.Instance.soundManager.Play(1017, Vector3.up, transform);
     }
 
     private void JogFootStep(int left)
@@ -112,7 +112,7 @@ public class AnimCtrl_Dummy : MonoBehaviour
     {
         owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Grab);
     }
-    
+
     private void EndReadyGrab()
     {
         owner.ChangeState(PlayerCtrl_Ver2.PlayerState.Grab);
@@ -126,5 +126,10 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private void CanClimbingCancel()
     {
         owner.SetCanClimbingCancel(true);
+    }
+
+    private void LandingSound()
+    {
+        GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
     }
 }

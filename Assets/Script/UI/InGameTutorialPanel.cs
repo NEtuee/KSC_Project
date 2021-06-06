@@ -23,7 +23,10 @@ public class InGameTutorialPanel : MonoBehaviour
     public void Active(bool active)
     {
         _canvas.enabled = active;
-        buttonGroup.Active(active);
+
+        if(buttonGroup != null)
+            buttonGroup.Active(active);
+
         if (active)
         {
             GameManager.Instance.PAUSE = true;

@@ -481,8 +481,25 @@ public class Drone : MonoBehaviour
         _droneAnim.SetTrigger("Respawn");
     }
 
+    public void Gesture(Transform playerTransform)
+    {
+        _respawn = true;
+        transform.SetParent(playerTransform);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        droneVisual.localPosition = Vector3.zero;
+        droneVisual.localRotation = Quaternion.identity;
+
+        _droneAnim.enabled = true;
+        _floatingMoveComponent.enabled = false;
+
+        _droneAnim.SetTrigger("Gesture1");
+    }
+
     public void CompleteRespawn()
     {
+        _droneAnim.SetTrigger("Init");
+
         transform.SetParent(null);
         droneBody.localPosition = droneBodyOriginPos;
         _respawn = false;
