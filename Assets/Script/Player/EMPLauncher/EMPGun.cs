@@ -90,8 +90,13 @@ public class EMPGun : MonoBehaviour
             {
                 hitable.Hit(damage);
                 crossHair.ActiveHitMark();
+                GameManager.Instance.soundManager.Play(1022, hit.point);
             }
-           }
+            else
+            {
+                GameManager.Instance.soundManager.Play(1023, hit.point);
+            }
+        }
 
         crossHair.ActiveAnimation();
 

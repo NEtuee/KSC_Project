@@ -121,7 +121,7 @@ public class Genie_BombDroneAI : DroneAIBase
             if(dist <= explosionDistance)
             {
                 cube.SetActive(false,false);
-                currCube.special = true;
+                cube.special = true;
             }
             
         }
