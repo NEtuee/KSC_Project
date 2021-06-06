@@ -428,7 +428,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             leg.Hold(false);
         }
 
-        head.enabled = true;
+        head.enabled = false;
 
         whenRecover?.Invoke();
     }
@@ -690,7 +690,11 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         foreach (var body in bodyParts)
         {
             body.transform.SetParent(null);
-            var rig = body.AddComponent<Rigidbody>();
+            if(!TryGetComponent<Rigidbody>(out var rig))
+            {
+                rig = body.AddComponent<Rigidbody>();
+            }
+
             rig.useGravity = true;
             rig.isKinematic = false;
 

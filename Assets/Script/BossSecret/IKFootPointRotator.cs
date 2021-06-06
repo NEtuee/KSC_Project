@@ -53,6 +53,7 @@ public class IKFootPointRotator : MonoBehaviour
         {
             if(ray.Cast(transform.position,out hit))
             {
+                Debug.DrawLine(transform.position,hit.point,Color.red);
                 var point = hit.point + (-down * baseHeight);
                 transform.position = point;
             }
