@@ -12,7 +12,7 @@ public class OutTroCtrl : MonoBehaviour
 
     public TextBaseButtonUi button;
 
-    private float _startValue = 0.8f;
+    private float _startValue = 0.1f;
     private float _endValue = 0.0f;
 
     void Start()
