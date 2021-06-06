@@ -12,6 +12,7 @@ public class DroneHelper_Genie : DroneHelper
 
     private void Start()
     {
+        base.Start();
         root.timer.InitTimer("Tip01Timer", 0.0f, 60.0f);
     }
 

@@ -185,4 +185,12 @@ public class FollowTargetCtrl : MonoBehaviour
         currentRot = transform.localRotation.eulerAngles;
         targetRot = currentRot;
     }
+
+    public void SetPitchYawPosition(float pitch, float yaw, Vector3 position)
+    {
+        transform.rotation = Quaternion.Euler(pitch, yaw, 0.0f);
+        currentRot = transform.localRotation.eulerAngles;
+        targetRot = currentRot;
+        transform.position = position;
+    }
 }
