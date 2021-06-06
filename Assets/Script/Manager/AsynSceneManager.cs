@@ -37,6 +37,8 @@ public class AsynSceneManager : MonoBehaviour
     public StageManager currentStageManager;
     public SceneLoadUI sceneLoadUI;
 
+    public string nullScene;
+
     private LevelInfo _currentScene;
     private List<Scene> _unloadScenes = new List<Scene>();
 
@@ -183,6 +185,9 @@ public class AsynSceneManager : MonoBehaviour
 
         currentStageManager = null;
 
+
+        StartCoroutine(LoadNullScene());
+
         _loadedScenes = _unloadScenes.Count;
 
         for(int i = 0; i < _unloadScenes.Count; ++i)
@@ -215,8 +220,42 @@ public class AsynSceneManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         sceneLoadUI.EndLoad();
 
+        StartCoroutine(UnLoadNullScene());
+
         yield return new WaitForSeconds(4f);
         _isLoaded = true;
+    }
+
+    IEnumerator LoadNullScene()
+    {
+        
+        AsyncOperation operation = SceneManager.LoadSceneAsync(nullScene,LoadSceneMode.Additive);
+        operation.allowSceneActivation = false;
+        
+        while (operation.isDone == false)
+        {
+            if (operation.progress >= 0.9f)
+            {
+                operation.allowSceneActivation = true;
+            }
+
+            yield return null;
+        }
+
+
+    }
+
+    IEnumerator UnLoadNullScene()
+    {
+        AsyncOperation operation = SceneManager.UnloadSceneAsync(nullScene);
+        operation.allowSceneActivation = false;
+
+        while(operation.isDone == false)
+        {
+            yield return null;
+        }
+
+        operation.allowSceneActivation = true;
     }
 
     IEnumerator UnloadSceneCoroutine(Scene scene)
