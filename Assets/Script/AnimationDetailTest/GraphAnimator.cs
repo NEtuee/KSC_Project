@@ -160,6 +160,16 @@ public class GraphAnimator : MonoBehaviour
         return _playList.Find((x)=>{return x.name == n;});
     }
 
+    public void StopTarget(string target)
+    {
+        var t = _playList.Find((x)=>{return x.name == target;});
+        if(t != null)
+        {
+            t.ReturnOrigin();
+            _playList.Remove(t);
+        }
+    }
+
     public void Stop()
     {
         foreach(var ani in _playList)

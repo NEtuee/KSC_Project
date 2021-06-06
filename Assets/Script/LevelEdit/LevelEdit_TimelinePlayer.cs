@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 
 public class LevelEdit_TimelinePlayer : MonoBehaviour
 {
@@ -40,6 +41,11 @@ public class LevelEdit_TimelinePlayer : MonoBehaviour
             GameManager.Instance.player.transform.position = endTransform.position;
             EndTrigger();
         });
+    }
+
+    public void LoadSceneFromManager(string target)
+    {
+        SceneManager.LoadScene(target,LoadSceneMode.Single);
     }
 
     public void LoadNextLevel()
