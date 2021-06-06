@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class EMPShield : Hitable
 {
+    public enum SoundType
+    {
+        Shield,
+        Bomb
+    }
+
+    public SoundType soundType = SoundType.Shield;
     public GameObject destroyEffect;
     public bool isCore = false;
     public bool isActive = false;
@@ -28,6 +35,8 @@ public class EMPShield : Hitable
 
     private Material mat;
 
+    public delegate void WhenReactive(GameObject scanable);
+    private WhenReactive whenReactive;
     void Start()
     {
         base.Start();
@@ -51,6 +60,8 @@ public class EMPShield : Hitable
 
         SetDistortion();
         StartCoroutine(HitEffect());
+
+        whenReactive += GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneScaner>().AddScanableObjets;
 
         //shieldParticle = GetComponent<ParticleSystem>();
     }
@@ -196,11 +207,14 @@ public class EMPShield : Hitable
 
     public void Reactive()
     {
+        //whenReactive(this.gameObject);
+
         collider.enabled = true;
 
         if(renderer != null)
             renderer.enabled = true;
         isOver = false;
+        isActive = false;
 
         if(mat != null)
         {
@@ -223,7 +237,20 @@ public class EMPShield : Hitable
 
     public override void Destroy()
     {
-        Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
+        if(soundType == SoundType.Shield)
+        {
+            GameManager.Instance.soundManager.Play(1515, new Vector3(0, 1, 0), transform);
+            GameManager.Instance.soundManager.Play(1518, new Vector3(0, 1, 0), transform);
+            GameManager.Instance.soundManager.Play(1501,transform.position);
+        }
+        else if(soundType == SoundType.Bomb)
+        {
+            GameManager.Instance.soundManager.Play(1700,transform.position);
+        }
+        
+
+        //Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
+        GameManager.Instance.effectManager.Active("CannonExplosion", transform.position);
         collider.enabled = false;
         if(renderer != null)
             renderer.enabled = false;
@@ -235,7 +262,7 @@ public class EMPShield : Hitable
     public override void Scanned()
     {
         //mat.SetColor("_BaseColor", scanColor);
-        if(!gameObject.activeSelf)
+        if(!gameObject.activeInHierarchy)
             return;
             
         if (isActive == false)
@@ -479,11 +506,13 @@ public class EMPShield : Hitable
         {
             originalWpo = secondWpoValue;
             mat.SetColor("_color", thirdColor );
+            GameManager.Instance.soundManager.Play(1516, new Vector3(0, 1, 0), transform);
         }
         else if(hp <= 60.0f)
         {
             originalWpo = thirdWpoValue;
             mat.SetColor("_color", secondColor);
+            GameManager.Instance.soundManager.Play(1517, new Vector3(0, 1, 0), transform);
         }
     }
 }

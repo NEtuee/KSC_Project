@@ -17,8 +17,39 @@ public class LevelEdit_TimelinePlayer : MonoBehaviour
     public void Play()
     {
         //GameManager.Instance.PAUSE = true;
-        GameManager.Instance.cameraManager.SetUpdateMethod(CinemachineBrain.UpdateMethod.SmartUpdate,CinemachineBrain.BrainUpdateMethod.LateUpdate);
 
+        StartTrigger();
+
+        GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
+            GameManager.Instance.cameraManager.SetUpdateMethod(CinemachineBrain.UpdateMethod.SmartUpdate,CinemachineBrain.BrainUpdateMethod.LateUpdate);
+
+            CinemachineBrain brain = GameManager.Instance.cameraManager.GetCinemachineBrain();
+            TimelineAsset timelineAsset = (TimelineAsset) playableDirector.playableAsset;
+            TrackAsset track = timelineAsset.GetOutputTrack(1) ;
+            playableDirector.SetGenericBinding (track, brain);
+            playableDirector.Play();
+        });
+
+    }
+
+    public void End()
+    {
+        GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
+            //GameManager.Instance.PAUSE = false;
+            GameManager.Instance.cameraManager.SetUpdateMethod();
+            GameManager.Instance.player.transform.position = endTransform.position;
+            EndTrigger();
+        });
+    }
+
+    public void LoadNextLevel()
+    {
+        EndTrigger();
+        GameManager.Instance.asynSceneManager.LoadNextlevelFrom();
+    }
+
+    public void StartTrigger()
+    {
         if(playerDisable)
         {
             GameManager.Instance.player.gameObject.SetActive(false);
@@ -27,19 +58,10 @@ public class LevelEdit_TimelinePlayer : MonoBehaviour
         {
             ((PlayerCtrl_Ver2)GameManager.Instance.player).GetDrone().gameObject.SetActive(false);
         }
-
-        CinemachineBrain brain = GameManager.Instance.cameraManager.GetCinemachineBrain();
-        TimelineAsset timelineAsset = (TimelineAsset) playableDirector.playableAsset;
-        TrackAsset track = timelineAsset.GetOutputTrack(1) ;
-        playableDirector.SetGenericBinding (track, brain);
-        playableDirector.Play();
     }
 
-    public void End()
+    public void EndTrigger()
     {
-        //GameManager.Instance.PAUSE = false;
-        GameManager.Instance.cameraManager.SetUpdateMethod();
-        GameManager.Instance.player.transform.position = endTransform.position;
         if(playerDisable)
         {
             GameManager.Instance.player.gameObject.SetActive(true);

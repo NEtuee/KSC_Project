@@ -106,6 +106,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private LayerMask climbingPaintLayer;
     [SerializeField] private LayerMask ledgeAbleLayer;
     [SerializeField] private LayerMask adjustAbleLayer;
+    [SerializeField] private LayerMask frontCheckLayer;
     [SerializeField] private Vector3 detectionOffset;
 
     [Header("Input Record")] [SerializeField]
@@ -153,6 +154,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private float _emissionTargetValue = 10f;
     private Color _originalEmissionColor;
     [SerializeField] private bool decharging = false;
+    [SerializeField] private TMPro.TextMeshProUGUI chargingCountText;
+    private Color _chargingCountTextColor;
     private Material pelvisGunMaterial;
     private IEnumerator _dechargingCoroutine;
     [SerializeField] private GameObject playerPelvisGunObject;
@@ -263,6 +266,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         pelvisGunMaterial = pelvisGunObject.GetComponent<Renderer>().material;
         _originalEmissionColor = pelvisGunMaterial.GetColor("_EmissionColor");
+
+        if (chargingCountText != null)
+            _chargingCountTextColor = chargingCountText.color;
 
         StartCoroutine(StopCheck());
     }
@@ -469,7 +475,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
                 InputChargeShot();
 
-                if (InputAimingRelease())
+                if (InputReleaseAiming())
                     return;
             }
                 break;
@@ -572,7 +578,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.SetFloat("HorizonWeight", horizonWeight);
 
                 if (Physics.Raycast(transform.position + collider.center, moveDir,
-                    collider.radius + currentSpeed * deltaTime) == false)
+                    collider.radius + currentSpeed * deltaTime, frontCheckLayer) == false)
                 {
                     movement.Move(moveDir);
                 }
@@ -675,7 +681,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 }
 
                 if (Physics.Raycast(transform.position + collider.center, moveDir,
-                    collider.radius + currentSpeed * deltaTime))
+                    collider.radius + currentSpeed * deltaTime, frontCheckLayer))
                 {
                     movement.Move(Vector3.up * currentJumpPower);
                 }
@@ -1552,6 +1558,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     currentSpeed = 0.0f;
                     animator.SetFloat("Speed", 0.0f);
                     animator.SetBool("HighLanding",true);
+                    GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
+                    GameManager.Instance.cameraManager.GenerateRecoilImpulse();
                 }
                 break;
         }
@@ -2006,38 +2014,43 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         return false;
     }
 
-    private bool InputAimingRelease()
+    private bool InputReleaseAiming()
     {
         //if (InputManager.Instance.GetAction(KeybindingActions.EMPAimRelease))
         if (InputManager.Instance.GetRelease(KeybindingActions.EMPAim))
         {
             GameManager.Instance.soundManager.Play(1009, Vector3.up, transform);
 
-            if(_charge != null)
-                _charge.Stop();
-
-            int loadCount = (int) (chargeTime.Value);
-            if (loadCount == 3)
-            {
-                if (decharging == true)
-                    StopCoroutine(_dechargingCoroutine);
-
-                _dechargingCoroutine = DechargingCoroutine();
-                StartCoroutine(_dechargingCoroutine);
-
-                GameManager.Instance.effectManager
-                    .Active("SteamSmoke", steamPosition.position, Quaternion.LookRotation(steamPosition.up)).transform
-                    .SetParent(steamPosition);
-            }
-
-            ChangeState(PlayerState.Default);
-            ActiveAim(false);
-            chargeTime.Value = 0.0f;
-            playerPelvisGunObject.SetActive(true);
+            ReleaseAiming();
             return true;
         }
 
         return false;
+    }
+
+    public void ReleaseAiming()
+    {
+        if (_charge != null)
+            _charge.Stop();
+
+        int loadCount = (int)(chargeTime.Value);
+        if (loadCount == 3)
+        {
+            if (decharging == true)
+                StopCoroutine(_dechargingCoroutine);
+
+            _dechargingCoroutine = DechargingCoroutine();
+            StartCoroutine(_dechargingCoroutine);
+
+            GameManager.Instance.effectManager
+                .Active("SteamSmoke", steamPosition.position, Quaternion.LookRotation(-steamPosition.up)).transform
+                .SetParent(steamPosition);
+        }
+
+        ChangeState(PlayerState.Default);
+        ActiveAim(false);
+        chargeTime.Value = 0.0f;
+        playerPelvisGunObject.SetActive(true);
     }
 
     private void InputChargeShot()
@@ -2460,6 +2473,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private IEnumerator DechargingCoroutine()
     {
         decharging = true;
+        if (chargingCountText != null)
+            chargingCountText.color = Color.red;
+
         float time = 0;
         while (time < dechargingDuration)
         {
@@ -2471,6 +2487,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
 
         decharging = false;
+        if (chargingCountText != null)
+            chargingCountText.color = _chargingCountTextColor;
     }
 
     public Drone GetDrone()
@@ -2522,7 +2540,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }
 
-
+    public void InitializeMove()
+    {
+        animator.SetFloat("Speed", 0.0f);
+        if (state == PlayerState.Aiming)
+        {
+            ReleaseAiming();
+            ChangeState(PlayerState.Default);
+        }
+    }
     #region 디버그
 
     private void OnDrawGizmos()

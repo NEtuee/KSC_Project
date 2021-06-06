@@ -10,6 +10,7 @@ public class EMPBomb : MonoBehaviour
     public LayerMask targetLayer;
     public float explosionRadius = 2f;
     public float explosionForce = 300f;
+    public float damage;
 
     public bool destroy = false;
     public bool teamKill = true;
@@ -39,6 +40,9 @@ public class EMPBomb : MonoBehaviour
                 if(ragdoll != null)
                 {
                     ragdoll.ExplosionRagdoll(explosionForce, (ragdoll.transform.position - transform.position).normalized);
+                    (GameManager.Instance.player as PlayerCtrl_Ver2).TakeDamage(damage);
+
+                    break;
                 }
                 else
                 {

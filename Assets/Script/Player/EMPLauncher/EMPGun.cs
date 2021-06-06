@@ -118,6 +118,11 @@ public class EMPGun : MonoBehaviour
             if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
             {
                 hitable.Hit(damage);
+                GameManager.Instance.soundManager.Play(1022, hit.point);
+            }
+            else
+            {
+                GameManager.Instance.soundManager.Play(1023, hit.point);
             }
 
             destroyed = true;

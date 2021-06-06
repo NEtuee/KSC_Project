@@ -77,6 +77,9 @@ public class MainTitleButton : MonoBehaviour,IPointerEnterHandler, IPointerExitH
         if (interactable == false)
             return;
         buttonImage.sprite = selectedSprite;
+
+        GameManager.Instance.soundManager.Play(3000, Vector3.zero);
+        GameManager.Instance.soundManager.SetParam(3000, 30001, 0);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -91,5 +94,8 @@ public class MainTitleButton : MonoBehaviour,IPointerEnterHandler, IPointerExitH
         if (interactable == false)
             return;
         onClick?.Invoke();
+
+        GameManager.Instance.soundManager.Play(3000, Vector3.zero);
+        GameManager.Instance.soundManager.SetParam(3000, 30001, 1);
     }
 }

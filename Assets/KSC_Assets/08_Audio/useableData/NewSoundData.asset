@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
   m_Name: NewSoundData
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 8afd59fbeaf9e4d4fb2683b4c7df896d, type: 3}
+  csvData: {fileID: 4900000, guid: 08fafd28dc7c2b149ab3f1716df04995, type: 3}
   soundData:
   - path: global data
     id: 0
@@ -109,7 +109,11 @@ MonoBehaviour:
   - path: event:/PlayerCharacter/Movement/Hit/PC_Down_Ground
     id: 1014
     type: SFX
-    parameters: []
+    parameters:
+    - name: PC_Down_Str
+      id: 10141
+      min: 0
+      max: 100
   - path: event:/PlayerCharacter/Movement/Hit/PC_Hit_Metal
     id: 1015
     type: SFX
@@ -136,6 +140,18 @@ MonoBehaviour:
     parameters: []
   - path: event:/PlayerCharacter/Weapon/PC_Weapon_Transform_3rd
     id: 1021
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Hit/PC_Weapon_Normal_Hit
+    id: 1022
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Hit/PC_Weapon_Mob_Hit
+    id: 1023
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Hit/PC_Weapon_Explo_Hit
+    id: 1024
     type: SFX
     parameters: []
   - path: event:/Drone/Movement/DR_Flying
@@ -210,6 +226,34 @@ MonoBehaviour:
     id: 1514
     type: SFX
     parameters: []
+  - path: event:/Mob/Global/Shield/Mob_Shield_Broken_Idle
+    id: 1515
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Shield/Mob_Shield_Crack_1st
+    id: 1516
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Shield/Mob_Shield_Crack_2nd
+    id: 1517
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Global/Shield/Mob_Shield_Crack_3rd
+    id: 1518
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Medusa/Medusa_Transform
+    id: 1519
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Medusa/Medusa_Shield_Open
+    id: 1520
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Medusa/Medusa_Shield_Close
+    id: 1521
+    type: SFX
+    parameters: []
   - path: event:/SFX/Explosion
     id: 1700
     type: SFX
@@ -242,6 +286,14 @@ MonoBehaviour:
     id: 2003
     type: AMB
     parameters: []
+  - path: event:/Ambient/Medusa/Light_On
+    id: 2004
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Medusa/Conveyor
+    id: 2005
+    type: AMB
+    parameters: []
   - path: event:/Ambient/Ground/UnderTheCliff
     id: 2006
     type: AMB
@@ -250,6 +302,58 @@ MonoBehaviour:
     id: 2007
     type: AMB
     parameters: []
+  - path: event:/Ambient/Elevator/Elevator_Inside
+    id: 2008
+    type: AMB
+    parameters:
+    - name: Elevator_In
+      id: 20081
+      min: 0
+      max: 1
+  - path: event:/Ambient/Elevator/Elevator_Move
+    id: 2009
+    type: AMB
+    parameters:
+    - name: Elevator_Stop
+      id: 20091
+      min: 0
+      max: 1
+  - path: event:/Ambient/Medusa/Rim_Gear_1st
+    id: 2010
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Medusa/Rim_Gear_2nd
+    id: 2011
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Medusa/Rim_Gear_3rd
+    id: 2012
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Medusa/Rim_Run
+    id: 2013
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Elevator/Door_Open
+    id: 2014
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Elevator/Door_Close
+    id: 2015
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Medusa/Conveyor_Move
+    id: 2016
+    type: AMB
+    parameters: []
+  - path: event:/UI/Button
+    id: 3000
+    type: UI
+    parameters:
+    - name: Bt_State
+      id: 30001
+      min: 0
+      max: 3
   - path: snapshot:/Global_Option/MasterVolume
     id: 4000
     type: Snapshot

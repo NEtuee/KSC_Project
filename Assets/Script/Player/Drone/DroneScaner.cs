@@ -134,4 +134,15 @@ public class DroneScaner : MonoBehaviour
             }
         }
     }
+
+    public void AddScanableObjets(GameObject scanable)
+    {
+        if (scanable == null)
+            return;
+
+        if (scanable.TryGetComponent<Scanable>(out Scanable currentScanable))
+        {
+            scanableObjects.Add(currentScanable);
+        }
+    }
 }

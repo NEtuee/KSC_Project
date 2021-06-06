@@ -532,7 +532,8 @@ public class CameraManager : MonoBehaviour
         var dir = -(Camera.main.transform.rotation * Vector3.forward).normalized;
         
         isCameraCollision =
-            collisionEx.Cast(GameManager.Instance.followTarget.transform.position + offset,dir,playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
+                        //collisionEx.Cast(GameManager.Instance.followTarget.transform.position + offset,dir,playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
+                        collisionEx.Cast(GameManager.Instance.followTarget.transform.position, dir, playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
 
         if (isCameraCollision)
         {

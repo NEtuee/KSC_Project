@@ -5,6 +5,7 @@ using UnityEngine;
 public class Genie_BombDroneAI : DroneAIBase
 {
     public Boogie_GridControll gridControll;
+    public Transform centerPosition;
 
     public Vector2 randomMaxSpeed;
     public Vector2 randomOffset;
@@ -13,15 +14,20 @@ public class Genie_BombDroneAI : DroneAIBase
     public float targetUpdateTime = 0.2f;
     public float lifeTime = 60f;
     public float launchTime = 2f;
+    public float maxDistance;
+    public float maxRecogDistance;
 
     public float explosionDistance;
 
     protected float _lifeTime;
 
+    private Transform _mainTarget;
+
     public void Start()
     {
         Init();
         SetTarget(GameManager.Instance.player.transform);
+        _mainTarget = _target;
         SetTargetOffset(Vector3.up * Random.Range(randomOffset.x,randomOffset.y));
         SetTargetDirectionUpdateTime(targetUpdateTime);
         SetRandomRotate(new Vector3(0f,180f,0f));
@@ -34,18 +40,44 @@ public class Genie_BombDroneAI : DroneAIBase
 
     public override void Progress(float deltaTime)
     {
-        ExplosionCheck();
-
         _lifeTime -= deltaTime;
         if(_lifeTime <= 0f)
         {
             shield.Hit();
         }
 
+        var centerTargetDist = Vector3.Distance(centerPosition.position,_mainTarget.position);
+        if(centerTargetDist > maxRecogDistance)
+        {
+            if(_target == _mainTarget)
+            {
+                gridControll.GetCube_Range(5,centerPosition.position,false);
+                _target = gridControll.GetRandomTargetCube().transform;
+            }
+        }
+        else
+        {
+            if(_target != _mainTarget)
+            {
+                _target = _mainTarget;
+            }
+
+            ExplosionCheck();
+        }
+
+        var centerDist = Vector3.Distance(centerPosition.position,transform.position);
+        if(centerDist >= maxDistance)
+        {
+            var dir = (centerPosition.position - transform.position).normalized;
+            AddForce(dir * maxSpeed * deltaTime * 3f);
+        }
+
         _timeCounterEx.IncreaseTimerSelf("launch",out var limit, deltaTime);
         if(!limit)
         {
             UpdateVelocity(deltaTime);
+            if(directionRotation)
+                DirectionRotation();
             return;
         }
 

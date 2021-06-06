@@ -83,6 +83,9 @@ public class AsynSceneManager : MonoBehaviour
     {
         if(!_isLoaded)
             return;
+
+        //GameManager.Instance.soundManager.Play(2009, new Vector3(0, 1, 0), GameManager.Instance.player.transform);
+
         sceneLoadUI.StartLoad(()=> {
             _currentScene = levels[currentLevel];
             RegisterProgress();
@@ -113,6 +116,8 @@ public class AsynSceneManager : MonoBehaviour
         if(!_isLoaded)
             return;
 
+        GameManager.Instance.soundManager.Play(2009, new Vector3(0, 1, 0), GameManager.Instance.player.transform);
+
         sceneLoadUI.StartLoad(() =>
         {
             currentLevel = (++currentLevel >= levels.Count ? 0 : currentLevel);
@@ -125,6 +130,8 @@ public class AsynSceneManager : MonoBehaviour
     {
         if(!_isLoaded)
             return;
+
+        GameManager.Instance.soundManager.Play(2009, new Vector3(0, 1, 0), GameManager.Instance.player.transform);
 
         sceneLoadUI.StartLoad(() =>
         {
@@ -148,7 +155,7 @@ public class AsynSceneManager : MonoBehaviour
         GameManager.Instance.PAUSE = true;
         _isLoaded = false;
 
-        if(GameManager.Instance.optionMenuCtrl != null)
+        if (GameManager.Instance.optionMenuCtrl != null)
         {
             GameManager.Instance.optionMenuCtrl.sceneLoadUi.SetLoadingComment(currentLevel);
         }
@@ -259,6 +266,10 @@ public class AsynSceneManager : MonoBehaviour
                 stage.ObjectTeleportToLoadedPos(_cam.transform,_player.transform.position);
                 stage.ObjectTeleportToLoadedPos(_follow,_player.transform.position);
                 stage.ObjectTeleportToLoadedPos(_drone,_drone.transform.position);
+
+                var rot = Quaternion.LookRotation(stage.loadedPlayerPosition.forward);
+                GameManager.Instance.followTarget.SetPitchYaw(rot.eulerAngles.x,rot.eulerAngles.y);
+                GameManager.Instance.player.transform.rotation = rot;
             }
             else
             {
@@ -266,6 +277,10 @@ public class AsynSceneManager : MonoBehaviour
                 stage.entranceElevator.ObjectTeleport(_cameraLocalTarget.localPosition,_cameraLocalTarget.localRotation,_cam.transform);
                 stage.entranceElevator.ObjectTeleport(_followLocalTarget.localPosition,_followLocalTarget.localRotation,_follow.transform);
                 stage.entranceElevator.ObjectTeleport(_droneLocalTarget.localPosition,_droneLocalTarget.localRotation,_drone.transform);
+
+                var rot = Quaternion.LookRotation(stage.entranceElevator.transform.forward);
+                GameManager.Instance.followTarget.SetPitchYaw(rot.eulerAngles.x,rot.eulerAngles.y);
+                GameManager.Instance.player.transform.rotation = rot;
 
                 ((PlayerCtrl_Ver2)GameManager.Instance.player).InitVelocity();
             }

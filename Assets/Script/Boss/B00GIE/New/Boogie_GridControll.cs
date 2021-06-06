@@ -7,6 +7,7 @@ public class Boogie_GridControll : MonoBehaviour
     public HexCubeGrid cubeGrid;
     public Material prev;
     public Material curr;
+    public Material safeZone;
 
 
     public HexCube centerCube;
@@ -59,6 +60,13 @@ public class Boogie_GridControll : MonoBehaviour
     }
 
     public HexCube GetRandomActiveCube(bool ignoreSpecial) {return cubeGrid.GetRandomActiveCube(ignoreSpecial);}
+    public HexCube GetRandomTargetCube() 
+    {
+        if(_targetCubes.Count == 0)
+            return null;
+
+        return _targetCubes[Random.Range(0,_targetCubes.Count)];
+    }
     public List<HexCube> GetTargetCubes() {return _targetCubes;}
     public HexCube GetCoreCube() {return _coreCube;}
     public void SetCoreCube(HexCube cube) {_coreCube = cube;}
@@ -93,6 +101,12 @@ public class Boogie_GridControll : MonoBehaviour
     {
         _targetCubes.Clear();
         cubeGrid.GetAllCube(ref _targetCubes,ignoreSpecial);
+    }
+
+    public void GetCube_Range(int range, Vector3 center, bool ignoreSpecial)
+    {
+        _targetCubes.Clear();
+        cubeGrid.GetCubeRange(ref _targetCubes,center,range,ignoreSpecial);
     }
 
     public void GetCube_Near(Vector3Int target,int loopCount, bool ignoreSpecial)
@@ -152,6 +166,14 @@ public class Boogie_GridControll : MonoBehaviour
     {
         _targetCubes.Clear();
         cubeGrid.GetCubeRing(ref _targetCubes,centerCube.cubePoint,radius);
+    }
+
+    public void GetCube_Sector(Vector3 position,int sector)
+    {
+        _targetCubes.Clear();
+
+        int range = (cubeGrid.mapSize) / 2 + 1;
+        cubeGrid.GetCubeSectorCycle(ref _targetCubes,centerCube.cubePoint,sector,range);
     }
 
     public void GetCube_Sector(Vector3 position)
