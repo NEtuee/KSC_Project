@@ -7,6 +7,7 @@ public class PlayerRePositionor : MonoBehaviour
 {
     public LayerMask playerLayer;
     public UnityEvent whenFall;
+    public UnityEvent beforeFall;
     public Transform respawn;
     public Transform bip;
 
@@ -17,6 +18,10 @@ public class PlayerRePositionor : MonoBehaviour
 
     public void OnTriggerEnter(Collider coll)
     {
+        if(playerLayer == (playerLayer | (1<<coll.gameObject.layer)))
+        {
+            beforeFall?.Invoke();
+        }
         //if(coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
         //{
         //    ctrl.transform.position = respawn.position;
