@@ -28,8 +28,6 @@ public class ParameterArea : MonoBehaviour
                 _fade = false;
             }
         }
-
-        Debug.Log(GameManager.Instance.soundManager.GetGlobalParam(parameterCode));
     }
 
     public void OnTriggerEnter(Collider coll)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-
+using UnityEngine.SceneManagement;
 
 public class IntroControl : MonoBehaviour
 {
@@ -47,6 +47,6 @@ public class IntroControl : MonoBehaviour
         black.DOFade(2.0f, 1.5f);
         yield return new WaitForSeconds(2.0f);
 
-       
+        SceneManager.LoadScene(1);
     }
 }

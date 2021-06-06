@@ -253,7 +253,7 @@ public class GameManager : MonoBehaviour
     public void LoadTitleScene()
     {
         asynSceneManager.MovePlayerObjectToUnloadScene();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
     
     public LevelEdit_BehaviorControll.State GetBossState()
