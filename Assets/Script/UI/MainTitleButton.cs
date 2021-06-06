@@ -98,4 +98,9 @@ public class MainTitleButton : MonoBehaviour,IPointerEnterHandler, IPointerExitH
         GameManager.Instance.soundManager.Play(3000, Vector3.zero);
         GameManager.Instance.soundManager.SetParam(3000, 30001, 1);
     }
+
+    public void Release()
+    {
+        buttonImage.sprite = defaultSprite;
+    }
 }

@@ -47,6 +47,9 @@ public class PlayerRePositionor : MonoBehaviour
     {
         if (coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
         {
+            if (ctrl.Dead == true)
+                yield break;
+
             ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
             yield return new WaitForSeconds(1.0f);
 
@@ -64,7 +67,12 @@ public class PlayerRePositionor : MonoBehaviour
 
         if(playerLayer == (playerLayer | (1<<coll.gameObject.layer)))
         {
-            ((PlayerCtrl_Ver2)(GameManager.Instance.player)).ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
+            PlayerCtrl_Ver2 player = ((PlayerCtrl_Ver2)(GameManager.Instance.player));
+
+            if (player.Dead == true)
+                yield break;
+
+            player.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
             yield return new WaitForSeconds(1.0f);
             //GameManager.Instance.player.transform.position = respawn.position;
             //bip.position = respawn.position;

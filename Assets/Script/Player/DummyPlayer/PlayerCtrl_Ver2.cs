@@ -32,7 +32,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         HangShake,
         Respawn,
         HighLanding,
-        Gesture
+        Gesture,
+        Gesture2
     }
 
     public enum ClimbingJumpDirection
@@ -361,6 +362,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if(Input.GetKeyDown(KeyCode.Alpha1) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
         {
             ChangeState(PlayerState.Gesture);
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
+        {
+            ChangeState(PlayerState.Gesture2);
+            return;
         }
 
         switch (state)
@@ -1574,7 +1581,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             case PlayerState.Gesture:
                 {
                     animator.SetTrigger("Gesture1");
-                    drone.Gesture(transform);
+                    drone.Gesture(transform , 1);
+                }
+                break;
+            case PlayerState.Gesture2:
+                {
+                    animator.SetTrigger("Gesture2");
+                    drone.Gesture(transform, 2);
                 }
                 break;
         }
@@ -2429,6 +2442,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     public override void TakeDamage(float damage, bool restoreEnergy = true)
     {
+        if (state == PlayerState.Respawn && state == PlayerState.Ragdoll)
+            return;
+
         hp.Value -= damage;
         if (restoreEnergy == true)
         {

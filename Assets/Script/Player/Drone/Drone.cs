@@ -481,7 +481,7 @@ public class Drone : MonoBehaviour
         _droneAnim.SetTrigger("Respawn");
     }
 
-    public void Gesture(Transform playerTransform)
+    public void Gesture(Transform playerTransform, int num)
     {
         _respawn = true;
         transform.SetParent(playerTransform);
@@ -493,7 +493,10 @@ public class Drone : MonoBehaviour
         _droneAnim.enabled = true;
         _floatingMoveComponent.enabled = false;
 
-        _droneAnim.SetTrigger("Gesture1");
+        if(num == 1)
+           _droneAnim.SetTrigger("Gesture1");
+        else
+           _droneAnim.SetTrigger("Gesture2");
     }
 
     public void CompleteRespawn()
