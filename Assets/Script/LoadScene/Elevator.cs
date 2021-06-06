@@ -14,10 +14,10 @@ public class Elevator : MonoBehaviour
         _sceneManager = GameObject.FindObjectOfType<AsynSceneManager>();
         _animator = GetComponent<Animator>();
 
-        if(!isExit)
-        {
-            Open();
-        }
+        // if(!isExit)
+        // {
+        //     Open();
+        // }
     }
 
     public void LoadNextScene()

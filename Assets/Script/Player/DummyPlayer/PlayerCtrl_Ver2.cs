@@ -2073,6 +2073,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             GameManager.Instance.effectManager
                 .Active("SteamSmoke", steamPosition.position, Quaternion.LookRotation(-steamPosition.up)).transform
                 .SetParent(steamPosition);
+            GameManager.Instance.soundManager.Play(1025,Vector3.up,transform);
         }
 
         ChangeState(PlayerState.Default);

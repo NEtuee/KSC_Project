@@ -173,6 +173,10 @@ public class AsynSceneManager : MonoBehaviour
                 UpdateLocalTargets(currentStageManager.exitElevator.transform);
             }
         }
+        if(GameManager.Instance.soundManager.GetGlobalParam(8) != 0)
+        {
+            GameManager.Instance.soundManager.SetGlobalParam(8,0f);
+        }
 
         SetTargetObjectParent(null);
         
@@ -224,6 +228,11 @@ public class AsynSceneManager : MonoBehaviour
 
         yield return new WaitForSeconds(4f);
         _isLoaded = true;
+
+        if(currentStageManager != null && currentStageManager.entranceElevator != null && !setPos)
+        {
+            currentStageManager.entranceElevator.Open();
+        }
     }
 
     IEnumerator LoadNullScene()
@@ -318,7 +327,7 @@ public class AsynSceneManager : MonoBehaviour
                 stage.entranceElevator.ObjectTeleport(_followLocalTarget.localPosition,_followLocalTarget.localRotation,_follow.transform);
                 stage.entranceElevator.ObjectTeleport(_droneLocalTarget.localPosition,_droneLocalTarget.localRotation,_drone.transform);
 
-                var rot = Quaternion.LookRotation(stage.entranceElevator.transform.forward);
+                var rot = Quaternion.LookRotation(-stage.entranceElevator.transform.forward);
                 GameManager.Instance.followTarget.SetPitchYawPosition(rot.eulerAngles.x,rot.eulerAngles.y, stage.entranceElevator.transform.position);
                 GameManager.Instance.player.transform.rotation = rot;
 

@@ -6769,6 +6769,7 @@ GameObject:
   - component: {fileID: 882967217}
   - component: {fileID: 882967216}
   - component: {fileID: 882967215}
+  - component: {fileID: 882967219}
   m_Layer: 0
   m_Name: LightTrigger
   m_TagString: Untagged
@@ -6858,6 +6859,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &882967219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882967214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62de72d696da5943ae02e7c936aac58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 0
 --- !u!1 &885295644
 GameObject:
   m_ObjectHideFlags: 0
@@ -8790,6 +8804,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1236465222}
+  - component: {fileID: 1236465223}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -8817,6 +8832,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1236465223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236465221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ef493085df5234082a04bb90345390, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 0
+  parameterCode: 8
+  value: 0
 --- !u!1 &1258608447
 GameObject:
   m_ObjectHideFlags: 0
@@ -17716,6 +17746,8 @@ GameObject:
   - component: {fileID: 1906756470}
   - component: {fileID: 1906756469}
   - component: {fileID: 1906756468}
+  - component: {fileID: 1906756472}
+  - component: {fileID: 1906756471}
   m_Layer: 0
   m_Name: RotatorTrigger
   m_TagString: Untagged
@@ -17742,6 +17774,30 @@ MonoBehaviour:
       - m_Target: {fileID: 1328896376}
         m_TargetAssemblyTypeName: FloorControl, Assembly-CSharp
         m_MethodName: SpecialLaunch
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1906756471}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1906756472}
+        m_TargetAssemblyTypeName: ParameterChanger, Assembly-CSharp
+        m_MethodName: Change
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17791,6 +17847,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1906756471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1906756467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62de72d696da5943ae02e7c936aac58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 1704
+--- !u!114 &1906756472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1906756467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ef493085df5234082a04bb90345390, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 0
+  parameterCode: 8
+  value: 1
 --- !u!1 &1918861457
 GameObject:
   m_ObjectHideFlags: 0
@@ -18327,6 +18411,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1328896376}
         m_TargetAssemblyTypeName: FloorControl, Assembly-CSharp
         m_MethodName: StopMove
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1236465223}
+        m_TargetAssemblyTypeName: ParameterChanger, Assembly-CSharp
+        m_MethodName: Change
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

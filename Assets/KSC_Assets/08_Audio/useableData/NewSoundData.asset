@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
   m_Name: NewSoundData
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 33cd673f74fcae84d8a46986c5987f16, type: 3}
+  csvData: {fileID: 4900000, guid: c01150bec8fc3b34fa8030b2fa9575ca, type: 3}
   soundData:
   - path: global data
     id: 0
@@ -46,6 +46,10 @@ MonoBehaviour:
       id: 7
       min: 0
       max: 100
+    - name: BGM_State
+      id: 8
+      min: 0
+      max: 1
   - path: event:/PlayerCharacter/Movement/PC_Jogging
     id: 1000
     type: SFX
@@ -152,6 +156,10 @@ MonoBehaviour:
     parameters: []
   - path: event:/PlayerCharacter/Weapon/PC_Weapon_Explo_Hit
     id: 1024
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Weapon/PC_Railgun_Discharging
+    id: 1025
     type: SFX
     parameters: []
   - path: event:/Drone/Movement/DR_Flying
@@ -270,6 +278,14 @@ MonoBehaviour:
     id: 1703
     type: AMB
     parameters: []
+  - path: event:/BGM/80bpm
+    id: 1704
+    type: BGM
+    parameters: []
+  - path: event:/BGM/83bpm
+    id: 1705
+    type: BGM
+    parameters: []
   - path: event:/Ambient/Medusa/Vent_Side
     id: 2000
     type: AMB
@@ -344,6 +360,10 @@ MonoBehaviour:
     parameters: []
   - path: event:/Ambient/Medusa/Conveyor_Move
     id: 2016
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Ground/Battery_Fallen
+    id: 2017
     type: AMB
     parameters: []
   - path: event:/UI/Button
