@@ -165,6 +165,12 @@ public class Genie_AI : MonoBehaviour
             _timeCounterEx.InitTimer("groundHitAttack",0f,groundHitAttackTime);
             _timeCounterEx.InitTimer("groundHitWait",0f,groundHitWaitTime);
 
+            if(_animator.IsPlaying("ChestCloseLeft") != null)
+            {
+                _animator.StopTarget("ChestCloseLeft");
+                _animator.StopTarget("ChestCloseRight");
+            }
+
             _animator.Play("ChestOpenLeft",leftChest);
             _animator.Play("ChestOpenRight",rightChest);
             
@@ -201,6 +207,13 @@ public class Genie_AI : MonoBehaviour
             ChangeState(State.Hit);
             SetGroundAreaMaterial(defaultMat);
             centerShield.ToOrigin();
+
+            if(_animator.IsPlaying("ChestOpenLeft") != null)
+            {
+                _animator.StopTarget("ChestOpenLeft");
+                _animator.StopTarget("ChestOpenRight");
+            }
+
             _animator.Play("ChestCloseLeft",leftChest);
             _animator.Play("ChestCloseRight",rightChest);
             whenCancelHitGround?.Invoke();
@@ -277,6 +290,13 @@ public class Genie_AI : MonoBehaviour
             // gridControll.GetCube_Sector(_groundLookTarget.position);
             // gridControll.SetCubesActive(false,true,groundDisapearTime);
             centerShield.ToOrigin();
+
+            if(_animator.IsPlaying("ChestOpenLeft") != null)
+            {
+                _animator.StopTarget("ChestOpenLeft");
+                _animator.StopTarget("ChestOpenRight");
+            }
+
             _animator.Play("ChestCloseLeft",leftChest);
             _animator.Play("ChestCloseRight",rightChest);
 
@@ -430,6 +450,12 @@ public class Genie_AI : MonoBehaviour
 
         if(currState == State.GroundHitAttack || currState == State.GroundHitReady)
         {
+            if(_animator.IsPlaying("ChestOpenLeft") != null)
+            {
+                _animator.StopTarget("ChestOpenLeft");
+                _animator.StopTarget("ChestOpenRight");
+            }
+
             _animator.Play("ChestCloseLeft",leftChest);
             _animator.Play("ChestCloseRight",rightChest);
         }

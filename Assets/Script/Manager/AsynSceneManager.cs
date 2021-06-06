@@ -226,7 +226,7 @@ public class AsynSceneManager : MonoBehaviour
 
         StartCoroutine(UnLoadNullScene());
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
         _isLoaded = true;
 
         if(currentStageManager != null && currentStageManager.entranceElevator != null && !setPos)
