@@ -29,6 +29,8 @@ public class Genie_AI : MonoBehaviour
     public List<Color> eyeColor;
     public List<Renderer> eyes;
 
+    public Transform respawnPoint;
+
     public Transform head;
     public Transform droneSpawnPoint;
 
@@ -139,11 +141,6 @@ public class Genie_AI : MonoBehaviour
             _droneSpawnLimit = _currentDroneCount;
             _droneSpawnCount = 0;
             UpdateDroneCount();
-
-            if(_currentDroneCount == 0)
-            {
-                SetSafeZone();
-            }
         }
         else if(state == State.GroundHitReady)
         {
@@ -198,6 +195,12 @@ public class Genie_AI : MonoBehaviour
         }
     }
 
+    public void SetRandomRespawnPoint()
+    {
+        var cube = gridControll.GetRandomActiveCube(true);
+        respawnPoint.position = cube.transform.position + Vector3.up;
+    }
+
     public void Launch()
     {
         ChangeState(State.LookTarget);
@@ -241,6 +244,7 @@ public class Genie_AI : MonoBehaviour
             _animator.Play("GroundAttackRight",handIKs[1]);
 
             centerShield.ToTarget();
+            SetSafeZone();
             GetGroundArea();
             SetGroundAreaMaterial(dangerMat);
             ChangeState(State.GroundHitAttack);

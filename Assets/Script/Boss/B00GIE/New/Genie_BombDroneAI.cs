@@ -33,6 +33,8 @@ public class Genie_BombDroneAI : DroneAIBase
         SetRandomRotate(new Vector3(0f,180f,0f));
         maxSpeed = Random.Range(randomMaxSpeed.x,randomMaxSpeed.y);
 
+        _lifeTime = lifeTime;
+
         _timeCounterEx.InitTimer("launch",0f,launchTime);
 
         this.gameObject.SetActive(false);
@@ -108,6 +110,7 @@ public class Genie_BombDroneAI : DroneAIBase
             if(dist <= explosionDistance)
             {
                 currCube.SetActive(false,false);
+                currCube.special = true;
             }
         }
         
@@ -118,6 +121,7 @@ public class Genie_BombDroneAI : DroneAIBase
             if(dist <= explosionDistance)
             {
                 cube.SetActive(false,false);
+                currCube.special = true;
             }
             
         }

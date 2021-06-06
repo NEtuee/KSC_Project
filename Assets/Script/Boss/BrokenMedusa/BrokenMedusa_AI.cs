@@ -47,6 +47,7 @@ public class BrokenMedusa_AI : IKBossBase
     //public Animation animationControll;
     public GraphAnimator graphAnimator;
     public BossScan scanner;
+    public GameObject shield;
     public FloorControl floorControl;
 
 
@@ -71,6 +72,7 @@ public class BrokenMedusa_AI : IKBossBase
     private bool _scanCheck = false;
     private bool _armPushLerpBack = false;
     private bool _jumpPush = false;
+    private bool _firstScan = false;
 
     public UnityEvent scannedEvent;
     public UnityEvent whenSearch;
@@ -91,6 +93,7 @@ public class BrokenMedusa_AI : IKBossBase
         }
 
         _timeCounter.InitTimer("transformTime");
+        _timeCounter.InitTimer("firstScanTime",0f,0.5f);
 
         _timeCounter.InitTimer("FrontWalk");
         _timeCounter.InitTimer("FrontWalk_Init");
@@ -208,6 +211,18 @@ public class BrokenMedusa_AI : IKBossBase
                 ChangeState(State.SearchIdle);
             }
 
+            if(!_firstScan)
+            {
+                _timeCounter.IncreaseTimerSelf("firstScanTime",out var scan,deltaTime);
+                if(scan)
+                {
+                    ScanForward();
+                    scannedEvent?.Invoke();
+                    _firstScan = true;
+                }
+                
+            }
+
             FrontMoveProgress(deltaTime);
         }
         else if(currentState == State.LockOnMove)
@@ -226,6 +241,18 @@ public class BrokenMedusa_AI : IKBossBase
             {
                 GameManager.Instance.soundManager.Play(1514, Vector3.zero, transform);
                 ChangeState(State.SearchIdle);
+            }
+
+            if(!_firstScan)
+            {
+                _timeCounter.IncreaseTimerSelf("firstScanTime",out var scan,deltaTime);
+                if(scan)
+                {
+                    ScanForward();
+                    scannedEvent?.Invoke();
+                    _firstScan = true;
+                }
+                
             }
 
             FrontMoveProgress(deltaTime);
@@ -346,6 +373,8 @@ public class BrokenMedusa_AI : IKBossBase
                 SetPlayerRunningLock(false);
                 SetAimLock(false);
                 SetCameraDefault();
+
+                shield.SetActive(true);
                 //animationControll.Play("Anim_Medusa_Finding");
             }
             // if(!animationControll.isPlaying)
@@ -615,7 +644,7 @@ public class BrokenMedusa_AI : IKBossBase
             {
                 //scan
                 GameManager.Instance.soundManager.Play(1513, Vector3.zero, transform);
-                scannedEvent?.Invoke();
+                
                 return true;
             }
         }

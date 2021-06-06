@@ -8,6 +8,7 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
     public List<ImmortalJirungE_V2_AI> aIs;
     public BezierLightning lightning;
     public Transform lightningPoint;
+    public LayerMask wallLayer;
 
     public UnityEvent whenAllShieldDestroy;
 
@@ -18,12 +19,14 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
     private int shieldCount = 0;
 
     private TimeCounterEx _timeCounterEx = new TimeCounterEx();
+    private RayEx _wallRay;
 
     public void Start()
     {
         //Recovery();
 
         _timeCounterEx.InitTimer("time",0f,Random.Range(1f,2f));
+        _wallRay = new RayEx(new Ray(),0f,wallLayer);
     }
 
     public void FixedUpdate()
@@ -53,6 +56,18 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
                 allShieldBroke = false;
                 ++shieldCount;
             }
+
+            // if(jirung.currentState == ImmortalJirungE_V2_AI.State.WallMove)
+            // {
+            //     _wallRay.SetDirection((jirung.transform.position - lightningPoint.position).normalized);
+            //     _wallRay.Distance = Vector3.Distance(jirung.transform.position,lightningPoint.position);
+
+            //     if(_wallRay.Cast(lightningPoint.position,out var hit))
+            //     {
+            //         jirung.Dead();
+            //     }
+            // }
+            
         }
         
         foreach(var jirung in aIs)
