@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Genie_AI : MonoBehaviour
 {
@@ -61,7 +62,13 @@ public class Genie_AI : MonoBehaviour
 
     [Header("HitPattern")]
     public float genieHitTime;
-    
+
+    public UnityEvent whenHitCore;
+    public UnityEvent whenCancelHitGround;
+    public UnityEvent whenGroggy;
+    public UnityEvent whenDroneSpawn;
+
+
 
     private Dictionary<State, StateDel> _stateDic;
     private List<HexCube> _areaList;
@@ -141,6 +148,8 @@ public class Genie_AI : MonoBehaviour
             _droneSpawnLimit = _currentDroneCount;
             _droneSpawnCount = 0;
             UpdateDroneCount();
+
+            whenDroneSpawn?.Invoke();
         }
         else if(state == State.GroundHitReady)
         {
@@ -177,6 +186,8 @@ public class Genie_AI : MonoBehaviour
             _animator.Play("GroggyRotate",head);
 
             _animatorController.SetBool("RockHand",true);
+
+            whenGroggy?.Invoke();
         }
 
         currentState = state;
@@ -192,7 +203,10 @@ public class Genie_AI : MonoBehaviour
             centerShield.ToOrigin();
             _animator.Play("ChestCloseLeft",leftChest);
             _animator.Play("ChestCloseRight",rightChest);
+            whenCancelHitGround?.Invoke();
+            return;
         }
+        whenHitCore?.Invoke();
     }
 
     public void SetRandomRespawnPoint()
