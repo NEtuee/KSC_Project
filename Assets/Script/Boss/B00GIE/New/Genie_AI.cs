@@ -211,7 +211,7 @@ public class Genie_AI : MonoBehaviour
 
     public void SetRandomRespawnPoint()
     {
-        var cube = gridControll.GetRandomActiveCube(true);
+        var cube = _safeArea.Count == 0 ? gridControll.GetRandomActiveCube(true) : _safeArea[Random.Range(0,_safeArea.Count)];
         respawnPoint.position = cube.transform.position + Vector3.up;
     }
 
