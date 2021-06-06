@@ -93,13 +93,13 @@ public class DroneHelper_Medusa : DroneHelper
         }
         else
         {
-            if (scanned == false || destroyedMedusa == true)
-                return;
-
-            if(scan1 == true && scan2 == false)
+            if (scan1 == true && scan2 == false)
             {
                 Scan2();
             }
+
+            if (scanned == false || destroyedMedusa == true)
+                return;
 
             if(tip1 == false)
             {

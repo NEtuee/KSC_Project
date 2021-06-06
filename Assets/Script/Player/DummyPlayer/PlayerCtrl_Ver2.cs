@@ -2461,7 +2461,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         Debug.Log("Player InitStatus");
         base.InitStatus();
-        hpPackCount.Value = 0;
+        //hpPackCount.Value = 0;
         ragdoll.ResetRagdoll();
         rigidbody.velocity = Vector3.zero;
         footIK.InitPelvisHeight();

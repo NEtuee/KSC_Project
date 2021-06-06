@@ -7457,6 +7457,65 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &152955527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 152955530}
+  - component: {fileID: 152955529}
+  - component: {fileID: 152955528}
+  m_Layer: 0
+  m_Name: TutorialTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &152955528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152955527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3aa13d90f8035e40a39a960dfeff956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOver: 0
+  tutorialType: 3
+--- !u!65 &152955529
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152955527}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 26.138315, y: 9.150238, z: 4.4266796}
+  m_Center: {x: 3.6930666, y: 1.1387062, z: 1.7133398}
+--- !u!4 &152955530
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152955527}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.28, y: 51.14, z: -40.04}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 67
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &155146248
 GameObject:
   m_ObjectHideFlags: 0
@@ -18192,6 +18251,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  soundType: 0
   destroyEffect: {fileID: 1994668523941644695, guid: b053d268fd4f0ff4d8dc691f6a14ce8a,
     type: 3}
   isCore: 0
@@ -32323,6 +32383,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
         type: 3}
+      propertyPath: soundType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2415251833704064408, guid: 5d864589129a8274abb22f5bd23dcfe1,
+        type: 3}
       propertyPath: whenDestroy.m_PersistentCalls.m_Calls.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -45681,7 +45746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3aa13d90f8035e40a39a960dfeff956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOver: 1
+  isOver: 0
   tutorialType: 4
 --- !u!65 &877066714
 BoxCollider:
@@ -45708,7 +45773,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 67
+  m_RootOrder: 68
   m_LocalEulerAnglesHint: {x: 0, y: 91.326, z: 0}
 --- !u!43 &903099832
 Mesh:
@@ -106410,18 +106475,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: ObjectActivator, Assembly-CSharp
         m_MethodName: Deactive
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 877066713}
-        m_TargetAssemblyTypeName: TutorialTrigger, Assembly-CSharp
-        m_MethodName: set_IsOver
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
