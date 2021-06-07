@@ -10,6 +10,13 @@ public enum InputType
     XboxPad
 }
 
+public enum AdditionalType
+{
+    First,
+    Second,
+    Third,
+    Forth
+}
 
 public class InputManager : MonoBehaviour
 {
@@ -76,6 +83,8 @@ public class InputManager : MonoBehaviour
 
     private Dictionary<KeyCode, string> dualShockKeycodeTranslateDict = new Dictionary<KeyCode, string>();
     private Dictionary<KeyCode, string> xboxKeycodeTranslateDict = new Dictionary<KeyCode, string>();
+
+    private bool[] additionaFlag = new bool[4] { false,false,false,false};
 
     private void Awake()
     {
@@ -183,6 +192,8 @@ public class InputManager : MonoBehaviour
                 }
             }
         }
+
+        CheckAddtional();
     }
 
     private void FixedUpdate()
@@ -497,6 +508,150 @@ public class InputManager : MonoBehaviour
         else
             return Input.GetAxis("Mouse Y") + Input.GetAxis("RightStickY_Xbox");
     }
+
+    public bool GetAdditionalKey(AdditionalType type)
+    {
+        switch(currentConnectGamepad)
+        {
+            case ConnectGamePad.None:
+                {
+                    switch(type)
+                    {
+                        case AdditionalType.First:
+                            return Input.GetKeyDown(KeyCode.Alpha1);
+                        case AdditionalType.Second:
+                            return Input.GetKeyDown(KeyCode.Alpha2);
+                        case AdditionalType.Third:
+                            return Input.GetKeyDown(KeyCode.Alpha3);
+                        case AdditionalType.Forth:
+                            return Input.GetKeyDown(KeyCode.Alpha4);
+                    }
+                }
+                break;
+            case ConnectGamePad.DualShock:
+                {
+                    switch (type)
+                    {
+                        case AdditionalType.First:
+                            if (Input.GetAxis("DpadY_DualShock") == 1.0f && additionaFlag[0] == false)
+                            {
+                                additionaFlag[0] = true;
+                                return true;
+                            }
+                            break; 
+                        case AdditionalType.Second:
+                            if (Input.GetAxis("DpadX_DualShock") == -1.0f && additionaFlag[1] == false)
+                            {
+                                additionaFlag[1] = true;
+                                return true;
+                            }
+                            break;
+                        case AdditionalType.Third:
+                            if (Input.GetAxis("DpadY_DualShock") == -1.0f && additionaFlag[2] == false)
+                            {
+                                additionaFlag[2] = true;
+                                return true;
+                            }
+                            break;
+                        case AdditionalType.Forth:
+                            if (Input.GetAxis("DpadX_DualShock") == 1.0f && additionaFlag[3] == false)
+                            {
+                                additionaFlag[3] = true;
+                                return true;
+                            }
+                            break;
+                    }
+                }
+                break;
+            case ConnectGamePad.XboxPad:
+                {
+                    switch (type)
+                    {
+                        case AdditionalType.First:
+                            if (Input.GetAxis("DpadY_Xbox") == 1.0f && additionaFlag[0] == false)
+                            {
+                                additionaFlag[0] = true;
+                                return true;
+                            }
+                            break;
+                        case AdditionalType.Second:
+                            if (Input.GetAxis("DpadX_Xbox") == -1.0f && additionaFlag[1] == false)
+                            {
+                                additionaFlag[1] = true;
+                                return true;
+                            }
+                            break;
+                        case AdditionalType.Third:
+                            if (Input.GetAxis("DpadY_Xbox") == -1.0f && additionaFlag[2] == false)
+                            {
+                                additionaFlag[2] = true;
+                                return true;
+                            }
+                            break;
+                        case AdditionalType.Forth:
+                            if (Input.GetAxis("DpadX_Xbox") == 1.0f && additionaFlag[3] == false)
+                            {
+                                additionaFlag[3] = true;
+                                return true;
+                            }
+                            break;
+                    }
+                }
+                break;
+        }
+
+        return false;
+    }
+
+    private void CheckAddtional()
+    {
+        switch(currentConnectGamepad)
+        {
+            case ConnectGamePad.None:
+                return;
+            case ConnectGamePad.XboxPad:
+                {
+                    if(additionaFlag[0] == true && Input.GetAxis("DpadY_DualShock") != 1.0f)
+                    {
+                        additionaFlag[0] = false;
+                    }
+                    if (additionaFlag[1] == true && Input.GetAxis("DpadX_DualShock") != 1.0f)
+                    {
+                        additionaFlag[1] = false;
+                    }
+                    if (additionaFlag[2] == true && Input.GetAxis("DpadY_DualShock") != 1.0f)
+                    {
+                        additionaFlag[2] = false;
+                    }
+                    if (additionaFlag[3] == true && Input.GetAxis("DpadX_DualShock") != 1.0f)
+                    {
+                        additionaFlag[3] = false;
+                    }
+                }
+                break;
+            case ConnectGamePad.DualShock:
+                {
+                    if (additionaFlag[0] == true && Input.GetAxis("DpadY_Xbox") != 1.0f)
+                    {
+                        additionaFlag[0] = false;
+                    }
+                    if (additionaFlag[1] == true && Input.GetAxis("DpadX_Xbox") != 1.0f)
+                    {
+                        additionaFlag[1] = false;
+                    }
+                    if (additionaFlag[2] == true && Input.GetAxis("DpadY_Xbox") != 1.0f)
+                    {
+                        additionaFlag[2] = false;
+                    }
+                    if (additionaFlag[3] == true && Input.GetAxis("DpadX_Xbox") != 1.0f)
+                    {
+                        additionaFlag[3] = false;
+                    }
+                }
+                break;
+        }
+    }
+        
 
     #region 키보드 바인딩
     private bool BindKeyboard_GetKeyDown(KeybindingActions action)

@@ -361,12 +361,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (Input.GetKeyDown(KeyCode.U))
             drone.Visible = true;
 
-        if(Input.GetKeyDown(KeyCode.Alpha1) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
+        if(InputManager.Instance.GetAdditionalKey(AdditionalType.First) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
         {
             ChangeState(PlayerState.Gesture);
             return;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
+        if (InputManager.Instance.GetAdditionalKey(AdditionalType.Second) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
         {
             ChangeState(PlayerState.Gesture2);
             return;
