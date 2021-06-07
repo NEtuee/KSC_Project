@@ -364,6 +364,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if(InputManager.Instance.GetAdditionalKey(AdditionalType.First) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
         {
             ChangeState(PlayerState.Gesture);
+            GameManager.Instance.soundManager.Play(1026,Vector3.up,transform);
             return;
         }
         if (InputManager.Instance.GetAdditionalKey(AdditionalType.Second) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)

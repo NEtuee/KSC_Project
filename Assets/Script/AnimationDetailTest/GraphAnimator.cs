@@ -23,6 +23,7 @@ public class GraphAnimator : MonoBehaviour
 
         public string name;
         public bool loop;
+
         public float speed;
         public AnimationType animationType;
         public AnimationCurve xCurve;
@@ -147,6 +148,8 @@ public class GraphAnimator : MonoBehaviour
 
     public List<GraphAnimation> animations = new List<GraphAnimation>();
 
+    public bool ignorePause = false;
+
     private List<GraphAnimation> _playList = new List<GraphAnimation>();
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 
@@ -227,8 +230,17 @@ public class GraphAnimator : MonoBehaviour
 
     public void Update()
     {
-        if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
-            return;
+        if(ignorePause)
+        {
+            if(GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
+                return;
+        }
+        else
+        {
+            if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
+                return;
+        }
+        
         
         Progress(Time.deltaTime);
 
@@ -236,8 +248,17 @@ public class GraphAnimator : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
-            return;
+        if(ignorePause)
+        {
+            if(GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+                return;
+        }
+        else
+        {
+            if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+                return;
+        }
+        
 
         Progress(Time.fixedDeltaTime);
     }
