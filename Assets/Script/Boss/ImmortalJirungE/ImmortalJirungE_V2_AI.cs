@@ -690,7 +690,8 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         foreach (var body in bodyParts)
         {
             body.transform.SetParent(null);
-            if(!TryGetComponent<Rigidbody>(out var rig))
+            body.TryGetComponent<Rigidbody>(out var rig);
+            if(rig == null)
             {
                 rig = body.AddComponent<Rigidbody>();
             }
