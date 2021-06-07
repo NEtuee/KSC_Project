@@ -41,6 +41,8 @@ public class OutTroCtrl : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         button.Active(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void GoToTitle()

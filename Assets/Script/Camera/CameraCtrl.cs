@@ -78,18 +78,18 @@ public class CameraCtrl : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    Cursor.lockState = CursorLockMode.None;
+        //    Cursor.visible = true;
+        //}
 
-        if(Input.GetKeyUp(KeyCode.Escape))
-        {
+        //if(Input.GetKeyUp(KeyCode.Escape))
+        //{
       
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        //    Cursor.lockState = CursorLockMode.Locked;
+        //    Cursor.visible = false;
+        //}
 
         //if(Input.GetKeyDown(KeyCode.L))
         //{

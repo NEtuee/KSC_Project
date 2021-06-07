@@ -9,6 +9,7 @@ public class RespawnStateBehavior : StateMachineBehaviour
         if (GameManager.Instance == null)
             return;
 
+        animator.SetBool("Respawn", false);
         ((PlayerCtrl_Ver2)GameManager.Instance.player).ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
     }
 }

@@ -45,6 +45,12 @@ public class LevelEdit_TimelinePlayer : MonoBehaviour
 
     public void LoadSceneFromManager(string target)
     {
+        Scene activeScene = SceneManager.GetActiveScene();
+        SceneManager.MoveGameObjectToScene(Camera.main.gameObject, activeScene);
+        SceneManager.MoveGameObjectToScene(GameManager.Instance.followTarget.gameObject, activeScene);
+        SceneManager.MoveGameObjectToScene(GameManager.Instance.player.gameObject, activeScene);
+        SceneManager.MoveGameObjectToScene(((PlayerCtrl_Ver2)GameManager.Instance.player).GetDrone().gameObject, activeScene);
+
         SceneManager.LoadScene(target,LoadSceneMode.Single);
     }
 

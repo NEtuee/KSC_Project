@@ -285,7 +285,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
 
         if (GameManager.Instance.optionMenuCtrl.CurrentTutorial == false && 
+            state != PlayerState.Respawn &&
             InputManager.Instance.GetInput(KeybindingActions.Option) && 
+            GameManager.Instance.optionMenuCtrl.sceneLoadUi.Loading == false &&
             dead == false)
         {
             GameManager.Instance.optionMenuCtrl.InputEsc();
@@ -1306,6 +1308,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 isLedge = false;
             }
                 break;
+            case PlayerState.Respawn:
+                {
+                    if (state == PlayerState.Default)
+                        Debug.Log("change default");
+                }
+                break;
         }
 
         switch (state)
@@ -1564,7 +1572,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 }
                 GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() =>
                 { 
-                    animator.SetTrigger("Respawn");
+                    animator.SetBool("Respawn",true);
                     drone.Respawn(transform);
                 });
             }

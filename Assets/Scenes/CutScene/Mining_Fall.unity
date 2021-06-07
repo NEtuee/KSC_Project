@@ -5885,6 +5885,7 @@ GameObject:
   - component: {fileID: 1869119380}
   - component: {fileID: 1869119379}
   - component: {fileID: 1869119378}
+  - component: {fileID: 1869119382}
   m_Layer: 0
   m_Name: Trigger
   m_TagString: Untagged
@@ -5924,6 +5925,18 @@ MonoBehaviour:
       - m_Target: {fileID: 503965464}
         m_TargetAssemblyTypeName: LevelEdit_TimelinePlayer, Assembly-CSharp
         m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1869119382}
+        m_TargetAssemblyTypeName: ParameterChanger, Assembly-CSharp
+        m_MethodName: Change
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5979,6 +5992,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!114 &1869119382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869119377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ef493085df5234082a04bb90345390, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 0
+  parameterCode: 6
+  value: 0
 --- !u!1 &1896625425
 GameObject:
   m_ObjectHideFlags: 3

@@ -47,7 +47,7 @@ public class PlayerRePositionor : MonoBehaviour
     {
         if (coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
         {
-            if (ctrl.Dead == true)
+            if (ctrl.Dead == true || ctrl.GetState() == PlayerCtrl_Ver2.PlayerState.Respawn)
                 yield break;
 
             ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
@@ -69,7 +69,7 @@ public class PlayerRePositionor : MonoBehaviour
         {
             PlayerCtrl_Ver2 player = ((PlayerCtrl_Ver2)(GameManager.Instance.player));
 
-            if (player.Dead == true)
+            if (player.Dead == true || player.GetState() == PlayerCtrl_Ver2.PlayerState.Respawn)
                 yield break;
 
             player.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);

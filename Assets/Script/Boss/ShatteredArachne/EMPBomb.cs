@@ -18,9 +18,12 @@ public class EMPBomb : MonoBehaviour
     private float _speed = 0f;
     private Material _matOrigin;
 
+    private PlayerCtrl_Ver2 player;
+
     public void Start()
     {
         _matOrigin = GetComponent<MeshRenderer>().material;
+        player = GameManager.Instance.player as PlayerCtrl_Ver2;
     }
 
     public void Hit()
@@ -34,11 +37,16 @@ public class EMPBomb : MonoBehaviour
 
         if(playerColl.Length != 0)
         {
+            Debug.Log(playerColl.Length);
             foreach(Collider curr in playerColl)
             {
+               
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
                 if(ragdoll != null)
                 {
+                    if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Ragdoll)
+                        continue;
+
                     ragdoll.ExplosionRagdoll(explosionForce, (ragdoll.transform.position - transform.position).normalized);
                     (GameManager.Instance.player as PlayerCtrl_Ver2).TakeDamage(damage);
 

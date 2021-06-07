@@ -419,6 +419,8 @@ public class PlayerRagdoll : MonoBehaviour
 
     public void ExplosionRagdoll(float power, Vector3 dir)
     {
+        
+
         if (isFlyRagdoll == true)
         {
             hipTransform.GetComponent<Rigidbody>().AddForce(dir * power, ForceMode.Impulse);
