@@ -191,60 +191,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            if (state == RagdollState.Animated)
-            {
-                //ActiveRightHandFixRagdoll();
-                //player.ChangeState(PlayerCtrl_Ver2.PlayerState.HangRagdoll);
-                //ActiveBothHandFixRagdoll();
-
-                //ActiveHangShake();
-            }
-            //else
-            //{
-            //    foreach (var copyBone in copyBoneRotations)
-            //    {
-            //        copyBone.active = false;
-            //    }
-
-            //    transform.rotation = copyTargetCharacter.transform.rotation;
-
-            //    DisableFixRagdoll();
-                
-            //    isHangShake = false;
-
-            //    copyTargetCharacter.Init();
-            //}
-        }
-        
-        
-
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    switch (state)
-        //    {
-        //        case RagdollState.Animated:
-
-        //            ActiveRightHandFixRagdoll();
-
-        //            break;
-        //        case RagdollState.Ragdoll:
-
-        //            DisableFixRagdoll();
-
-        //            break;
-        //    }
-        //}
-
-        //if (isLeftHandFix)
-        //{
-        //    leftHandTransform.SetPositionAndRotation(leftHandPoint.position, leftHandPoint.rotation);
-        //}
-        //if (isRightHandFix)
-        //{
-        //    rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
-        //}
+       
     }
 
     private void LateUpdate()

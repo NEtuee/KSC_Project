@@ -137,8 +137,8 @@ public class HandIKCtrl : MonoBehaviour
 
     void Update()
     {
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 3.0f, 0.6f)), transform.TransformDirection(new Vector3(-0.5f, -1.0f, 0.0f)), Color.green);
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 3.0f, 0.6f)), transform.TransformDirection(new Vector3(0.5f, -1.0f, 0.0f)), Color.green);
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 3.0f, 0.6f)), transform.TransformDirection(new Vector3(-0.5f, -1.0f, 0.0f)), Color.green);
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 3.0f, 0.6f)), transform.TransformDirection(new Vector3(0.5f, -1.0f, 0.0f)), Color.green);
 
         if(notUseHandIK == true)
         {

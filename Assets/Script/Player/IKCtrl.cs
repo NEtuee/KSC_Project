@@ -70,6 +70,9 @@ public class IKCtrl : MonoBehaviour
             return;
         }
 
+        if (Vector3.Distance(animator.bodyPosition, transform.position) >= 2.0f)
+            InitPelvisHeight();
+
         MovePelvisHeight();
 
         if (enableFeetIk == false)

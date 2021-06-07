@@ -278,11 +278,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     int ground = 0;
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            ground = ++ground >= 3 ? 0 : ground;
-            GameManager.Instance.soundManager.SetGlobalParam(5,ground);
-        }
+        //if(Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    ground = ++ground >= 3 ? 0 : ground;
+        //    GameManager.Instance.soundManager.SetGlobalParam(5,ground);
+        //}
 
         if (GameManager.Instance.optionMenuCtrl.CurrentTutorial == false && 
             state != PlayerState.Respawn &&
@@ -304,8 +304,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         // if (Input.GetKeyDown(KeyCode.E))
         //     animator.SetTrigger("Shot");
 
-        if (Input.GetKeyDown(KeyCode.Q))
-            energy.Value = 100.0f;
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //    energy.Value = 100.0f;
 
         InputUpdate();
 
@@ -358,8 +358,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         InputUseHpPack();
         InputRun();
 
-        if (Input.GetKeyDown(KeyCode.U))
-            drone.Visible = true;
+        //if (Input.GetKeyDown(KeyCode.U))
+        //    drone.Visible = true;
 
         if(InputManager.Instance.GetAdditionalKey(AdditionalType.First) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
         {

@@ -47,10 +47,10 @@ public class EMPGun : MonoBehaviour
     {
         launchPos.LookAt(lookAim);
 
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            GameManager.Instance.cameraManager.GenerateRecoilImpulse();
-        }
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+        //}
     }
 
     public void LaunchLaser(float damage)
