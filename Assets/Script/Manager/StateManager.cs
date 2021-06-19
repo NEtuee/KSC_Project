@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,12 @@ public class StateManager : MonoBehaviour
     public FadeUI staminaUI;
     public FadeUI energyUI;
     public HpPackUI hpPackUI;
+    public SkinnedMeshRenderer bagRenderer;
+    public Material _bagMat;
     void Start()
     {
+        _bagMat = bagRenderer.sharedMaterial;
+        
         ((PlayerCtrl_Ver2)(GameManager.Instance.player)).hpPackCount.Subscribe(value =>
         {
             if (((PlayerCtrl_Ver2)(GameManager.Instance.player)).GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
@@ -26,6 +31,7 @@ public class StateManager : MonoBehaviour
 
         GameManager.Instance.player.hp.Subscribe(value =>
         {
+            _bagMat.SetFloat("Vector1_5338de784f7d4439aba250082f9a53e3", value*0.01f);
             if (((PlayerCtrl_Ver2)(GameManager.Instance.player)).GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
                 hpUI.SetValue(value, false);
             else
@@ -69,5 +75,10 @@ public class StateManager : MonoBehaviour
         hpUI.SetVisible(result);
         staminaUI.SetVisible(result);
         energyUI.SetVisible(result);
+    }
+
+    private void FixedUpdate()
+    {
+        //Debug.Log(bagRenderer.sharedMaterial.GetFloat("Vector1_5338de784f7d4439aba250082f9a53e3"));
     }
 }
