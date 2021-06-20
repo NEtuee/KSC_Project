@@ -1874,6 +1874,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
             if (Physics.SphereCast(point1, collider.radius * 1.5f, transform.forward, out hit, 3f, detectionLayer))
             {
+                // Vector3 surfaceNormal = hit.normal;
+                // //surfaceNormal.z = 0;
+                // surfaceNormal.x = 0;
+                // float angle = Vector3.Angle(Vector3.forward, surfaceNormal);
+                // surfaceNormal.z = 0;
+                // //Debug.Log(Vector3.Angle(Vector3.forward, surfaceNormal));
+                // if (surfaceNormal.normalized.y < 0 && angle > 45f)
+                //     return false;
+                
                 if (DetectionCanClimbingAreaByVertexColor(point1, transform.forward, 3f) == true)
                 {
                     return false;
