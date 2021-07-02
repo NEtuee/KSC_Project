@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MainMenuCtrlManager : MonoBehaviour
 {
+    public InputAction pauseButton;
+
     public enum MainMenuState
     {
         Main = 0, Option, Sound, Display, Control, KeyBinding
@@ -21,16 +24,11 @@ public class MainMenuCtrlManager : MonoBehaviour
 
     private void Start()
     {
+        pauseButton.performed += _ => Prev();
+
+
         _currentPage = mainPage;
         _currentPage.Active(true);
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            Prev();
-        }
     }
 
     public void Prev()
@@ -74,4 +72,15 @@ public class MainMenuCtrlManager : MonoBehaviour
         }
         _currentPage.Active(true);
     }
+
+    private void OnEnable()
+    {
+        pauseButton.Enable();
+    }
+
+    private void OnDisable()
+    {
+        pauseButton.Disable();
+    }
+
 }
