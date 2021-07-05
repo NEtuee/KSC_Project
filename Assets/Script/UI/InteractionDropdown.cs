@@ -1,34 +1,17 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class BaseAppearButton : Button, Appearable
+public class InteractionDropdown : TMP_Dropdown
 {
     public UnityEvent onSeleted;
     public UnityEvent onDeseleted;
     public UnityEvent onEnter;
     public UnityEvent onExit;
-
-    protected override void Start()
-    {
-        base.Start();
-    }
-
-    public virtual void Appear()
-    {
-    }
-
-    public virtual void Disappear()
-    {
-    }
-
-    public virtual void Init()
-    {
-    }
 
     public override void OnSelect(BaseEventData eventData)
     {

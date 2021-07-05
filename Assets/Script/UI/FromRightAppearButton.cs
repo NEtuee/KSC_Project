@@ -8,8 +8,12 @@ using UnityEngine.Events;
 public class FromRightAppearButton : BaseAppearButton
 {
     [SerializeField] private Vector2 _startOffset;
+    public Vector2 StartOffset { get => _startOffset; set { _startOffset = value; } }
+
     [SerializeField] private float _duration;
+    public float Duration { get => _duration; set => _duration = value; }
     [SerializeField] [Range(0.0f, 1.0f)] private float middleCallTiming = 0.5f;
+    public float MiddleCallTiming { get => middleCallTiming; set => middleCallTiming = value; }
     private RectTransform _rect;
     private Vector2 _targetPosition;
 

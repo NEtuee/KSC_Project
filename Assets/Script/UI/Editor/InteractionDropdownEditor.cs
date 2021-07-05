@@ -1,15 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Collections;using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UI;
+using TMPro.EditorUtilities;
 
-[CustomEditor(typeof(BaseAppearButton))]
-public class BaseAppearButtonEditor : ButtonEditor
+[CustomEditor(typeof(InteractionDropdown))]
+public class InteractionDropdownEditor : TMPro.EditorUtilities.DropdownEditor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        BaseAppearButton t = (BaseAppearButton)target;
+        InteractionDropdown t = (InteractionDropdown)target;
 
         var prop = serializedObject.FindProperty("onSeleted");
         EditorGUILayout.PropertyField(prop, true);

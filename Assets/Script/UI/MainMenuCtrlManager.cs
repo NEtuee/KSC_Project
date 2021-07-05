@@ -83,4 +83,8 @@ public class MainMenuCtrlManager : MonoBehaviour
         pauseButton.Disable();
     }
 
+    public void LogCheck()
+    {
+        Debug.Log("call");
+    }
 }

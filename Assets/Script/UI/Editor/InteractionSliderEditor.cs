@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UI;
 
-[CustomEditor(typeof(BaseAppearButton))]
-public class BaseAppearButtonEditor : ButtonEditor
+[CustomEditor(typeof(InteractionSlider))]
+public class InteractionSliderEditor : SliderEditor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        BaseAppearButton t = (BaseAppearButton)target;
+        InteractionSlider t = (InteractionSlider)target;
 
         var prop = serializedObject.FindProperty("onSeleted");
         EditorGUILayout.PropertyField(prop, true);
