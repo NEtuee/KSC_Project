@@ -14,6 +14,7 @@ public class MenuPage : MonoBehaviour
 
     public UnityEvent onFisrtActive;
     public UnityEvent onActive;
+    public UnityEvent onDisable;
 
     public List<Appearable> appearables = new List<Appearable>();
 
@@ -72,6 +73,10 @@ public class MenuPage : MonoBehaviour
             //    _isFirst = true;
             //    onFisrtActive.Invoke();
             //}
+        }
+        else
+        {
+            onDisable.Invoke();
         }
 
         _canvas.enabled = active;
