@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public FollowTargetCtrl followTarget;
     [SerializeField] public UIManager uiManager;
     [SerializeField] public CameraManager cameraManager;
-    [SerializeField] public LevelEdit_BehaviorControll bossControll;
+
     [SerializeField] private Transform coreTransfrom;
     [SerializeField] private Transform killEventTransform;
     [SerializeField] private HudTest hudTest;
@@ -84,10 +84,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if(GameObject.FindGameObjectWithTag("Boss") != null)
-        {
-            bossControll = GameObject.FindGameObjectWithTag("Boss").GetComponent<LevelEdit_BehaviorControll>();
-        }
 
         screenWidth = Screen.width;
         screenHeight = Screen.height;
@@ -254,18 +250,6 @@ public class GameManager : MonoBehaviour
     {
         asynSceneManager.MovePlayerObjectToUnloadScene();
         SceneManager.LoadScene(1);
-    }
-    
-    public LevelEdit_BehaviorControll.State GetBossState()
-    {
-        if (bossControll != null)
-        {
-            return bossControll.GetState();
-        }
-        else
-        {
-            return LevelEdit_BehaviorControll.State.Idle;
-        }
     }
 
     public Transform GetCoreTransform() { return coreTransfrom; }
