@@ -77,11 +77,6 @@ public class CameraCollision : MonoBehaviour
         aimPos = root;
         lookingEventTarget = root;
 
-        if (GameObject.Find("Boss_CollisionV2")!= null)
-        {
-            GameObject.Find("Boss_CollisionV2").GetComponent<LevelEdit_BehaviorControll>().OnShake += OnShake;
-        }
-
         //LoadPostProcess();
     }
 
