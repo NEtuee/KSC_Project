@@ -463,6 +463,12 @@ public class RebindingUI : MonoBehaviour
 
 #endif
 
+    private void Start()
+    {
+        UpdateActionLabel();
+        UpdateBindingDisplay();
+    }
+
     private void UpdateActionLabel()
     {
         if (m_ActionLabel != null)

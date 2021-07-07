@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public enum UpdateMethod
 {
@@ -2599,6 +2600,44 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             ChangeState(PlayerState.Default);
         }
     }
+
+    #region New Input System
+
+    public void OnMove(InputAction.CallbackContext value)
+    {
+        Vector2 inputVector = value.ReadValue<Vector2>();
+        inputVertical = inputVector.y;
+        inputHorizontal = inputVector.x;
+    }
+
+    public void OnRun(InputAction.CallbackContext value)
+    {
+        if (value.performed == false)
+            return;
+
+        if(isRun)
+        {
+            isRun = false;
+        }
+        else
+        {
+            isRun = true;
+        }
+    }
+
+    public void OnShot(InputAction.CallbackContext value)
+    {
+        if (value.performed == false)
+            return;
+
+        if (state != PlayerState.Aiming)
+            return;
+
+
+    }
+
+    #endregion
+
     #region 디버그
 
     private void OnDrawGizmos()
