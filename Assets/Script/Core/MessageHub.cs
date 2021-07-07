@@ -16,7 +16,7 @@ public abstract class MessageHub<T> : MessageReceiver where T : MessageReceiver
         _receivers.Add(receiver.uniqueNumber, receiver);
     }
 
-    public void DeleteReceiver(int target)
+    public virtual void DeleteReceiver(int target)
     {
         if(_receivers.ContainsKey(target))
             _receivers.Remove(target);
@@ -28,15 +28,23 @@ public abstract class MessageHub<T> : MessageReceiver where T : MessageReceiver
             _receivers.Remove(target.uniqueNumber);
     }
 
-    public void MessageSendProcessing()
+    public void CallReceiveMessageProcessing()
     {
         foreach(var receiver in _receivers.Values)
         {
-            MessageSendProcessing(receiver);
+            receiver.ReceiveMessageProcessing();
         }
     }
 
-    public void MessageSendProcessing(MessageReceiver receiver)
+    public void SendMessageProcessing()
+    {
+        foreach(var receiver in _receivers.Values)
+        {
+            SendMessageProcessing(receiver);
+        }
+    }
+
+    public virtual void SendMessageProcessing(T receiver)
     {
         Message msg = receiver.DequeueSendMessage();
         while(msg != null)
@@ -45,7 +53,7 @@ public abstract class MessageHub<T> : MessageReceiver where T : MessageReceiver
             {
                 _receivers[msg.target].ReceiveMessage(msg);
             }
-            else if(msg.target == 0)
+            else if(msg.target == 0 || uniqueNumber == msg.target)
             {
                 ReceiveMessage(msg);
             }
@@ -74,4 +82,13 @@ public abstract class MessageHub<T> : MessageReceiver where T : MessageReceiver
 
         base.Dispose();
     }
+
+#if UNITY_EDITOR
+
+    public Dictionary<int, T> Debug_GetReceivers()
+    {
+        return _receivers;
+    }
+
+#endif
 }

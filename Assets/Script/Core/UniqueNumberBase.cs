@@ -18,6 +18,17 @@ public class UniqueNumberBase : MonoBehaviour
         _uniqueNumber = _numberOrder++;
     }
 
+    protected int GetSavedNumber(string key)
+    {
+        if(!_numberStorage.ContainsKey(key))
+        {
+            Debug.Log("key dose not exists");
+            return -1;
+        }
+
+        return _numberStorage[key];
+    }
+
     protected void SaveMyNumber(string key)
     {
         if(_numberStorage == null)

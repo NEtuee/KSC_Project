@@ -2,19 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ManagerBase<T> : MessageHub<T>, IProgress where T : ObjectBase
+public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
 {
-    public override void RegisterReceiver(T receiver)
+    public override void RegisterReceiver(ObjectBase receiver)
     {
-        receiver.Initialize();
+        Debug.Log(receiver.name);
         base.RegisterReceiver(receiver);
     }
 
-    protected override void Awake()
-    {
-        base.Awake();
-        Assign();
-    }
+    // protected override void Awake()
+    // {
+    //     base.Awake();
+    // }
 
     public virtual void Assign()
     {
@@ -23,9 +22,12 @@ public abstract class ManagerBase<T> : MessageHub<T>, IProgress where T : Object
         };
 
         AddAction(MessageTitles.system_registerRequest,(msg)=>{
-            RegisterReceiver((T)msg.sender);
+            RegisterReceiver((ObjectBase)msg.sender);
         });
 
+        AddAction(MessageTitles.system_withdrawRequest,(msg)=>{
+            DeleteReceiver(((ObjectBase)msg.sender).uniqueNumber);
+        });
     }
 
     public virtual void Initialize(){}
@@ -34,13 +36,30 @@ public abstract class ManagerBase<T> : MessageHub<T>, IProgress where T : Object
     {
         foreach(var receiver in _receivers.Values)
         {
+            if(receiver == null)
+                continue;
             receiver.Progress(deltaTime);
         }
     }
 
     public virtual void AfterProgress(float deltaTime)
     {
-        MessageSendProcessing();
+        foreach(var receiver in _receivers.Values)
+        {
+            if(receiver == null)
+                continue;
+            receiver.AfterProgress(deltaTime);
+        }
+    }
+
+    public virtual void UpdateTransform()
+    {
+        foreach(var receiver in _receivers.Values)
+        {
+            if(receiver == null)
+                continue;
+            receiver.UpdateTransform();
+        }
     }
 
     public virtual void Release()

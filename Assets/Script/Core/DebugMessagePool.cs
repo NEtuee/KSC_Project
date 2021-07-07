@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 
-public static class MessagePool
+public static class DebugMessagePool
 {
-    private static Queue<Message> _freeQueue = new Queue<Message>();
+    private static Queue<DebugMessage> _freeQueue = new Queue<DebugMessage>();
     private static int _messageCount = 0;
     
-    public static Message CreateNewItem()
+    public static DebugMessage CreateNewItem()
     {
         ++_messageCount;
-        return new Message();
+        return new DebugMessage();
     }
 
-    public static Message GetMessage()
+    public static DebugMessage GetMessage()
     {
         if(_freeQueue.Count == 0)
             return CreateNewItem();
@@ -19,7 +19,7 @@ public static class MessagePool
         return _freeQueue.Dequeue();
     }
 
-    public static void ReturnMessage(Message msg)
+    public static void ReturnMessage(DebugMessage msg)
     {
         _freeQueue.Enqueue(msg);
     }
