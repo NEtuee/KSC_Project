@@ -127,10 +127,10 @@ public class Drone : MonoBehaviour
         if (GameManager.Instance.PAUSE == true)
             return;
 
-        if (InputManager.Instance.GetInput(KeybindingActions.Scan) && _scanLeftTime <= 0.0f)
-        {
-            Scan();
-        }
+        //if (InputManager.Instance.GetInput(KeybindingActions.Scan) && _scanLeftTime <= 0.0f)
+        //{
+        //    Scan();
+        //}
 
         if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.Update)
             return;

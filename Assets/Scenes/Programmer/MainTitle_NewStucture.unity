@@ -17518,6 +17518,8 @@ GameObject:
   - component: {fileID: 696821775}
   - component: {fileID: 696821774}
   - component: {fileID: 696821776}
+  - component: {fileID: 696821778}
+  - component: {fileID: 696821777}
   m_Layer: 0
   m_Name: UiManager
   m_TagString: Untagged
@@ -17591,10 +17593,199 @@ MonoBehaviour:
   m_GameObject: {fileID: 696821773}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6626f7e487c7be43aaec8988d15e7f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b6c2da2db9374dada6761b5e35121c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actions: {fileID: -944628639613478452, guid: ca644ea9dcc2e554cb1b15c0b756bf3e, type: 3}
+--- !u!114 &696821777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696821773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38b0114904c5a254f96c60413bdbcb43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  move: {x: 0, y: 0}
+  Camera: {x: 0, y: 0}
+--- !u!114 &696821778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696821773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: ca644ea9dcc2e554cb1b15c0b756bf3e,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 696821777}
+        m_TargetAssemblyTypeName: NewInputTest, Assembly-CSharp
+        m_MethodName: Move
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7dac195e-ef59-400e-8808-9628071d7044
+    m_ActionName: Game/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/DualShock4GamepadHID/leftStick]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 696821777}
+        m_TargetAssemblyTypeName: NewInputTest, Assembly-CSharp
+        m_MethodName: Cam
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d42bbca3-1360-4d6a-a549-a2f60ede0c02
+    m_ActionName: Game/Camera[/Mouse/delta,/DualShock4GamepadHID/rightStick]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 696821777}
+        m_TargetAssemblyTypeName: NewInputTest, Assembly-CSharp
+        m_MethodName: Run
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 792bcdc3-0f33-418c-8ba8-1334bd180426
+    m_ActionName: Game/Run[/Keyboard/leftShift,/DualShock4GamepadHID/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 696821777}
+        m_TargetAssemblyTypeName: NewInputTest, Assembly-CSharp
+        m_MethodName: Shot
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 57af588d-f2ac-4687-9fab-8a5bcfa16506
+    m_ActionName: Game/Shot[/Mouse/leftButton,/DualShock4GamepadHID/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 696821777}
+        m_TargetAssemblyTypeName: NewInputTest, Assembly-CSharp
+        m_MethodName: Grab
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2670cc27-12cd-4ac9-9b21-264dbaa01835
+    m_ActionName: Game/Grab[/Mouse/rightButton,/DualShock4GamepadHID/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 696821777}
+        m_TargetAssemblyTypeName: NewInputTest, Assembly-CSharp
+        m_MethodName: EmpAim
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ade75f61-2fcc-48c2-b7d9-2f61ed51de38
+    m_ActionName: Game/EmpAim[/Keyboard/c,/DualShock4GamepadHID/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 696821777}
+        m_TargetAssemblyTypeName: NewInputTest, Assembly-CSharp
+        m_MethodName: Scan
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3e885979-7d1f-42ed-8f25-92132e2e4f99
+    m_ActionName: Game/Scan[/Keyboard/v,/DualShock4GamepadHID/rightStickPress]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 696821777}
+        m_TargetAssemblyTypeName: NewInputTest, Assembly-CSharp
+        m_MethodName: UseHpPack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 116edf46-32c0-4e10-9975-67f036b44451
+    m_ActionName: Game/UseHpPack[/Keyboard/e,/DualShock4GamepadHID/buttonWest]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 696821777}
+        m_TargetAssemblyTypeName: NewInputTest, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6db39ab9-cf48-46b6-aa00-a0dc245284ea
+    m_ActionName: Game/Jump[/Keyboard/space,/DualShock4GamepadHID/buttonEast]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Game
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &700186236
 GameObject:
   m_ObjectHideFlags: 0
@@ -49713,13 +49904,25 @@ MonoBehaviour:
         m_CallState: 2
   onActive:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 696821778}
+        m_TargetAssemblyTypeName: UnityEngine.InputSystem.PlayerInput, Unity.InputSystem
+        m_MethodName: DeactivateInput
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onDisable:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 696821776}
-        m_TargetAssemblyTypeName: SaveRebind, Assembly-CSharp
-        m_MethodName: SaveBinding
+      - m_Target: {fileID: 696821778}
+        m_TargetAssemblyTypeName: UnityEngine.InputSystem.PlayerInput, Unity.InputSystem
+        m_MethodName: ActivateInput
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

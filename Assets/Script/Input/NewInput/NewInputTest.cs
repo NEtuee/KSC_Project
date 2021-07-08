@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 public class NewInputTest : MonoBehaviour
 {
+    public Vector2 move;
+    public Vector2 Camera;
+
     public void Run(InputAction.CallbackContext value)
     {
         if(value.performed)
@@ -45,5 +48,15 @@ public class NewInputTest : MonoBehaviour
     {
         if (value.performed)
             Debug.Log("Jump");
+    }
+
+    public void Move(InputAction.CallbackContext value)
+    {
+        move = value.ReadValue<Vector2>();
+    }
+
+    public void Cam(InputAction.CallbackContext value)
+    {
+        Camera = value.ReadValue<Vector2>();
     }
 }

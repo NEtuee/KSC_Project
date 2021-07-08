@@ -12,30 +12,30 @@ public class VirtualCameraChanger : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F1))
-        {
-            GameManager.Instance.cameraManager.ActiveCamera(firstCam);
-        }
+        //if(Input.GetKeyDown(KeyCode.F1))
+        //{
+        //    GameManager.Instance.cameraManager.ActiveCamera(firstCam);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            GameManager.Instance.cameraManager.ActiveCamera(secondCam);
-        }
+        //if (Input.GetKeyDown(KeyCode.F2))
+        //{
+        //    GameManager.Instance.cameraManager.ActiveCamera(secondCam);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            GameManager.Instance.cameraManager.ActiveCamera(thirdCam);
-        }
+        //if (Input.GetKeyDown(KeyCode.F3))
+        //{
+        //    GameManager.Instance.cameraManager.ActiveCamera(thirdCam);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.F4))
-        {
-            GameManager.Instance.cameraManager.ActiveCamera(fourthCam);
-        }
+        //if (Input.GetKeyDown(KeyCode.F4))
+        //{
+        //    GameManager.Instance.cameraManager.ActiveCamera(fourthCam);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            GameManager.Instance.cameraManager.BackToPrevCamera();
-        }
+        //if (Input.GetKeyDown(KeyCode.F5))
+        //{
+        //    GameManager.Instance.cameraManager.BackToPrevCamera();
+        //}
     }
 
 }

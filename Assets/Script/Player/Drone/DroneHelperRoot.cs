@@ -43,16 +43,16 @@ public class DroneHelperRoot : MonoBehaviour
         if (GameManager.Instance.PAUSE == true)
             return;
 
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            HelpEvent("Test");
-        }
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    HelpEvent("Test");
+        //}
 
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            //HelpEvent("Test2");
-            HelpEvent("ArachneBombHint");
-        }
+        //if (Input.GetKeyDown(KeyCode.B))
+        //{
+        //    //HelpEvent("Test2");
+        //    HelpEvent("ArachneBombHint");
+        //}
 
         if(ReferenceEquals(currentHelper, null) == false)
         {

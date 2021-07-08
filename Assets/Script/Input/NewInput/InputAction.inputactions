@@ -75,14 +75,14 @@
                     "id": "6db39ab9-cf48-46b6-aa00-a0dc245284ea",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Press(behavior=2)"
                 }
             ],
             "bindings": [
                 {
                     "name": "WASD",
                     "id": "8dcd3cc9-beff-4ca8-9515-45b599613298",
-                    "path": "2DVector",
+                    "path": "2DVector(mode=2)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -150,7 +150,7 @@
                     "id": "260e229c-44ae-4e74-a563-dcd3877fe333",
                     "path": "<Mouse>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "InvertVector2(invertX=false)",
                     "groups": "Keyboard",
                     "action": "Camera",
                     "isComposite": false,
@@ -161,7 +161,7 @@
                     "id": "d4b4a3bf-ed8d-44cb-8ef6-7f2bbedf0210",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "InvertVector2(invertX=false)",
                     "groups": "Gamepad",
                     "action": "Camera",
                     "isComposite": false,

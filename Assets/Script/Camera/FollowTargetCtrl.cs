@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FollowTargetCtrl : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class FollowTargetCtrl : MonoBehaviour
     [SerializeField] private float rotSmooth = 0.1f;
     [SerializeField] private float followSmooth = 8f;
     [SerializeField] private bool isPause;
+
+    private float _mouseX;
+    private float _mouseY;
     
     public float YawRotateSpeed
     {
@@ -86,11 +90,11 @@ public class FollowTargetCtrl : MonoBehaviour
         if((GameManager.Instance.player as PlayerCtrl_Ver2).CheckAimLock())
             return;
 
-        float mouseX = InputManager.Instance.GetCameraAxisX();
-        float mouseY = InputManager.Instance.GetCameraAxisY();
+        //float mouseX = InputManager.Instance.GetCameraAxisX();
+        //float mouseY = InputManager.Instance.GetCameraAxisY();
 
-        targetRot.y += mouseX * yawRotateSpeed * Time.unscaledDeltaTime;
-        targetRot.x += mouseY * pitchRotateSpeed * Time.unscaledDeltaTime;
+        targetRot.y += _mouseX * yawRotateSpeed * Time.unscaledDeltaTime;
+        targetRot.x += _mouseY * pitchRotateSpeed * Time.unscaledDeltaTime;
 
         targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
 
@@ -117,11 +121,11 @@ public class FollowTargetCtrl : MonoBehaviour
 
         transform.position = target.position + Vector3.up;
 
-        float mouseX = InputManager.Instance.GetCameraAxisX();
-        float mouseY = InputManager.Instance.GetCameraAxisY();
+        //float mouseX = InputManager.Instance.GetCameraAxisX();
+        //float mouseY = InputManager.Instance.GetCameraAxisY();
 
-        targetRot.y += mouseX * yawRotateSpeed * Time.fixedUnscaledDeltaTime;
-        targetRot.x += mouseY * pitchRotateSpeed * Time.fixedUnscaledDeltaTime;
+        targetRot.y += _mouseX * yawRotateSpeed * Time.fixedUnscaledDeltaTime;
+        targetRot.x += _mouseY * pitchRotateSpeed * Time.fixedUnscaledDeltaTime;
 
         targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
 
@@ -192,5 +196,12 @@ public class FollowTargetCtrl : MonoBehaviour
         currentRot = transform.localRotation.eulerAngles;
         targetRot = currentRot;
         transform.position = position;
+    }
+
+    public void OnCamera(InputAction.CallbackContext value)
+    {
+        Vector2 inputVector = value.ReadValue<Vector2>();
+        _mouseY = inputVector.y;
+        _mouseX = inputVector.x;
     }
 }

@@ -197,20 +197,20 @@ public class GameManager : MonoBehaviour
 
         if (optionMenuCtrl.sceneLoadUi != null && optionMenuCtrl.sceneLoadUi.Loading == false)
         {
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                asynSceneManager.LoadPrevlevel();
-            }
+            //if (Input.GetKeyDown(KeyCode.O))
+            //{
+            //    asynSceneManager.LoadPrevlevel();
+            //}
 
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                asynSceneManager.LoadNextlevelFrom();
-            }
+            //if (Input.GetKeyDown(KeyCode.P))
+            //{
+            //    asynSceneManager.LoadNextlevelFrom();
+            //}
 
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                asynSceneManager.LoadCurrentLevel();
-            }
+            //if (Input.GetKeyDown(KeyCode.I))
+            //{
+            //    asynSceneManager.LoadCurrentLevel();
+            //}
         }
     }
 
