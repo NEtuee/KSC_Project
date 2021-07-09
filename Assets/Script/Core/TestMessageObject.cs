@@ -14,6 +14,6 @@ public class TestMessageObject : ObjectBase
     {
         base.Progress(deltaTime);
 
-        Debug.Log("Check");
+        SendMessageEx(0x0200,_currentManagerNumber,"log");
     }
 }

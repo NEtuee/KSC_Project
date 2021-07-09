@@ -6,7 +6,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     protected Quaternion _rotation;
     protected Vector3 _scale;
 
-    private int _currentManagerNumber;
+    protected int _currentManagerNumber;
 
     protected override void Awake()
     {
