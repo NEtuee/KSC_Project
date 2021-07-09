@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class UniqueNumberBase : MonoBehaviour
 {
     public int uniqueNumber{get{return _uniqueNumber;}}
-    private int _uniqueNumber;
+    private int _uniqueNumber = 0;
     private static int _numberOrder = 1;
     private static Dictionary<string, int> _numberStorage;
 
@@ -15,7 +15,8 @@ public class UniqueNumberBase : MonoBehaviour
 
     private void SetUniqueNumber()
     {
-        _uniqueNumber = _numberOrder++;
+        if(_uniqueNumber == 0)
+            _uniqueNumber = _numberOrder++;
     }
 
     protected int GetSavedNumber(string key)
@@ -39,6 +40,8 @@ public class UniqueNumberBase : MonoBehaviour
             Debug.Log("key already exsist");
             return;
         }
+
+        SetUniqueNumber();
 
         _numberStorage.Add(key,_uniqueNumber);
     }

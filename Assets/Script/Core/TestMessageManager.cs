@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class TestMessageManager : ManagerBase
 {
-    public static TestMessageManager instance;
-
     public override void Assign()
     {
         base.Assign();
 
         SaveMyNumber("TestManager");
 
-        instance = this;
+        AddAction(0x0200,(msg)=>{
+            Debug.Log((string)msg.data);
+        });
     }
 }
