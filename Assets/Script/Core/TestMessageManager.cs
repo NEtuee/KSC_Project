@@ -8,9 +8,7 @@ public class TestMessageManager : ManagerBase
 
     public override void Assign()
     {
-        _unknownMessageProcess = (msg)=>{
-            MessagePool.ReturnMessage(msg);
-        };
+        base.Assign();
 
         SaveMyNumber("TestManager");
 
