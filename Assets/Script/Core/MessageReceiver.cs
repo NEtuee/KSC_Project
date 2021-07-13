@@ -3,7 +3,7 @@ using System;
 
 public abstract class MessageReceiver : UniqueNumberBase
 {
-    private Dictionary<short, Action<Message>> _msgProcActions = new Dictionary<short, Action<Message>>();
+    private Dictionary<ushort, Action<Message>> _msgProcActions = new Dictionary<ushort, Action<Message>>();
     private Queue<Message> _sendQueue = new Queue<Message>();
     private Queue<Message> _receiveQueue = new Queue<Message>();
 
@@ -65,7 +65,7 @@ public abstract class MessageReceiver : UniqueNumberBase
         return _receiveQueue.Count == 0 ? null : _receiveQueue.Dequeue();
     }
 
-    protected void AddAction(short title, Action<Message> action)
+    protected void AddAction(ushort title, Action<Message> action)
     {
         if(_msgProcActions.ContainsKey(title))
             return;
@@ -81,7 +81,7 @@ public abstract class MessageReceiver : UniqueNumberBase
 #endif
     }
 
-    protected void SendMessageEx(short title, int target, Object data)
+    protected void SendMessageEx(ushort title, int target, Object data)
     {
         var msg = MessagePack(title,target,data);
         _sendQueue.Enqueue(msg);
@@ -98,7 +98,7 @@ public abstract class MessageReceiver : UniqueNumberBase
 #endif
     }
 
-    protected void SendMessageEx(MessageReceiver receiver, short title, Object data)
+    protected void SendMessageEx(MessageReceiver receiver, ushort title, Object data)
     {
         var msg = MessagePack(title,receiver.uniqueNumber,data);
         receiver.ReceiveMessage(msg);
@@ -112,7 +112,7 @@ public abstract class MessageReceiver : UniqueNumberBase
         //..
     }
 
-    protected Message MessagePack(short title, int target, Object data)
+    protected Message MessagePack(ushort title, int target, Object data)
     {
         var msg = MessagePool.GetMessage();
         msg.Set(title,target,data,(Object)this);

@@ -2,13 +2,13 @@ using System;
 
 public class Message
 {
-    public short title;
+    public ushort title;
     public int target;
 
     public Object data;
     public Object sender;
 
-    public void Set(short title, int target, Object data, Object sender)
+    public void Set(ushort title, int target, Object data, Object sender)
     {
         this.title = title;
         this.target = target;
