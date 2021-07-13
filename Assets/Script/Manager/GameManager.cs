@@ -289,13 +289,13 @@ public class GameManager : MonoBehaviour
         this.player = player;
     }
 
-    public void RequstGameResult()
-    {
-        if(uiManager != null)
-        {
-            uiManager.GameResult();
-        }
-    }
+    //public void RequstGameResult()
+    //{
+    //    if(uiManager != null)
+    //    {
+    //        uiManager.GameResult();
+    //    }
+    //}
 
     //public void RequstChangePP(float time)
     //{
