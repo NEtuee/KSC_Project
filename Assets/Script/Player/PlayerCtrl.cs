@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-public class PlayerCtrl : MonoBehaviour
+public class PlayerCtrl : TestObjectBase
 {
     [SerializeField] protected bool isPause;
     public FloatReactiveProperty stamina = new FloatReactiveProperty(100);

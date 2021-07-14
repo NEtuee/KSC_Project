@@ -276,6 +276,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             _chargingCountTextColor = chargingCountText.color;
 
         StartCoroutine(StopCheck());
+
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("PlayerManager"));
     }
 
     int ground = 0;

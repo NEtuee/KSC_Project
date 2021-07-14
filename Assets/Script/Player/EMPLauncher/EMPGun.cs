@@ -5,7 +5,7 @@ using UnityEngine.Animations.Rigging;
 using DG.Tweening;
 using UniRx;
 
-public class EMPGun : MonoBehaviour
+public class EMPGun : TestObjectBase
 {
     [SerializeField] private GameObject _gunObject;
     [SerializeField] private Animator gunAnim;
@@ -27,20 +27,30 @@ public class EMPGun : MonoBehaviour
         mainCamera = Camera.main.transform;
         _gunObject.SetActive(false);
         playerAnim = GetComponent<Animator>();
-        GetComponent<PlayerCtrl_Ver2>().chargeTime.Subscribe(value => { 
-            if(value >= 3f)
-            {
-                crossHair.Third();
-            }
-            else if(value >= 2f)
-            {
-                crossHair.Second();
-            }
-            else if (value >= 1f)
-            {
-                crossHair.First();
-            }
-        });
+        //GetComponent<PlayerCtrl_Ver2>().chargeTime.Subscribe(value => { 
+        //    if(value >= 3f)
+        //    {
+        //        //crossHair.Third();
+        //        SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 3);
+        //    }
+        //    else if(value >= 2f)
+        //    {
+        //        //crossHair.Second();
+        //        SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 2);
+        //    }
+        //    else if (value >= 1f)
+        //    {
+        //        //crossHair.First();
+        //        SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 1);
+        //    }
+        //});
+
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("PlayerManager"));
     }
 
     void Update()
@@ -152,10 +162,11 @@ public class EMPGun : MonoBehaviour
             _gunObject.SetActive(active);
         }
 
-        if(crossHair != null)
-        {
-            crossHair.SetActive(active);
-        }
+        //if(crossHair != null)
+        //{
+        //    crossHair.SetActive(active);
+        //}
+        SendMessageEx(MessageTitles.uimanager_activecrosshair, GetSavedNumber("UIManager"), active);
 
         if(gunAnim != null)
         {

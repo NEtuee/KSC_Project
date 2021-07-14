@@ -25,12 +25,6 @@ public class CrossHair : MonoBehaviour
     public float secondStageOffset = 250.0f;
     public float thirdStageOffset = 350.0f;
 
-    public RectTransform left;
-    public RectTransform right;
-
-    public Image leftImage;
-    public Image rightImage;
-
     public float centerPosX = 12.5f;
     public float centerScale = 1;
     public float middlePosX = 100.0f;

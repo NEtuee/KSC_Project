@@ -19,9 +19,22 @@ public class UIManager : ManagerBase
     [SerializeField] private MenuPage controlPage;
     [SerializeField] private MenuPage keybindingPage;
 
+    [Header("CrossHair")]
+    [SerializeField] private CrossHair _crossHair;
+
+    [Header("StateUI")]
+    [SerializeField] private FadeUI _hpBar;
+    [SerializeField] private FadeUI _staminaBar;
+    [SerializeField] private FadeUI _energyBar;
+
     private void Start()
     {
         pauseAction.performed += _ => OnPauseButton();
+
+        if(_crossHair == null)
+        {
+            Debug.Log("Not Set CrossHair");
+        }
     }
 
     public override void Assign()
@@ -29,6 +42,11 @@ public class UIManager : ManagerBase
         base.Assign();
         SaveMyNumber("UIManager");
 
+        AddAction(MessageTitles.uimanager_activecrosshair, ActiveCrossHair);
+        AddAction(MessageTitles.uimanager_setcrosshairphase, SetCrossHairPhase);
+
+        AddAction(MessageTitles.uimanager_setvaluestatebar, SetValueStateBar);
+        AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
     }
 
     public override void Initialize()
@@ -94,9 +112,67 @@ public class UIManager : ManagerBase
         _currentPage.Active(true);
     }
 
+    #region CrossHair
+    public void ActiveCrossHair(Message msg)
+    {
+        bool active = (bool)msg.data;
+        _crossHair.SetActive(active);
+    }
+
+    public void SetCrossHairPhase(Message msg)
+    {
+        int phase = (int)msg.data;
+        switch(phase)
+        {
+            case 1:
+                _crossHair.First();
+                break;
+            case 2:
+                _crossHair.Second();
+                break;
+            case 3:
+                _crossHair.Third();
+                break;
+        }
+    }
+    #endregion
+
+    #region StateBar
+    public void SetValueStateBar(Message msg)
+    {
+        StateBarSetValueType recv = (StateBarSetValueType)msg.data;
+
+        switch(recv.type)
+        {
+            case StateBarType.HP:
+                _hpBar.SetValue(recv.value,recv.visible);
+                break;
+            case StateBarType.Stamina:
+                _staminaBar.SetValue(recv.value,recv.visible);
+                break;
+            case StateBarType.Energy:
+                _energyBar.SetValue(recv.value, recv.visible);
+                break;
+        }
+    }
+
+    public void SetVisibleAllStateBar(Message msg)
+    {
+        bool visibe = (bool)msg.data;
+        _hpBar.SetVisible(visibe);
+        _staminaBar.SetVisible(visibe);
+        _energyBar.SetVisible(visibe);
+    }
+    #endregion
+
     public enum PauseMenuState
     {
         Game = 0, Option, Sound, Display, Control, KeyBinding, Loading
+    }
+
+    public enum StateBarType
+    {
+        HP,Stamina,Energy
     }
 
     private void OnEnable()
@@ -108,4 +184,11 @@ public class UIManager : ManagerBase
     {
         pauseAction.Disable();
     }
+}
+
+struct StateBarSetValueType
+{
+    public UIManager.StateBarType type;
+    public float value;
+    public bool visible;
 }
