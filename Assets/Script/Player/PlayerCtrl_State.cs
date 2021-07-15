@@ -64,8 +64,8 @@ public class PlayerCtrl_State : PlayerCtrl
     [SerializeField] private int abosrbCount = 0;
 
     [Header("Spear")]
-    [SerializeField] private SpearCtrl spearPrefab;
-    [SerializeField] private SpecialSpearCtrl specialSpearPrefab;
+    //[SerializeField] private SpearCtrl spearPrefab;
+    //[SerializeField] private SpecialSpearCtrl specialSpearPrefab;
     [SerializeField] private GameObject specialSpearVisualPrefab;
     [SerializeField] private Transform launchPos;
     [SerializeField] private bool isSpacialSpearMode;
@@ -79,8 +79,8 @@ public class PlayerCtrl_State : PlayerCtrl
     private bool isSpearDissolve;
 
     [Header("Rope")]
-    [SerializeField] private RopeBuiltIn ropePrefab;
-    [SerializeField] private RopeBuiltIn currentHangingRope = null;
+    //[SerializeField] private RopeBuiltIn ropePrefab;
+    //[SerializeField] private RopeBuiltIn currentHangingRope = null;
     [SerializeField] private float ropeClimbingSpeed = 3f;
     [SerializeField] private float ropeDetectRange = 4f;
     [SerializeField] private bool ropeHandLeft; //로프 짚는 손이 왼손 차례 여부
@@ -1251,118 +1251,118 @@ public class PlayerCtrl_State : PlayerCtrl
             return;
         }
 
-        if (isCanInputClimbing == true && GameManager.Instance.GetBossState() != LevelEdit_BehaviorControll.State.Disturbance)
-        {
-            if (vertical == 0.0f)
-            {
-                currentVerticalValue = 0.0f;
-                //    animator.SetBool("IsClimbing", false);
-                //    animator.SetBool("IsReverseClimbing", false);
-            }
-            else if (vertical >= 0.0f)
-            {
-                //if (HeadCheck() == false)
-                //{
-                //    currentVerticalValue = 1.0f;
-                //    //animator.SetBool("IsClimbing", true);
-                //    //animator.SetBool("IsReverseClimbing", false);
-                //}
-                //else
-                //{
-                //    currentVerticalValue = 0.0f;
-                //    //animator.SetBool("IsClimbing", false);
-                //    //animator.SetBool("IsReverseClimbing", false);
-                //}
-                currentVerticalValue = 1.0f;
-            }
-            else
-            {
-                if (movement.isGrounded == false)
-                {
-                    currentVerticalValue = -1.0f;
-                    //animator.SetBool("IsClimbing", false);
-                    //animator.SetBool("IsReverseClimbing", true);
-                }
-                else
-                {
-                    currentVerticalValue = 0.0f;
-                    //animator.SetBool("IsClimbing", false);
-                    //animator.SetBool("IsReverseClimbing", false);
-                }
-            }
+        // if (isCanInputClimbing == true && GameManager.Instance.GetBossState() != LevelEdit_BehaviorControll.State.Disturbance)
+        // {
+        //     if (vertical == 0.0f)
+        //     {
+        //         currentVerticalValue = 0.0f;
+        //         //    animator.SetBool("IsClimbing", false);
+        //         //    animator.SetBool("IsReverseClimbing", false);
+        //     }
+        //     else if (vertical >= 0.0f)
+        //     {
+        //         //if (HeadCheck() == false)
+        //         //{
+        //         //    currentVerticalValue = 1.0f;
+        //         //    //animator.SetBool("IsClimbing", true);
+        //         //    //animator.SetBool("IsReverseClimbing", false);
+        //         //}
+        //         //else
+        //         //{
+        //         //    currentVerticalValue = 0.0f;
+        //         //    //animator.SetBool("IsClimbing", false);
+        //         //    //animator.SetBool("IsReverseClimbing", false);
+        //         //}
+        //         currentVerticalValue = 1.0f;
+        //     }
+        //     else
+        //     {
+        //         if (movement.isGrounded == false)
+        //         {
+        //             currentVerticalValue = -1.0f;
+        //             //animator.SetBool("IsClimbing", false);
+        //             //animator.SetBool("IsReverseClimbing", true);
+        //         }
+        //         else
+        //         {
+        //             currentVerticalValue = 0.0f;
+        //             //animator.SetBool("IsClimbing", false);
+        //             //animator.SetBool("IsReverseClimbing", false);
+        //         }
+        //     }
 
-            if (horizontal > 0.0f)
-            {
-                currentHorizontalValue = Mathf.Ceil(horizontal);
-            }
-            else
-            {
-                currentHorizontalValue = Mathf.Floor(horizontal);
-            }
+        //     if (horizontal > 0.0f)
+        //     {
+        //         currentHorizontalValue = Mathf.Ceil(horizontal);
+        //     }
+        //     else
+        //     {
+        //         currentHorizontalValue = Mathf.Floor(horizontal);
+        //     }
 
-            RaycastHit hit;
-            if (currentVerticalValue != 0.0f)
-            {
-                if (currentVerticalValue > 0.0f)
-                {
+        //     RaycastHit hit;
+        //     if (currentVerticalValue != 0.0f)
+        //     {
+        //         if (currentVerticalValue > 0.0f)
+        //         {
 
-                    //if (Physics.SphereCast(upPoint.position, 0.2f, transform.forward, out hit, 1f,detectionLayer))
-                    //{
-                    //    Debug.Log(LayerMask.LayerToName(hit.collider.gameObject.layer));
-                    //}
-                    if (isUpDetect == true)
-                    {
-                        if (Physics.SphereCast(upPoint.position, 0.27f, transform.forward, out hit, 1f, detectionLayer))
-                        {
-                            animator.SetBool("IsClimbing", true);
-                            animator.SetBool("IsReverseClimbing", false);
-                            animator.SetBool("IsSideClimbing", false);
-                        }
-                    }
-                    else
-                    {
-                        animator.SetBool("IsClimbing", true);
-                        animator.SetBool("IsReverseClimbing", false);
-                        animator.SetBool("IsSideClimbing", false);
-                    }
-                }
-                else
-                {
-                    //if (Physics.SphereCast(transform.position - transform.up * 0.2f, collider.radius, transform.forward, out hit,1f, climbingLayer))
-                    //{
-                    animator.SetBool("IsClimbing", false);
-                    animator.SetBool("IsReverseClimbing", true);
-                    animator.SetBool("IsSideClimbing", false);
-                    //}
-                }
-            }
-            else
-            {
-                animator.SetBool("IsClimbing", false);
-                animator.SetBool("IsReverseClimbing", false);
+        //             //if (Physics.SphereCast(upPoint.position, 0.2f, transform.forward, out hit, 1f,detectionLayer))
+        //             //{
+        //             //    Debug.Log(LayerMask.LayerToName(hit.collider.gameObject.layer));
+        //             //}
+        //             if (isUpDetect == true)
+        //             {
+        //                 if (Physics.SphereCast(upPoint.position, 0.27f, transform.forward, out hit, 1f, detectionLayer))
+        //                 {
+        //                     animator.SetBool("IsClimbing", true);
+        //                     animator.SetBool("IsReverseClimbing", false);
+        //                     animator.SetBool("IsSideClimbing", false);
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 animator.SetBool("IsClimbing", true);
+        //                 animator.SetBool("IsReverseClimbing", false);
+        //                 animator.SetBool("IsSideClimbing", false);
+        //             }
+        //         }
+        //         else
+        //         {
+        //             //if (Physics.SphereCast(transform.position - transform.up * 0.2f, collider.radius, transform.forward, out hit,1f, climbingLayer))
+        //             //{
+        //             animator.SetBool("IsClimbing", false);
+        //             animator.SetBool("IsReverseClimbing", true);
+        //             animator.SetBool("IsSideClimbing", false);
+        //             //}
+        //         }
+        //     }
+        //     else
+        //     {
+        //         animator.SetBool("IsClimbing", false);
+        //         animator.SetBool("IsReverseClimbing", false);
 
-                if (currentHorizontalValue > 0.0f)
-                {
-                    if (Physics.SphereCast(transform.position + transform.right * collider.radius * 2f, collider.radius, transform.forward, out hit, 1f, climbingLayer))
-                    {
-                        animator.SetBool("IsSideClimbing", true);
-                        animator.SetBool("Left", false);
-                    }
-                }
-                else if (currentHorizontalValue < 0.0f)
-                {
-                    if (Physics.SphereCast(transform.position - transform.right * collider.radius * 2f, collider.radius, transform.forward, out hit, 1f, climbingLayer))
-                    {
-                        animator.SetBool("IsSideClimbing", true);
-                        animator.SetBool("Left", true);
-                    }
-                }
-                else
-                {
-                    animator.SetBool("IsSideClimbing", false);
-                }
-            }
-        }
+        //         if (currentHorizontalValue > 0.0f)
+        //         {
+        //             if (Physics.SphereCast(transform.position + transform.right * collider.radius * 2f, collider.radius, transform.forward, out hit, 1f, climbingLayer))
+        //             {
+        //                 animator.SetBool("IsSideClimbing", true);
+        //                 animator.SetBool("Left", false);
+        //             }
+        //         }
+        //         else if (currentHorizontalValue < 0.0f)
+        //         {
+        //             if (Physics.SphereCast(transform.position - transform.right * collider.radius * 2f, collider.radius, transform.forward, out hit, 1f, climbingLayer))
+        //             {
+        //                 animator.SetBool("IsSideClimbing", true);
+        //                 animator.SetBool("Left", true);
+        //             }
+        //         }
+        //         else
+        //         {
+        //             animator.SetBool("IsSideClimbing", false);
+        //         }
+        //     }
+        // }
 
         //if (currentVerticalValue == 0.0f && horizontal != 0.0f)
         //{
@@ -1571,47 +1571,47 @@ public class PlayerCtrl_State : PlayerCtrl
 
     private bool InputHangingRope()
     {
-        if (InputManager.Instance.GetAction(KeybindingActions.Interaction))
-        {
-            Vector3 startPos = transform.position + transform.up * (colliderHeight * 0.5f);
+        // if (InputManager.Instance.GetAction(KeybindingActions.Interaction))
+        // {
+        //     Vector3 startPos = transform.position + transform.up * (colliderHeight * 0.5f);
 
-            Collider[] colliders = Physics.OverlapSphere(startPos, ropeDetectRange, ropeCheckLayer);
+        //     Collider[] colliders = Physics.OverlapSphere(startPos, ropeDetectRange, ropeCheckLayer);
 
-            if (colliders.Length != 0)
-            {
-                int targetCount = 0;
-                for (int i = 1; i < colliders.Length; i++)
-                {
-                    float dist1 = (transform.position - colliders[i].transform.position).sqrMagnitude;
-                    float dist2 = (transform.position - colliders[targetCount].transform.position).sqrMagnitude;
-                    if (dist1 < dist2 && colliders[i].GetComponent<RopeBuiltIn>().canHanging == true)
-                    {
-                        targetCount = i;
-                    }
-                }
+        //     if (colliders.Length != 0)
+        //     {
+        //         int targetCount = 0;
+        //         for (int i = 1; i < colliders.Length; i++)
+        //         {
+        //             float dist1 = (transform.position - colliders[i].transform.position).sqrMagnitude;
+        //             float dist2 = (transform.position - colliders[targetCount].transform.position).sqrMagnitude;
+        //             if (dist1 < dist2 && colliders[i].GetComponent<RopeBuiltIn>().canHanging == true)
+        //             {
+        //                 targetCount = i;
+        //             }
+        //         }
 
-                if (colliders[targetCount].GetComponent<RopeBuiltIn>().canHanging == false)
-                {
-                    return false;
-                }
+        //         if (colliders[targetCount].GetComponent<RopeBuiltIn>().canHanging == false)
+        //         {
+        //             return false;
+        //         }
 
-                currentHangingRope = colliders[targetCount].GetComponent<RopeBuiltIn>();
+        //         currentHangingRope = colliders[targetCount].GetComponent<RopeBuiltIn>();
 
-                currentHangingRope.InitializeRope(transform.position + transform.up * colliderHeight);
-                transform.parent = currentHangingRope.transform;
-                transform.position = currentHangingRope.transform.position - transform.up * colliderHeight;
-                isCanInputClimbing = true;
+        //         currentHangingRope.InitializeRope(transform.position + transform.up * colliderHeight);
+        //         transform.parent = currentHangingRope.transform;
+        //         transform.position = currentHangingRope.transform.position - transform.up * colliderHeight;
+        //         isCanInputClimbing = true;
 
-                rigidbody.isKinematic = true;
+        //         rigidbody.isKinematic = true;
 
-                animator.SetBool("IsHangingRope", true);
-                currentVerticalValue = 0.0f;
+        //         animator.SetBool("IsHangingRope", true);
+        //         currentVerticalValue = 0.0f;
 
-                state = PlayerState.HangRope;
+        //         state = PlayerState.HangRope;
 
-                return true;
-            }
-        }
+        //         return true;
+        //     }
+        // }
 
         return false;
     }
@@ -1647,11 +1647,11 @@ public class PlayerCtrl_State : PlayerCtrl
 
     private void InputRopeCtrl()
     {
-        if (currentHangingRope != null)
-        {
-            currentHangingRope.ClimbingRope(-currentVerticalValue, ropeClimbingSpeed, transform.right, ropeHandLeft);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(camForward, transform.up), 4f * Time.deltaTime);
-        }
+        // if (currentHangingRope != null)
+        // {
+        //     currentHangingRope.ClimbingRope(-currentVerticalValue, ropeClimbingSpeed, transform.right, ropeHandLeft);
+        //     transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(camForward, transform.up), 4f * Time.deltaTime);
+        // }
     }
 
     private bool InputAbsorb()
@@ -1727,43 +1727,43 @@ public class PlayerCtrl_State : PlayerCtrl
             OnAimOff?.Invoke();
         }
 
-        if (isAim == true && InputManager.Instance.GetAction(KeybindingActions.Shot) && currentSpearNum != 0)
-        {
-            if (isSpacialSpearMode == false)
-            {
-                if (spearPrefab != null && launchPos != null)
-                {
-                    SpearCtrl spear = Instantiate(spearPrefab, launchPos.position, launchPos.rotation);
-                    spear.Launch(launchPos.position);
-                }
-                ReleaseAim();
+        // if (isAim == true && InputManager.Instance.GetAction(KeybindingActions.Shot) && currentSpearNum != 0)
+        // {
+        //     if (isSpacialSpearMode == false)
+        //     {
+        //         if (spearPrefab != null && launchPos != null)
+        //         {
+        //             SpearCtrl spear = Instantiate(spearPrefab, launchPos.position, launchPos.rotation);
+        //             spear.Launch(launchPos.position);
+        //         }
+        //         ReleaseAim();
 
-                currentSpearNum -= 1;
-            }
-            else
-            {
-                RaycastHit hit;
-                if (Physics.SphereCast(mainCameraTrasform.position, 1f, camForward, out hit, 4f, spacialSpearShotCheckLayer))
-                {
-                    ReleaseAim();
+        //         currentSpearNum -= 1;
+        //     }
+        //     else
+        //     {
+        //         RaycastHit hit;
+        //         if (Physics.SphereCast(mainCameraTrasform.position, 1f, camForward, out hit, 4f, spacialSpearShotCheckLayer))
+        //         {
+        //             ReleaseAim();
 
-                }
-                else
-                {
-                    SpecialSpearCtrl specialSpear = Instantiate(specialSpearPrefab, launchPos.position, launchPos.rotation);
-                    specialSpear.Launch(GameManager.Instance.GetCoreTransform());
-                    specialSpear.AddListener(GameManager.Instance.bossControll.ExplosionProgress);
+        //         }
+        //         else
+        //         {
+        //             SpecialSpearCtrl specialSpear = Instantiate(specialSpearPrefab, launchPos.position, launchPos.rotation);
+        //             specialSpear.Launch(GameManager.Instance.GetCoreTransform());
+        //             //specialSpear.AddListener(GameManager.Instance.bossControll.ExplosionProgress);
 
-                    //GameManager.Instance.CameraEventIntroduction_Immediate(GameManager.Instance.GetKillEventTransform());
-                    //GameManager.Instance.LookingEvent_CameraCollision(specialSpear.transform);
+        //             //GameManager.Instance.CameraEventIntroduction_Immediate(GameManager.Instance.GetKillEventTransform());
+        //             //GameManager.Instance.LookingEvent_CameraCollision(specialSpear.transform);
 
 
-                    //GameManager.Instance.SetCameraFov();
+        //             //GameManager.Instance.SetCameraFov();
 
-                    ReleaseAim();
-                }
-            }
-        }
+        //             ReleaseAim();
+        //         }
+        //     }
+        // }
     }
 
     public void ReleaseAim()
