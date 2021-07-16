@@ -34,15 +34,19 @@ public class TimeManagerEx : ManagerBase
     {
         base.Progress(deltaTime);
 
+    }
+
+    private void Update()
+    {
         if (_timeScaled)
         {
-            _timeCounter.IncreaseTimerSelf("timeScaleStart", out bool limit, deltaTime);
+            _timeCounter.IncreaseTimerSelf("timeScaleStart", out bool limit, Time.unscaledDeltaTime);
             if (limit)
             {
-                _timeCounter.IncreaseTimerSelf("timeScaleStop", out limit, deltaTime);
+                _timeCounter.IncreaseTimerSelf("timeScaleStop", out limit, Time.unscaledDeltaTime);
                 if (limit)
                 {
-                    float currTime = _timeCounter.IncreaseTimerSelf("timeScaleLerp", out limit, deltaTime);
+                    float currTime = _timeCounter.IncreaseTimerSelf("timeScaleLerp", out limit, Time.unscaledDeltaTime);
                     float limitTime = _timeCounter.GetTimeLimit("timeScaleLerp");
 
                     if (limit)

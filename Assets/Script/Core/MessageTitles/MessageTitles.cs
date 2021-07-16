@@ -38,5 +38,73 @@ public static partial class MessageTitles
     /// data = bool
     /// </summary>
     public const ushort uimanager_setvisibleallstatebar = 0x0304;
+
+    /// <summary>
+    /// data = HpPackValueType
+    /// </summary>
+    public const ushort uimanager_setvaluehppackui = 0x0305;
+    #endregion
+
+    #region CameraManager
+
+    /// <summary>
+    /// data = SetRadialBlurData
+    /// </summary>
+    public const ushort cameramanager_setradialblur = 0x0401;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort cameramanager_activeplayerfollocamera = 0x0402;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort cameramanager_activeaimcamera = 0x0403;
+
+    /// <summary>
+    /// data = float
+    /// </summary>
+    public const ushort cameramanager_setaimcameradistance = 0x0404;
+
+    /// <summary>
+    /// data = ActiveVirtualCameraData
+    /// </summary>
+    public const ushort cameramanager_activevirtualcamera = 0x0405;
+
+    /// <summary>
+    /// data = string(keyName)
+    /// </summary>
+    public const ushort cameramanager_setfollowcameradistance = 0x0406;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort cameramanager_setzerodamping = 0x0407;
+
+    /// <summary>
+    /// data = float(lateTime)
+    /// </summary>
+    public const ushort cameramanager_restoredamping = 0x0408;
+
+    /// <summary>
+    /// data = vector3
+    /// </summary>
+    public const ushort cameramanager_setdamping = 0x0409;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort cameramanager_generaterecoilimpluse = 0x0410;
+
+    #endregion
+
+    #region Player
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort player_initalizemove = 0x0901;
+
     #endregion
 }

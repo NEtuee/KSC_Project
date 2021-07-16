@@ -26,6 +26,7 @@ public class UIManager : ManagerBase
     [SerializeField] private FadeUI _hpBar;
     [SerializeField] private FadeUI _staminaBar;
     [SerializeField] private FadeUI _energyBar;
+    [SerializeField] private HpPackUI _hpPackUI;
 
     private void Start()
     {
@@ -33,7 +34,22 @@ public class UIManager : ManagerBase
 
         if(_crossHair == null)
         {
-            Debug.Log("Not Set CrossHair");
+            Debug.LogError("Not Set CrossHair");
+        }
+
+        if (_staminaBar == null)
+        {
+            Debug.LogError("Not Set StaminaBar");
+        }
+
+        if (_energyBar == null)
+        {
+            Debug.LogError("Not Set EnergyBar");
+        }
+
+        if (_hpPackUI == null)
+        {
+            Debug.LogError("Not Set HpPackUi");
         }
     }
 
@@ -47,6 +63,7 @@ public class UIManager : ManagerBase
 
         AddAction(MessageTitles.uimanager_setvaluestatebar, SetValueStateBar);
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
+        AddAction(MessageTitles.uimanager_setvaluehppackui, SetValueHpPackUI);
     }
 
     public override void Initialize()
@@ -156,18 +173,26 @@ public class UIManager : ManagerBase
         }
     }
 
+    public void SetValueHpPackUI(Message msg)
+    {
+        HpPackValueType recv = (HpPackValueType)msg.data;
+
+        _hpPackUI.SetValue(recv.value, recv.visible);
+    }
+
     public void SetVisibleAllStateBar(Message msg)
     {
         bool visibe = (bool)msg.data;
         _hpBar.SetVisible(visibe);
         _staminaBar.SetVisible(visibe);
         _energyBar.SetVisible(visibe);
+        _hpPackUI.SetVisible(visibe);
     }
     #endregion
 
     public enum PauseMenuState
     {
-        Game = 0, Option, Sound, Display, Control, KeyBinding, Loading
+        Game = 0, Option, Sound, Display, Control, KeyBinding, Loading, Tutorial
     }
 
     public enum StateBarType
@@ -190,5 +215,11 @@ struct StateBarSetValueType
 {
     public UIManager.StateBarType type;
     public float value;
+    public bool visible;
+}
+
+struct HpPackValueType
+{
+    public int value;
     public bool visible;
 }

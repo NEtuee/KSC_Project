@@ -279,6 +279,17 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     }
 
+    public override void Assign()
+    {
+        base.Assign();
+        SaveMyNumber("Player");
+
+        AddAction(MessageTitles.player_initalizemove, (msg) => 
+        {
+            InitializeMove();
+        });
+    }
+
     public override void Initialize()
     {
         base.Initialize();
@@ -1343,8 +1354,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 ActiveAim(false);
 
-                if(!_aimLock)
-                    GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+                    if (!_aimLock)
+                        SendMessageEx(MessageTitles.cameramanager_activeplayerfollocamera, GetSavedNumber("CameraManager"), null);
+                    //GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
                 drone.OrderAimHelp(false);
                 releaseAimEvent?.Invoke();
             }
@@ -1389,7 +1401,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 collider.height = 1.898009f;
                 collider.center = new Vector3(0.0f, 0.95622f, 0.0f);
 
-                GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
+                    //GameManager.Instance.cameraManager.SetFollowCameraDistance("Default");
+                    SendMessageEx(MessageTitles.cameramanager_setfollowcameradistance, GetSavedNumber("CameraManager"), "Default");
 
                     airTime = 0.0f;
                 // else
@@ -1417,7 +1430,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 footIK.DisableFeetIk();
                 isClimbingMove = false;
                 movement.SetGrab();
-                GameManager.Instance.cameraManager.SetFollowCameraDistance("Grab");
+                    //GameManager.Instance.cameraManager.SetFollowCameraDistance("Grab");
+                    SendMessageEx(MessageTitles.cameramanager_setfollowcameradistance, GetSavedNumber("CameraManager"), "Grab");
 
                 }
                 break;
@@ -1515,8 +1529,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Aiming:
             {
-                GameManager.Instance.cameraManager.ActiveAimCamera();
-                GameManager.Instance.stateManager.Visible(false);
+                    //GameManager.Instance.cameraManager.ActiveAimCamera();
+                    //GameManager.Instance.stateManager.Visible(false);
+                SendMessageEx(MessageTitles.cameramanager_activeaimcamera, GetSavedNumber("CameraManager"), null);
+                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), false);
+
                 footIK.DisableFeetIk();
                 drone.OrderAimHelp(true);
                 activeAimEvent?.Invoke();
@@ -2703,19 +2720,31 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             empGun.LaunchLaser(loadCount * 40.0f);
             chargeTime.Value = 0.0f;
             AddEnergyValue(-loadCount * costValue);
-            GameManager.Instance.cameraManager.SetAimCameraDistance(0.333f * (float)loadCount);
+            //GameManager.Instance.cameraManager.SetAimCameraDistance(0.333f * (float)loadCount);
+            SendMessageEx(MessageTitles.cameramanager_setaimcameradistance, GetSavedNumber("CameraManager"), 0.333f * (float)loadCount);
+
             _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, chargeDelayTime);
 
             GameManager.Instance.soundManager.Play(1009 + loadCount, Vector3.up, transform);
 
             if (loadCount >= 2)
             {
-                TimeManager.instance.SetTimeScale(0f, .4f, 0.2f, 0.02f);
+                //TimeManager.instance.SetTimeScale(0f, .4f, 0.2f, 0.02f);
+                SetTimeScaleMsg data;
+                data.timeScale = 0.0f;
+                data.lerpTime = 0.4f;
+                data.stopTime = 0.2f;
+                data.startTime = 0.02f;
+                SendMessageEx(MessageTitles.timemanager_settimescale, GetSavedNumber("TimeManager"), data);
             }
-
             if (loadCount == 3)
             {
-                GameManager.Instance.cameraManager.SetRadialBlur(1f, 0.2f, 0.4f);
+                //GameManager.Instance.cameraManager.SetRadialBlur(1f, 0.2f, 0.4f);
+                SetRadialBlurData data;
+                data.factor = 1.0f;
+                data.radius = 0.2f;
+                data.time = 0.4f;
+                SendMessageEx(MessageTitles.cameramanager_setradialblur, GetSavedNumber("CameraManager"), data);
             }
         }
     }

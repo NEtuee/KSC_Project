@@ -12,7 +12,7 @@ public struct DistanceBlendProfile
     public float blendDuration;
 }
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : ManagerBase
 {
     [SerializeField] private CinemachineBrain brain;
     private Transform brainCameraTransfrom;
@@ -98,6 +98,54 @@ public class CameraManager : MonoBehaviour
         aimDistanceOrigin = playerAimCamOrigin.m_Lens.FieldOfView;
     }
 
+    public override void Assign()
+    {
+        base.Assign();
+
+        SaveMyNumber("CameraManager");
+
+        AddAction(MessageTitles.cameramanager_setradialblur, (msg) =>
+        {
+            SetRadialBlurData data = (SetRadialBlurData)msg.data;
+            SetRadialBlur(data.factor, data.radius, data.time);
+        });
+
+        AddAction(MessageTitles.cameramanager_activeplayerfollocamera, (msg) => ActivePlayerFollowCamera());
+        AddAction(MessageTitles.cameramanager_activeaimcamera, (msg) => ActiveAimCamera());
+
+        AddAction(MessageTitles.cameramanager_setaimcameradistance, (msg) =>
+        {
+            float factor = (float)msg.data;
+            SetAimCameraDistance(factor);
+        });
+
+        AddAction(MessageTitles.cameramanager_activevirtualcamera, (msg) =>
+        {
+            ActiveVirtualCameraData data = (ActiveVirtualCameraData)msg.data;
+            ActiveVirtualCamera(data.cam, data.follow);
+        });
+
+        AddAction(MessageTitles.cameramanager_setfollowcameradistance, (msg) => 
+        {
+            string key = (string)msg.data;
+            SetFollowCameraDistance(key);
+        });
+
+        AddAction(MessageTitles.cameramanager_setzerodamping, (msg) => ZeroDamping());
+        AddAction(MessageTitles.cameramanager_restoredamping, (msg) => 
+        {
+            float lateTime = (float)msg.data;
+            RestoreDamping(lateTime);
+        });
+
+        AddAction(MessageTitles.cameramanager_setdamping, (msg) => 
+        {
+            Vector3 damp = (Vector3)msg.data;
+            SetDamping(damp);
+        });
+        AddAction(MessageTitles.cameramanager_generaterecoilimpluse, (msg) => GenerateRecoilImpulse());
+    }
+
     private void Update()
     {
         //UpdateCameraSide((GameManager.Instance.GetInputHorizontal() + 1f) * 0.5f);
@@ -175,9 +223,6 @@ public class CameraManager : MonoBehaviour
         radialBlur.SetFloat("_Radius", radius);
     }
     
-    /// <summary>
-    /// ���� ���۽� �÷��̾� ķ ���� ���� ��Ȱ��ȭ �մϴ�.
-    /// </summary>
     private void InitializeCameraAtGameStart()
     { 
         playerAimCam.gameObject.SetActive(false);
@@ -230,9 +275,6 @@ public class CameraManager : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// ī�޶� ���� ī�޶�� �ٲߴϴ�.
-    /// </summary>
     public bool ActiveAimCamera()
     {
         if (playerAimCam == null)
@@ -277,13 +319,8 @@ public class CameraManager : MonoBehaviour
         return true;
     }
 
-
-    /// <summary>
-    /// ������ ����� ī�޶�� ��ȯ�մϴ�.
-    /// </summary>
     public bool BackToPrevCamera()
     {
-        //���� ī�޶� ������ ��ȯ
         if(prevActiveCam == null)
         {
             return false;
@@ -301,8 +338,6 @@ public class CameraManager : MonoBehaviour
 
     public bool BackToPrevCamera(Action doneBlendCall)
     {
-        //���� ī�޶� ������ ��ȯ
-
         if (prevActiveCam == null)
         {
             return false;
@@ -322,10 +357,6 @@ public class CameraManager : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// �Ѱ��� ���߾� ī�޶� ���� ī�޶�� �����մϴ�. 
-    /// </summary>
-    /// <param name="activeCamera"></param>
     public bool ActiveCamera(CinemachineVirtualCameraBase activeCamera)
     {
         if (activeCamera == null)
@@ -355,10 +386,6 @@ public class CameraManager : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// �ش��ϴ� Ű�� ī�޶� ���� ī�޶�� �����մϴ�.
-    /// </summary>
-    /// <param name="cameraKey"></param>
     public bool ActiveCamera(string cameraKey)
     {
         if(cameraDictionary.ContainsKey(cameraKey) == false)
@@ -394,11 +421,6 @@ public class CameraManager : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// ī�޶� Ű�� ����մϴ�.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="camera"></param>
     public void RegisterCameraKey(string key, CinemachineVirtualCameraBase camera)
     {
         cameraDictionary.Add(key, camera);
@@ -614,3 +636,15 @@ public class CameraManager : MonoBehaviour
     }
 }
 
+public struct SetRadialBlurData
+{
+    public float factor;
+    public float radius;
+    public float time;
+}
+
+public struct ActiveVirtualCameraData
+{
+   public CinemachineVirtualCameraBase cam;
+   public Cinemachine3rdPersonFollow follow;
+}

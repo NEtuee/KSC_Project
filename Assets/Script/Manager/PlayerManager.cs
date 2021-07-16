@@ -72,6 +72,24 @@ public class PlayerManager : ManagerBase
             }
         });
 
+        _player.hpPackCount.Subscribe(value =>
+        {
+            HpPackValueType data;
+            data.value = value;
+
+            if (_player.GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
+            {
+                data.visible = false;
+                SendMessageEx(MessageTitles.uimanager_setvaluehppackui, GetSavedNumber("UIManager"), data);
+            }
+            else
+            {
+                data.visible = true;
+                SendMessageEx(MessageTitles.uimanager_setvaluehppackui, GetSavedNumber("UIManager"), data);
+                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), true);
+            }
+        });
+
         _player.chargeTime.Subscribe(value => {
             if (value >= 3f)
             {
