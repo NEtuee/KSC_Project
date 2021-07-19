@@ -99,6 +99,44 @@ public static partial class MessageTitles
 
     #endregion
 
+    #region EffectManager
+
+    /// <summary>
+    /// data = EffectActiveData
+    /// </summary>
+    public const ushort effectmanager_activeeffect = 0x0701;
+
+    /// <summary>
+    /// data = EffectActiveData
+    /// </summary>
+    public const ushort effectmanager_activeeffectwithrotation = 0x0702;
+
+    /// <summary>
+    /// data = EffectActiveData
+    /// </summary>
+    public const ushort effectmanager_activeeffectsetparent = 0x0703;
+
+    #endregion
+
+    #region VideoManager
+
+    /// <summary>
+    /// data = RawImage
+    /// </summary>
+    public const ushort videomanager_settargetimage = 0x0801;
+
+    /// <summary>
+    /// data = string(key)
+    /// </summary>
+    public const ushort videomanager_playvideo = 0x0802;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort videomanager_stopvideo = 0x0803;
+
+    #endregion
+
     #region Player
 
     /// <summary>

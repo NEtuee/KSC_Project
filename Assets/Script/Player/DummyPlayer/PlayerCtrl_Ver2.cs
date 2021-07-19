@@ -2160,9 +2160,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             _dechargingCoroutine = DechargingCoroutine();
             StartCoroutine(_dechargingCoroutine);
 
-            GameManager.Instance.effectManager
-                .Active("SteamSmoke", steamPosition.position, Quaternion.LookRotation(-steamPosition.up)).transform
-                .SetParent(steamPosition);
+            //GameManager.Instance.effectManager
+            //    .Active("Decharging", steamPosition.position, Quaternion.LookRotation(-steamPosition.up)).transform
+            //    .SetParent(steamPosition);
+            EffectActiveData data;
+            data.key = "Decharging";
+            data.position = steamPosition.position;
+            data.rotation = Quaternion.LookRotation(-steamPosition.up);
+            data.parent = steamPosition;
+            SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent, GetSavedNumber("EffectManager"), data);
             GameManager.Instance.soundManager.Play(1025,Vector3.up,transform);
         }
 
