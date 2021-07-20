@@ -44,7 +44,7 @@ public class MessageReceiverEditor : Editor
         GUILayout.BeginVertical("box");
         foreach(var msg in messageControl.sendedQueue)
         {
-            DrawMessageInfo(msg);
+            DrawMessageInfo(msg,false);
         }
         GUILayout.EndVertical();
 
@@ -54,21 +54,34 @@ public class MessageReceiverEditor : Editor
         GUILayout.BeginVertical("box");
         foreach(var msg in messageControl.receivedQueue)
         {
-            DrawMessageInfo(msg);
+            DrawMessageInfo(msg,true);
         }
         GUILayout.EndVertical();
     }
 
-    public void DrawMessageInfo(DebugMessage msg)
+    public void DrawMessageInfo(DebugMessage msg, bool gotoObject)
     {
+        string number = msg.count.ToString();
         string title = msg.title.ToString("X4");
         string target = msg.target.ToString();
         string dataExists = msg.data ? "exists" : "null";
         string sender = msg.senderNumber + ":" + msg.senderName;
 
-        string label = title + " _ " + target + " _ " + dataExists + " _ " + sender;
-    
+        string label = number + ". " + title + " _ " + target + " _ " + dataExists + " _ " + sender;
+
+        GUILayout.BeginHorizontal();
+
+        GUI.enabled = (msg.gameObject != null) && gotoObject;
+        if(GUILayout.Button("<",GUILayout.Width(20f)))
+        {
+            EditorGUIUtility.PingObject(msg.gameObject);
+        }
+        GUI.enabled = true;
+
+
         GUILayout.Label(label);
+
+        GUILayout.EndHorizontal();
     }
 
     public static void DrawUILine(Color color, int thickness = 1, int padding = 8)
