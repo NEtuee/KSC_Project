@@ -127,20 +127,34 @@ public abstract class MessageReceiver : UniqueNumberBase
 
     public bool allowDebugMode = false;
 
+    [UnityEngine.HideInInspector] public int sendedCount = 0;
+    [UnityEngine.HideInInspector] public int receivedCount = 0;
+
+
+    private int _debugCount = 6;
+
     public void Debug_AddSendedQueue(Message msg)
     {
         if(!allowDebugMode)
             return;
 
-        sendedQueue.Enqueue(Debug_CopyMessage(msg));
+        sendedQueue.Enqueue(Debug_CopyMessage(msg,++sendedCount));
+        if(sendedQueue.Count > _debugCount)
+        {
+            DebugMessagePool.ReturnMessage(sendedQueue.Dequeue());
+        }
     }
 
     public void Debug_AddReceivedQueue(Message msg)
     {
         if(!allowDebugMode)
             return;
-            
-        receivedQueue.Enqueue(Debug_CopyMessage(msg));
+        
+        receivedQueue.Enqueue(Debug_CopyMessage(msg,++receivedCount));
+        if(receivedQueue.Count > _debugCount)
+        {
+            DebugMessagePool.ReturnMessage(receivedQueue.Dequeue());
+        }
     }
 
     public void Debug_ClearQueue()
@@ -161,7 +175,7 @@ public abstract class MessageReceiver : UniqueNumberBase
         receivedQueue.Clear();
     }
 
-    public DebugMessage Debug_CopyMessage(Message msg)
+    public DebugMessage Debug_CopyMessage(Message msg, int count)
     {
         var target = DebugMessagePool.GetMessage();
 
@@ -179,9 +193,15 @@ public abstract class MessageReceiver : UniqueNumberBase
             }
         }
         
+        target.gameObject = null;
 
+        if(msg.sender != null)
+        {
+            if(((MessageReceiver)msg.sender) != null)
+                target.gameObject = ((MessageReceiver)msg.sender).gameObject;
+        }
 
-        target.Set(msg.title,msg.target,data,senderCode,senderName);
+        target.Set(msg.title,msg.target,data,senderCode,senderName,count);
 
         return target;
     }
