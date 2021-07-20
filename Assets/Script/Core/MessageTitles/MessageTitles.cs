@@ -43,6 +43,12 @@ public static partial class MessageTitles
     /// data = HpPackValueType
     /// </summary>
     public const ushort uimanager_setvaluehppackui = 0x0305;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort uimanager_setdescription = 0x0306;
+
     #endregion
 
     #region CameraManager

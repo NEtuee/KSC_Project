@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UniRx;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class UIManager : ManagerBase
 {
@@ -13,11 +14,13 @@ public class UIManager : ManagerBase
     [Header("PauseUI")]
     [SerializeField] private PauseMenuState _currentPauseState;
     private MenuPage _currentPage;
+    [SerializeField] private MenuPage pausePage;
     [SerializeField] private MenuPage optionPage;
     [SerializeField] private MenuPage soundPage;
     [SerializeField] private MenuPage displayPage;
     [SerializeField] private MenuPage controlPage;
     [SerializeField] private MenuPage keybindingPage;
+    [SerializeField] private MenuPage tutorialPage;
 
     [Header("CrossHair")]
     [SerializeField] private CrossHair _crossHair;
@@ -27,6 +30,10 @@ public class UIManager : ManagerBase
     [SerializeField] private FadeUI _staminaBar;
     [SerializeField] private FadeUI _energyBar;
     [SerializeField] private HpPackUI _hpPackUI;
+
+    [Header("TutorialMenu")]
+    [SerializeField] private RawImage videoRawImage;
+    [SerializeField] private TextMeshProUGUI descriptionText;
 
     private void Start()
     {
@@ -51,6 +58,16 @@ public class UIManager : ManagerBase
         {
             Debug.LogError("Not Set HpPackUi");
         }
+
+        if(videoRawImage == null)
+        {
+            Debug.LogError("Not Set VideoRawImage");
+        }
+
+        if (descriptionText == null)
+        {
+            Debug.LogError("Not Set DescriptionText");
+        }
     }
 
     public override void Assign()
@@ -64,11 +81,15 @@ public class UIManager : ManagerBase
         AddAction(MessageTitles.uimanager_setvaluestatebar, SetValueStateBar);
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
         AddAction(MessageTitles.uimanager_setvaluehppackui, SetValueHpPackUI);
+
+        AddAction(MessageTitles.uimanager_setdescription, (msg) => SetDescription((string)msg.data));
     }
 
     public override void Initialize()
     {
         base.Initialize();
+
+        SendMessageEx(MessageTitles.videomanager_settargetimage, GetSavedNumber("VideoManager"), videoRawImage);
     }
 
     public void OnPauseButton()
@@ -79,25 +100,53 @@ public class UIManager : ManagerBase
         if(_currentPauseState == PauseMenuState.Game)
         {
             SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), true);
-            ActivePage((int)PauseMenuState.Option);
+            ActivePage((int)PauseMenuState.Pause);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             return;
         }
 
-        if(_currentPauseState == PauseMenuState.Option)
+
+        if (_currentPauseState == PauseMenuState.Pause)
         {
             SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), false);
             ActivePage((int)PauseMenuState.Game);
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            return;
+        }
+
+        if(_currentPauseState == PauseMenuState.Tutorial || _currentPauseState == PauseMenuState.Option)
+        {
+            ActivePage((int)PauseMenuState.Pause);
+            return;
         }
         else
         {
             ActivePage((int)PauseMenuState.Option);
+            return;
         }
+
+
+        //else
+        //{
+        //    ActivePage((int)PauseMenuState.Option);
+        //}
+
+        //if (_currentPauseState == PauseMenuState.Option)
+        //{
+        //    SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), false);
+        //    ActivePage((int)PauseMenuState.Game);
+
+        //    Cursor.lockState = CursorLockMode.Locked;
+        //    Cursor.visible = false;
+        //}
+        //else
+        //{
+        //    ActivePage((int)PauseMenuState.Option);
+        //}
     }
 
     public void ActivePage(int pageNum)
@@ -110,6 +159,9 @@ public class UIManager : ManagerBase
             case PauseMenuState.Game:
                 _currentPage = null;
                 return;
+            case PauseMenuState.Pause:
+                _currentPage = pausePage;
+                break;
             case PauseMenuState.Option:
                 _currentPage = optionPage;
                 break;
@@ -124,6 +176,9 @@ public class UIManager : ManagerBase
                 break;
             case PauseMenuState.KeyBinding:
                 _currentPage = keybindingPage;
+                break;
+            case PauseMenuState.Tutorial:
+                _currentPage = tutorialPage;
                 break;
         }
         _currentPage.Active(true);
@@ -190,9 +245,14 @@ public class UIManager : ManagerBase
     }
     #endregion
 
+    public void SetDescription(string description)
+    {
+        descriptionText.text = description;
+    }
+
     public enum PauseMenuState
     {
-        Game = 0, Option, Sound, Display, Control, KeyBinding, Loading, Tutorial
+        Game = 0, Pause,Option, Sound, Display, Control, KeyBinding, Loading, Tutorial
     }
 
     public enum StateBarType
