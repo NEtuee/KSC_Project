@@ -15,9 +15,9 @@ public class ImpulseTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.I))
-        {
-            impulseSource.GenerateImpulse();
-        }
+        //if(Input.GetKeyDown(KeyCode.I))
+        //{
+        //    impulseSource.GenerateImpulse();
+        //}
     }
 }

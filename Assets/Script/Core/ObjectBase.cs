@@ -17,7 +17,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         Initialize();
     }
 
-    public void UpdateTransform()
+    public virtual void UpdateTransform()
     {
         if(_position != transform.position || _rotation != transform.rotation)
         {
@@ -29,7 +29,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         
     }
 
-    public void SyncLocalValue()
+    public virtual void SyncLocalValue()
     {
         _position = transform.position;
         _rotation = transform.rotation;

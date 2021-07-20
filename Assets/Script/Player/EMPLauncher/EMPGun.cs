@@ -5,7 +5,7 @@ using UnityEngine.Animations.Rigging;
 using DG.Tweening;
 using UniRx;
 
-public class EMPGun : MonoBehaviour
+public class EMPGun : TestObjectBase
 {
     [SerializeField] private GameObject _gunObject;
     [SerializeField] private Animator gunAnim;
@@ -27,20 +27,30 @@ public class EMPGun : MonoBehaviour
         mainCamera = Camera.main.transform;
         _gunObject.SetActive(false);
         playerAnim = GetComponent<Animator>();
-        GetComponent<PlayerCtrl_Ver2>().chargeTime.Subscribe(value => { 
-            if(value >= 3f)
-            {
-                crossHair.Third();
-            }
-            else if(value >= 2f)
-            {
-                crossHair.Second();
-            }
-            else if (value >= 1f)
-            {
-                crossHair.First();
-            }
-        });
+        //GetComponent<PlayerCtrl_Ver2>().chargeTime.Subscribe(value => { 
+        //    if(value >= 3f)
+        //    {
+        //        //crossHair.Third();
+        //        SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 3);
+        //    }
+        //    else if(value >= 2f)
+        //    {
+        //        //crossHair.Second();
+        //        SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 2);
+        //    }
+        //    else if (value >= 1f)
+        //    {
+        //        //crossHair.First();
+        //        SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 1);
+        //    }
+        //});
+
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("PlayerManager"));
     }
 
     void Update()
@@ -64,27 +74,44 @@ public class EMPGun : MonoBehaviour
         //GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
         //GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
 
+        EffectActiveData data;
+        data.position = laserEffectPos.position;
+        data.rotation = laserEffectPos.rotation;
+        data.parent = null;
         if (damage <=40f)
         {
-            GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
-            InputManager.Instance.GamePadSetVibrate(0.2f,0.6f);
+            //GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
+            data.key = "Laser02";
+            SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation, GetSavedNumber("EffectManager"), data);
+            //InputManager.Instance.GamePadSetVibrate(0.2f,0.6f);
         }
         else if (damage <= 80f)
         {
-            GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
-            InputManager.Instance.GamePadSetVibrate(0.3f,0.8f);
+            //GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
+            //InputManager.Instance.GamePadSetVibrate(0.3f,0.8f);
+            data.key = "Laser_Level2";
+            SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation, GetSavedNumber("EffectManager"), data);
         }   
         else if (damage <= 120f)
         {
-            GameManager.Instance.effectManager.Active("Laser_Level3", laserEffectPos.position, laserEffectPos.rotation);
-            InputManager.Instance.GamePadSetVibrate(0.4f,1.0f);
+            //GameManager.Instance.effectManager.Active("Laser_Level3", laserEffectPos.position, laserEffectPos.rotation);
+            //InputManager.Instance.GamePadSetVibrate(0.4f,1.0f);
+            data.key = "Laser_Level3";
+            SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation, GetSavedNumber("EffectManager"), data);
         }
         
         
         if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         //if (Physics.SphereCast(mainCamera.position,layserRadius, mainCamera.forward, out hit, 1000.0f,hitLayer))
-           {
-            GameManager.Instance.effectManager.Active("LaserHit",hit.point);
+        {
+            //GameManager.Instance.effectManager.Active("LaserHit",hit.point);
+            EffectActiveData hitData;
+            hitData.key = "LaserHit";
+            hitData.position = hit.point;
+            hitData.rotation = Quaternion.identity;
+            hitData.parent = null;
+            SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), hitData);
+
 
             if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
             {
@@ -106,37 +133,37 @@ public class EMPGun : MonoBehaviour
         }
     }
 
-    public void LaunchLaser(float damage, out bool destroyed)
-    {
-        if (playerAnim != null)
-        {
-            playerAnim.SetTrigger("Shot");
-        }
+    //public void LaunchLaser(float damage, out bool destroyed)
+    //{
+    //    if (playerAnim != null)
+    //    {
+    //        playerAnim.SetTrigger("Shot");
+    //    }
         
-        GameManager.Instance.cameraManager.GenerateRecoilImpulse();
-        GameManager.Instance.effectManager.Active("Laser", laserEffectPos.position, laserEffectPos.rotation);
+    //    GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+    //    GameManager.Instance.effectManager.Active("Laser", laserEffectPos.position, laserEffectPos.rotation);
 
-        if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
-        {
-            GameManager.Instance.effectManager.Active("LaserHit",hit.point);
+    //    if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
+    //    {
+    //        GameManager.Instance.effectManager.Active("LaserHit",hit.point);
 
-            if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
-            {
-                hitable.Hit(damage);
-                GameManager.Instance.soundManager.Play(1022, hit.point);
-            }
-            else
-            {
-                GameManager.Instance.soundManager.Play(1023, hit.point);
-            }
+    //        if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
+    //        {
+    //            hitable.Hit(damage);
+    //            GameManager.Instance.soundManager.Play(1022, hit.point);
+    //        }
+    //        else
+    //        {
+    //            GameManager.Instance.soundManager.Play(1023, hit.point);
+    //        }
 
-            destroyed = true;
-        }
-        else
-        {
-            destroyed = false;
-        }
-    }
+    //        destroyed = true;
+    //    }
+    //    else
+    //    {
+    //        destroyed = false;
+    //    }
+    //}
 
     public void LaunchImpact()
     {
@@ -152,10 +179,11 @@ public class EMPGun : MonoBehaviour
             _gunObject.SetActive(active);
         }
 
-        if(crossHair != null)
-        {
-            crossHair.SetActive(active);
-        }
+        //if(crossHair != null)
+        //{
+        //    crossHair.SetActive(active);
+        //}
+        SendMessageEx(MessageTitles.uimanager_activecrosshair, GetSavedNumber("UIManager"), active);
 
         if(gunAnim != null)
         {

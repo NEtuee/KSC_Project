@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TutorialTrigger : MonoBehaviour
+public class TutorialTrigger : TestObjectBase
 {
     public bool isOver = false;
     public bool IsOver { get => IsOver; set => isOver = value; }

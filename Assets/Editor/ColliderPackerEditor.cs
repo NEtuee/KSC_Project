@@ -9,6 +9,7 @@ public class ColliderPackerEditor : Editor
         base.OnInspectorGUI();
 
         ColliderPacker coll = (ColliderPacker)target;
+        
         if (GUILayout.Button("Pack"))
         {
             coll.Pack();
