@@ -36,7 +36,7 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     {
         foreach(var receiver in _receivers.Values)
         {
-            if(receiver == null)
+            if(receiver == null || !receiver.gameObject.activeInHierarchy)
                 continue;
             receiver.Progress(deltaTime);
         }
@@ -46,7 +46,7 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     {
         foreach(var receiver in _receivers.Values)
         {
-            if(receiver == null)
+            if(receiver == null || !receiver.gameObject.activeInHierarchy)
                 continue;
             receiver.AfterProgress(deltaTime);
         }
@@ -56,7 +56,7 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     {
         foreach(var receiver in _receivers.Values)
         {
-            if(receiver == null)
+            if(receiver == null || !receiver.gameObject.activeInHierarchy)
                 continue;
             receiver.UpdateTransform();
         }
