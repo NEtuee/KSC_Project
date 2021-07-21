@@ -11,7 +11,9 @@ public class TestMessageManager : ManagerBase
         SaveMyNumber("TestManager");
 
         AddAction(0x0200,(msg)=>{
-            Debug.Log((string)msg.data);
+            var target = (MessageReceiver)msg.sender;
+            SendMessageQuick(target,0x0200,msg.data);
+            // Debug.Log((string)msg.data);
         });
     }
 }

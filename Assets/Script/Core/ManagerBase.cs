@@ -15,6 +15,23 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     //     base.Awake();
     // }
 
+    public void SendMessageQuick(Message msg)
+    {
+        MasterManager.instance.HandleMessageQuick(msg);
+#if UNITY_EDITOR
+        Debug_AddSendedQueue(msg);
+#endif
+    }
+
+    public void SendMessageQuick(ushort title, int target, Object data)
+    {
+        var msg = MessagePack(title,target,data);
+        MasterManager.instance.HandleMessageQuick(msg);
+#if UNITY_EDITOR
+        Debug_AddSendedQueue(msg);
+#endif
+    }
+
     public virtual void Assign()
     {
         _unknownMessageProcess = (msg)=>{

@@ -291,6 +291,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowDebugMode: 1
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
   managers:
   - {fileID: 1222908378}
 --- !u!4 &1222908377
@@ -320,6 +323,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowDebugMode: 1
+  debugExceptionTitles:
+  - 0200
+  sendedCount: 0
+  receivedCount: 0
 --- !u!1001 &1860851473
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -391,6 +398,16 @@ PrefabInstance:
         type: 3}
       propertyPath: allowDebugMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6560803744846732601, guid: 0e988883629403d48a360b145d134c2a,
+        type: 3}
+      propertyPath: debugExceptionTitles.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6560803744846732601, guid: 0e988883629403d48a360b145d134c2a,
+        type: 3}
+      propertyPath: debugExceptionTitles.Array.data[0]
+      value: 0200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e988883629403d48a360b145d134c2a, type: 3}

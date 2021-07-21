@@ -101,37 +101,82 @@ public class MasterManager : MessageHub<ManagerBase>
         }
     }
 
-    public override void SendMessageProcessing(ManagerBase receiver)
+    // public override void SendMessageProcessing(ManagerBase receiver)
+    // {
+    //     Message msg = receiver.DequeueSendMessage();
+    //     while(msg != null)
+    //     {
+    //         HandleMessage(msg);
+
+    //         msg = receiver.DequeueSendMessage();
+    //     }
+    // }
+
+    public void HandleMessageQuick(Message msg)
     {
-        Message msg = receiver.DequeueSendMessage();
-        while(msg != null)
+        if(IsInReceivers(msg.target) && _receivers[msg.target].CanHandleMessage(msg))
         {
-            if(IsInReceivers(msg.target))
+#if UNITY_EDITOR
+            _receivers[msg.target].Debug_AddReceivedQueue(msg);
+#endif
+            _receivers[msg.target].MessageProcessing(msg);
+            MessagePool.ReturnMessage(msg);
+        }
+        else if((msg.target == 0 || uniqueNumber == msg.target) && CanHandleMessage(msg))
+        {
+#if UNITY_EDITOR
+            Debug_AddReceivedQueue(msg);
+#endif
+            MessageProcessing(msg);
+            MessagePool.ReturnMessage(msg);
+        }
+        else
+        {
+            bool find = false;
+            foreach(var other in _receivers.Values)
             {
-                _receivers[msg.target].ReceiveMessage(msg);
-            }
-            else if(msg.target == 0 || uniqueNumber == msg.target)
-            {
-                ReceiveMessage(msg);
-            }
-            else
-            {
-                bool find = false;
-                foreach(var other in _receivers.Values)
+                if(other.IsInReceivers(msg.target) && other.CanHandleMessage(msg))
                 {
-                    if(other.IsInReceivers(msg.target))
-                    {
-                        other.ReceiveMessage(msg);
-                        find = true;
-                        break;
-                    }
+#if UNITY_EDITOR
+                    other.GetReciever(msg.target).Debug_AddReceivedQueue(msg);
+#endif
+                    other.GetReciever(msg.target).MessageProcessing(msg);
+                    MessagePool.ReturnMessage(msg);
+                    find = true;
+                    break;
                 }
-
-                if(!find)
-                    _unknownMessageProcess(msg);
             }
 
-            msg = receiver.DequeueSendMessage();
+            if(!find)
+                _unknownMessageProcess(msg);
+        }
+    }
+
+    public override void HandleMessage(Message msg)
+    {
+        if(IsInReceivers(msg.target))
+        {
+            _receivers[msg.target].ReceiveMessage(msg);
+        }
+        else if(msg.target == 0 || uniqueNumber == msg.target)
+        {
+            ReceiveMessage(msg);
+        }
+        else
+        {
+            bool find = false;
+            foreach(var other in _receivers.Values)
+            {
+                if(other.IsInReceivers(msg.target))
+                {
+                    other.GetReciever(msg.target).ReceiveMessage(msg);
+                    find = true;
+                    break;
+                }
+            }
+
+            if(!find)
+                _unknownMessageProcess(msg);
         }
     }
 
