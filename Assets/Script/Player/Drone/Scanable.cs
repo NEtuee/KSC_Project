@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Scanable : MonoBehaviour
+public abstract class Scanable : UnTransfromObjectBase
 {
     [SerializeField] protected LayerMask visibleCastLayer;
     [SerializeField]protected Renderer renderer;
@@ -14,8 +14,9 @@ public abstract class Scanable : MonoBehaviour
 
     protected bool _isTriggered = false;
     
-    protected void Start()
+    protected override void Start()
     {
+        base.Start();
         renderer = GetComponent<Renderer>();
         collider = GetComponent<Collider>();
     }

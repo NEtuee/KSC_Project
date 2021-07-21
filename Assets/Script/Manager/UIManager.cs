@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UniRx;
 using UnityEngine.InputSystem;
 using TMPro;
+using DG.Tweening;
 
 public class UIManager : ManagerBase
 {
@@ -34,6 +36,13 @@ public class UIManager : ManagerBase
     [Header("TutorialMenu")]
     [SerializeField] private RawImage videoRawImage;
     [SerializeField] private TextMeshProUGUI descriptionText;
+
+    [Header("Fade")]
+    [SerializeField] private Canvas fadeCanvas;
+    [SerializeField] private Image fadeImage;
+
+    [Header("LoadingUI")]
+    [SerializeField] private LoadingUI loadingUI;
 
     private void Start()
     {
@@ -68,6 +77,11 @@ public class UIManager : ManagerBase
         {
             Debug.LogError("Not Set DescriptionText");
         }
+
+        if(fadeImage == null)
+        {
+            Debug.LogError("Not Set FadeImage");
+        }
     }
 
     public override void Assign()
@@ -82,7 +96,27 @@ public class UIManager : ManagerBase
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
         AddAction(MessageTitles.uimanager_setvaluehppackui, SetValueHpPackUI);
 
-        AddAction(MessageTitles.uimanager_setdescription, (msg) => SetDescription((string)msg.data));
+        AddAction(MessageTitles.uimanager_settutorialdescription, (msg) => SetDescription((string)msg.data));
+
+        AddAction(MessageTitles.uimanager_fadein, (msg) => FadeIn());
+        AddAction(MessageTitles.uimanager_fadeout, (msg) => FadeOut());
+
+        AddAction(MessageTitles.uimanager_activeloadingui, (msg) => 
+        {
+            bool active = (bool)msg.data;
+            ActiveLoadingUI(active);
+        });
+        AddAction(MessageTitles.uimanager_setloadinggagevalue, (msg) => 
+        {
+            float value = (float)msg.data;
+            loadingUI.SetLoadingGageValue(value);
+        });
+        AddAction(MessageTitles.uimanager_setloadingtiptext, (msg) =>
+        {
+            string text = (string)msg.data;
+            loadingUI.SetLoadingTipText(text);
+        });
+
     }
 
     public override void Initialize()
@@ -90,6 +124,8 @@ public class UIManager : ManagerBase
         base.Initialize();
 
         SendMessageEx(MessageTitles.videomanager_settargetimage, GetSavedNumber("VideoManager"), videoRawImage);
+
+        fadeCanvas.enabled = false;
     }
 
     public void OnPauseButton()
@@ -245,10 +281,41 @@ public class UIManager : ManagerBase
     }
     #endregion
 
+    #region TutorialUI
     public void SetDescription(string description)
     {
         descriptionText.text = description;
     }
+    #endregion
+
+    #region Fade
+    public void FadeIn(Action action = null)
+    {
+        fadeCanvas.enabled = true;
+        fadeImage.DOFade(1.0f, 0.5f).OnComplete(()=>action?.Invoke());
+    }
+
+    public void FadeOut(Action action = null)
+    {
+        fadeImage.DOFade(0.0f, 0.5f).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
+    }
+    #endregion
+
+    #region LoadingUI
+
+    public void ActiveLoadingUI(bool active)
+    {
+        if(active)
+        {
+            FadeIn(() => loadingUI.Active(true));
+        }
+        else
+        {
+            FadeOut(() => loadingUI.Active(false));
+        }
+    }
+
+    #endregion
 
     public enum PauseMenuState
     {

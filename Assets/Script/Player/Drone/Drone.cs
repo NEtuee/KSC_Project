@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Drone : MonoBehaviour
 {
@@ -518,5 +519,14 @@ public class Drone : MonoBehaviour
         transform.position = position;
         _targetPosition = position;
         _finalTargetPosition = position;
+    }
+
+    public void OnScan(InputAction.CallbackContext value)
+    {
+        if (value.performed == false)
+            return;
+
+        if (_scanLeftTime <= 0.0f)
+            Scan();
     }
 }

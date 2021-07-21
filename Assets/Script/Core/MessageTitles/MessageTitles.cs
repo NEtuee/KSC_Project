@@ -47,8 +47,32 @@ public static partial class MessageTitles
     /// <summary>
     /// data = string
     /// </summary>
-    public const ushort uimanager_setdescription = 0x0306;
+    public const ushort uimanager_settutorialdescription = 0x0306;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_fadein = 0x0307;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_fadeout = 0x0308;
+
+    /// <summary>
+    /// data = bool
+    /// </summary>
+    public const ushort uimanager_activeloadingui = 0x0309;
+
+    /// <summary>
+    /// data = float(0.0 ~ 1.0)
+    /// </summary>
+    public const ushort uimanager_setloadinggagevalue = 0x0310;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort uimanager_setloadingtiptext = 0x0311;
     #endregion
 
     #region CameraManager

@@ -107,7 +107,9 @@ public class VideoManager : ManagerBase
 
         _videoPlayer.clip = _tutorialData[key].videoClip;
 
-        SendMessageEx(MessageTitles.uimanager_setdescription, GetSavedNumber("UIManager"), _tutorialData[key].description);
+        string description = _tutorialData[key].description;
+        description = description.Replace("\\n", "\n");
+        SendMessageEx(MessageTitles.uimanager_settutorialdescription, GetSavedNumber("UIManager"), description);
         StartCoroutine(PrepareVideo());
     }
 }

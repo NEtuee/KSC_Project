@@ -66,6 +66,12 @@ public class EMPShield : Hitable
         //shieldParticle = GetComponent<ParticleSystem>();
     }
 
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("ObjectManager"));
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -250,7 +256,13 @@ public class EMPShield : Hitable
         
 
         //Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
-        GameManager.Instance.effectManager.Active("CannonExplosion", transform.position);
+        //GameManager.Instance.effectManager.Active("CannonExplosion", transform.position);
+        EffectActiveData data;
+        data.key = "CannonExplosion";
+        data.position = transform.position;
+        data.rotation = Quaternion.identity;
+        data.parent = null;
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
         collider.enabled = false;
         if(renderer != null)
             renderer.enabled = false;

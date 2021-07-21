@@ -5,7 +5,7 @@ using UnityEngine.Animations.Rigging;
 using DG.Tweening;
 using UniRx;
 
-public class EMPGun : TestObjectBase
+public class EMPGun : UnTransfromObjectBase
 {
     [SerializeField] private GameObject _gunObject;
     [SerializeField] private Animator gunAnim;
@@ -22,8 +22,9 @@ public class EMPGun : TestObjectBase
     private Transform mainCamera;
     private RaycastHit hit;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         mainCamera = Camera.main.transform;
         _gunObject.SetActive(false);
         playerAnim = GetComponent<Animator>();
