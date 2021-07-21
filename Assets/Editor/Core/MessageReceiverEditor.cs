@@ -32,11 +32,11 @@ public class MessageReceiverEditor : Editor
 
         GUILayout.Label(uniqueNumberField_Text + messageControl.uniqueNumber);
 
-        if(EditorApplication.isPlaying && !EditorApplication.isPaused)
-        {
-            GUILayout.Label("isPlaying");
-            return;
-        }
+        // if(EditorApplication.isPlaying && !EditorApplication.isPaused)
+        // {
+        //     GUILayout.Label("isPlaying");
+        //     return;
+        // }
 
         DrawUILine(Color.gray);
 

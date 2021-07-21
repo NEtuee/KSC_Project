@@ -14,13 +14,28 @@ public abstract class MessageReceiver : UniqueNumberBase
 #if UNITY_EDITOR
         Debug_AddReceivedQueue(msg);
 #endif
-        if(!_msgProcActions.ContainsKey(msg.title))
+        if(!CanHandleMessage(msg))
         {
             MessagePool.ReturnMessage(msg);
             return;
         }
         _recentlySender = msg.sender;
         _receiveQueue.Enqueue(msg);
+    }
+
+    public void ReceiveAndProcessMessage(Message msg)
+    {
+#if UNITY_EDITOR
+        Debug_AddReceivedQueue(msg);
+#endif
+        if(!CanHandleMessage(msg))
+        {
+            MessagePool.ReturnMessage(msg);
+            return;
+        }
+        _recentlySender = msg.sender;
+        MessageProcessing(msg);
+        MessagePool.ReturnMessage(msg);
     }
 
     public void ReceiveMessageProcessing()
@@ -33,6 +48,11 @@ public abstract class MessageReceiver : UniqueNumberBase
         }
 
         _receiveQueue.Clear();
+    }
+
+    public bool CanHandleMessage(Message msg)
+    {
+        return _msgProcActions.ContainsKey(msg.title);
     }
 
     public void MessageProcessing(Message msg)
@@ -71,6 +91,23 @@ public abstract class MessageReceiver : UniqueNumberBase
             return;
 
         _msgProcActions.Add(title,action);
+    }
+
+    protected void SendMessageQuick(MessageReceiver receiver,Message msg)
+    {
+        receiver.ReceiveAndProcessMessage(msg);
+#if UNITY_EDITOR
+        Debug_AddSendedQueue(msg);
+#endif
+    }
+
+    protected void SendMessageQuick(MessageReceiver receiver,ushort title, Object data)
+    {
+        var msg = MessagePack(title,receiver.uniqueNumber,data);
+        receiver.ReceiveAndProcessMessage(msg);
+#if UNITY_EDITOR
+        Debug_AddSendedQueue(msg);
+#endif
     }
 
     protected void SendMessageEx(Message msg)
@@ -127,6 +164,8 @@ public abstract class MessageReceiver : UniqueNumberBase
 
     public bool allowDebugMode = false;
 
+    public List<string> debugExceptionTitles = new List<string>();
+
     [UnityEngine.HideInInspector] public int sendedCount = 0;
     [UnityEngine.HideInInspector] public int receivedCount = 0;
 
@@ -137,6 +176,15 @@ public abstract class MessageReceiver : UniqueNumberBase
     {
         if(!allowDebugMode)
             return;
+
+        if(debugExceptionTitles.Count != 0)
+        {
+            string title = msg.title.ToString("X4");
+            if(debugExceptionTitles.Exists((x)=>{return x == title;}))
+            {
+                return;
+            }
+        }
 
         sendedQueue.Enqueue(Debug_CopyMessage(msg,++sendedCount));
         if(sendedQueue.Count > _debugCount)
@@ -150,6 +198,15 @@ public abstract class MessageReceiver : UniqueNumberBase
         if(!allowDebugMode)
             return;
         
+        if(debugExceptionTitles.Count != 0)
+        {
+            string title = msg.title.ToString("X4");
+            if(debugExceptionTitles.Exists((x)=>{return x == title;}))
+            {
+                return;
+            }
+        }
+
         receivedQueue.Enqueue(Debug_CopyMessage(msg,++receivedCount));
         if(receivedQueue.Count > _debugCount)
         {

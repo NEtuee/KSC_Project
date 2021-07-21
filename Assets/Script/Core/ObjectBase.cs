@@ -41,6 +41,23 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         _scale = transform.localScale;
     }
 
+    public void SendMessageQuick(Message msg)
+    {
+        MasterManager.instance.HandleMessageQuick(msg);
+#if UNITY_EDITOR
+        Debug_AddSendedQueue(msg);
+#endif
+    }
+
+    public void SendMessageQuick(ushort title, int target, System.Object data)
+    {
+        var msg = MessagePack(title,target,data);
+        MasterManager.instance.HandleMessageQuick(msg);
+#if UNITY_EDITOR
+        Debug_AddSendedQueue(msg);
+#endif
+    }
+
     public void RegisterRequest(int managerNumber)
     {
         _currentManagerNumber = managerNumber;

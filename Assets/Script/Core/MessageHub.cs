@@ -49,21 +49,31 @@ public abstract class MessageHub<T> : MessageReceiver where T : MessageReceiver
         Message msg = receiver.DequeueSendMessage();
         while(msg != null)
         {
-            if(IsInReceivers(msg.target))
-            {
-                _receivers[msg.target].ReceiveMessage(msg);
-            }
-            else if(msg.target == 0 || uniqueNumber == msg.target)
-            {
-                ReceiveMessage(msg);
-            }
-            else
-            {
-                _unknownMessageProcess(msg);
-            }
+            HandleMessage(msg);
 
             msg = receiver.DequeueSendMessage();
         }
+    }
+
+    public virtual void HandleMessage(Message msg)
+    {
+        if(IsInReceivers(msg.target))
+        {
+            _receivers[msg.target].ReceiveMessage(msg);
+        }
+        else if(msg.target == 0 || uniqueNumber == msg.target)
+        {
+            ReceiveMessage(msg);
+        }
+        else
+        {
+            _unknownMessageProcess(msg);
+        }
+    }
+
+    public T GetReciever(int number)
+    {
+        return _receivers[number];
     }
 
     public bool IsInReceivers(int number)
