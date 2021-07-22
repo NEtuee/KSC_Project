@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UniRx;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using TMPro;
 using DG.Tweening;
 
@@ -43,6 +44,8 @@ public class UIManager : ManagerBase
 
     [Header("LoadingUI")]
     [SerializeField] private LoadingUI loadingUI;
+
+    private EventSystem _eventSystem;
 
     private void Start()
     {
@@ -82,6 +85,12 @@ public class UIManager : ManagerBase
         {
             Debug.LogError("Not Set FadeImage");
         }
+
+        if(GameObject.Find("EventSystem").TryGetComponent<EventSystem>(out _eventSystem) == false)
+        {
+            Debug.LogError("Not Exist EventSystem");
+        }
+        
     }
 
     public override void Assign()
@@ -316,6 +325,8 @@ public class UIManager : ManagerBase
     }
 
     #endregion
+
+
 
     public enum PauseMenuState
     {

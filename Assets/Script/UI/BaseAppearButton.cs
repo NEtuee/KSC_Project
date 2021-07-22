@@ -53,4 +53,9 @@ public class BaseAppearButton : Button, Appearable
         base.OnPointerExit(eventData);
         onExit.Invoke();
     }
+
+    public void TakeClick()
+    {
+        onClick.Invoke();
+    }
 }
