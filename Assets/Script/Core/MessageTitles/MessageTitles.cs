@@ -73,6 +73,16 @@ public static partial class MessageTitles
     /// data = string
     /// </summary>
     public const ushort uimanager_setloadingtiptext = 0x0311;
+
+    /// <summary>
+    /// data = CameraRotateSpeedData
+    /// </summary>
+    public const ushort uimanager_setvaluecamerarotatespeedslider = 0x0312;
+
+    /// <summary>
+    /// data = VolumeData
+    /// </summary>
+    public const ushort uimanager_setvaluevolumeslider = 0x0313;
     #endregion
 
     #region CameraManager
@@ -164,6 +174,15 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort videomanager_stopvideo = 0x0803;
+
+    #endregion
+
+    #region SettingManager
+
+    /// <summary>
+    /// data = CameraRotateSpeedData
+    /// </summary>
+    public const ushort setting_savecamerarotatespeed = 0x0901;
 
     #endregion
 

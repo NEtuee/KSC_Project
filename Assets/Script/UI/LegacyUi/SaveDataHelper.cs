@@ -4,14 +4,14 @@ using UnityEngine;
 using System.IO;
 
 [System.Serializable]
-public class ControlSettingData
+public struct ControlSettingData
 {
     public float pitchRotateSpeed;
     public float yawRotateSpeed;
 }
 
 [System.Serializable]
-public class SoundSettingData
+public struct SoundSettingData
 {
     public float masterVolume;
     public float sfxVolume;
@@ -20,7 +20,7 @@ public class SoundSettingData
 }
 
 [System.Serializable]
-public class DisplaySettingData
+public struct DisplaySettingData
 {
     public bool activeVsync;
     public int screenWidth;

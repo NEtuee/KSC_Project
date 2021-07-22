@@ -45,6 +45,14 @@ public class UIManager : ManagerBase
     [Header("LoadingUI")]
     [SerializeField] private LoadingUI loadingUI;
 
+    [Header("SettingSlider")]
+    [SerializeField] private Slider yawRotateSpeedSlider;
+    [SerializeField] private Slider pitchRotateSpeedSlider;
+    [SerializeField] private Slider masterVolumeSlider;
+    [SerializeField] private Slider sfxVolumeSlider;
+    [SerializeField] private Slider ambientVolumeSlider;
+    [SerializeField] private Slider bgmVolumeSlider;
+
     private EventSystem _eventSystem;
 
     private void Start()
@@ -126,6 +134,16 @@ public class UIManager : ManagerBase
             loadingUI.SetLoadingTipText(text);
         });
 
+        AddAction(MessageTitles.uimanager_setvaluecamerarotatespeedslider, (msg) =>
+         {
+             CameraRotateSpeedData data = (CameraRotateSpeedData)msg.data;
+             SetValueCameraRotateSpeedSlider(data.yaw, data.pitch);
+         });
+        AddAction(MessageTitles.uimanager_setvaluevolumeslider, (msg) =>
+        {
+            VolumeData data = (VolumeData)msg.data;
+            SetValueVolumeSlider(data.master, data.vfx,data.ambient, data.bgm);
+        });
     }
 
     public override void Initialize()
@@ -196,8 +214,22 @@ public class UIManager : ManagerBase
 
     public void ActivePage(int pageNum)
     {
-        if(_currentPage != null)
+        if (_currentPage != null)
+        {
+            switch (_currentPauseState)
+            {
+                case PauseMenuState.Control:
+                    {
+                        CameraRotateSpeedData data;
+                        data.yaw = yawRotateSpeedSlider.value;
+                        data.pitch = pitchRotateSpeedSlider.value;
+                        SendMessageEx(MessageTitles.setting_savecamerarotatespeed, GetSavedNumber("SettingManager"), data);
+                    }
+                    break;         
+            }
             _currentPage.Active(false);
+        }
+
         _currentPauseState = (PauseMenuState)pageNum;
         switch (_currentPauseState)
         {
@@ -326,7 +358,23 @@ public class UIManager : ManagerBase
 
     #endregion
 
+    #region SettingSlider
 
+    public void SetValueCameraRotateSpeedSlider(float yaw, float pitch)
+    {
+        yawRotateSpeedSlider.value = yaw;
+        pitchRotateSpeedSlider.value = pitch;
+    }
+
+    public void SetValueVolumeSlider(float master, float vfx, float ambient, float bgm)
+    {
+        masterVolumeSlider.value = master;
+        sfxVolumeSlider.value = vfx;
+        ambientVolumeSlider.value = ambient;
+        bgmVolumeSlider.value = bgm;
+    }
+
+    #endregion
 
     public enum PauseMenuState
     {
