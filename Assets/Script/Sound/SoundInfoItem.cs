@@ -21,7 +21,9 @@ public class SoundInfoItem : ScriptableObject
     public class SoundInfo
     {
         public string path;
+        public string name;
         public int id;
+        public float defaultVolume = 1f;
         public string type;
         public List<SoundParameter> parameters;
 
@@ -77,6 +79,8 @@ public class SoundInfoItem : ScriptableObject
                 var item = new SoundInfo();
                 item.id = int.Parse(d[0]);
                 item.path = d[1];
+                var split = item.path.Split('/');
+                item.name = split[split.Length - 1];
                 item.type = d[2];
 
                 soundData.Add(item);

@@ -9,6 +9,7 @@ public class MessageReceiverEditor : Editor
     const string uniqueNumberField_Text = "Unique Number : ";
     const string sendedQueueField_Text = "Sended Messages";
     const string receivedQueueField_Text = "Received Messages";
+    const string debugAreaField_Text = "DebugArea";
 
     public virtual void OnEnable()
     {
@@ -24,11 +25,15 @@ public class MessageReceiverEditor : Editor
 
         EditorGUILayout.Space();
 
+        GUILayout.Label(debugAreaField_Text);
+
         if(!EditorApplication.isPlaying)
         {
-            GUILayout.Label("DebugArea");
+            //GUILayout.Label("DebugArea");
             return;
         }
+
+        GUILayout.BeginVertical("box");
 
         GUILayout.Label(uniqueNumberField_Text + messageControl.uniqueNumber);
 
@@ -56,6 +61,8 @@ public class MessageReceiverEditor : Editor
         {
             DrawMessageInfo(msg,true);
         }
+        GUILayout.EndVertical();
+
         GUILayout.EndVertical();
     }
 

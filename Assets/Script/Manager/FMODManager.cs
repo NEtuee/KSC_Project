@@ -22,7 +22,7 @@ public struct SetParameterData
     public float value;
 }
 
-
+[SerializeField]
 public class FMODManager : ManagerBase
 {
     public SoundInfoItem infoItem;
@@ -76,10 +76,19 @@ public class FMODManager : ManagerBase
         {
             Play(item,Vector3.zero);
         }
-    }
 
+        timeCounterEx.InitTimer("Check",0f,0.1f);
+    }
+    TimeCounterEx timeCounterEx = new TimeCounterEx();
     public override void AfterProgress(float deltaTime)
     {
+        timeCounterEx.IncreaseTimer("Check",out var limit);
+        if(limit)
+        {
+            Play(startPlayList[0],Vector3.zero);
+            timeCounterEx.InitTimer("Check",0f,0.2f);
+        }
+
         foreach(var pair in _activeMap)
         {
             var value = pair.Value;
@@ -159,6 +168,7 @@ public class FMODManager : ManagerBase
         emitter.gameObject.SetActive(true);
 
         emitter.Play();
+        emitter.EventInstance.setVolume(FindSoundInfo(id).defaultVolume);
         
         AddActiveMap(id,emitter);
 
@@ -173,6 +183,7 @@ public class FMODManager : ManagerBase
         emitter.gameObject.SetActive(true);
 
         emitter.Play();
+        emitter.EventInstance.setVolume(FindSoundInfo(id).defaultVolume);
 
         AddActiveMap(id,emitter);
         
@@ -245,6 +256,11 @@ public class FMODManager : ManagerBase
         return value;
     }
 
+    public Dictionary<int, List<FMODUnity.StudioEventEmitter>> GetActiveMap()
+    {
+        return _activeMap;
+    }
+
     private void ReturnCache(int id, FMODUnity.StudioEventEmitter emitter)
     {
         emitter.gameObject.SetActive(false);
@@ -279,6 +295,7 @@ public class FMODManager : ManagerBase
             comp.Event = sound.path;
             comp.Preload = true;
             comp.DataCode = id;
+            comp.EventInstance.setVolume(sound.defaultVolume);
             comp.gameObject.SetActive(active);
             comp.transform.SetParent(this.transform);
 
@@ -325,6 +342,18 @@ public class FMODManager : ManagerBase
         {
             return infoItem.FindSound(id);
         }
+    }
+
+    public float GetParameterByName(string name)
+    {
+        var result = FMODUnity.RuntimeManager.StudioSystem.getParameterByName(name,out var value);
+        if(result != FMOD.RESULT.OK)
+        {
+            Debug.Log("parameter does not exists : " + name);
+            return -1f;
+        }
+
+        return value;
     }
 
     private void CreateCachedGlobalParams()
