@@ -32,6 +32,7 @@ public class CameraManager : ManagerBase
     [SerializeField] private LayerMask collisionLayer;
     [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private AnimationCurve blurCurve;
+    [SerializeField] private FollowTargetCtrl followTarget;
     
     private bool isBlendCameraDistance;
     private float targetDistance;
@@ -65,6 +66,9 @@ public class CameraManager : ManagerBase
     //Damping
     private Vector3 prevDamping = Vector3.zero;
 
+    private PlayerCtrl_Ver2 _player;
+    private Transform _playerTransfrom;
+
     private void Start()
     {
         brainCameraTransfrom = brain.transform;
@@ -78,7 +82,7 @@ public class CameraManager : ManagerBase
 
         InitializeCameraAtGameStart();
 
-        if(((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod == UpdateMethod.FixedUpdate)
+        if(_player.updateMethod == UpdateMethod.FixedUpdate)
         {
             brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
             brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
@@ -144,6 +148,19 @@ public class CameraManager : ManagerBase
             SetDamping(damp);
         });
         AddAction(MessageTitles.cameramanager_generaterecoilimpluse, (msg) => GenerateRecoilImpulse());
+
+        AddAction(MessageTitles.set_setplayer, (msg) => 
+        {
+            _player = (PlayerCtrl_Ver2)msg.data;
+            _playerTransfrom = _player.transform;
+        });
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
     }
 
     private void Update()
@@ -155,7 +172,7 @@ public class CameraManager : ManagerBase
         // }
 
         var cross = Vector3.Cross(brainCameraTransfrom.forward,Vector3.up);
-        var side = Vector3.Dot(cross.normalized,GameManager.Instance.player.transform.forward);
+        var side = Vector3.Dot(cross.normalized,_playerTransfrom.forward);
         var currSide = playerFollowCam3rdPersonComponent.CameraSide;
 
         playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
@@ -555,7 +572,7 @@ public class CameraManager : ManagerBase
         
         isCameraCollision =
                         //collisionEx.Cast(GameManager.Instance.followTarget.transform.position + offset,dir,playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
-                        collisionEx.Cast(GameManager.Instance.followTarget.transform.position, dir, playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
+                        collisionEx.Cast(followTarget.transform.position, dir, playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
 
         if (isCameraCollision)
         {
@@ -574,7 +591,7 @@ public class CameraManager : ManagerBase
 
     public void SetUpdateMethod()
     {
-        if(((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod == UpdateMethod.FixedUpdate)
+        if(_player.updateMethod == UpdateMethod.FixedUpdate)
         {
             brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
             brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;

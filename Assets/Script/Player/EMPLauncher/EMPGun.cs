@@ -70,8 +70,9 @@ public class EMPGun : UnTransfromObjectBase
         {
             playerAnim.SetTrigger("Shot");
         }
-        
-        GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+
+        //GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+        SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
         //GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
         //GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
 

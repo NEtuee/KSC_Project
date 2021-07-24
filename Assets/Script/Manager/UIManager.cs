@@ -34,6 +34,12 @@ public class UIManager : ManagerBase
     [SerializeField] private FadeUI _energyBar;
     [SerializeField] private HpPackUI _hpPackUI;
 
+    [Header("GunUI")]
+    [SerializeField] private Canvas gunUiCanvas;
+    [SerializeField] private TextMeshProUGUI gunLoadValueText;
+    [SerializeField] private TextMeshProUGUI gunChargeValueText;
+    [SerializeField] private GunGageUi aimEnergyBar;
+
     [Header("TutorialMenu")]
     [SerializeField] private RawImage videoRawImage;
     [SerializeField] private TextMeshProUGUI descriptionText;
@@ -52,6 +58,11 @@ public class UIManager : ManagerBase
     [SerializeField] private Slider sfxVolumeSlider;
     [SerializeField] private Slider ambientVolumeSlider;
     [SerializeField] private Slider bgmVolumeSlider;
+
+    [Header("SettingDropdown")]
+    [SerializeField] private TMP_Dropdown screenModeDropdown;
+    [SerializeField] private TMP_Dropdown resolutionDropdown;
+    [SerializeField] private TMP_Dropdown vsyncDropdown;
 
     private EventSystem _eventSystem;
 
@@ -143,6 +154,56 @@ public class UIManager : ManagerBase
         {
             VolumeData data = (VolumeData)msg.data;
             SetValueVolumeSlider(data.master, data.vfx,data.ambient, data.bgm);
+        });
+
+        AddAction(MessageTitles.uimanager_setresolutiondropdown, (msg) => 
+        {
+            ResolutionData data = (ResolutionData)msg.data;
+            resolutionDropdown.AddOptions(data.resolutionStrings);
+        });
+
+        AddAction(MessageTitles.uimanager_setvalueresolutiondropdown,(msg)=>
+        {
+            int value = (int)msg.data;
+            resolutionDropdown.value = value;
+        });
+        AddAction(MessageTitles.uimanager_setvaluescreenmodedropdown, (msg) =>
+        {
+            int value = (int)msg.data;
+            screenModeDropdown.value = value;
+        });
+        AddAction(MessageTitles.uimanager_setvaluevsyncdropdown, (msg) =>
+        {
+            int value = (int)msg.data;
+            vsyncDropdown.value = value;
+        });
+
+        AddAction(MessageTitles.uimanager_fadeinout, (msg) =>
+        {
+            Action action = (Action)msg.data;
+            FadeInOut(action);
+        });
+
+        AddAction(MessageTitles.uimanager_setgunloadvalue, (msg) =>
+        {
+            int value = (int)msg.data;
+            gunLoadValueText.text = value.ToString();
+        });
+        AddAction(MessageTitles.uimanager_setgunchargetimevalue, (msg) => 
+        {
+            float value = (float)msg.data;
+            gunChargeValueText.text = ((int)(value * 100.0f)).ToString();
+            aimEnergyBar.SetFrontValue(value);
+        });
+        AddAction(MessageTitles.uimanager_setgunenergyvalue, (msg) =>
+        {
+            float value = (float)msg.data;
+            aimEnergyBar.SetBackValue(value);
+        });
+        AddAction(MessageTitles.uimanager_activegunui, (msg) =>
+        {
+            bool active = (bool)msg.data;
+            gunUiCanvas.enabled = active;
         });
     }
 
@@ -340,6 +401,13 @@ public class UIManager : ManagerBase
     {
         fadeImage.DOFade(0.0f, 0.5f).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
     }
+
+
+    IEnumerator DeferredCallFadeOutAction(float duration, Action fadeOutAction)
+    {
+        yield return new WaitForSeconds(duration);
+        fadeOutAction?.Invoke();
+    }
     #endregion
 
     #region LoadingUI
@@ -356,6 +424,15 @@ public class UIManager : ManagerBase
         }
     }
 
+    public void FadeInOut(Action action)
+    {
+        fadeCanvas.enabled = true;
+        fadeImage.DOFade(1.0f, 1.0f).OnComplete(() =>
+        {
+            StartCoroutine(DeferredCallFadeOutAction(1f*0.8f,action));
+            fadeImage.DOFade(0.0f, 1.0f).SetDelay(1f).OnComplete(()=> fadeCanvas.enabled = false);
+        });
+    }
     #endregion
 
     #region SettingSlider
@@ -373,6 +450,12 @@ public class UIManager : ManagerBase
         ambientVolumeSlider.value = ambient;
         bgmVolumeSlider.value = bgm;
     }
+
+    #endregion
+
+    #region SettingDropDown
+
+    
 
     #endregion
 

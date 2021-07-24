@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System;
 
 public enum UpdateMethod
 {
@@ -289,6 +290,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             InitializeMove();
         });
+
+        AddAction(MessageTitles.player_visibledrone, (msg) =>
+         {
+             bool visible = (bool)msg.data;
+             drone.Visible = visible;
+         });
     }
 
     public override void Initialize()
@@ -330,6 +337,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //    energy.Value = 100.0f;
 
         //InputUpdate();
+
+        //if(Keyboard.current.jKey.wasPressedThisFrame == true)
+        //{
+        //    Action action;
+        //    action = () =>
+        //    {
+        //        Debug.Log("Call Action");
+        //    };
+        //    SendMessageEx(MessageTitles.uimanager_fadeinout, GetSavedNumber("UIManager"), action);
+        //}
 
         camForward = mainCameraTrasform.forward;
         camRight = mainCameraTrasform.right;
@@ -1359,8 +1376,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         SendMessageEx(MessageTitles.cameramanager_activeplayerfollocamera, GetSavedNumber("CameraManager"), null);
                     //GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
                 drone.OrderAimHelp(false);
-                releaseAimEvent?.Invoke();
-            }
+                    //releaseAimEvent?.Invoke();
+                    SendMessageEx(MessageTitles.uimanager_activegunui, GetSavedNumber("UIManager"), false);
+                }
                 break;
             case PlayerState.Jump:
             {
@@ -1538,6 +1556,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 footIK.DisableFeetIk();
                 drone.OrderAimHelp(true);
                 activeAimEvent?.Invoke();
+                SendMessageEx(MessageTitles.uimanager_activegunui, GetSavedNumber("UIManager"), true);
                 _transformCount = 0;
             }
                 break;
@@ -1644,11 +1663,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     ragdoll.ResetRagdoll();
                 }
-                GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() =>
-                { 
-                    animator.SetBool("Respawn",true);
-                    drone.Respawn(transform);
-                });
+                //GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() =>
+                //{ 
+                //    animator.SetBool("Respawn",true);
+                //    drone.Respawn(transform);
+                //});
+                    Action action;
+                    action = () => 
+                    {
+                        animator.SetBool("Respawn", true);
+                        drone.Respawn(transform);
+                    };
+                    SendMessageEx(MessageTitles.uimanager_fadeinout, GetSavedNumber("UIManager"), action);
             }
                 break;
             case PlayerState.HighLanding:
@@ -1657,7 +1683,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetFloat("Speed", 0.0f);
                     animator.SetBool("HighLanding",true);
                     GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
-                    GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+                    //GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+                    SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
                 }
                 break;
             case PlayerState.Gesture:

@@ -83,6 +83,51 @@ public static partial class MessageTitles
     /// data = VolumeData
     /// </summary>
     public const ushort uimanager_setvaluevolumeslider = 0x0313;
+
+    /// <summary>
+    /// data = List<string>
+    /// </summary>
+    public const ushort uimanager_setresolutiondropdown = 0x0314;
+
+    /// <summary>
+    /// data = int
+    /// </summary>
+    public const ushort uimanager_setvalueresolutiondropdown = 0x0315;
+
+    /// <summary>
+    /// data = int
+    /// </summary>
+    public const ushort uimanager_setvaluescreenmodedropdown = 0x0316;
+
+    /// <summary>
+    /// data = int
+    /// </summary>
+    public const ushort uimanager_setvaluevsyncdropdown = 0x0317;
+
+    /// <summary>
+    /// data = action
+    /// </summary>
+    public const ushort uimanager_fadeinout = 0x0318;
+
+    /// <summary>
+    /// data = int
+    /// </summary>
+    public const ushort uimanager_setgunloadvalue = 0x0319;
+
+    /// <summary>
+    /// data = float
+    /// </summary>
+    public const ushort uimanager_setgunchargetimevalue = 0x0320;
+
+    /// <summary>
+    /// data = float;
+    /// </summary>
+    public const ushort uimanager_setgunenergyvalue = 0x0321;
+
+    /// <summary>
+    /// data = bool;
+    /// </summary>
+    public const ushort uimanager_activegunui = 0x0322;
     #endregion
 
     #region CameraManager
@@ -192,6 +237,29 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort player_initalizemove = 0x0901;
+
+    /// <summary>
+    /// data = bool
+    /// </summary>
+    public const ushort player_visibledrone = 0x0902;
+
+    #endregion
+
+    #region PlayerManager
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort playermanager_sendplayerctrl = 0x0910;
+
+    #endregion
+
+    #region Setter
+
+    /// <summary>
+    /// data = PlayerCtrl_ver2
+    /// </summary>
+    public const ushort set_setplayer = 0x1001;
 
     #endregion
 }

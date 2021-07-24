@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FollowTargetCtrl : MonoBehaviour
+public class FollowTargetCtrl : UnTransfromObjectBase
 {
     [SerializeField] private bool visible = true;
     public bool Visible => visible;
@@ -16,9 +16,11 @@ public class FollowTargetCtrl : MonoBehaviour
     [SerializeField] private float followSmooth = 8f;
     [SerializeField] private bool isPause;
 
+    [SerializeField]private PlayerCtrl_Ver2 _player;
+
     private float _mouseX;
     private float _mouseY;
-    
+
     public float YawRotateSpeed
     {
         get => yawRotateSpeed;
@@ -41,19 +43,27 @@ public class FollowTargetCtrl : MonoBehaviour
 
     [SerializeField]private bool updateMode = false;
 
-    void Start()
+    public override void Assign()
     {
+        base.Assign();
+
+        AddAction(MessageTitles.set_setplayer, (msg) =>
+        {
+            _player = (PlayerCtrl_Ver2)msg.data;
+            target = _player.transform;
+        });
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("PlayerManager"));
+
         currentRot = transform.localRotation.eulerAngles;
         targetRot = currentRot;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
-
-        target = GameManager.Instance.player.transform;
-        if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod == UpdateMethod.Update)
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
+        if(_player.updateMethod == UpdateMethod.Update)
         {
             updateMode = true;
         }
@@ -62,6 +72,7 @@ public class FollowTargetCtrl : MonoBehaviour
             updateMode = false;
         }
     }
+
 
     void Update()
     {
@@ -87,7 +98,7 @@ public class FollowTargetCtrl : MonoBehaviour
         //transform.position = target.position + Vector3.up;
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
 
-        if((GameManager.Instance.player as PlayerCtrl_Ver2).CheckAimLock())
+        if(_player.CheckAimLock())
             return;
 
         //float mouseX = InputManager.Instance.GetCameraAxisX();
@@ -118,6 +129,8 @@ public class FollowTargetCtrl : MonoBehaviour
 
         if (!visible)
             return;
+
+        Debug.Log("dd");
 
         transform.position = target.position + Vector3.up;
 
