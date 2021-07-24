@@ -8,12 +8,25 @@ public struct SoundPlayData
 {
     public int id;
     public Vector3 position;
+
+    public SoundPlayData(int id, Vector3 position)
+    {
+        this.id = id;
+        this.position = position;
+    }
 }
 public struct AttachSoundPlayData
 {
     public int id;
     public Vector3 localPosition;
     public Transform parent;
+
+    public AttachSoundPlayData(int id, Vector3 localPosition, Transform parent)
+    {
+        this.id = id;
+        this.localPosition = localPosition;
+        this.parent = parent;
+    }
 }
 public struct SetParameterData
 {
@@ -77,17 +90,10 @@ public class FMODManager : ManagerBase
             Play(item,Vector3.zero);
         }
 
-        timeCounterEx.InitTimer("Check",0f,0.1f);
     }
-    TimeCounterEx timeCounterEx = new TimeCounterEx();
+
     public override void AfterProgress(float deltaTime)
     {
-        timeCounterEx.IncreaseTimer("Check",out var limit);
-        if(limit)
-        {
-            Play(startPlayList[0],Vector3.zero);
-            timeCounterEx.InitTimer("Check",0f,0.2f);
-        }
 
         foreach(var pair in _activeMap)
         {
@@ -168,7 +174,19 @@ public class FMODManager : ManagerBase
         emitter.gameObject.SetActive(true);
 
         emitter.Play();
-        emitter.EventInstance.setVolume(FindSoundInfo(id).defaultVolume);
+        var info = FindSoundInfo(id);
+
+        emitter.EventInstance.setVolume(info.defaultVolume);
+
+        if(emitter.EventDescription.is3D(out var is3d) == FMOD.RESULT.OK)
+        {
+            emitter.OverrideAttenuation = info.overrideAttenuation && is3d;
+            if(emitter.OverrideAttenuation)
+            {
+                emitter.OverrideMinDistance = info.overrideDistance.x;
+                emitter.OverrideMaxDistance = info.overrideDistance.y;
+            }
+        }
         
         AddActiveMap(id,emitter);
 
@@ -183,7 +201,21 @@ public class FMODManager : ManagerBase
         emitter.gameObject.SetActive(true);
 
         emitter.Play();
-        emitter.EventInstance.setVolume(FindSoundInfo(id).defaultVolume);
+
+        var info = FindSoundInfo(id);
+
+        emitter.EventInstance.setVolume(info.defaultVolume);
+
+        if(emitter.EventDescription.is3D(out var is3d) == FMOD.RESULT.OK)
+        {
+            emitter.OverrideAttenuation = info.overrideAttenuation && is3d;
+            if(emitter.OverrideAttenuation)
+            {
+                emitter.OverrideMinDistance = info.overrideDistance.x;
+                emitter.OverrideMaxDistance = info.overrideDistance.y;
+            }
+        }
+        
 
         AddActiveMap(id,emitter);
         
@@ -390,5 +422,13 @@ public class FMODManager : ManagerBase
             _soundMap.Add(d.id,d);
         }
     }
+
+
+#if UNITY_EDITOR
+
+    public List<int> playerList = new List<int>();
+
+#endif
+
 
 }

@@ -24,6 +24,8 @@ public class SoundInfoItem : ScriptableObject
         public string name;
         public int id;
         public float defaultVolume = 1f;
+        public bool overrideAttenuation = false;
+        public Vector3 overrideDistance;
         public string type;
         public List<SoundParameter> parameters;
 
@@ -58,7 +60,8 @@ public class SoundInfoItem : ScriptableObject
 
     public void CreateInfoFromCSV(TextAsset csv)
     {
-        soundData = new List<SoundInfo>();
+        var saveData = new List<SoundInfo>();
+        //soundData = new List<SoundInfo>();
         IOManager.ReadRangeFromCSV(csv.text,1,-1,0,2,out var data);
         IOManager.ReadRangeFromCSV(csv.text,1,-1,4,8,out var param);
 
@@ -67,7 +70,7 @@ public class SoundInfoItem : ScriptableObject
         globalData.path = "global data";
         globalData.type = "Global";
 
-        soundData.Add(globalData);
+        saveData.Add(globalData);
         
         if(data != null && param != null)
         {
@@ -83,7 +86,20 @@ public class SoundInfoItem : ScriptableObject
                 item.name = split[split.Length - 1];
                 item.type = d[2];
 
-                soundData.Add(item);
+
+                if(soundData != null)
+                {
+                    var sound = FindSound(item.id);
+                    if(sound != null)
+                    {
+                        item.defaultVolume = sound.defaultVolume;
+                        item.overrideAttenuation = sound.overrideAttenuation;
+                        item.overrideDistance = sound.overrideDistance;
+                    }
+                }
+
+
+                saveData.Add(item);
             }
 
             foreach(var p in param)
@@ -96,7 +112,7 @@ public class SoundInfoItem : ScriptableObject
                 float min = float.Parse(p[3]);
                 float max = float.Parse(p[4]);
 
-                var find = soundData.Find(x=> x.id == group);
+                var find = saveData.Find(x=> x.id == group);
 
                 if(find == null)
                 {
@@ -119,8 +135,9 @@ public class SoundInfoItem : ScriptableObject
             Debug.Log("file error");
         }
 
-        soundData.Sort((x,y)=>{return x.id > y.id ? 1 : (x.id < y.id ? -1 : 0);});
+        saveData.Sort((x,y)=>{return x.id > y.id ? 1 : (x.id < y.id ? -1 : 0);});
 
+        soundData = new List<SoundInfo>(saveData);
         EditorUtility.SetDirty(this);
     }
 #endif

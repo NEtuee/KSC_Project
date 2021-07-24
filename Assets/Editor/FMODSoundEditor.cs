@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEditorInternal;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class FMODSoundEditor : EditorWindow
 {
@@ -54,17 +55,16 @@ public class FMODSoundEditor : EditorWindow
     {
         public int code = 0;
         Vector2 insideScroll;
-        public override void ShowMenu(FMODManager manager, Rect position, System.Object addiData)
-        {
-            GUILayout.BeginHorizontal(GUILayout.ExpandHeight(true));
 
+        public void SoundList(FMODManager manager,Action<int> buttonPressed)
+        {
             GUILayout.BeginVertical("box",GUILayout.Width(200f));
             GUILayout.BeginHorizontal();
             GUILayout.Label("id");
             code = EditorGUILayout.IntField(code);
             if(GUILayout.Button("Add Sound"))
             {
-                manager.startPlayList.Add(code);
+                buttonPressed(code);
             }
             GUILayout.EndHorizontal();
 
@@ -84,8 +84,14 @@ public class FMODSoundEditor : EditorWindow
             
 
             EndScrollView();
-
             GUILayout.EndVertical();
+        }
+
+        public override void ShowMenu(FMODManager manager, Rect position, System.Object addiData)
+        {
+            GUILayout.BeginHorizontal(GUILayout.ExpandHeight(true));
+
+            SoundList(manager,manager.startPlayList.Add);
 
             BeginScrollView();
 
@@ -117,7 +123,7 @@ public class FMODSoundEditor : EditorWindow
             GUILayout.EndHorizontal();
         }
 
-        public bool DrawSoundItem(SoundInfoItem.SoundInfo info, float width, float height)
+        public bool DrawSoundItem(SoundInfoItem.SoundInfo info, float width, float height, bool showParams = true)
         {
             GUILayout.BeginVertical("box",GUILayout.Width(width),GUILayout.ExpandHeight(true));
             if(GUILayout.Button("delete"))
@@ -134,13 +140,24 @@ public class FMODSoundEditor : EditorWindow
             GUILayout.Label("id : " + info.id.ToString(),GUILayout.Width(width));
             GUILayout.Label("type : " + info.type,GUILayout.Width(width));
             GUILayout.Label("volume : " + info.defaultVolume,GUILayout.Width(width));
+            GUILayout.Label("attenu : " + info.overrideAttenuation,GUILayout.Width(width));
 
-            GUILayout.Space(10f);
-            GUILayout.Label("parameters",style,GUILayout.Width(width));
-            for(int i = 0; i < info.parameters.Count; ++i)
+            if(info.overrideAttenuation)
             {
-                GUILayout.Label(info.parameters[i].name,GUILayout.Width(width));
+                GUILayout.Label(" min : " + info.overrideDistance.x ,GUILayout.Width(width));
+                GUILayout.Label(" max : " + info.overrideDistance.y,GUILayout.Width(width));
             }
+
+            if(showParams)
+            {
+                GUILayout.Space(10f);
+                GUILayout.Label("parameters",style,GUILayout.Width(width));
+                for(int i = 0; i < info.parameters.Count; ++i)
+                {
+                    GUILayout.Label(info.parameters[i].name,GUILayout.Width(width));
+                }
+            }
+            
 
             GUILayout.EndVertical();
 
@@ -443,7 +460,171 @@ public class FMODSoundEditor : EditorWindow
     }
 
 
+    public class SoundPlayerViewMenu : SoundListMesnu
+    {
+        private Vector3 _soundPosition;
+        private Transform _parent;
 
+        public void VolumeSlider(SoundInfoItem.SoundInfo _info, Rect position,float width)
+        {
+            GUILayout.BeginVertical("box",GUILayout.Width(width));
+
+            var volume = _info.defaultVolume;
+                
+            GUIStyle style = new GUIStyle(GUI.skin.box);
+            style.alignment = TextAnchor.MiddleCenter;
+            style.normal.textColor = Color.white;
+            style.wordWrap = false;
+
+            float modified = volume;
+        
+            GUILayout.Label("Volume",style,GUILayout.Width(width));
+            modified = VerticalSlider(modified,0f,1f,width,position.height - 62f);
+            modified = EditorGUILayout.FloatField(modified,GUILayout.Width(width));
+
+            if(volume != modified)
+            {
+                _info.defaultVolume = modified;                
+            }
+
+            GUILayout.EndVertical();
+        }
+
+        public SoundPlayerViewMenu()
+        {
+            
+        }
+
+        public void PlaySetting()
+        {
+            GUILayout.BeginVertical("box",GUILayout.Width(100f),GUILayout.ExpandHeight(true));
+
+            GUIStyle style = new GUIStyle(GUI.skin.box);
+            style.alignment = TextAnchor.MiddleCenter;
+            style.normal.textColor = Color.white;
+            style.wordWrap = false;
+
+            GUILayout.Label("PlaySettings",style,GUILayout.ExpandWidth(true));
+
+
+            GUILayout.Space(10f);
+            GUILayout.Label(_parent == null ? "world" : "local",style,GUILayout.ExpandWidth(true));
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("x",GUILayout.Width(15f));
+            _soundPosition.x = EditorGUILayout.FloatField(_soundPosition.x,GUILayout.ExpandWidth(true));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("y",GUILayout.Width(15f));
+            _soundPosition.y = EditorGUILayout.FloatField(_soundPosition.y,GUILayout.ExpandWidth(true));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("z",GUILayout.Width(15f));
+            _soundPosition.z = EditorGUILayout.FloatField(_soundPosition.z,GUILayout.ExpandWidth(true));
+            GUILayout.EndHorizontal();
+
+
+            GUILayout.Space(10f);
+            GUILayout.Label("parent",style,GUILayout.ExpandWidth(true));
+            _parent = (Transform)EditorGUILayout.ObjectField(_parent,typeof(Transform),true);
+
+
+            GUILayout.EndVertical();
+        }
+
+        public override void ShowMenu(FMODManager manager, Rect position, object addiData)
+        {
+            GUILayout.BeginHorizontal(GUILayout.ExpandHeight(true));
+
+            SoundList(manager,(x)=>{
+                if(manager.playerList.Find((y)=>{return x == y;}) != 0)
+                {
+                    Debug.Log("key already exists");
+                    return;
+                }
+                manager.playerList.Add(x);
+                EditorUtility.SetDirty(manager);
+            });
+
+            PlaySetting();
+
+            BeginScrollView();
+            GUILayout.BeginHorizontal();
+
+            for(int i = 0; i < manager.playerList.Count;)
+            {
+                var item = manager.playerList[i];
+
+                var sound = manager.infoItem.FindSound(item);
+                if(sound == null)
+                {
+                    Debug.Log("sound data is not found : " + item);
+                    manager.playerList.RemoveAt(i);
+                    continue;
+                }
+
+                GUILayout.BeginVertical("box",GUILayout.Width(100f));
+
+                if(!DrawSoundItem(sound,100f,position.height - 40f))
+                {
+                    manager.playerList.RemoveAt(i);
+                }
+                else
+                {
+                    ++i;
+
+                    GUIStyle style = new GUIStyle(GUI.skin.box);
+                    style.alignment = TextAnchor.MiddleCenter;
+                    style.normal.textColor = Color.white;
+                    style.wordWrap = false;
+
+                    //GUILayout.BeginVertical(GUILayout.Width(100f));
+
+                    GUILayout.Label("SoundPlay",style,GUILayout.ExpandWidth(true));
+
+                    GUI.enabled = EditorApplication.isPlaying;
+                    if(GUILayout.Button("Play"))
+                    {
+                        Message msg = MessagePool.GetMessage();
+                        
+
+                        if(_parent == null)
+                        {
+                            msg.data = new SoundPlayData(item,Vector3.zero);
+                            msg.title = MessageTitles.fmod_play;
+                            //manager.Play(item,_soundPosition);
+                        }
+                        else
+                        {
+                            msg.data = new AttachSoundPlayData(item,Vector3.zero,_parent);
+                            msg.title = MessageTitles.fmod_play;
+                            //manager.Play(item,_soundPosition,_parent);
+                        }
+
+                        manager.ReceiveAndProcessMessage(msg);
+
+                    }
+
+                    GUI.enabled = true;
+
+                    
+                    
+                    //GUILayout.EndVertical();
+                }
+
+                GUILayout.EndVertical();
+
+                VolumeSlider(sound,position,70f);
+            }
+
+            GUILayout.EndHorizontal();
+            EndScrollView();
+
+            GUILayout.EndHorizontal();
+        }
+    }
 
 
 
@@ -455,8 +636,8 @@ public class FMODSoundEditor : EditorWindow
 
     private int _menuSelect = 0;
 
-    private string[] menuBase = {"StartPlayList","GlobalParameters","PlayingList"};
-    private System.Object[] menuData = {null,null,null};
+    private string[] menuBase = {"StartPlayList","GlobalParameters","PlayingList", "SoundPlayer"};
+    private System.Object[] menuData = {null,null,null,null};
     private List<ScrollViewMenu> menus = new List<ScrollViewMenu>();
 
 
@@ -473,6 +654,7 @@ public class FMODSoundEditor : EditorWindow
         menus.Add(new SoundListMesnu());
         menus.Add(new ParameterViewMenu(_target.infoItem.FindSound(0)));
         menus.Add(new SoundItemView(null));
+        menus.Add(new SoundPlayerViewMenu());
     }
 
 
@@ -510,60 +692,6 @@ public class FMODSoundEditor : EditorWindow
         }
 
         _menuSelect = GUILayout.SelectionGrid(_menuSelect,menuBase,1);
-
-        // GUILayout.Space(10f);
-
-        // GUIStyle style = new GUIStyle(GUI.skin.box);
-        // style.alignment = TextAnchor.MiddleCenter;
-        // style.normal.textColor = Color.white;
-        // style.wordWrap = false;
-        // GUILayout.Label("playing List",style,GUILayout.ExpandWidth(true));
-
-        // _playScrollView.BeginScrollView(position.height - 110f);
-
-        // var active = _target.GetActiveMap();
-        // bool find = false;
-        
-        // if(active != null)
-        // {
-        //     foreach(var item in active)
-        //     {
-        //         if(item.Value.Count > 0)
-        //         {
-        //             if(item.Key == _menuSelect)
-        //             {
-        //                 GUI.enabled = false;
-        //                 find = true;
-        //             }
-
-        //             var itemName = _target.infoItem.FindSound(item.Key).name;
-
-        //             if(GUILayout.Button(itemName))
-        //             {
-        //                 _menuSelect = item.Key;
-
-        //                 if(menuData[2] == null)
-        //                 {
-        //                     menuData[2] = new SoundItemView.MenuData();
-        //                 }
-
-        //                 SoundItemView.MenuData data = (SoundItemView.MenuData)menuData[2];
-        //                 data.info = _target.infoItem.FindSound(item.Key);
-        //                 data.eventEmitter = item.Value;
-        //                 find = true;
-        //             }
-
-        //             GUI.enabled = true;
-        //         }
-        //     }
-        // }
-        
-        // _menuSelect = _menuSelect > 2 && !find ? 0 : _menuSelect;
-
-        // _playScrollView.EndScrollView();
-
-        //_menuSelect = GUILayout.SelectionGrid(_menuSelect - 3,menuBase,1) + 3;
-        
 
         GUILayout.EndVertical();
 
