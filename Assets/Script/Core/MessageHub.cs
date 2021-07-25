@@ -49,10 +49,30 @@ public abstract class MessageHub<T> : MessageReceiver where T : MessageReceiver
         Message msg = receiver.DequeueSendMessage();
         while(msg != null)
         {
-            HandleMessage(msg);
+            if(msg.target <= boradcastNumber)
+                HandleBroadcastMessage(msg);
+            else
+                HandleMessage(msg);
 
             msg = receiver.DequeueSendMessage();
         }
+    }
+
+    public virtual void HandleBroadcastMessage(Message msg)
+    {
+        foreach(var item in _receivers.Values)
+        {
+            if(msg.target == boradcastWithoutSenderNumber && msg.sender != null)
+            {
+                if(item.uniqueNumber == ((MessageReceiver)msg.sender).uniqueNumber)
+                    continue;
+            }
+            
+            var send = MessagePack(msg);
+            item.ReceiveMessage(send);
+        }
+
+        MessagePool.ReturnMessage(msg);
     }
 
     public virtual void HandleMessage(Message msg)

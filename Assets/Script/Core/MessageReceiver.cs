@@ -9,6 +9,10 @@ public abstract class MessageReceiver : UniqueNumberBase
 
     protected Object _recentlySender;
 
+    protected const int boradcastNumber = -10;
+    protected const int boradcastWithoutSenderNumber = -11;
+
+
     public void ReceiveMessage(Message msg)
     {
 #if UNITY_EDITOR
@@ -144,9 +148,21 @@ public abstract class MessageReceiver : UniqueNumberBase
 #endif
     }
 
-    protected void SendBroadcastMessage()
+    protected void SendBroadcastMessage(ushort title, Object data, bool withoutSender)
     {
-        //..
+        var msg = MessagePack(title, withoutSender ? boradcastWithoutSenderNumber : boradcastNumber, data);
+
+        _sendQueue.Enqueue(msg);
+#if UNITY_EDITOR
+        Debug_AddSendedQueue(msg);
+#endif
+    }
+
+    protected Message MessagePack(Message msg)
+    {
+        var target = MessagePool.GetMessage();
+        target.Set(msg.title,msg.target,msg.data,msg.sender);
+        return target;
     }
 
     protected Message MessagePack(ushort title, int target, Object data)

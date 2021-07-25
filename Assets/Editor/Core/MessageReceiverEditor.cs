@@ -70,7 +70,7 @@ public class MessageReceiverEditor : Editor
     {
         string number = msg.count.ToString();
         string title = msg.title.ToString("X4");
-        string target = msg.target.ToString();
+        string target = msg.target == -10 ? "Broadcast" : msg.target.ToString();
         string dataExists = msg.data ? "exists" : "null";
         string sender = msg.senderNumber + ":" + msg.senderName;
 
