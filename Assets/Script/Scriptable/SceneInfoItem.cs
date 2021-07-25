@@ -6,17 +6,18 @@ using UnityEngine.SceneManagement;
 [CreateAssetMenu(fileName = "SceneInformation", menuName = "Options/SceneInformation")]
 public class SceneInfoItem : ScriptableObject
 {
-    [SerializeField]
+    [System.Serializable]
     public class SceneInformation
     {
         public string name;
 
         [SerializeField]
-        public List<Scene> targetScenes; 
+        public List<string> targetScenes; 
     }
 
-    [SerializeField]
-    public List<SceneInformation> scenes = new List<SceneInformation>();
+
+    public List<SceneInformation> scenes;
+
 
     public SceneInformation FindScene(int position)
     {

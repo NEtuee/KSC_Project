@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class SceneManagerEx : ManagerBase
 {
@@ -22,11 +23,24 @@ public class SceneManagerEx : ManagerBase
 
     public override void Assign()
     {
-        LoadCurrentLevel();
+        SaveMyNumber("SceneManager");
 
         AddAction(MessageTitles.scene_loadCurrentLevel,LoadCurrentLevel);
         AddAction(MessageTitles.scene_loadPrevLevel,LoadPrevlevel);
         AddAction(MessageTitles.scene_loadNextLevel,LoadNextLevel);
+    }
+
+    public override void Initialize()
+    {
+        LoadCurrentLevel();
+    }
+
+    public override void Progress(float deltaTime)
+    {
+        if(Keyboard.current.kKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.scene_loadNextLevel,GetSavedNumber("SceneManager"),null);
+        }
     }
 
 
@@ -96,19 +110,7 @@ public class SceneManagerEx : ManagerBase
         if(!_isLoaded)
             yield break;
 
-        GameManager.Instance.PAUSE = true;
         _isLoaded = false;
-
-        if (GameManager.Instance.optionMenuCtrl != null)
-        {
-            GameManager.Instance.optionMenuCtrl.sceneLoadUi.SetLoadingComment(currentLevel);
-        }
-
-        if(GameManager.Instance.soundManager.GetGlobalParam(8) != 0)
-        {
-            GameManager.Instance.soundManager.SetGlobalParam(8,0f);
-        }
-
 
 
         SendBroadcastMessage(MessageTitles.scene_beforeSceneChange,_currentScene,false);
@@ -206,9 +208,9 @@ public class SceneManagerEx : ManagerBase
         --_loadedScenes;
     }
 
-    IEnumerator LoadSceneCoroutine(bool setPos, bool sceneActive, Scene target)
+    IEnumerator LoadSceneCoroutine(bool setPos, bool sceneActive, string target)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(target.buildIndex,LoadSceneMode.Additive);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(target,LoadSceneMode.Additive);
         operation.allowSceneActivation = false;
         
         while (operation.isDone == false)
@@ -219,9 +221,11 @@ public class SceneManagerEx : ManagerBase
             yield return null;
         }
 
+        var scene = SceneManager.GetSceneByName(target);
+
         if(sceneActive)
-            SceneManager.SetActiveScene(target);
-        _unloadScenes.Add(target);
+            SceneManager.SetActiveScene(scene);
+        _unloadScenes.Add(scene);
 
         //var stage = GameObject.FindObjectOfType<StageManager>();
 

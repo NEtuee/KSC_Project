@@ -374,6 +374,7 @@ GameObject:
   - component: {fileID: 1222908378}
   - component: {fileID: 1222908376}
   - component: {fileID: 1222908379}
+  - component: {fileID: 1222908380}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -400,6 +401,7 @@ MonoBehaviour:
   managers:
   - {fileID: 1222908378}
   - {fileID: 1222908379}
+  - {fileID: 1222908380}
 --- !u!4 &1222908377
 Transform:
   m_ObjectHideFlags: 0
@@ -451,6 +453,25 @@ MonoBehaviour:
   createSoundMap: 1
   startPlayList: a30f0000a20f0000a10f0000a00f0000
   playerList: e8030000f0030000e9030000ea030000ec030000
+--- !u!114 &1222908380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222908375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7e0ace6d43a7b048b1f8ef41c6d5c1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 1
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  sceneInfo: {fileID: 11400000, guid: 6c5dfa9ce94e46f47b82ad58c3b0ce3d, type: 2}
+  currentLevel: 0
+  nullScene: NullScene
 --- !u!1001 &1860851473
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -9,9 +9,9 @@ public class MessageObjectCreateTest : MonoBehaviour
 
     void Update()
     {
-        if(Keyboard.current.kKey.wasPressedThisFrame)
-        {
-            Instantiate(target);
-        }
+        // if(Keyboard.current.kKey.wasPressedThisFrame)
+        // {
+        //     Instantiate(target);
+        // }
     }
 }

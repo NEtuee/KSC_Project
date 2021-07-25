@@ -47,7 +47,6 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         float deltaTime = Time.deltaTime;
 
-
         ManagersUpdate(deltaTime);
         ManagersAfterUpdate(deltaTime);
 
