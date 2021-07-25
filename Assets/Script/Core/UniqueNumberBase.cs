@@ -23,7 +23,7 @@ public class UniqueNumberBase : MonoBehaviour
     {
         if(!_numberStorage.ContainsKey(key))
         {
-            Debug.Log("key dose not exists");
+            Debug.Log("key dose not exists : " + key);
             return -1;
         }
 

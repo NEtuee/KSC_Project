@@ -36,8 +36,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] public OptionMenuCtrl optionMenuCtrl;
     public Transform bossTransform;
 
-    public List<LockOnTarget> lockOnTargets = new List<LockOnTarget>();
-
     private Vector3 mainCameraStartPosition;
     private Vector3 mainCameraStartLocalPosition;
     private Vector3 camRootStartPosition;
@@ -89,22 +87,19 @@ public class GameManager : MonoBehaviour
         screenHeight = Screen.height;
         screenCenter.Set(screenWidth * 0.5f, screenHeight * 0.5f);
 
-        foreach(var lockTarget in GameObject.FindGameObjectsWithTag("LockOnTarget"))
-        {
-            lockOnTargets.Add(lockTarget.GetComponent<LockOnTarget>());
-        }
+   
 
         //StartCoroutine(LateStart());
         //QualitySettings.vSyncCount = 0;
 
         SaveDataHelper.streamingAssetsPath = Application.streamingAssetsPath;
 
-        if (followTarget != null)
-        {
-            ControlSettingData controlSettingData = SaveDataHelper.LoadSetting<ControlSettingData>();
-            followTarget.YawRotateSpeed = controlSettingData.yawRotateSpeed;
-            followTarget.PitchRotateSpeed = controlSettingData.pitchRotateSpeed;
-        }
+        //if (followTarget != null)
+        //{
+        //    ControlSettingData controlSettingData = SaveDataHelper.LoadSetting<ControlSettingData>();
+        //    followTarget.YawRotateSpeed = controlSettingData.yawRotateSpeed;
+        //    followTarget.PitchRotateSpeed = controlSettingData.pitchRotateSpeed;
+        //}
 
         SoundSettingData soundSettingData = SaveDataHelper.LoadSetting<SoundSettingData>();
         if(soundManager != null)
@@ -120,9 +115,9 @@ public class GameManager : MonoBehaviour
             soundManager.SetGlobalParam(4, soundSettingData.bgmVolume);
         }
 
-        DisplaySettingData displaySettingData = SaveDataHelper.LoadSetting<DisplaySettingData>();
-        QualitySettings.vSyncCount = displaySettingData.activeVsync == true ? 1 : 0;
-        Screen.SetResolution(displaySettingData.screenWidth, displaySettingData.screenHeight,Screen.fullScreen);
+        //DisplaySettingData displaySettingData = SaveDataHelper.LoadSetting<DisplaySettingData>();
+        //QualitySettings.vSyncCount = displaySettingData.activeVsync == true ? 1 : 0;
+        //Screen.SetResolution(displaySettingData.screenWidth, displaySettingData.screenHeight,Screen.fullScreen);
 
         if(player != null)
             player.whenPlayerDead += () => { PAUSE = true;};

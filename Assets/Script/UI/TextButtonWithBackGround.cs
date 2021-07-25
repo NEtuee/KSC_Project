@@ -12,6 +12,12 @@ public class TextButtonWithBackGround : TextButton
     public Color deselectColor;
     public Color exitColor;
 
+    private void Start()
+    {
+        base.Start();
+        backGroundImage.color = deselectColor;
+    }
+
     public override void OnSelect(BaseEventData eventData)
     {
         base.OnSelect(eventData);
@@ -36,7 +42,8 @@ public class TextButtonWithBackGround : TextButton
     public override void OnPointerExit(PointerEventData eventData)
     {
         base.OnPointerExit(eventData);
-        backGroundImage.color = exitColor;
+        if(eventData.selectedObject != this.gameObject)
+           backGroundImage.color = exitColor;
         onExit.Invoke();
     }
 }

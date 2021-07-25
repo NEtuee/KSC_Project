@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UniRx;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using TMPro;
+using DG.Tweening;
 
 public class UIManager : ManagerBase
 {
@@ -13,11 +17,13 @@ public class UIManager : ManagerBase
     [Header("PauseUI")]
     [SerializeField] private PauseMenuState _currentPauseState;
     private MenuPage _currentPage;
+    [SerializeField] private MenuPage pausePage;
     [SerializeField] private MenuPage optionPage;
     [SerializeField] private MenuPage soundPage;
     [SerializeField] private MenuPage displayPage;
     [SerializeField] private MenuPage controlPage;
     [SerializeField] private MenuPage keybindingPage;
+    [SerializeField] private MenuPage tutorialPage;
 
     [Header("CrossHair")]
     [SerializeField] private CrossHair _crossHair;
@@ -27,6 +33,38 @@ public class UIManager : ManagerBase
     [SerializeField] private FadeUI _staminaBar;
     [SerializeField] private FadeUI _energyBar;
     [SerializeField] private HpPackUI _hpPackUI;
+
+    [Header("GunUI")]
+    [SerializeField] private Canvas gunUiCanvas;
+    [SerializeField] private TextMeshProUGUI gunLoadValueText;
+    [SerializeField] private TextMeshProUGUI gunChargeValueText;
+    [SerializeField] private GunGageUi aimEnergyBar;
+
+    [Header("TutorialMenu")]
+    [SerializeField] private RawImage videoRawImage;
+    [SerializeField] private TextMeshProUGUI descriptionText;
+
+    [Header("Fade")]
+    [SerializeField] private Canvas fadeCanvas;
+    [SerializeField] private Image fadeImage;
+
+    [Header("LoadingUI")]
+    [SerializeField] private LoadingUI loadingUI;
+
+    [Header("SettingSlider")]
+    [SerializeField] private Slider yawRotateSpeedSlider;
+    [SerializeField] private Slider pitchRotateSpeedSlider;
+    [SerializeField] private Slider masterVolumeSlider;
+    [SerializeField] private Slider sfxVolumeSlider;
+    [SerializeField] private Slider ambientVolumeSlider;
+    [SerializeField] private Slider bgmVolumeSlider;
+
+    [Header("SettingDropdown")]
+    [SerializeField] private TMP_Dropdown screenModeDropdown;
+    [SerializeField] private TMP_Dropdown resolutionDropdown;
+    [SerializeField] private TMP_Dropdown vsyncDropdown;
+
+    private EventSystem _eventSystem;
 
     private void Start()
     {
@@ -51,6 +89,27 @@ public class UIManager : ManagerBase
         {
             Debug.LogError("Not Set HpPackUi");
         }
+
+        if(videoRawImage == null)
+        {
+            Debug.LogError("Not Set VideoRawImage");
+        }
+
+        if (descriptionText == null)
+        {
+            Debug.LogError("Not Set DescriptionText");
+        }
+
+        if(fadeImage == null)
+        {
+            Debug.LogError("Not Set FadeImage");
+        }
+
+        if(GameObject.Find("EventSystem").TryGetComponent<EventSystem>(out _eventSystem) == false)
+        {
+            Debug.LogError("Not Exist EventSystem");
+        }
+        
     }
 
     public override void Assign()
@@ -64,11 +123,97 @@ public class UIManager : ManagerBase
         AddAction(MessageTitles.uimanager_setvaluestatebar, SetValueStateBar);
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
         AddAction(MessageTitles.uimanager_setvaluehppackui, SetValueHpPackUI);
+
+        AddAction(MessageTitles.uimanager_settutorialdescription, (msg) => SetDescription((string)msg.data));
+
+        AddAction(MessageTitles.uimanager_fadein, (msg) => FadeIn());
+        AddAction(MessageTitles.uimanager_fadeout, (msg) => FadeOut());
+
+        AddAction(MessageTitles.uimanager_activeloadingui, (msg) => 
+        {
+            bool active = (bool)msg.data;
+            ActiveLoadingUI(active);
+        });
+        AddAction(MessageTitles.uimanager_setloadinggagevalue, (msg) => 
+        {
+            float value = (float)msg.data;
+            loadingUI.SetLoadingGageValue(value);
+        });
+        AddAction(MessageTitles.uimanager_setloadingtiptext, (msg) =>
+        {
+            string text = (string)msg.data;
+            loadingUI.SetLoadingTipText(text);
+        });
+
+        AddAction(MessageTitles.uimanager_setvaluecamerarotatespeedslider, (msg) =>
+         {
+             CameraRotateSpeedData data = (CameraRotateSpeedData)msg.data;
+             SetValueCameraRotateSpeedSlider(data.yaw, data.pitch);
+         });
+        AddAction(MessageTitles.uimanager_setvaluevolumeslider, (msg) =>
+        {
+            VolumeData data = (VolumeData)msg.data;
+            SetValueVolumeSlider(data.master, data.vfx,data.ambient, data.bgm);
+        });
+
+        AddAction(MessageTitles.uimanager_setresolutiondropdown, (msg) => 
+        {
+            ResolutionData data = (ResolutionData)msg.data;
+            resolutionDropdown.AddOptions(data.resolutionStrings);
+        });
+
+        AddAction(MessageTitles.uimanager_setvalueresolutiondropdown,(msg)=>
+        {
+            int value = (int)msg.data;
+            resolutionDropdown.value = value;
+        });
+        AddAction(MessageTitles.uimanager_setvaluescreenmodedropdown, (msg) =>
+        {
+            int value = (int)msg.data;
+            screenModeDropdown.value = value;
+        });
+        AddAction(MessageTitles.uimanager_setvaluevsyncdropdown, (msg) =>
+        {
+            int value = (int)msg.data;
+            vsyncDropdown.value = value;
+        });
+
+        AddAction(MessageTitles.uimanager_fadeinout, (msg) =>
+        {
+            Action action = (Action)msg.data;
+            FadeInOut(action);
+        });
+
+        AddAction(MessageTitles.uimanager_setgunloadvalue, (msg) =>
+        {
+            int value = (int)msg.data;
+            gunLoadValueText.text = value.ToString();
+        });
+        AddAction(MessageTitles.uimanager_setgunchargetimevalue, (msg) => 
+        {
+            float value = (float)msg.data;
+            gunChargeValueText.text = ((int)(value * 100.0f)).ToString();
+            aimEnergyBar.SetFrontValue(value);
+        });
+        AddAction(MessageTitles.uimanager_setgunenergyvalue, (msg) =>
+        {
+            float value = (float)msg.data;
+            aimEnergyBar.SetBackValue(value);
+        });
+        AddAction(MessageTitles.uimanager_activegunui, (msg) =>
+        {
+            bool active = (bool)msg.data;
+            gunUiCanvas.enabled = active;
+        });
     }
 
     public override void Initialize()
     {
         base.Initialize();
+
+        SendMessageEx(MessageTitles.videomanager_settargetimage, GetSavedNumber("VideoManager"), videoRawImage);
+
+        fadeCanvas.enabled = false;
     }
 
     public void OnPauseButton()
@@ -79,37 +224,82 @@ public class UIManager : ManagerBase
         if(_currentPauseState == PauseMenuState.Game)
         {
             SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), true);
-            ActivePage((int)PauseMenuState.Option);
+            ActivePage((int)PauseMenuState.Pause);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             return;
         }
 
-        if(_currentPauseState == PauseMenuState.Option)
+
+        if (_currentPauseState == PauseMenuState.Pause)
         {
             SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), false);
             ActivePage((int)PauseMenuState.Game);
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            return;
+        }
+
+        if(_currentPauseState == PauseMenuState.Tutorial || _currentPauseState == PauseMenuState.Option)
+        {
+            ActivePage((int)PauseMenuState.Pause);
+            return;
         }
         else
         {
             ActivePage((int)PauseMenuState.Option);
+            return;
         }
+
+
+        //else
+        //{
+        //    ActivePage((int)PauseMenuState.Option);
+        //}
+
+        //if (_currentPauseState == PauseMenuState.Option)
+        //{
+        //    SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), false);
+        //    ActivePage((int)PauseMenuState.Game);
+
+        //    Cursor.lockState = CursorLockMode.Locked;
+        //    Cursor.visible = false;
+        //}
+        //else
+        //{
+        //    ActivePage((int)PauseMenuState.Option);
+        //}
     }
 
     public void ActivePage(int pageNum)
     {
-        if(_currentPage != null)
+        if (_currentPage != null)
+        {
+            switch (_currentPauseState)
+            {
+                case PauseMenuState.Control:
+                    {
+                        CameraRotateSpeedData data;
+                        data.yaw = yawRotateSpeedSlider.value;
+                        data.pitch = pitchRotateSpeedSlider.value;
+                        SendMessageEx(MessageTitles.setting_savecamerarotatespeed, GetSavedNumber("SettingManager"), data);
+                    }
+                    break;         
+            }
             _currentPage.Active(false);
+        }
+
         _currentPauseState = (PauseMenuState)pageNum;
         switch (_currentPauseState)
         {
             case PauseMenuState.Game:
                 _currentPage = null;
                 return;
+            case PauseMenuState.Pause:
+                _currentPage = pausePage;
+                break;
             case PauseMenuState.Option:
                 _currentPage = optionPage;
                 break;
@@ -124,6 +314,9 @@ public class UIManager : ManagerBase
                 break;
             case PauseMenuState.KeyBinding:
                 _currentPage = keybindingPage;
+                break;
+            case PauseMenuState.Tutorial:
+                _currentPage = tutorialPage;
                 break;
         }
         _currentPage.Active(true);
@@ -190,9 +383,85 @@ public class UIManager : ManagerBase
     }
     #endregion
 
+    #region TutorialUI
+    public void SetDescription(string description)
+    {
+        descriptionText.text = description;
+    }
+    #endregion
+
+    #region Fade
+    public void FadeIn(Action action = null)
+    {
+        fadeCanvas.enabled = true;
+        fadeImage.DOFade(1.0f, 0.5f).OnComplete(()=>action?.Invoke());
+    }
+
+    public void FadeOut(Action action = null)
+    {
+        fadeImage.DOFade(0.0f, 0.5f).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
+    }
+
+
+    IEnumerator DeferredCallFadeOutAction(float duration, Action fadeOutAction)
+    {
+        yield return new WaitForSeconds(duration);
+        fadeOutAction?.Invoke();
+    }
+    #endregion
+
+    #region LoadingUI
+
+    public void ActiveLoadingUI(bool active)
+    {
+        if(active)
+        {
+            FadeIn(() => loadingUI.Active(true));
+        }
+        else
+        {
+            FadeOut(() => loadingUI.Active(false));
+        }
+    }
+
+    public void FadeInOut(Action action)
+    {
+        fadeCanvas.enabled = true;
+        fadeImage.DOFade(1.0f, 1.0f).OnComplete(() =>
+        {
+            StartCoroutine(DeferredCallFadeOutAction(1f*0.8f,action));
+            fadeImage.DOFade(0.0f, 1.0f).SetDelay(1f).OnComplete(()=> fadeCanvas.enabled = false);
+        });
+    }
+    #endregion
+
+    #region SettingSlider
+
+    public void SetValueCameraRotateSpeedSlider(float yaw, float pitch)
+    {
+        yawRotateSpeedSlider.value = yaw;
+        pitchRotateSpeedSlider.value = pitch;
+    }
+
+    public void SetValueVolumeSlider(float master, float vfx, float ambient, float bgm)
+    {
+        masterVolumeSlider.value = master;
+        sfxVolumeSlider.value = vfx;
+        ambientVolumeSlider.value = ambient;
+        bgmVolumeSlider.value = bgm;
+    }
+
+    #endregion
+
+    #region SettingDropDown
+
+    
+
+    #endregion
+
     public enum PauseMenuState
     {
-        Game = 0, Option, Sound, Display, Control, KeyBinding, Loading, Tutorial
+        Game = 0, Pause,Option, Sound, Display, Control, KeyBinding, Loading, Tutorial
     }
 
     public enum StateBarType

@@ -43,6 +43,91 @@ public static partial class MessageTitles
     /// data = HpPackValueType
     /// </summary>
     public const ushort uimanager_setvaluehppackui = 0x0305;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort uimanager_settutorialdescription = 0x0306;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_fadein = 0x0307;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_fadeout = 0x0308;
+
+    /// <summary>
+    /// data = bool
+    /// </summary>
+    public const ushort uimanager_activeloadingui = 0x0309;
+
+    /// <summary>
+    /// data = float(0.0 ~ 1.0)
+    /// </summary>
+    public const ushort uimanager_setloadinggagevalue = 0x0310;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort uimanager_setloadingtiptext = 0x0311;
+
+    /// <summary>
+    /// data = CameraRotateSpeedData
+    /// </summary>
+    public const ushort uimanager_setvaluecamerarotatespeedslider = 0x0312;
+
+    /// <summary>
+    /// data = VolumeData
+    /// </summary>
+    public const ushort uimanager_setvaluevolumeslider = 0x0313;
+
+    /// <summary>
+    /// data = List<string>
+    /// </summary>
+    public const ushort uimanager_setresolutiondropdown = 0x0314;
+
+    /// <summary>
+    /// data = int
+    /// </summary>
+    public const ushort uimanager_setvalueresolutiondropdown = 0x0315;
+
+    /// <summary>
+    /// data = int
+    /// </summary>
+    public const ushort uimanager_setvaluescreenmodedropdown = 0x0316;
+
+    /// <summary>
+    /// data = int
+    /// </summary>
+    public const ushort uimanager_setvaluevsyncdropdown = 0x0317;
+
+    /// <summary>
+    /// data = action
+    /// </summary>
+    public const ushort uimanager_fadeinout = 0x0318;
+
+    /// <summary>
+    /// data = int
+    /// </summary>
+    public const ushort uimanager_setgunloadvalue = 0x0319;
+
+    /// <summary>
+    /// data = float
+    /// </summary>
+    public const ushort uimanager_setgunchargetimevalue = 0x0320;
+
+    /// <summary>
+    /// data = float;
+    /// </summary>
+    public const ushort uimanager_setgunenergyvalue = 0x0321;
+
+    /// <summary>
+    /// data = bool;
+    /// </summary>
+    public const ushort uimanager_activegunui = 0x0322;
     #endregion
 
     #region CameraManager
@@ -137,12 +222,44 @@ public static partial class MessageTitles
 
     #endregion
 
+    #region SettingManager
+
+    /// <summary>
+    /// data = CameraRotateSpeedData
+    /// </summary>
+    public const ushort setting_savecamerarotatespeed = 0x0901;
+
+    #endregion
+
     #region Player
 
     /// <summary>
     /// data = null
     /// </summary>
     public const ushort player_initalizemove = 0x0901;
+
+    /// <summary>
+    /// data = bool
+    /// </summary>
+    public const ushort player_visibledrone = 0x0902;
+
+    #endregion
+
+    #region PlayerManager
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort playermanager_sendplayerctrl = 0x0910;
+
+    #endregion
+
+    #region Setter
+
+    /// <summary>
+    /// data = PlayerCtrl_ver2
+    /// </summary>
+    public const ushort set_setplayer = 0x1001;
 
     #endregion
 }

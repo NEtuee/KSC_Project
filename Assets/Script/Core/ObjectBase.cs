@@ -14,6 +14,11 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
         SyncLocalValue();
         Assign();
+        //Initialize();
+    }
+
+    protected virtual void Start()
+    {
         Initialize();
     }
 

@@ -19,7 +19,6 @@ public class EffectManager : ManagerBase
             Active(data.key, data.position);
         });
 
-
         AddAction(MessageTitles.effectmanager_activeeffectwithrotation, (msg) =>
         {
             EffectActiveData data = (EffectActiveData)msg.data;

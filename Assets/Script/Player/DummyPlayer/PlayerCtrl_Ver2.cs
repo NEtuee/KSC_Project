@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System;
 
 public enum UpdateMethod
 {
@@ -231,8 +232,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private bool _runLock = false;
     private bool _aimLock = false;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         animator = GetComponent<Animator>();
         rigidbody = GetComponent<Rigidbody>();
         collider = GetComponent<CapsuleCollider>();
@@ -288,6 +290,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             InitializeMove();
         });
+
+        AddAction(MessageTitles.player_visibledrone, (msg) =>
+         {
+             bool visible = (bool)msg.data;
+             drone.Visible = visible;
+         });
     }
 
     public override void Initialize()
@@ -330,6 +338,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         //InputUpdate();
 
+        //if(Keyboard.current.jKey.wasPressedThisFrame == true)
+        //{
+        //    Action action;
+        //    action = () =>
+        //    {
+        //        Debug.Log("Call Action");
+        //    };
+        //    SendMessageEx(MessageTitles.uimanager_fadeinout, GetSavedNumber("UIManager"), action);
+        //}
+
         camForward = mainCameraTrasform.forward;
         camRight = mainCameraTrasform.right;
         camForward.y = 0;
@@ -364,174 +382,174 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ProcessFixedUpdate();
     }
 
-    private void InputUpdate()
-    {
-        camForward = mainCameraTrasform.forward;
-        camRight = mainCameraTrasform.right;
-        camForward.y = 0;
-        camRight.y = 0;
+    //private void InputUpdate()
+    //{
+    //    camForward = mainCameraTrasform.forward;
+    //    camRight = mainCameraTrasform.right;
+    //    camForward.y = 0;
+    //    camRight.y = 0;
 
-        inputVertical = InputManager.Instance.GetMoveAxisVertical();
-        inputHorizontal = InputManager.Instance.GetMoveAxisHorizontal();
+    //    inputVertical = InputManager.Instance.GetMoveAxisVertical();
+    //    inputHorizontal = InputManager.Instance.GetMoveAxisHorizontal();
 
-        UpdateInputValue(inputVertical, inputHorizontal);
+    //    UpdateInputValue(inputVertical, inputHorizontal);
 
-        //if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
-        //{
-        //    isRun = true;
-        //}
-        //else
-        //{
-        //    isRun = false;
-        //}
-        InputUseHpPack();
-        InputRun();
+    //    //if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
+    //    //{
+    //    //    isRun = true;
+    //    //}
+    //    //else
+    //    //{
+    //    //    isRun = false;
+    //    //}
+    //    InputUseHpPack();
+    //    InputRun();
 
-        //if (Input.GetKeyDown(KeyCode.U))
-        //    drone.Visible = true;
+    //    //if (Input.GetKeyDown(KeyCode.U))
+    //    //    drone.Visible = true;
 
-        if(InputManager.Instance.GetAdditionalKey(AdditionalType.First) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
-        {
-            ChangeState(PlayerState.Gesture);
-            GameManager.Instance.soundManager.Play(1026,Vector3.up,transform);
-            return;
-        }
-        if (InputManager.Instance.GetAdditionalKey(AdditionalType.Second) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
-        {
-            ChangeState(PlayerState.Gesture2);
-            return;
-        }
+    //    if (InputManager.Instance.GetAdditionalKey(AdditionalType.First) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
+    //    {
+    //        ChangeState(PlayerState.Gesture);
+    //        GameManager.Instance.soundManager.Play(1026, Vector3.up, transform);
+    //        return;
+    //    }
+    //    if (InputManager.Instance.GetAdditionalKey(AdditionalType.Second) && currentSpeed == 0.0f && state == PlayerState.Default && movement.isGrounded == true)
+    //    {
+    //        ChangeState(PlayerState.Gesture2);
+    //        return;
+    //    }
 
-        switch (state)
-        {
-            case PlayerState.Default:
-            {
-                if (InputManager.Instance.GetInput(KeybindingActions.Jump) && pressJump == false)
-                {
-                    pressJump = true;
-                    animator.SetTrigger("Jump");
-                    return;
-                }
+    //    switch (state)
+    //    {
+    //        case PlayerState.Default:
+    //            {
+    //                if (InputManager.Instance.GetInput(KeybindingActions.Jump) && pressJump == false)
+    //                {
+    //                    pressJump = true;
+    //                    animator.SetTrigger("Jump");
+    //                    return;
+    //                }
 
-                if (InputTryGrab())
-                    return;
+    //                if (InputTryGrab())
+    //                    return;
 
-                if (InputAiming())
-                    return;
-            }
-                break;
-            case PlayerState.Jump:
-            {
-                if (InputAiming())
-                    return;
+    //                if (InputAiming())
+    //                    return;
+    //            }
+    //            break;
+    //        case PlayerState.Jump:
+    //            {
+    //                if (InputAiming())
+    //                    return;
 
-                if (InputTryGrab())
-                    return;
-            }
-                break;
-            case PlayerState.Grab:
-            {
-                if(InputManager.Instance.GetInput(KeybindingActions.Jump))
-                {
-                    animator.SetTrigger("ClimbingCancel");
-                        handIK.DisableHandIK();
-                    return;
-                }
+    //                if (InputTryGrab())
+    //                    return;
+    //            }
+    //            break;
+    //        case PlayerState.Grab:
+    //            {
+    //                if (InputManager.Instance.GetInput(KeybindingActions.Jump))
+    //                {
+    //                    animator.SetTrigger("ClimbingCancel");
+    //                    handIK.DisableHandIK();
+    //                    return;
+    //                }
 
-                if (InputClimbingJump())
-                    return;
+    //                if (InputClimbingJump())
+    //                    return;
 
-                if (InputReleaseGrab())
-                    return;
+    //                if (InputReleaseGrab())
+    //                    return;
 
-                if (isCanClimbingCancel == true)
-                {
-                    if (currentVerticalValue != 0.0f || currentHorizontalValue != 0.0f)
-                    {
-                        animator.SetTrigger("ClimbingCancel");
-                        isCanClimbingCancel = false;
-                    }
-                }
-            }
-                break;
-            case PlayerState.ReadyGrab:
-            {
-                if (InputReleaseGrab())
-                    return;
+    //                if (isCanClimbingCancel == true)
+    //                {
+    //                    if (currentVerticalValue != 0.0f || currentHorizontalValue != 0.0f)
+    //                    {
+    //                        animator.SetTrigger("ClimbingCancel");
+    //                        isCanClimbingCancel = false;
+    //                    }
+    //                }
+    //            }
+    //            break;
+    //        case PlayerState.ReadyGrab:
+    //            {
+    //                if (InputReleaseGrab())
+    //                    return;
 
-                if (isCanReadyClimbingCancel == true && (inputVertical != 0 || inputHorizontal != 0))
-                {
-                    animator.SetTrigger("ReadyClimbCancel");
-                    ChangeState(PlayerState.Grab);
-                }
-            }
-                break;
-            case PlayerState.HangEdge:
-            case PlayerState.HangLedge:
-            {
-                if (InputReleaseGrab())
-                    return;
-                if (InputLedgeUp())
-                    return;
-            }
-                break;
-            case PlayerState.HangRagdoll:
-            case PlayerState.HangShake:
-            {
-                if (InputReleaseGrab())
-                    return;
-            }
-                break;
-            case PlayerState.RunToStop:
-            {
-                if (InputTryGrab())
-                    return;
-            }
-                break;
-            case PlayerState.Aiming:
-            {
-                // if(loading == false && impactLoading == false && loadCount.Value < 3 && Input.GetKeyDown(KeyCode.LeftControl))
-                // {
-                //     loading = true;
-                //     loadTime = 0f;
-                //      empGun.GunLoad();
-                // }
-                _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
-                if (limit)
-                {
-                    if(_charge == null)
-                        _charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
-                    
-                    chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
-                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
-                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
-                    
-                    GameManager.Instance.soundManager.SetParam(1013,10131,(chargeTime.Value) * 100f);
+    //                if (isCanReadyClimbingCancel == true && (inputVertical != 0 || inputHorizontal != 0))
+    //                {
+    //                    animator.SetTrigger("ReadyClimbCancel");
+    //                    ChangeState(PlayerState.Grab);
+    //                }
+    //            }
+    //            break;
+    //        case PlayerState.HangEdge:
+    //        case PlayerState.HangLedge:
+    //            {
+    //                if (InputReleaseGrab())
+    //                    return;
+    //                if (InputLedgeUp())
+    //                    return;
+    //            }
+    //            break;
+    //        case PlayerState.HangRagdoll:
+    //        case PlayerState.HangShake:
+    //            {
+    //                if (InputReleaseGrab())
+    //                    return;
+    //            }
+    //            break;
+    //        case PlayerState.RunToStop:
+    //            {
+    //                if (InputTryGrab())
+    //                    return;
+    //            }
+    //            break;
+    //        case PlayerState.Aiming:
+    //            {
+    //                // if(loading == false && impactLoading == false && loadCount.Value < 3 && Input.GetKeyDown(KeyCode.LeftControl))
+    //                // {
+    //                //     loading = true;
+    //                //     loadTime = 0f;
+    //                //      empGun.GunLoad();
+    //                // }
+    //                _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
+    //                if (limit)
+    //                {
+    //                    if (_charge == null)
+    //                        _charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
 
-                    gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
+    //                    chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
+    //                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
+    //                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
 
-                    if(_transformCount < (int)chargeTime.Value)
-                    {
-                        GameManager.Instance.soundManager.Play(1019 + _transformCount, Vector3.up, transform);
-                        _transformCount = (int)chargeTime.Value;
+    //                    GameManager.Instance.soundManager.SetParam(1013, 10131, (chargeTime.Value) * 100f);
 
-                    }
-                }
+    //                    gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
 
-                InputChargeShot();
+    //                    if (_transformCount < (int)chargeTime.Value)
+    //                    {
+    //                        GameManager.Instance.soundManager.Play(1019 + _transformCount, Vector3.up, transform);
+    //                        _transformCount = (int)chargeTime.Value;
 
-                if (InputReleaseAiming())
-                    return;
-            }
-                break;
-            case PlayerState.ClimbingJump:
-            {
-                if (InputTryGrab())
-                    return;
-            }
-                break;
-        }
-    }
+    //                    }
+    //                }
+
+    //                InputChargeShot();
+
+    //                if (InputReleaseAiming())
+    //                    return;
+    //            }
+    //            break;
+    //        case PlayerState.ClimbingJump:
+    //            {
+    //                if (InputTryGrab())
+    //                    return;
+    //            }
+    //            break;
+    //    }
+    //}
 
     private void ProcessUpdate(float deltaTime)
     {
@@ -1358,8 +1376,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         SendMessageEx(MessageTitles.cameramanager_activeplayerfollocamera, GetSavedNumber("CameraManager"), null);
                     //GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
                 drone.OrderAimHelp(false);
-                releaseAimEvent?.Invoke();
-            }
+                    //releaseAimEvent?.Invoke();
+                    SendMessageEx(MessageTitles.uimanager_activegunui, GetSavedNumber("UIManager"), false);
+                }
                 break;
             case PlayerState.Jump:
             {
@@ -1537,6 +1556,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 footIK.DisableFeetIk();
                 drone.OrderAimHelp(true);
                 activeAimEvent?.Invoke();
+                SendMessageEx(MessageTitles.uimanager_activegunui, GetSavedNumber("UIManager"), true);
                 _transformCount = 0;
             }
                 break;
@@ -1643,11 +1663,18 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                     ragdoll.ResetRagdoll();
                 }
-                GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() =>
-                { 
-                    animator.SetBool("Respawn",true);
-                    drone.Respawn(transform);
-                });
+                //GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() =>
+                //{ 
+                //    animator.SetBool("Respawn",true);
+                //    drone.Respawn(transform);
+                //});
+                    Action action;
+                    action = () => 
+                    {
+                        animator.SetBool("Respawn", true);
+                        drone.Respawn(transform);
+                    };
+                    SendMessageEx(MessageTitles.uimanager_fadeinout, GetSavedNumber("UIManager"), action);
             }
                 break;
             case PlayerState.HighLanding:
@@ -1656,7 +1683,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetFloat("Speed", 0.0f);
                     animator.SetBool("HighLanding",true);
                     GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
-                    GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+                    //GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+                    SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
                 }
                 break;
             case PlayerState.Gesture:

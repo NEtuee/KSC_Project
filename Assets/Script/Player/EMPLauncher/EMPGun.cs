@@ -5,7 +5,7 @@ using UnityEngine.Animations.Rigging;
 using DG.Tweening;
 using UniRx;
 
-public class EMPGun : TestObjectBase
+public class EMPGun : UnTransfromObjectBase
 {
     [SerializeField] private GameObject _gunObject;
     [SerializeField] private Animator gunAnim;
@@ -22,8 +22,9 @@ public class EMPGun : TestObjectBase
     private Transform mainCamera;
     private RaycastHit hit;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         mainCamera = Camera.main.transform;
         _gunObject.SetActive(false);
         playerAnim = GetComponent<Animator>();
@@ -69,8 +70,9 @@ public class EMPGun : TestObjectBase
         {
             playerAnim.SetTrigger("Shot");
         }
-        
-        GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+
+        //GameManager.Instance.cameraManager.GenerateRecoilImpulse();
+        SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
         //GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
         //GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
 

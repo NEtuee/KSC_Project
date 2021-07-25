@@ -3,15 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TutorialTrigger : TestObjectBase
+public class TutorialTrigger : UnTransfromObjectBase
 {
     public bool isOver = false;
     public bool IsOver { get => IsOver; set => isOver = value; }
     public TutorialType tutorialType;
     private OptionMenuCtrl _uiManager;
     
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         if (TryGetComponent<Collider>(out Collider collider) == false)
         {
             Debug.LogWarning("Not Exist Collider");

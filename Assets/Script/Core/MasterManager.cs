@@ -29,8 +29,12 @@ public class MasterManager : MessageHub<ManagerBase>
         foreach(var m in managers)
         {
             m.Assign();
-            m.Initialize();
             RegisterReceiver(m);
+        }
+
+        foreach(var m in managers)
+        {
+            m.Initialize();
         }
     }
 

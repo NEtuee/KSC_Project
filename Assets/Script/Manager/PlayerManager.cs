@@ -12,11 +12,20 @@ public class PlayerManager : ManagerBase
     {
         base.Assign();
         SaveMyNumber("PlayerManager");
+
+        AddAction(MessageTitles.playermanager_sendplayerctrl, (msg) => 
+        {
+            var target = (MessageReceiver)msg.sender;
+            SendMessageQuick(target, MessageTitles.set_setplayer, _player);
+        });
     }
 
     public override void Initialize()
     {
         base.Initialize();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         _player.hp.Subscribe(value =>
         {
@@ -106,6 +115,19 @@ public class PlayerManager : ManagerBase
                 //crossHair.First();
                 SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 1);
             }
+        });
+
+        _player.loadCount.Subscribe(value =>
+        {
+            SendMessageEx(MessageTitles.uimanager_setgunloadvalue, GetSavedNumber("UIManager"), value);
+        });
+        _player.chargeTime.Subscribe(value => 
+        {
+            SendMessageEx(MessageTitles.uimanager_setgunchargetimevalue, GetSavedNumber("UIManager"), value);
+        });
+        _player.energy.Subscribe(value =>
+        {
+            SendMessageEx(MessageTitles.uimanager_setgunenergyvalue, GetSavedNumber("UIManager"), value);
         });
     }
 }
