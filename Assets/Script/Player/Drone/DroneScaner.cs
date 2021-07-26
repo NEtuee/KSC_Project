@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-public class DroneScaner : MonoBehaviour
+public class DroneScaner : UnTransfromObjectBase
 {
     public Transform forward;
     public Transform scanStart;
@@ -22,10 +22,17 @@ public class DroneScaner : MonoBehaviour
     [SerializeField] private List<Scanable> scanableObjects = new List<Scanable>();
 
     private RaycastHit hit;
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         FindScanableObjects();
-        SceneManager.sceneLoaded += (s,w)=>{FindScanableObjects();};
+        SceneManager.sceneLoaded += (s, w) => { FindScanableObjects(); };
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("PlayerManager"));
     }
 
     public void Scanning()
@@ -40,7 +47,10 @@ public class DroneScaner : MonoBehaviour
         scanForward.Normalize();
         scanMat.SetVector("_ForwardDirection", scanForward);
             
-        GameManager.Instance.soundManager.Play(1301, Vector3.zero, transform);
+        //GameManager.Instance.soundManager.Play(1301, Vector3.zero, transform);
+        AttachSoundPlayData soundData;
+        soundData.id = 1301; soundData.localPosition = Vector3.zero; soundData.parent = transform;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
 
     void Update()

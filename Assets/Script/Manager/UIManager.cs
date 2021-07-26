@@ -153,7 +153,7 @@ public class UIManager : ManagerBase
         AddAction(MessageTitles.uimanager_setvaluevolumeslider, (msg) =>
         {
             VolumeData data = (VolumeData)msg.data;
-            SetValueVolumeSlider(data.master, data.vfx,data.ambient, data.bgm);
+            SetValueVolumeSlider(data.master, data.sfx,data.ambient, data.bgm);
         });
 
         AddAction(MessageTitles.uimanager_setresolutiondropdown, (msg) => 
@@ -286,7 +286,17 @@ public class UIManager : ManagerBase
                         data.pitch = pitchRotateSpeedSlider.value;
                         SendMessageEx(MessageTitles.setting_savecamerarotatespeed, GetSavedNumber("SettingManager"), data);
                     }
-                    break;         
+                    break;
+                case PauseMenuState.Sound:
+                    {
+                        VolumeData data;
+                        data.master = masterVolumeSlider.value;
+                        data.sfx = sfxVolumeSlider.value;
+                        data.ambient = ambientVolumeSlider.value;
+                        data.bgm = bgmVolumeSlider.value;
+                        SendMessageEx(MessageTitles.setting_saveVolume, GetSavedNumber("SettingManager"), data);
+                    }
+                    break;
             }
             _currentPage.Active(false);
         }

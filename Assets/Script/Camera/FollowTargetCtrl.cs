@@ -130,8 +130,6 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         if (!visible)
             return;
 
-        Debug.Log("dd");
-
         transform.position = target.position + Vector3.up;
 
         //float mouseX = InputManager.Instance.GetCameraAxisX();

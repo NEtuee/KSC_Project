@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimCtrl_Dummy : MonoBehaviour
+public class AnimCtrl_Dummy : UnTransfromObjectBase
 {
     private PlayerCtrl_Ver2 owner;
     private Animator animator;
@@ -13,8 +13,9 @@ public class AnimCtrl_Dummy : MonoBehaviour
 
     public EMPGun gun;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         owner = GetComponent<PlayerCtrl_Ver2>();
         animator = GetComponent<Animator>();
         handIk = GetComponent<HandIKCtrl>();
@@ -24,6 +25,17 @@ public class AnimCtrl_Dummy : MonoBehaviour
             leftFootTransform = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
             rightFootTransform = animator.GetBoneTransform(HumanBodyBones.RightFoot);
         }
+    }
+
+    public override void Assign()
+    {
+        base.Assign();
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("PlayerManager"));
     }
 
     private void EndTurnBack()
@@ -39,7 +51,10 @@ public class AnimCtrl_Dummy : MonoBehaviour
     private void JumpTiming()
     {
         owner.Jump();
-        GameManager.Instance.soundManager.Play(1003, Vector3.zero, transform);
+        //GameManager.Instance.soundManager.Play(1003, Vector3.zero, transform);
+        AttachSoundPlayData soundData;
+        soundData.id = 1003; soundData.localPosition = Vector3.zero; soundData.parent = transform;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
 
     private void EndClimbMove()
@@ -74,7 +89,10 @@ public class AnimCtrl_Dummy : MonoBehaviour
 
     private void GetupSound()
     {
-        GameManager.Instance.soundManager.Play(1017, Vector3.up, transform);
+        //GameManager.Instance.soundManager.Play(1017, Vector3.up, transform);
+        AttachSoundPlayData soundData;
+        soundData.id = 1017; soundData.localPosition = Vector3.up; soundData.parent = transform;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
 
     private void JogFootStep(int left)
@@ -85,7 +103,10 @@ public class AnimCtrl_Dummy : MonoBehaviour
         else
             footStepPosition = rightFootTransform.position;
 
-        GameManager.Instance.soundManager.Play(1000, footStepPosition);
+        SoundPlayData soundData;
+        soundData.id = 1000; soundData.position = footStepPosition;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+        //GameManager.Instance.soundManager.Play(1000, footStepPosition);
     }
 
     private void RunFootStep(int left)
@@ -96,7 +117,10 @@ public class AnimCtrl_Dummy : MonoBehaviour
         else
             footStepPosition = rightFootTransform.position;
 
-        GameManager.Instance.soundManager.Play(1001, footStepPosition);
+        //GameManager.Instance.soundManager.Play(1001, footStepPosition);
+        SoundPlayData soundData;
+        soundData.id = 1001; soundData.position = footStepPosition;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
 
     private void StartClimbingJump()
@@ -130,6 +154,9 @@ public class AnimCtrl_Dummy : MonoBehaviour
 
     private void LandingSound()
     {
-        GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
+        //GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
+        AttachSoundPlayData soundData;
+        soundData.id = 1004; soundData.localPosition = Vector3.up; soundData.parent = transform;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
 }

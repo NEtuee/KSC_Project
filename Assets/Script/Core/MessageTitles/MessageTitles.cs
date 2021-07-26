@@ -229,6 +229,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort setting_savecamerarotatespeed = 0x0901;
 
+    /// <summary>
+    /// data = VolumeData
+    /// </summary>
+    public const ushort setting_saveVolume = 0x0902;
+
     #endregion
 
     #region Player

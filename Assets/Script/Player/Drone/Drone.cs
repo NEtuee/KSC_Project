@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Drone : MonoBehaviour
+public class Drone : UnTransfromObjectBase
 {
     public enum DroneState { Default, Approach, Collect, Return , AimHelp ,Help,Scan}
     public enum DroneFollowState{Left,Right,Forward,Backward}
@@ -77,8 +77,9 @@ public class Drone : MonoBehaviour
     public WhenCompleteRespawn whenCompleteRespawn;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         mainCam = Camera.main.transform;
         playerHead = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head);
         player = (PlayerCtrl_Ver2)GameManager.Instance.player;
@@ -86,7 +87,10 @@ public class Drone : MonoBehaviour
         droneHelperRoot = GetComponent<DroneHelperRoot>();
         _droneScaner = GetComponent<DroneScaner>();
         
-        GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);
+        //GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);
+        AttachSoundPlayData soundData;
+        soundData.id = 1300; soundData.localPosition = Vector3.zero; soundData.parent = transform;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
 
         if (droneVisual == null)
         {
@@ -109,6 +113,12 @@ public class Drone : MonoBehaviour
         camRight.y = 0;
         _targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
         _finalTargetPosition = _targetPosition;
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("PlayerManager"));
     }
 
     // Update is called once per frame
@@ -452,7 +462,10 @@ public class Drone : MonoBehaviour
         if(state != DroneState.AimHelp)
         {
             state = DroneState.Help;
-            GameManager.Instance.soundManager.Play(1302, Vector3.zero, transform);
+            //GameManager.Instance.soundManager.Play(1302, Vector3.zero, transform);
+            AttachSoundPlayData soundData;
+            soundData.id = 1302; soundData.localPosition = Vector3.zero; soundData.parent = transform;
+            SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
             whenHelp?.Invoke();
         }
     }

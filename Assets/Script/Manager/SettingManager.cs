@@ -23,6 +23,12 @@ public class SettingManager : ManagerBase
             CameraRotateSpeedData data = (CameraRotateSpeedData)msg.data;
             SaveCameraRotateSpeed(data.pitch, data.yaw);
         });
+
+        AddAction(MessageTitles.setting_saveVolume, (msg) =>
+        {
+            VolumeData data = (VolumeData)msg.data;
+            SaveSoundVolume(data.master, data.sfx, data.ambient, data.bgm);
+        });
     }
 
     public override void Initialize()
@@ -74,6 +80,27 @@ public class SettingManager : ManagerBase
         }
         SendMessageEx(MessageTitles.uimanager_setvaluescreenmodedropdown, GetSavedNumber("UIManager"), Screen.fullScreen ? 0 : 1);
         SendMessageEx(MessageTitles.uimanager_setvaluevsyncdropdown, GetSavedNumber("UIManager"), QualitySettings.vSyncCount == 0 ? 0 : 1);
+
+        SoundSettingData soundSettingData = SaveDataHelper.LoadSetting<SoundSettingData>();
+        SetParameterData setParameterData;
+        setParameterData.paramId = 1; setParameterData.value = soundSettingData.masterVolume; setParameterData.soundId = 0;
+        SendMessageEx(MessageTitles.fmod_setGlobalParam,GetSavedNumber("FMODManager"), setParameterData);
+        SetParameterData setParameterData2;
+        setParameterData2.paramId = 2; setParameterData2.value = soundSettingData.sfxVolume; setParameterData2.soundId = 0;
+        SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData2);
+        SetParameterData setParameterData3;
+        setParameterData3.paramId = 3; setParameterData3.value = soundSettingData.ambientVolume; setParameterData3.soundId = 0;
+        SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData3);
+        SetParameterData setParameterData4;
+        setParameterData4.paramId = 4; setParameterData4.value = soundSettingData.bgmVolume; setParameterData4.soundId = 0;
+        SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData4);
+
+        VolumeData volumeData;
+        volumeData.master = soundSettingData.masterVolume / 100f;
+        volumeData.sfx = soundSettingData.sfxVolume / 100f;
+        volumeData.ambient = soundSettingData.ambientVolume / 100f;
+        volumeData.bgm = soundSettingData.bgmVolume / 100f;
+        SendMessageEx(MessageTitles.uimanager_setvaluevolumeslider, GetSavedNumber("UIManager"), volumeData);
     }
 
     public void SaveCameraRotateSpeed(float pitch, float yaw)
@@ -150,7 +177,7 @@ public struct CameraRotateSpeedData
 public struct VolumeData
 {
     public float master;
-    public float vfx;
+    public float sfx;
     public float ambient;
     public float bgm;
 }

@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
         //StartCoroutine(LateStart());
         //QualitySettings.vSyncCount = 0;
 
-        SaveDataHelper.streamingAssetsPath = Application.streamingAssetsPath;
+        //SaveDataHelper.streamingAssetsPath = Application.streamingAssetsPath;
 
         //if (followTarget != null)
         //{
@@ -101,19 +101,19 @@ public class GameManager : MonoBehaviour
         //    followTarget.PitchRotateSpeed = controlSettingData.pitchRotateSpeed;
         //}
 
-        SoundSettingData soundSettingData = SaveDataHelper.LoadSetting<SoundSettingData>();
-        if(soundManager != null)
-        {
-            soundManager.Play(4000, Vector3.zero);
-            soundManager.Play(4001, Vector3.zero);
-            soundManager.Play(4002, Vector3.zero);
-            soundManager.Play(4003, Vector3.zero);
+        //SoundSettingData soundSettingData = SaveDataHelper.LoadSetting<SoundSettingData>();
+        //if(soundManager != null)
+        //{
+        //    soundManager.Play(4000, Vector3.zero);
+        //    soundManager.Play(4001, Vector3.zero);
+        //    soundManager.Play(4002, Vector3.zero);
+        //    soundManager.Play(4003, Vector3.zero);
 
-            soundManager.SetGlobalParam(1, soundSettingData.masterVolume);
-            soundManager.SetGlobalParam(2, soundSettingData.sfxVolume);
-            soundManager.SetGlobalParam(3, soundSettingData.ambientVolume);
-            soundManager.SetGlobalParam(4, soundSettingData.bgmVolume);
-        }
+        //    soundManager.SetGlobalParam(1, soundSettingData.masterVolume);
+        //    soundManager.SetGlobalParam(2, soundSettingData.sfxVolume);
+        //    soundManager.SetGlobalParam(3, soundSettingData.ambientVolume);
+        //    soundManager.SetGlobalParam(4, soundSettingData.bgmVolume);
+        //}
 
         //DisplaySettingData displaySettingData = SaveDataHelper.LoadSetting<DisplaySettingData>();
         //QualitySettings.vSyncCount = displaySettingData.activeVsync == true ? 1 : 0;
