@@ -185,7 +185,7 @@ public class MasterManager : MessageHub<ManagerBase>
 
     private void RegisterReceiver(Message msg)
     {
-        if(msg.target == uniqueNumber)
+        if(msg.target == uniqueNumber || msg.target == 0)
         {
             var manager = (ManagerBase)msg.sender;
             manager.Assign();
@@ -199,7 +199,7 @@ public class MasterManager : MessageHub<ManagerBase>
 
     private void DeleteReceiver(Message msg)
     {
-        if(msg.target == uniqueNumber)
+        if(msg.target == uniqueNumber || msg.target == 0)
         {
             var manager = (int)msg.data;
             DeleteReceiver(manager);

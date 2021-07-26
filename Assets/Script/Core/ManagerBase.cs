@@ -81,6 +81,42 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
 
     public virtual void Release()
     {
+        WithdrawRequest();
+
+#if UNITY_EDITOR
+        Debug_ClearQueue();
+#endif
+    }
+
+    public void RegisterRequest()
+    {
+        var msg = MessagePack(MessageTitles.system_registerRequest,0,null);
+        MasterManager.instance.ReceiveMessage(msg);
+
+#if UNITY_EDITOR
+        Debug_AddSendedQueue(msg);
+#endif
+    }
+
+    public void WithdrawRequest()
+    {
+        var msg = MessagePack(MessageTitles.system_withdrawRequest,0,uniqueNumber);
+        MasterManager.instance.ReceiveMessage(msg);
+
+#if UNITY_EDITOR
+        Debug_AddSendedQueue(msg);
+#endif
+    }
+
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        Release();
+    }
+
+    protected virtual void OnDestroy()
+    {
         Dispose();
     }
 }

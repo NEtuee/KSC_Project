@@ -147,6 +147,7 @@ public class SceneManagerEx : ManagerBase
         }
 
 
+        Debug.Log("Load");
 
         SendBroadcastMessage(MessageTitles.scene_afterSceneChange,_currentScene,false);
 

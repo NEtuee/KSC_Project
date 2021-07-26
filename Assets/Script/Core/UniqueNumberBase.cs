@@ -30,19 +30,28 @@ public class UniqueNumberBase : MonoBehaviour
         return _numberStorage[key];
     }
 
-    protected void SaveMyNumber(string key)
+    protected void SaveMyNumber(string key, bool overWrite = false)
     {
         if(_numberStorage == null)
             _numberStorage = new Dictionary<string, int>();
 
-        if(_numberStorage.ContainsKey(key))
-        {
-            Debug.Log("key already exsist");
-            return;
-        }
-
         SetUniqueNumber();
 
-        _numberStorage.Add(key,_uniqueNumber);
+        if(_numberStorage.ContainsKey(key))
+        {
+            if(overWrite)
+            {
+                _numberStorage[key] = uniqueNumber;
+            }
+            else
+            {
+                Debug.Log("key already exsist");
+            }
+
+        }
+        else
+        {
+            _numberStorage.Add(key,_uniqueNumber);
+        }
     }
 }
