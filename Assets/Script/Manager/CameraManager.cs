@@ -121,6 +121,11 @@ public class CameraManager : ManagerBase
             _player = (PlayerCtrl_Ver2)msg.data;
             _playerTransfrom = _player.transform;
         });
+
+        AddAction(MessageTitles.cameramanager_getCameraManager, (msg) =>
+         {
+             SendMessageQuick((MessageReceiver)msg.sender, MessageTitles.set_setCameraManager, this);
+         });
     }
 
     public override void Initialize()

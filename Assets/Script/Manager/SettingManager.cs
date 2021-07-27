@@ -121,6 +121,20 @@ public class SettingManager : ManagerBase
         soundData.ambientVolume = ambient * 100f;
         soundData.bgmVolume = bgm * 100f;
         SaveDataHelper.SaveSetting(soundData);
+
+        SetParameterData setParameterData;
+        setParameterData.paramId = 1; setParameterData.value = soundData.masterVolume; setParameterData.soundId = 0;
+        SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData);
+        SetParameterData setParameterData2;
+        setParameterData2.paramId = 2; setParameterData2.value = soundData.sfxVolume; setParameterData2.soundId = 0;
+        SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData2);
+        SetParameterData setParameterData3;
+        setParameterData3.paramId = 3; setParameterData3.value = soundData.ambientVolume; setParameterData3.soundId = 0;
+        SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData3);
+        SetParameterData setParameterData4;
+        setParameterData4.paramId = 4; setParameterData4.value = soundData.bgmVolume; setParameterData4.soundId = 0;
+        SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData4);
+
     }
 
     public void SetResoultion(int value)

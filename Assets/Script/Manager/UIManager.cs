@@ -205,6 +205,11 @@ public class UIManager : ManagerBase
             bool active = (bool)msg.data;
             gunUiCanvas.enabled = active;
         });
+
+        AddAction(MessageTitles.uimanager_getUimanager, (msg) =>
+         {
+             SendMessageQuick((MessageReceiver)msg.sender, MessageTitles.set_setUimanager, this);
+         });
     }
 
     public override void Initialize()
@@ -476,7 +481,7 @@ public class UIManager : ManagerBase
         SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), paramData);
     }
 
-    public void PlayExitSound()
+    public void PlayClickSound()
     {
         SoundPlayData soundPlay;
         soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false;
