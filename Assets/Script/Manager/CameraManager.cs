@@ -69,39 +69,6 @@ public class CameraManager : ManagerBase
     private PlayerCtrl_Ver2 _player;
     private Transform _playerTransfrom;
 
-    private void Start()
-    {
-        brainCameraTransfrom = brain.transform;
-
-        GameManager.Instance.cameraManager = this;
-
-        collisionEx = new DirectionCollisionEx(playerFollowCam.transform,collisionRadius,collisionLayer);
-
-        otherCameras.Add(playerFollowCam);
-        otherCameras.Add(playerAimCam);
-
-        InitializeCameraAtGameStart();
-
-        if(_player.updateMethod == UpdateMethod.FixedUpdate)
-        {
-            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
-            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
-        }
-        else
-        {
-            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
-            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
-        }
-
-        for(int i = 0; i<distanceBlendProfiles.Length;i++)
-        {
-            distanceDic.Add(distanceBlendProfiles[i].name, distanceBlendProfiles[i]);
-        }
-
-        SetFollowCameraDistance("Default");
-        aimDistanceOrigin = playerAimCamOrigin.m_Lens.FieldOfView;
-    }
-
     public override void Assign()
     {
         base.Assign();
@@ -161,6 +128,36 @@ public class CameraManager : ManagerBase
         base.Initialize();
 
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
+
+        brainCameraTransfrom = brain.transform;
+
+        GameManager.Instance.cameraManager = this;
+
+        collisionEx = new DirectionCollisionEx(playerFollowCam.transform, collisionRadius, collisionLayer);
+
+        otherCameras.Add(playerFollowCam);
+        otherCameras.Add(playerAimCam);
+
+        InitializeCameraAtGameStart();
+
+        if (_player.updateMethod == UpdateMethod.FixedUpdate)
+        {
+            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
+            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+        }
+        else
+        {
+            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
+            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
+        }
+
+        for (int i = 0; i < distanceBlendProfiles.Length; i++)
+        {
+            distanceDic.Add(distanceBlendProfiles[i].name, distanceBlendProfiles[i]);
+        }
+
+        SetFollowCameraDistance("Default");
+        aimDistanceOrigin = playerAimCamOrigin.m_Lens.FieldOfView;
     }
 
     private void Update()
