@@ -89,7 +89,7 @@ public class Drone : UnTransfromObjectBase
         
         //GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);
         AttachSoundPlayData soundData;
-        soundData.id = 1300; soundData.localPosition = Vector3.zero; soundData.parent = transform;
+        soundData.id = 1300; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
 
         if (droneVisual == null)
@@ -464,7 +464,7 @@ public class Drone : UnTransfromObjectBase
             state = DroneState.Help;
             //GameManager.Instance.soundManager.Play(1302, Vector3.zero, transform);
             AttachSoundPlayData soundData;
-            soundData.id = 1302; soundData.localPosition = Vector3.zero; soundData.parent = transform;
+            soundData.id = 1302; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
             whenHelp?.Invoke();
         }

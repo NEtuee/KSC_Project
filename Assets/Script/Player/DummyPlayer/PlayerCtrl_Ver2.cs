@@ -226,7 +226,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private RaycastHit wallHit;
 
-    private FMODUnity.StudioEventEmitter _charge;
+    [SerializeField]private FMODUnity.StudioEventEmitter _charge;
 
     private int _transformCount = 0;
     private bool _runLock = false;
@@ -295,6 +295,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
          {
              bool visible = (bool)msg.data;
              drone.Visible = visible;
+         });
+
+        AddAction(MessageTitles.fmod_soundEmitter, (msg) =>
+         {
+             _charge = (FMODUnity.StudioEventEmitter)msg.data;
          });
     }
 
@@ -878,26 +883,33 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 _chargeDelayTimer.IncreaseTimerSelf("ChargeDelay", out bool limit, Time.deltaTime);
                 if (limit)
                 {
-                    if(_charge == null)
-                        _charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
-                    
-                    chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
+                        //if(_charge == null)
+                        //_charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
+
+                        if (_charge == null)
+                        {
+                            AttachSoundPlayData chargeSoundPlayData;
+                            chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = transform; chargeSoundPlayData.returnValue = true;
+                            SendMessageQuick(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), chargeSoundPlayData);
+                        }
+
+                        chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
                     chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
-                    
-                    //GameManager.Instance.soundManager.SetParam(1013,10131,(chargeTime.Value) * 100f);
-                    //SetParameterData setParameterData;
-                    //setParameterData.soundId = 1013; setParameterData.paramId = 10131; setParameterData.value = (chargeTime.Value) * 100f;
-                    //SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), setParameterData);
 
-                    gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
+                        //GameManager.Instance.soundManager.SetParam(1013,10131,(chargeTime.Value) * 100f);
+                        SetParameterData setParameterData;
+                        setParameterData.soundId = 1013; setParameterData.paramId = 10131; setParameterData.value = (chargeTime.Value) * 100f;
+                        SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), setParameterData);
+
+                        gunAnim.SetFloat("Energy", chargeTime.Value * 100.0f);
 
                     if(_transformCount < (int)chargeTime.Value)
                     {
                             //GameManager.Instance.soundManager.Play(1019 + _transformCount, Vector3.up, transform);
                         AttachSoundPlayData soundData;
-                        soundData.id = 1019 + _transformCount; soundData.localPosition = Vector3.up; soundData.parent = transform;
-                        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
+                        soundData.id = 1019 + _transformCount; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+                        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData); 
                         _transformCount = (int)chargeTime.Value;
                     }
                 }
@@ -1356,7 +1368,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         //GameManager.Instance.soundManager.Play(1006, Vector3.up, transform);
         AttachSoundPlayData soundData;
-        soundData.id = 1006; soundData.localPosition = Vector3.up; soundData.parent = transform;
+        soundData.id = 1006; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
 
@@ -1394,7 +1406,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 {
                         //GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
                         AttachSoundPlayData soundData;
-                        soundData.id = 1004; soundData.localPosition = Vector3.up; soundData.parent = transform;
+                        soundData.id = 1004; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
                         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
                 }
             }
@@ -1507,7 +1519,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.applyRootMotion = true;
                     //GameManager.Instance.soundManager.Play(1018, Vector3.up, transform);
                     AttachSoundPlayData soundData;
-                    soundData.id = 1018; soundData.localPosition = Vector3.up; soundData.parent = transform;
+                    soundData.id = 1018; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
                     SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
                 animator.SetTrigger("TurnBack");
             }
@@ -1517,7 +1529,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.applyRootMotion = true;
 
                     AttachSoundPlayData soundData;
-                    soundData.id = 1002; soundData.localPosition = Vector3.up; soundData.parent = transform;
+                    soundData.id = 1002; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
                     SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
                     //GameManager.Instance.soundManager.Play(1002, Vector3.up, transform);
                 if (currentSpeed > walkSpeed)
@@ -1598,7 +1610,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 climbingJumpStartTime = Time.time;
 
                     AttachSoundPlayData soundData;
-                    soundData.id = 1007; soundData.localPosition = Vector3.up; soundData.parent = transform;
+                    soundData.id = 1007; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
                     SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
                     //GameManager.Instance.soundManager.Play(1007, Vector3.up, transform);
 
@@ -1703,7 +1715,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     animator.SetFloat("Speed", 0.0f);
                     animator.SetBool("HighLanding",true);
                     AttachSoundPlayData soundData;
-                    soundData.id = 1004; soundData.localPosition = Vector3.up; soundData.parent = transform;
+                    soundData.id = 1004; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
                     SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
                     //GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
                     //GameManager.Instance.cameraManager.GenerateRecoilImpulse();
@@ -2222,7 +2234,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent, GetSavedNumber("EffectManager"), data);
 
             AttachSoundPlayData soundData;
-            soundData.id = 1025; soundData.localPosition = Vector3.up; soundData.parent = transform;
+            soundData.id = 1025; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
             //GameManager.Instance.soundManager.Play(1025,Vector3.up,transform);
         }
@@ -2370,7 +2382,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 return true;
         }
     }
-
     #endregion
 
     #region 셋터
@@ -2789,6 +2800,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             soundPlayData.id = 1009 + loadCount;
             soundPlayData.localPosition = Vector3.up;
             soundPlayData.parent = transform;
+            soundPlayData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundPlayData);
 
             if (loadCount >= 2)
@@ -2993,10 +3005,16 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 //GameManager.Instance.soundManager.Play(1008, Vector3.up, transform);
                 AttachSoundPlayData soundData;
-                soundData.id = 1008; soundData.localPosition = Vector3.up; soundData.parent = transform;
+                soundData.id = 1008; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
                 SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
 
-                _charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
+
+                
+                AttachSoundPlayData chargeSoundPlayData;
+                chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = transform; chargeSoundPlayData.returnValue = true;
+                SendMessageQuick(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), chargeSoundPlayData);
+         
+                //_charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
                 ChangeState(PlayerState.Aiming);
                 ActiveAim(true);
                 playerPelvisGunObject.SetActive(false);
@@ -3007,7 +3025,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if(state == PlayerState.Aiming)
         {
             AttachSoundPlayData soundData;
-            soundData.id = 1009; soundData.localPosition = Vector3.up; soundData.parent = transform;
+            soundData.id = 1009; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
             //GameManager.Instance.soundManager.Play(1009, Vector3.up, transform);
             ReleaseAiming();

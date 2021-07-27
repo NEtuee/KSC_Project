@@ -121,8 +121,6 @@ public class FMODManager : ManagerBase
                 }
             }
         }
-
-        
     }
 
 #region MessageCallback
@@ -143,7 +141,7 @@ public class FMODManager : ManagerBase
         var data = (AttachSoundPlayData)msg.data;
         var emitter = Play(data.id,data.localPosition,data.parent);
 
-        if(data.returnValue)
+        if (data.returnValue)
         {
             var send = MessagePack(MessageTitles.fmod_soundEmitter,((MessageReceiver)msg.sender).uniqueNumber,emitter);
             SendMessageQuick(send);

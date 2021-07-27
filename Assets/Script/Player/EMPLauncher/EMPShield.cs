@@ -249,19 +249,19 @@ public class EMPShield : Hitable
             //GameManager.Instance.soundManager.Play(1518, new Vector3(0, 1, 0), transform);
             //GameManager.Instance.soundManager.Play(1501,transform.position);
             AttachSoundPlayData soundData;
-            soundData.id = 1515; soundData.localPosition = new Vector3(0,1,0); soundData.parent = transform;
-            SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
+            soundData.id = 1515; soundData.localPosition = new Vector3(0,1,0); soundData.parent = transform; soundData.returnValue = false;
+            SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData); 
             AttachSoundPlayData soundData2;
-            soundData2.id = 1518; soundData2.localPosition = new Vector3(0, 1, 0); soundData2.parent = transform;
+            soundData2.id = 1518; soundData2.localPosition = new Vector3(0, 1, 0); soundData2.parent = transform; soundData2.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData2);
             SoundPlayData soundData3;
-            soundData3.id = 1501; soundData3.position = transform.position;
+            soundData3.id = 1501; soundData3.position = transform.position; soundData3.returnValue = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData3);
         }
         else if(soundType == SoundType.Bomb)
         {
             SoundPlayData soundData;
-            soundData.id = 1700; soundData.position = transform.position;
+            soundData.id = 1700; soundData.position = transform.position; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
             //GameManager.Instance.soundManager.Play(1700,transform.position);
         }
@@ -532,7 +532,7 @@ public class EMPShield : Hitable
             mat.SetColor("_color", thirdColor );
             //GameManager.Instance.soundManager.Play(1516, new Vector3(0, 1, 0), transform);
             AttachSoundPlayData soundData;
-            soundData.id = 1516; soundData.localPosition = new Vector3(0, 1, 0); soundData.parent = transform;
+            soundData.id = 1516; soundData.localPosition = new Vector3(0, 1, 0); soundData.parent = transform; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
         }
         else if(hp <= 60.0f)
@@ -541,7 +541,7 @@ public class EMPShield : Hitable
             mat.SetColor("_color", secondColor);
             //GameManager.Instance.soundManager.Play(1517, new Vector3(0, 1, 0), transform);
             AttachSoundPlayData soundData;
-            soundData.id = 1517; soundData.localPosition = new Vector3(0, 1, 0); soundData.parent = transform;
+            soundData.id = 1517; soundData.localPosition = new Vector3(0, 1, 0); soundData.parent = transform; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
         }
     }

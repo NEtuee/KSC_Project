@@ -49,7 +49,7 @@ public class DroneScaner : UnTransfromObjectBase
             
         //GameManager.Instance.soundManager.Play(1301, Vector3.zero, transform);
         AttachSoundPlayData soundData;
-        soundData.id = 1301; soundData.localPosition = Vector3.zero; soundData.parent = transform;
+        soundData.id = 1301; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
 

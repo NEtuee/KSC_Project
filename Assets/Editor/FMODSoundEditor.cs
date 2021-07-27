@@ -592,13 +592,13 @@ public class FMODSoundEditor : EditorWindow
 
                         if(_parent == null)
                         {
-                            msg.data = new SoundPlayData(item,Vector3.zero);
+                            msg.data = new SoundPlayData(item,Vector3.zero,false);
                             msg.title = MessageTitles.fmod_play;
                             //manager.Play(item,_soundPosition);
                         }
                         else
                         {
-                            msg.data = new AttachSoundPlayData(item,Vector3.zero,_parent);
+                            msg.data = new AttachSoundPlayData(item,Vector3.zero,_parent,false);
                             msg.title = MessageTitles.fmod_play;
                             //manager.Play(item,_soundPosition,_parent);
                         }

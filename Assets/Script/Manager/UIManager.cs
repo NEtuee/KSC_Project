@@ -463,9 +463,35 @@ public class UIManager : ManagerBase
 
     #endregion
 
+    #region UISound
+
+    public void PlayEnterSound()
+    {
+        SoundPlayData soundPlay;
+        soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
+
+        SetParameterData paramData;
+        paramData.soundId = 3000; paramData.paramId = 30001; paramData.value = 0;
+        SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), paramData);
+    }
+
+    public void PlayExitSound()
+    {
+        SoundPlayData soundPlay;
+        soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
+
+        SetParameterData paramData;
+        paramData.soundId = 3000; paramData.paramId = 30001; paramData.value = 1;
+        SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), paramData);
+    }
+
+    #endregion
+
     #region SettingDropDown
 
-    
+
 
     #endregion
 

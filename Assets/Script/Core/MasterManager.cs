@@ -137,8 +137,8 @@ public class MasterManager : MessageHub<ManagerBase>
         {
             bool find = false;
             foreach(var other in _receivers.Values)
-            {
-                if(other.IsInReceivers(msg.target) && other.CanHandleMessage(msg))
+            {            
+                if(other.IsInReceivers(msg.target) && other.GetReciever(msg.target).CanHandleMessage(msg))
                 {
 #if UNITY_EDITOR
                     other.GetReciever(msg.target).Debug_AddReceivedQueue(msg);
