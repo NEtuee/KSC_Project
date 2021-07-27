@@ -45,8 +45,6 @@ public class FMODManager : ManagerBase
 {
     public SoundInfoItem infoItem;
 
-    public bool createSoundMap = false;
-
     public List<int> startPlayList = new List<int>();
 
     private Dictionary<int, SoundInfoItem.SoundInfo> _soundMap;
@@ -77,12 +75,12 @@ public class FMODManager : ManagerBase
         AddAction(MessageTitles.fmod_attachPlay,AttachPlay);
         AddAction(MessageTitles.fmod_setParam,SetParam);
         AddAction(MessageTitles.fmod_setGlobalParam,SetGlobalParam);
+        AddAction(MessageTitles.scene_beforeSceneChange,BeforeSceneLoad);
     }
 
     public override void Initialize()
     {
-        if(createSoundMap)
-            CreateSoundMap();
+        CreateSoundMap();
 
         _cacheMap = new Dictionary<int, Queue<FMODUnity.StudioEventEmitter>>();
         _activeMap = new Dictionary<int, List<FMODUnity.StudioEventEmitter>>();
@@ -124,7 +122,7 @@ public class FMODManager : ManagerBase
     }
 
 #region MessageCallback
-    public void Play(Message msg)
+    private void Play(Message msg)
     {
         var data = (SoundPlayData)msg.data;
         var emitter = Play(data.id,data.position);
@@ -136,7 +134,7 @@ public class FMODManager : ManagerBase
         }
     }
 
-    public void AttachPlay(Message msg)
+    private void AttachPlay(Message msg)
     {
         var data = (AttachSoundPlayData)msg.data;
         var emitter = Play(data.id,data.localPosition,data.parent);
@@ -148,29 +146,35 @@ public class FMODManager : ManagerBase
         }
     }
 
-    public void SetParam(Message msg)
+    private void SetParam(Message msg)
     {
         var data = (SetParameterData)msg.data;
         SetParam(data.soundId,data.paramId,data.value);
     }
 
-    public void SetGlobalParam(Message msg)
+    private void SetGlobalParam(Message msg)
     {
         var data = (SetParameterData)msg.data;
         SetGlobalParam(data.paramId,data.value);
     }
 
+    private void BeforeSceneLoad(Message msg)
+    {
+        ReturnAllCache(false);
+    }
+
 #endregion
 
-    public void ReturnAllCache()
+    public void ReturnAllCache(bool stop)
     {
         foreach(var pair in _activeMap)
         {
             var value = pair.Value;
             for(int i = 0; i < value.Count; ++i)
             {
-                value[i].Stop();
-                //_cacheMap[value[i].DataCode].Enqueue(value[i]);
+                if(stop)
+                    value[i].Stop();
+
                 value[i].transform.SetParent(gameObject.transform);
                 ReturnCache(pair.Key,value[i]);
 
@@ -375,19 +379,12 @@ public class FMODManager : ManagerBase
 
     private SoundInfoItem.SoundInfo FindSoundInfo(int id)
     {
-        if(createSoundMap)
-        {
-            if(_soundMap.ContainsKey(id))
-                return _soundMap[id];
-            else
-            {
-                Debug.LogError("Sound id not found");
-                return null;
-            }
-        }
+        if(_soundMap.ContainsKey(id))
+            return _soundMap[id];
         else
         {
-            return infoItem.FindSound(id);
+            Debug.LogError("Sound id not found");
+            return null;
         }
     }
 
