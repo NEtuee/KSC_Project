@@ -8,11 +8,13 @@ public struct SoundPlayData
 {
     public int id;
     public Vector3 position;
+    public bool returnValue;
 
-    public SoundPlayData(int id, Vector3 position)
+    public SoundPlayData(int id, Vector3 position, bool returnValue)
     {
         this.id = id;
         this.position = position;
+        this.returnValue = returnValue;
     }
 }
 public struct AttachSoundPlayData
@@ -21,11 +23,14 @@ public struct AttachSoundPlayData
     public Vector3 localPosition;
     public Transform parent;
 
-    public AttachSoundPlayData(int id, Vector3 localPosition, Transform parent)
+    public bool returnValue;
+
+    public AttachSoundPlayData(int id, Vector3 localPosition, Transform parent,bool returnValue)
     {
         this.id = id;
         this.localPosition = localPosition;
         this.parent = parent;
+        this.returnValue = returnValue;
     }
 }
 public struct SetParameterData
@@ -124,13 +129,25 @@ public class FMODManager : ManagerBase
     public void Play(Message msg)
     {
         var data = (SoundPlayData)msg.data;
-        Play(data.id,data.position);
+        var emitter = Play(data.id,data.position);
+
+        if(data.returnValue)
+        {
+            var send = MessagePack(MessageTitles.fmod_soundEmitter,((MessageReceiver)msg.sender).uniqueNumber,emitter);
+            SendMessageQuick(send);
+        }
     }
 
     public void AttachPlay(Message msg)
     {
         var data = (AttachSoundPlayData)msg.data;
-        Play(data.id,data.localPosition,data.parent);
+        var emitter = Play(data.id,data.localPosition,data.parent);
+
+        if(data.returnValue)
+        {
+            var send = MessagePack(MessageTitles.fmod_soundEmitter,((MessageReceiver)msg.sender).uniqueNumber,emitter);
+            SendMessageQuick(send);
+        }
     }
 
     public void SetParam(Message msg)

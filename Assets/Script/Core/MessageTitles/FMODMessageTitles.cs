@@ -19,4 +19,9 @@ public static partial class MessageTitles
     /// data = SetParameterData
     /// </summary>
     public const ushort fmod_setGlobalParam = 0x0503;
+
+    /// <summary>
+    /// data = FMODEventEmitter
+    /// </summary>
+    public const ushort fmod_soundEmitter = 0x0504;
 }
