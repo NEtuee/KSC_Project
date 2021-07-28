@@ -192,6 +192,16 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort cameramanager_getCameraManager = 0x0411;
 
+    /// <summary>
+    /// data = PitchYawData
+    /// </summary>
+    public const ushort cameramanager_setYawPitch = 0x0412;
+
+    /// <summary>
+    /// data = PitchYawPositionData
+    /// </summary>
+    public const ushort cameramanager_setYawPitchPosition = 0x0413;
+
     #endregion
 
     #region EffectManager
@@ -258,6 +268,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort player_visibledrone = 0x0902;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort player_initVelocity = 0x0903;
+
     #endregion
 
     #region PlayerManager
@@ -266,6 +281,11 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort playermanager_sendplayerctrl = 0x0910;
+
+    /// <summary>
+    /// data = PositionRotation
+    /// </summary>
+    public const ushort playermanager_setPlayerTransform = 0x0911;
 
     #endregion
 

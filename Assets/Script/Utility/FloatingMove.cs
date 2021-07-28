@@ -15,9 +15,6 @@ public class FloatingMove : MonoBehaviour
     }
     void Update()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
-
         float adjust = Mathf.Sin(Time.time * floatingSpeed);
         transform.localPosition = startPosition + Vector3.up *range*rangeRatio* adjust;
     }

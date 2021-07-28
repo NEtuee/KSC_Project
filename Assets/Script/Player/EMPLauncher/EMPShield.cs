@@ -85,45 +85,45 @@ public class EMPShield : Hitable
             }
         }
 
-        if(debug)
-        {
-            //Vector3 cameraPosition = GameManager.Instance.GetPlayerPosition();
-            Vector3 cameraPosition = ((PlayerCtrl_Ver2)GameManager.Instance.player).GetPlayerCenter();
+        //if(debug)
+        //{
+        //    //Vector3 cameraPosition = GameManager.Instance.GetPlayerPosition();
+        //    Vector3 cameraPosition = ((PlayerCtrl_Ver2)GameManager.Instance.player).GetPlayerCenter();
 
-            Bounds bound = collider.bounds;
-            Vector3 extents = bound.extents;
-            Vector3 point;
-            point = bound.center + new Vector3(-extents.x, -extents.y, extents.z);
-            Debug.DrawLine(cameraPosition, point, Color.red);
-            //2
-            point = bound.center + new Vector3(extents.x, -extents.y, extents.z);
-            Debug.DrawLine(cameraPosition, point, Color.red);
+        //    Bounds bound = collider.bounds;
+        //    Vector3 extents = bound.extents;
+        //    Vector3 point;
+        //    point = bound.center + new Vector3(-extents.x, -extents.y, extents.z);
+        //    Debug.DrawLine(cameraPosition, point, Color.red);
+        //    //2
+        //    point = bound.center + new Vector3(extents.x, -extents.y, extents.z);
+        //    Debug.DrawLine(cameraPosition, point, Color.red);
 
-            //3
-            point = bound.center + new Vector3(-extents.x, -extents.y, -extents.z);
-            Debug.DrawLine(cameraPosition, point, Color.red);
+        //    //3
+        //    point = bound.center + new Vector3(-extents.x, -extents.y, -extents.z);
+        //    Debug.DrawLine(cameraPosition, point, Color.red);
 
-            //4
-            point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
-            Debug.DrawLine(cameraPosition, point, Color.red);
+        //    //4
+        //    point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
+        //    Debug.DrawLine(cameraPosition, point, Color.red);
 
-            //5
-            point = bound.center + new Vector3(-extents.x, extents.y, extents.z);
-            Debug.DrawLine(cameraPosition, point, Color.red);
+        //    //5
+        //    point = bound.center + new Vector3(-extents.x, extents.y, extents.z);
+        //    Debug.DrawLine(cameraPosition, point, Color.red);
 
-            //6
-            point = bound.center + new Vector3(extents.x, extents.y, extents.z);
-            Debug.DrawLine(cameraPosition, point, Color.red);
+        //    //6
+        //    point = bound.center + new Vector3(extents.x, extents.y, extents.z);
+        //    Debug.DrawLine(cameraPosition, point, Color.red);
 
-            //7
-            point = bound.center + new Vector3(-extents.x, extents.y, -extents.z);
-            Debug.DrawLine(cameraPosition, point, Color.red);
+        //    //7
+        //    point = bound.center + new Vector3(-extents.x, extents.y, -extents.z);
+        //    Debug.DrawLine(cameraPosition, point, Color.red);
 
-            //8
-            point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
-            Debug.DrawLine(cameraPosition, point, Color.red);
+        //    //8
+        //    point = bound.center + new Vector3(extents.x, extents.y, -extents.z);
+        //    Debug.DrawLine(cameraPosition, point, Color.red);
 
-        }
+        //}
     }
 
     private void FixedUpdate()

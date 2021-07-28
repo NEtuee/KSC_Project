@@ -76,17 +76,34 @@ public class Drone : UnTransfromObjectBase
     public delegate void WhenCompleteRespawn();
     public WhenCompleteRespawn whenCompleteRespawn;
 
-    // Start is called before the first frame update
-    protected override void Start()
+    public override void Assign()
     {
-        base.Start();
+        base.Assign();
+
+        AddAction(MessageTitles.set_setplayer, (msg) =>
+        {
+            player = (PlayerCtrl_Ver2)msg.data;
+        });
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("PlayerManager"));
+
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
+
+        if(player == null)
+        {
+            Debug.LogError("Not Set PlayerCtrl");
+        }
+
         mainCam = Camera.main.transform;
-        playerHead = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head);
-        player = (PlayerCtrl_Ver2)GameManager.Instance.player;
+        playerHead = player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head);
         target = player.transform;
         droneHelperRoot = GetComponent<DroneHelperRoot>();
         _droneScaner = GetComponent<DroneScaner>();
-        
+
         //GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);
         AttachSoundPlayData soundData;
         soundData.id = 1300; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
@@ -115,19 +132,10 @@ public class Drone : UnTransfromObjectBase
         _finalTargetPosition = _targetPosition;
     }
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        RegisterRequest(GetSavedNumber("PlayerManager"));
-    }
-
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
-
-        if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.FixedUpdate)
+        if (player.updateMethod != UpdateMethod.FixedUpdate)
             return;
 
         UpdateDrone(Time.fixedDeltaTime);
@@ -135,15 +143,13 @@ public class Drone : UnTransfromObjectBase
 
     private void LateUpdate()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
 
         //if (InputManager.Instance.GetInput(KeybindingActions.Scan) && _scanLeftTime <= 0.0f)
         //{
         //    Scan();
         //}
 
-        if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.Update)
+        if (player.updateMethod != UpdateMethod.Update)
             return;
 
         UpdateDrone(Time.deltaTime);
