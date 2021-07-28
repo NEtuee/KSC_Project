@@ -91,7 +91,11 @@ public class FMODSoundEditor : EditorWindow
         {
             GUILayout.BeginHorizontal(GUILayout.ExpandHeight(true));
 
-            SoundList(manager,manager.startPlayList.Add);
+            SoundList(manager,(x)=>{
+                var playData = new PlayData();
+                playData.code = code;
+                manager.startPlayList.Add(playData);
+            });
 
             BeginScrollView();
 
@@ -101,7 +105,7 @@ public class FMODSoundEditor : EditorWindow
             {
                 var item = manager.startPlayList[i];
 
-                var sound = manager.infoItem.FindSound(item);
+                var sound = manager.infoItem.FindSound(item.code);
                 if(sound == null)
                 {
                     Debug.Log("sound data is not found : " + item);
@@ -109,12 +113,18 @@ public class FMODSoundEditor : EditorWindow
                     continue;
                 }
 
+                GUILayout.BeginVertical(GUILayout.Width(100f));
+
                 if(!DrawSoundItem(sound,100f,position.height - 40f))
                 {
                     manager.startPlayList.RemoveAt(i);
                 }
                 else
                     ++i;
+
+                item.dontStop = GUILayout.Toggle(item.dontStop,"Don't Stop");
+
+                GUILayout.EndVertical();
             }
 
             GUILayout.EndHorizontal();

@@ -255,13 +255,13 @@ public class EMPShield : Hitable
             soundData2.id = 1518; soundData2.localPosition = new Vector3(0, 1, 0); soundData2.parent = transform; soundData2.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData2);
             SoundPlayData soundData3;
-            soundData3.id = 1501; soundData3.position = transform.position; soundData3.returnValue = false;
+            soundData3.id = 1501; soundData3.position = transform.position; soundData3.returnValue = false; soundData3.dontStop = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData3);
         }
         else if(soundType == SoundType.Bomb)
         {
             SoundPlayData soundData;
-            soundData.id = 1700; soundData.position = transform.position; soundData.returnValue = false;
+            soundData.id = 1700; soundData.position = transform.position; soundData.returnValue = false; soundData.dontStop = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
             //GameManager.Instance.soundManager.Play(1700,transform.position);
         }

@@ -9,12 +9,14 @@ public struct SoundPlayData
     public int id;
     public Vector3 position;
     public bool returnValue;
+    public bool dontStop;
 
-    public SoundPlayData(int id, Vector3 position, bool returnValue)
+    public SoundPlayData(int id, Vector3 position, bool returnValue, bool dontStop = false)
     {
         this.id = id;
         this.position = position;
         this.returnValue = returnValue;
+        this.dontStop = dontStop;
     }
 }
 public struct AttachSoundPlayData
@@ -40,12 +42,19 @@ public struct SetParameterData
     public float value;
 }
 
-[SerializeField]
+[System.Serializable]
+public class PlayData
+{
+    public int code;
+    public bool dontStop;
+}
+
+[System.Serializable]
 public class FMODManager : ManagerBase
 {
     public SoundInfoItem infoItem;
 
-    public List<int> startPlayList = new List<int>();
+    public List<PlayData> startPlayList = new List<PlayData>();
 
     private Dictionary<int, SoundInfoItem.SoundInfo> _soundMap;
     private Dictionary<int, Queue<FMODUnity.StudioEventEmitter>> _cacheMap;
@@ -90,7 +99,7 @@ public class FMODManager : ManagerBase
 
         foreach(var item in startPlayList)
         {
-            Play(item,Vector3.zero);
+            Play(item.code,Vector3.zero,item.dontStop);
         }
 
     }
@@ -125,7 +134,7 @@ public class FMODManager : ManagerBase
     private void Play(Message msg)
     {
         var data = (SoundPlayData)msg.data;
-        var emitter = Play(data.id,data.position);
+        var emitter = Play(data.id,data.position,data.dontStop);
 
         if(data.returnValue)
         {
@@ -172,6 +181,9 @@ public class FMODManager : ManagerBase
             var value = pair.Value;
             for(int i = 0; i < value.Count; ++i)
             {
+                if(value[i].dontStop)
+                    continue;
+                    
                 if(stop)
                     value[i].Stop();
 
@@ -184,13 +196,14 @@ public class FMODManager : ManagerBase
         }
     }
 
-    public FMODUnity.StudioEventEmitter Play(int id, Vector3 position)
+    public FMODUnity.StudioEventEmitter Play(int id, Vector3 position, bool dontStop)
     {
         var emitter = GetCache(id);
         
-        emitter.transform.SetParent(null);
+        emitter.transform.SetParent(dontStop ? this.transform : null);
         emitter.transform.SetPositionAndRotation(position,Quaternion.identity);
         emitter.gameObject.SetActive(true);
+        emitter.dontStop = dontStop;
 
         emitter.Play();
         var info = FindSoundInfo(id);
@@ -249,7 +262,7 @@ public class FMODManager : ManagerBase
     IEnumerator DeferredPlay(int id, Vector3 position, float deferredTime)
     {
         yield return new WaitForSeconds(deferredTime);
-        Play(id, position);
+        Play(id, position,false);
     }
 
     private void AddActiveMap(int id, FMODUnity.StudioEventEmitter emitter)
@@ -331,7 +344,10 @@ public class FMODManager : ManagerBase
             CreateSoundCacheItem(id,1);
         }
 
-        return _cacheMap[id].Dequeue();
+        var cache = _cacheMap[id].Dequeue();;
+        cache.dontStop = false;
+
+        return cache;
     }
 
     private void CreateSoundCacheItem(int id,int count,bool active = false)

@@ -468,7 +468,7 @@ public class UIManager : ManagerBase
     public void PlayEnterSound()
     {
         SoundPlayData soundPlay;
-        soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false;
+        soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
 
         SetParameterData paramData;
@@ -479,7 +479,7 @@ public class UIManager : ManagerBase
     public void PlayExitSound()
     {
         SoundPlayData soundPlay;
-        soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false;
+        soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
 
         SetParameterData paramData;

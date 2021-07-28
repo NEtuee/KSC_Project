@@ -20,6 +20,7 @@ namespace FMODUnity
         public float OverrideMaxDistance = -1.0f;
 
         public int DataCode = -1;
+        public bool dontStop = false;
 
         protected FMOD.Studio.EventDescription eventDescription;
         public  FMOD.Studio.EventDescription EventDescription { get { return eventDescription; } }

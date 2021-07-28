@@ -121,14 +121,14 @@ public class EMPGun : UnTransfromObjectBase
                 crossHair.ActiveHitMark();
                 //GameManager.Instance.soundManager.Play(1022, hit.point);
                 SoundPlayData soundData;
-                soundData.id = 1022; soundData.position = hit.point; soundData.returnValue = false;
+                soundData.id = 1022; soundData.position = hit.point; soundData.returnValue = false; soundData.dontStop = false;
                 SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
             }
             else
             {
                 //GameManager.Instance.soundManager.Play(1023, hit.point);
                 SoundPlayData soundData;
-                soundData.id = 1023; soundData.position = hit.point; soundData.returnValue = false;
+                soundData.id = 1023; soundData.position = hit.point; soundData.returnValue = false; soundData.dontStop = false;
                 SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
             }
         }

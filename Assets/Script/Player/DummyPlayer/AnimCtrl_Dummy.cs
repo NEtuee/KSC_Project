@@ -104,7 +104,7 @@ public class AnimCtrl_Dummy : UnTransfromObjectBase
             footStepPosition = rightFootTransform.position;
 
         SoundPlayData soundData;
-        soundData.id = 1000; soundData.position = footStepPosition; soundData.returnValue = false;
+        soundData.id = 1000; soundData.position = footStepPosition; soundData.returnValue = false; soundData.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
         //GameManager.Instance.soundManager.Play(1000, footStepPosition);
     }
@@ -119,7 +119,7 @@ public class AnimCtrl_Dummy : UnTransfromObjectBase
 
         //GameManager.Instance.soundManager.Play(1001, footStepPosition);
         SoundPlayData soundData;
-        soundData.id = 1001; soundData.position = footStepPosition; soundData.returnValue = false;
+        soundData.id = 1001; soundData.position = footStepPosition; soundData.returnValue = false; soundData.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
 
