@@ -151,19 +151,19 @@ public class SceneManagerEx : ManagerBase
 
         SendBroadcastMessage(MessageTitles.scene_afterSceneChange,_currentScene,false);
 
+        Debug.Log("AfterLoad");
 
-
-        yield return new WaitForSeconds(2f);
+        yield return CoroutineUtilities.WaitForRealTime(2f);
 
         StartCoroutine(UnLoadNullScene());
 
-        yield return new WaitForSeconds(3f);
+        yield return CoroutineUtilities.WaitForRealTime(3f);
 
 
         _isLoaded = true;
 
         SendBroadcastMessage(MessageTitles.scene_sceneChanged,_currentScene,false);
-
+        Debug.Log("Load Complite");
     }
 
     IEnumerator LoadNullScene()
@@ -219,8 +219,16 @@ public class SceneManagerEx : ManagerBase
             if (operation.progress >= 0.9f)
                 operation.allowSceneActivation = true;
 
+            if (sceneActive == true)
+            {
+                SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), operation.progress);
+            }
+
             yield return null;
         }
+
+        if (sceneActive == true)
+            SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), 1f);
 
         var scene = SceneManager.GetSceneByName(target);
 

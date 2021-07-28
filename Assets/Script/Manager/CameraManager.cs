@@ -121,6 +121,28 @@ public class CameraManager : ManagerBase
             _player = (PlayerCtrl_Ver2)msg.data;
             _playerTransfrom = _player.transform;
         });
+
+        AddAction(MessageTitles.cameramanager_getCameraManager, (msg) =>
+         {
+             SendMessageQuick((MessageReceiver)msg.sender, MessageTitles.set_setCameraManager, this);
+         });
+
+        AddAction(MessageTitles.cameramanager_setYawPitch, (msg) =>
+         {
+             PitchYawData data=(PitchYawData)msg.data;
+             followTarget.SetPitchYaw(data.pitch, data.yaw);
+         });
+        AddAction(MessageTitles.cameramanager_setYawPitchPosition, (msg) =>
+        {
+            PitchYawPositionData data = (PitchYawPositionData)msg.data;
+            followTarget.SetPitchYawPosition(data.pitch, data.yaw,data.position);
+        });
+
+        AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
+         {
+             DontDestroyOnLoad(Camera.main.transform);
+             DontDestroyOnLoad(followTarget.transform);
+         });
     }
 
     public override void Initialize()
@@ -661,4 +683,17 @@ public struct ActiveVirtualCameraData
 {
    public CinemachineVirtualCameraBase cam;
    public Cinemachine3rdPersonFollow follow;
+}
+
+public struct PitchYawData
+{
+    public float pitch;
+    public float yaw;
+}
+
+public struct PitchYawPositionData
+{
+    public float pitch;
+    public float yaw;
+    public Vector3 position;
 }

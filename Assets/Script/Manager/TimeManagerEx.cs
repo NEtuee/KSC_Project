@@ -19,6 +19,15 @@ public class TimeManagerEx : ManagerBase
 
         AddAction(MessageTitles.timemanager_settimescale, SetTimeScale);
         AddAction(MessageTitles.timemanager_timestop, StopTime);
+
+        AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
+         {
+             StopTime(true);
+         });
+        AddAction(MessageTitles.scene_sceneChanged, (msg) =>
+        {
+            StopTime(false);
+        });
     }
 
     public override void Initialize()
@@ -86,6 +95,14 @@ public class TimeManagerEx : ManagerBase
         bool active = (bool)msg.data;
 
         if (active)
+            Time.timeScale = 0.0f;
+        else
+            Time.timeScale = 1.0f;
+    }
+
+    public void StopTime(bool stop)
+    {
+        if (stop)
             Time.timeScale = 0.0f;
         else
             Time.timeScale = 1.0f;

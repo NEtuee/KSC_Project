@@ -128,6 +128,11 @@ public static partial class MessageTitles
     /// data = bool;
     /// </summary>
     public const ushort uimanager_activegunui = 0x0322;
+
+    /// <summary>
+    /// data = null;
+    /// </summary>
+    public const ushort uimanager_getUimanager = 0x0323;
     #endregion
 
     #region CameraManager
@@ -181,6 +186,21 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort cameramanager_generaterecoilimpluse = 0x0410;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort cameramanager_getCameraManager = 0x0411;
+
+    /// <summary>
+    /// data = PitchYawData
+    /// </summary>
+    public const ushort cameramanager_setYawPitch = 0x0412;
+
+    /// <summary>
+    /// data = PitchYawPositionData
+    /// </summary>
+    public const ushort cameramanager_setYawPitchPosition = 0x0413;
 
     #endregion
 
@@ -248,6 +268,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort player_visibledrone = 0x0902;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort player_initVelocity = 0x0903;
+
     #endregion
 
     #region PlayerManager
@@ -257,6 +282,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort playermanager_sendplayerctrl = 0x0910;
 
+    /// <summary>
+    /// data = PositionRotation
+    /// </summary>
+    public const ushort playermanager_setPlayerTransform = 0x0911;
+
     #endregion
 
     #region Setter
@@ -265,6 +295,16 @@ public static partial class MessageTitles
     /// data = PlayerCtrl_ver2
     /// </summary>
     public const ushort set_setplayer = 0x1001;
+
+    /// <summary>
+    /// data = UIManager
+    /// </summary>
+    public const ushort set_setUimanager = 0x1002;
+
+    /// <summary>
+    /// data = CameraManager
+    /// </summary>
+    public const ushort set_setCameraManager = 0x1003;
 
     #endregion
 }

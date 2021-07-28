@@ -291,6 +291,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             InitializeMove();
         });
 
+        AddAction(MessageTitles.player_initVelocity, (msg) =>
+        {
+            InitVelocity();
+        });
+
         AddAction(MessageTitles.player_visibledrone, (msg) =>
          {
              bool visible = (bool)msg.data;
@@ -326,9 +331,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         //{
         //    GameManager.Instance.optionMenuCtrl.InputEsc();
         //}
-
-        if (GameManager.Instance.PAUSE == true)
-            return;
 
         if (isPause == true)
         {
@@ -372,10 +374,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (GameManager.Instance.PAUSE == true)
             return;
 
-        if (isPause == true)
-        {
-            return;
-        }
 
         UpdateStamina(Time.fixedDeltaTime);
 
@@ -2245,41 +2243,41 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         playerPelvisGunObject.SetActive(true);
     }
 
-    private void InputChargeShot()
-    {
-        //if (InputManager.Instance.GetAction(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
-        if (InputManager.Instance.GetInput(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
-        {
-            if(_charge != null)
-            {
-                _charge.Stop();
-                _charge = null;
+    //private void InputChargeShot()
+    //{
+    //    //if (InputManager.Instance.GetAction(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
+    //    if (InputManager.Instance.GetInput(KeybindingActions.Shot) && chargeTime.Value >= 1.0f)
+    //    {
+    //        if(_charge != null)
+    //        {
+    //            _charge.Stop();
+    //            _charge = null;
 
-            }
+    //        }
 
-            int loadCount = (int) (chargeTime.Value);
-            loadCount = loadCount > 3 ? 3 : loadCount;
-            _transformCount = 0;
+    //        int loadCount = (int) (chargeTime.Value);
+    //        loadCount = loadCount > 3 ? 3 : loadCount;
+    //        _transformCount = 0;
 
-            empGun.LaunchLaser(loadCount * 40.0f);
-            chargeTime.Value = 0.0f;
-            AddEnergyValue(-loadCount * costValue);
-            GameManager.Instance.cameraManager.SetAimCameraDistance(0.333f * (float) loadCount);
-            _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, chargeDelayTime);
+    //        empGun.LaunchLaser(loadCount * 40.0f);
+    //        chargeTime.Value = 0.0f;
+    //        AddEnergyValue(-loadCount * costValue);
+    //        GameManager.Instance.cameraManager.SetAimCameraDistance(0.333f * (float) loadCount);
+    //        _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, chargeDelayTime);
 
-            GameManager.Instance.soundManager.Play(1009 + loadCount, Vector3.up, transform);
+    //        GameManager.Instance.soundManager.Play(1009 + loadCount, Vector3.up, transform);
 
-            if (loadCount >= 2)
-            {
-                TimeManager.instance.SetTimeScale(0f, .4f, 0.2f, 0.02f);
-            }
+    //        if (loadCount >= 2)
+    //        {
+    //            TimeManager.instance.SetTimeScale(0f, .4f, 0.2f, 0.02f);
+    //        }
 
-            if (loadCount == 3)
-            {
-                GameManager.Instance.cameraManager.SetRadialBlur(1f, 0.2f, 0.4f);
-            }
-        }
-    }
+    //        if (loadCount == 3)
+    //        {
+    //            GameManager.Instance.cameraManager.SetRadialBlur(1f, 0.2f, 0.4f);
+    //        }
+    //    }
+    //}
 
     private bool InputLedgeUp()
     {

@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using UnityEngine.InputSystem;
 
 public class PlayerManager : ManagerBase
 {
     [SerializeField] private PlayerCtrl_Ver2 _player;
     [SerializeField] private EMPGun _emp;
+    private Drone _drone;
 
     public override void Assign()
     {
@@ -18,6 +20,24 @@ public class PlayerManager : ManagerBase
             var target = (MessageReceiver)msg.sender;
             SendMessageQuick(target, MessageTitles.set_setplayer, _player);
         });
+
+        AddAction(MessageTitles.playermanager_setPlayerTransform, (msg) =>
+        {
+            PositionRotation data = (PositionRotation)msg.data;
+            _player.transform.SetPositionAndRotation(data.position, data.rotation); 
+        });
+
+        AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
+         {
+             DontDestroyOnLoad(_player.transform);
+             DontDestroyOnLoad(_drone.transform);
+         });
+
+        AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
+        {
+            _player.InitializeMove();
+            _player.InitVelocity();
+        });
     }
 
     public override void Initialize()
@@ -26,6 +46,8 @@ public class PlayerManager : ManagerBase
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        _drone = _player.GetDrone();
 
         _player.hp.Subscribe(value =>
         {
@@ -130,4 +152,20 @@ public class PlayerManager : ManagerBase
             SendMessageEx(MessageTitles.uimanager_setgunenergyvalue, GetSavedNumber("UIManager"), value);
         });
     }
+
+    public override void Progress(float deltaTime)
+    {
+        base.Progress(deltaTime);
+
+        if(Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
+        }
+    }
+}
+
+public struct PositionRotation
+{
+    public Vector3 position;
+    public Quaternion rotation;
 }

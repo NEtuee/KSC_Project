@@ -2,15 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoScale : MonoBehaviour
+public class AutoScale : UnTransfromObjectBase
 {
     private RectTransform rect;
 
     [SerializeField] private Vector3 standardScale;
+    private CameraManager _cameraManager;
 
-    private void Awake()
+    public override void Assign()
     {
+        base.Assign();
+
+        AddAction(MessageTitles.set_setCameraManager, (msg) =>
+         {
+             _cameraManager = (CameraManager)msg.data;
+         });
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        RegisterRequest(GetSavedNumber("UIManager"));
+
+        SendMessageQuick(MessageTitles.cameramanager_getCameraManager, GetSavedNumber("CameraManager"), null);
+
         rect = GetComponent<RectTransform>();
+
+        if(_cameraManager == null)
+        {
+            Debug.LogError("Not Set CameraManager");
+        }
     }
 
     private void FixedUpdate()
@@ -20,7 +42,7 @@ public class AutoScale : MonoBehaviour
             return;
         }
 
-        float camDist = GameManager.Instance.cameraManager.GetCameraDistance();
+        float camDist = _cameraManager.GetCameraDistance();
         rect.localScale = standardScale * camDist;
     }
 }

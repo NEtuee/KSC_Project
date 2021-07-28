@@ -27,7 +27,7 @@ public class LoadingTextImageCtrl : MonoBehaviour
     {
         while(_active)
         {
-            yield return new WaitForSeconds(_term);
+            yield return CoroutineUtilities.WaitForRealTime(_term);
             _currentNum++;
             if (_currentNum >= loadingCycleSprites.Count)
                 _currentNum = 0;

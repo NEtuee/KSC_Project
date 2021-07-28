@@ -79,9 +79,6 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         if (updateMode == false)
             return;
 
-        if (GameManager.Instance.PAUSE == true)
-            return;
-
         if (!visible)
             return;
         //if (Input.GetKeyDown(KeyCode.Alpha0))
@@ -124,9 +121,6 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         if (GameManager.Instance.PAUSE == true)
             return;
 
-        if (updateMode == true)
-            return;
-
         if (!visible)
             return;
 
@@ -162,11 +156,6 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
         if (updateMode == false)
             return;
-
-        if (isPause == true)
-        {
-            return;
-        }
 
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, followSmooth * Time.deltaTime);
         //transform.position = target.position + Vector3.up + Vector3.up * ((PlayerCtrl_Ver2)GameManager.Instance.player).GetFootStepOffset() * 0.1f;

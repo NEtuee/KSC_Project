@@ -205,6 +205,21 @@ public class UIManager : ManagerBase
             bool active = (bool)msg.data;
             gunUiCanvas.enabled = active;
         });
+
+        AddAction(MessageTitles.uimanager_getUimanager, (msg) =>
+         {
+             SendMessageQuick((MessageReceiver)msg.sender, MessageTitles.set_setUimanager, this);
+         });
+
+        AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
+         {
+             ActiveLoadingUI(true);
+         });
+
+        AddAction(MessageTitles.scene_sceneChanged, (msg) =>
+        {
+            ActiveLoadingUI(false);
+        });
     }
 
     public override void Initialize()
@@ -404,12 +419,12 @@ public class UIManager : ManagerBase
     public void FadeIn(Action action = null)
     {
         fadeCanvas.enabled = true;
-        fadeImage.DOFade(1.0f, 0.5f).OnComplete(()=>action?.Invoke());
+        fadeImage.DOFade(1.0f, 0.5f).SetUpdate(true).OnComplete(()=>action?.Invoke());
     }
 
     public void FadeOut(Action action = null)
     {
-        fadeImage.DOFade(0.0f, 0.5f).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
+        fadeImage.DOFade(0.0f, 0.5f).SetUpdate(true).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
     }
 
 
@@ -426,21 +441,25 @@ public class UIManager : ManagerBase
     {
         if(active)
         {
+            _currentPauseState = PauseMenuState.Loading;
             FadeIn(() => loadingUI.Active(true));
         }
         else
         {
-            FadeOut(() => loadingUI.Active(false));
+            loadingUI.Active(false);
+            FadeOut(()=> {
+                _currentPauseState = PauseMenuState.Game;
+            });
         }
     }
 
     public void FadeInOut(Action action)
     {
         fadeCanvas.enabled = true;
-        fadeImage.DOFade(1.0f, 1.0f).OnComplete(() =>
+        fadeImage.DOFade(1.0f, 1.0f).SetUpdate(true).OnComplete(() =>
         {
             StartCoroutine(DeferredCallFadeOutAction(1f*0.8f,action));
-            fadeImage.DOFade(0.0f, 1.0f).SetDelay(1f).OnComplete(()=> fadeCanvas.enabled = false);
+            fadeImage.DOFade(0.0f, 1.0f).SetUpdate(true).SetDelay(1f).OnComplete(()=> fadeCanvas.enabled = false);
         });
     }
     #endregion
@@ -476,7 +495,7 @@ public class UIManager : ManagerBase
         SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), paramData);
     }
 
-    public void PlayExitSound()
+    public void PlayClickSound()
     {
         SoundPlayData soundPlay;
         soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
