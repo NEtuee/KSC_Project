@@ -7,9 +7,11 @@ public class TutorialTrigger : UnTransfromObjectBase
 {
     public bool isOver = false;
     public bool IsOver { get => IsOver; set => isOver = value; }
-    public TutorialType tutorialType;
-    private OptionMenuCtrl _uiManager;
-    
+
+    public InGameTutorialCtrl.InGameTutorialType tutorial;
+    //public TutorialType tutorialType;
+    //private OptionMenuCtrl _uiManager;
+
     protected override void Start()
     {
         base.Start();
@@ -19,34 +21,20 @@ public class TutorialTrigger : UnTransfromObjectBase
             Debug.LogWarning("Not Exist Collider");
             return;
         }
+    }
 
-        if (GameManager.Instance == null)
-        {
-            Debug.LogWarning("Not Exist GameManager");
-            return;
-        }
-        
-        if (GameManager.Instance.optionMenuCtrl == null)
-        {
-            Debug.LogWarning("Not Exist UiManager");
-            return;
-        }
-
-        _uiManager = GameManager.Instance.optionMenuCtrl;
+    public override void Initialize()
+    {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("ObjectManager"));
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (isOver)
             return;
-        
-        if (other.CompareTag("Player") == false)
-            return;
 
-        other.GetComponent<PlayerCtrl_Ver2>().InitializeMove();
-        //if (_uiManager.TutorialEvent(key) == false)
-        //    return;
-        _uiManager.InGameTutorial(tutorialType);
+        SendMessageEx(MessageTitles.uimanager_activeInGameTutorial, GetSavedNumber("UIManager"), tutorial);
         
         isOver = true;
         gameObject.SetActive(false);

@@ -133,6 +133,11 @@ public static partial class MessageTitles
     /// data = null;
     /// </summary>
     public const ushort uimanager_getUimanager = 0x0323;
+
+    /// <summary>
+    /// data = InGameTutorialCtrl.InGameTutorialType
+    /// </summary>
+    public const ushort uimanager_activeInGameTutorial = 0x0324;
     #endregion
 
     #region CameraManager

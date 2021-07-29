@@ -33,7 +33,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] public AsynSceneManager asynSceneManager;
     [SerializeField] public GameObject endBackGround;
     [SerializeField] public EffectManager effectManager;
-    [SerializeField] public OptionMenuCtrl optionMenuCtrl;
     public Transform bossTransform;
 
     private Vector3 mainCameraStartPosition;
@@ -122,8 +121,7 @@ public class GameManager : MonoBehaviour
         if(player != null)
             player.whenPlayerDead += () => { PAUSE = true;};
         
-        if(asynSceneManager != null && asynSceneManager.enabled == false)
-            optionMenuCtrl.DisableSceneLoadUI();
+
     }
 
     private IEnumerator LateStart()
@@ -190,23 +188,6 @@ public class GameManager : MonoBehaviour
         //    }
         //}
 
-        if (optionMenuCtrl.sceneLoadUi != null && optionMenuCtrl.sceneLoadUi.Loading == false)
-        {
-            //if (Input.GetKeyDown(KeyCode.O))
-            //{
-            //    asynSceneManager.LoadPrevlevel();
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.P))
-            //{
-            //    asynSceneManager.LoadNextlevelFrom();
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.I))
-            //{
-            //    asynSceneManager.LoadCurrentLevel();
-            //}
-        }
     }
 
     public void SwitchMenuDone()

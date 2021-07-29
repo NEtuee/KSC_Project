@@ -157,10 +157,10 @@ public class AsynSceneManager : MonoBehaviour
         GameManager.Instance.PAUSE = true;
         _isLoaded = false;
 
-        if (GameManager.Instance.optionMenuCtrl != null)
-        {
-            GameManager.Instance.optionMenuCtrl.sceneLoadUi.SetLoadingComment(currentLevel);
-        }
+        //if (GameManager.Instance.optionMenuCtrl != null)
+        //{
+        //    GameManager.Instance.optionMenuCtrl.sceneLoadUi.SetLoadingComment(currentLevel);
+        //}
 
         if (currentStageManager != null)
         {

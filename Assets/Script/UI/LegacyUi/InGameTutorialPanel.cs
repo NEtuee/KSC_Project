@@ -32,7 +32,7 @@ public class InGameTutorialPanel : MonoBehaviour
             GameManager.Instance.PAUSE = true;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            GameManager.Instance.optionMenuCtrl.CurrentTutorial = true;
+            //GameManager.Instance.optionMenuCtrl.CurrentTutorial = true;
             ((PlayerCtrl_Ver2)GameManager.Instance.player).IsRun = false;
 
             if(!notVideo)

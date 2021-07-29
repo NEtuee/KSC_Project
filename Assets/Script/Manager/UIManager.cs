@@ -43,6 +43,7 @@ public class UIManager : ManagerBase
     [Header("TutorialMenu")]
     [SerializeField] private RawImage videoRawImage;
     [SerializeField] private TextMeshProUGUI descriptionText;
+    [SerializeField] private InGameTutorialCtrl inGameTutorialCtrl;
 
     [Header("Fade")]
     [SerializeField] private Canvas fadeCanvas;
@@ -220,6 +221,16 @@ public class UIManager : ManagerBase
         {
             ActiveLoadingUI(false);
         });
+
+        AddAction(MessageTitles.uimanager_activeInGameTutorial, (msg) =>
+         {
+             InGameTutorialCtrl.InGameTutorialType type = (InGameTutorialCtrl.InGameTutorialType)msg.data;
+             inGameTutorialCtrl.Active(type);
+             _currentPauseState = PauseMenuState.InGameTutorial;
+             Cursor.lockState = CursorLockMode.None;
+             Cursor.visible = true;
+             SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), true);
+         });
     }
 
     public override void Initialize()
@@ -257,6 +268,17 @@ public class UIManager : ManagerBase
             return;
         }
 
+        if(_currentPauseState == PauseMenuState.InGameTutorial)
+        {
+            SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), false);
+            inGameTutorialCtrl.Disable();
+            _currentPauseState = PauseMenuState.Game;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            return;
+        }
+
         if(_currentPauseState == PauseMenuState.Tutorial || _currentPauseState == PauseMenuState.Option)
         {
             ActivePage((int)PauseMenuState.Pause);
@@ -288,6 +310,16 @@ public class UIManager : ManagerBase
         //}
     }
 
+    public override void Progress(float deltaTime)
+    {
+        base.Progress(deltaTime);
+
+        if(Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.uimanager_activeInGameTutorial, GetSavedNumber("UIManager"), InGameTutorialCtrl.InGameTutorialType.Climbing);
+        }
+    }
+
     public void ActivePage(int pageNum)
     {
         if (_currentPage != null)
@@ -311,6 +343,9 @@ public class UIManager : ManagerBase
                         data.bgm = bgmVolumeSlider.value;
                         SendMessageEx(MessageTitles.setting_saveVolume, GetSavedNumber("SettingManager"), data);
                     }
+                    break;
+                case PauseMenuState.Tutorial:
+                    SendMessageEx(MessageTitles.videomanager_stopvideo, GetSavedNumber("VideoManager"), null);
                     break;
             }
             _currentPage.Active(false);
@@ -516,13 +551,14 @@ public class UIManager : ManagerBase
 
     public enum PauseMenuState
     {
-        Game = 0, Pause,Option, Sound, Display, Control, KeyBinding, Loading, Tutorial
+        Game = 0, Pause,Option, Sound, Display, Control, KeyBinding, Loading, Tutorial, InGameTutorial
     }
 
     public enum StateBarType
     {
         HP,Stamina,Energy
     }
+
 
     private void OnEnable()
     {

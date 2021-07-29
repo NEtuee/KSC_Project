@@ -21,26 +21,26 @@ public class LevelEdit_TimelinePlayer : MonoBehaviour
 
         StartTrigger();
 
-        GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
-            GameManager.Instance.cameraManager.SetUpdateMethod(CinemachineBrain.UpdateMethod.SmartUpdate,CinemachineBrain.BrainUpdateMethod.LateUpdate);
+        //GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
+        //    GameManager.Instance.cameraManager.SetUpdateMethod(CinemachineBrain.UpdateMethod.SmartUpdate,CinemachineBrain.BrainUpdateMethod.LateUpdate);
 
-            CinemachineBrain brain = GameManager.Instance.cameraManager.GetCinemachineBrain();
-            TimelineAsset timelineAsset = (TimelineAsset) playableDirector.playableAsset;
-            TrackAsset track = timelineAsset.GetOutputTrack(1) ;
-            playableDirector.SetGenericBinding (track, brain);
-            playableDirector.Play();
-        });
+        //    CinemachineBrain brain = GameManager.Instance.cameraManager.GetCinemachineBrain();
+        //    TimelineAsset timelineAsset = (TimelineAsset) playableDirector.playableAsset;
+        //    TrackAsset track = timelineAsset.GetOutputTrack(1) ;
+        //    playableDirector.SetGenericBinding (track, brain);
+        //    playableDirector.Play();
+        //});
 
     }
 
     public void End()
     {
-        GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
-            //GameManager.Instance.PAUSE = false;
-            GameManager.Instance.cameraManager.SetUpdateMethod();
-            GameManager.Instance.player.transform.position = endTransform.position;
-            EndTrigger();
-        });
+        //GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
+        //    //GameManager.Instance.PAUSE = false;
+        //    GameManager.Instance.cameraManager.SetUpdateMethod();
+        //    GameManager.Instance.player.transform.position = endTransform.position;
+        //    EndTrigger();
+        //});
     }
 
     public void LoadSceneFromManager(string target)
