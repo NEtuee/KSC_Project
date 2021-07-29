@@ -152,7 +152,6 @@ public class CameraManager : ManagerBase
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
         brainCameraTransfrom = brain.transform;
-        Debug.Log(GameManager.Instance);
         GameManager.Instance.cameraManager = this;
 
         collisionEx = new DirectionCollisionEx(playerFollowCam.transform, collisionRadius, collisionLayer);

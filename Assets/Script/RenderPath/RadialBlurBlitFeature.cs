@@ -20,6 +20,17 @@ public class RadialBlurBlitFeature : ScriptableRendererFeature
     RenderTargetHandle renderTextureHandle;
     RadialBlurBlitRenderPass myRenderPass;
 
+    public CameraManager cameraManager;
+
+    private void Awake()
+    {
+        cameraManager = GameObject.Find("CameraManager").GetComponent<CameraManager>();
+        if(cameraManager == null)
+        {
+            Debug.LogError("Not Set CameraManger");
+        }
+    }
+
     public override void Create()
     {
         myRenderPass = new RadialBlurBlitRenderPass(
@@ -42,13 +53,7 @@ public class RadialBlurBlitFeature : ScriptableRendererFeature
             return;
         }
 
-        if (GameManager.Instance == null)
-            return;
-
-        if (GameManager.Instance.cameraManager == null)
-            return;
-
-        if (!(Application.isPlaying && GameManager.Instance.cameraManager.CheckScreenEffectActive(name)))
+        if (!(Application.isPlaying && cameraManager.CheckScreenEffectActive(name)))
         {
             return;
         }
