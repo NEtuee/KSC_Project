@@ -37,7 +37,7 @@ public class ConditionalProcessorView : PinnedElementView
         if (processor.currentGraphExecution != null)
         {
             // Unhighlight the last executed node
-            view = graphView.nodeViews.Find(v => v.nodeTarget == processor.currentGraphExecution.Current);
+            view = graphView.nodeViews.Find(v => v.nodeTarget.GUID == processor.currentGraphExecution.Current.GUID);
             view.UnHighlight();
         }
 
@@ -46,7 +46,7 @@ public class ConditionalProcessorView : PinnedElementView
         // Display debug infos, currentGraphExecution is modified in the Step() function above
         if (processor.currentGraphExecution != null)
         {
-            view = graphView.nodeViews.Find(v => v.nodeTarget == processor.currentGraphExecution.Current);
+            view = graphView.nodeViews.Find(v => v.nodeTarget.GUID == processor.currentGraphExecution.Current.GUID);
             view.Highlight();
         }
     }

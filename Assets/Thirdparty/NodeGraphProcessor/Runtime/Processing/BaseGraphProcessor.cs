@@ -22,7 +22,7 @@ namespace GraphProcessor
 		/// <param name="graph">Graph to be processed</param>
 		public BaseGraphProcessor(BaseGraph graph)
 		{
-			this.graph = graph;
+			this.graph = ScriptableObject.Instantiate(graph);
 
 			UpdateComputeOrder();
 		}

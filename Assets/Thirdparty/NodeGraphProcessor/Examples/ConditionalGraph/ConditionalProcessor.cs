@@ -56,6 +56,8 @@ namespace NodeGraphProcessor.Examples
                 startNodeList.ForEach(s => nodeToExecute.Push(s));
                 // Execute the whole graph:
                 enumerator = RunTheGraph(nodeToExecute);
+
+                Debug.Log("Run");
             }
 
             while(enumerator.MoveNext())

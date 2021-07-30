@@ -8,7 +8,7 @@ using System.IO;
 
 public class GraphAssetCallbacks
 {
-	[MenuItem("Assets/Create/GraphProcessor", false, 10)]
+	[MenuItem("Assets/Create/GraphProcessor/BaseGraph", false, 10)]
 	public static void CreateGraphPorcessor()
 	{
 		var graph = ScriptableObject.CreateInstance< BaseGraph >();

@@ -18,6 +18,9 @@ namespace GraphProcessor
 			baseGraphView = graphView;
 			parameter      = param;
 
+			if(graphView == null)
+				Debug.Log("?");
+
 			var field = graphView.exposedParameterFactory.GetParameterSettingsField(param, (newValue) => {
 				param.settings = newValue as ExposedParameter.Settings;
 			});
