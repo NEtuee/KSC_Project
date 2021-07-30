@@ -168,4 +168,10 @@ public struct PositionRotation
 {
     public Vector3 position;
     public Quaternion rotation;
+
+    public PositionRotation(Vector3 pos, Quaternion rot)
+    {
+        position = pos;
+        rotation = rot;
+    }
 }

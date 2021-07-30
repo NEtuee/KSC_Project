@@ -22,14 +22,15 @@ public class RadialBlurBlitFeature : ScriptableRendererFeature
 
     public CameraManager cameraManager;
 
-    private void Awake()
+    public void OnEnable()
     {
         cameraManager = GameObject.Find("CameraManager").GetComponent<CameraManager>();
-        if(cameraManager == null)
+        if (cameraManager == null)
         {
             Debug.LogError("Not Set CameraManger");
         }
     }
+
 
     public override void Create()
     {
