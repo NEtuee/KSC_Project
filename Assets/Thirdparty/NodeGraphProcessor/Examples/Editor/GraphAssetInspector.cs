@@ -32,5 +32,9 @@ public class GraphAssetInspector : GraphInspector
 		{
 			text = "Open exposed properties graph window"
 		});
+		root.Add(new Button(() => EditorWindow.GetWindow<FunctionGraphWindow>().InitializeGraph(target as FunctionGraph))
+		{
+			text = "Open function graph window"
+		});
 	}
 }

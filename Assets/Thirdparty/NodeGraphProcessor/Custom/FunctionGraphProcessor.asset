@@ -1,0 +1,426 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd9fdf4324caa8419c7d5623e3fa8b3, type: 3}
+  m_Name: FunctionGraphProcessor
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  - id: 9
+  - id: 10
+  edges:
+  - GUID: 82cdc156-3ed8-41db-8417-9cbb95e7a7b2
+    owner: {fileID: 11400000}
+    inputNodeGUID: fc8d55c3-0566-4b98-ae9e-6bb3d22f6a20
+    outputNodeGUID: 473ac079-8d43-4209-9b36-b6eaaa4331f1
+    inputFieldName: logText
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: 9b60b22a-f21b-4169-a481-24ef93f298db
+    owner: {fileID: 11400000}
+    inputNodeGUID: 2593e722-e7b9-4414-817f-7e878c74a4b6
+    outputNodeGUID: b2b01273-be9b-4514-a405-bccc8721b595
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 2439507e-f1f9-43de-b18b-037843916e44
+    owner: {fileID: 11400000}
+    inputNodeGUID: abde3875-cf16-4c04-8bfd-b822dd9f154e
+    outputNodeGUID: 2593e722-e7b9-4414-817f-7e878c74a4b6
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 0303fe1e-5383-44b1-b61e-e76dd28b38bf
+    owner: {fileID: 11400000}
+    inputNodeGUID: 60bcce63-56a7-4ad5-9a67-76d6a752b6d9
+    outputNodeGUID: 4257c346-d595-4095-8faa-f62839bd7a21
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 03280249-9dcf-4011-b2d1-790d3c891cf1
+    owner: {fileID: 11400000}
+    inputNodeGUID: 69402a2e-0f54-4920-ad8a-3a93e3bfc261
+    outputNodeGUID: 60bcce63-56a7-4ad5-9a67-76d6a752b6d9
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 82f190bd-ed21-4b53-a929-53cbaef45b6c
+    owner: {fileID: 11400000}
+    inputNodeGUID: ce380671-6e09-4997-b8ad-018b8e488128
+    outputNodeGUID: fc8d55c3-0566-4b98-ae9e-6bb3d22f6a20
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 964688af-2318-404f-ae5a-3394f3217814
+    owner: {fileID: 11400000}
+    inputNodeGUID: d0c4ebba-a987-4eb3-acda-2f376cdc0fa0
+    outputNodeGUID: ce380671-6e09-4997-b8ad-018b8e488128
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 31514ccb-eed9-49fb-8305-3213a22d0d13
+    owner: {fileID: 11400000}
+    inputNodeGUID: fc8d55c3-0566-4b98-ae9e-6bb3d22f6a20
+    outputNodeGUID: e37bb069-2d7a-4d88-8e13-58dfe97181b7
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups:
+  - title: Second Call
+    color: {r: 0, g: 0, b: 0, a: 0.3}
+    position:
+      serializedVersion: 2
+      x: -649.297
+      y: 123.29526
+      width: 716
+      height: 207
+    size: {x: 400, y: 200}
+    innerNodeGUIDs:
+    - 4257c346-d595-4095-8faa-f62839bd7a21
+    - 60bcce63-56a7-4ad5-9a67-76d6a752b6d9
+    - 69402a2e-0f54-4920-ad8a-3a93e3bfc261
+  - title: Call Log
+    color: {r: 0, g: 0, b: 0, a: 0.3}
+    position:
+      serializedVersion: 2
+      x: -775.3598
+      y: -136.9781
+      width: 995
+      height: 207
+    size: {x: 400, y: 200}
+    innerNodeGUIDs:
+    - e37bb069-2d7a-4d88-8e13-58dfe97181b7
+    - 473ac079-8d43-4209-9b36-b6eaaa4331f1
+    - fc8d55c3-0566-4b98-ae9e-6bb3d22f6a20
+    - d0c4ebba-a987-4eb3-acda-2f376cdc0fa0
+    - ce380671-6e09-4997-b8ad-018b8e488128
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 1006
+      y: 352
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: ConditionalProcessorView, Assembly-CSharp-Editor, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 88
+      width: 186
+      height: 220
+    opened: 1
+    editorType:
+      serializedType: FunctionItemView, Assembly-CSharp-Editor, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 316
+      width: 191
+      height: 224
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  exposedParameters:
+  - id: 11
+  - id: 12
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 921, y: 283, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  functions:
+  - id: 13
+  - id: 14
+  functionID: 11
+  references:
+    version: 1
+    00000000:
+      type: {class: FunctionStartNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: e37bb069-2d7a-4d88-8e13-58dfe97181b7
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: -750.4791
+          y: -78
+          width: 119
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        title: Call Log
+    00000001:
+      type: {class: FunctionEndNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: d0c4ebba-a987-4eb3-acda-2f376cdc0fa0
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 24.520874
+          y: -78
+          width: 170
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        title: Call Log
+    00000002:
+      type: {class: ConsoleNode, ns: NodeGraphProcessor.Examples, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: fc8d55c3-0566-4b98-ae9e-6bb3d22f6a20
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: -469.47913
+          y: -78
+          width: 170
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        logText: Log
+        logType: 3
+    00000003:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        nodeCustomName: 
+        GUID: 473ac079-8d43-4209-9b36-b6eaaa4331f1
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: -607.4791
+          y: 8
+          width: 86
+          height: 37
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: a5df51b0-fe28-4e33-bf0d-bafeb1a56372
+        accessor: 0
+    00000004:
+      type: {class: StartNode, ns: NodeGraphProcessor.Examples, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: b2b01273-be9b-4514-a405-bccc8721b595
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: -641.0002
+          y: -292.61713
+          width: 88
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    00000005:
+      type: {class: FunctionNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 2593e722-e7b9-4414-817f-7e878c74a4b6
+        computeOrder: 6
+        position:
+          serializedVersion: 2
+          x: -455.00018
+          y: -292.61713
+          width: 170
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        functionID: 10
+        functionInfo:
+          name: Call Log
+          uniqueID: 10
+          inputParams: []
+          outputParams: []
+          entryNode:
+            id: 0
+          endNode:
+            id: 1
+    00000006:
+      type: {class: ConsoleNode, ns: NodeGraphProcessor.Examples, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: abde3875-cf16-4c04-8bfd-b822dd9f154e
+        computeOrder: 7
+        position:
+          serializedVersion: 2
+          x: -213.00014
+          y: -292.61713
+          width: 170
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        logText: END
+        logType: 3
+    00000007:
+      type: {class: FunctionStartNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 4257c346-d595-4095-8faa-f62839bd7a21
+        computeOrder: 8
+        position:
+          serializedVersion: 2
+          x: -624.01135
+          y: 182
+          width: 141
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        title: Second Call
+    00000008:
+      type: {class: FunctionEndNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 69402a2e-0f54-4920-ad8a-3a93e3bfc261
+        computeOrder: 10
+        position:
+          serializedVersion: 2
+          x: -128.01135
+          y: 182
+          width: 170
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        title: Second Call
+    00000009:
+      type: {class: ConsoleNode, ns: NodeGraphProcessor.Examples, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 60bcce63-56a7-4ad5-9a67-76d6a752b6d9
+        computeOrder: 9
+        position:
+          serializedVersion: 2
+          x: -383.01135
+          y: 182
+          width: 170
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        logText: second
+        logType: 3
+    0000000A:
+      type: {class: FunctionNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: ce380671-6e09-4997-b8ad-018b8e488128
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: -224.47913
+          y: -78
+          width: 170
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        functionID: 11
+        functionInfo:
+          name: Second Call
+          uniqueID: 11
+          inputParams: []
+          outputParams: []
+          entryNode:
+            id: 7
+          endNode:
+            id: 8
+    0000000B:
+      type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 9293c0e8-f5a5-4fd6-be4c-4dec1802fdb8
+        name: TestBoolean
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 15
+        val: 1
+    0000000C:
+      type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: a5df51b0-fe28-4e33-bf0d-bafeb1a56372
+        name: message
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 16
+        val: Call
+    0000000D:
+      type: {class: FunctionGraph/FunctionInfo, ns: , asm: Assembly-CSharp}
+      data:
+        name: Call Log
+        uniqueID: 10
+        inputParams: []
+        outputParams: []
+        entryNode:
+          id: 0
+        endNode:
+          id: 1
+    0000000E:
+      type: {class: FunctionGraph/FunctionInfo, ns: , asm: Assembly-CSharp}
+      data:
+        name: Second Call
+        uniqueID: 11
+        inputParams: []
+        outputParams: []
+        entryNode:
+          id: 7
+        endNode:
+          id: 8
+    0000000F:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 9293c0e8-f5a5-4fd6-be4c-4dec1802fdb8
+    00000010:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: a5df51b0-fe28-4e33-bf0d-bafeb1a56372

@@ -809,7 +809,7 @@ namespace GraphProcessor
 #endif
 		}
 
-		void UpdateSerializedProperties()
+		protected void UpdateSerializedProperties()
 		{
 			serializedGraph = new SerializedObject(graph);
 		}

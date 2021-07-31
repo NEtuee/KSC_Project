@@ -13,6 +13,15 @@ public class ListNode : BaseNode
 	[Input(name = "In"), SerializeField]
 	public Vector4				input;
 
+	[Output(name = "Out")]
+	public IntParameter parameter;
+
+	[Output(name = "Out")]
+	public FloatParameter parameter2;
+
+	[Output(name = "Out")]
+	public Vector3Parameter parameter3;
+
 	public List<GameObject>		objs = new List<GameObject>();
 
 	public override string		name => "List";

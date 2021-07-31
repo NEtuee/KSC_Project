@@ -15,6 +15,13 @@ public class GraphAssetCallbacks
 		ProjectWindowUtil.CreateAsset(graph, "GraphProcessor.asset");
 	}
 
+	[MenuItem("Assets/Create/GraphProcessor/FunctionGraph", false, 10)]
+	public static void CreateFunctionGraphPorcessor()
+	{
+		var graph = ScriptableObject.CreateInstance< FunctionGraph >();
+		ProjectWindowUtil.CreateAsset(graph, "FunctionGraphProcessor.asset");
+	}
+
 	[OnOpenAsset(0)]
 	public static bool OnBaseGraphOpened(int instanceID, int line)
 	{
