@@ -1017,8 +1017,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private void ProcessFixedUpdate()
     {
           animator.SetBool("IsGround", pressJump == false ? movement.isGrounded : false);
+           
+          bool isNearGround =Physics.Raycast(transform.position, -transform.up, 1.0f, groundLayer);
+          animator.SetBool("IsNearGround",isNearGround);
 
-        switch (state)
+          switch (state)
         {
             case PlayerState.Grab:
             {
