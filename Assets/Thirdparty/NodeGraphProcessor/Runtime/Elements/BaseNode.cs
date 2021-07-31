@@ -657,6 +657,7 @@ namespace GraphProcessor
 		/// Override this method to implement custom processing
 		/// </summary>
 		protected virtual void Process() {}
+		public virtual void ValueInputed(NodePort port) {}
 
 		#endregion
 

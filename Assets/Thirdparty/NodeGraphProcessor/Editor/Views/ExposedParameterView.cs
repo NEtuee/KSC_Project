@@ -29,7 +29,6 @@ namespace GraphProcessor
 
         protected virtual void OnAddClicked()
         {
-            Debug.Log("Check");
             var parameterType = new GenericMenu();
 
             foreach (var paramType in GetExposedParameterTypes())

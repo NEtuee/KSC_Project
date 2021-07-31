@@ -261,10 +261,19 @@ namespace GraphProcessor
 			}
 
 			foreach (var pushDataDelegate in pushDataDelegates)
+			{
 				pushDataDelegate.Value();
+			}
+
+			foreach(var edge in edges)
+			{
+				edge.inputNode.ValueInputed(edge.inputPort);
+			}
 
 			if (edgeWithRemoteCustomIO.Count == 0)
+			{
 				return ;
+			}
 
 			//if there are custom IO implementation on the other ports, they'll need our value in the passThrough buffer
 			object ourValue = fieldInfo.GetValue(fieldOwner);
