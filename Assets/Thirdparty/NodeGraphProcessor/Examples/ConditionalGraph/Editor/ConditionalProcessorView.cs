@@ -16,7 +16,7 @@ public class ConditionalProcessorView : PinnedElementView
 
     protected override void Initialize(BaseGraphView graphView)
     {
-        processor = new ConditionalProcessor(graphView.graph);
+        processor = new ConditionalProcessor(graphView.graph, false);
         this.graphView = graphView;
 
         graphView.computeOrderUpdated += processor.UpdateComputeOrder;

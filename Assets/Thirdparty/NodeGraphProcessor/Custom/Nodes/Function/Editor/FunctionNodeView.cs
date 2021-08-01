@@ -18,6 +18,7 @@ public class FunctionNodeView : BaseNodeView
 
 		title = node.functionInfo.name;
 
+		titleContainer.style.backgroundColor = new StyleColor(new Color(.5f,0.2f,0f));
 		node.functionInfo.onNameChanged += (x)=>{title = x;};
 	}
 }

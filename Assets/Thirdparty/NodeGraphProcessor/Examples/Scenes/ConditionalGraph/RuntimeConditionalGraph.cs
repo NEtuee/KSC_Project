@@ -12,7 +12,7 @@ public class RuntimeConditionalGraph : MonoBehaviour
 	private void Start()
 	{
 		if(graph != null)
-			processor = new ConditionalProcessor(graph);
+			processor = new ConditionalProcessor(graph,true);
 
 		processor.Run();
 	}

@@ -20,9 +20,12 @@ namespace GraphProcessor
 		/// Manage graph scheduling and processing
 		/// </summary>
 		/// <param name="graph">Graph to be processed</param>
-		public BaseGraphProcessor(BaseGraph graph)
+		public BaseGraphProcessor(BaseGraph graph, bool copy)
 		{
-			this.graph = ScriptableObject.Instantiate(graph);
+			if(copy)
+				this.graph = ScriptableObject.Instantiate(graph);
+			else
+				this.graph = graph;
 
 			UpdateComputeOrder();
 		}

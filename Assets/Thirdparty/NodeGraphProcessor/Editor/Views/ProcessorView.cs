@@ -18,7 +18,7 @@ namespace GraphProcessor
 
 		protected override void Initialize(BaseGraphView graphView)
 		{
-			processor = new ProcessGraphProcessor(graphView.graph);
+			processor = new ProcessGraphProcessor(graphView.graph, false);
 
 			graphView.computeOrderUpdated += processor.UpdateComputeOrder;
 

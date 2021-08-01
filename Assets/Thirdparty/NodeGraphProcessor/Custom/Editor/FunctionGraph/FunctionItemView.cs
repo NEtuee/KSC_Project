@@ -64,7 +64,10 @@ public class FunctionItemView : PinnedElementView
 
         foreach (var param in functionGraph.functions)
         {
-            var row = new BlackboardRow(new FunctionItemFieldView(graphView, param), new VisualElement());
+            if(param.hideInList)
+                continue;
+                
+            var row = new BlackboardRow(new FunctionItemFieldView(graphView, param), null);
             // row.expanded = param.settings.expanded;
             // row.RegisterCallback<GeometryChangedEvent>(e => {
             //     param.settings.expanded = row.expanded;

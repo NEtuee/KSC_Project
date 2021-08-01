@@ -39,12 +39,14 @@ public class FunctionGraphView : BaseGraphView
 		evt.menu.AppendAction("New Stack", (e) => AddStackNode(new BaseStackNode(position)), DropdownMenuAction.AlwaysEnabled);
 	}
 
-    public void AddFunction(Vector2 position)
+    public FunctionGraph.FunctionInfo AddFunction(Vector2 position, string title = "", bool hide = false)
     {
         var function = new FunctionGraph.FunctionInfo{
             name = "New Function " + functionGraph.functionID,
             uniqueID = ++functionGraph.functionID,
         };
+
+        function.name = title == "" ? function.name : title;
 
         var startNode = BaseNode.CreateFromType<FunctionStartNode>(position);
         AddNode(startNode);
@@ -54,9 +56,12 @@ public class FunctionGraphView : BaseGraphView
 
         function.entryNode = startNode;
         function.endNode = endNode;
+        function.hideInList = hide;
 
         function.UpdateNodeTitle();
         functionGraph.AddFunction(function);
+
+        return function;
         //functionGraph.onFunctionListChanged?.Invoke();
     }
 

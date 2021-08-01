@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GraphProcessor;
 
+[System.Serializable]
 public class FunctionGraph : BaseGraph
 {
     [System.Serializable]
@@ -13,10 +14,10 @@ public class FunctionGraph : BaseGraph
         public int uniqueID;
 
         [SerializeField,SerializeReference]
-        public List<ExposedParameter> inputParams = new List<ExposedParameter>();
+        public List<object> inputParams = new List<object>();
 
         [SerializeField,SerializeReference]
-        public List<ExposedParameter> outputParams = new List<ExposedParameter>();
+        public List<object> outputParams = new List<object>();
 
         [SerializeField,SerializeReference]
         public FunctionStartNode entryNode;
@@ -32,6 +33,10 @@ public class FunctionGraph : BaseGraph
             endNode.ChangeTitle(name);
             onNameChanged?.Invoke(name);
         }
+
+#if UNITY_EDITOR
+        public bool hideInList = false;
+#endif
 
     }
 

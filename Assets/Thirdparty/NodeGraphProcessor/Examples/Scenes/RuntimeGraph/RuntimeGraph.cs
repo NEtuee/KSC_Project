@@ -13,7 +13,7 @@ public class RuntimeGraph : MonoBehaviour
 	private void Start()
 	{
 		if (graph != null)
-			processor = new ProcessGraphProcessor(graph);
+			processor = new ProcessGraphProcessor(graph, true);
 	}
 
 	int i = 0;

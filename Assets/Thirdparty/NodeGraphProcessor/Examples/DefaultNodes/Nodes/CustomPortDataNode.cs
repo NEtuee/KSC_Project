@@ -27,10 +27,15 @@ public class CustomPortData : BaseNode
 		output = 0;
 
 		if (inputs == null)
+		{
+			Debug.Log("Check");
 			return ;
-
+		}
 		foreach (float input in inputs)
+		{
+			Debug.Log("loop");
 			output += input;
+		}
 	}
 
 	[CustomPortBehavior(nameof(inputs))]
@@ -47,6 +52,7 @@ public class CustomPortData : BaseNode
 	[CustomPortInput(nameof(inputs), typeof(float), allowCast = true)]
 	public void GetInputs(List< SerializableEdge > edges)
 	{
-		// inputs = edges.Select(e => (float)e.passThroughBuffer);
+		Debug.Log(edges.Count);
+		inputs = edges.Select(e => e.passThroughBuffer);
 	}
 }

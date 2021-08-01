@@ -22,6 +22,13 @@ public class GraphAssetCallbacks
 		ProjectWindowUtil.CreateAsset(graph, "FunctionGraphProcessor.asset");
 	}
 
+	[MenuItem("Assets/Create/GraphProcessor/StateMachineGraph", false, 10)]
+	public static void CreateStateGraphPorcessor()
+	{
+		var graph = ScriptableObject.CreateInstance< StateMachineGraph >();
+		ProjectWindowUtil.CreateAsset(graph, "StateGraphProcessor.asset");
+	}
+
 	[OnOpenAsset(0)]
 	public static bool OnBaseGraphOpened(int instanceID, int line)
 	{

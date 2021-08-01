@@ -5,16 +5,16 @@ using UnityEditor;
 using GraphProcessor;
 using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 
-public class FunctionGraphToolbarView : ToolbarView
+public class StateGraphToolbarView : FunctionGraphToolbarView
 {
-    public FunctionGraphToolbarView(BaseGraphView graphView) : base(graphView) {}
+    public StateGraphToolbarView(BaseGraphView graphView) : base(graphView) {}
 
 	protected override void AddButtons()
 	{
 		base.AddButtons();
 
-        bool processorVisible = graphView.GetPinnedElementStatus<FunctionItemView>() != Status.Hidden;
-	    AddToggle("Show Function List", processorVisible, (v) => graphView.ToggleView<FunctionItemView>());
+        bool processorVisible = graphView.GetPinnedElementStatus<StateItemView>() != Status.Hidden;
+	    AddToggle("Show State List", processorVisible, (v) => graphView.ToggleView<StateItemView>());
 
 		bool conditionalProcessorVisible = graphView.GetPinnedElementStatus< ConditionalProcessorView >() != Status.Hidden;
 		AddToggle("Show Conditional Processor", conditionalProcessorVisible, (v) => graphView.ToggleView< ConditionalProcessorView>());

@@ -20,7 +20,7 @@ namespace GraphProcessor
 		/// Manage graph scheduling and processing
 		/// </summary>
 		/// <param name="graph">Graph to be processed</param>
-		public ProcessGraphProcessor(BaseGraph graph) : base(graph) {}
+		public ProcessGraphProcessor(BaseGraph graph, bool copy) : base(graph, copy) {}
 
 		public override void UpdateComputeOrder()
 		{
