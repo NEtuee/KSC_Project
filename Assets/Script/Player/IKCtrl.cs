@@ -73,6 +73,12 @@ public class IKCtrl : MonoBehaviour
         if (Vector3.Distance(animator.bodyPosition, transform.position) >= 2.0f)
             InitPelvisHeight();
 
+        float leftWeight = animator.GetFloat("LeftIkWeight");
+        float rightWeight = animator.GetFloat("RightIkWeight");
+        float leftRotWeight = animator.GetFloat("LeftRotationWeight");
+        float rightRotWeight = animator.GetFloat("RightRotationWeight");
+
+        if(leftWeight != 0.0f || rightWeight != 0.0f)
         MovePelvisHeight();
 
         if (enableFeetIk == false)
@@ -82,11 +88,6 @@ public class IKCtrl : MonoBehaviour
 
         if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab || player.GetState() == PlayerCtrl_Ver2.PlayerState.HangLedge)
             return;
-
-        float leftWeight = animator.GetFloat("LeftIkWeight");
-        float rightWeight = animator.GetFloat("RightIkWeight");
-        float leftRotWeight = animator.GetFloat("LeftRotationWeight");
-        float rightRotWeight = animator.GetFloat("RightRotationWeight");
 
         animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, rightWeight);
 
