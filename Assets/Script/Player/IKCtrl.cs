@@ -78,8 +78,12 @@ public class IKCtrl : MonoBehaviour
         float leftRotWeight = animator.GetFloat("LeftRotationWeight");
         float rightRotWeight = animator.GetFloat("RightRotationWeight");
 
-        if(leftWeight != 0.0f || rightWeight != 0.0f)
-        MovePelvisHeight();
+        if (leftWeight != 0.0f || rightWeight != 0.0f)
+            MovePelvisHeight();
+        else
+        {
+            lastPelvisPositionY = animator.bodyPosition.y;
+        }
 
         if (enableFeetIk == false)
         {

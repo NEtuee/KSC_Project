@@ -143,6 +143,11 @@ public class CameraManager : ManagerBase
              DontDestroyOnLoad(Camera.main.transform);
              DontDestroyOnLoad(followTarget.transform);
          });
+
+        AddAction(MessageTitles.cameramanager_setBrainCameraPosition, (msg) =>
+         {
+             SetBrainCameraPosition((Vector3)msg.data);
+         });
     }
 
     public override void Initialize()
@@ -688,6 +693,12 @@ public struct PitchYawData
 {
     public float pitch;
     public float yaw;
+
+    public PitchYawData(float pitch,float yaw)
+    {
+        this.pitch = pitch;
+        this.yaw = yaw;
+    }
 }
 
 public struct PitchYawPositionData

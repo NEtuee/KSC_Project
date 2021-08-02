@@ -8,6 +8,8 @@ public class PlayerManager : ManagerBase
 {
     [SerializeField] private PlayerCtrl_Ver2 _player;
     [SerializeField] private EMPGun _emp;
+    [SerializeField] private Renderer bagRenderer;
+    private Material _bagMatrial;
     private Drone _drone;
 
     public override void Assign()
@@ -38,11 +40,23 @@ public class PlayerManager : ManagerBase
             _player.InitializeMove();
             _player.InitVelocity();
         });
+
+        AddAction(MessageTitles.playermanager_addDamageToPlayer, (msg) =>
+        {
+            _player.TakeDamage((float)msg.data);
+        });
     }
 
     public override void Initialize()
     {
         base.Initialize();
+
+        if(bagRenderer == null)
+        {
+            Debug.LogError("Not Set Bag Renderer");
+        }
+
+        _bagMatrial = bagRenderer.material;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -51,6 +65,8 @@ public class PlayerManager : ManagerBase
 
         _player.hp.Subscribe(value =>
         {
+            _bagMatrial.SetFloat("Vector1_5338de784f7d4439aba250082f9a53e3", value * 0.01f);
+
             StateBarSetValueType data;
             data.type = UIManager.StateBarType.HP;
             data.value = value;
