@@ -1436,6 +1436,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.SetBool("IsGrab", false);
                 animator.SetBool("IsLedge", false);
                 animator.SetTrigger("Landing");
+                    animator.ResetTrigger("FastStop");
                 footIK.EnableFeetIk();
                 handIK.DisableHandIK();
                 //GameManager.Instance.stateManager.Visible(false);
@@ -2627,7 +2628,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             PlayerDead();
         }
 
-        whenTakeDamage?.Invoke();
+        SendMessageEx(MessageTitles.uimanager_damageEffect, GetSavedNumber("UIManager"), null);
     }
 
     public void PlayerDead()

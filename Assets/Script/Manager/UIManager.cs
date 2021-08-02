@@ -33,6 +33,7 @@ public class UIManager : ManagerBase
     [SerializeField] private FadeUI _staminaBar;
     [SerializeField] private FadeUI _energyBar;
     [SerializeField] private HpPackUI _hpPackUI;
+    [SerializeField] private DamageEffect damageEffect;
 
     [Header("GunUI")]
     [SerializeField] private Canvas gunUiCanvas;
@@ -110,7 +111,11 @@ public class UIManager : ManagerBase
         {
             Debug.LogError("Not Exist EventSystem");
         }
-        
+
+        if (damageEffect == null)
+        {
+            Debug.LogError("Not Set DamageEffect");
+        }
     }
 
     public override void Assign()
@@ -230,6 +235,11 @@ public class UIManager : ManagerBase
              Cursor.lockState = CursorLockMode.None;
              Cursor.visible = true;
              SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), true);
+         });
+
+        AddAction(MessageTitles.uimanager_damageEffect, (msg) =>
+         {
+             damageEffect.Effect();
          });
     }
 
