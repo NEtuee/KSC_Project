@@ -13,9 +13,9 @@ public static class IOManager {
 		public INIDataInfo(string t, string d) {title = t; data = d;}
 	};
 
-	public static void WriteStringToFile_NoMark(string[] str,string fileName, bool docu = true)
+	public static void WriteStringToFile_NoMark(string[] str,string fileName, bool addPath = true)
 	{
-		string path = docu ? PathForDocumentsFile(fileName) : fileName;
+		string path = addPath ? PathForDocumentsFile(fileName) : fileName;
 		FileStream file = new FileStream ( path, FileMode.Create, FileAccess.Write );
 		StreamWriter sw = new StreamWriter( file );
 		int line = str.Length;

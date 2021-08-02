@@ -7,13 +7,7 @@ using DG.Tweening;
 public class DamageEffect : MonoBehaviour
 {
     public Image hitEffectImage;
-
-    private void Start()
-    {
-        ((PlayerCtrl_Ver2)GameManager.Instance.player).whenTakeDamage += HitEffect;
-    }
-
-    public void HitEffect()
+    public void Effect()
     {
         hitEffectImage.DOKill();
 

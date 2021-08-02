@@ -138,6 +138,11 @@ public static partial class MessageTitles
     /// data = InGameTutorialCtrl.InGameTutorialType
     /// </summary>
     public const ushort uimanager_activeInGameTutorial = 0x0324;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_damageEffect = 0x0325;
     #endregion
 
     #region CameraManager
@@ -207,6 +212,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort cameramanager_setYawPitchPosition = 0x0413;
 
+    /// <summary>
+    /// data = vector3
+    /// </summary>
+    public const ushort cameramanager_setBrainCameraPosition = 0x0414;
+
     #endregion
 
     #region EffectManager
@@ -266,17 +276,17 @@ public static partial class MessageTitles
     /// <summary>
     /// data = null
     /// </summary>
-    public const ushort player_initalizemove = 0x0901;
+    public const ushort player_initalizemove = 0x0903;
 
     /// <summary>
     /// data = bool
     /// </summary>
-    public const ushort player_visibledrone = 0x0902;
+    public const ushort player_visibledrone = 0x0904;
 
     /// <summary>
     /// data = null
     /// </summary>
-    public const ushort player_initVelocity = 0x0903;
+    public const ushort player_initVelocity = 0x0905;
 
     #endregion
 
@@ -291,6 +301,11 @@ public static partial class MessageTitles
     /// data = PositionRotation
     /// </summary>
     public const ushort playermanager_setPlayerTransform = 0x0911;
+
+    /// <summary>
+    /// data = float
+    /// </summary>
+    public const ushort playermanager_addDamageToPlayer = 0x0912;
 
     #endregion
 

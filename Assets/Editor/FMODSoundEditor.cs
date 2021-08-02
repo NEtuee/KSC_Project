@@ -682,7 +682,7 @@ public class FMODSoundEditor : EditorWindow
         {
             var objs = GameObject.FindObjectsOfType<FMODManager>();
 
-            if(objs != null)
+            if(objs != null && objs.Length != 0)
             {
                 _target = objs[0];
                 _prevTarget = null;

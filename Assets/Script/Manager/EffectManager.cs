@@ -72,5 +72,13 @@ struct EffectActiveData
     public Vector3 position;
     public Quaternion rotation;
     public Transform parent;
+
+    public EffectActiveData(string key, Vector3 position, Quaternion rotation, Transform parent = null)
+    {
+        this.key = key;
+        this.position = position;
+        this.rotation = rotation;
+        this.parent = parent;
+    }
 }
 
