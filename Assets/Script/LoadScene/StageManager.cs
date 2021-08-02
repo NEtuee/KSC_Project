@@ -5,7 +5,6 @@ using UnityEngine;
 public class StageManager : MonoBehaviour
 {
     public string SceneTitle = "";
-    public BooleanTrigger stageTriggerAsset;
 
     public Elevator entranceElevator;
     public Elevator exitElevator;

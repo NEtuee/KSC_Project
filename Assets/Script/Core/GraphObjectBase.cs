@@ -5,7 +5,7 @@ using UnityEngine;
 using GraphProcessor;
 using NodeGraphProcessor.Examples;
 
-public class GraphObjectBase : ObjectBase
+public class GraphObjectBase : UnTransfromObjectBase
 {
     public StateMachineGraph graphOrigin;
     private Dictionary<string,EntryNode> _entryNodes = new Dictionary<string, EntryNode>();
@@ -34,6 +34,7 @@ public class GraphObjectBase : ObjectBase
     public override void Initialize()
     {
         base.Initialize();
+        RegisterRequest(GetSavedNumber("StageManager"));
 
         RunGraph("Initialize");
     }
@@ -42,7 +43,12 @@ public class GraphObjectBase : ObjectBase
     {
         base.Progress(deltaTime);
 
-        RunGraph("Progress");
+        var node = FindNode("Progress");
+        if(node != null)
+        {
+            ((ObjectProgressEntryNode)node).deltaTime = deltaTime;
+            RunGraph(node);
+        }
     }
 
     public override void AfterProgress(float deltaTime)
@@ -61,14 +67,24 @@ public class GraphObjectBase : ObjectBase
         Destroy(_graph);
     }
 
+    EntryNode FindNode(string key)
+    {
+        return _entryNodes.ContainsKey(key) ? _entryNodes[key] : null;
+    }
+
+    void RunGraph(EntryNode node)
+    {
+        _nodeToExecute.Clear();
+        _nodeToExecute.Push(node);
+        RunTheGraph(_nodeToExecute);
+    }
+
     void RunGraph(string key)
     {
         if(!_entryNodes.ContainsKey(key))
             return;
     
-        _nodeToExecute.Clear();
-        _nodeToExecute.Push(_entryNodes[key]);
-        RunTheGraph(_nodeToExecute);
+        RunGraph(_entryNodes[key]);
     }
 
     void InitGraph()
@@ -155,7 +171,6 @@ public class GraphObjectBase : ObjectBase
 			else
 			{
 				node.OnProcess();
-                Debug.Log(node.name);
 			}
 		}
 	}

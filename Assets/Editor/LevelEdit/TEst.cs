@@ -14,7 +14,7 @@ public class TEst : EditorWindow
     [SerializeField, SerializeReference]
     EditorGUISplitView splitView = new EditorGUISplitView(EditorGUISplitView.Direction.Horizontal);
 
-    StageManager _stageManager;
+    StageManagerEx _stageManager;
 
 #region  ItemMenu
     string[] _itemMenu;
@@ -54,7 +54,7 @@ public class TEst : EditorWindow
         };
         _booleanTriggerMenu = new string[]{"GlobalTrigger","StageTrigger"};
 
-        _stageManager = GameObject.FindObjectOfType<StageManager>();
+        _stageManager = GameObject.FindObjectOfType<StageManagerEx>();
         _booleanTrigger[0] = (BooleanTrigger)AssetDatabase.LoadAssetAtPath("Assets/Settings/GlobalBooleanTrigger.asset",typeof(BooleanTrigger));
         _booleanTrigger[1] = _stageManager?.stageTriggerAsset;
 

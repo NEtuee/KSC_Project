@@ -5,7 +5,7 @@ using System.Reflection;
 using GraphProcessor;
 using NodeGraphProcessor.Examples;
 
-[System.Serializable, NodeMenuItem("Custom/EntryNode")]
+[System.Serializable]
 public class EntryNode : BaseNode, IConditionalNode
 {
 	[Output(name = "Executes")]

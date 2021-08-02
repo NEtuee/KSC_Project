@@ -16,6 +16,6 @@ public class EntryNodeView : BaseNodeView
 
         // Create your fields using node's variables and add them to the controlsContainer
 
-		controlsContainer.Add(new Label("Hello World !"));
+		titleContainer.style.backgroundColor = new StyleColor(new Color(0f,0.3f,0.45f));
 	}
 }
