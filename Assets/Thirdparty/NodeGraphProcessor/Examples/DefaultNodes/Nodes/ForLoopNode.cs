@@ -24,7 +24,7 @@ public class ForLoopNode : ConditionalNode
 
 	protected override void Process() => index++; // Implement all logic that affects the loop inner fields
 
-	public override IEnumerable< ConditionalNode >	GetExecutedNodes() => throw new System.Exception("Do not use GetExecutedNoes in for loop to get it's dependencies");
+	public override List<ConditionalNode>	GetExecutedNodes() => throw new System.Exception("Do not use GetExecutedNoes in for loop to get it's dependencies");
 
 	public IEnumerable< ConditionalNode >	GetExecutedNodesLoopBody()
 	{

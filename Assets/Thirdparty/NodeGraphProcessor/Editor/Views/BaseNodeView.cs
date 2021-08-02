@@ -837,7 +837,9 @@ namespace GraphProcessor
 				propertyField.Unbind();
 				// The property path look like this: nodes.Array.data[x].fieldName
 				// And we want to update the value of x with the new node index:
-				propertyField.bindingPath = s_ReplaceNodeIndexPropertyPath.Replace(propertyField.bindingPath, m => m.Groups[1].Value + nodeIndexString + m.Groups[3].Value);
+				
+				if(propertyField.bindingPath != null)
+					propertyField.bindingPath = s_ReplaceNodeIndexPropertyPath.Replace(propertyField.bindingPath, m => m.Groups[1].Value + nodeIndexString + m.Groups[3].Value);
 				propertyField.Bind(owner.serializedGraph);
 			}
 		}

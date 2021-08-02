@@ -10,7 +10,7 @@ public class FunctionEndNode : LinearConditionalNode, IConditionalNode
 {
     public Action onTitleChange;
     public string title = "";
-    public IEnumerable<ConditionalNode> nextNode;
+    public List<ConditionalNode> nextNode;
 
     public void ChangeTitle(string title)
     {
@@ -18,7 +18,7 @@ public class FunctionEndNode : LinearConditionalNode, IConditionalNode
         onTitleChange?.Invoke();
     }
 
-    public override IEnumerable< ConditionalNode >	GetExecutedNodes()
+    public override List<ConditionalNode>	GetExecutedNodes()
 	{
         return nextNode;
     }

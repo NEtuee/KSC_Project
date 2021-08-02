@@ -968,8 +968,12 @@ namespace GraphProcessor
 
 		public void RemoveNode(BaseNode node)
 		{
-			var view = nodeViewsPerNode[node];
-			RemoveNodeView(view);
+			if(nodeViewsPerNode.ContainsKey(node))
+			{
+				var view = nodeViewsPerNode[node];
+				RemoveNodeView(view);
+			}
+			
 			graph.RemoveNode(node);
 		}
 

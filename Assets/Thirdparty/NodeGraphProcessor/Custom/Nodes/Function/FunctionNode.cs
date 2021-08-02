@@ -45,12 +45,21 @@ public class FunctionNode : LinearConditionalNode
 	    //output = input * 42;
 	}
 
-	public override IEnumerable< ConditionalNode >	GetExecutedNodes()
+	public override List<ConditionalNode>	GetExecutedNodes()
 	{
-		var node = outputPorts.FirstOrDefault(n => n.fieldName == nameof(executes))
-		 	.GetEdges().Select(e => e.inputNode as ConditionalNode);
+		executedNodes.Clear();
+
+		var ports = outputPorts.Find((x)=>{return x.fieldName == nameof(executes);});
+		var edges = ports?.GetEdges();
+		foreach(var edge in edges)
+		{
+			executedNodes.Add((ConditionalNode)edge.inputNode);
+		}
+
+		// var node = outputPorts.FirstOrDefault(n => n.fieldName == nameof(executes))
+		//  	.GetEdges().Select(e => e.inputNode as ConditionalNode);
 			
-		functionInfo.endNode.nextNode = node;
+		functionInfo.endNode.nextNode = executedNodes;
 
 		// Return all the nodes connected to the executes port
 		return functionInfo.entryNode.GetExecutedNodes();

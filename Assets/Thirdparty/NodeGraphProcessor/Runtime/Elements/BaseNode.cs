@@ -177,6 +177,8 @@ namespace GraphProcessor
 			}
 		}
 
+
+		Action processAction;
 		// Used in port update algorithm
 		Stack<PortUpdate> fieldsToUpdate = new Stack<PortUpdate>();
 		HashSet<PortUpdate> updatedFields = new HashSet<PortUpdate>();
@@ -218,7 +220,7 @@ namespace GraphProcessor
 		public void Initialize(BaseGraph graph)
 		{
 			this.graph = graph;
-
+			processAction = Process;
 			ExceptionToLog.Call(() => Enable());
 
 			InitializePorts();
@@ -631,7 +633,7 @@ namespace GraphProcessor
 		{
 			inputPorts.PullDatas();
 
-			ExceptionToLog.Call(() => Process());
+			ExceptionToLog.Call(processAction);
 
 			InvokeOnProcessed();
 

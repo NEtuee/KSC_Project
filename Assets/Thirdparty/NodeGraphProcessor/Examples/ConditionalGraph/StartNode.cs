@@ -11,12 +11,28 @@ namespace NodeGraphProcessor.Examples
 		[Output(name = "Executes")]
 		public ConditionalLink		executes;
 
+		List<ConditionalNode> excutedNodes = new List<ConditionalNode>();
+
 		public override string		name => "Start";
 
-		public IEnumerable< ConditionalNode >	GetExecutedNodes()
+		public List<ConditionalNode>	GetExecutedNodes()
 		{
+			excutedNodes.Clear();
+
+			foreach(var output in outputPorts)
+			{
+				foreach(var edge in output.GetEdges())
+				{
+					if(edge.inputNode is ConditionalNode)
+					{
+						excutedNodes.Add((ConditionalNode)edge.inputNode);
+					}
+				}
+			}
+
+			return excutedNodes;
 			// Return all the nodes connected to the executes port
-			return GetOutputNodes().Where(n => n is ConditionalNode).Select(n => n as ConditionalNode);
+			//return GetOutputNodes().Where(n => n is ConditionalNode).Select(n => n as ConditionalNode);
 		}
 
 		public override FieldInfo[] GetNodeFields() => base.GetNodeFields();

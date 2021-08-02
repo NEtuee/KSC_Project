@@ -17,8 +17,9 @@ namespace NodeGraphProcessor.Examples
 		// These booleans will controls wether or not the execution of the folowing nodes will be done or discarded.
 		[Input(name = "Executed", allowMultiple = true)]
 		public ConditionalLink	executed;
+		public List<ConditionalNode> executedNodes = new List<ConditionalNode>();
 
-		public abstract IEnumerable< ConditionalNode >	GetExecutedNodes();
+		public abstract List<ConditionalNode>	GetExecutedNodes();
 
 		// Assure that the executed field is always at the top of the node port section
 		public override FieldInfo[] GetNodeFields()
@@ -38,11 +39,21 @@ namespace NodeGraphProcessor.Examples
 		[Output(name = "Executes")]
 		public ConditionalLink	executes;
 
-		public override IEnumerable< ConditionalNode >	GetExecutedNodes()
+		public override List<ConditionalNode>	GetExecutedNodes()
 		{
+			executedNodes.Clear();
+
+			var ports = outputPorts.Find((x)=>{return x.fieldName == nameof(executes);});
+			var edges = ports?.GetEdges();
+			foreach(var edge in edges)
+			{
+				executedNodes.Add((ConditionalNode)edge.inputNode);
+			}
+
+			return executedNodes;
 			// Return all the nodes connected to the executes port
-			return outputPorts.FirstOrDefault(n => n.fieldName == nameof(executes))
-				.GetEdges().Select(e => e.inputNode as ConditionalNode);
+			// return outputPorts.FirstOrDefault(n => n.fieldName == nameof(executes))
+			// 	.GetEdges().Select(e => e.inputNode as ConditionalNode);
 		}
 	}
 	

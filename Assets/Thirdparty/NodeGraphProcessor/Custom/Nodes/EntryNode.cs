@@ -5,23 +5,22 @@ using System.Reflection;
 using GraphProcessor;
 using NodeGraphProcessor.Examples;
 
-[System.Serializable]
-public class FunctionStartNode : BaseNode, IConditionalNode
+[System.Serializable, NodeMenuItem("Custom/EntryNode")]
+public class EntryNode : BaseNode, IConditionalNode
 {
-    [Output(name = "Executes")]
+	[Output(name = "Executes")]
 	public ConditionalLink		executes;
-	public override string		name => "FunctionStart";
+
+	public override string		name => "EntryNode";
+
+	public virtual string entryCode{get{return "";}}
 
 	List<ConditionalNode> excutedNodes = new List<ConditionalNode>();
 
-    public Action onTitleChange;
-    public string title = "";
-
-    public void ChangeTitle(string title)
-    {
-        this.title = title;
-        onTitleChange?.Invoke();
-    }
+	protected override void Process()
+	{
+	    //output = input * 42;
+	}
 
 	public List<ConditionalNode>	GetExecutedNodes()
 	{
@@ -39,6 +38,7 @@ public class FunctionStartNode : BaseNode, IConditionalNode
 		}
 
 		return excutedNodes;
+
 		// Return all the nodes connected to the executes port
 		//return GetOutputNodes().Where(n => n is ConditionalNode).Select(n => n as ConditionalNode);
 	}

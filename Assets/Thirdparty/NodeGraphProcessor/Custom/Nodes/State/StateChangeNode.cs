@@ -53,12 +53,20 @@ public class StateChangeNode : LinearConditionalNode
 		stateMachineGraph.ChangeState(stateID);
 	}
 
-	public override IEnumerable< ConditionalNode >	GetExecutedNodes()
+	public override List<ConditionalNode>	GetExecutedNodes()
 	{
-		var node = outputPorts.FirstOrDefault(n => n.fieldName == nameof(executes))
-		 	.GetEdges().Select(e => e.inputNode as ConditionalNode);
+		executedNodes.Clear();
 
-		stateInfo.stateInitialize.endNode.nextNode = node;
+		var ports = outputPorts.Find((x)=>{return x.fieldName == nameof(executes);});
+		var edges = ports?.GetEdges();
+		foreach(var edge in edges)
+		{
+			executedNodes.Add((ConditionalNode)edge.inputNode);
+		}
+		// var node = outputPorts.FirstOrDefault(n => n.fieldName == nameof(executes))
+		//  	.GetEdges().Select(e => e.inputNode as ConditionalNode);
+
+		stateInfo.stateInitialize.endNode.nextNode = executedNodes;
 
 		return stateInfo.stateInitialize.entryNode.GetExecutedNodes();
 	}

@@ -20,16 +20,25 @@ public class StateProgressNode : LinearConditionalNode
         stateInfo = stateMachineGraph.FindState(stateMachineGraph.currentState);
 	}
 
-	public override IEnumerable< ConditionalNode >	GetExecutedNodes()
+	public override List<ConditionalNode>	GetExecutedNodes()
 	{
-        var node = outputPorts.FirstOrDefault(n => n.fieldName == nameof(executes))
-		 	.GetEdges().Select(e => e.inputNode as ConditionalNode);
+		executedNodes.Clear();
+
+		var ports = outputPorts.Find((x)=>{return x.fieldName == nameof(executes);});
+		var edges = ports?.GetEdges();
+		foreach(var edge in edges)
+		{
+			executedNodes.Add((ConditionalNode)edge.inputNode);
+		}
+
+        // var node = outputPorts.FirstOrDefault(n => n.fieldName == nameof(executes))
+		//  	.GetEdges().Select(e => e.inputNode as ConditionalNode);
 
         if(stateInfo == null)
-            return node;
+            return executedNodes;
 
 
-		stateInfo.stateProgress.endNode.nextNode = node;
+		stateInfo.stateProgress.endNode.nextNode = executedNodes;
 
 		return stateInfo.stateProgress.entryNode.GetExecutedNodes();
 	}

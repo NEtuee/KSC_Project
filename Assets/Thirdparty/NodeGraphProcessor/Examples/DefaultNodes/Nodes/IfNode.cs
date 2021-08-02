@@ -22,12 +22,22 @@ public class IfNode : ConditionalNode
 
 	public override string		name => "If";
 
-	public override IEnumerable< ConditionalNode >	GetExecutedNodes()
+	public override List<ConditionalNode>	GetExecutedNodes()
 	{
 		string fieldName = condition ? nameof(@true) : nameof(@false);
 
+		executedNodes.Clear();
+
+		var ports = outputPorts.Find((x)=>{return x.fieldName == fieldName;});
+		var edges = ports?.GetEdges();
+		foreach(var edge in edges)
+		{
+			executedNodes.Add((ConditionalNode)edge.inputNode);
+		}
+
+		return executedNodes;
 		// Return all the nodes connected to either the true or false node
-		return outputPorts.FirstOrDefault(n => n.fieldName == fieldName)
-			.GetEdges().Select(e => e.inputNode as ConditionalNode);
+		//return outputPorts.FirstOrDefault(n => n.fieldName == fieldName)
+//			.GetEdges().Select(e => e.inputNode as ConditionalNode);
 	}
 }
