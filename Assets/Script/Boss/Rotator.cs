@@ -32,11 +32,11 @@ public class Rotator : MonoBehaviour
 
     public void Update()
     {
-        if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Fixed)
-            return;
+        // if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Fixed)
+        //     return;
 
-        if (GameManager.Instance.PAUSE == true)
-            return;
+        // if (GameManager.Instance.PAUSE == true)
+        //     return;
 
         if(play && !_start)
         {
@@ -89,11 +89,11 @@ public class Rotator : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Update)
-            return;
+        // if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Update)
+        //     return;
 
-        if (GameManager.Instance.PAUSE == true)
-            return;
+        // if (GameManager.Instance.PAUSE == true)
+        //     return;
 
         if(play && !_start)
         {

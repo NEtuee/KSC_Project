@@ -30,7 +30,7 @@ public class EntryNode : BaseNode, IConditionalNode
 		{
 			foreach(var edge in output.GetEdges())
 			{
-				if(edge.inputNode is ConditionalNode)
+				if(edge.inputPort.portData.displayType == typeof(ConditionalLink))
 				{
 					excutedNodes.Add((ConditionalNode)edge.inputNode);
 				}

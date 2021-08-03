@@ -171,6 +171,14 @@ namespace GraphProcessor
         protected override Settings CreateSettings() => new ColorSettings();
     }
 
+    // public class Vector3Parameter : ExposedParameter
+    // {
+    //     [SerializeField] Vector3 val = new Vector3();
+
+    //     public override object value { get => val; set => val = (Vector3)value; }
+    //     public override Type GetValueType() => typeof(Vector3);
+    // }
+
     [System.Serializable]
     public class FloatParameter : ExposedParameter
     {
@@ -198,48 +206,6 @@ namespace GraphProcessor
     }
 
     [System.Serializable]
-    public class Vector2Parameter : ExposedParameter
-    {
-        public enum Vector2Mode
-        {
-            Default,
-            MinMaxSlider,
-        }
-
-        [Serializable]
-        public class Vector2Settings : Settings
-        {
-            public Vector2Mode mode;
-            public float min = 0;
-            public float max = 1;
-
-            public override bool Equals(Settings param)
-                => base.Equals(param) && mode == ((Vector2Settings)param).mode && min == ((Vector2Settings)param).min && max == ((Vector2Settings)param).max;
-        }
-
-        [SerializeField] Vector2 val;
-
-        public override object value { get => val; set => val = (Vector2)value; }
-        protected override Settings CreateSettings() => new Vector2Settings();
-    }
-
-    [System.Serializable]
-    public class Vector3Parameter : ExposedParameter
-    {
-        [SerializeField] Vector3 val;
-
-        public override object value { get => val; set => val = (Vector3)value; }
-    }
-
-    [System.Serializable]
-    public class Vector4Parameter : ExposedParameter
-    {
-        [SerializeField] Vector4 val;
-
-        public override object value { get => val; set => val = (Vector4)value; }
-    }
-
-    [System.Serializable]
     public class IntParameter : ExposedParameter
     {
         public enum IntMode
@@ -263,22 +229,6 @@ namespace GraphProcessor
 
         public override object value { get => val; set => val = (int)value; }
         protected override Settings CreateSettings() => new IntSettings();
-    }
-
-    [System.Serializable]
-    public class Vector2IntParameter : ExposedParameter
-    {
-        [SerializeField] Vector2Int val;
-
-        public override object value { get => val; set => val = (Vector2Int)value; }
-    }
-
-    [System.Serializable]
-    public class Vector3IntParameter : ExposedParameter
-    {
-        [SerializeField] Vector3Int val;
-
-        public override object value { get => val; set => val = (Vector3Int)value; }
     }
 
     [System.Serializable]

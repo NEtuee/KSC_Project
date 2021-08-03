@@ -15,9 +15,9 @@ public class LevelObjectGraph : StateMachineGraph
 
     public LevelObjectGraph()
     {
-        gameObjectGUID = AddExposedParameter("GameObject",typeof(GameObjectParameter),null,false);
-        transformGUID = AddExposedParameter("Transform",typeof(TransformParameter),null,false);
-        levelObjectTransformGUID = AddExposedParameter("LevelObject",typeof(GraphObjectParamter),null,false);
-        levelObjectGUID = AddExposedParameter("LvObjTransform",typeof(GraphObjectTransformParamter),null,false);
+        gameObjectGUID = AddExposedParameter("GameObject",typeof(GameObjectParameter),null,false,true);
+        transformGUID = AddExposedParameter("Transform",typeof(TransformParameter),null,false,true);
+        levelObjectGUID = AddExposedParameter("LevelObject",typeof(GraphObjectParamter),null,false,true);
+        levelObjectTransformGUID= AddExposedParameter("LvObjTransform",typeof(GraphObjectTransformParamter),null,false,true);
     }
 }

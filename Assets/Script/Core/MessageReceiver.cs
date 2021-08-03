@@ -97,7 +97,7 @@ public abstract class MessageReceiver : UniqueNumberBase
         _msgProcActions.Add(title,action);
     }
 
-    protected void SendMessageQuick(MessageReceiver receiver,Message msg)
+    public void SendMessageQuick(MessageReceiver receiver,Message msg)
     {
         receiver.ReceiveAndProcessMessage(msg);
 #if UNITY_EDITOR
@@ -105,7 +105,7 @@ public abstract class MessageReceiver : UniqueNumberBase
 #endif
     }
 
-    protected void SendMessageQuick(MessageReceiver receiver,ushort title, Object data)
+    public void SendMessageQuick(MessageReceiver receiver,ushort title, Object data)
     {
         var msg = MessagePack(title,receiver.uniqueNumber,data);
         receiver.ReceiveAndProcessMessage(msg);
@@ -114,7 +114,7 @@ public abstract class MessageReceiver : UniqueNumberBase
 #endif
     }
 
-    protected void SendMessageEx(Message msg)
+    public void SendMessageEx(Message msg)
     {
         _sendQueue.Enqueue(msg);
 #if UNITY_EDITOR
@@ -122,7 +122,7 @@ public abstract class MessageReceiver : UniqueNumberBase
 #endif
     }
 
-    protected void SendMessageEx(ushort title, int target, Object data)
+    public void SendMessageEx(ushort title, int target, Object data)
     {
         var msg = MessagePack(title,target,data);
         _sendQueue.Enqueue(msg);
@@ -131,7 +131,7 @@ public abstract class MessageReceiver : UniqueNumberBase
 #endif
     }
 
-    protected void SendMessageEx(MessageReceiver receiver, Message msg)
+    public void SendMessageEx(MessageReceiver receiver, Message msg)
     {
         receiver.ReceiveMessage(msg);
 #if UNITY_EDITOR
@@ -139,7 +139,7 @@ public abstract class MessageReceiver : UniqueNumberBase
 #endif
     }
 
-    protected void SendMessageEx(MessageReceiver receiver, ushort title, Object data)
+    public void SendMessageEx(MessageReceiver receiver, ushort title, Object data)
     {
         var msg = MessagePack(title,receiver.uniqueNumber,data);
         receiver.ReceiveMessage(msg);
@@ -148,7 +148,7 @@ public abstract class MessageReceiver : UniqueNumberBase
 #endif
     }
 
-    protected void SendBroadcastMessage(ushort title, Object data, bool withoutSender)
+    public void SendBroadcastMessage(ushort title, Object data, bool withoutSender)
     {
         var msg = MessagePack(title, withoutSender ? boradcastWithoutSenderNumber : boradcastNumber, data);
 

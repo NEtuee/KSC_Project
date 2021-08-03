@@ -250,7 +250,6 @@ GameObject:
   - component: {fileID: 1070541199}
   - component: {fileID: 1070541198}
   - component: {fileID: 1070541197}
-  - component: {fileID: 1070541200}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -270,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9012e7153b95d7d4cb3f40f353efe064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowDebugMode: 0
+  allowDebugMode: 1
   debugExceptionTitles: []
   sendedCount: 0
   receivedCount: 0
@@ -290,12 +289,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5a773f3fabbda34e96f3ba833572eee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowDebugMode: 0
+  allowDebugMode: 1
   debugExceptionTitles: []
   sendedCount: 0
   receivedCount: 0
-  managers:
-  - {fileID: 1070541197}
+  managers: []
 --- !u!4 &1070541199
 Transform:
   m_ObjectHideFlags: 0
@@ -310,31 +308,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1070541200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1070541196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  Event: event:/UI/Button
-  PlayEvent: 0
-  StopEvent: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
-  DataCode: -1
-  dontStop: 0
 --- !u!1 &1354448709
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,6 +320,7 @@ GameObject:
   - component: {fileID: 1354448710}
   - component: {fileID: 1354448713}
   - component: {fileID: 1354448712}
+  - component: {fileID: 1354448714}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -370,8 +344,7 @@ MonoBehaviour:
   debugExceptionTitles: []
   sendedCount: 0
   receivedCount: 0
-  graphOrigin: {fileID: 11400000, guid: 7790ab346af61cf419bf38966b6b5f64, type: 2}
-  _graph: {fileID: 0}
+  graphOrigin: {fileID: 11400000, guid: 44de59bc1af717f48b1ddea1684152ee, type: 2}
 --- !u!4 &1354448711
 Transform:
   m_ObjectHideFlags: 0
@@ -436,3 +409,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1354448709}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1354448714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354448709}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e50eadf66e2378428bbc0ae56c40d1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: {x: 0, y: 10, z: 0}
+  play: 1
+  fall: 0
+  lerpSpeed: 0
+  lerpFactor: 1
+  startFactor: 0
+  _speed: {x: 0, y: 10, z: 0}
+  _stopMove: 0

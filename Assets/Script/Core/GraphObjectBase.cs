@@ -5,12 +5,13 @@ using UnityEngine;
 using GraphProcessor;
 using NodeGraphProcessor.Examples;
 
+[System.Serializable]
 public class GraphObjectBase : UnTransfromObjectBase
 {
     public LevelObjectGraph graphOrigin;
     private Dictionary<string,EntryNode> _entryNodes = new Dictionary<string, EntryNode>();
 
-    public LevelObjectGraph _graph;
+    private LevelObjectGraph _graph;
 
     HashSet<BaseNode> _nodeDependenciesGathered = new HashSet<BaseNode>();
 	HashSet<BaseNode> _skipConditionalHandling  = new HashSet<BaseNode>();
@@ -67,6 +68,11 @@ public class GraphObjectBase : UnTransfromObjectBase
         Destroy(_graph);
     }
 
+    public LevelObjectGraph GetCopyedGraph()
+    {
+        return _graph;
+    }
+
     EntryNode FindNode(string key)
     {
         return _entryNodes.ContainsKey(key) ? _entryNodes[key] : null;
@@ -92,6 +98,11 @@ public class GraphObjectBase : UnTransfromObjectBase
         _graph = ScriptableObject.Instantiate(graphOrigin);
         var entryNodeList = _graph.nodes.Where(n => n is EntryNode).Select(n => n as EntryNode).ToList();
 
+        _graph.GetExposedParameterFromGUID(_graph.transformGUID).value = transform;
+        _graph.GetExposedParameterFromGUID(_graph.gameObjectGUID).value = gameObject;
+        _graph.GetExposedParameterFromGUID(_graph.levelObjectGUID).value = this;
+        _graph.GetExposedParameterFromGUID(_graph.levelObjectTransformGUID).value = _objTransform;
+
         foreach(var node in entryNodeList)
         {
             _entryNodes.Add(node.entryCode,node);
@@ -102,17 +113,18 @@ public class GraphObjectBase : UnTransfromObjectBase
 	{
         _nodeDependenciesGathered.Clear();
         _skipConditionalHandling.Clear();
-        
+
 		while(nodeToExecute.Count > 0)
 		{
 			var node = nodeToExecute.Pop();
+
 			// TODO: maxExecutionTimeMS
 
 			// In case the node is conditional, then we need to execute it's non-conditional dependencies first
 			if(node is IConditionalNode && !_skipConditionalHandling.Contains(node))
 			{
 				// Gather non-conditional deps: TODO, move to the cache:
-				 if(_nodeDependenciesGathered.Contains(node))
+				if(_nodeDependenciesGathered.Contains(node))
 				{
 					// Execute the conditional node:
 					node.OnProcess();
@@ -137,7 +149,9 @@ public class GraphObjectBase : UnTransfromObjectBase
 							break;
 						case IConditionalNode cNode:
 							foreach(var n in cNode.GetExecutedNodes())
+                            {
 								nodeToExecute.Push(n);
+                            }
 						 	break;
 						default:
 							Debug.LogError($"Conditional node {node} not handled");
@@ -159,12 +173,18 @@ public class GraphObjectBase : UnTransfromObjectBase
                         var dependency = _dependencies.Pop();
 
                         foreach (var port in dependency.inputPorts)
+                        {
 				            foreach (var edge in port.GetEdges())
 				            	if(!(edge.outputNode is IConditionalNode))
+                                {
                                     _dependencies.Push(edge.outputNode);
+                                }
+                        }
 
                         if (dependency != node)
+                        {
                             nodeToExecute.Push(dependency);
+                        }
                     }
 				}
 			}

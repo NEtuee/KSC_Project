@@ -28,16 +28,29 @@ public class FunctionStartNode : BaseNode, IConditionalNode
 	{
 		excutedNodes.Clear();
 
+		// foreach(var output in outputPorts)
+		// {
+		// 	foreach(var edge in output.GetEdges())
+		// 	{
+		// 		if(edge.inputNode is ConditionalNode)
+		// 		{
+		// 			excutedNodes.Add((ConditionalNode)edge.inputNode);
+		// 		}
+		// 	}
+		// }
+
 		foreach(var output in outputPorts)
 		{
 			foreach(var edge in output.GetEdges())
 			{
-				if(edge.inputNode is ConditionalNode)
+				if(edge.inputPort.portData.displayType == typeof(ConditionalLink))
 				{
 					excutedNodes.Add((ConditionalNode)edge.inputNode);
 				}
 			}
 		}
+
+		
 
 		return excutedNodes;
 		// Return all the nodes connected to the executes port

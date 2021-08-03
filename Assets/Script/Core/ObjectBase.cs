@@ -2,6 +2,7 @@ using UnityEngine;
 
 public abstract class ObjectBase : MessageReceiver, IProgress
 {
+    [System.Serializable]
     public class ObjectTransform
     {
         public Vector3 position;

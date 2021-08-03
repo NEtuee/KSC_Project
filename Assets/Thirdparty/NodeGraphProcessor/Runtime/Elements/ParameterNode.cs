@@ -89,12 +89,14 @@ namespace GraphProcessor
 					displayType = (parameter == null) ? typeof(object) : parameter.GetValueType(),
 				};
 			}
+
 		}
 
 		protected override void Process()
 		{
 #if UNITY_EDITOR // In the editor, an undo/redo can change the parameter instance in the graph, in this case the field in this class will point to the wrong parameter
-			parameter = graph.GetExposedParameterFromGUID(parameterGUID);
+			if(!UnityEditor.EditorApplication.isPlaying)
+				parameter = graph.GetExposedParameterFromGUID(parameterGUID);
 #endif
 
 			if (accessor == ParameterAccessor.Get)

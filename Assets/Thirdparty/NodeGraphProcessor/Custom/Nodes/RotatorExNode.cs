@@ -12,7 +12,7 @@ public class RotatorExNode : LinearConditionalNode
     public float                deltaTime;
 
 	[Input(name = "Axis")]
-	public Vector3				axis;
+	public VectorClasses.Vector3C				axis;
 
 	[Input(name = "GameObject")]
 	public GameObject			gameObject;
@@ -23,6 +23,6 @@ public class RotatorExNode : LinearConditionalNode
 
 	protected override void Process()
 	{
-	    gameObject.transform.rotation *= Quaternion.Euler(axis * deltaTime);
+	    gameObject.transform.rotation *= Quaternion.Euler((Vector3)axis * deltaTime);
 	}
 }
