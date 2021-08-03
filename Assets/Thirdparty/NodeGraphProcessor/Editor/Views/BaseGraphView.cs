@@ -129,7 +129,7 @@ namespace GraphProcessor
 		/// <summary>
 		/// Workaround object for creating exposed parameter property fields.
 		/// </summary>
-		public ExposedParameterFieldFactory exposedParameterFactory { get; private set; }
+		public ExposedParameterFieldFactory exposedParameterFactory { get; set; }
 
 		public SerializedObject		serializedGraph { get; private set; }
 
@@ -375,8 +375,12 @@ namespace GraphProcessor
 							RemoveElement(group);
 							return true;
 						case ExposedParameterFieldView blackboardField:
-							graph.RemoveExposedParameter(blackboardField.parameter);
-							UpdateSerializedProperties();
+							if(blackboardField.parameter.canDelete)
+							{
+								graph.RemoveExposedParameter(blackboardField.parameter);
+								UpdateSerializedProperties();
+							}
+							
 							return true;
 						case BaseStackNodeView stackNodeView:
 							graph.RemoveStackNode(stackNodeView.stackNode);

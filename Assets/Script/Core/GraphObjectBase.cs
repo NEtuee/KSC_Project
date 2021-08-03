@@ -7,10 +7,10 @@ using NodeGraphProcessor.Examples;
 
 public class GraphObjectBase : UnTransfromObjectBase
 {
-    public StateMachineGraph graphOrigin;
+    public LevelObjectGraph graphOrigin;
     private Dictionary<string,EntryNode> _entryNodes = new Dictionary<string, EntryNode>();
 
-    private StateMachineGraph _graph;
+    public LevelObjectGraph _graph;
 
     HashSet<BaseNode> _nodeDependenciesGathered = new HashSet<BaseNode>();
 	HashSet<BaseNode> _skipConditionalHandling  = new HashSet<BaseNode>();

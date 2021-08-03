@@ -2,9 +2,13 @@ using UnityEngine;
 
 public abstract class ObjectBase : MessageReceiver, IProgress
 {
-    protected Vector3 _position;
-    protected Quaternion _rotation;
-    protected Vector3 _scale;
+    public class ObjectTransform
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+        public Vector3 scale;
+    }
+    protected ObjectTransform _objTransform;
 
     protected int _currentManagerNumber;
 
@@ -24,10 +28,10 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
     public virtual void UpdateTransform()
     {
-        if(_position != transform.position || _rotation != transform.rotation)
+        if(_objTransform.position != transform.position || _objTransform.rotation != transform.rotation)
         {
-            transform.SetPositionAndRotation(_position,_rotation);
-            transform.localScale = _scale;
+            transform.SetPositionAndRotation(_objTransform.position,_objTransform.rotation);
+            transform.localScale = _objTransform.scale;
 
             SyncLocalValue();
         }
@@ -36,9 +40,9 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
     public virtual void SyncLocalValue()
     {
-        _position = transform.position;
-        _rotation = transform.rotation;
-        _scale = transform.localScale;
+        _objTransform.position = transform.position;
+        _objTransform.rotation = transform.rotation;
+        _objTransform.scale = transform.localScale;
     }
 
     public void SendMessageQuick(Message msg)

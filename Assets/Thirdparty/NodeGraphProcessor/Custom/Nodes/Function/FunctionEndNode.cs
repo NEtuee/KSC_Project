@@ -11,6 +11,8 @@ public class FunctionEndNode : LinearConditionalNode, IConditionalNode
     public Action onTitleChange;
     public string title = "";
     public List<ConditionalNode> nextNode;
+    
+    public override bool deletable => false;
 
     public void ChangeTitle(string title)
     {

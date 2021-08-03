@@ -37,6 +37,7 @@ namespace GraphProcessor
 		[Obsolete("Use value instead")]
 		public SerializableObject	serializedValue;
 		public bool					input = true;
+        public bool                 canDelete = true;
         [SerializeReference]
 		public Settings             settings;
 		public string shortType => GetValueType()?.Name;
@@ -422,6 +423,15 @@ namespace GraphProcessor
         [SerializeField] Material val;
 
         public override object value { get => val; set => val = (Material)value; }
-        public override Type GetValueType() => typeof(Material);
+        public override Type GetValueType() => typeof(Material); 
+    }
+
+    [System.Serializable]
+    public class TransformParameter : ExposedParameter
+    {
+        [SerializeField] Transform val;
+
+        public override object value { get => val; set => val = (Transform)value; }
+        public override Type GetValueType() => typeof(Transform);
     }
 }

@@ -11,6 +11,7 @@ public class FunctionStartNode : BaseNode, IConditionalNode
     [Output(name = "Executes")]
 	public ConditionalLink		executes;
 	public override string		name => "FunctionStart";
+	public override bool deletable => false;
 
 	List<ConditionalNode> excutedNodes = new List<ConditionalNode>();
 

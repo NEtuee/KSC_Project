@@ -29,6 +29,13 @@ public class GraphAssetCallbacks
 		ProjectWindowUtil.CreateAsset(graph, "StateGraphProcessor.asset");
 	}
 
+	[MenuItem("Assets/Create/GraphProcessor/LevelObjectGraph", false, 10)]
+	public static void CreateLevelObjectGraphPorcessor()
+	{
+		var graph = ScriptableObject.CreateInstance< LevelObjectGraph >();
+		ProjectWindowUtil.CreateAsset(graph, "LevelObject.asset");
+	}
+
 	[OnOpenAsset(0)]
 	public static bool OnBaseGraphOpened(int instanceID, int line)
 	{

@@ -197,6 +197,7 @@ namespace GraphProcessor
 			var p =  new PropertyField(isHidden, "Hide in Inspector");
 
             p.RegisterValueChangeCallback(e => {
+                Debug.Log("Hidden");
                 settingsProperty.serializedObject.ApplyModifiedProperties();
                 graph.NotifyExposedParameterChanged(param);
             });
