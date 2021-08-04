@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 using GraphProcessor;
 
 [NodeCustomEditor(typeof(EntryNode))]
-public class EntryNodeView : BaseNodeView
+public class EntryNodeView2 : BaseNodeView
 {
 	public override void Enable()
 	{
