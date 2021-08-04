@@ -49,8 +49,9 @@ public class FunctionItemView : PinnedElementView
         foreach (var type in TypeCache.GetTypesDerivedFrom<ExposedParameter>())
         {
             if (type.IsGenericType)
+            {
                 continue ;
-
+            }
             yield return type;
         }
     }

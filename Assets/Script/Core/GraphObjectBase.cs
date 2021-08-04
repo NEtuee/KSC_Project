@@ -5,12 +5,13 @@ using UnityEngine;
 using GraphProcessor;
 using NodeGraphProcessor.Examples;
 
-public class GraphObjectBase : ObjectBase
+[System.Serializable]
+public class GraphObjectBase : UnTransfromObjectBase
 {
-    public StateMachineGraph graphOrigin;
+    public LevelObjectGraph graphOrigin;
     private Dictionary<string,EntryNode> _entryNodes = new Dictionary<string, EntryNode>();
 
-    private StateMachineGraph _graph;
+    private LevelObjectGraph _graph;
 
     HashSet<BaseNode> _nodeDependenciesGathered = new HashSet<BaseNode>();
 	HashSet<BaseNode> _skipConditionalHandling  = new HashSet<BaseNode>();
@@ -34,6 +35,7 @@ public class GraphObjectBase : ObjectBase
     public override void Initialize()
     {
         base.Initialize();
+        RegisterRequest(GetSavedNumber("StageManager"));
 
         RunGraph("Initialize");
     }
@@ -42,7 +44,12 @@ public class GraphObjectBase : ObjectBase
     {
         base.Progress(deltaTime);
 
-        RunGraph("Progress");
+        var node = FindNode("Progress");
+        if(node != null)
+        {
+            ((ObjectProgressEntryNode)node).deltaTime = deltaTime;
+            RunGraph(node);
+        }
     }
 
     public override void AfterProgress(float deltaTime)
@@ -61,20 +68,40 @@ public class GraphObjectBase : ObjectBase
         Destroy(_graph);
     }
 
+    public LevelObjectGraph GetCopyedGraph()
+    {
+        return _graph;
+    }
+
+    EntryNode FindNode(string key)
+    {
+        return _entryNodes.ContainsKey(key) ? _entryNodes[key] : null;
+    }
+
+    void RunGraph(EntryNode node)
+    {
+        _nodeToExecute.Clear();
+        _nodeToExecute.Push(node);
+        RunTheGraph(_nodeToExecute);
+    }
+
     void RunGraph(string key)
     {
         if(!_entryNodes.ContainsKey(key))
             return;
     
-        _nodeToExecute.Clear();
-        _nodeToExecute.Push(_entryNodes[key]);
-        RunTheGraph(_nodeToExecute);
+        RunGraph(_entryNodes[key]);
     }
 
     void InitGraph()
     {
         _graph = ScriptableObject.Instantiate(graphOrigin);
         var entryNodeList = _graph.nodes.Where(n => n is EntryNode).Select(n => n as EntryNode).ToList();
+
+        _graph.GetExposedParameterFromGUID(_graph.transformGUID).value = transform;
+        _graph.GetExposedParameterFromGUID(_graph.gameObjectGUID).value = gameObject;
+        _graph.GetExposedParameterFromGUID(_graph.levelObjectGUID).value = this;
+        _graph.GetExposedParameterFromGUID(_graph.levelObjectTransformGUID).value = _objTransform;
 
         foreach(var node in entryNodeList)
         {
@@ -86,17 +113,18 @@ public class GraphObjectBase : ObjectBase
 	{
         _nodeDependenciesGathered.Clear();
         _skipConditionalHandling.Clear();
-        
+
 		while(nodeToExecute.Count > 0)
 		{
 			var node = nodeToExecute.Pop();
+
 			// TODO: maxExecutionTimeMS
 
 			// In case the node is conditional, then we need to execute it's non-conditional dependencies first
 			if(node is IConditionalNode && !_skipConditionalHandling.Contains(node))
 			{
 				// Gather non-conditional deps: TODO, move to the cache:
-				 if(_nodeDependenciesGathered.Contains(node))
+				if(_nodeDependenciesGathered.Contains(node))
 				{
 					// Execute the conditional node:
 					node.OnProcess();
@@ -121,7 +149,9 @@ public class GraphObjectBase : ObjectBase
 							break;
 						case IConditionalNode cNode:
 							foreach(var n in cNode.GetExecutedNodes())
+                            {
 								nodeToExecute.Push(n);
+                            }
 						 	break;
 						default:
 							Debug.LogError($"Conditional node {node} not handled");
@@ -143,19 +173,24 @@ public class GraphObjectBase : ObjectBase
                         var dependency = _dependencies.Pop();
 
                         foreach (var port in dependency.inputPorts)
+                        {
 				            foreach (var edge in port.GetEdges())
 				            	if(!(edge.outputNode is IConditionalNode))
+                                {
                                     _dependencies.Push(edge.outputNode);
+                                }
+                        }
 
                         if (dependency != node)
+                        {
                             nodeToExecute.Push(dependency);
+                        }
                     }
 				}
 			}
 			else
 			{
 				node.OnProcess();
-                Debug.Log(node.name);
 			}
 		}
 	}

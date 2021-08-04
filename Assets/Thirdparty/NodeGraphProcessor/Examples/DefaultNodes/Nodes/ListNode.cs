@@ -19,8 +19,6 @@ public class ListNode : BaseNode
 	[Output(name = "Out")]
 	public FloatParameter parameter2;
 
-	[Output(name = "Out")]
-	public Vector3Parameter parameter3;
 
 	public List<GameObject>		objs = new List<GameObject>();
 

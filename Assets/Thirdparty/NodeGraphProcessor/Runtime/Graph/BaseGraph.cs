@@ -545,7 +545,7 @@ namespace GraphProcessor
 		/// <param name="type">parameter type (must be a subclass of ExposedParameter)</param>
 		/// <param name="value">default value</param>
 		/// <returns>The unique id of the parameter</returns>
-		public string AddExposedParameter(string name, Type type, object value = null)
+		public string AddExposedParameter(string name, Type type, object value = null, bool canDelete = true, bool isHidden = false)
 		{
 
 			if (!type.IsSubclassOf(typeof(ExposedParameter)))
@@ -560,6 +560,8 @@ namespace GraphProcessor
 				value = Activator.CreateInstance(param.GetValueType());
 			
 			param.Initialize(name, value);
+			param.canDelete = canDelete;
+			param.settings.isHidden = isHidden;
 			exposedParameters.Add(param);
 
 			onExposedParameterListChanged?.Invoke();

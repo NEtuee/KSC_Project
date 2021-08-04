@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StageManagerEx : ManagerBase
 {
+    public BooleanTrigger stageTriggerAsset;
+    
     public Elevator entranceElevator;
     public Elevator exitElevator;
     public Transform loadedPlayerPosition;

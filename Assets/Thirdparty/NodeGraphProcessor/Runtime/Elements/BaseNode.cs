@@ -634,6 +634,8 @@ namespace GraphProcessor
 			inputPorts.PullDatas();
 
 			ExceptionToLog.Call(processAction);
+			//processAction?.Invoke();
+			//Process();
 
 			InvokeOnProcessed();
 
