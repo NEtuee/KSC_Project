@@ -14,7 +14,7 @@ public class SettingManager : ManagerBase
     public override void Assign()
     {
         base.Assign();
-        SaveMyNumber("SettingManager");
+        SaveMyNumber("SettingManager",true);
 
         SaveDataHelper.streamingAssetsPath = Application.streamingAssetsPath;
 
@@ -36,12 +36,15 @@ public class SettingManager : ManagerBase
         base.Initialize();
 
         ControlSettingData controlSettingData = SaveDataHelper.LoadSetting<ControlSettingData>();
-        followTarget.PitchRotateSpeed = controlSettingData.pitchRotateSpeed;
-        followTarget.YawRotateSpeed = controlSettingData.yawRotateSpeed;
+        if (followTarget != null)
+        {
+            followTarget.PitchRotateSpeed = controlSettingData.pitchRotateSpeed;
+            followTarget.YawRotateSpeed = controlSettingData.yawRotateSpeed;
+        }
 
         CameraRotateSpeedData cameraRotateSpeedData;
-        cameraRotateSpeedData.pitch = followTarget.PitchRotateSpeed / MaxRotateSpeed;
-        cameraRotateSpeedData.yaw = followTarget.YawRotateSpeed / MaxRotateSpeed;
+        cameraRotateSpeedData.pitch = controlSettingData.pitchRotateSpeed / MaxRotateSpeed;
+        cameraRotateSpeedData.yaw = controlSettingData.yawRotateSpeed / MaxRotateSpeed;
 
         SendMessageEx(MessageTitles.uimanager_setvaluecamerarotatespeedslider, GetSavedNumber("UIManager"), cameraRotateSpeedData);
 
@@ -177,7 +180,7 @@ public class SettingManager : ManagerBase
     {
         if(followTarget == null)
         {
-            Debug.LogError("Not Set FollowTarget");
+            Debug.LogWarning("Not Set FollowTarget");
         }
     }
 }

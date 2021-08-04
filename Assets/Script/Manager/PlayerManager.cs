@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : ManagerBase
 {
@@ -177,6 +178,18 @@ public class PlayerManager : ManagerBase
         {
             SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
         }
+    }
+
+    public void GameQuit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+
+#if UNITY_STANDALONE
+        Application.Quit();
+#endif
+
     }
 }
 

@@ -121,7 +121,7 @@ public class UIManager : ManagerBase
     public override void Assign()
     {
         base.Assign();
-        SaveMyNumber("UIManager");
+        SaveMyNumber("UIManager",true);
 
         AddAction(MessageTitles.uimanager_activecrosshair, ActiveCrossHair);
         AddAction(MessageTitles.uimanager_setcrosshairphase, SetCrossHairPhase);
