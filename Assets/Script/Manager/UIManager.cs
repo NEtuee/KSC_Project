@@ -593,3 +593,9 @@ struct HpPackValueType
     public int value;
     public bool visible;
 }
+//public class HpPackValueType : MessageData
+//{
+//    public int value;
+//    public bool visible;
+//}
+
