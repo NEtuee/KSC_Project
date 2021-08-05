@@ -17,7 +17,6 @@ namespace FMODUnity
         FMOD.RESULT Lookup()
         {
             FMOD.RESULT result = RuntimeManager.StudioSystem.getParameterDescriptionByName(parameter, out parameterDescription);
-        
             return result;
         }
 

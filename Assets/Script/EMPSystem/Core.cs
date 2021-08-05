@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MD;
 
 public class Core : Hitable
 {
@@ -25,7 +26,7 @@ public class Core : Hitable
     public override void Destroy()
     {
         //GameManager.Instance.effectManager.Active("CannonExplosion", transform.position);
-        EffectActiveData data;
+        EffectActiveData data = MessageDataPooling.GetMessageData<EffectActiveData>();
         data.key = "CannonExplosion";
         data.position = transform.position;
         data.rotation = Quaternion.identity;
