@@ -61,12 +61,12 @@ public class BooleanTrigger : ScriptableObject
             dataList.Add(booleans[i].name + ":" + (booleans[i].trigger ? "1" : "0"));
         }
 
-        IOManager.WriteStringToFile_NoMark(dataList.ToArray(),name);
+        IOControl.WriteStringToFile_NoMark(dataList.ToArray(),name);
     }
 
     public void LoadDataFromFile(string name, bool addMissing)
     {
-        var dataArray = IOManager.ReadStringFromFile(name);
+        var dataArray = IOControl.ReadStringFromFile(name);
 
         foreach(var data in dataArray)
         {

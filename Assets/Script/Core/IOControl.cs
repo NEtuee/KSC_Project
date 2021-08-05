@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class IOManager {
+public static class IOControl {
 
 	public class INIDataInfo
 	{
