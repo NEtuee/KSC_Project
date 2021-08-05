@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using MD;
 
 public class PlayerRePositionor : UnTransfromObjectBase
 {
@@ -74,10 +75,13 @@ public class PlayerRePositionor : UnTransfromObjectBase
             ctrl.transform.position = respawn.position;
             ctrl.transform.SetPositionAndRotation(respawn.position,rot);
             //GameManager.Instance.cameraManager.SetBrainCameraPosition(respawn.position);
-            SendMessageEx(MessageTitles.cameramanager_setBrainCameraPosition, GetSavedNumber("CameraManager"), respawn.position);
+            Vector3Data position = MessageDataPooling.GetMessageData<Vector3Data>();
+            position.value = respawn.position;
+            SendMessageEx(MessageTitles.cameramanager_setBrainCameraPosition, GetSavedNumber("CameraManager"), position);
 
             //GameManager.Instance.followTarget.SetPitchYaw(rot.eulerAngles.x,rot.eulerAngles.y);
-            PitchYawData data = new PitchYawData(rot.eulerAngles.x, rot.eulerAngles.y);
+            PitchYawData data = MessageDataPooling.GetMessageData<PitchYawData>();
+            data.pitch = rot.eulerAngles.x; data.yaw = rot.eulerAngles.y;
             SendMessageEx(MessageTitles.cameramanager_setYawPitch, GetSavedNumber("CameraManager"), data);
             ctrl.TakeDamage(5.0f,false);
             whenFall?.Invoke();
@@ -99,9 +103,11 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
             _player.transform.SetPositionAndRotation(respawn.position,rot);
             _player.TakeDamage(5.0f);
-            SendMessageEx(MessageTitles.cameramanager_setBrainCameraPosition, GetSavedNumber("CameraManager"), respawn.position);
-            
-            PitchYawData data = new PitchYawData(rot.eulerAngles.x, rot.eulerAngles.y);
+            Vector3Data position = MessageDataPooling.GetMessageData<Vector3Data>();
+            position.value = respawn.position;
+            SendMessageEx(MessageTitles.cameramanager_setBrainCameraPosition, GetSavedNumber("CameraManager"), position);
+            PitchYawData data = MessageDataPooling.GetMessageData<PitchYawData>();
+            data.pitch = rot.eulerAngles.x; data.yaw = rot.eulerAngles.y;
             SendMessageEx(MessageTitles.cameramanager_setYawPitch, GetSavedNumber("CameraManager"), data);
             whenFall?.Invoke();
         }

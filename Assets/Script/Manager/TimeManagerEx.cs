@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using MD;
 public class TimeManagerEx : ManagerBase
 {
     private float _timeScaleLerp = 0f;
@@ -78,7 +78,7 @@ public class TimeManagerEx : ManagerBase
     /// <param name="msg"></param>
     public void SetTimeScale(Message msg)
     {
-        SetTimeScaleMsg data = (SetTimeScaleMsg)msg.data;
+        SetTimeScaleMsg data = MessageDataPooling.CastData<SetTimeScaleMsg>(msg.data);
 
         _timeCounter.InitTimer("timeScaleLerp", 0f, data.lerpTime);
         _timeCounter.InitTimer("timeScaleStop", 0f, data.stopTime);
@@ -92,9 +92,9 @@ public class TimeManagerEx : ManagerBase
 
     public void StopTime(Message msg)
     {
-        bool active = (bool)msg.data;
+        BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
 
-        if (active)
+        if (data.value)
             Time.timeScale = 0.0f;
         else
             Time.timeScale = 1.0f;
@@ -110,10 +110,13 @@ public class TimeManagerEx : ManagerBase
 }
 
 
-struct SetTimeScaleMsg
+namespace MD
 {
-    public float timeScale;
-    public float lerpTime;
-    public float stopTime;
-    public float startTime;
+    public class SetTimeScaleMsg : MessageData
+    {
+        public float timeScale;
+        public float lerpTime;
+        public float stopTime;
+        public float startTime;
+    }
 }

@@ -1,6 +1,8 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using MD;
 
 public class MessageData
 {
@@ -12,14 +14,14 @@ public class MessageDataPool
     public List<MessageData> _poolList = new List<MessageData>();
     public int _count = 0;
 
-    public MessageData Get()
+    public MessageData Get<T>() where T : MessageData, new()
     {
         if(_count == _poolList.Count)
             _count = 0;
 
         if(_poolList[_count].isUsing == true)
         {
-            _poolList.Add(new MessageData());
+            _poolList.Add(new T());
             _count = 0;
             return _poolList[_poolList.Count - 1];
         }
@@ -34,9 +36,19 @@ public class MessageDataPool
 public static class MessageDataPooling
 {
     private static Dictionary<System.Type, MessageDataPool> _messageDataDic = new Dictionary<System.Type, MessageDataPool>();
-    private const int initalizeDataNum = 3;
 
-    public static void RegisterMessageData<T>() where T : MessageData,new()
+    static MessageDataPooling()
+    {
+        RegisterMessageData<IntData>(10);
+        RegisterMessageData<FloatData>(10);
+        RegisterMessageData<BoolData>(10);
+        RegisterMessageData<StringData>(10);
+        RegisterMessageData<ActionData>();
+        RegisterMessageData<Vector3Data>(5);
+        RegisterMessageData<QuaternionData>(5);
+    }
+
+    public static void RegisterMessageData<T>(int initNum = 3) where T : MessageData,new()
     {
         System.Type type = typeof(T);
 
@@ -44,7 +56,7 @@ public static class MessageDataPooling
         {
             _messageDataDic.Add(type, new MessageDataPool());
 
-            for(int i =0; i<initalizeDataNum;i++)
+            for(int i =0; i<initNum;i++)
             {
                 _messageDataDic[type]._poolList.Add(new T());
             }
@@ -60,7 +72,7 @@ public static class MessageDataPooling
             RegisterMessageData<T>();
         }
 
-        return _messageDataDic[type].Get() as T;
+        return _messageDataDic[type].Get<T>() as T;
     }
 
     public static T CastData<T>(object data) where T : MessageData
@@ -70,3 +82,44 @@ public static class MessageDataPooling
         return realData;
     }
 }
+
+#region PrimaryMessageData
+
+namespace MD
+{
+    public class IntData : MessageData
+    {
+        public int value;
+    }
+
+    public class FloatData : MessageData
+    {
+        public float value;
+    }
+
+    public class BoolData : MessageData
+    {
+        public bool value;
+    }
+
+    public class StringData : MessageData
+    {
+        public string value;
+    }
+
+    public class ActionData : MessageData
+    {
+        public Action value;
+    }
+
+    public class Vector3Data : MessageData
+    {
+        public Vector3 value;
+    }
+
+    public class QuaternionData : MessageData
+    {
+        public Quaternion value;
+    }
+}
+#endregion

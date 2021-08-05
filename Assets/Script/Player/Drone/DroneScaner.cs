@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using MD;
 public class DroneScaner : UnTransfromObjectBase
 {
     public Transform forward;
@@ -48,7 +49,7 @@ public class DroneScaner : UnTransfromObjectBase
         scanMat.SetVector("_ForwardDirection", scanForward);
             
         //GameManager.Instance.soundManager.Play(1301, Vector3.zero, transform);
-        AttachSoundPlayData soundData;
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1301; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MD;
 
 public class EMPShield : Hitable
 {
@@ -248,19 +249,19 @@ public class EMPShield : Hitable
             //GameManager.Instance.soundManager.Play(1515, new Vector3(0, 1, 0), transform);
             //GameManager.Instance.soundManager.Play(1518, new Vector3(0, 1, 0), transform);
             //GameManager.Instance.soundManager.Play(1501,transform.position);
-            AttachSoundPlayData soundData;
+            AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
             soundData.id = 1515; soundData.localPosition = new Vector3(0,1,0); soundData.parent = transform; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData); 
-            AttachSoundPlayData soundData2;
+            AttachSoundPlayData soundData2 = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
             soundData2.id = 1518; soundData2.localPosition = new Vector3(0, 1, 0); soundData2.parent = transform; soundData2.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData2);
-            SoundPlayData soundData3;
+            SoundPlayData soundData3 = MessageDataPooling.GetMessageData<SoundPlayData>();
             soundData3.id = 1501; soundData3.position = transform.position; soundData3.returnValue = false; soundData3.dontStop = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData3);
         }
         else if(soundType == SoundType.Bomb)
         {
-            SoundPlayData soundData;
+            SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
             soundData.id = 1700; soundData.position = transform.position; soundData.returnValue = false; soundData.dontStop = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
             //GameManager.Instance.soundManager.Play(1700,transform.position);
@@ -269,7 +270,7 @@ public class EMPShield : Hitable
 
         //Destroy(Instantiate(destroyEffect, transform.position, transform.rotation), 3.5f);
         //GameManager.Instance.effectManager.Active("CannonExplosion", transform.position);
-        EffectActiveData data;
+        EffectActiveData data = MessageDataPooling.GetMessageData<EffectActiveData>();
         data.key = "CannonExplosion";
         data.position = transform.position;
         data.rotation = Quaternion.identity;
@@ -531,7 +532,7 @@ public class EMPShield : Hitable
             originalWpo = secondWpoValue;
             mat.SetColor("_color", thirdColor );
             //GameManager.Instance.soundManager.Play(1516, new Vector3(0, 1, 0), transform);
-            AttachSoundPlayData soundData;
+            AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
             soundData.id = 1516; soundData.localPosition = new Vector3(0, 1, 0); soundData.parent = transform; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
         }
@@ -540,7 +541,7 @@ public class EMPShield : Hitable
             originalWpo = thirdWpoValue;
             mat.SetColor("_color", secondColor);
             //GameManager.Instance.soundManager.Play(1517, new Vector3(0, 1, 0), transform);
-            AttachSoundPlayData soundData;
+            AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
             soundData.id = 1517; soundData.localPosition = new Vector3(0, 1, 0); soundData.parent = transform; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
         }

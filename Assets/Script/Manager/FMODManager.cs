@@ -3,43 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMOD;
 using Debug = UnityEngine.Debug;
+using MD;
 
-public struct SoundPlayData
+namespace MD
 {
-    public int id;
-    public Vector3 position;
-    public bool returnValue;
-    public bool dontStop;
-
-    public SoundPlayData(int id, Vector3 position, bool returnValue, bool dontStop = false)
+    public class SoundPlayData : MessageData
     {
-        this.id = id;
-        this.position = position;
-        this.returnValue = returnValue;
-        this.dontStop = dontStop;
+        public int id;
+        public Vector3 position;
+        public bool returnValue;
+        public bool dontStop;
+
+        public SoundPlayData() { }
+        public SoundPlayData(int id, Vector3 position, bool returnValue, bool dontStop = false)
+        {
+            this.id = id;
+            this.position = position;
+            this.returnValue = returnValue;
+            this.dontStop = dontStop;
+        }
     }
-}
-public struct AttachSoundPlayData
-{
-    public int id;
-    public Vector3 localPosition;
-    public Transform parent;
-
-    public bool returnValue;
-
-    public AttachSoundPlayData(int id, Vector3 localPosition, Transform parent,bool returnValue)
+    public class AttachSoundPlayData : MessageData
     {
-        this.id = id;
-        this.localPosition = localPosition;
-        this.parent = parent;
-        this.returnValue = returnValue;
+        public int id;
+        public Vector3 localPosition;
+        public Transform parent;
+
+        public bool returnValue;
+
+        public AttachSoundPlayData() { }
+        public AttachSoundPlayData(int id, Vector3 localPosition, Transform parent, bool returnValue)
+        {
+            this.id = id;
+            this.localPosition = localPosition;
+            this.parent = parent;
+            this.returnValue = returnValue;
+        }
     }
-}
-public struct SetParameterData
-{
-    public int soundId;
-    public int paramId;
-    public float value;
+    public class SetParameterData : MessageData
+    {
+        public int soundId;
+        public int paramId;
+        public float value;
+    }
 }
 
 [System.Serializable]
@@ -79,6 +85,10 @@ public class FMODManager : ManagerBase
         base.Assign();
 
         SaveMyNumber("FMODManager",true);
+
+        MessageDataPooling.RegisterMessageData<SoundPlayData>(20);
+        MessageDataPooling.RegisterMessageData<AttachSoundPlayData>(20);
+        MessageDataPooling.RegisterMessageData<SetParameterData>();
 
         AddAction(MessageTitles.fmod_play,Play);
         AddAction(MessageTitles.fmod_attachPlay,AttachPlay);
@@ -133,7 +143,7 @@ public class FMODManager : ManagerBase
 #region MessageCallback
     private void Play(Message msg)
     {
-        var data = (SoundPlayData)msg.data;
+        var data = MessageDataPooling.CastData<SoundPlayData>(msg.data);
         var emitter = Play(data.id,data.position,data.dontStop);
 
         if(data.returnValue)
@@ -145,7 +155,7 @@ public class FMODManager : ManagerBase
 
     private void AttachPlay(Message msg)
     {
-        var data = (AttachSoundPlayData)msg.data;
+        var data = MessageDataPooling.CastData<AttachSoundPlayData>(msg.data);
         var emitter = Play(data.id,data.localPosition,data.parent);
 
         if (data.returnValue)
@@ -157,13 +167,13 @@ public class FMODManager : ManagerBase
 
     private void SetParam(Message msg)
     {
-        var data = (SetParameterData)msg.data;
+        var data = MessageDataPooling.CastData<SetParameterData>(msg.data);
         SetParam(data.soundId,data.paramId,data.value);
     }
 
     private void SetGlobalParam(Message msg)
     {
-        var data = (SetParameterData)msg.data;
+        var data = MessageDataPooling.CastData<SetParameterData>(msg.data);
         SetGlobalParam(data.paramId,data.value);
     }
 

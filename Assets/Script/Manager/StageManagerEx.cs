@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MD;
 
 public class StageManagerEx : ManagerBase
 {
@@ -18,7 +19,9 @@ public class StageManagerEx : ManagerBase
 
         AddAction(MessageTitles.scene_sceneChanged, (msg) =>
         {
-            PositionRotation data = new PositionRotation(loadedPlayerPosition.position, loadedPlayerPosition.rotation);
+            PositionRotation data = MessageDataPooling.GetMessageData<PositionRotation>();
+            data.position = loadedPlayerPosition.position;
+            data.rotation = loadedPlayerPosition.rotation;
             SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
         });
     }

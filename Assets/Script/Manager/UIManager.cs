@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using TMPro;
 using DG.Tweening;
+using MD;
 
 public class UIManager : ManagerBase
 {
@@ -123,6 +124,9 @@ public class UIManager : ManagerBase
         base.Assign();
         SaveMyNumber("UIManager",true);
 
+        MessageDataPooling.RegisterMessageData<StateBarSetValueType>();
+        MessageDataPooling.RegisterMessageData<HpPackValueType>();
+
         AddAction(MessageTitles.uimanager_activecrosshair, ActiveCrossHair);
         AddAction(MessageTitles.uimanager_setcrosshairphase, SetCrossHairPhase);
 
@@ -130,86 +134,90 @@ public class UIManager : ManagerBase
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
         AddAction(MessageTitles.uimanager_setvaluehppackui, SetValueHpPackUI);
 
-        AddAction(MessageTitles.uimanager_settutorialdescription, (msg) => SetDescription((string)msg.data));
+        AddAction(MessageTitles.uimanager_settutorialdescription, (msg) =>
+        {
+            StringData data = MessageDataPooling.CastData<StringData>(msg.data);
+            SetDescription(data.value);
+        });
 
         AddAction(MessageTitles.uimanager_fadein, (msg) => FadeIn());
         AddAction(MessageTitles.uimanager_fadeout, (msg) => FadeOut());
 
         AddAction(MessageTitles.uimanager_activeloadingui, (msg) => 
         {
-            bool active = (bool)msg.data;
-            ActiveLoadingUI(active);
+            BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
+            ActiveLoadingUI(data.value);
         });
         AddAction(MessageTitles.uimanager_setloadinggagevalue, (msg) => 
         {
-            float value = (float)msg.data;
-            loadingUI.SetLoadingGageValue(value);
+            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+            loadingUI.SetLoadingGageValue(data.value);
         });
         AddAction(MessageTitles.uimanager_setloadingtiptext, (msg) =>
         {
-            string text = (string)msg.data;
-            loadingUI.SetLoadingTipText(text);
+            StringData data = MessageDataPooling.CastData<StringData>(msg.data);
+            loadingUI.SetLoadingTipText(data.value);
         });
 
         AddAction(MessageTitles.uimanager_setvaluecamerarotatespeedslider, (msg) =>
          {
-             CameraRotateSpeedData data = (CameraRotateSpeedData)msg.data;
+             CameraRotateSpeedData data = MessageDataPooling.CastData<CameraRotateSpeedData>(msg.data);
              SetValueCameraRotateSpeedSlider(data.yaw, data.pitch);
          });
         AddAction(MessageTitles.uimanager_setvaluevolumeslider, (msg) =>
         {
-            VolumeData data = (VolumeData)msg.data;
+            VolumeData data = MessageDataPooling.CastData<VolumeData>(msg.data);
             SetValueVolumeSlider(data.master, data.sfx,data.ambient, data.bgm);
         });
 
         AddAction(MessageTitles.uimanager_setresolutiondropdown, (msg) => 
         {
-            ResolutionData data = (ResolutionData)msg.data;
+            ResolutionData data = MessageDataPooling.CastData<ResolutionData>(msg.data);
             resolutionDropdown.AddOptions(data.resolutionStrings);
         });
 
         AddAction(MessageTitles.uimanager_setvalueresolutiondropdown,(msg)=>
         {
-            int value = (int)msg.data;
-            resolutionDropdown.value = value;
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            resolutionDropdown.value = data.value;
         });
         AddAction(MessageTitles.uimanager_setvaluescreenmodedropdown, (msg) =>
         {
-            int value = (int)msg.data;
-            screenModeDropdown.value = value;
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            screenModeDropdown.value = data.value;
         });
         AddAction(MessageTitles.uimanager_setvaluevsyncdropdown, (msg) =>
         {
-            int value = (int)msg.data;
-            vsyncDropdown.value = value;
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            vsyncDropdown.value = data.value;
         });
 
         AddAction(MessageTitles.uimanager_fadeinout, (msg) =>
         {
-            Action action = (Action)msg.data;
-            FadeInOut(action);
+            ActionData data = MessageDataPooling.CastData<ActionData>(msg.data);
+            FadeInOut(data.value);
         });
 
         AddAction(MessageTitles.uimanager_setgunloadvalue, (msg) =>
         {
-            int value = (int)msg.data;
-            gunLoadValueText.text = value.ToString();
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            gunLoadValueText.text = data.ToString();
         });
         AddAction(MessageTitles.uimanager_setgunchargetimevalue, (msg) => 
         {
-            float value = (float)msg.data;
-            gunChargeValueText.text = ((int)(value * 100.0f)).ToString();
-            aimEnergyBar.SetFrontValue(value);
+            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+            gunChargeValueText.text = ((int)(data.value * 100.0f)).ToString();
+            aimEnergyBar.SetFrontValue(data.value);
         });
         AddAction(MessageTitles.uimanager_setgunenergyvalue, (msg) =>
         {
-            float value = (float)msg.data;
-            aimEnergyBar.SetBackValue(value);
+            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+            aimEnergyBar.SetBackValue(data.value);
         });
         AddAction(MessageTitles.uimanager_activegunui, (msg) =>
         {
-            bool active = (bool)msg.data;
-            gunUiCanvas.enabled = active;
+            BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
+            gunUiCanvas.enabled = data.value;
         });
 
         AddAction(MessageTitles.uimanager_getUimanager, (msg) =>
@@ -229,12 +237,14 @@ public class UIManager : ManagerBase
 
         AddAction(MessageTitles.uimanager_activeInGameTutorial, (msg) =>
          {
-             InGameTutorialCtrl.InGameTutorialType type = (InGameTutorialCtrl.InGameTutorialType)msg.data;
-             inGameTutorialCtrl.Active(type);
+             InGameTutorialTypeData data = MessageDataPooling.CastData<InGameTutorialTypeData>(msg.data);
+             inGameTutorialCtrl.Active(data.type);
              _currentPauseState = PauseMenuState.InGameTutorial;
              Cursor.lockState = CursorLockMode.None;
              Cursor.visible = true;
-             SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), true);
+             BoolData setTimeStop = MessageDataPooling.GetMessageData<BoolData>();
+             setTimeStop.value = true;
+             SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), setTimeStop);
          });
 
         AddAction(MessageTitles.uimanager_damageEffect, (msg) =>
@@ -259,7 +269,9 @@ public class UIManager : ManagerBase
 
         if(_currentPauseState == PauseMenuState.Game)
         {
-            SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), true);
+            BoolData setTimeStop = MessageDataPooling.GetMessageData<BoolData>();
+            setTimeStop.value = true;
+            SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), setTimeStop);
             ActivePage((int)PauseMenuState.Pause);
 
             Cursor.lockState = CursorLockMode.None;
@@ -270,7 +282,9 @@ public class UIManager : ManagerBase
 
         if (_currentPauseState == PauseMenuState.Pause)
         {
-            SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), false);
+            BoolData setTimeStop = MessageDataPooling.GetMessageData<BoolData>();
+            setTimeStop.value = false;
+            SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), setTimeStop);
             ActivePage((int)PauseMenuState.Game);
 
             Cursor.lockState = CursorLockMode.Locked;
@@ -280,7 +294,9 @@ public class UIManager : ManagerBase
 
         if(_currentPauseState == PauseMenuState.InGameTutorial)
         {
-            SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), false);
+            BoolData setTimeStop = MessageDataPooling.GetMessageData<BoolData>();
+            setTimeStop.value = false;
+            SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), setTimeStop);
             inGameTutorialCtrl.Disable();
             _currentPauseState = PauseMenuState.Game;
             Cursor.lockState = CursorLockMode.Locked;
@@ -324,10 +340,10 @@ public class UIManager : ManagerBase
     {
         base.Progress(deltaTime);
 
-        if(Keyboard.current.nKey.wasPressedThisFrame)
-        {
-            SendMessageEx(MessageTitles.uimanager_activeInGameTutorial, GetSavedNumber("UIManager"), InGameTutorialCtrl.InGameTutorialType.Climbing);
-        }
+        //if(Keyboard.current.nKey.wasPressedThisFrame)
+        //{
+        //    SendMessageEx(MessageTitles.uimanager_activeInGameTutorial, GetSavedNumber("UIManager"), InGameTutorialCtrl.InGameTutorialType.Climbing);
+        //}
     }
 
     public void ActivePage(int pageNum)
@@ -338,7 +354,7 @@ public class UIManager : ManagerBase
             {
                 case PauseMenuState.Control:
                     {
-                        CameraRotateSpeedData data;
+                        CameraRotateSpeedData data = MessageDataPooling.GetMessageData<CameraRotateSpeedData>();
                         data.yaw = yawRotateSpeedSlider.value;
                         data.pitch = pitchRotateSpeedSlider.value;
                         SendMessageEx(MessageTitles.setting_savecamerarotatespeed, GetSavedNumber("SettingManager"), data);
@@ -346,7 +362,7 @@ public class UIManager : ManagerBase
                     break;
                 case PauseMenuState.Sound:
                     {
-                        VolumeData data;
+                        VolumeData data = MessageDataPooling.GetMessageData<VolumeData>();
                         data.master = masterVolumeSlider.value;
                         data.sfx = sfxVolumeSlider.value;
                         data.ambient = ambientVolumeSlider.value;
@@ -395,14 +411,14 @@ public class UIManager : ManagerBase
     #region CrossHair
     public void ActiveCrossHair(Message msg)
     {
-        bool active = (bool)msg.data;
-        _crossHair.SetActive(active);
+        BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
+        _crossHair.SetActive(data.value);
     }
 
     public void SetCrossHairPhase(Message msg)
     {
-        int phase = (int)msg.data;
-        switch(phase)
+        IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+        switch(data.value)
         {
             case 1:
                 _crossHair.First();
@@ -420,7 +436,7 @@ public class UIManager : ManagerBase
     #region StateBar
     public void SetValueStateBar(Message msg)
     {
-        StateBarSetValueType recv = (StateBarSetValueType)msg.data;
+        StateBarSetValueType recv = MessageDataPooling.CastData<StateBarSetValueType>(msg.data);
 
         switch(recv.type)
         {
@@ -438,18 +454,18 @@ public class UIManager : ManagerBase
 
     public void SetValueHpPackUI(Message msg)
     {
-        HpPackValueType recv = (HpPackValueType)msg.data;
+        HpPackValueType recv = MessageDataPooling.CastData<HpPackValueType>(msg.data);
 
         _hpPackUI.SetValue(recv.value, recv.visible);
     }
 
     public void SetVisibleAllStateBar(Message msg)
     {
-        bool visibe = (bool)msg.data;
-        _hpBar.SetVisible(visibe);
-        _staminaBar.SetVisible(visibe);
-        _energyBar.SetVisible(visibe);
-        _hpPackUI.SetVisible(visibe);
+        BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
+        _hpBar.SetVisible(data.value);
+        _staminaBar.SetVisible(data.value);
+        _energyBar.SetVisible(data.value);
+        _hpPackUI.SetVisible(data.value);
     }
     #endregion
 
@@ -531,22 +547,22 @@ public class UIManager : ManagerBase
 
     public void PlayEnterSound()
     {
-        SoundPlayData soundPlay;
+        SoundPlayData soundPlay = MessageDataPooling.GetMessageData<SoundPlayData>();
         soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
 
-        SetParameterData paramData;
+        SetParameterData paramData = MessageDataPooling.GetMessageData<SetParameterData>();
         paramData.soundId = 3000; paramData.paramId = 30001; paramData.value = 0;
         SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), paramData);
     }
 
     public void PlayClickSound()
     {
-        SoundPlayData soundPlay;
+        SoundPlayData soundPlay = MessageDataPooling.GetMessageData<SoundPlayData>();
         soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
 
-        SetParameterData paramData;
+        SetParameterData paramData = MessageDataPooling.GetMessageData<SetParameterData>();
         paramData.soundId = 3000; paramData.paramId = 30001; paramData.value = 1;
         SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), paramData);
     }
@@ -555,7 +571,26 @@ public class UIManager : ManagerBase
 
     #region SettingDropDown
 
+    public void RequestSetScreenMode()
+    {
+        IntData data = MessageDataPooling.GetMessageData<IntData>();
+        data.value = screenModeDropdown.value;
+        SendMessageEx(MessageTitles.setting_setScreenMode, GetSavedNumber("SettingManager"),data);
+    }
 
+    public void RequestSetResolution()
+    {
+        IntData data = MessageDataPooling.GetMessageData<IntData>();
+        data.value = resolutionDropdown.value;
+        SendMessageEx(MessageTitles.setting_setResolution, GetSavedNumber("SettingManager"), data);
+    }
+
+    public void RequestSetVsync()
+    {
+        IntData data = MessageDataPooling.GetMessageData<IntData>();
+        data.value = vsyncDropdown.value;
+        SendMessageEx(MessageTitles.setting_setVsync, GetSavedNumber("SettingManager"), data);
+    }
 
     #endregion
 
@@ -581,17 +616,20 @@ public class UIManager : ManagerBase
     }
 }
 
-struct StateBarSetValueType
+namespace MD
 {
-    public UIManager.StateBarType type;
-    public float value;
-    public bool visible;
-}
+    public class StateBarSetValueType : MessageData
+    {
+        public UIManager.StateBarType type;
+        public float value;
+        public bool visible;
+    }
 
-struct HpPackValueType
-{
-    public int value;
-    public bool visible;
+    public class HpPackValueType : MessageData
+    {
+        public int value;
+        public bool visible;
+    }
 }
 //public class HpPackValueType : MessageData
 //{

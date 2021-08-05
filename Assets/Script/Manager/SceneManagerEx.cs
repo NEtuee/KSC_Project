@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-
+using MD;
 public class SceneManagerEx : ManagerBase
 {
     public SceneInfoItem sceneInfo;
@@ -221,14 +221,20 @@ public class SceneManagerEx : ManagerBase
 
             if (sceneActive == true)
             {
-                SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), operation.progress);
+                FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+                data.value = operation.progress;
+                SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), data);
             }
 
             yield return null;
         }
 
         if (sceneActive == true)
-            SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), 1f);
+        {
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = 1f;
+            SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), data);
+        }
 
         var scene = SceneManager.GetSceneByName(target);
 

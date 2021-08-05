@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MD;
 
 public class AnimCtrl_Dummy : UnTransfromObjectBase
 {
@@ -52,7 +53,7 @@ public class AnimCtrl_Dummy : UnTransfromObjectBase
     {
         owner.Jump();
         //GameManager.Instance.soundManager.Play(1003, Vector3.zero, transform);
-        AttachSoundPlayData soundData;
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1003; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
@@ -90,7 +91,7 @@ public class AnimCtrl_Dummy : UnTransfromObjectBase
     private void GetupSound()
     {
         //GameManager.Instance.soundManager.Play(1017, Vector3.up, transform);
-        AttachSoundPlayData soundData;
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1017; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
@@ -103,7 +104,7 @@ public class AnimCtrl_Dummy : UnTransfromObjectBase
         else
             footStepPosition = rightFootTransform.position;
 
-        SoundPlayData soundData;
+        SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
         soundData.id = 1000; soundData.position = footStepPosition; soundData.returnValue = false; soundData.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
         //GameManager.Instance.soundManager.Play(1000, footStepPosition);
@@ -118,7 +119,7 @@ public class AnimCtrl_Dummy : UnTransfromObjectBase
             footStepPosition = rightFootTransform.position;
 
         //GameManager.Instance.soundManager.Play(1001, footStepPosition);
-        SoundPlayData soundData;
+        SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
         soundData.id = 1001; soundData.position = footStepPosition; soundData.returnValue = false; soundData.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
@@ -155,7 +156,7 @@ public class AnimCtrl_Dummy : UnTransfromObjectBase
     private void LandingSound()
     {
         //GameManager.Instance.soundManager.Play(1004, Vector3.up, transform);
-        AttachSoundPlayData soundData;
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1004; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
