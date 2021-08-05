@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using DG.Tweening;
 using UniRx;
+using MD;
 
 public class EMPGun : UnTransfromObjectBase
 {
@@ -76,7 +77,7 @@ public class EMPGun : UnTransfromObjectBase
         //GameManager.Instance.effectManager.Active("Laser02", laserEffectPos.position, laserEffectPos.rotation);
         //GameManager.Instance.effectManager.Active("Laser_Level2", laserEffectPos.position, laserEffectPos.rotation);
 
-        EffectActiveData data;
+        EffectActiveData data = MessageDataPooling.GetMessageData<EffectActiveData>();
         data.position = laserEffectPos.position;
         data.rotation = laserEffectPos.rotation;
         data.parent = null;
@@ -107,7 +108,7 @@ public class EMPGun : UnTransfromObjectBase
         //if (Physics.SphereCast(mainCamera.position,layserRadius, mainCamera.forward, out hit, 1000.0f,hitLayer))
         {
             //GameManager.Instance.effectManager.Active("LaserHit",hit.point);
-            EffectActiveData hitData;
+            EffectActiveData hitData = MessageDataPooling.GetMessageData<EffectActiveData>();
             hitData.key = "LaserHit";
             hitData.position = hit.point;
             hitData.rotation = Quaternion.identity;
@@ -120,14 +121,14 @@ public class EMPGun : UnTransfromObjectBase
                 hitable.Hit(damage);
                 crossHair.ActiveHitMark();
                 //GameManager.Instance.soundManager.Play(1022, hit.point);
-                SoundPlayData soundData;
+                SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
                 soundData.id = 1022; soundData.position = hit.point; soundData.returnValue = false; soundData.dontStop = false;
                 SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
             }
             else
             {
                 //GameManager.Instance.soundManager.Play(1023, hit.point);
-                SoundPlayData soundData;
+                SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
                 soundData.id = 1023; soundData.position = hit.point; soundData.returnValue = false; soundData.dontStop = false;
                 SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
             }
@@ -191,7 +192,9 @@ public class EMPGun : UnTransfromObjectBase
         //{
         //    crossHair.SetActive(active);
         //}
-        SendMessageEx(MessageTitles.uimanager_activecrosshair, GetSavedNumber("UIManager"), active);
+        BoolData data = MessageDataPooling.GetMessageData<BoolData>();
+        data.value = active;
+        SendMessageEx(MessageTitles.uimanager_activecrosshair, GetSavedNumber("UIManager"), data);
 
         if(gunAnim != null)
         {

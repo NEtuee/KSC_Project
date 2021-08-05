@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using MD;
 
 public class MainMenuCtrlManager : ManagerBase
 {
@@ -53,35 +54,51 @@ public class MainMenuCtrlManager : ManagerBase
 
         AddAction(MessageTitles.uimanager_setvaluecamerarotatespeedslider, (msg) =>
          {
-             CameraRotateSpeedData data = (CameraRotateSpeedData)msg.data;
+             CameraRotateSpeedData data = MessageDataPooling.CastData<CameraRotateSpeedData>(msg.data);
              yawRotateSpeedSlider.value = data.yaw;
              pitchRotateSpeedSlider.value = data.pitch;
          });
         AddAction(MessageTitles.uimanager_setresolutiondropdown, (msg) =>
          {
-             ResolutionData data = (ResolutionData)msg.data;
+             ResolutionData data = MessageDataPooling.CastData<ResolutionData>(msg.data);
              resolutionDropdown.AddOptions(data.resolutionStrings);
          });
 
         AddAction(MessageTitles.uimanager_setvaluescreenmodedropdown, (msg) =>
          {
-             int value = (int)msg.data;
-             screenModeDropdown.value = value;
+             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+             screenModeDropdown.value = data.value;
          });
         AddAction(MessageTitles.uimanager_setvaluevsyncdropdown, (msg) =>
         {
-            int value = (int)msg.data;
-            vsyncDropdown.value = value;
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            vsyncDropdown.value = data.value;
         });
 
         AddAction(MessageTitles.uimanager_setvaluevolumeslider, (msg) =>
          {
-             VolumeData data = (VolumeData)msg.data;
+             VolumeData data = MessageDataPooling.CastData<VolumeData>(msg.data);
              masterVolumeSlider.value = data.master;
              sfxVolumeSlider.value = data.sfx;
              ambientVolumeSlider.value = data.ambient;
              bgmVolumeSlider.value = data.bgm;
          });
+
+        AddAction(MessageTitles.uimanager_setvalueresolutiondropdown, (msg) =>
+        {
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            resolutionDropdown.value = data.value;
+        });
+        AddAction(MessageTitles.uimanager_setvaluescreenmodedropdown, (msg) =>
+        {
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            screenModeDropdown.value = data.value;
+        });
+        AddAction(MessageTitles.uimanager_setvaluevsyncdropdown, (msg) =>
+        {
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            vsyncDropdown.value = data.value;
+        });
     }
 
     private void Start()
@@ -114,7 +131,7 @@ public class MainMenuCtrlManager : ManagerBase
             {
                 case MainMenuState.Control:
                     {
-                        CameraRotateSpeedData data;
+                        CameraRotateSpeedData data = MessageDataPooling.GetMessageData<CameraRotateSpeedData>();
                         data.yaw = yawRotateSpeedSlider.value;
                         data.pitch = pitchRotateSpeedSlider.value;
                         SendMessageEx(MessageTitles.setting_savecamerarotatespeed, GetSavedNumber("SettingManager"), data);
@@ -122,7 +139,7 @@ public class MainMenuCtrlManager : ManagerBase
                     break;
                 case MainMenuState.Sound:
                     {
-                        VolumeData data;
+                        VolumeData data = MessageDataPooling.GetMessageData<VolumeData>();
                         data.master = masterVolumeSlider.value;
                         data.sfx = sfxVolumeSlider.value;
                         data.ambient = ambientVolumeSlider.value;
@@ -176,22 +193,22 @@ public class MainMenuCtrlManager : ManagerBase
 
     public void PlayEnterSound()
     {
-        SoundPlayData soundPlay;
+        SoundPlayData soundPlay = MessageDataPooling.GetMessageData<SoundPlayData>();
         soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
 
-        SetParameterData paramData;
+        SetParameterData paramData = MessageDataPooling.GetMessageData<SetParameterData>();
         paramData.soundId = 3000; paramData.paramId = 30001; paramData.value = 0;
         SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), paramData);
     }
 
     public void PlayClickSound()
     {
-        SoundPlayData soundPlay;
+        SoundPlayData soundPlay = MessageDataPooling.GetMessageData<SoundPlayData>();
         soundPlay.id = 3000; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
 
-        SetParameterData paramData;
+        SetParameterData paramData = MessageDataPooling.GetMessageData<SetParameterData>();
         paramData.soundId = 3000; paramData.paramId = 30001; paramData.value = 1;
         SendMessageEx(MessageTitles.fmod_setParam, GetSavedNumber("FMODManager"), paramData);
     }
@@ -206,6 +223,27 @@ public class MainMenuCtrlManager : ManagerBase
         {
             SceneManager.LoadScene(playerScene);
         });
+    }
+
+    public void RequestSetScreenMode()
+    {
+        IntData data = MessageDataPooling.GetMessageData<IntData>();
+        data.value = screenModeDropdown.value;
+        SendMessageEx(MessageTitles.setting_setScreenMode, GetSavedNumber("SettingManager"), data);
+    }
+
+    public void RequestSetResolution()
+    {
+        IntData data = MessageDataPooling.GetMessageData<IntData>();
+        data.value = resolutionDropdown.value;
+        SendMessageEx(MessageTitles.setting_setResolution, GetSavedNumber("SettingManager"), data);
+    }
+
+    public void RequestSetVsync()
+    {
+        IntData data = MessageDataPooling.GetMessageData<IntData>();
+        data.value = vsyncDropdown.value;
+        SendMessageEx(MessageTitles.setting_setVsync, GetSavedNumber("SettingManager"), data);
     }
 
     public void GameQuit()

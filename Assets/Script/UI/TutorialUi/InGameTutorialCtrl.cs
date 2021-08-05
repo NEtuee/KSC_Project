@@ -71,3 +71,11 @@ public class InGameTutorialCtrl : MonoBehaviour
         Climbing,Move,Special,Scan,Emp
     }
 }
+
+namespace MD
+{
+    public class InGameTutorialTypeData : MessageData
+    {
+        public InGameTutorialCtrl.InGameTutorialType type;
+    }
+}

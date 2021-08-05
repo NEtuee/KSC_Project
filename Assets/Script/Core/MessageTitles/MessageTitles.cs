@@ -270,6 +270,20 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort setting_saveVolume = 0x0902;
 
+    /// <summary>
+    /// data = IntData
+    /// </summary>
+    public const ushort setting_setScreenMode = 0x0903;
+
+    /// <summary>
+    /// data = IntData
+    /// </summary>
+    public const ushort setting_setResolution = 0x0904;
+
+    /// <summary>
+    /// data = IntData
+    /// </summary>
+    public const ushort setting_setVsync = 0x0905;
     #endregion
 
     #region Player

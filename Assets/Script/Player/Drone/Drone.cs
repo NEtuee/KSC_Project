@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using MD;
 
 public class Drone : UnTransfromObjectBase
 {
@@ -105,7 +106,7 @@ public class Drone : UnTransfromObjectBase
         _droneScaner = GetComponent<DroneScaner>();
 
         //GameManager.Instance.soundManager.Play(1300, Vector3.zero, transform);
-        AttachSoundPlayData soundData;
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1300; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
 
@@ -469,7 +470,7 @@ public class Drone : UnTransfromObjectBase
         {
             state = DroneState.Help;
             //GameManager.Instance.soundManager.Play(1302, Vector3.zero, transform);
-            AttachSoundPlayData soundData;
+            AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
             soundData.id = 1302; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
             whenHelp?.Invoke();
