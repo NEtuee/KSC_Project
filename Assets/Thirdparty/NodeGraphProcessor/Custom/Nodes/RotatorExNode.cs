@@ -5,7 +5,7 @@ using GraphProcessor;
 using System.Linq;
 using NodeGraphProcessor.Examples;
 
-[System.Serializable, NodeMenuItem("Custom/Rotator")]
+[System.Serializable, NodeMenuItem("LevelEdit/Rotator")]
 public class RotatorExNode : LinearConditionalNode
 {
 	[Input(name = "DeltaTime")]

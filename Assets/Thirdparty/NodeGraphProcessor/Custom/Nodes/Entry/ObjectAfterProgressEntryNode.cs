@@ -4,9 +4,9 @@ using UnityEngine;
 using GraphProcessor;
 using System.Linq;
 
-[System.Serializable, NodeMenuItem("Custom/ObjectAfterProgressEntry")]
+[System.Serializable, NodeMenuItem("Entry/ObjectAfterProgressEntry")]
 public class ObjectAfterProgressEntryNode : EntryNode
 {
-    public override string		name => "ObjectAfterProgressEntry";
+    public override string		name => "Object After Progress Entry";
     public override string entryCode => "AfterProgress";
 }

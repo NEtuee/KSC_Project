@@ -5,7 +5,7 @@ using GraphProcessor;
 using System.Linq;
 using NodeGraphProcessor.Examples;
 
-[System.Serializable, NodeMenuItem("Custom/FunctionNode")]
+//[System.Serializable, NodeMenuItem("Custom/FunctionNode")]
 public class FunctionNode : LinearConditionalNode
 {
 	public override string		name => "FunctionNode";

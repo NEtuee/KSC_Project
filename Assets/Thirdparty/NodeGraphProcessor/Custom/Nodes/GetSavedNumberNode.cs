@@ -4,7 +4,7 @@ using UnityEngine;
 using GraphProcessor;
 using System.Linq;
 
-[System.Serializable, NodeMenuItem("Custom/GetSavedNumber")]
+[System.Serializable, NodeMenuItem("Object/GetSavedNumber")]
 public class GetSavedNumberNode : BaseNode
 {
 	[Input(name = "Name"),SerializeField]

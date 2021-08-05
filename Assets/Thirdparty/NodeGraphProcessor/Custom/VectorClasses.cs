@@ -22,9 +22,14 @@ namespace VectorClasses
         [SerializeField]
         public float x = 0f, y = 0f, z = 0f;
         public static explicit operator Vector3(Vector3C v) {return new Vector3(v.x,v.y,v.z);}
+        
+        public void Set(Vector3 vec){this.x = vec.x; this.y = vec.y; this.z = vec.z;}
+        public void Set(float x, float y,float z){this.x = x; this.y = y; this.z = z;}
+
 
         public Vector3C(){}
-        public Vector3C(float x, float y,float z){this.x = x; this.y = y; this.z = z;}
+        public Vector3C(float x, float y,float z){Set(x,y,z);}
+        public Vector3C(Vector3 vec){Set(vec);}
     }
 
     [System.Serializable]

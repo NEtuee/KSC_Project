@@ -187,6 +187,15 @@ public class TEst : EditorWindow
         if(currentTrigger == null)
         {
             GUILayout.Label("Current Boolean Trigger Is Not Exists");
+
+            if(_booleanTriggerMenuSelect == 1)
+            {
+                if(GUILayout.Button("Create Boolean Trigger Set") && _stageManager != null)
+                {
+                    _stageManager.stageTriggerAsset = ScriptableObject.CreateInstance<BooleanTrigger>();
+                    _booleanTrigger[1] = _stageManager.stageTriggerAsset;
+                }
+            }
             return;
         }
 

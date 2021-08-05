@@ -5,7 +5,7 @@ using GraphProcessor;
 using System.Linq;
 using NodeGraphProcessor.Examples;
 
-[System.Serializable, NodeMenuItem("Custom/ChangeState")]
+[System.Serializable, NodeMenuItem("State/ChangeState")]
 public class StateChangeNode : LinearConditionalNode
 {
 	public override string		name => "ChangeState";

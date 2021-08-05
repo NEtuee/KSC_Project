@@ -5,10 +5,10 @@ using GraphProcessor;
 using NodeGraphProcessor.Examples;
 
 
-[System.Serializable, NodeMenuItem("Custom/Function : other")]
+[System.Serializable, NodeMenuItem("Functon/Function : other")]
 public class OtherFunctionNode : LinearConditionalNode
 {
-    [Input(name = "GraphObject")]
+    //[Input(name = "GraphObject"), SerializeField]
     public GraphObjectBase graphObject;
 
     

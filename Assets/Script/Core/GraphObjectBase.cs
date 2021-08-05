@@ -68,6 +68,36 @@ public class GraphObjectBase : UnTransfromObjectBase
         Destroy(_graph);
     }
 
+    public void OnTriggerEnter(Collider coll)
+    {
+        var node = FindNode("TriggerEnter");
+        if(node != null)
+        {
+            ((ObjectTriggerEnterEntryNode)node).collider = coll;
+            RunGraph(node);
+        }
+    }
+
+    public void OnTriggerStay(Collider coll)
+    {
+        var node = FindNode("TriggerStay");
+        if(node != null)
+        {
+            ((ObjectTriggerEnterEntryNode)node).collider = coll;
+            RunGraph(node);
+        }
+    }
+
+    public void OnTriggerExit(Collider coll)
+    {
+        var node = FindNode("TriggerExit");
+        if(node != null)
+        {
+            ((ObjectTriggerEnterEntryNode)node).collider = coll;
+            RunGraph(node);
+        }
+    }
+
     public LevelObjectGraph GetCopyedGraph()
     {
         return _graph;

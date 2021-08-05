@@ -5,7 +5,7 @@ using GraphProcessor;
 using System.Linq;
 using NodeGraphProcessor.Examples;
 
-[System.Serializable, NodeMenuItem("Custom/SendMessage")]
+[System.Serializable, NodeMenuItem("Object/SendMessage")]
 public class SendMessageNode : LinearConditionalNode
 {
 	[Input(name = "Sender")]

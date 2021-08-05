@@ -157,7 +157,9 @@ namespace GraphProcessor
 					mouseOverControls = false;
 					schedule.Execute(_ => {
 						if (!mouseOverControls)
+						{
 							controlsContainer.style.display = DisplayStyle.None;
+						}
 					}).ExecuteLater(500);
 				});
 			}

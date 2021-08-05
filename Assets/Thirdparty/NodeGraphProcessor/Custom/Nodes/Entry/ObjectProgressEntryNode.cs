@@ -4,12 +4,12 @@ using UnityEngine;
 using GraphProcessor;
 using System.Linq;
 
-[System.Serializable, NodeMenuItem("Custom/ObjectProgressEntry")]
+[System.Serializable, NodeMenuItem("Entry/ObjectProgressEntry")]
 public class ObjectProgressEntryNode : EntryNode
 {
     [Output(name = "DeltaTime")]
     public float deltaTime;
     
-    public override string		name => "ObjectProgressEntry";
+    public override string		name => "Object Progress Entry";
     public override string entryCode => "Progress";
 }

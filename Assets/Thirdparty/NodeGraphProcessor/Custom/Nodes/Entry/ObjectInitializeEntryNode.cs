@@ -4,9 +4,9 @@ using UnityEngine;
 using GraphProcessor;
 using System.Linq;
 
-[System.Serializable, NodeMenuItem("Custom/ObjectInitializeEntry")]
+[System.Serializable, NodeMenuItem("Entry/ObjectInitializeEntry")]
 public class ObjectInitializeEntryNode : EntryNode
 {
-	public override string		name => "ObjectInitializeEntry";
+	public override string		name => "Object Initialize Entry";
 	public override string entryCode => "Initialize";
 }
