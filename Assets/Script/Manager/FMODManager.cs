@@ -78,7 +78,7 @@ public class FMODManager : ManagerBase
     {
         base.Assign();
 
-        SaveMyNumber("FMODManager");
+        SaveMyNumber("FMODManager",true);
 
         AddAction(MessageTitles.fmod_play,Play);
         AddAction(MessageTitles.fmod_attachPlay,AttachPlay);
