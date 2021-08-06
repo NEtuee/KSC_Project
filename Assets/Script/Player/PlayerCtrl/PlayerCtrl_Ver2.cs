@@ -1290,7 +1290,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             return;
         }
 
-        if (state == PlayerState.Default && currentSpeed > 0.0f && Vector3.Dot(moveForward, prevForward) < -0.8f)
+        if (state == PlayerState.Default && currentSpeed > 0.0f && Vector3.Dot(moveForward, prevForward) < -0.5f)
         {
             if (currentSpeed > walkSpeed)
             {
@@ -1439,7 +1439,6 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 animator.SetBool("IsGrab", false);
                 animator.SetBool("IsLedge", false);
                 animator.SetTrigger("Landing");
-                    animator.ResetTrigger("FastStop");
                 footIK.EnableFeetIk();
                 handIK.DisableHandIK();
                 //GameManager.Instance.stateManager.Visible(false);
@@ -1537,9 +1536,9 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             {
                 animator.applyRootMotion = true;
 
-                    AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
-                    soundData.id = 1002; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
-                    SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
+                    //AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+                    //soundData.id = 1002; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+                    //SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
                     //GameManager.Instance.soundManager.Play(1002, Vector3.up, transform);
                 if (currentSpeed > walkSpeed)
                 {
@@ -1757,7 +1756,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         while (true)
         {
-            if (time >= 0.025f && currentSpeed > walkSpeed)
+            if (time >= 0.05f && currentSpeed > walkSpeed && inputVertical == 0.0f && inputHorizontal == 0.0f)
             {
                 ChangeState(PlayerState.RunToStop);
                 time = 0.0f;
@@ -1765,14 +1764,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             if (state == PlayerState.Default && currentSpeed > 0.0f && inputVertical == 0.0f && inputHorizontal == 0.0f)
             {
-                time += Time.deltaTime;
+                time += Time.fixedDeltaTime;
             }
             else
             {
                 time = 0.0f;
             }
 
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
     }
 
