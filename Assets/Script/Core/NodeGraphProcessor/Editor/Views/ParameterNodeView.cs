@@ -28,9 +28,9 @@ public class ParameterNodeView : BaseNodeView
         });
         
         UpdatePort();
-        controlsContainer.Add(accessorSelector);
+        //controlsContainer.Add(accessorSelector);
         
-        //    Find and remove expand/collapse button
+        //  Find and remove expand/collapse button
         titleContainer.Remove(titleContainer.Q("title-button-container"));
         //    Remove Port from the #content
         topContainer.parent.Remove(topContainer);

@@ -4,6 +4,7 @@ using UnityEngine;
 using GraphProcessor;
 using System.Linq;
 using System;
+using NodeGraphProcessor.Examples;
 
 namespace GraphProcessor
 {
@@ -26,7 +27,7 @@ namespace GraphProcessor
 
 		public event Action onParameterChanged;
 
-		public ParameterAccessor accessor;
+		public ParameterAccessor accessor = ParameterAccessor.Get;
 
 		protected override void Enable()
 		{

@@ -27,7 +27,7 @@ public class LoadPrevLevelNode : LinearConditionalNode
     [Input(name = "LevelObject")]
 	public GraphObjectBase obj;
 
-	public override string		name => "Get Layer";
+	public override string		name => "Load PrevLevel";
 
 	protected override void Process()
 	{

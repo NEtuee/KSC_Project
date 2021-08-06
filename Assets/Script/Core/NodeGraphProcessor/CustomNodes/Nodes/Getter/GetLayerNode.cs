@@ -19,7 +19,7 @@ public class GetLayerFromGameObjectNode : BaseNode
 
 	protected override void Process()
 	{
-	    layer = gameObject.layer;
+	    layer = 1 << gameObject.layer;
 	}
 }
 
@@ -37,7 +37,7 @@ public class GetLayerFromTransformNode : BaseNode
 
 	protected override void Process()
 	{
-	    layer = tp.gameObject.layer;
+	    layer = 1 << tp.gameObject.layer;
 	}
 }
 
@@ -55,7 +55,7 @@ public class GetLayerFromCollisionNode : BaseNode
 
 	protected override void Process()
 	{
-	    layer = coll.gameObject.layer;
+	    layer = 1 << coll.gameObject.layer;
 	}
 }
 
@@ -73,6 +73,6 @@ public class GetLayerFromColliderNode : BaseNode
 
 	protected override void Process()
 	{
-	    layer = coll.gameObject.layer;
+	    layer = 1 << coll.gameObject.layer;
 	}
 }

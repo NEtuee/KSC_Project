@@ -24,8 +24,8 @@ public class RaycastNode : LinearConditionalNode
 	[Input(name = "MaxDistance"),SerializeField]
 	public float dist;
 
-	[Input(name = "Layer"),SerializeField]
-	public LayerMask layer;
+	[Input(name = "Layer")]
+	public int layer;
 
 
 	[Output(name = "IsHit")]

@@ -115,7 +115,7 @@ public class SceneManagerEx : ManagerBase
 
         SendBroadcastMessage(MessageTitles.scene_beforeSceneChange,_currentScene,false);
 
-
+        yield return CoroutineUtilities.WaitForRealTime(2f);
 
         StartCoroutine(LoadNullScene());
 
@@ -147,23 +147,15 @@ public class SceneManagerEx : ManagerBase
         }
 
 
-        Debug.Log("Load");
-
         SendBroadcastMessage(MessageTitles.scene_afterSceneChange,_currentScene,false);
-
-        Debug.Log("AfterLoad");
-
-        yield return CoroutineUtilities.WaitForRealTime(2f);
-
         StartCoroutine(UnLoadNullScene());
 
-        yield return CoroutineUtilities.WaitForRealTime(3f);
+        yield return CoroutineUtilities.WaitForRealTime(2f);
 
 
         _isLoaded = true;
 
         SendBroadcastMessage(MessageTitles.scene_sceneChanged,_currentScene,false);
-        Debug.Log("Load Complite");
     }
 
     IEnumerator LoadNullScene()

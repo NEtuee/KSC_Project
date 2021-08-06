@@ -5,7 +5,7 @@ using GraphProcessor;
 using System.Linq;
 using VectorClasses;
 
-[System.Serializable, NodeMenuItem("Operations/Layer : Equal")]
+[System.Serializable, NodeMenuItem("Operations/Layer : Compare")]
 public class LayerEqualNode : BaseNode
 {
 	[Input(name = "A"),SerializeField]
@@ -18,7 +18,7 @@ public class LayerEqualNode : BaseNode
 	[Output(name = "Result")]
 	public bool result;
 
-	public override string		name => "Equal";
+	public override string		name => "Layer Compare";
 
 	protected override void Process()
 	{

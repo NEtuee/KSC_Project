@@ -621,13 +621,33 @@ namespace GraphProcessor
 				var exposedParameterFieldViews = dragData.OfType<ExposedParameterFieldView>();
 				if (exposedParameterFieldViews.Any())
 				{
-					foreach (var paramFieldView in exposedParameterFieldViews)
-					{
-						RegisterCompleteObjectUndo("Create Parameter Node");
-						var paramNode = BaseNode.CreateFromType< ParameterNode >(mousePos);
-						paramNode.parameterGUID = paramFieldView.parameter.guid;
-						AddNode(paramNode);
-					}
+					var parameterType = new GenericMenu();
+            		parameterType.AddItem(new GUIContent("Get"), false, () =>
+            		{
+            		    foreach (var paramFieldView in exposedParameterFieldViews)
+						{
+							RegisterCompleteObjectUndo("Create Parameter Node");
+							var paramNode = BaseNode.CreateFromType< ParameterNode >(mousePos);
+							paramNode.parameterGUID = paramFieldView.parameter.guid;
+							AddNode(paramNode);
+	
+						}
+            		});
+
+					parameterType.AddItem(new GUIContent("Set"), false, () =>
+            		{
+            		    foreach (var paramFieldView in exposedParameterFieldViews)
+						{
+							RegisterCompleteObjectUndo("Create Parameter Node");
+							var paramNode = BaseNode.CreateFromType< SetParameterNode >(mousePos);
+							paramNode.parameterGUID = paramFieldView.parameter.guid;
+							AddNode(paramNode);
+	
+						}
+            		});
+
+            		parameterType.ShowAsContext();
+
 				}
 			}
 
