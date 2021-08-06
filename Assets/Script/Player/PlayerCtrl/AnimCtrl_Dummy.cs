@@ -12,7 +12,6 @@ public class AnimCtrl_Dummy : UnTransfromObjectBase
     private Transform leftFootTransform;
     private Transform rightFootTransform;
 
-    public EMPGun gun;
 
     protected override void Start()
     {
