@@ -4,7 +4,7 @@ using UnityEngine;
 using GraphProcessor;
 using System.Linq;
 
-[System.Serializable, NodeMenuItem("Entry/ObjectProgressEntry")]
+[System.Serializable, NodeMenuItem("Entry/Object Progress Entry")]
 public class ObjectProgressEntryNode : EntryNode
 {
     [Output(name = "DeltaTime")]

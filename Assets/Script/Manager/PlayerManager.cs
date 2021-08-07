@@ -50,6 +50,11 @@ public class PlayerManager : ManagerBase
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
             _player.TakeDamage(data.value);
         });
+
+        AddAction(MessageTitles.playermanager_getPlayer,(msg)=>{
+            var receiver = (MessageReceiver)msg.sender;
+            SendMessageQuick(receiver,MessageTitles.playermanager_getPlayer,_player);
+        });
     }
 
     public override void Initialize()

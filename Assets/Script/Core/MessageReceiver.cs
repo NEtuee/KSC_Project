@@ -27,7 +27,7 @@ public abstract class MessageReceiver : UniqueNumberBase
         _receiveQueue.Enqueue(msg);
     }
 
-    public void ReceiveAndProcessMessage(Message msg)
+    public virtual void ReceiveAndProcessMessage(Message msg)
     {
 #if UNITY_EDITOR
         Debug_AddReceivedQueue(msg);

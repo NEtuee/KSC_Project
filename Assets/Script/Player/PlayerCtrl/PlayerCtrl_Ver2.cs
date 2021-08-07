@@ -2699,6 +2699,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             chargingCountText.color = _chargingCountTextColor;
     }
 
+    public PlayerRagdoll GetPlayerRagdoll() {return ragdoll;}
+
     public Drone GetDrone()
     {
         return drone;

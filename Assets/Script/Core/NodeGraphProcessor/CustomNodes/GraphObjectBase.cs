@@ -11,7 +11,9 @@ public class GraphObjectBase : UnTransfromObjectBase
     public LevelObjectGraph graphOrigin;
     private Dictionary<string,EntryNode> _entryNodes = new Dictionary<string, EntryNode>();
 
-    private LevelObjectGraph _graph;
+    protected LevelObjectGraph _graph;
+
+    private Animator _animatorControll;
 
     HashSet<BaseNode> _nodeDependenciesGathered = new HashSet<BaseNode>();
 	HashSet<BaseNode> _skipConditionalHandling  = new HashSet<BaseNode>();
@@ -19,15 +21,22 @@ public class GraphObjectBase : UnTransfromObjectBase
     Stack<BaseNode> _nodeToExecute = new Stack<BaseNode>();
     Stack<BaseNode> _dependencies = new Stack<BaseNode>();
 
+    Queue<Message> _receivedMessaged = new Queue<Message>();
+
+    TimeCounterEx _timeCounterEx = new TimeCounterEx();
+
     protected override void Awake()
     {
         InitGraph();
         base.Awake();
+
+        TryGetComponent<Animator>(out _animatorControll);
     }
 
     public override void Assign()
     {
         base.Assign();
+        AddAction(MessageTitles.player_EMPHit,EMPHitMessage);
 
         RunGraph("Assign");
     }
@@ -57,6 +66,8 @@ public class GraphObjectBase : UnTransfromObjectBase
         base.AfterProgress(deltaTime);
 
         RunGraph("AfterProgress");
+
+        ClearMessageQueue();
     }
 
     public override void Release()
@@ -97,6 +108,88 @@ public class GraphObjectBase : UnTransfromObjectBase
             RunGraph(node);
         }
     }
+
+    public void WhenEMPHit(float damage)
+    {
+        var node = FindNode("EMPHit");
+        if(node != null)
+        {
+            ((ObjectEMPHitEntryNode)node).damage = damage;
+            RunGraph(node);
+        }
+    }
+
+#region Behaviour
+
+    public void Turn(bool isLeft, Transform target, float rotationSpeed, float deltaTime)
+    {
+        Turn(target, rotationSpeed * deltaTime * (isLeft ? 1f : -1f));
+    }
+
+    public void Turn(bool isLeft, Transform target, float rotationSpeed, float deltaTime, Vector3 axis)
+    {
+        Turn(target, rotationSpeed * deltaTime * (isLeft ? 1f : -1f),axis);
+    }
+
+    public void Turn(Transform target, float factor, Vector3 axis)
+    {
+        target.RotateAround(target.position,axis,factor);
+    }
+
+    public void Turn(Transform target, float factor)
+    {
+        target.RotateAround(target.position,target.up,factor);
+    }
+
+#endregion
+
+
+#region Message
+
+    public void EMPHitMessage(Message msg)
+    {
+        var data = MessageDataPooling.CastData<MD.FloatData>(msg.data);
+
+        WhenEMPHit(data.value);
+    }
+
+    public override void ReceiveAndProcessMessage(Message msg)
+    {
+        _receivedMessaged.Enqueue(msg);
+    }
+
+    public void ClearMessageQueue()
+    {
+        if(_receivedMessaged.Count == 0)
+            return;
+            
+        var msg = _receivedMessaged.Dequeue();
+        while(msg != null)
+        {
+            MessagePool.ReturnMessage(msg);
+            msg = _receivedMessaged.Dequeue();
+        }
+    }
+
+    public Message DequeueGraphMessage()
+    {
+        return _receivedMessaged.Count == 0 ? null : _receivedMessaged.Dequeue();
+    }
+
+#endregion
+
+    public void InitTimer(string name,float timelimit)
+    {
+        _timeCounterEx.InitTimer(name,0f,timelimit);
+    }
+
+    public float IncreaseTimer(string name, float deltaTime, out bool limit)
+    {
+        return _timeCounterEx.IncreaseTimerSelf(name,out limit,deltaTime);
+    }
+
+
+    public Animator GetAnimator() {return _animatorControll;}
 
     public LevelObjectGraph GetCopyedGraph()
     {

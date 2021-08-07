@@ -6,6 +6,14 @@ using DG.Tweening;
 using UniRx;
 using MD;
 
+namespace MD
+{
+    public class EMPHitData : MessageData
+    {
+        public float damage;
+    }
+}
+
 public class EMPGun : UnTransfromObjectBase
 {
     [SerializeField] private GameObject _gunObject;
@@ -115,7 +123,13 @@ public class EMPGun : UnTransfromObjectBase
             hitData.parent = null;
             SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), hitData);
 
+            if(hit.collider.TryGetComponent<MessageReceiver>(out var receiver))
+            {
+                var empData = MessageDataPooling.GetMessageData<FloatData>();
+                empData.value = damage;
 
+                SendMessageEx(receiver,MessageTitles.player_EMPHit,empData);
+            }
             if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
             {
                 hitable.Hit(damage);

@@ -303,6 +303,8 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort player_initVelocity = 0x0905;
 
+    public const ushort player_EMPHit = 0x0906;
+
     #endregion
 
     #region PlayerManager
@@ -321,6 +323,11 @@ public static partial class MessageTitles
     /// data = float
     /// </summary>
     public const ushort playermanager_addDamageToPlayer = 0x0912;
+
+    /// <summary>
+    /// data = PlayerCtrl_ver2
+    /// </summary>
+    public const ushort playermanager_getPlayer = 0x0913;
 
     #endregion
 

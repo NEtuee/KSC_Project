@@ -4,7 +4,7 @@ using UnityEngine;
 using GraphProcessor;
 using System.Linq;
 
-[System.Serializable, NodeMenuItem("Entry/ObjectReleaseEntry")]
+[System.Serializable, NodeMenuItem("Entry/Object Release Entry")]
 public class ObjectReleaseEntryNode : EntryNode
 {
     public override string		name => "Object Release Entry";

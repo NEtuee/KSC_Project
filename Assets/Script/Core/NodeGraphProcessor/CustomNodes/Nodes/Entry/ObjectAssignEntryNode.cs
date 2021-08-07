@@ -4,7 +4,7 @@ using UnityEngine;
 using GraphProcessor;
 using System.Linq;
 
-[System.Serializable, NodeMenuItem("Entry/ObjectAssignEntry")]
+[System.Serializable, NodeMenuItem("Entry/Object Assign Entry")]
 public class ObjectAssignEntryNode : EntryNode
 {
     public override string		name => "Object Assign Entry";
