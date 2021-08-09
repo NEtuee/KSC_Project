@@ -50,6 +50,8 @@ public class PlayerManager : ManagerBase
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
             _player.TakeDamage(data.value);
         });
+
+        AddAction(MessageTitles.playermanager_initPlayerStatus, (msg) => _player.InitStatus());
     }
 
     public override void Initialize()

@@ -2645,7 +2645,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     public void PlayerDead()
     {
         dead = true;
-        whenPlayerDead?.Invoke();
+        //whenPlayerDead?.Invoke();
+        SendMessageEx(MessageTitles.uimanager_activeGameOverUi, GetSavedNumber("UIManager"), null);
     }
 
     private IEnumerator HpRestore()

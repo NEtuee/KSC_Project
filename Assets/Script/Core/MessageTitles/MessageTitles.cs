@@ -16,6 +16,7 @@ public static partial class MessageTitles
     /// data = bool
     /// </summary>
     public const ushort timemanager_timestop = 0x0202;
+
     #endregion
 
     #region UIManager
@@ -144,6 +145,11 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort uimanager_damageEffect = 0x0325;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_activeGameOverUi = 0x0326;
     #endregion
 
     #region CameraManager
@@ -321,6 +327,11 @@ public static partial class MessageTitles
     /// data = float
     /// </summary>
     public const ushort playermanager_addDamageToPlayer = 0x0912;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort playermanager_initPlayerStatus = 0x0913;
 
     #endregion
 

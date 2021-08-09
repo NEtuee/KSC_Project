@@ -25,6 +25,8 @@ public class UIManager : ManagerBase
     [SerializeField] private MenuPage controlPage;
     [SerializeField] private MenuPage keybindingPage;
     [SerializeField] private MenuPage tutorialPage;
+    [SerializeField] private MenuPage gameoverPage;
+    [SerializeField] private Canvas backGroundCanvas;
 
     [Header("CrossHair")]
     [SerializeField] private CrossHair _crossHair;
@@ -66,6 +68,9 @@ public class UIManager : ManagerBase
     [SerializeField] private TMP_Dropdown screenModeDropdown;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     [SerializeField] private TMP_Dropdown vsyncDropdown;
+
+    [Header("GuideText")]
+    [SerializeField] private GuideText guideText;
 
     private EventSystem _eventSystem;
 
@@ -251,6 +256,11 @@ public class UIManager : ManagerBase
          {
              damageEffect.Effect();
          });
+
+        AddAction(MessageTitles.uimanager_activeGameOverUi, (msg) =>
+        {
+            ActiveGameOverUI();
+        });
     }
 
     public override void Initialize()
@@ -264,7 +274,7 @@ public class UIManager : ManagerBase
 
     public void OnPauseButton()
     {
-        if (_currentPauseState == PauseMenuState.Loading)
+        if (_currentPauseState == PauseMenuState.Loading || _currentPauseState == PauseMenuState.GameOver)
             return;
 
         if(_currentPauseState == PauseMenuState.Game)
@@ -371,6 +381,7 @@ public class UIManager : ManagerBase
                     }
                     break;
                 case PauseMenuState.Tutorial:
+                    backGroundCanvas.enabled = true;
                     SendMessageEx(MessageTitles.videomanager_stopvideo, GetSavedNumber("VideoManager"), null);
                     break;
             }
@@ -382,9 +393,11 @@ public class UIManager : ManagerBase
         {
             case PauseMenuState.Game:
                 _currentPage = null;
+                backGroundCanvas.enabled = false;
                 return;
             case PauseMenuState.Pause:
                 _currentPage = pausePage;
+                backGroundCanvas.enabled = true;
                 break;
             case PauseMenuState.Option:
                 _currentPage = optionPage;
@@ -403,6 +416,7 @@ public class UIManager : ManagerBase
                 break;
             case PauseMenuState.Tutorial:
                 _currentPage = tutorialPage;
+                backGroundCanvas.enabled = false;
                 break;
         }
         _currentPage.Active(true);
@@ -594,9 +608,41 @@ public class UIManager : ManagerBase
 
     #endregion
 
+    public void SetGuideTextDescription(string key)
+    {
+        guideText.SetDescription(key);
+    }
+
+    public void SetGuideTextSetSpace()
+    {
+        guideText.SetSpace();
+    }
+
+    public void ActiveGameOverUI()
+    {
+        gameoverPage.Active(true);
+        _currentPauseState = PauseMenuState.GameOver;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void OnRestartButton()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        gameoverPage.Active(false);
+        SendMessageEx(MessageTitles.playermanager_initPlayerStatus, GetSavedNumber("PlayerManager"), null);
+        SendMessageEx(MessageTitles.scene_loadCurrentLevel, GetSavedNumber("SceneManager"), null);
+    }
+
+    public void OnTitleButton()
+    {
+
+    }
+
     public enum PauseMenuState
     {
-        Game = 0, Pause,Option, Sound, Display, Control, KeyBinding, Loading, Tutorial, InGameTutorial
+        Game = 0, Pause,Option, Sound, Display, Control, KeyBinding, Loading, Tutorial, InGameTutorial, GameOver
     }
 
     public enum StateBarType
