@@ -134,7 +134,7 @@ public class EMPGun : UnTransfromObjectBase
             }
         }
 
-        crossHair.ActiveAnimation();
+        crossHair.Launch();
 
         if (gunAnim != null)
         {

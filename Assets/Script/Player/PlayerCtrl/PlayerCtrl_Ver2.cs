@@ -893,8 +893,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         }
 
                         chargeTime.Value += Time.deltaTime * (decharging ? dechargingRatio : 1f);
-                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
-                    chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
+                        chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, Mathf.Abs(energy.Value / costValue));
+                        chargeTime.Value = Mathf.Clamp(chargeTime.Value, 0.0f, 3.0f);
 
                         //GameManager.Instance.soundManager.SetParam(1013,10131,(chargeTime.Value) * 100f);
                         SetParameterData setParameterData = MessageDataPooling.GetMessageData<SetParameterData>();
@@ -2802,8 +2802,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
             loadCount = loadCount > 3 ? 3 : loadCount;
             _transformCount = 0;
 
-            empGun.LaunchLaser(loadCount * 40.0f);
             chargeTime.Value = 0.0f;
+            empGun.LaunchLaser(loadCount * 40.0f);
             AddEnergyValue(-loadCount * costValue);
             FloatData camDist = MessageDataPooling.GetMessageData<FloatData>();
             camDist.value = 0.333f * (float)loadCount;
