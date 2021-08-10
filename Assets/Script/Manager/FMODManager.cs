@@ -296,6 +296,9 @@ public class FMODManager : ManagerBase
         var n = FindSoundInfo(soundID).FindParameter(parameterID);
         value = Mathf.Clamp(value,n.min,n.max);
 
+        if(!_activeMap.ContainsKey(soundID))
+            return;
+
         foreach(var list in _activeMap[soundID])
         {
             list.SetParameter(n.name,value);

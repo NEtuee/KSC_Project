@@ -25,3 +25,20 @@ public class BooleanEqualNode : BaseNode
 	    result = a == b;
 	}
 }
+
+[System.Serializable, NodeMenuItem("Operations/Boolean : Reverse")]
+public class BooleanNotEqualNode : BaseNode
+{
+	[Input(name = "A"),SerializeField]
+	public bool a;
+
+	[Output(name = "Result")]
+	public bool result;
+
+	public override string		name => "Reverse";
+
+	protected override void Process()
+	{
+	    result = !a;
+	}
+}

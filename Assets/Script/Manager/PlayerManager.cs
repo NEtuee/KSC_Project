@@ -52,6 +52,10 @@ public class PlayerManager : ManagerBase
         });
 
         AddAction(MessageTitles.playermanager_initPlayerStatus, (msg) => _player.InitStatus());
+        AddAction(MessageTitles.playermanager_getPlayer,(msg)=>{
+            var receiver = (MessageReceiver)msg.sender;
+            SendMessageQuick(receiver,MessageTitles.playermanager_getPlayer,_player);
+        });
     }
 
     public override void Initialize()

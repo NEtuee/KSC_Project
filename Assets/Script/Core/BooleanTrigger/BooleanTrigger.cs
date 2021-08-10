@@ -2,11 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+namespace MD
+{
+    public class TriggerData : MessageData
+    {
+        public string name;
+        public bool trigger;
+    }
+}
+
+
 [System.Serializable]
 public class BooleanTuple
 {
+    [SerializeField,SerializeReference]
     public string name;
+    [SerializeField,SerializeReference]
     public string description;
+    [SerializeField,SerializeReference]
     public bool trigger;
 }
 
