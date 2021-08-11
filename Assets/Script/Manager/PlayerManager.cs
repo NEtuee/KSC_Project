@@ -56,6 +56,13 @@ public class PlayerManager : ManagerBase
             var receiver = (MessageReceiver)msg.sender;
             SendMessageQuick(receiver,MessageTitles.playermanager_getPlayer,_player);
         });
+
+        AddAction(MessageTitles.playermanager_hidePlayer, (msg) =>
+        {
+            bool visible = (bool)msg.data;
+            _player.GetDrone().gameObject.SetActive(visible);
+            _player.gameObject.SetActive(visible);
+        });
     }
 
     public override void Initialize()
