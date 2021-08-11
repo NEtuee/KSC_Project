@@ -124,6 +124,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &30715644
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 30715646}
+  - component: {fileID: 30715645}
+  m_Layer: 0
+  m_Name: 'wqdwd : Point'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &30715645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30715644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093697f86e246c54caa1153894d9899e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bezierPoint1: {fileID: 0}
+  bezierPoint2: {fileID: 0}
+--- !u!4 &30715646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30715644}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -17.02, y: -0.17860031, z: 4.22}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1667875780}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &59996288
 GameObject:
   m_ObjectHideFlags: 0
@@ -2704,19 +2749,6 @@ MonoBehaviour:
   - id: 2
   - id: 3
   - id: 4
-  - id: 5
-  - id: 6
-  - id: 7
-  - id: 8
-  - id: 9
-  - id: 10
-  - id: 11
-  - id: 12
-  - id: 13
-  - id: 14
-  - id: 15
-  - id: 16
-  - id: 17
   edges:
   - GUID: da86007f-b3fb-487e-984e-43aa365379ec
     owner: {fileID: 723247771}
@@ -2758,70 +2790,6 @@ MonoBehaviour:
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: output
-  - GUID: 03af0d0c-3386-4546-9e79-680405158518
-    owner: {fileID: 723247771}
-    inputNodeGUID: b059b729-6ecb-41f0-abfb-e8a75007e5f2
-    outputNodeGUID: 8df8ef5f-acf5-436d-835c-4a808a7bc18f
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 5d943e8c-24f2-4bf6-922d-b2984b55568d
-    owner: {fileID: 723247771}
-    inputNodeGUID: 3d5ccce5-420a-412a-a8d9-457f2fabed4a
-    outputNodeGUID: c1c61c72-c4b0-475d-9972-b44e73ea61fd
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: fdaa5636-7dd0-49cf-afef-402893ef50c6
-    owner: {fileID: 723247771}
-    inputNodeGUID: bf6090d9-3d70-4980-a1cb-bbae1757f341
-    outputNodeGUID: f029861f-640b-41cd-9078-4eb649bce9e6
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: c02bb375-a34c-4544-a42d-e7c78a237a42
-    owner: {fileID: 723247771}
-    inputNodeGUID: 5e6cfca3-f1ef-42dd-8dcf-81b2b7563f24
-    outputNodeGUID: 7b95acc3-188e-4ef4-8e2d-c5bfc7ffb6f1
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 6d569a27-d6cb-4021-9457-98d2e9235ab8
-    owner: {fileID: 723247771}
-    inputNodeGUID: 8189031e-3103-415f-af60-19d0072659b2
-    outputNodeGUID: 3cdd9b99-1c51-4300-b9d8-3078e9dc4dde
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: c6a72e8f-6fb2-4d2d-863d-001f4d12e9ec
-    owner: {fileID: 723247771}
-    inputNodeGUID: 3cd02009-eb16-49e4-97ea-e39638e30b10
-    outputNodeGUID: e12fd303-4b77-435c-99bd-eb285f772225
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 4ef2079e-2752-4993-b9e8-0371947189c2
-    owner: {fileID: 723247771}
-    inputNodeGUID: f860f672-ab17-462f-baf0-26649e4e5a8b
-    outputNodeGUID: bf89e025-4943-4676-8dca-0b416c7d1be7
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: fe5245fe-a6a8-49ab-839f-3cd5e9c84d32
-    owner: {fileID: 723247771}
-    inputNodeGUID: 125bcca1-3b61-4366-80ef-6ad6c291dfc5
-    outputNodeGUID: f860f672-ab17-462f-baf0-26649e4e5a8b
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements:
@@ -2856,25 +2824,19 @@ MonoBehaviour:
       serializedType: FunctionItemView, EveryAssembly, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
   exposedParameters:
-  - id: 18
-  - id: 19
-  - id: 20
-  - id: 21
-  - id: 22
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  - id: 9
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 85, y: 900, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
-  functions:
-  - id: 23
-  - id: 24
-  - id: 25
-  - id: 26
+  position: {x: 414, y: 9, z: 0}
+  scale: {x: 0.57175326, y: 0.57175326, z: 1}
+  functions: []
   functionID: 7
-  states:
-  - id: 27
-  - id: 28
+  states: []
   stateID: 2
   initializeState: 0
   currentState: 0
@@ -2972,235 +2934,6 @@ MonoBehaviour:
         deltaTime: 0
         isArrived: 0
     00000005:
-      type: {class: FunctionStartNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: c1c61c72-c4b0-475d-9972-b44e73ea61fd
-        computeOrder: 5
-        position:
-          serializedVersion: 2
-          x: 665
-          y: -536
-          width: 143
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        title: Idle Initialize
-    00000006:
-      type: {class: FunctionEndNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: 3d5ccce5-420a-412a-a8d9-457f2fabed4a
-        computeOrder: 6
-        position:
-          serializedVersion: 2
-          x: 1122
-          y: -536
-          width: 170
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        title: Idle Initialize
-    00000007:
-      type: {class: FunctionStartNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: f029861f-640b-41cd-9078-4eb649bce9e6
-        computeOrder: 7
-        position:
-          serializedVersion: 2
-          x: 666
-          y: -429
-          width: 145
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        title: Idle Progress
-    00000008:
-      type: {class: FunctionEndNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: bf6090d9-3d70-4980-a1cb-bbae1757f341
-        computeOrder: 8
-        position:
-          serializedVersion: 2
-          x: 1122
-          y: -429
-          width: 170
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        title: Idle Progress
-    00000009:
-      type: {class: StateChangeNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: 8189031e-3103-415f-af60-19d0072659b2
-        computeOrder: 10
-        position:
-          serializedVersion: 2
-          x: 326.28998
-          y: -803.0001
-          width: 170
-          height: 96
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        stateID: 2
-        stateMachineGraph: {fileID: 723247771}
-        stateInfo:
-          name: Run
-          uniqueID: 2
-          stateInitialize:
-            id: 25
-          stateProgress:
-            id: 26
-    0000000A:
-      type: {class: StateProgressNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: 3cd02009-eb16-49e4-97ea-e39638e30b10
-        computeOrder: 12
-        position:
-          serializedVersion: 2
-          x: 326.28998
-          y: -676.0001
-          width: 170
-          height: 90
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        stateMachineGraph: {fileID: 0}
-        stateInfo:
-          name: 
-          uniqueID: 0
-          stateInitialize:
-            id: 29
-          stateProgress:
-            id: 29
-    0000000B:
-      type: {class: FunctionStartNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: 7b95acc3-188e-4ef4-8e2d-c5bfc7ffb6f1
-        computeOrder: 13
-        position:
-          serializedVersion: 2
-          x: 667
-          y: -1004
-          width: 145
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        title: Run Initialize
-    0000000C:
-      type: {class: FunctionEndNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: 5e6cfca3-f1ef-42dd-8dcf-81b2b7563f24
-        computeOrder: 14
-        position:
-          serializedVersion: 2
-          x: 1126.0001
-          y: -1004
-          width: 170
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        title: Run Initialize
-    0000000D:
-      type: {class: FunctionStartNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: bf89e025-4943-4676-8dca-0b416c7d1be7
-        computeOrder: 15
-        position:
-          serializedVersion: 2
-          x: 665
-          y: -803
-          width: 147
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        title: Run Progress
-    0000000E:
-      type: {class: FunctionEndNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: 125bcca1-3b61-4366-80ef-6ad6c291dfc5
-        computeOrder: 17
-        position:
-          serializedVersion: 2
-          x: 1126
-          y: -803
-          width: 170
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        title: Run Progress
-    0000000F:
-      type: {class: ObjectInitializeEntryNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: 3cdd9b99-1c51-4300-b9d8-3078e9dc4dde
-        computeOrder: 9
-        position:
-          serializedVersion: 2
-          x: 83.29
-          y: -803.0001
-          width: 162
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-    00000010:
-      type: {class: ObjectProgressEntryNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: e12fd303-4b77-435c-99bd-eb285f772225
-        computeOrder: 11
-        position:
-          serializedVersion: 2
-          x: 81.289986
-          y: -676.0001
-          width: 164
-          height: 99
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        deltaTime: 0
-    00000011:
-      type: {class: PathFollowMoveNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: f860f672-ab17-462f-baf0-26649e4e5a8b
-        computeOrder: 16
-        position:
-          serializedVersion: 2
-          x: 861
-          y: -803
-          width: 221
-          height: 195
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        obj: {fileID: 0}
-        direction:
-          x: 0
-          y: 0
-          z: 0
-        speed: 0
-        rotationSpeed: 0
-        deltaTime: 0
-    00000012:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: 8a546e62-6b53-4f38-92ce-fd83953c64c5
@@ -3213,9 +2946,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 30
+          id: 10
         val: {fileID: 0}
-    00000013:
+    00000006:
       type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: e1db4752-fbd6-433e-9e14-622bb2079cc9
@@ -3228,9 +2961,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 31
+          id: 11
         val: {fileID: 0}
-    00000014:
+    00000007:
       type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: 3debf6eb-fa46-4afb-b8d9-842b37b879e0
@@ -3243,9 +2976,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 32
+          id: 12
         val: {fileID: 0}
-    00000015:
+    00000008:
       type: {class: GraphObjectTransformParamter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: fea3f1ce-94ff-4af1-9d6c-9a88abc89049
@@ -3258,12 +2991,12 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 33
+          id: 13
         val:
           position: {x: 0, y: 0, z: 0}
           rotation: {x: 0, y: 0, z: 0, w: 0}
           scale: {x: 0, y: 0, z: 0}
-    00000016:
+    00000009:
       type: {class: PathFollowGraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: 9ab2f2b7-8cb6-47f9-8298-983847d65db5
@@ -3276,101 +3009,33 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 34
-        val: {fileID: 827348542}
-    00000017:
-      type: {class: FunctionGraph/FunctionInfo, ns: , asm: EveryAssembly}
-      data:
-        name: Idle Initialize
-        uniqueID: 4
-        inputParams: []
-        outputParams: []
-        entryNode:
-          id: 5
-        endNode:
-          id: 6
-        hideInList: 1
-    00000018:
-      type: {class: FunctionGraph/FunctionInfo, ns: , asm: EveryAssembly}
-      data:
-        name: Idle Progress
-        uniqueID: 5
-        inputParams: []
-        outputParams: []
-        entryNode:
-          id: 7
-        endNode:
-          id: 8
-        hideInList: 1
-    00000019:
-      type: {class: FunctionGraph/FunctionInfo, ns: , asm: EveryAssembly}
-      data:
-        name: Run Initialize
-        uniqueID: 6
-        inputParams: []
-        outputParams: []
-        entryNode:
-          id: 11
-        endNode:
-          id: 12
-        hideInList: 1
-    0000001A:
-      type: {class: FunctionGraph/FunctionInfo, ns: , asm: EveryAssembly}
-      data:
-        name: Run Progress
-        uniqueID: 7
-        inputParams: []
-        outputParams: []
-        entryNode:
-          id: 13
-        endNode:
           id: 14
-        hideInList: 1
-    0000001B:
-      type: {class: StateMachineGraph/StateInfo, ns: , asm: EveryAssembly}
-      data:
-        name: Idle
-        uniqueID: 1
-        stateInitialize:
-          id: 23
-        stateProgress:
-          id: 24
-    0000001C:
-      type: {class: StateMachineGraph/StateInfo, ns: , asm: EveryAssembly}
-      data:
-        name: Run
-        uniqueID: 2
-        stateInitialize:
-          id: 25
-        stateProgress:
-          id: 26
-    0000001D:
-      type: {class: , ns: , asm: }
-    0000001E:
+        val: {fileID: 827348542}
+    0000000A:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: 8a546e62-6b53-4f38-92ce-fd83953c64c5
-    0000001F:
+    0000000B:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: e1db4752-fbd6-433e-9e14-622bb2079cc9
-    00000020:
+    0000000C:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: 3debf6eb-fa46-4afb-b8d9-842b37b879e0
-    00000021:
+    0000000D:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: fea3f1ce-94ff-4af1-9d6c-9a88abc89049
-    00000022:
+    0000000E:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
@@ -3787,7 +3452,7 @@ MonoBehaviour:
       y: 142
       width: 272
       height: 304
-    opened: 1
+    opened: 0
     editorType:
       serializedType: GraphProcessor.ExposedParameterView, EveryAssembly, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
@@ -3801,8 +3466,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -49, y: 184, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
+  position: {x: -381, y: 212, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
   functions: []
   functionID: 0
   states: []
@@ -4126,6 +3791,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 59996289}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1007024706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1007024708}
+  - component: {fileID: 1007024707}
+  m_Layer: 0
+  m_Name: 'wqdwd : Point'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1007024707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007024706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093697f86e246c54caa1153894d9899e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bezierPoint1: {fileID: 0}
+  bezierPoint2: {fileID: 0}
+--- !u!4 &1007024708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007024706}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -12.500946, y: -0.17860031, z: -0.12657928}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1667875780}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1176426557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1176426559}
+  - component: {fileID: 1176426558}
+  m_Layer: 0
+  m_Name: 'wqdwd : Point'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1176426558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176426557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093697f86e246c54caa1153894d9899e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bezierPoint1: {fileID: 0}
+  bezierPoint2: {fileID: 0}
+--- !u!4 &1176426559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176426557}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -16.73648, y: -0.17860031, z: -1.4388046}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1667875780}
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1180957179
 GameObject:
@@ -7108,6 +6863,51 @@ Transform:
   m_Father: {fileID: 1667875780}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1639345178
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1639345180}
+  - component: {fileID: 1639345179}
+  m_Layer: 0
+  m_Name: 'wqdwd : Point'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1639345179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639345178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093697f86e246c54caa1153894d9899e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bezierPoint1: {fileID: 0}
+  bezierPoint2: {fileID: 0}
+--- !u!4 &1639345180
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639345178}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -10.685379, y: -0.17860031, z: 4.6004333}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1667875780}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1667875777
 GameObject:
   m_ObjectHideFlags: 0
@@ -7180,7 +6980,15 @@ MonoBehaviour:
     - {fileID: 1508046684}
     - {fileID: 106745660}
     - {fileID: 2003749702}
-  currentPath: 
+  - name: wqdwd
+    isLoop: 1
+    movePoints:
+    - {fileID: 30715645}
+    - {fileID: 1885385651}
+    - {fileID: 1176426558}
+    - {fileID: 1007024707}
+    - {fileID: 1639345179}
+  currentPath: wqdwd
 --- !u!4 &1667875780
 Transform:
   m_ObjectHideFlags: 0
@@ -7205,6 +7013,11 @@ Transform:
   - {fileID: 1508046685}
   - {fileID: 106745661}
   - {fileID: 2003749703}
+  - {fileID: 30715646}
+  - {fileID: 1885385652}
+  - {fileID: 1176426559}
+  - {fileID: 1007024708}
+  - {fileID: 1639345180}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8258,6 +8071,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1667875780}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1885385650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1885385652}
+  - component: {fileID: 1885385651}
+  m_Layer: 0
+  m_Name: 'wqdwd : Point'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1885385651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1885385650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093697f86e246c54caa1153894d9899e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bezierPoint1: {fileID: 0}
+  bezierPoint2: {fileID: 0}
+--- !u!4 &1885385652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1885385650}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -19.21, y: -0.17860031, z: 1.49}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1667875780}
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2003749701
 GameObject:
