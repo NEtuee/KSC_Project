@@ -34,7 +34,9 @@ public class TutorialTrigger : UnTransfromObjectBase
         if (isOver)
             return;
 
-        SendMessageEx(MessageTitles.uimanager_activeInGameTutorial, GetSavedNumber("UIManager"), tutorial);
+        MD.InGameTutorialTypeData data = MessageDataPooling.GetMessageData<MD.InGameTutorialTypeData>();
+        data.type = tutorial;
+        SendMessageEx(MessageTitles.uimanager_activeInGameTutorial, GetSavedNumber("UIManager"), data);
         
         isOver = true;
         gameObject.SetActive(false);

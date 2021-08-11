@@ -62,8 +62,8 @@ public class SoundInfoItem : ScriptableObject
     {
         var saveData = new List<SoundInfo>();
         //soundData = new List<SoundInfo>();
-        IOManager.ReadRangeFromCSV(csv.text,1,-1,0,2,out var data);
-        IOManager.ReadRangeFromCSV(csv.text,1,-1,4,8,out var param);
+        IOControl.ReadRangeFromCSV(csv.text,1,-1,0,2,out var data);
+        IOControl.ReadRangeFromCSV(csv.text,1,-1,4,8,out var param);
 
         var globalData = new SoundInfo();
         globalData.id = 0;

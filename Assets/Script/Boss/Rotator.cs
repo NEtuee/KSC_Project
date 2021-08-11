@@ -32,68 +32,68 @@ public class Rotator : MonoBehaviour
 
     public void Update()
     {
-        if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Fixed)
-            return;
+        // if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Fixed)
+        //     return;
 
-        if (GameManager.Instance.PAUSE == true)
-            return;
+        // if (GameManager.Instance.PAUSE == true)
+        //     return;
 
-        if(play && !_start)
-        {
-            _startFactor += Time.deltaTime;
-            if(_startFactor >= startFactor)
-            {
-                _start = true;
-            }
-            else
-            {
-                return;
-            }
-        }
+        //if(play && !_start)
+        //{
+        //    _startFactor += Time.deltaTime;
+        //    if(_startFactor >= startFactor)
+        //    {
+        //        _start = true;
+        //    }
+        //    else
+        //    {
+        //        return;
+        //    }
+        //}
 
-        if (play)
-        {
-            if(lerpSpeed)
-            {
-                if(!_stopMove)
-                {
-                    _speed += lerpFactor * speed.normalized * Time.deltaTime;
-                    if(_speed.magnitude >= speed.magnitude)
-                    {
-                        _speed = speed;
-                        lerpSpeed = false;
-                    }
-                }
-                else
-                {
-                    _speed -= lerpFactor * speed.normalized * Time.deltaTime;
-                    var angle = Vector3.Angle(_speed,speed);
-                    if(angle >= 160f)
-                    {
-                        _speed = Vector3.zero;;
-                        lerpSpeed = false;
-                    }
-                }
+        //if (play)
+        //{
+        //    if(lerpSpeed)
+        //    {
+        //        if(!_stopMove)
+        //        {
+        //            _speed += lerpFactor * speed.normalized * Time.deltaTime;
+        //            if(_speed.magnitude >= speed.magnitude)
+        //            {
+        //                _speed = speed;
+        //                lerpSpeed = false;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            _speed -= lerpFactor * speed.normalized * Time.deltaTime;
+        //            var angle = Vector3.Angle(_speed,speed);
+        //            if(angle >= 160f)
+        //            {
+        //                _speed = Vector3.zero;;
+        //                lerpSpeed = false;
+        //            }
+        //        }
                 
-            }
+        //    }
 
-            transform.rotation *= Quaternion.Euler(_speed * Time.deltaTime);
-            RotateSubRotators(Time.deltaTime);
-        }
+        //    transform.rotation *= Quaternion.Euler(_speed * Time.deltaTime);
+        //    RotateSubRotators(Time.deltaTime);
+        //}
 
-        if(fall)
-        {
-            AddGravity(Time.fixedDeltaTime);
-        }
+        //if(fall)
+        //{
+        //    AddGravity(Time.fixedDeltaTime);
+        //}
     }
 
     public void FixedUpdate()
     {
-        if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Update)
-            return;
+        // if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Update)
+        //     return;
 
-        if (GameManager.Instance.PAUSE == true)
-            return;
+        // if (GameManager.Instance.PAUSE == true)
+        //     return;
 
         if(play && !_start)
         {

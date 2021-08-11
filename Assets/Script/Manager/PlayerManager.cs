@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using MD;
 
 public class PlayerManager : ManagerBase
 {
@@ -17,6 +19,8 @@ public class PlayerManager : ManagerBase
         base.Assign();
         SaveMyNumber("PlayerManager");
 
+        MessageDataPooling.RegisterMessageData<PositionRotation>();
+
         AddAction(MessageTitles.playermanager_sendplayerctrl, (msg) => 
         {
             var target = (MessageReceiver)msg.sender;
@@ -25,7 +29,7 @@ public class PlayerManager : ManagerBase
 
         AddAction(MessageTitles.playermanager_setPlayerTransform, (msg) =>
         {
-            PositionRotation data = (PositionRotation)msg.data;
+            PositionRotation data = MessageDataPooling.CastData<PositionRotation>(msg.data);
             _player.transform.SetPositionAndRotation(data.position, data.rotation); 
         });
 
@@ -43,7 +47,14 @@ public class PlayerManager : ManagerBase
 
         AddAction(MessageTitles.playermanager_addDamageToPlayer, (msg) =>
         {
-            _player.TakeDamage((float)msg.data);
+            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+            _player.TakeDamage(data.value);
+        });
+
+        AddAction(MessageTitles.playermanager_initPlayerStatus, (msg) => _player.InitStatus());
+        AddAction(MessageTitles.playermanager_getPlayer,(msg)=>{
+            var receiver = (MessageReceiver)msg.sender;
+            SendMessageQuick(receiver,MessageTitles.playermanager_getPlayer,_player);
         });
     }
 
@@ -67,7 +78,7 @@ public class PlayerManager : ManagerBase
         {
             _bagMatrial.SetFloat("Vector1_5338de784f7d4439aba250082f9a53e3", value * 0.01f);
 
-            StateBarSetValueType data;
+            StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
             data.type = UIManager.StateBarType.HP;
             data.value = value;
             if (_player.GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
@@ -79,13 +90,15 @@ public class PlayerManager : ManagerBase
             {
                 data.visible = true;
                 SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
-                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), true);
+                BoolData setVisible = MessageDataPooling.GetMessageData<BoolData>();
+                setVisible.value = true;
+                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), setVisible);
             }
         });
 
         _player.stamina.Subscribe(value =>
         {
-            StateBarSetValueType data;
+            StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
             data.type = UIManager.StateBarType.Stamina;
             data.value = value;
             if (_player.GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
@@ -97,13 +110,15 @@ public class PlayerManager : ManagerBase
             {
                 data.visible = true;
                 SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
-                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), true);
+                BoolData setVisible = MessageDataPooling.GetMessageData<BoolData>();
+                setVisible.value = true;
+                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), setVisible);
             }
         });
 
         _player.energy.Subscribe(value =>
         {
-            StateBarSetValueType data;
+            StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
             data.type = UIManager.StateBarType.Energy;
             data.value = value;
             if (_player.GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
@@ -115,13 +130,15 @@ public class PlayerManager : ManagerBase
             {
                 data.visible = true;
                 SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
-                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), true);
+                BoolData setVisible = MessageDataPooling.GetMessageData<BoolData>();
+                setVisible.value = true;
+                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), setVisible);
             }
         });
 
         _player.hpPackCount.Subscribe(value =>
         {
-            HpPackValueType data;
+            HpPackValueType data = MessageDataPooling.GetMessageData<HpPackValueType>();
             data.value = value;
 
             if (_player.GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
@@ -133,7 +150,9 @@ public class PlayerManager : ManagerBase
             {
                 data.visible = true;
                 SendMessageEx(MessageTitles.uimanager_setvaluehppackui, GetSavedNumber("UIManager"), data);
-                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), true);
+                BoolData setVisible = MessageDataPooling.GetMessageData<BoolData>();
+                setVisible.value = true;
+                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), setVisible);
             }
         });
 
@@ -141,31 +160,43 @@ public class PlayerManager : ManagerBase
             if (value >= 3f)
             {
                 //crossHair.Third();
-                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 3);
+                IntData phase = MessageDataPooling.GetMessageData<IntData>();
+                phase.value = 3;
+                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
             }
             else if (value >= 2f)
             {
                 //crossHair.Second();
-                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 2);
+                IntData phase = MessageDataPooling.GetMessageData<IntData>();
+                phase.value = 2;
+                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
             }
             else if (value >= 1f)
             {
                 //crossHair.First();
-                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), 1);
+                IntData phase = MessageDataPooling.GetMessageData<IntData>();
+                phase.value = 1;
+                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
             }
         });
 
         _player.loadCount.Subscribe(value =>
         {
-            SendMessageEx(MessageTitles.uimanager_setgunloadvalue, GetSavedNumber("UIManager"), value);
+            IntData data = MessageDataPooling.GetMessageData<IntData>();
+            data.value = value;
+            SendMessageEx(MessageTitles.uimanager_setgunloadvalue, GetSavedNumber("UIManager"), data);
         });
         _player.chargeTime.Subscribe(value => 
         {
-            SendMessageEx(MessageTitles.uimanager_setgunchargetimevalue, GetSavedNumber("UIManager"), value);
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = value;
+            SendMessageEx(MessageTitles.uimanager_setgunchargetimevalue, GetSavedNumber("UIManager"), data);
         });
         _player.energy.Subscribe(value =>
         {
-            SendMessageEx(MessageTitles.uimanager_setgunenergyvalue, GetSavedNumber("UIManager"), value);
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = value;
+            SendMessageEx(MessageTitles.uimanager_setgunenergyvalue, GetSavedNumber("UIManager"), data);
         });
     }
 
@@ -178,16 +209,32 @@ public class PlayerManager : ManagerBase
             SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
         }
     }
+
+    public void GameQuit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+
+#if UNITY_STANDALONE
+        Application.Quit();
+#endif
+
+    }
 }
 
-public struct PositionRotation
+namespace MD
 {
-    public Vector3 position;
-    public Quaternion rotation;
-
-    public PositionRotation(Vector3 pos, Quaternion rot)
+    public class PositionRotation : MessageData
     {
-        position = pos;
-        rotation = rot;
+        public Vector3 position;
+        public Quaternion rotation;
+
+        public PositionRotation() { }
+        public PositionRotation(Vector3 pos, Quaternion rot)
+        {
+            position = pos;
+            rotation = rot;
+        }
     }
 }

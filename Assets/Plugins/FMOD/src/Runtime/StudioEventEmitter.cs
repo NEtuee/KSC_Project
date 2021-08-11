@@ -18,7 +18,6 @@ namespace FMODUnity
         public bool OverrideAttenuation = false;
         public float OverrideMinDistance = -1.0f;
         public float OverrideMaxDistance = -1.0f;
-
         public int DataCode = -1;
         public bool dontStop = false;
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MD;
 
 public class SettingManager : ManagerBase
 {
@@ -14,7 +15,7 @@ public class SettingManager : ManagerBase
     public override void Assign()
     {
         base.Assign();
-        SaveMyNumber("SettingManager");
+        SaveMyNumber("SettingManager",true);
 
         SaveDataHelper.streamingAssetsPath = Application.streamingAssetsPath;
 
@@ -29,6 +30,22 @@ public class SettingManager : ManagerBase
             VolumeData data = (VolumeData)msg.data;
             SaveSoundVolume(data.master, data.sfx, data.ambient, data.bgm);
         });
+
+        AddAction(MessageTitles.setting_setScreenMode, (msg) =>
+         {
+             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+             SetScreenMode(data.value);
+         });
+        AddAction(MessageTitles.setting_setResolution, (msg) =>
+        {
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            SetResolution(data.value);
+        });
+        AddAction(MessageTitles.setting_setVsync, (msg) =>
+        {
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            SetVsnc(data.value);
+        });
     }
 
     public override void Initialize()
@@ -36,12 +53,15 @@ public class SettingManager : ManagerBase
         base.Initialize();
 
         ControlSettingData controlSettingData = SaveDataHelper.LoadSetting<ControlSettingData>();
-        followTarget.PitchRotateSpeed = controlSettingData.pitchRotateSpeed;
-        followTarget.YawRotateSpeed = controlSettingData.yawRotateSpeed;
+        if (followTarget != null)
+        {
+            followTarget.PitchRotateSpeed = controlSettingData.pitchRotateSpeed;
+            followTarget.YawRotateSpeed = controlSettingData.yawRotateSpeed;
+        }
 
-        CameraRotateSpeedData cameraRotateSpeedData;
-        cameraRotateSpeedData.pitch = followTarget.PitchRotateSpeed / MaxRotateSpeed;
-        cameraRotateSpeedData.yaw = followTarget.YawRotateSpeed / MaxRotateSpeed;
+        CameraRotateSpeedData cameraRotateSpeedData = MessageDataPooling.GetMessageData<CameraRotateSpeedData>();
+        cameraRotateSpeedData.pitch = controlSettingData.pitchRotateSpeed / MaxRotateSpeed;
+        cameraRotateSpeedData.yaw = controlSettingData.yawRotateSpeed / MaxRotateSpeed;
 
         SendMessageEx(MessageTitles.uimanager_setvaluecamerarotatespeedslider, GetSavedNumber("UIManager"), cameraRotateSpeedData);
 
@@ -50,8 +70,8 @@ public class SettingManager : ManagerBase
         Screen.SetResolution(displaySettingData.screenWidth, displaySettingData.screenHeight, Screen.fullScreen);
 
         Resolution[] resolutions = Screen.resolutions;
-        ResolutionData resolutionData;
-        resolutionData.resolutionStrings = new List<string>();
+        ResolutionData resolutionData = MessageDataPooling.GetMessageData<ResolutionData>();
+        resolutionData.resolutionStrings.Clear();
         foreach (var res in resolutions)
         {
             foreach (var respondRes in respondResolutionsVectors)
@@ -74,28 +94,35 @@ public class SettingManager : ManagerBase
             if (Screen.currentResolution.height == _respondResolutions[i].height &&
                 Screen.currentResolution.width == _respondResolutions[i].width)
             {
-                SendMessageEx(MessageTitles.uimanager_setvalueresolutiondropdown, GetSavedNumber("UIManager"), i);
+                IntData intData = MessageDataPooling.GetMessageData<IntData>();
+                intData.value = i;
+                SendMessageEx(MessageTitles.uimanager_setvalueresolutiondropdown, GetSavedNumber("UIManager"), intData);
                 break;
             }
         }
-        SendMessageEx(MessageTitles.uimanager_setvaluescreenmodedropdown, GetSavedNumber("UIManager"), Screen.fullScreen ? 0 : 1);
-        SendMessageEx(MessageTitles.uimanager_setvaluevsyncdropdown, GetSavedNumber("UIManager"), QualitySettings.vSyncCount == 0 ? 0 : 1);
+
+        IntData fullScreen = MessageDataPooling.GetMessageData<IntData>();
+        fullScreen.value = Screen.fullScreen ? 0 : 1;
+        SendMessageEx(MessageTitles.uimanager_setvaluescreenmodedropdown, GetSavedNumber("UIManager"), fullScreen);
+        IntData vsync = MessageDataPooling.GetMessageData<IntData>();
+        vsync.value = QualitySettings.vSyncCount == 0 ? 0 : 1;
+        SendMessageEx(MessageTitles.uimanager_setvaluevsyncdropdown, GetSavedNumber("UIManager"), vsync);
 
         SoundSettingData soundSettingData = SaveDataHelper.LoadSetting<SoundSettingData>();
-        SetParameterData setParameterData;
+        SetParameterData setParameterData = MessageDataPooling.GetMessageData<SetParameterData>();
         setParameterData.paramId = 1; setParameterData.value = soundSettingData.masterVolume; setParameterData.soundId = 0;
         SendMessageEx(MessageTitles.fmod_setGlobalParam,GetSavedNumber("FMODManager"), setParameterData);
-        SetParameterData setParameterData2;
+        SetParameterData setParameterData2 = MessageDataPooling.GetMessageData<SetParameterData>();
         setParameterData2.paramId = 2; setParameterData2.value = soundSettingData.sfxVolume; setParameterData2.soundId = 0;
         SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData2);
-        SetParameterData setParameterData3;
+        SetParameterData setParameterData3 = MessageDataPooling.GetMessageData<SetParameterData>();
         setParameterData3.paramId = 3; setParameterData3.value = soundSettingData.ambientVolume; setParameterData3.soundId = 0;
         SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData3);
-        SetParameterData setParameterData4;
+        SetParameterData setParameterData4 = MessageDataPooling.GetMessageData<SetParameterData>();
         setParameterData4.paramId = 4; setParameterData4.value = soundSettingData.bgmVolume; setParameterData4.soundId = 0;
         SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData4);
 
-        VolumeData volumeData;
+        VolumeData volumeData = MessageDataPooling.GetMessageData<VolumeData>();
         volumeData.master = soundSettingData.masterVolume / 100f;
         volumeData.sfx = soundSettingData.sfxVolume / 100f;
         volumeData.ambient = soundSettingData.ambientVolume / 100f;
@@ -122,22 +149,22 @@ public class SettingManager : ManagerBase
         soundData.bgmVolume = bgm * 100f;
         SaveDataHelper.SaveSetting(soundData);
 
-        SetParameterData setParameterData;
+        SetParameterData setParameterData = MessageDataPooling.GetMessageData<SetParameterData>();
         setParameterData.paramId = 1; setParameterData.value = soundData.masterVolume; setParameterData.soundId = 0;
         SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData);
-        SetParameterData setParameterData2;
+        SetParameterData setParameterData2 = MessageDataPooling.GetMessageData<SetParameterData>();
         setParameterData2.paramId = 2; setParameterData2.value = soundData.sfxVolume; setParameterData2.soundId = 0;
         SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData2);
-        SetParameterData setParameterData3;
+        SetParameterData setParameterData3 = MessageDataPooling.GetMessageData<SetParameterData>();
         setParameterData3.paramId = 3; setParameterData3.value = soundData.ambientVolume; setParameterData3.soundId = 0;
         SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData3);
-        SetParameterData setParameterData4;
+        SetParameterData setParameterData4 = MessageDataPooling.GetMessageData<SetParameterData>();
         setParameterData4.paramId = 4; setParameterData4.value = soundData.bgmVolume; setParameterData4.soundId = 0;
         SendMessageEx(MessageTitles.fmod_setGlobalParam, GetSavedNumber("FMODManager"), setParameterData4);
 
     }
 
-    public void SetResoultion(int value)
+    public void SetResolution(int value)
     {
         Screen.SetResolution(_respondResolutions[value].width, _respondResolutions[value].height, Screen.fullScreen);
         SaveDisplaySetting();
@@ -177,26 +204,29 @@ public class SettingManager : ManagerBase
     {
         if(followTarget == null)
         {
-            Debug.LogError("Not Set FollowTarget");
+            Debug.LogWarning("Not Set FollowTarget");
         }
     }
 }
 
-public struct CameraRotateSpeedData
+namespace MD
 {
-    public float yaw;
-    public float pitch;
-}
+    public class CameraRotateSpeedData : MessageData
+    {
+        public float yaw;
+        public float pitch;
+    }
 
-public struct VolumeData
-{
-    public float master;
-    public float sfx;
-    public float ambient;
-    public float bgm;
-}
+    public class VolumeData : MessageData
+    {
+        public float master;
+        public float sfx;
+        public float ambient;
+        public float bgm;
+    }
 
-public struct ResolutionData
-{
-    public List<string> resolutionStrings;
+    public class ResolutionData : MessageData
+    {
+        public List<string> resolutionStrings = new List<string>();
+    }
 }
