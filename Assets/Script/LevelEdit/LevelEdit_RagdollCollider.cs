@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelEdit_RagdollCollider : MonoBehaviour
+public class LevelEdit_RagdollCollider : UnTransfromObjectBase
 {
     public enum EventType
     {
@@ -35,14 +35,29 @@ public class LevelEdit_RagdollCollider : MonoBehaviour
     private Collider _myCollider;
     private PlayerRagdoll _ragdoll;
 
-    public void Start()
+    public override void Assign()
     {
-        _ragdoll = GameManager.Instance.player.GetComponent<PlayerRagdoll>();
+        base.Assign();
+        Debug.Log("Check");
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        RegisterRequest(GetSavedNumber("StageManager"));
+
+        AddAction(MessageTitles.set_setplayer,(x)=>{
+            _ragdoll = ((PlayerCtrl_Ver2)x.data).GetPlayerRagdoll();
+        });
+
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
+
         _myCollider = GetComponent<Collider>();
     }
 
 
-    public void Update()
+    public override void Progress(float deltaTime)
     {
         if(_ragdoll.state == PlayerRagdoll.RagdollState.Ragdoll)
                 return;
@@ -80,7 +95,6 @@ public class LevelEdit_RagdollCollider : MonoBehaviour
                 if(hitForcePointType == HitForcePointType.CollisionPoint)
                 {
                     dir = (_ragdoll.transform.position - closest).normalized;
-                    Debug.Log(dir);
                 }
                 else if(hitForcePointType == HitForcePointType.CenterPosition)
                 {
@@ -125,7 +139,7 @@ public class LevelEdit_RagdollCollider : MonoBehaviour
 
     public Vector3 GetTargetDirection()
     {
-        return (GameManager.Instance.player.transform.position - transform.position).normalized;
+        return ((_ragdoll.transform.position + Vector3.up * 3f) - transform.position).normalized; 
     }
 
     public void ExplosionRagdoll(Vector3 dir)

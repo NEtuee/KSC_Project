@@ -60,7 +60,6 @@ public class RadialBlurBlitFeature : ScriptableRendererFeature
         }
         
 
-
         var cameraColorTargetIdent = renderer.cameraColorTarget;
         myRenderPass.Setup(cameraColorTargetIdent);
 
