@@ -9,6 +9,7 @@ using MD;
 public class PlayerManager : ManagerBase
 {
     [SerializeField] private PlayerCtrl_Ver2 _player;
+    private IKCtrl _playerFootIK;
     [SerializeField] private EMPGun _emp;
     [SerializeField] private Renderer bagRenderer;
     private Material _bagMatrial;
@@ -30,7 +31,8 @@ public class PlayerManager : ManagerBase
         AddAction(MessageTitles.playermanager_setPlayerTransform, (msg) =>
         {
             PositionRotation data = MessageDataPooling.CastData<PositionRotation>(msg.data);
-            _player.transform.SetPositionAndRotation(data.position, data.rotation); 
+            _player.transform.SetPositionAndRotation(data.position, data.rotation);
+            _playerFootIK.InitPelvisHeight();
         });
 
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
@@ -68,6 +70,13 @@ public class PlayerManager : ManagerBase
     public override void Initialize()
     {
         base.Initialize();
+
+        _playerFootIK = _player.GetComponent<IKCtrl>();
+
+        if(_playerFootIK == null)
+        {
+            Debug.LogError("Not Exits Player in IKCtrl");
+        }
 
         if(bagRenderer == null)
         {

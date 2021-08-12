@@ -130,14 +130,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     [Header("Move Direction")] [SerializeField]
     private Vector3 moveDir;
-
     private Vector3 lookDir;
     private Vector3 prevDir;
     private Vector3 camForward;
     private Vector3 camRight;
 
-    [Header("Detection")] [SerializeField] private LedgeChecker ledgeChecker;
+    [Header("Detection")] 
+    [SerializeField] private LedgeChecker ledgeChecker;
     [SerializeField] private SpaceChecker spaceChecker;
+    [SerializeField] private Vector3 wallUnderCheckOffset;
 
     [Header("Edge")] [SerializeField] private float hangAbleEdgeDist = 2f;
 
@@ -2876,6 +2877,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                             return;
                         }
 
+                        if (Physics.Raycast(transform.position + transform.TransformDirection(wallUnderCheckOffset), transform.forward, 3f, detectionLayer) == false)
+                        {
+                            return;
+                        }
+
                         movement.SetParent(hit.collider.transform);
                         movement.Attach();
 
@@ -3141,6 +3147,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         private void OnDrawGizmos()
     {
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(transform.position + transform.TransformDirection(wallUnderCheckOffset) - transform.forward, transform.forward * 3f);
+
+        if(Application.isPlaying)
+           Gizmos.DrawRay(transform.position + collider.center - transform.forward, transform.forward * 3f);
+
         DebugDraw();
     }
 
@@ -3168,6 +3180,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         DebugCastDetection.Instance.DebugSphereCastDetection(point1, collider.radius, transform.forward, 2f,
             climbingPaintLayer, Color.blue, Color.red);
 
+        //Vector3 wallCheckPoint = transform.position + transform.TransformDirection(wallCheckOffset) - transform.forward;
+        //DebugCastDetection.Instance.DebugSphereCastDetection(wallCheckPoint, collider.radius * 1.5f, transform.forward, 3f, detectionLayer, Color.green, Color.red);
         //start = transform.position + transform.up * collider.height * 2;
         //RaycastHit upHit;
         //RaycastHit forwardHit;
