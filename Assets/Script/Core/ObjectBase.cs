@@ -9,7 +9,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         public Quaternion rotation;
         public Vector3 scale;
     }
-    protected ObjectTransform _objTransform;
+    protected ObjectTransform _objTransform = new ObjectTransform();
 
     protected int _currentManagerNumber;
 

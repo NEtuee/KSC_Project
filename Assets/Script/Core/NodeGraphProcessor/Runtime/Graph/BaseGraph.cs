@@ -129,7 +129,7 @@ namespace GraphProcessor
 
 		// Trick to keep the node inspector alive during the editor session
 		[SerializeField]
-		internal UnityEngine.Object		nodeInspectorReference;
+		public UnityEngine.Object		nodeInspectorReference;
 
 		//graph visual properties
 		public Vector3					position = Vector3.zero;

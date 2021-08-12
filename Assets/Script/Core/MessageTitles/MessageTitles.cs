@@ -222,8 +222,6 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort cameramanager_setBrainCameraPosition = 0x0414;
 
-    #endregion
-
     #region EffectManager
 
     /// <summary>
@@ -357,5 +355,4 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort set_setCameraManager = 0x1003;
 
-    #endregion
 }
