@@ -30,7 +30,11 @@ public class GraphObjectBase : UnTransfromObjectBase
         InitGraph();
         base.Awake();
 
-        TryGetComponent<Animator>(out _animatorControll);
+        if(!TryGetComponent<Animator>(out _animatorControll))
+        {
+            _animatorControll = GetComponentInChildren<Animator>();
+        }
+        
     }
 
     public override void Assign()

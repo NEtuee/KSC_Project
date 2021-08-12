@@ -75,6 +75,15 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
         actionData.value = ()=>{
             EndTrigger();
+
+            if(endTransform != null)
+            {
+                var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
+                data.position = endTransform.position;
+                data.rotation = endTransform.rotation;
+                SendMessageEx(MessageTitles.playermanager_setPlayerTransform,GetSavedNumber("PlayerManager"),data);
+            }
+            
         };
 
         SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);

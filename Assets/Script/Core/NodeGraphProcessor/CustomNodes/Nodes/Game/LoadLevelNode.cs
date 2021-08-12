@@ -35,3 +35,25 @@ public class LoadPrevLevelNode : LinearConditionalNode
                 UniqueNumberBase.GetSavedNumberStatic("SceneManager"),null);
 	}
 }
+
+[System.Serializable, NodeMenuItem("Game/Load SpecificLevel")]
+public class LoadSpecificLevelNode : LinearConditionalNode
+{
+    [Input(name = "LevelObject")]
+	public GraphObjectBase obj;
+
+	[Input(name = "Level Key"),SerializeField]
+	public string level;
+
+
+	public override string		name => "Load SpecificLevel";
+
+	protected override void Process()
+	{
+		var data = MessageDataPooling.GetMessageData<MD.StringData>();
+		data.value = level;
+
+	    obj.SendMessageEx(MessageTitles.scene_loadSpecificLevel,
+                UniqueNumberBase.GetSavedNumberStatic("SceneManager"),data);
+	}
+}
