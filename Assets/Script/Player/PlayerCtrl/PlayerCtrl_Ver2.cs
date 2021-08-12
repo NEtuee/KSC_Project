@@ -181,7 +181,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
     [SerializeField] private float climbingJumpEnergyRestoreValue;
 
-    [Header("Spine")] private Transform spine;
+    [Header("Spine")] 
+    private Transform spine;
     [SerializeField] private Vector3 relativeVec;
     [SerializeField] private Transform lookAtAim;
     private Quaternion storeSpineRotation;
@@ -869,12 +870,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if (lookDir != Vector3.zero)
                     {
                         transform.rotation = Quaternion.Lerp(transform.rotation,
-                            Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * 1.0f);
+                            Quaternion.LookRotation(lookDir, Vector3.up), deltaTime * 30.0f);
                     }
                     else
                     {
                         transform.rotation = Quaternion.Lerp(transform.rotation,
-                            Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * 1.0f);
+                            Quaternion.LookRotation(transform.forward, Vector3.up), deltaTime * 30.0f);
                     }
 
                     movement.Move(moveDir + (Vector3.up * currentJumpPower));

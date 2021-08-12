@@ -198,9 +198,21 @@ public class RebindingUI : MonoBehaviour
                 displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
         }
 
-        // Set on label (if any).
-        if (m_BindingText != null)
-            m_BindingText.text = displayString;
+        if (m_KeyOption == KeyOption.Hold)
+        {
+            // Set on label (if any).
+            if (m_BindingText != null)
+                m_BindingText.text = displayString;
+            if (m_BindingToggleText != null)
+                m_BindingToggleText.text = "";
+        }
+        else
+        {
+            if (m_BindingToggleText != null)
+                m_BindingToggleText.text = displayString;
+            if (m_BindingText != null)
+                m_BindingText.text = "";
+        }
 
         // Give listeners a chance to configure UI in response.
         m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
@@ -248,6 +260,23 @@ public class RebindingUI : MonoBehaviour
             PerformInteractiveRebind(action, bindingIndex);
         }
     }
+    public void StartInteractiveRebindToggle()
+    {
+        if (!ResolveActionAndBinding(out var action, out var bindingIndex))
+            return;
+
+        // If the binding is a composite, we need to rebind each part in turn.
+        if (action.bindings[bindingIndex].isComposite)
+        {
+            var firstPartIndex = bindingIndex + 1;
+            if (firstPartIndex < action.bindings.Count && action.bindings[firstPartIndex].isPartOfComposite)
+                PerformInteractiveRebindToggle(action, firstPartIndex, allCompositeParts: true);
+        }
+        else
+        {
+            PerformInteractiveRebindToggle(action, bindingIndex);
+        }
+    }
 
     private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false)
     {
@@ -289,6 +318,11 @@ public class RebindingUI : MonoBehaviour
                         return;
                     }
 
+                    m_KeyOption = KeyOption.Toggle;
+                    InputBinding binding = action.ChangeBindingWithId(m_BindingId).binding;
+                    binding.overrideInteractions = "Press(behavior=2)";
+                    action.ApplyBindingOverride(bindingIndex, binding);
+
                     UpdateBindingDisplay();
                     CleanUp();
 
@@ -299,6 +333,89 @@ public class RebindingUI : MonoBehaviour
                         var nextBindingIndex = bindingIndex + 1;
                         if (nextBindingIndex < action.bindings.Count && action.bindings[nextBindingIndex].isPartOfComposite)
                             PerformInteractiveRebind(action, nextBindingIndex, true);
+                    }
+                });
+
+        // If it's a part binding, show the name of the part in the UI.
+        var partName = default(string);
+        if (action.bindings[bindingIndex].isPartOfComposite)
+            partName = $"Binding '{action.bindings[bindingIndex].name}'. ";
+
+        // Bring up rebind overlay, if we have one.
+        m_RebindOverlay?.SetActive(true);
+        if (m_RebindText != null)
+        {
+            var text = !string.IsNullOrEmpty(m_RebindOperation.expectedControlType)
+                ? $"{partName}Waiting for {m_RebindOperation.expectedControlType} input..."
+                : $"{partName}Waiting for input...";
+            m_RebindText.text = text;
+        }
+
+        // If we have no rebind overlay and no callback but we have a binding text label,
+        // temporarily set the binding text label to "<Waiting>".
+        if (m_RebindOverlay == null && m_RebindText == null && m_RebindStartEvent == null && m_BindingText != null)
+            m_BindingText.text = "<Waiting...>";
+
+        // Give listeners a chance to act on the rebind starting.
+        m_RebindStartEvent?.Invoke(this, m_RebindOperation);
+
+        m_RebindOperation.Start();
+    }
+
+    private void PerformInteractiveRebindToggle(InputAction action, int bindingIndex, bool allCompositeParts = false)
+    {
+        m_RebindOperation?.Cancel(); // Will null out m_RebindOperation.
+
+        void CleanUp()
+        {
+            m_RebindOperation?.Dispose();
+            m_RebindOperation = null;
+        }
+
+        action.Disable();
+        // Configure the rebind.
+        m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
+            .WithControlsExcluding("<Mouse>/press")
+            .WithControlsExcluding("<Mouse>/position")
+            .WithCancelingThrough("<Keyboard>/escape")
+            .OnCancel(
+                operation =>
+                {
+                    action.Enable();
+                    m_RebindStopEvent?.Invoke(this, operation);
+                    m_RebindOverlay?.SetActive(false);
+                    UpdateBindingDisplay();
+                    CleanUp();
+                })
+            .OnComplete(
+                operation =>
+                {
+                    action.Enable();
+                    m_RebindOverlay?.SetActive(false);
+                    m_RebindStopEvent?.Invoke(this, operation);
+
+                    if (CheckDuplicateBindings(action, bindingIndex, allCompositeParts))
+                    {
+                        action.RemoveBindingOverride(bindingIndex);
+                        CleanUp();
+                        PerformInteractiveRebindToggle(action, bindingIndex, allCompositeParts);
+                        return;
+                    }
+
+                    UpdateBindingDisplay();
+                    m_KeyOption = KeyOption.Toggle;
+                    InputBinding binding = action.ChangeBindingWithId(m_BindingId).binding;
+                    binding.overrideInteractions = "Press(behavior=0)";
+                    action.ApplyBindingOverride(bindingIndex, binding);
+                    CleanUp();
+
+                    // If there's more composite parts we should bind, initiate a rebind
+                    // for the next part.
+                    if (allCompositeParts)
+                    {
+                        var nextBindingIndex = bindingIndex + 1;
+                        if (nextBindingIndex < action.bindings.Count && action.bindings[nextBindingIndex].isPartOfComposite)
+                            PerformInteractiveRebindToggle(action, nextBindingIndex, true);
                     }
                 });
 
@@ -406,6 +523,14 @@ public class RebindingUI : MonoBehaviour
         }
     }
 
+    public enum KeyOption
+    {
+        Hold,Toggle
+    }
+
+    [SerializeField]
+    private KeyOption m_KeyOption = KeyOption.Hold;
+
     [Tooltip("Reference to action that is to be rebound from the UI.")]
     [SerializeField]
     private InputActionReference m_Action;
@@ -424,6 +549,9 @@ public class RebindingUI : MonoBehaviour
     [Tooltip("Text label that will receive the current, formatted binding string.")]
     [SerializeField]
     private TextMeshProUGUI m_BindingText;
+
+    [SerializeField]
+    private TextMeshProUGUI m_BindingToggleText;
 
     [Tooltip("Optional UI that will be shown while a rebind is in progress.")]
     [SerializeField]
