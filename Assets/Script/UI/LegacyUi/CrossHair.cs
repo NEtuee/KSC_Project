@@ -102,11 +102,37 @@ public class CrossHair : MonoBehaviour
         stage = 0;
     }
 
+    public void Launch()
+    {
+        //leftCross.DOAnchorPosX(-thirdStageOffset, 0.15f);
+        //rightCross.DOAnchorPosX(thirdStageOffset, 0.15f);
+        //upCross.DOAnchorPosY(thirdStageOffset, 0.15f);
+        //downCross.DOAnchorPosY(-thirdStageOffset, 0.15f);
+
+        //leftUpLine.DOAnchorPos(new Vector2(-thirdStageOffset, thirdStageOffset), 0.15f).SetEase(Ease.OutQuart);
+        //leftDownLine.DOAnchorPos(new Vector2(-thirdStageOffset, -thirdStageOffset), 0.15f).SetEase(Ease.OutQuart);
+        //RightUpLine.DOAnchorPos(new Vector2(thirdStageOffset, thirdStageOffset), 0.15f).SetEase(Ease.OutQuart);
+        //RightDownLine.DOAnchorPos(new Vector2(thirdStageOffset, -thirdStageOffset), 0.15f).SetEase(Ease.OutQuart);
+
+        float speed = 0.15f;
+
+        leftCross.DOAnchorPosX(-firstStageOffset, speed).SetUpdate(true).SetEase(Ease.OutBack);
+        rightCross.DOAnchorPosX(firstStageOffset, speed).SetUpdate(true).SetEase(Ease.OutBack);
+        upCross.DOAnchorPosY(firstStageOffset, speed).SetUpdate(true).SetEase(Ease.OutBack);
+        downCross.DOAnchorPosY(-firstStageOffset, speed).SetUpdate(true).SetEase(Ease.OutBack);
+
+        leftUpLine.DOAnchorPos(new Vector2(-firstStageOffset, firstStageOffset), speed).SetUpdate(true);
+        leftDownLine.DOAnchorPos(new Vector2(-firstStageOffset, -firstStageOffset), speed).SetUpdate(true);
+        RightUpLine.DOAnchorPos(new Vector2(firstStageOffset, firstStageOffset), speed).SetUpdate(true);
+        RightDownLine.DOAnchorPos(new Vector2(firstStageOffset, -firstStageOffset), speed).SetUpdate(true).OnComplete(() => stage = 0);
+
+ 
+    }
+
     public void First()
     {
         if (stage != 0)
             return;
-
         //left.DOAnchorPosX(-middlePosX, 0.2f);
         //right.DOAnchorPosX(middlePosX, 0.2f);
         //left.DOScale(middleScale, 0.2f);

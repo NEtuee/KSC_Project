@@ -28,12 +28,18 @@ public class IKCtrl : MonoBehaviour
     public bool useProIkFeature = false;
     public bool showSolverDebug = true;
 
+    private Vector3 originalBodyPosition;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         player = GetComponent<PlayerCtrl_Ver2>();
         movement = GetComponent<PlayerMovement>();
+
+        if(animator != null)
+        {
+            originalBodyPosition = animator.bodyPosition;
+        }
     }
 
     private void FixedUpdate()
@@ -169,7 +175,8 @@ public class IKCtrl : MonoBehaviour
 
     public void InitPelvisHeight()
     {
-        lastPelvisPositionY = transform.position.y + positionToPelvisDifference.y;
+        animator.bodyPosition = originalBodyPosition;
+        lastPelvisPositionY = animator.bodyPosition.y;
     }
 
     private void FeetPositionSolver(Vector3 fromSkyPosition, ref Vector3 feetIkPositions, ref Quaternion feetIkRotations)

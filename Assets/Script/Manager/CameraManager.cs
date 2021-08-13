@@ -3,6 +3,17 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Cinemachine;
+using MD;
+
+namespace MD
+{
+    public class BrainUpdateMethodData : MessageData
+    {
+        public CinemachineBrain.UpdateMethod update;
+        public CinemachineBrain.BrainUpdateMethod blend;
+    }
+}
+
 
 [System.Serializable]
 public struct DistanceBlendProfile
@@ -75,9 +86,11 @@ public class CameraManager : ManagerBase
 
         SaveMyNumber("CameraManager");
 
+        MessageDataPooling.RegisterMessageData<SetRadialBlurData>();
+
         AddAction(MessageTitles.cameramanager_setradialblur, (msg) =>
         {
-            SetRadialBlurData data = (SetRadialBlurData)msg.data;
+            SetRadialBlurData data = MessageDataPooling.CastData<SetRadialBlurData>(msg.data);
             SetRadialBlur(data.factor, data.radius, data.time);
         });
 
@@ -86,33 +99,33 @@ public class CameraManager : ManagerBase
 
         AddAction(MessageTitles.cameramanager_setaimcameradistance, (msg) =>
         {
-            float factor = (float)msg.data;
-            SetAimCameraDistance(factor);
+            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+            SetAimCameraDistance(data.value);
         });
 
         AddAction(MessageTitles.cameramanager_activevirtualcamera, (msg) =>
         {
-            ActiveVirtualCameraData data = (ActiveVirtualCameraData)msg.data;
+            ActiveVirtualCameraData data = MessageDataPooling.CastData<ActiveVirtualCameraData>(msg.data);
             ActiveVirtualCamera(data.cam, data.follow);
         });
 
         AddAction(MessageTitles.cameramanager_setfollowcameradistance, (msg) => 
         {
-            string key = (string)msg.data;
-            SetFollowCameraDistance(key);
+            StringData data = MessageDataPooling.CastData<StringData>(msg.data);
+            SetFollowCameraDistance(data.value);
         });
 
         AddAction(MessageTitles.cameramanager_setzerodamping, (msg) => ZeroDamping());
         AddAction(MessageTitles.cameramanager_restoredamping, (msg) => 
         {
-            float lateTime = (float)msg.data;
-            RestoreDamping(lateTime);
+            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+            RestoreDamping(data.value);
         });
 
         AddAction(MessageTitles.cameramanager_setdamping, (msg) => 
         {
-            Vector3 damp = (Vector3)msg.data;
-            SetDamping(damp);
+            Vector3Data data = MessageDataPooling.CastData<Vector3Data>(msg.data);
+            SetDamping(data.value);
         });
         AddAction(MessageTitles.cameramanager_generaterecoilimpluse, (msg) => GenerateRecoilImpulse());
 
@@ -123,31 +136,46 @@ public class CameraManager : ManagerBase
         });
 
         AddAction(MessageTitles.cameramanager_getCameraManager, (msg) =>
-         {
-             SendMessageQuick((MessageReceiver)msg.sender, MessageTitles.set_setCameraManager, this);
-         });
+        {
+            SendMessageQuick((MessageReceiver)msg.sender, MessageTitles.set_setCameraManager, this);
+        });
 
         AddAction(MessageTitles.cameramanager_setYawPitch, (msg) =>
-         {
-             PitchYawData data=(PitchYawData)msg.data;
-             followTarget.SetPitchYaw(data.pitch, data.yaw);
-         });
+        {
+            PitchYawData data= MessageDataPooling.CastData<PitchYawData>(msg.data);
+            followTarget.SetPitchYaw(data.pitch, data.yaw);
+        });
+
         AddAction(MessageTitles.cameramanager_setYawPitchPosition, (msg) =>
         {
-            PitchYawPositionData data = (PitchYawPositionData)msg.data;
+            PitchYawPositionData data = MessageDataPooling.CastData<PitchYawPositionData>(msg.data);
             followTarget.SetPitchYawPosition(data.pitch, data.yaw,data.position);
         });
 
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
-         {
-             DontDestroyOnLoad(Camera.main.transform);
-             DontDestroyOnLoad(followTarget.transform);
-         });
+        {
+            DontDestroyOnLoad(Camera.main.transform);
+            DontDestroyOnLoad(followTarget.transform);
+        });
 
         AddAction(MessageTitles.cameramanager_setBrainCameraPosition, (msg) =>
-         {
-             SetBrainCameraPosition((Vector3)msg.data);
-         });
+        {
+            Vector3Data data = MessageDataPooling.CastData<Vector3Data>(msg.data);
+            SetBrainCameraPosition(data.value);
+        });
+
+        AddAction(MessageTitles.cameramanager_setBrainUpdateMethod, (msg) =>
+        {
+            if(msg.data == null)
+            {
+                SetUpdateMethod();
+            }
+            else
+            {
+                var brainUpdate = MessageDataPooling.CastData<BrainUpdateMethodData>(msg.data);
+                SetUpdateMethod(brainUpdate.update,brainUpdate.blend);
+            }
+        });
     }
 
     public override void Initialize()
@@ -676,34 +704,38 @@ public class CameraManager : ManagerBase
     }
 }
 
-public struct SetRadialBlurData
+namespace MD
 {
-    public float factor;
-    public float radius;
-    public float time;
-}
-
-public struct ActiveVirtualCameraData
-{
-   public CinemachineVirtualCameraBase cam;
-   public Cinemachine3rdPersonFollow follow;
-}
-
-public struct PitchYawData
-{
-    public float pitch;
-    public float yaw;
-
-    public PitchYawData(float pitch,float yaw)
+    public class SetRadialBlurData : MessageData
     {
-        this.pitch = pitch;
-        this.yaw = yaw;
+        public float factor;
+        public float radius;
+        public float time;
     }
-}
 
-public struct PitchYawPositionData
-{
-    public float pitch;
-    public float yaw;
-    public Vector3 position;
+    public class ActiveVirtualCameraData : MessageData
+    {
+        public CinemachineVirtualCameraBase cam;
+        public Cinemachine3rdPersonFollow follow;
+    }
+
+    public class PitchYawData : MessageData
+    {
+        public float pitch;
+        public float yaw;
+
+        public PitchYawData() { }
+        public PitchYawData(float pitch, float yaw)
+        {
+            this.pitch = pitch;
+            this.yaw = yaw;
+        }
+    }
+
+    public class PitchYawPositionData : MessageData
+    {
+        public float pitch;
+        public float yaw;
+        public Vector3 position;
+    }
 }

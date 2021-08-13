@@ -21,6 +21,11 @@ public static class MessagePool
 
     public static void ReturnMessage(Message msg)
     {
+        if (msg.data != null && msg.data.GetType() == typeof(MessageData))
+        {
+            var messageData = (MessageData) msg.data;
+            messageData.isUsing = false;
+        }
         _freeQueue.Enqueue(msg);
     }
 

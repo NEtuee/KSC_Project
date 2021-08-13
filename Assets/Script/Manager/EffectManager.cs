@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MD;
 
 public class EffectManager : ManagerBase
 {
@@ -13,21 +14,23 @@ public class EffectManager : ManagerBase
         base.Assign();
         SaveMyNumber("EffectManager");
 
+        MessageDataPooling.RegisterMessageData<EffectActiveData>(10);
+
         AddAction(MessageTitles.effectmanager_activeeffect, (msg) =>
         {
-            EffectActiveData data = (EffectActiveData)msg.data;
+            EffectActiveData data = MessageDataPooling.CastData<EffectActiveData>(msg.data);
             Active(data.key, data.position);
         });
 
         AddAction(MessageTitles.effectmanager_activeeffectwithrotation, (msg) =>
         {
-            EffectActiveData data = (EffectActiveData)msg.data;
+            EffectActiveData data = MessageDataPooling.CastData<EffectActiveData>(msg.data);
             Active(data.key, data.position,data.rotation);
         });
 
         AddAction(MessageTitles.effectmanager_activeeffectsetparent, (msg) =>
         {
-            EffectActiveData data = (EffectActiveData)msg.data;
+            EffectActiveData data = MessageDataPooling.CastData<EffectActiveData>(msg.data);
             Active(data.key, data.position, data.rotation).transform.SetParent(data.parent);
         });
     }
@@ -66,19 +69,24 @@ public class EffectManager : ManagerBase
     }
 }
 
-struct EffectActiveData
+namespace MD
 {
-    public string key;
-    public Vector3 position;
-    public Quaternion rotation;
-    public Transform parent;
-
-    public EffectActiveData(string key, Vector3 position, Quaternion rotation, Transform parent = null)
+    public class EffectActiveData : MessageData
     {
-        this.key = key;
-        this.position = position;
-        this.rotation = rotation;
-        this.parent = parent;
+        public string key;
+        public Vector3 position;
+        public Quaternion rotation;
+        public Transform parent = null;
+
+        public EffectActiveData() { }
+
+        public EffectActiveData(string key, Vector3 position, Quaternion rotation, Transform parent = null)
+        {
+            this.key = key;
+            this.position = position;
+            this.rotation = rotation;
+            this.parent = parent;
+        }
     }
 }
 

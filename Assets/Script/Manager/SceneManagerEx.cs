@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-
+using MD;
 public class SceneManagerEx : ManagerBase
 {
     public SceneInfoItem sceneInfo;
@@ -115,7 +115,7 @@ public class SceneManagerEx : ManagerBase
 
         SendBroadcastMessage(MessageTitles.scene_beforeSceneChange,_currentScene,false);
 
-
+        yield return CoroutineUtilities.WaitForRealTime(2f);
 
         StartCoroutine(LoadNullScene());
 
@@ -147,23 +147,15 @@ public class SceneManagerEx : ManagerBase
         }
 
 
-        Debug.Log("Load");
-
         SendBroadcastMessage(MessageTitles.scene_afterSceneChange,_currentScene,false);
-
-        Debug.Log("AfterLoad");
-
-        yield return CoroutineUtilities.WaitForRealTime(2f);
-
         StartCoroutine(UnLoadNullScene());
 
-        yield return CoroutineUtilities.WaitForRealTime(3f);
+        yield return CoroutineUtilities.WaitForRealTime(2f);
 
 
         _isLoaded = true;
 
         SendBroadcastMessage(MessageTitles.scene_sceneChanged,_currentScene,false);
-        Debug.Log("Load Complite");
     }
 
     IEnumerator LoadNullScene()
@@ -221,14 +213,20 @@ public class SceneManagerEx : ManagerBase
 
             if (sceneActive == true)
             {
-                SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), operation.progress);
+                FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+                data.value = operation.progress;
+                SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), data);
             }
 
             yield return null;
         }
 
         if (sceneActive == true)
-            SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), 1f);
+        {
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = 1f;
+            SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), data);
+        }
 
         var scene = SceneManager.GetSceneByName(target);
 

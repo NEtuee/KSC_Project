@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
+
 public class ImpulseTest : MonoBehaviour
 {
     [SerializeField] private CinemachineImpulseSource impulseSource;

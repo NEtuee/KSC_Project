@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using MD;
 
 public class VideoManager : ManagerBase
 {
@@ -26,8 +27,8 @@ public class VideoManager : ManagerBase
 
         AddAction(MessageTitles.videomanager_playvideo, (msg) => 
         {
-            string key = (string)msg.data;
-            PlayVideo(key);
+            StringData data = MessageDataPooling.CastData<StringData>(msg.data);
+            PlayVideo(data.value);
         });
 
         AddAction(MessageTitles.videomanager_stopvideo, (msg)=>StopVideo());
@@ -109,7 +110,10 @@ public class VideoManager : ManagerBase
 
         string description = _tutorialData[key].description;
         description = description.Replace("\\n", "\n");
-        SendMessageEx(MessageTitles.uimanager_settutorialdescription, GetSavedNumber("UIManager"), description);
+
+        StringData data = MessageDataPooling.GetMessageData<StringData>();
+        data.value = description;
+        SendMessageEx(MessageTitles.uimanager_settutorialdescription, GetSavedNumber("UIManager"), data);
         StartCoroutine(PrepareVideo());
     }
 }

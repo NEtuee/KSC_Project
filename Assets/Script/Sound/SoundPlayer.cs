@@ -8,6 +8,15 @@ public class SoundPlayer : MonoBehaviour
 
     public void Play()
     {
-        GameManager.Instance.soundManager.Play(code,transform.position);
+        var sound = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        sound.id = code;
+        sound.position = transform.position;
+        sound.dontStop = false;
+        sound.returnValue = false;
+
+        var msg = MessagePool.GetMessage();
+        msg.Set(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound,null);
+
+        MasterManager.instance.HandleMessage(msg);
     }
 }

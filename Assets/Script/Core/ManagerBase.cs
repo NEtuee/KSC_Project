@@ -53,8 +53,10 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     {
         foreach(var receiver in _receivers.Values)
         {
-            if(receiver == null || !receiver.gameObject.activeInHierarchy)
+            if(receiver == null || !receiver.gameObject.activeInHierarchy || !receiver.enabled)
+            {
                 continue;
+            }
             receiver.Progress(deltaTime);
         }
     }
@@ -63,7 +65,7 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     {
         foreach(var receiver in _receivers.Values)
         {
-            if(receiver == null || !receiver.gameObject.activeInHierarchy)
+            if(receiver == null || !receiver.gameObject.activeInHierarchy || !receiver.enabled)
                 continue;
             receiver.AfterProgress(deltaTime);
         }
@@ -73,7 +75,7 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     {
         foreach(var receiver in _receivers.Values)
         {
-            if(receiver == null || !receiver.gameObject.activeInHierarchy)
+            if(receiver == null || !receiver.gameObject.activeInHierarchy || !receiver.enabled)
                 continue;
             receiver.UpdateTransform();
         }
@@ -91,7 +93,7 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     public void RegisterRequest()
     {
         var msg = MessagePack(MessageTitles.system_registerRequest,0,null);
-        MasterManager.instance.ReceiveMessage(msg);
+        MasterManager.instance.HandleMessageQuick(msg);
 
 #if UNITY_EDITOR
         Debug_AddSendedQueue(msg);

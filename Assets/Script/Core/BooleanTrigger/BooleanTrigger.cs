@@ -2,11 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+namespace MD
+{
+    public class TriggerData : MessageData
+    {
+        public string name;
+        public bool trigger;
+    }
+}
+
+
 [System.Serializable]
 public class BooleanTuple
 {
+    [SerializeField,SerializeReference]
     public string name;
+    [SerializeField,SerializeReference]
     public string description;
+    [SerializeField,SerializeReference]
     public bool trigger;
 }
 
@@ -61,12 +75,12 @@ public class BooleanTrigger : ScriptableObject
             dataList.Add(booleans[i].name + ":" + (booleans[i].trigger ? "1" : "0"));
         }
 
-        IOManager.WriteStringToFile_NoMark(dataList.ToArray(),name);
+        IOControl.WriteStringToFile_NoMark(dataList.ToArray(),name);
     }
 
     public void LoadDataFromFile(string name, bool addMissing)
     {
-        var dataArray = IOManager.ReadStringFromFile(name);
+        var dataArray = IOControl.ReadStringFromFile(name);
 
         foreach(var data in dataArray)
         {
