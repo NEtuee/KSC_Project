@@ -84,7 +84,6 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     public virtual void Release()
     {
         WithdrawRequest();
-        Debug.Log(name);
 
 #if UNITY_EDITOR
         Debug_ClearQueue();

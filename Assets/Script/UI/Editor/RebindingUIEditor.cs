@@ -13,12 +13,14 @@ public class RebindingUIEditor : UnityEditor.Editor
         m_BindingIdProperty = serializedObject.FindProperty("m_BindingId");
         m_ActionLabelProperty = serializedObject.FindProperty("m_ActionLabel");
         m_BindingTextProperty = serializedObject.FindProperty("m_BindingText");
+        m_BindToggleTextProperty = serializedObject.FindProperty("m_BindingToggleText");
         m_RebindOverlayProperty = serializedObject.FindProperty("m_RebindOverlay");
         m_RebindTextProperty = serializedObject.FindProperty("m_RebindText");
         m_UpdateBindingUIEventProperty = serializedObject.FindProperty("m_UpdateBindingUIEvent");
         m_RebindStartEventProperty = serializedObject.FindProperty("m_RebindStartEvent");
         m_RebindStopEventProperty = serializedObject.FindProperty("m_RebindStopEvent");
         m_DisplayStringOptionsProperty = serializedObject.FindProperty("m_DisplayStringOptions");
+        m_keyOptionProperty = serializedObject.FindProperty("m_KeyOption");
 
         RefreshBindingOptions();
     }
@@ -45,6 +47,12 @@ public class RebindingUIEditor : UnityEditor.Editor
             var optionsNew = (InputBinding.DisplayStringOptions)EditorGUILayout.EnumFlagsField(m_DisplayOptionsLabel, optionsOld);
             if (optionsOld != optionsNew)
                 m_DisplayStringOptionsProperty.intValue = (int)optionsNew;
+
+            var keyoptionOld = (RebindingUI.KeyOption)m_keyOptionProperty.intValue;
+            var keyoptionNew = (RebindingUI.KeyOption)EditorGUILayout.EnumPopup(m_keyOptionLable, keyoptionOld);
+
+            if (keyoptionOld != keyoptionNew)
+                m_keyOptionProperty.intValue = (int)keyoptionNew;
         }
 
         // UI section.
@@ -54,6 +62,7 @@ public class RebindingUIEditor : UnityEditor.Editor
         {
             EditorGUILayout.PropertyField(m_ActionLabelProperty);
             EditorGUILayout.PropertyField(m_BindingTextProperty);
+            EditorGUILayout.PropertyField(m_BindToggleTextProperty);
             EditorGUILayout.PropertyField(m_RebindOverlayProperty);
             EditorGUILayout.PropertyField(m_RebindTextProperty);
         }
@@ -147,15 +156,18 @@ public class RebindingUIEditor : UnityEditor.Editor
     private SerializedProperty m_BindingIdProperty;
     private SerializedProperty m_ActionLabelProperty;
     private SerializedProperty m_BindingTextProperty;
+    private SerializedProperty m_BindToggleTextProperty;
     private SerializedProperty m_RebindOverlayProperty;
     private SerializedProperty m_RebindTextProperty;
     private SerializedProperty m_RebindStartEventProperty;
     private SerializedProperty m_RebindStopEventProperty;
     private SerializedProperty m_UpdateBindingUIEventProperty;
     private SerializedProperty m_DisplayStringOptionsProperty;
+    private SerializedProperty m_keyOptionProperty;
 
     private GUIContent m_BindingLabel = new GUIContent("Binding");
     private GUIContent m_DisplayOptionsLabel = new GUIContent("Display Options");
+    private GUIContent m_keyOptionLable = new GUIContent("KeyOption");
     private GUIContent m_UILabel = new GUIContent("UI");
     private GUIContent m_EventsLabel = new GUIContent("Events");
     private GUIContent[] m_BindingOptions;

@@ -222,6 +222,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort cameramanager_setBrainCameraPosition = 0x0414;
 
+    /// <summary>
+    /// data = vector3
+    /// </summary>
+    public const ushort cameramanager_setBrainUpdateMethod = 0x0415;
+
     #region EffectManager
 
     /// <summary>
@@ -330,6 +335,11 @@ public static partial class MessageTitles
     /// data = PlayerCtrl_ver2
     /// </summary>
     public const ushort playermanager_getPlayer = 0x0913;
+
+    /// <summary>
+    /// data = bool
+    /// </summary>
+    public const ushort playermanager_hidePlayer = 0x0907;
 
     #endregion
 

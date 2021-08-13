@@ -5,6 +5,16 @@ using UnityEngine;
 using Cinemachine;
 using MD;
 
+namespace MD
+{
+    public class BrainUpdateMethodData : MessageData
+    {
+        public CinemachineBrain.UpdateMethod update;
+        public CinemachineBrain.BrainUpdateMethod blend;
+    }
+}
+
+
 [System.Serializable]
 public struct DistanceBlendProfile
 {
@@ -126,15 +136,16 @@ public class CameraManager : ManagerBase
         });
 
         AddAction(MessageTitles.cameramanager_getCameraManager, (msg) =>
-         {
-             SendMessageQuick((MessageReceiver)msg.sender, MessageTitles.set_setCameraManager, this);
-         });
+        {
+            SendMessageQuick((MessageReceiver)msg.sender, MessageTitles.set_setCameraManager, this);
+        });
 
         AddAction(MessageTitles.cameramanager_setYawPitch, (msg) =>
-         {
-             PitchYawData data= MessageDataPooling.CastData<PitchYawData>(msg.data);
-             followTarget.SetPitchYaw(data.pitch, data.yaw);
-         });
+        {
+            PitchYawData data= MessageDataPooling.CastData<PitchYawData>(msg.data);
+            followTarget.SetPitchYaw(data.pitch, data.yaw);
+        });
+
         AddAction(MessageTitles.cameramanager_setYawPitchPosition, (msg) =>
         {
             PitchYawPositionData data = MessageDataPooling.CastData<PitchYawPositionData>(msg.data);
@@ -142,16 +153,29 @@ public class CameraManager : ManagerBase
         });
 
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
-         {
-             DontDestroyOnLoad(Camera.main.transform);
-             DontDestroyOnLoad(followTarget.transform);
-         });
+        {
+            DontDestroyOnLoad(Camera.main.transform);
+            DontDestroyOnLoad(followTarget.transform);
+        });
 
         AddAction(MessageTitles.cameramanager_setBrainCameraPosition, (msg) =>
-         {
-             Vector3Data data = MessageDataPooling.CastData<Vector3Data>(msg.data);
-             SetBrainCameraPosition(data.value);
-         });
+        {
+            Vector3Data data = MessageDataPooling.CastData<Vector3Data>(msg.data);
+            SetBrainCameraPosition(data.value);
+        });
+
+        AddAction(MessageTitles.cameramanager_setBrainUpdateMethod, (msg) =>
+        {
+            if(msg.data == null)
+            {
+                SetUpdateMethod();
+            }
+            else
+            {
+                var brainUpdate = MessageDataPooling.CastData<BrainUpdateMethodData>(msg.data);
+                SetUpdateMethod(brainUpdate.update,brainUpdate.blend);
+            }
+        });
     }
 
     public override void Initialize()
