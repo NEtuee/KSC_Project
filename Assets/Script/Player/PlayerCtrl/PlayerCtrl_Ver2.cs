@@ -2836,7 +2836,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 SetRadialBlurData data = MessageDataPooling.GetMessageData<SetRadialBlurData>();
                 data.factor = 1.0f;
                 data.radius = 0.2f;
-                data.time = 0.4f;
+                data.time = 0.8f;
                 SendMessageEx(MessageTitles.cameramanager_setradialblur, GetSavedNumber("CameraManager"), data);
             }
         }

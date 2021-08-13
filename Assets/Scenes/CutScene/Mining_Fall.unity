@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1052,10 +1052,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0e5904b55356f429ecce16a305638b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
   changeType: 1
   align: 0
   paramterCode: 6
   parameterClear: 0
+  inVolume: 0
   max: 100
   radius: 27.23
   height: 37.7
@@ -1115,7 +1120,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &372066104
 Transform:
@@ -1333,6 +1338,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73852dc2f846d6a4b89f5b9d9e155158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -1570,10 +1579,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6526cfd28204d5a4da114c1196667951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
   playableDirector: {fileID: 503965462}
+  activeLists: []
   endTransform: {fileID: 0}
+  startFade: 1
   playerDisable: 1
-  droneDisable: 1
+  ragdoll: 0
 --- !u!114 &503965465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2215,10 +2230,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0e5904b55356f429ecce16a305638b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
   changeType: 0
   align: 0
   paramterCode: 7
   parameterClear: 1
+  inVolume: 0
   max: 100
   radius: 27.23
   height: 37.7
@@ -6479,6 +6499,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ef493085df5234082a04bb90345390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
   code: 0
   parameterCode: 6
   value: 0

@@ -108,7 +108,7 @@ public class GraphObjectBase : UnTransfromObjectBase
         var node = FindNode("TriggerExit");
         if(node != null)
         {
-            ((ObjectTriggerEnterEntryNode)node).collider = coll;
+            ((ObjectTriggerExitEntryNode)node).collider = coll;
             RunGraph(node);
         }
     }

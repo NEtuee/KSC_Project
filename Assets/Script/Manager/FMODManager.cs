@@ -177,6 +177,17 @@ public class FMODManager : ManagerBase
         SetGlobalParam(data.paramId,data.value);
     }
 
+    private void GetGlobalParam(Message msg)
+    {
+        var data = MessageDataPooling.CastData<IntData>(msg.data);
+        var factor = GetGlobalParam(data.value);
+
+        var floatData = MessageDataPooling.GetMessageData<FloatData>();
+        floatData.value = factor;
+
+        //SendMessageQuick((MessageReceiver)msg.sender,Message)
+    }
+
     private void BeforeSceneLoad(Message msg)
     {
         ReturnAllCache(false);

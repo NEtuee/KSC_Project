@@ -6,7 +6,6 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
 {
     public override void RegisterReceiver(ObjectBase receiver)
     {
-        Debug.Log(receiver.name);
         base.RegisterReceiver(receiver);
     }
 

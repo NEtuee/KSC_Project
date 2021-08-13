@@ -341,6 +341,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort playermanager_hidePlayer = 0x0907;
 
+    /// <summary>
+    /// data = bool
+    /// </summary>
+    public const ushort playermanager_ragdoll = 0x0908;
+
     #endregion
 
     #region Setter

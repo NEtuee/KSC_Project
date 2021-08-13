@@ -12,6 +12,7 @@ public class FMODSoundEditor : EditorWindow
     public class ScrollViewMenu
     {
         public Vector2 scroll;
+        public bool repaint = false;
 
         public Vector2 BeginScrollView(Vector2 sc, float height)
         {
@@ -189,6 +190,8 @@ public class FMODSoundEditor : EditorWindow
             BeginScrollView(position.height);
             GUILayout.BeginHorizontal();
 
+            repaint = true;
+
             foreach(var item in _info.parameters)
             {
                 GUILayout.BeginVertical("box");
@@ -212,6 +215,7 @@ public class FMODSoundEditor : EditorWindow
 
                 if(EditorApplication.isPlaying && modified != value)
                 {
+                    repaint = false;
                     if(_info.id == 0)
                     {
                         manager.SetGlobalParam(item.id,modified);
@@ -456,6 +460,7 @@ public class FMODSoundEditor : EditorWindow
 
         public override void ShowMenu(FMODManager manager, Rect position, System.Object addiData)
         {
+            repaint = true;
             PlayingList(200f,manager,position);
 
             if(_selected)
@@ -711,6 +716,11 @@ public class FMODSoundEditor : EditorWindow
 
         var menuPos = /*_menuSelect >= menuBase.Length ? 2 :*/ _menuSelect;
         menus[menuPos].ShowMenu(_target,position,menuData[menuPos]);
+
+        if(menus[menuPos].repaint)
+        {
+            Repaint();
+        }
 
 
         // _scrollView.BeginScrollView(position.height);

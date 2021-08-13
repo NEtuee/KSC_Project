@@ -32,6 +32,7 @@ public class PlayerManager : ManagerBase
         {
             PositionRotation data = MessageDataPooling.CastData<PositionRotation>(msg.data);
             _player.transform.SetPositionAndRotation(data.position, data.rotation);
+            _player.GetPlayerRagdoll().transform.position = data.position;
             _playerFootIK.InitPelvisHeight();
         });
 
@@ -64,6 +65,10 @@ public class PlayerManager : ManagerBase
             bool visible = (bool)msg.data;
             _player.GetDrone().gameObject.SetActive(visible);
             _player.gameObject.SetActive(visible);
+        });
+
+        AddAction(MessageTitles.playermanager_ragdoll,(msg)=>{
+            _player.GetPlayerRagdoll().SlidingRagdoll(Vector3.zero);
         });
     }
 

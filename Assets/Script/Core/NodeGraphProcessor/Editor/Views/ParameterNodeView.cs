@@ -17,15 +17,15 @@ public class ParameterNodeView : BaseNodeView
     {
         parameterNode = nodeTarget as ParameterNode;
 
-        EnumField accessorSelector = new EnumField(parameterNode.accessor);
-        accessorSelector.SetValueWithoutNotify(parameterNode.accessor);
-        accessorSelector.RegisterValueChangedCallback(evt =>
-        {
-            parameterNode.accessor = (ParameterAccessor)evt.newValue;
-            UpdatePort();
-            controlsContainer.MarkDirtyRepaint();
-            ForceUpdatePorts();
-        });
+        // EnumField accessorSelector = new EnumField(parameterNode.accessor);
+        // accessorSelector.SetValueWithoutNotify(parameterNode.accessor);
+        // accessorSelector.RegisterValueChangedCallback(evt =>
+        // {
+        //     parameterNode.accessor = (ParameterAccessor)evt.newValue;
+        //     UpdatePort();
+        //     controlsContainer.MarkDirtyRepaint();
+        //     ForceUpdatePorts();
+        // });
         
         UpdatePort();
         //controlsContainer.Add(accessorSelector);

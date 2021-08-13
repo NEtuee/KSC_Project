@@ -19,6 +19,7 @@ MonoBehaviour:
   - id: 3
   - id: 4
   - id: 5
+  - id: 6
   references:
     version: 1
     00000000:
@@ -26,7 +27,7 @@ MonoBehaviour:
       data:
         name: check
         description: 'trigger : check'
-        trigger: 1
+        trigger: 0
     00000001:
       type: {class: BooleanTuple, ns: , asm: EveryAssembly}
       data:
@@ -56,4 +57,10 @@ MonoBehaviour:
       data:
         name: Cutscene_HubEntrance
         description: 'trigger : Cutscene_HubEntrance'
+        trigger: 1
+    00000006:
+      type: {class: BooleanTuple, ns: , asm: EveryAssembly}
+      data:
+        name: Cutscene_HubFirst
+        description: 'trigger : Cutscene_HubFirst'
         trigger: 1

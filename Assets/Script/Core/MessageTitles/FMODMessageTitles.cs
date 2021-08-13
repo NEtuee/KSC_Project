@@ -21,7 +21,12 @@ public static partial class MessageTitles
     public const ushort fmod_setGlobalParam = 0x0503;
 
     /// <summary>
+    /// data = float
+    /// </summary>
+    public const ushort fmod_getGlobalParam = 0x0504;
+
+    /// <summary>
     /// data = FMODEventEmitter
     /// </summary>
-    public const ushort fmod_soundEmitter = 0x0504;
+    public const ushort fmod_soundEmitter = 0x0505;
 }

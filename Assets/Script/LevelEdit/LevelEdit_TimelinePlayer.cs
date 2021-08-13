@@ -10,9 +10,12 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 {
     public PlayableDirector playableDirector;
 
+    public List<GameObject> activeLists = new List<GameObject>();
     public Transform endTransform;
 
+    public bool startFade = true;
     public bool playerDisable = false;
+    public bool ragdoll = false;
 
     private CinemachineBrain _mainCamBrain;
     private CameraManager _camManager;
@@ -42,21 +45,41 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
         StartTrigger();
 
-        var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
-        actionData.value = ()=>{
+        if(startFade)
+        {
+            var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
+            actionData.value = ()=>{
+                SetActiveObjects(true);
+
+                var data = MessageDataPooling.GetMessageData<MD.BrainUpdateMethodData>();
+                data.update = CinemachineBrain.UpdateMethod.SmartUpdate;
+                data.blend = CinemachineBrain.BrainUpdateMethod.LateUpdate;
+                SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod,GetSavedNumber("CameraManager"),data);
+
+                TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
+                TrackAsset track = timelineAsset.GetOutputTrack(1) ;
+                playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
+                playableDirector.SetGenericBinding (track, _mainCamBrain);
+                playableDirector.Play();
+            };
+
+            SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);
+        }
+        else
+        {
+            SetActiveObjects(true);
+
             var data = MessageDataPooling.GetMessageData<MD.BrainUpdateMethodData>();
             data.update = CinemachineBrain.UpdateMethod.SmartUpdate;
             data.blend = CinemachineBrain.BrainUpdateMethod.LateUpdate;
             SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod,GetSavedNumber("CameraManager"),data);
-
+    
             TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
             TrackAsset track = timelineAsset.GetOutputTrack(1) ;
             playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
             playableDirector.SetGenericBinding (track, _mainCamBrain);
             playableDirector.Play();
-        };
-
-        SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);
+        }
 
         //GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
         //    GameManager.Instance.cameraManager.SetUpdateMethod(CinemachineBrain.UpdateMethod.SmartUpdate,CinemachineBrain.BrainUpdateMethod.LateUpdate);
@@ -75,6 +98,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
         actionData.value = ()=>{
             EndTrigger();
+            SetActiveObjects(false);
 
             if(endTransform != null)
             {
@@ -82,6 +106,11 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
                 data.position = endTransform.position;
                 data.rotation = endTransform.rotation;
                 SendMessageEx(MessageTitles.playermanager_setPlayerTransform,GetSavedNumber("PlayerManager"),data);
+            }
+
+            if(ragdoll)
+            {
+                SendMessageEx(MessageTitles.playermanager_ragdoll,GetSavedNumber("PlayerManager"),null);
             }
             
         };
@@ -105,6 +134,14 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         SceneManager.MoveGameObjectToScene(((PlayerCtrl_Ver2)GameManager.Instance.player).GetDrone().gameObject, activeScene);
 
         SceneManager.LoadScene(target,LoadSceneMode.Single);
+    }
+
+    public void SetActiveObjects(bool active)
+    {
+        foreach(var item in activeLists)
+        {
+            item.SetActive(active);
+        }
     }
 
     public void LoadNextLevel()
