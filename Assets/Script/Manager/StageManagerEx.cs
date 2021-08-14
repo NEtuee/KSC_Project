@@ -24,12 +24,16 @@ public class StageManagerEx : ManagerBase
     {
         base.Assign();
 
+        Debug.Log("assign");
+
         AddAction(MessageTitles.scene_sceneChanged, (msg) =>
         {
             PositionRotation data = MessageDataPooling.GetMessageData<PositionRotation>();
             data.position = loadedPlayerPosition.position;
             data.rotation = loadedPlayerPosition.rotation;
             SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
+
+            Debug.Log("send");
         });
 
         AddAction(MessageTitles.boolTrigger_getTriggerAsset,GetStageTriggerAsset);

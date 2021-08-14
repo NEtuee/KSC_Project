@@ -122,15 +122,15 @@ namespace GraphProcessor
 		/// <summary>
 		/// Is the node created from a duplicate operation (either ctrl-D or copy/paste).
 		/// </summary>
-		public bool					createdFromDuplication {get; internal set; } = false;
+		public bool					createdFromDuplication {get; set; } = false;
 
 		/// <summary>
 		/// True only when the node was created from a duplicate operation and is inside a group that was also duplicated at the same time. 
 		/// </summary>
-		public bool					createdWithinGroup {get; internal set; } = false;
+		public bool					createdWithinGroup {get; set; } = false;
 
 		[NonSerialized]
-		internal Dictionary< string, NodeFieldInformation >	nodeFields = new Dictionary< string, NodeFieldInformation >();
+		public Dictionary< string, NodeFieldInformation >	nodeFields = new Dictionary< string, NodeFieldInformation >();
 
 		[NonSerialized]
 		internal Dictionary< Type, CustomPortTypeBehaviorDelegate> customPortTypeBehaviorMap = new Dictionary<Type, CustomPortTypeBehaviorDelegate>();
@@ -141,7 +141,7 @@ namespace GraphProcessor
 		[NonSerialized]
 		protected BaseGraph			graph;
 
-		internal class NodeFieldInformation
+		public class NodeFieldInformation
 		{
 			public string						name;
 			public string						fieldName;
