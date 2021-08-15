@@ -18,5 +18,11 @@ public class StateGraphToolbarView : FunctionGraphToolbarView
 
 		bool conditionalProcessorVisible = graphView.GetPinnedElementStatus< ConditionalProcessorView >() != Status.Hidden;
 		AddToggle("Show Conditional Processor", conditionalProcessorVisible, (v) => graphView.ToggleView< ConditionalProcessorView>());
+
+		AddButton("Save", () => 
+		{
+			EditorUtility.SetDirty(graphView.graph);
+			AssetDatabase.SaveAssets();
+		}, left: false);
 	}
 }

@@ -11,7 +11,7 @@ public class ParameterArea : UnTransfromObjectBase
 
     public bool exitFade = false;
 
-    private bool _fade = true;
+    private bool _fade = false;
     private float _timer = 0f;
     private float _currentFactor = 0f;
     private float _paramFactor = 0f;

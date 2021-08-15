@@ -29,6 +29,8 @@ public class ParameterNodeView : BaseNodeView
         
         UpdatePort();
         //controlsContainer.Add(accessorSelector);
+
+        titleContainer.style.backgroundColor = new StyleColor(new Color(0.08851013f,0.3679245f,0.3321595f));
         
         //  Find and remove expand/collapse button
         titleContainer.Remove(titleContainer.Q("title-button-container"));

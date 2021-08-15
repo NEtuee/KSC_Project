@@ -14,4 +14,13 @@ namespace GraphProcessor
         public override object value { get => val; set => val = (PlayerCtrl_Ver2)value; }
         public override Type GetValueType() => typeof(PlayerCtrl_Ver2);
     }
+
+    [System.Serializable]
+    public class FMODEmitterParameter : ExposedParameter
+    {
+        [SerializeField] FMODUnity.StudioEventEmitter val;
+
+        public override object value { get => val; set => val = (FMODUnity.StudioEventEmitter)value; }
+        public override Type GetValueType() => typeof(FMODUnity.StudioEventEmitter);
+    }
 }

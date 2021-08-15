@@ -54,13 +54,13 @@ public abstract class MessageReceiver : UniqueNumberBase
         _receiveQueue.Clear();
     }
 
-    public bool CanHandleMessage(Message msg)
+    public virtual bool CanHandleMessage(Message msg)
     {
         return _msgProcActions.ContainsKey(msg.title);
     }
 
-    public void MessageProcessing(Message msg)
-    {
+    public virtual void MessageProcessing(Message msg)
+    {        
         _msgProcActions[msg.title](msg);
     }
 

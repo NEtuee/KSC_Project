@@ -157,9 +157,32 @@ public class GraphObjectBase : UnTransfromObjectBase
         WhenEMPHit(data.value);
     }
 
-    public override void ReceiveAndProcessMessage(Message msg)
+    public override bool CanHandleMessage(Message msg)
     {
-        _receivedMessaged.Enqueue(msg);
+        return true;
+    }
+
+    // public override void ReceiveAndProcessMessage(Message msg)
+    // {
+    //     _receivedMessaged.Enqueue(msg);
+    // }
+
+    public override void MessageProcessing(Message msg)
+    {
+        if(msg.title == MessageTitles.player_EMPHit)
+        {
+            base.MessageProcessing(msg);
+        }
+        else
+        {
+            var data = MessagePool.GetMessage();
+            data.title = msg.title;
+            data.sender = msg.sender;
+            data.target = msg.target;
+            data.data = msg.data;
+
+            _receivedMessaged.Enqueue(data);
+        }
     }
 
     public void ClearMessageQueue()

@@ -7,12 +7,13 @@ using NodeGraphProcessor.Examples;
 using UnityEditor;
 
 [CustomEditor(typeof(GraphObjectBase),true)]
-public class GraphObjectBaseEditor : Editor
+public class GraphObjectBaseEditor : MessageReceiverEditor
 {
     protected GraphObjectBase obj;
 
-    public virtual void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
         obj = (GraphObjectBase)target;
     }
 
@@ -44,6 +45,24 @@ public class GraphObjectBaseEditor : Editor
             var copy = ScriptableObject.Instantiate(obj.graphOrigin);
 
             obj.graphOrigin = copy;
+        }
+
+        if(GUILayout.Button("Save to ScriptableObject File"))
+        {
+            if(obj.graphOrigin.name == "")
+            {
+                Debug.Log("Graph name is empty");
+                return;
+            }
+
+            var graph = ScriptableObject.Instantiate(obj.graphOrigin);
+		    ProjectWindowUtil.CreateAsset(graph, obj.graphOrigin.name + ".asset");
+        }
+
+        if(GUILayout.Button("Save Asset"))
+        {
+            EditorUtility.SetDirty(obj.graphOrigin);
+			AssetDatabase.SaveAssets();
         }
 
     }

@@ -32,6 +32,8 @@ public class ParameterVolume : UnTransfromObjectBase
     public float radius;
     public float height;
 
+    public AnimationCurve fadeCurve;
+
     private float _factor;
 
     private Transform _targetTransform;
@@ -98,6 +100,7 @@ public class ParameterVolume : UnTransfromObjectBase
             var dist = Vector3.Distance(pos,target);
             var factor = dist / radius;
             factor = 1f - factor;
+            factor = fadeCurve.Evaluate(factor);
 
             _factor = max * factor;
 
@@ -113,7 +116,8 @@ public class ParameterVolume : UnTransfromObjectBase
         {
             var targetY = GetTargetPosition().y;
             var factor = (targetY - GetBottom()) / height;
-
+            factor = fadeCurve.Evaluate(factor);
+            
             _factor = max * factor;
 
             var data = MessageDataPooling.GetMessageData<MD.SetParameterData>();

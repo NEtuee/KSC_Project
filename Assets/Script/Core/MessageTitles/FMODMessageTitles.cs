@@ -29,4 +29,9 @@ public static partial class MessageTitles
     /// data = FMODEventEmitter
     /// </summary>
     public const ushort fmod_soundEmitter = 0x0505;
+
+    /// <summary>
+    /// data = int
+    /// </summary>
+    public const ushort fmod_stopAll = 0x0506;
 }

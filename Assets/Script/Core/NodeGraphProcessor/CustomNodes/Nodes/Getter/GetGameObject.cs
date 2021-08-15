@@ -57,3 +57,21 @@ public class GetGameObjectFromColliderNode : BaseNode
 	    gameObject = coll.gameObject;
 	}
 }
+
+[System.Serializable, NodeMenuItem("Get/Get GameObject : Component")]
+public class GetGameObjectFromComponentNode : BaseNode
+{
+	[Input(name = "Component")]
+	public Component component;
+
+
+	[Output(name = "GameObject")]
+	public GameObject gameObject;
+
+	public override string		name => "Get GameObject";
+
+	protected override void Process()
+	{
+	    gameObject = component.gameObject;
+	}
+}

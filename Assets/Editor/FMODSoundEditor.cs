@@ -97,6 +97,8 @@ public class FMODSoundEditor : EditorWindow
                 var playData = new PlayData();
                 playData.code = code;
                 manager.startPlayList.Add(playData);
+
+                EditorUtility.SetDirty(manager);
             });
 
             BeginScrollView();
@@ -342,11 +344,15 @@ public class FMODSoundEditor : EditorWindow
             {
                 GUILayout.BeginHorizontal();
 
+                var color = GUI.backgroundColor;
+                eventEmitter[i].EventInstance.getPaused(out var isPaused);
+                GUI.backgroundColor = isPaused ? Color.red : Color.green;
                 if(GUILayout.Button(i.ToString() ,style,GUILayout.Width(30f)))
                 {
                     EditorGUIUtility.PingObject(eventEmitter[i].gameObject);
                 }
-                
+                GUI.backgroundColor = color;
+
                 if(GUILayout.Button("kill"))
                 {
                     eventEmitter[i].Stop();
@@ -615,7 +621,7 @@ public class FMODSoundEditor : EditorWindow
                         else
                         {
                             msg.data = new AttachSoundPlayData(item,Vector3.zero,_parent,false);
-                            msg.title = MessageTitles.fmod_play;
+                            msg.title = MessageTitles.fmod_attachPlay;
                             //manager.Play(item,_soundPosition,_parent);
                         }
 

@@ -25,3 +25,25 @@ public class LayerEqualNode : BaseNode
 	    result = ((1 << a) & (1 << b)) != 0;
 	}
 }
+
+[System.Serializable, NodeMenuItem("Operations/Layer Check")]
+public class LayerCheckNode : BaseNode
+{
+	[Input(name = "GameObject")]
+	public GameObject a;
+
+    [SerializeField]
+	public LayerMask layer;
+
+
+	[Output(name = "Result")]
+	public bool result;
+
+	public override string		name => "Layer Check";
+
+	protected override void Process()
+	{
+		result = ((a.layer) & (1 << layer.value)) != 0;
+	    //result = ((1 << a) & (1 << b)) != 0;
+	}
+}

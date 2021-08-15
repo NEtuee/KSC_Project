@@ -19,6 +19,14 @@ public class SoundPlayNode : LinearConditionalNode
 	public Vector3C soundPosition;
 
 
+    [Input(name = "GraphObject")]
+	public GraphObjectBase graphObj;
+
+
+
+    [Output(name = "SoundEmitter")]
+	public FMODUnity.StudioEventEmitter emitter;
+
 
 
 	public override string		name => "Sound Play";
@@ -32,15 +40,9 @@ public class SoundPlayNode : LinearConditionalNode
             data.id = code;
             data.localPosition = (Vector3)soundPosition;
             data.parent = parent;
-            data.returnValue = false;
+            data.returnValue = true;
 
-            var msg = MessagePool.GetMessage();
-            msg.title = MessageTitles.fmod_attachPlay;
-            msg.data = data;
-            msg.target = UniqueNumberBase.GetSavedNumberStatic("FMODManager");
-            msg.sender = null;
-
-            MasterManager.instance.HandleMessage(msg);
+            graphObj.SendMessageQuick(MessageTitles.fmod_attachPlay,UniqueNumberBase.GetSavedNumberStatic("FMODManager"),data);
         }
         else
         {
@@ -49,15 +51,16 @@ public class SoundPlayNode : LinearConditionalNode
             data.id = code;
             data.position = (Vector3)soundPosition;
             data.dontStop = false;
-            data.returnValue = false;
+            data.returnValue = true;
 
-            var msg = MessagePool.GetMessage();
-            msg.title = MessageTitles.fmod_play;
-            msg.data = data;
-            msg.target = UniqueNumberBase.GetSavedNumberStatic("FMODManager");
-            msg.sender = null;
+            graphObj.SendMessageQuick(MessageTitles.fmod_play,UniqueNumberBase.GetSavedNumberStatic("FMODManager"),data);
+        }
 
-            MasterManager.instance.HandleMessage(msg);
+        var msg = graphObj.DequeueGraphMessage();
+        if(msg != null)
+        {
+            emitter = (FMODUnity.StudioEventEmitter)msg.data;
+            MessagePool.ReturnMessage(msg);
         }
 	}
 
