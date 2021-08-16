@@ -8,7 +8,7 @@ Shader "KSC/VFX/Hologram"
 
     SubShader
     {
-        Tags { "RenderType" = "Trasnparent" "RenderPipeline" = "UniversalPipeline" "Queue" = "3000+1"}
+        Tags { "RenderType" = "Trasnparent" "RenderPipeline" = "UniversalPipeline"}
 
         Pass
         {
