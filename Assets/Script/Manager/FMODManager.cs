@@ -46,6 +46,12 @@ namespace MD
         public int paramId;
         public float value;
     }
+
+    public class StopAllSoundData : MessageData
+    {
+        public int id;
+        public bool fade;
+    }
 }
 
 [System.Serializable]
@@ -94,6 +100,8 @@ public class FMODManager : ManagerBase
         AddAction(MessageTitles.fmod_attachPlay,AttachPlay);
         AddAction(MessageTitles.fmod_setParam,SetParam);
         AddAction(MessageTitles.fmod_setGlobalParam,SetGlobalParam);
+        AddAction(MessageTitles.fmod_stopAll,StopAllSound);
+
         AddAction(MessageTitles.scene_beforeSceneChange,BeforeSceneLoad);
     }
 
@@ -177,6 +185,23 @@ public class FMODManager : ManagerBase
         SetGlobalParam(data.paramId,data.value);
     }
 
+    private void GetGlobalParam(Message msg)
+    {
+        var data = MessageDataPooling.CastData<IntData>(msg.data);
+        var factor = GetGlobalParam(data.value);
+
+        var floatData = MessageDataPooling.GetMessageData<FloatData>();
+        floatData.value = factor;
+
+        //SendMessageQuick((MessageReceiver)msg.sender,Message)
+    }
+
+    private void StopAllSound(Message msg)
+    {
+        var data = MessageDataPooling.CastData<StopAllSoundData>(msg.data);
+        StopAllSound(data.id,data.fade);
+    }
+
     private void BeforeSceneLoad(Message msg)
     {
         ReturnAllCache(false);
@@ -189,10 +214,13 @@ public class FMODManager : ManagerBase
         foreach(var pair in _activeMap)
         {
             var value = pair.Value;
-            for(int i = 0; i < value.Count; ++i)
+            for(int i = 0; i < value.Count;)
             {
                 if(value[i].dontStop)
+                {
+                    ++i;
                     continue;
+                }
                     
                 if(stop)
                     value[i].Stop();
@@ -200,9 +228,11 @@ public class FMODManager : ManagerBase
                 value[i].transform.SetParent(gameObject.transform);
                 ReturnCache(pair.Key,value[i]);
 
+                value.RemoveAt(i);
+
             }
             
-            value.Clear();
+            //value.Clear();
         }
     }
 
@@ -214,6 +244,7 @@ public class FMODManager : ManagerBase
         emitter.transform.SetPositionAndRotation(position,Quaternion.identity);
         emitter.gameObject.SetActive(true);
         emitter.dontStop = dontStop;
+        emitter.AllowFadeout = true;
 
         emitter.Play();
         var info = FindSoundInfo(id);
@@ -322,6 +353,18 @@ public class FMODManager : ManagerBase
         //Debug.Log("ID : "+id+" SetValue"+value);
     }
     
+    private void StopAllSound(int id, bool fade)
+    {
+        if(_activeMap.ContainsKey(id))
+        {
+            foreach(var item in _activeMap[id])
+            {
+                item.AllowFadeout = fade;
+                item.Stop();
+            }
+        }
+    }
+
     public float GetGlobalParam(int id)
     {
         var desc = FindGlobalParamDesc(id);

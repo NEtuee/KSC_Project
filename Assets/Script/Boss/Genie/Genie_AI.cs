@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Genie_AI : MonoBehaviour
+public class Genie_AI : ObjectBase
 {
     public delegate void StateDel(float deltaTime);
     public enum State
@@ -80,6 +80,7 @@ public class Genie_AI : MonoBehaviour
     private TimeCounterEx _timeCounterEx;
     private GraphAnimator _animator;
     private Animator _animatorController;
+    private PlayerCtrl_Ver2 _player;
     private Transform _target;
     private Transform _groundLookTarget;
     private Vector3 _originPos;
@@ -90,12 +91,26 @@ public class Genie_AI : MonoBehaviour
     private int _droneSpawnCount;
     private int _droneSpawnLimit;
 
-    public void Start()
+    public override void Assign()
     {
+        base.Assign();
+
+        AddAction(MessageTitles.set_setplayer,(x)=>{
+            _player = (PlayerCtrl_Ver2)x.data;
+            _target = _player.transform;
+        });
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        RegisterRequest(GetSavedNumber("StageManager"));
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
+
         gridControll.Init();
 
         _originPos = transform.position;
-        _target = GameManager.Instance.player.transform;
 
         _headOriginPos = head.position;
         _currentDroneCount = 0;
@@ -124,13 +139,10 @@ public class Genie_AI : MonoBehaviour
         ChangeState(currentState);
     }
 
-    public void FixedUpdate()
+    public override void FixedProgress(float deltaTime)
     {
-        if(GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
-            return;
-
         UpdateDroneCount();
-        _currentStateDelegate(Time.fixedDeltaTime);
+        _currentStateDelegate(deltaTime);
     }
 
     public void ChangeState(State state)
@@ -235,7 +247,7 @@ public class Genie_AI : MonoBehaviour
 
     public void HitPlayer(float attack)
     {
-        (GameManager.Instance.player as PlayerCtrl_Ver2).TakeDamage(10f);
+        _player.TakeDamage(10f);
     }
 
     public void State_Idle(float deltaTime)

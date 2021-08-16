@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rotator : MonoBehaviour
+public class Rotator : UnTransfromObjectBase
 {
     public Vector3 speed;
 
@@ -22,72 +22,18 @@ public class Rotator : MonoBehaviour
     private bool _start = false;
     public bool _stopMove = false;
 
-    public void Start()
+    public override void Initialize()
     {
+        base.Initialize();
+        RegisterRequest(GetSavedNumber("StageManager"));
+
         _subRotators = new List<SubRotator>(transform.GetComponentsInChildren<SubRotator>(false));
         _bodys = new List<Rigidbody>(transform.GetComponentsInChildren<Rigidbody>(false));
 
         _speed = lerpSpeed ? Vector3.zero : speed;
     }
 
-    public void Update()
-    {
-        // if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Fixed)
-        //     return;
-
-        // if (GameManager.Instance.PAUSE == true)
-        //     return;
-
-        //if(play && !_start)
-        //{
-        //    _startFactor += Time.deltaTime;
-        //    if(_startFactor >= startFactor)
-        //    {
-        //        _start = true;
-        //    }
-        //    else
-        //    {
-        //        return;
-        //    }
-        //}
-
-        //if (play)
-        //{
-        //    if(lerpSpeed)
-        //    {
-        //        if(!_stopMove)
-        //        {
-        //            _speed += lerpFactor * speed.normalized * Time.deltaTime;
-        //            if(_speed.magnitude >= speed.magnitude)
-        //            {
-        //                _speed = speed;
-        //                lerpSpeed = false;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            _speed -= lerpFactor * speed.normalized * Time.deltaTime;
-        //            var angle = Vector3.Angle(_speed,speed);
-        //            if(angle >= 160f)
-        //            {
-        //                _speed = Vector3.zero;;
-        //                lerpSpeed = false;
-        //            }
-        //        }
-                
-        //    }
-
-        //    transform.rotation *= Quaternion.Euler(_speed * Time.deltaTime);
-        //    RotateSubRotators(Time.deltaTime);
-        //}
-
-        //if(fall)
-        //{
-        //    AddGravity(Time.fixedDeltaTime);
-        //}
-    }
-
-    public void FixedUpdate()
+    public override void FixedProgress(float deltaTime)
     {
         // if (GameManager.Instance.GAMEUPDATE == GameManager.GameUpdate.Update)
         //     return;
@@ -97,7 +43,7 @@ public class Rotator : MonoBehaviour
 
         if(play && !_start)
         {
-            _startFactor += Time.fixedDeltaTime;
+            _startFactor += deltaTime;
             if(_startFactor >= startFactor)
             {
                 _start = true;
@@ -114,7 +60,7 @@ public class Rotator : MonoBehaviour
             {
                 if(!_stopMove)
                 {
-                    _speed += lerpFactor * speed.normalized * Time.fixedDeltaTime;
+                    _speed += lerpFactor * speed.normalized * deltaTime;
                     if(_speed.magnitude >= speed.magnitude)
                     {
                         _speed = speed;
@@ -123,7 +69,7 @@ public class Rotator : MonoBehaviour
                 }
                 else
                 {
-                    _speed -= lerpFactor * speed.normalized * Time.fixedDeltaTime;
+                    _speed -= lerpFactor * speed.normalized * deltaTime;
                     var angle = Vector3.Angle(_speed,speed);
                     if(angle >= 160f)
                     {
@@ -134,13 +80,13 @@ public class Rotator : MonoBehaviour
                 
             }
 
-            transform.rotation *= Quaternion.Euler(_speed * Time.fixedDeltaTime);
-            RotateSubRotators(Time.fixedDeltaTime);
+            transform.rotation *= Quaternion.Euler(_speed * deltaTime);
+            RotateSubRotators(deltaTime);
         }
 
         if(fall)
         {
-            AddGravity(Time.fixedDeltaTime);
+            AddGravity(deltaTime);
         }
     }
 

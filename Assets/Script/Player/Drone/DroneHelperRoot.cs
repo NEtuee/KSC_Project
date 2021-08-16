@@ -77,6 +77,17 @@ public class DroneHelperRoot : MonoBehaviour
         return true;
     }
 
+    public bool ShowText(string text)
+    {
+        active = true;
+        helping = true;
+        descriptText.SetTargetString(text);
+        droneDiscriptCanvas.enabled = true;
+        drone.OrderHelp();
+        timer.InitTimer("Help");
+        return true;
+    }
+
     public void ActiveDescriptCanvas(bool active)
     {
         if(ReferenceEquals(droneDiscriptCanvas,null) == false)

@@ -30,7 +30,11 @@ public class GraphObjectBase : UnTransfromObjectBase
         InitGraph();
         base.Awake();
 
-        TryGetComponent<Animator>(out _animatorControll);
+        if(!TryGetComponent<Animator>(out _animatorControll))
+        {
+            _animatorControll = GetComponentInChildren<Animator>();
+        }
+        
     }
 
     public override void Assign()
@@ -104,7 +108,7 @@ public class GraphObjectBase : UnTransfromObjectBase
         var node = FindNode("TriggerExit");
         if(node != null)
         {
-            ((ObjectTriggerEnterEntryNode)node).collider = coll;
+            ((ObjectTriggerExitEntryNode)node).collider = coll;
             RunGraph(node);
         }
     }
@@ -153,9 +157,32 @@ public class GraphObjectBase : UnTransfromObjectBase
         WhenEMPHit(data.value);
     }
 
-    public override void ReceiveAndProcessMessage(Message msg)
+    public override bool CanHandleMessage(Message msg)
     {
-        _receivedMessaged.Enqueue(msg);
+        return true;
+    }
+
+    // public override void ReceiveAndProcessMessage(Message msg)
+    // {
+    //     _receivedMessaged.Enqueue(msg);
+    // }
+
+    public override void MessageProcessing(Message msg)
+    {
+        if(msg.title == MessageTitles.player_EMPHit)
+        {
+            base.MessageProcessing(msg);
+        }
+        else
+        {
+            var data = MessagePool.GetMessage();
+            data.title = msg.title;
+            data.sender = msg.sender;
+            data.target = msg.target;
+            data.data = msg.data;
+
+            _receivedMessaged.Enqueue(data);
+        }
     }
 
     public void ClearMessageQueue()
@@ -224,7 +251,6 @@ public class GraphObjectBase : UnTransfromObjectBase
         _graph.GetExposedParameterFromGUID(_graph.transformGUID).value = transform;
         _graph.GetExposedParameterFromGUID(_graph.gameObjectGUID).value = gameObject;
         _graph.GetExposedParameterFromGUID(_graph.levelObjectGUID).value = this;
-        _graph.GetExposedParameterFromGUID(_graph.levelObjectTransformGUID).value = _objTransform;
 
         foreach(var node in entryNodeList)
         {

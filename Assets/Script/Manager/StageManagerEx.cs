@@ -41,6 +41,10 @@ public class StageManagerEx : ManagerBase
         AddAction(MessageTitles.boolTrigger_setTrigger,SetStageTrigger);
 
         AddAction(MessageTitles.stage_getPath,GetPath);
+
+        AddAction(MessageTitles.scene_afterSceneChange,(x)=>{
+            Debug.Log("GOGOGOGOGOGOGOGOGO");
+        });
     }
 
 

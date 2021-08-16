@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FloorControl : MonoBehaviour
+public class FloorControl : UnTransfromObjectBase
 {
     public List<Rotator> floors = new List<Rotator>();
     public Vector3 firstPosition;
@@ -14,8 +14,9 @@ public class FloorControl : MonoBehaviour
 
     public Transform rimSoundPosition;
 
-    public void Start()
+    public override void Initialize()
     {
+        RegisterRequest(GetSavedNumber("StageManager"));
         if(positionning)
         {
             for(int i = 0; i < floors.Count; ++i)
@@ -27,11 +28,8 @@ public class FloorControl : MonoBehaviour
         
     }
 
-    public void Update()
+    public override void Progress(float deltaTime)
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
-
         if (_launch)
         {
             if(positionning)
@@ -83,7 +81,7 @@ public class FloorControl : MonoBehaviour
 
     IEnumerator SoundLaunch()
     {
-        GameManager.Instance.soundManager.Play(2010, rimSoundPosition.position);
+        SoundPlay(2010,null, rimSoundPosition.position);
         yield return new WaitForSeconds(0.6f);
 
         _launch = true;
@@ -93,10 +91,36 @@ public class FloorControl : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.55f);
-        GameManager.Instance.soundManager.Play(2011, rimSoundPosition.position);
+        SoundPlay(2011,null, rimSoundPosition.position);
         yield return new WaitForSeconds(0.65f);
-        GameManager.Instance.soundManager.Play(2012, rimSoundPosition.position);
+        SoundPlay(2012,null, rimSoundPosition.position);
         yield return new WaitForSeconds(1.0f);
-        GameManager.Instance.soundManager.Play(2013, rimSoundPosition.position);
+        SoundPlay(2013,null, rimSoundPosition.position);
+    }
+
+    public void SoundPlay(int code, Transform parent, Vector3 position)
+    {
+        if(parent != null)
+        {
+            var data = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
+
+            data.id = code;
+            data.localPosition = (Vector3)position;
+            data.parent = parent;
+            data.returnValue = true;
+
+            SendMessageEx(MessageTitles.fmod_attachPlay,UniqueNumberBase.GetSavedNumberStatic("FMODManager"),data);
+        }
+        else
+        {
+            var data = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+
+            data.id = code;
+            data.position = (Vector3)position;
+            data.dontStop = false;
+            data.returnValue = true;
+
+            SendMessageEx(MessageTitles.fmod_play,UniqueNumberBase.GetSavedNumberStatic("FMODManager"),data);
+        }
     }
 }

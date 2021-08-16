@@ -487,6 +487,14 @@ public class Drone : UnTransfromObjectBase
         }
     }
 
+    public void DroneTextCall(string text)
+    {
+        if(ReferenceEquals(droneHelperRoot,null) == false)
+        {
+            droneHelperRoot.ShowText(text);
+        }
+    }
+
     public void Respawn(Transform playerTransform)
     {
         _respawn = true;

@@ -16,6 +16,8 @@ public class SetParameterNodeView : BaseNodeView
 
         // Create your fields using node's variables and add them to the controlsContainer
 
+		titleContainer.style.backgroundColor = new StyleColor(new Color(0.08851013f,0.3679245f,0.3321595f));
+
 		node.onParameterChanged += ()=>{
 			title = "Set " + node.parameter?.name;
 		};

@@ -7,7 +7,7 @@ using VectorClasses;
 using NodeGraphProcessor.Examples;
 
 [System.Serializable, NodeMenuItem("Get/Get : Player")]
-public class GetPlayerNode : LinearConditionalNode
+public class GetPlayerNode : BaseNode
 {
     [Input(name = "Graph Object")]
 	public GraphObjectBase obj;
@@ -20,7 +20,7 @@ public class GetPlayerNode : LinearConditionalNode
 
 	protected override void Process()
 	{
-	    obj.SendMessageQuick(MessageTitles.playermanager_getPlayer,UniqueNumberBase.GetSavedNumberStatic("PlayerManager"),null);
+	    obj.SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,UniqueNumberBase.GetSavedNumberStatic("PlayerManager"),null);
 
         var msg = obj.DequeueGraphMessage();
         if(msg != null)

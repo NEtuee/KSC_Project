@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class LevelEdit_Trigger : MonoBehaviour
+public class LevelEdit_Trigger : UnTransfromObjectBase
 {
     public enum TriggerType
     {
@@ -33,22 +33,22 @@ public class LevelEdit_Trigger : MonoBehaviour
 
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 
-    public void Start()
+    public override void Initialize()
     {
-        _timeCounter.InitTimer("time");
+        base.Initialize();
 
+        RegisterRequest(GetSavedNumber("StageManager"));
+        _timeCounter.InitTimer("time");
+ 
     }
 
-    public void Update()
+    public override void Progress(float deltaTime)
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
-
         _timeCounter.IncreaseTimer("time",1f,out _timeOut);
 
         if(isTriggered && triggerTimer != 0f)
         {
-            triggerTimer -= Time.deltaTime;
+            triggerTimer -= deltaTime;
 
             if(triggerTimer < 0f)
             {
@@ -58,7 +58,7 @@ public class LevelEdit_Trigger : MonoBehaviour
         
         if(isTriggered && !afterEvent && afterEventProgress)
         {
-            afterTriggerTimer -= Time.deltaTime;
+            afterTriggerTimer -= deltaTime;
             if(afterTriggerTimer < 0f)
             {
                 afterEvent = true;

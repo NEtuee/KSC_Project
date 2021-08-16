@@ -4,11 +4,5 @@ using UnityEngine;
 
 public class UnTransfromObjectBase : ObjectBase
 {
-    public override void UpdateTransform()
-    {
-    }
 
-    public override void SyncLocalValue()
-    {
-    }
 }

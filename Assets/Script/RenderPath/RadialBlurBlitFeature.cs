@@ -54,7 +54,7 @@ public class RadialBlurBlitFeature : ScriptableRendererFeature
             return;
         }
 
-        if (!(Application.isPlaying && cameraManager != null &&cameraManager.CheckScreenEffectActive(name)))
+        if (cameraManager != null &&cameraManager.CheckScreenEffectActive(name))
         {
             return;
         }

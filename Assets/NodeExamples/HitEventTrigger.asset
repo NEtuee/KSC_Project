@@ -1,0 +1,219 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8944f096533da428411dbec1367657, type: 3}
+  m_Name: HitEventTrigger
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  edges:
+  - GUID: 5d2bcf44-b7f8-4597-bb16-140cb687931a
+    owner: {fileID: 11400000}
+    inputNodeGUID: 6ace9a02-3ea4-4c56-85e0-b7a56cb15022
+    outputNodeGUID: b3203c2c-8f0c-4abd-bc1d-b3f0b10ca607
+    inputFieldName: unityEvent
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: d24fa553-c9ed-412c-a112-40acc5ac5852
+    owner: {fileID: 11400000}
+    inputNodeGUID: 6ace9a02-3ea4-4c56-85e0-b7a56cb15022
+    outputNodeGUID: 380bc59d-6cc8-4c03-af99-30b0cecbf49f
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 165
+      width: 254
+      height: 198
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  exposedParameters:
+  - id: 3
+  - id: 4
+  - id: 5
+  - id: 6
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  functions: []
+  functionID: 0
+  states: []
+  stateID: 0
+  initializeState: 0
+  currentState: 0
+  gameObjectGUID: 60fdf5e2-3419-453e-b20d-10dcd6e7cf4f
+  transformGUID: 88d4c36e-9ae5-4f01-ab34-aa98b1a2c6c3
+  levelObjectGUID: b95c463e-588f-4f31-aa9e-e7aa5da2c1f4
+  references:
+    version: 1
+    00000000:
+      type: {class: ObjectEMPHitEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 380bc59d-6cc8-4c03-af99-30b0cecbf49f
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 463
+          y: 275
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        damage: 0
+    00000001:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: b3203c2c-8f0c-4abd-bc1d-b3f0b10ca607
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 537
+          y: 404
+          width: 83
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: 04e4d77d-b937-4203-8fd0-3d979d09cf94
+        accessor: 0
+    00000002:
+      type: {class: InvokeUnityEventNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 6ace9a02-3ea4-4c56-85e0-b7a56cb15022
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 719
+          y: 275
+          width: 181
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+    00000003:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 60fdf5e2-3419-453e-b20d-10dcd6e7cf4f
+        name: GameObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 7
+        val: {fileID: 0}
+    00000004:
+      type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 88d4c36e-9ae5-4f01-ab34-aa98b1a2c6c3
+        name: Transform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 8
+        val: {fileID: 0}
+    00000005:
+      type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: b95c463e-588f-4f31-aa9e-e7aa5da2c1f4
+        name: LevelObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 9
+        val: {fileID: 0}
+    00000006:
+      type: {class: UnityEventParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 04e4d77d-b937-4203-8fd0-3d979d09cf94
+        name: WhenHit
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 1
+        settings:
+          id: 10
+        val:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 0}
+              m_TargetAssemblyTypeName: BrokenMedusa_AI, Assembly-CSharp
+              m_MethodName: BodyHitAnimation
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+    00000007:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 60fdf5e2-3419-453e-b20d-10dcd6e7cf4f
+    00000008:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 88d4c36e-9ae5-4f01-ab34-aa98b1a2c6c3
+    00000009:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: b95c463e-588f-4f31-aa9e-e7aa5da2c1f4
+    0000000A:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 04e4d77d-b937-4203-8fd0-3d979d09cf94

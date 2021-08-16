@@ -57,3 +57,21 @@ public class GetTransformFromColliderNode : BaseNode
 	    tp = coll.transform;
 	}
 }
+
+[System.Serializable, NodeMenuItem("Get/Get Transform : MessageReceiver")]
+public class GetTransformFromMessageReceiverNode : BaseNode
+{
+	[Input(name = "Receiver")]
+	public MessageReceiver coll;
+
+
+	[Output(name = "Transform")]
+	public Transform tp;
+
+	public override string		name => "Get Transform";
+
+	protected override void Process()
+	{
+	    tp = coll.transform;
+	}
+}

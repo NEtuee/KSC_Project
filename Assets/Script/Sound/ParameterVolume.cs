@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public class ParameterVolume : MonoBehaviour
+public class ParameterVolume : UnTransfromObjectBase
 {
     public enum ParameterChangeType
     {
@@ -26,24 +26,65 @@ public class ParameterVolume : MonoBehaviour
 
     public int paramterCode;
     public bool parameterClear = true;
+    public bool inVolume = false;
     public float max;
 
     public float radius;
     public float height;
 
+    public AnimationCurve fadeCurve;
+
     private float _factor;
 
-    public void Update()
+    private Transform _targetTransform;
+
+    public override void Assign()
+    {
+        base.Assign();
+
+        AddAction(MessageTitles.set_setplayer,(x)=>{
+            _targetTransform = ((PlayerCtrl_Ver2)x.data).transform;
+        });
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        RegisterRequest(GetSavedNumber("StageManager"));
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
+    }
+
+    public override void Progress(float deltaTime)
     {
         if(IsInVolume())
         {
+            inVolume = true;
             SetParameter();
+        }
+        else if(inVolume)
+        {
+            parameterClear = true;
+            inVolume = false;
         }
         else if(parameterClear)
         {
             float velo = 0f;
             _factor = Mathf.SmoothDamp(_factor,0f,ref velo,0.2f);
-            GameManager.Instance.soundManager.SetGlobalParam(paramterCode,_factor);
+
+            var data = MessageDataPooling.GetMessageData<MD.SetParameterData>();
+            data.soundId = 0;
+            data.paramId = paramterCode;
+            data.value = _factor;
+
+            if(_factor <= 0.01f)
+            {
+                parameterClear = false;
+            }
+
+            SendMessageEx(MessageTitles.fmod_setGlobalParam,GetSavedNumber("FMODManager"),data);
+
+            //GameManager.Instance.soundManager.SetGlobalParam(paramterCode,_factor);
         }
 
         
@@ -59,19 +100,34 @@ public class ParameterVolume : MonoBehaviour
             var dist = Vector3.Distance(pos,target);
             var factor = dist / radius;
             factor = 1f - factor;
+            factor = fadeCurve.Evaluate(factor);
 
             _factor = max * factor;
 
-            GameManager.Instance.soundManager.SetGlobalParam(paramterCode,_factor);
+            var data = MessageDataPooling.GetMessageData<MD.SetParameterData>();
+            data.soundId = 0;
+            data.paramId = paramterCode;
+            data.value = _factor;
+
+            SendMessageEx(MessageTitles.fmod_setGlobalParam,GetSavedNumber("FMODManager"),data);
+            //GameManager.Instance.soundManager.SetGlobalParam(paramterCode,_factor);
         }
         else if(changeType == ParameterChangeType.HorizontalTop)
         {
             var targetY = GetTargetPosition().y;
             var factor = (targetY - GetBottom()) / height;
-
+            factor = fadeCurve.Evaluate(factor);
+            
             _factor = max * factor;
 
-            GameManager.Instance.soundManager.SetGlobalParam(paramterCode,_factor);
+            var data = MessageDataPooling.GetMessageData<MD.SetParameterData>();
+            data.soundId = 0;
+            data.paramId = paramterCode;
+            data.value = _factor;
+
+            SendMessageEx(MessageTitles.fmod_setGlobalParam,GetSavedNumber("FMODManager"),data);
+
+            //GameManager.Instance.soundManager.SetGlobalParam(paramterCode,_factor);
         }
         else if(changeType == ParameterChangeType.Both)
         {
@@ -105,7 +161,7 @@ public class ParameterVolume : MonoBehaviour
 
     public Vector3 GetTargetPosition()
     {
-        return GameManager.Instance.player.transform.position;
+        return _targetTransform.position;
     }
 
     public float GetBottom()

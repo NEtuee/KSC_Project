@@ -1306,7 +1306,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             if (state != PlayerState.Aiming)
             {
-                if (isRun == true)
+                if (isRun == true && !_runLock)
                 {
                     currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, deltaTime * 20.0f);
                 }
@@ -2174,10 +2174,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         if(isRun)
         {
-            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle) || _runLock)
+            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle) || _runLock) 
                 isRun = false;
         }
-        else
+        else if(!_runLock)
         {
             if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
                 isRun = true;
@@ -2837,7 +2837,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 SetRadialBlurData data = MessageDataPooling.GetMessageData<SetRadialBlurData>();
                 data.factor = 1.0f;
                 data.radius = 0.2f;
-                data.time = 0.4f;
+                data.time = 0.8f;
                 SendMessageEx(MessageTitles.cameramanager_setradialblur, GetSavedNumber("CameraManager"), data);
             }
         }

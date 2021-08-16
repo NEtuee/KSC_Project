@@ -5,6 +5,6 @@ interface IProgress
     void Initialize();
     void Progress(float deltaTime);
     void AfterProgress(float deltaTime);
-    void UpdateTransform();
+    void FixedProgress(float deltaTime);
     void Release();
 }

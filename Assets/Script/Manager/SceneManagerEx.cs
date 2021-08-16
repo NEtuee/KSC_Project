@@ -28,6 +28,7 @@ public class SceneManagerEx : ManagerBase
         AddAction(MessageTitles.scene_loadCurrentLevel,LoadCurrentLevel);
         AddAction(MessageTitles.scene_loadPrevLevel,LoadPrevlevel);
         AddAction(MessageTitles.scene_loadNextLevel,LoadNextLevel);
+        AddAction(MessageTitles.scene_loadSpecificLevel,LoadSpecificLevel);
     }
 
     public override void Initialize()
@@ -45,6 +46,12 @@ public class SceneManagerEx : ManagerBase
 
 
 #region messageCallback
+
+    public void LoadSpecificLevel(Message msg)
+    {
+        var key = MessageDataPooling.CastData<StringData>(msg.data);
+        LoadSpecificLevel(key.value);
+    }
 
     public void LoadCurrentLevel(Message msg)
     {
@@ -64,6 +71,31 @@ public class SceneManagerEx : ManagerBase
 #endregion
 
 
+    public void LoadSpecificLevel(string key)
+    {
+        if(!_isLoaded)
+            return;
+
+        int level = -1;
+        for(int i = 0; i < sceneInfo.scenes.Count; ++i)
+        {
+            if(sceneInfo.scenes[i].name == key)
+            {
+                level = i;
+            }
+        }
+
+        if(level == -1)
+        {
+            Debug.Log("Level not found");
+            return;
+        }
+
+        currentLevel = level;
+        
+        _currentScene = sceneInfo.FindScene(currentLevel);
+        StartCoroutine(SceneLoadingProgress(true));
+    }
 
     public void LoadLevel(int level)
     {

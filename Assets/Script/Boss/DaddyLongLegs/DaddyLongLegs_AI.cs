@@ -16,9 +16,9 @@ public class DaddyLongLegs_AI : IKBossBase
     private bool _animate = false;
     private bool _prevActive = false;
 
-    public void Start()
+    public override void Initialize()
     {
-        GetSoundManager();
+        base.Initialize();
         //SetLegHitGroundSound(1507);
         if(randomStart)
             startTime = Random.Range(0f,3f);
@@ -106,19 +106,8 @@ public class DaddyLongLegs_AI : IKBossBase
 
     //}
 
-    public void Update()
+    public override void FixedProgress(float deltaTime)
     {
-        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
-            return;
-
-        UpdateProcess(Time.deltaTime);
-    }
-
-    public void FixedUpdate()
-    {
-        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
-            return;
-
-        UpdateProcess(Time.fixedDeltaTime);
+        UpdateProcess(deltaTime);
     }
 }

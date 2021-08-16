@@ -16,5 +16,13 @@ public class StateGraphAssetInspector : GraphInspector
 		{
 			text = "Open state graph window"
 		});
+
+		root.Add(new Button(() => {
+			EditorUtility.SetDirty(target);
+			AssetDatabase.SaveAssets();
+		})
+		{
+			text = "Save"
+		});
 	}
 }

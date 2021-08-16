@@ -34,4 +34,9 @@ public static partial class MessageTitles
     /// data = SoundPlayData
     /// </summary>
     public const ushort scene_loadPrevLevel = 0x0606;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort scene_loadSpecificLevel = 0x0607;
 }

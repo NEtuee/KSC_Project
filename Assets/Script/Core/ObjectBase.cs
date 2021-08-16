@@ -16,8 +16,6 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     protected override void Awake()
     {
         base.Awake();
-
-        SyncLocalValue();
         Assign();
         //Initialize();
     }
@@ -25,25 +23,6 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     protected virtual void Start()
     {
         Initialize();
-    }
-
-    public virtual void UpdateTransform()
-    {
-        if(_objTransform.position != transform.position || _objTransform.rotation != transform.rotation)
-        {
-            transform.SetPositionAndRotation(_objTransform.position,_objTransform.rotation);
-            transform.localScale = _objTransform.scale;
-
-            SyncLocalValue();
-        }
-        
-    }
-
-    public virtual void SyncLocalValue()
-    {
-        _objTransform.position = transform.position;
-        _objTransform.rotation = transform.rotation;
-        _objTransform.scale = transform.localScale;
     }
 
     public void SendMessageQuick(Message msg)
@@ -88,6 +67,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     public virtual void Initialize(){}
     public virtual void Progress(float deltaTime){}
     public virtual void AfterProgress(float deltaTime){}
+    public virtual void FixedProgress(float deltaTime){}
     public virtual void Release()
     {
         WithdrawRequest();

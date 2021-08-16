@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Elevator : MonoBehaviour
+public class Elevator : UnTransfromObjectBase
 {
     public bool isExit = false;
 
-    private AsynSceneManager _sceneManager;
     private Animator _animator;
 
-    public void Start()
+    public override void Initialize()
     {
-        _sceneManager = GameObject.FindObjectOfType<AsynSceneManager>();
+        base.Initialize();
+
+        RegisterRequest(GetSavedNumber("StageManager"));
+
+        //_sceneManager = GameObject.FindObjectOfType<AsynSceneManager>();
         _animator = GetComponent<Animator>();
 
         // if(!isExit)
@@ -30,19 +33,46 @@ public class Elevator : MonoBehaviour
         WaitForSeconds se = new WaitForSeconds(2f);
         yield return se;
         
-        _sceneManager.LoadNextlevel();
+        SendMessageEx(MessageTitles.scene_loadNextLevel,GetSavedNumber("SceneManager"),null);
+        //_sceneManager.LoadNextlevel();
     }
 
     public void Open()
     {
         _animator.SetTrigger("OpenTrigger");
-        GameManager.Instance.soundManager.Play(2014, transform.position);
+        SoundPlay(2014,null, transform.position);
     }
 
     public void Close()
     {
         _animator.SetTrigger("CloseTrigger");
-        GameManager.Instance.soundManager.Play(2015, transform.position);
+        SoundPlay(2015,null, transform.position);
+    }
+
+    public void SoundPlay(int code, Transform parent, Vector3 position)
+    {
+        if(parent != null)
+        {
+            var data = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
+
+            data.id = code;
+            data.localPosition = (Vector3)position;
+            data.parent = parent;
+            data.returnValue = true;
+
+            SendMessageEx(MessageTitles.fmod_attachPlay,UniqueNumberBase.GetSavedNumberStatic("FMODManager"),data);
+        }
+        else
+        {
+            var data = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+
+            data.id = code;
+            data.position = (Vector3)position;
+            data.dontStop = false;
+            data.returnValue = true;
+
+            SendMessageEx(MessageTitles.fmod_play,UniqueNumberBase.GetSavedNumberStatic("FMODManager"),data);
+        }
     }
 
     public void ObjectTeleport(Vector3 localPos, Quaternion localRot, Transform target, bool attatch = false)

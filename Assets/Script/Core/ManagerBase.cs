@@ -6,7 +6,6 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
 {
     public override void RegisterReceiver(ObjectBase receiver)
     {
-        Debug.Log(receiver.name);
         base.RegisterReceiver(receiver);
     }
 
@@ -71,13 +70,13 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
         }
     }
 
-    public virtual void UpdateTransform()
+    public virtual void FixedProgress(float deltaTime)
     {
         foreach(var receiver in _receivers.Values)
         {
             if(receiver == null || !receiver.gameObject.activeInHierarchy || !receiver.enabled)
                 continue;
-            receiver.UpdateTransform();
+            receiver.FixedProgress(deltaTime);
         }
     }
 

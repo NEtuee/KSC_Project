@@ -40,7 +40,7 @@ public class GetStageTrigger : BaseNode
         find = true;
         trigger = MessageDataPooling.CastData<MD.TriggerData>(msg.data).trigger;
 
-        MessagePool.ReturnMessage(msg);
+        //MessagePool.ReturnMessage(msg);
 	}
 }
 

@@ -103,8 +103,10 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
 
     private float _rolledAngle = 0f;
 
-    public void Start()
+    public override void Initialize()
     {
+        base.Initialize();
+
         _spawnPosition = transform.position;
         _spawnRotation = transform.rotation;
         
@@ -114,7 +116,6 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         _forwardRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),11f,8f,obstacleLayer);
         _sideRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),8f,8f,obstacleLayer);
 
-        GetSoundManager();
         SetLegHitGroundSound(1509);
         
         SaveBodyTransform();
@@ -122,20 +123,9 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         //ChangeState(State.TransformClose);
     }
 
-    public void Update()
+    public override void FixedProgress(float deltaTime)
     {
-        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
-            return;
-        
-        UpdateProcess(Time.deltaTime);
-    }
-
-    public void FixedUpdate()
-    {
-        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
-            return;
-        
-        UpdateProcess(Time.fixedDeltaTime);
+        UpdateProcess(deltaTime);
     }
 
     public void UpdateProcess(float deltaTime)
@@ -146,7 +136,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         {
             FollowPath(deltaTime);
 
-            _timeCounter.IncreaseTimer("wallMoveTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("wallMoveTime",out bool limit,deltaTime);
             if(limit)
             {
                 canFloorWhip = true;
@@ -162,13 +152,13 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
 
                 var speed = _roll ? rollSpeed : whipSpeed;
                 MoveAngle(dir,speed,deltaTime,4f,!_whipNearCheck);
-                _targetDistance = Vector3.Distance(GameManager.Instance.player.transform.position,transform.position);
+                _targetDistance = Vector3.Distance(_target.transform.position,transform.position);
 
                 if(!_whipNearCheck)
                 {
                     if(_targetDistance >= whipNearDistance)
                     {
-                        SetTarget(GameManager.Instance.player.transform.position);
+                        SetTarget(_target.transform.position);
                     }
                     else
                     {
@@ -203,7 +193,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             //     }
             // }
 
-            _timeCounter.IncreaseTimer("whipTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("whipTime",out bool limit,deltaTime);
             if(limit)
             {
                 if (!_roll)
@@ -225,7 +215,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         {
             FollowPath(deltaTime);
 
-            _timeCounter.IncreaseTimer("wallMoveTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("wallMoveTime",out bool limit,deltaTime);
             if(limit)
             {
                 shield.Reactive();
@@ -245,7 +235,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             //     body.AddForce(Vector3.down * (2000f * Time.deltaTime),ForceMode.Acceleration);
             // }
 
-            _timeCounter.IncreaseTimer("stunTime",5,out bool limit);
+            _timeCounter.IncreaseTimerSelf("stunTime",5,out bool limit,deltaTime);
             if(limit)
             {
                 if(transform.up.y <= 0.3f)
@@ -260,7 +250,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if(currentState == State.Recovery)
         {
-            // _timeCounter.IncreaseTimer("recoverTime",1f,out bool limit);
+            // _timeCounter.IncreaseTimerSelf("recoverTime",1f,out bool limit);
             // if(limit)
             // {
                 _nextState = _launched ? State.WallMoveExit : State.WallMove;
@@ -270,7 +260,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if(currentState == State.TransformOpen)
         {
-            _timeCounter.IncreaseTimer("TransformTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("TransformTime",out bool limit,deltaTime);
             if(limit)
             {
                 ChangeState(_nextState);
@@ -278,7 +268,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if(currentState == State.TransformClose)
         {
-            _timeCounter.IncreaseTimer("TransformTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("TransformTime",out bool limit,deltaTime);
             //if()
             {
                 ChangeState(_nextState);
@@ -286,7 +276,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if(currentState == State.TransformFoldLeg)
         {
-            _timeCounter.IncreaseTimer("TransformTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("TransformTime",out bool limit,deltaTime);
             //if()
             {
                 ChangeState(_nextState);
@@ -294,7 +284,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if(currentState == State.TransformSpreadLeg)
         {
-            _timeCounter.IncreaseTimer("TransformTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("TransformTime",out bool limit,deltaTime);
             if(limit)
             {
                 // shield.gameObject.SetActive(true);
@@ -304,7 +294,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if(currentState == State.Launch)
         {
-            _timeCounter.IncreaseTimer("stunTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("stunTime",out bool limit,deltaTime);
             if(limit)
             {
                 ChangeState(State.Recovery);
@@ -312,7 +302,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if (currentState == State.LaunchReadyTimer)
         {
-            _timeCounter.IncreaseTimer("launchTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("launchTime",out bool limit,deltaTime);
             if(limit)
             {
                 ChangeState(State.Launch);
@@ -320,7 +310,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if (currentState == State.Hit)
         {
-            _timeCounter.IncreaseTimer("hitTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("hitTime",out bool limit,deltaTime);
             if(limit)
             {
                 ChangeState(_prevState);
@@ -328,7 +318,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
         else if (currentState == State.Dead)
         {
-            _timeCounter.IncreaseTimer("DeadTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("DeadTime",out bool limit,deltaTime);
             if(limit)
             {
                 Respawn();
@@ -360,7 +350,7 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
         }
     }
 
-    public void Hit()
+    public new void Hit()
     {
         ChangeState(State.Hit);
     }
@@ -404,7 +394,8 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             leg.Hold(true);
         }
 
-        GameManager.Instance.effectManager.Active("ElectricExplosion", transform.position);
+        ActiveEffect("ElectricExplosion", transform.position,Quaternion.identity,null);
+        //GameManager.Instance.effectManager.Active("ElectricExplosion", transform.position);
         
         head.enabled = false;
     }
@@ -568,14 +559,14 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
                 return;
             }
 
-            if(GameManager.Instance.player.transform.position.y >= 10f)
+            if(_target.transform.position.y >= 10f)
             {
                 GetPath("FloorWhip" + whipPath);
                 lowCheck = false;
             }
             else
             {
-                SetTarget(GameManager.Instance.player.transform.position);
+                SetTarget(_target.transform.position);
                 lowCheck = true;
             }
                 
@@ -874,14 +865,14 @@ public class ImmortalJirungE_V2_AI : IKPathFollowBossBase
             coll.gameObject.SetActive(false);
         }
 
-        if (currentState == State.FloorWhip)
+        if (currentState == State.FloorWhip && (coll.gameObject.layer & (1 << targetLayer.value)) != 0 )
         {
-            var ragdoll = GameManager.Instance.player.GetComponent<PlayerRagdoll>();
+            var ragdoll = _target.GetComponent<PlayerRagdoll>();
             if (ragdoll.state != PlayerRagdoll.RagdollState.Ragdoll)
             {
-                GameManager.Instance.player.TakeDamage(_roll ? rollDamage : whipDamage);
+                _player.TakeDamage(_roll ? rollDamage : whipDamage);
                 ragdoll.ExplosionRagdoll(300f,transform.forward);   
-                GameManager.Instance.soundManager.Play(1015,coll.transform.position);
+                SoundPlay(1015,null,coll.transform.position);
             }
         }
         

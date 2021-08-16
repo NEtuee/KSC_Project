@@ -17,9 +17,10 @@ public class DaddyLongLegs_Cutscene : IKBossBase
     private bool _animate = false;
     private bool _prevActive = true;
 
-    public void Start()
+    public override void Initialize()
     {
-        GetSoundManager();
+        base.Initialize();
+
         animator.ignorePause = true;
         //SetLegHitGroundSound(1507);
         if(randomStart)
@@ -52,7 +53,7 @@ public class DaddyLongLegs_Cutscene : IKBossBase
 
     //}
 
-    public void Update()
+    public override void Progress(float deltaTime)
     {
         var cam = Camera.main;
         var dir = (transform.position - cam.transform.position);
@@ -120,7 +121,7 @@ public class DaddyLongLegs_Cutscene : IKBossBase
         }
     }
 
-    public void FixedUpdate()
+    public override void AfterProgress(float deltaTime)
     {
         if (!_animate)
         {
@@ -143,6 +144,6 @@ public class DaddyLongLegs_Cutscene : IKBossBase
         if (!master.isMove)
             return;
 
-        UpdateProcess(Time.fixedDeltaTime);
+        UpdateProcess(deltaTime);
     }
 }

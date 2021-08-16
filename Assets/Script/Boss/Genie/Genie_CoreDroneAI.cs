@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Genie_CoreDroneAI : Genie_BombDroneAI
 {
-    public new void Start()
+    public override void Initialize()
     {
-        Init();
-        SetTarget(GameManager.Instance.player.transform);
+        base.Initialize();
+
         SetTargetOffset(Vector3.up * Random.Range(randomOffset.x,randomOffset.y));
         SetTargetDirectionUpdateTime(0.2f);
         maxSpeed = Random.Range(randomMaxSpeed.x,randomMaxSpeed.y);
@@ -15,7 +15,7 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
         this.gameObject.SetActive(false);
     }
 
-    public override void Progress(float deltaTime)
+    public override void FixedProgress(float deltaTime)
     {
         SetMirrorSideTarget();
 
@@ -45,10 +45,10 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
 
     public void SetMirrorSideTarget()
     {
-        var player = gridControll.cubeGrid.GetCubeFromWorld(GameManager.Instance.player.transform.position);
+        var player = gridControll.cubeGrid.GetCubeFromWorld(_player.transform.position);
         if(player == null)
         {
-            _direction = (transform.position - GameManager.Instance.player.transform.position).normalized;
+            _direction = (transform.position - _player.transform.position).normalized;
             return;
         }
 
@@ -60,7 +60,7 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
         else
         {
             _target = null;
-            _direction = (GameManager.Instance.player.transform.position - transform.position).normalized;
+            _direction = (_player.transform.position - transform.position).normalized;
         }
     }
 }

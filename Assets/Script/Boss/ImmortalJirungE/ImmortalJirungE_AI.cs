@@ -32,7 +32,7 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
     private SphereRayEx _forwardRay;
     private SphereRayEx _sideRay;
 
-    public void Start()
+    public override void Initialize()
     {
         ChangeState(State.WallMove);
         _pathLoop = true;
@@ -40,7 +40,6 @@ public class ImmortalJirungE_AI : IKPathFollowBossBase
         _forwardRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),11f,8f,obstacleLayer);
         _sideRay = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),8f,8f,obstacleLayer);
 
-        GetSoundManager();
         SetLegHitGroundSound(1509);
     }
 

@@ -16,16 +16,28 @@ public class IKBossBase : Hitable
     public List<IKLegMovement> legs = new List<IKLegMovement>();
 
     protected TimeCounterEx _timeCounter = new TimeCounterEx();
+    protected PlayerCtrl_Ver2 _player;
     protected Transform _target;
 
     protected Vector3 _centerPosition;
     protected float _targetDistance;
 
-    protected FMODSoundManager _soundManager;
-
-        public virtual void Initialize()
+    public override void Assign()
     {
-        _target = GameManager.Instance.player.transform;
+        base.Assign();
+
+        AddAction(MessageTitles.set_setplayer,(x)=>{
+            _player = (PlayerCtrl_Ver2)x.data;
+            _target = _player.transform;
+        });
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        RegisterRequest(GetSavedNumber("StageManager"));
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
         _centerPosition = transform.position;
     }
 
@@ -60,9 +72,40 @@ public class IKBossBase : Hitable
         }
     }
 
-    protected void GetSoundManager()
+    public void ActiveEffect(string key, Vector3 position, Quaternion rotation, Transform parent)
     {
-        _soundManager = GameManager.Instance.soundManager;
+        var hitData = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+        hitData.key = key;
+        hitData.position = position;
+        hitData.rotation = rotation;
+        hitData.parent = parent;
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), hitData);
+    }
+
+    public void SoundPlay(int code, Transform parent, Vector3 position)
+    {
+        if(parent != null)
+        {
+            var data = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
+
+            data.id = code;
+            data.localPosition = (Vector3)position;
+            data.parent = parent;
+            data.returnValue = true;
+
+            SendMessageEx(MessageTitles.fmod_attachPlay,UniqueNumberBase.GetSavedNumberStatic("FMODManager"),data);
+        }
+        else
+        {
+            var data = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+
+            data.id = code;
+            data.position = (Vector3)position;
+            data.dontStop = false;
+            data.returnValue = true;
+
+            SendMessageEx(MessageTitles.fmod_play,UniqueNumberBase.GetSavedNumberStatic("FMODManager"),data);
+        }
     }
     
     
@@ -72,7 +115,8 @@ public class IKBossBase : Hitable
         {
             leg.legHitToGround += pos =>
             {
-                _soundManager.Play(code, pos);
+                SoundPlay(code,null,pos);
+                //_soundManager.Play(code, pos);
             };
         }
     }
