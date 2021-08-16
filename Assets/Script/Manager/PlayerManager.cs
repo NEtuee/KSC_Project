@@ -70,6 +70,11 @@ public class PlayerManager : ManagerBase
         AddAction(MessageTitles.playermanager_ragdoll,(msg)=>{
             _player.GetPlayerRagdoll().SlidingRagdoll(Vector3.zero);
         });
+
+        AddAction(MessageTitles.playermanager_droneText,(msg)=>{
+            var data = MessageDataPooling.CastData<StringData>(msg.data);
+            _player.GetDrone().DroneTextCall(data.value);
+        });
     }
 
     public override void Initialize()
