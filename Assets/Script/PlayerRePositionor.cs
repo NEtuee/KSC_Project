@@ -72,8 +72,13 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
             var rot = Quaternion.LookRotation(respawn.forward);
 
-            ctrl.transform.position = respawn.position;
-            ctrl.transform.SetPositionAndRotation(respawn.position,rot);
+
+            //ctrl.transform.position = respawn.position;
+            //ctrl.transform.SetPositionAndRotation(respawn.position,rot);
+            var respawnData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
+            respawnData.position = respawn.position;
+            respawnData.rotation = rot;
+            SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), respawnData);
             //GameManager.Instance.cameraManager.SetBrainCameraPosition(respawn.position);
             Vector3Data position = MessageDataPooling.GetMessageData<Vector3Data>();
             position.value = respawn.position;
@@ -101,8 +106,10 @@ public class PlayerRePositionor : UnTransfromObjectBase
             //bip.position = respawn.position;
             var rot = Quaternion.LookRotation(respawn.forward);
 
-            _player.transform.SetPositionAndRotation(respawn.position,rot);
-            _player.TakeDamage(5.0f);
+            var respawnData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
+            respawnData.position = respawn.position;
+            respawnData.rotation = rot;
+            SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), respawnData);
             Vector3Data position = MessageDataPooling.GetMessageData<Vector3Data>();
             position.value = respawn.position;
             SendMessageEx(MessageTitles.cameramanager_setBrainCameraPosition, GetSavedNumber("CameraManager"), position);

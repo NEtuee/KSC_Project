@@ -675,8 +675,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Jump:
             {
-                    airTime += deltaTime;
-
+                airTime += deltaTime;
 
                 if (movement.isGrounded == true)
                 {

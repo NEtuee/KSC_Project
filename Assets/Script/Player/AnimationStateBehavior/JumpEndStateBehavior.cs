@@ -16,6 +16,8 @@ public class JumpEndStateBehavior : StateMachineBehaviour
         base.OnStateExit(animator, stateInfo, layerIndex);
 
         animator.ResetTrigger("FastStop");
-        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
+
+        if(player.GetState() != PlayerCtrl_Ver2.PlayerState.Respawn)
+           player.ChangeState(PlayerCtrl_Ver2.PlayerState.Default);
     }
 }

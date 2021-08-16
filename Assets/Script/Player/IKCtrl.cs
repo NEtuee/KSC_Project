@@ -14,6 +14,7 @@ public class IKCtrl : MonoBehaviour
     private Vector3 rightFootPosition, leftFootPosition, leftFootIkPosition, rightFootIkPosition;
     private Quaternion leftFootIkRotation, rightFootIkRotation;
     [SerializeField] private float lastPelvisPositionY, lastRightFootPositionY, lastLeftFootPositionY;
+    [SerializeField] private float diff;
 
     public bool enableFeetIk = true;
     [Range(0, 2)] [SerializeField] private float heightFromGroundRaycast = 1.14f;
@@ -76,7 +77,8 @@ public class IKCtrl : MonoBehaviour
             return;
         }
 
-        if (Vector3.Distance(animator.bodyPosition, transform.position) >= 2.0f)
+        diff = Vector3.Distance(animator.bodyPosition, transform.position);
+        if (diff >= 2.0f)
             InitPelvisHeight();
 
         float leftWeight = animator.GetFloat("LeftIkWeight");

@@ -150,6 +150,11 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort uimanager_activeGameOverUi = 0x0326;
+
+    /// <summary>
+    /// data = ScanMakerData
+    /// </summary>
+    public const ushort uimanager_activeScanMaker = 0x0327;
     #endregion
 
     /// <summary>
