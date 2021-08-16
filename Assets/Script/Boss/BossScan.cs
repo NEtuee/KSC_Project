@@ -14,8 +14,8 @@ public class BossScan : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
+        // if (GameManager.Instance.PAUSE == true)
+        //     return;
 
         if (scaning == true)
         {

@@ -6,7 +6,7 @@ using GraphProcessor;
 using NodeGraphProcessor.Examples;
 using UnityEditor;
 
-[CustomEditor(typeof(GraphObjectBase),true)]
+[CustomEditor(typeof(GraphObjectBase),true),CanEditMultipleObjects]
 public class GraphObjectBaseEditor : MessageReceiverEditor
 {
     protected GraphObjectBase obj;
@@ -45,6 +45,11 @@ public class GraphObjectBaseEditor : MessageReceiverEditor
             var copy = ScriptableObject.Instantiate(obj.graphOrigin);
 
             obj.graphOrigin = copy;
+        }
+
+        if(GUILayout.Button("Create New Graph"))
+        {
+            obj.graphOrigin = ScriptableObject.CreateInstance<LevelObjectGraph>();
         }
 
         if(GUILayout.Button("Save to ScriptableObject File"))

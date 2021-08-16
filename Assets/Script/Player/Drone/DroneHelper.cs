@@ -36,11 +36,6 @@ public abstract class DroneHelper : MonoBehaviour
         if (tryScan == true)
             return;
 
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            tryScan = true;
-        }
-
         bool limit;
         root.timer.IncreaseTimer("ScanCheckTimer", 30.0f, out limit);
         if (limit == true)

@@ -150,7 +150,7 @@ public class PlayerRagdoll : MonoBehaviour
 
         if (state == RagdollState.Ragdoll && simulateState == RagdollSimulateState.Shock)
         {
-            _timeCounter.IncreaseTimer("shock", out bool limit);
+            _timeCounter.IncreaseTimerSelf("shock", out bool limit,Time.fixedDeltaTime);
             if (limit)
             {
                 int rand = UnityEngine.Random.Range(1,3);
@@ -165,7 +165,7 @@ public class PlayerRagdoll : MonoBehaviour
                 //GameManager.Instance.effectManager.Active("ElectricSpark",transform.position,Quaternion.identity);
             }
             
-            _timeCounter.IncreaseTimer("shockProgress", out limit);
+            _timeCounter.IncreaseTimerSelf("shockProgress", out limit,Time.fixedDeltaTime);
             if (limit)
             {
                 simulateState = RagdollSimulateState.Default;

@@ -9,7 +9,6 @@ public class LevelObjectGraph : StateMachineGraph
 {
     public string gameObjectGUID;
     public string transformGUID;
-    public string levelObjectTransformGUID;
     public string levelObjectGUID;
 
 
@@ -18,6 +17,5 @@ public class LevelObjectGraph : StateMachineGraph
         gameObjectGUID = AddExposedParameter("GameObject",typeof(GameObjectParameter),null,false,true);
         transformGUID = AddExposedParameter("Transform",typeof(TransformParameter),null,false,true);
         levelObjectGUID = AddExposedParameter("LevelObject",typeof(GraphObjectParamter),null,false,true);
-        levelObjectTransformGUID= AddExposedParameter("LvObjTransform",typeof(GraphObjectTransformParamter),null,false,true);
     }
 }

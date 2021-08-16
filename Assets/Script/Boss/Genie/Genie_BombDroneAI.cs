@@ -23,10 +23,10 @@ public class Genie_BombDroneAI : DroneAIBase
 
     private Transform _mainTarget;
 
-    public void Start()
+    public override void Initialize()
     {
-        Init();
-        SetTarget(GameManager.Instance.player.transform);
+        base.Initialize();
+
         _mainTarget = _target;
         SetTargetOffset(Vector3.up * Random.Range(randomOffset.x,randomOffset.y));
         SetTargetDirectionUpdateTime(targetUpdateTime);
@@ -40,7 +40,7 @@ public class Genie_BombDroneAI : DroneAIBase
         this.gameObject.SetActive(false);
     }
 
-    public override void Progress(float deltaTime)
+    public override void FixedProgress(float deltaTime)
     {
         _lifeTime -= deltaTime;
         if(_lifeTime <= 0f)
@@ -89,7 +89,7 @@ public class Genie_BombDroneAI : DroneAIBase
             AddForce(dist * 2f * Vector3.up * deltaTime);
         }
         
-        base.Progress(deltaTime);
+        base.FixedProgress(deltaTime);
     }
 
     public void ExplosionCheck()

@@ -79,10 +79,19 @@ public class BrokenMedusa_AI : IKBossBase
     public UnityEvent whenSearchIdle;
     public UnityEvent deadEvent;
 
-    public void Start()
+    public override void Assign()
     {
-        Initialize();
-        GetSoundManager();
+        base.Assign();
+
+        AddAction(MessageTitles.player_EMPHit,(x)=>{
+            BodyHitAnimation();
+        });
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
         SetLegHitGroundSound(1512);
         
         if(animationType == AnimationType.Graph)
@@ -101,26 +110,38 @@ public class BrokenMedusa_AI : IKBossBase
         _timeCounter.InitTimer("pushStand");
         _timeCounter.InitTimer("pushCooldown");
         
-        GameManager.Instance.soundManager.Play(4005,Vector3.zero,transform);
+        SoundPlay(4005,transform,Vector3.zero);
+        //GameManager.Instance.soundManager.Play(4005,Vector3.zero,transform);
 
         ChangeState(State.TransformIdle);
     }
 
-    public void Update()
+    public override void FixedProgress(float deltaTime)
     {
-        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
-            return;
-
-        UpdateProcess(Time.deltaTime);
+        UpdateProcess(deltaTime);
     }
 
-    public void FixedUpdate()
-    {
-        if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
-            return;
+    // public override void AfterProgress(float deltaTime)
+    // {
+    //     head.rotation = _headRotation;
+    //     Debug.Log(head.eulerAngles);
+    // }
+
+    // public void Update()
+    // {
+    //     if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
+    //         return;
+
+    //     UpdateProcess(Time.deltaTime);
+    // }
+
+    // public void FixedUpdate()
+    // {
+    //     if (GameManager.Instance.PAUSE == true || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+    //         return;
         
-        UpdateProcess(Time.fixedDeltaTime);
-    }
+    //     UpdateProcess(Time.fixedDeltaTime);
+    // }
 
     public void LateUpdate()
     {
@@ -132,7 +153,7 @@ public class BrokenMedusa_AI : IKBossBase
     {
         if (_isTriggered)
         {
-            _timeCounter.IncreaseTimer("scanTime",out bool limit);
+            _timeCounter.IncreaseTimerSelf("scanTime",out bool limit,deltaTime);
             if (limit)
             {
                 _isTriggered = false;
@@ -140,7 +161,7 @@ public class BrokenMedusa_AI : IKBossBase
             
         }
         
-        _timeCounter.IncreaseTimer("timer",1f,out bool timeLimit);
+        _timeCounter.IncreaseTimerSelf("timer",1f,out bool timeLimit,deltaTime);
         if(!timeLimit)
         {
             return;
@@ -148,7 +169,7 @@ public class BrokenMedusa_AI : IKBossBase
 
         UpdateDirection();
         UpdatePerpendicularPoint();
-        Push();
+        Push(deltaTime);
         var upDist = MathEx.distance(transform.position.y, _target.position.y);
         _jumpPush = _jumpPush && jumpPushDist <= upDist;
 
@@ -158,18 +179,8 @@ public class BrokenMedusa_AI : IKBossBase
             ChangeState(State.LockOnMove);
         }
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            //animationControll.Play("Anim_Medusa_Hit");
-        }
-        
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Dead();
-        }
 
-
-        _timeCounter.IncreaseTimer("pushStand",out bool pushLimit);
+        _timeCounter.IncreaseTimerSelf("pushStand",out bool pushLimit,deltaTime);
         if(pushLimit)
         {
             _armPushLerpBack = !(IsPlaying(2,"Anim_Medusa_Push") || IsPlaying(2,"Anim_Medusa_PushUp"));
@@ -207,7 +218,8 @@ public class BrokenMedusa_AI : IKBossBase
 
             if(!IsOnGrounded())
             {
-                GameManager.Instance.soundManager.Play(1514, Vector3.zero, transform);
+                SoundPlay(1514,transform,Vector3.zero);
+                //GameManager.Instance.soundManager.Play(1514, Vector3.zero, transform);
                 ChangeState(State.SearchIdle);
             }
 
@@ -239,7 +251,8 @@ public class BrokenMedusa_AI : IKBossBase
             
             if(!IsOnGrounded())
             {
-                GameManager.Instance.soundManager.Play(1514, Vector3.zero, transform);
+                SoundPlay(1514,transform,Vector3.zero);
+                //GameManager.Instance.soundManager.Play(1514, Vector3.zero, transform);
                 ChangeState(State.SearchIdle);
             }
 
@@ -267,8 +280,10 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.Scanned)
         {
+            Debug.Log(_scannedPosition);
             if(LookTarget_Head(_scannedPosition, deltaTime))
             {
+                Debug.Log("Check1");
                 if(!scanner.scaning)
                 {
                     if (_scanCheck)
@@ -287,6 +302,7 @@ public class BrokenMedusa_AI : IKBossBase
 
             if(ScanCheck())
             {
+                Debug.Log("Check2");
                 UpdateMoveLine();
                 ChangeState(State.LockOnMove);
 
@@ -545,6 +561,12 @@ public class BrokenMedusa_AI : IKBossBase
 
     }
 
+    public void BodyHitAnimation()
+    {
+        if(graphAnimator.IsPlaying("HitV") == null && (currentState != State.TransformIdle || currentState != State.TransformOpen))
+            graphAnimator.Play("HitV",body,false);
+    }
+
     public void OpenTrigger()
     {
         ChangeState(State.TransformOpen);
@@ -567,13 +589,17 @@ public class BrokenMedusa_AI : IKBossBase
             MainAnimationPlay(4);
             //animationControll.Play("Anim_Medusa_Hit");
         }
-        _soundManager.Play(1701,transform.position);
+
+        SoundPlay(1701,null,transform.position);
+        //_soundManager.Play(1701,transform.position);
     }
 
     public void Dead()
     {
-        _soundManager.Play(1510,transform.position);
-        _soundManager.Play(1700,transform.position);
+        SoundPlay(1510,null,transform.position);
+        SoundPlay(1700,null,transform.position);
+        //_soundManager.Play(1510,transform.position);
+        //_soundManager.Play(1700,transform.position);
         SetIKActive(false);
         ChangeState(State.Dead);
     }
@@ -582,6 +608,7 @@ public class BrokenMedusa_AI : IKBossBase
     {
         if((currentState == State.Idle || currentState == State.SearchIdle || currentState == State.SearchRotate || currentState == State.SearchScan))
         {
+            Debug.Log("Check");
             ChangeState(State.Scanned);
             _isTriggered = true;
 
@@ -617,7 +644,8 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void ScanForward()
     {
-        _soundManager.Play(1511,transform.position);
+        SoundPlay(1511,null,transform.position);
+        //_soundManager.Play(1511,transform.position);
         scanner.SetHeight(transform.position.y + scanYLimit);
         scanner.ScanSetup(transform.position,GetHeadForward());
     }
@@ -643,7 +671,8 @@ public class BrokenMedusa_AI : IKBossBase
             if (mag <= scanner.range && mag >= scanner.range - 3f)
             {
                 //scan
-                GameManager.Instance.soundManager.Play(1513, Vector3.zero, transform);
+                //GameManager.Instance.soundManager.Play(1513, Vector3.zero, transform);
+                SoundPlay(1513,transform,Vector3.zero);
                 
                 return true;
             }
@@ -652,9 +681,9 @@ public class BrokenMedusa_AI : IKBossBase
         return false;
     }
 
-    public void Push()
+    public void Push(float deltaTime)
     {
-        _timeCounter.IncreaseTimer("pushCooldown",out var limit);
+        _timeCounter.IncreaseTimerSelf("pushCooldown",out var limit,deltaTime);
         if(!limit)
         {
             return;
@@ -688,14 +717,16 @@ public class BrokenMedusa_AI : IKBossBase
             {
                 _jumpPush = true;
                 PushBackUp();
-                GameManager.Instance.soundManager.Play(1015,_target.position);
+                SoundPlay(1015,null,_target.position);
+                //GameManager.Instance.soundManager.Play(1015,_target.position);
                 _timeCounter.InitTimer("pushCooldown");
             }
             else if(((upDist <= jumpPushDist) && _jumpPush) || !_jumpPush)
             {
                 PushBack();
                 _jumpPush = false;
-                GameManager.Instance.soundManager.Play(1015,_target.position);
+                SoundPlay(1015,null,_target.position);
+                //GameManager.Instance.soundManager.Play(1015,_target.position);
                 _timeCounter.InitTimer("pushCooldown");
             }
         }
@@ -718,14 +749,13 @@ public class BrokenMedusa_AI : IKBossBase
             foreach(Collider curr in playerColl)
             {
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
-                var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
                 
                 if (ragdoll != null)
                 {
                     ragdoll.ExplosionRagdoll(250.0f, transform.forward);
                         //Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
                     
-                    player.TakeDamage(5f);
+                    _player.TakeDamage(5f);
                     break;
                 }
 
@@ -745,10 +775,10 @@ public class BrokenMedusa_AI : IKBossBase
         }
 
         var dir = (MathEx.DeleteYPos(_target.position) - MathEx.DeleteYPos(_perpendicularPoint)).normalized;
-        var player = ((PlayerCtrl_Ver2)GameManager.Instance.player);
-        player.TakeDamage(5f);
-        player.SetJumpPower(20f);
-        player.SetVelocity(dir * 15f);
+
+        _player.TakeDamage(5f);
+        _player.SetJumpPower(20f);
+        _player.SetVelocity(dir * 15f);
         
         // Collider[] playerColl = Physics.OverlapSphere(shildTransform.position, 10f,targetLayer);
         //
@@ -767,19 +797,17 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void SetCameraDefault()
     {
-        GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
+        //GameManager.Instance.cameraManager.ActivePlayerFollowCamera();
     }
 
     public void SetPlayerRunningLock(bool value)
     {
-        var player = GameManager.Instance.player as PlayerCtrl_Ver2;
-        player.SetRunningLock(value);
+        _player.SetRunningLock(value);
     }
 
     public void SetAimLock(bool value)
     {
-        var player = GameManager.Instance.player as PlayerCtrl_Ver2;
-        player.SetAimLock(value);
+        _player.SetAimLock(value);
     }
 
     public void LineMove(float deltaTime)

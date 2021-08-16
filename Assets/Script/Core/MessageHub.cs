@@ -13,6 +13,7 @@ public abstract class MessageHub<T> : MessageReceiver where T : MessageReceiver
 
     public virtual void RegisterReceiver(T receiver)
     {
+        UnityEngine.Debug.Log(receiver.name);
         _receivers.Add(receiver.uniqueNumber, receiver);
     }
 

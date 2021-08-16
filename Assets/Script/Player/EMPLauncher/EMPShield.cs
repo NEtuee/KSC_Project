@@ -38,9 +38,9 @@ public class EMPShield : Hitable
 
     public delegate void WhenReactive(GameObject scanable);
     private WhenReactive whenReactive;
-    void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         collider = GetComponent<Collider>();
         if(renderer != null)
@@ -216,10 +216,15 @@ public class EMPShield : Hitable
     {
         //whenReactive(this.gameObject);
 
-        collider.enabled = true;
+        if(collider != null)
+            collider.enabled = true;
 
         if(renderer != null)
+        {
+            Debug.Log("Check");
             renderer.enabled = true;
+            mat = renderer.material;
+        }
         isOver = false;
         isActive = false;
 

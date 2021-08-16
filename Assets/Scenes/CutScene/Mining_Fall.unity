@@ -7055,8 +7055,8 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 0
-      width: 150
-      height: 200
+      width: 244
+      height: 194
     opened: 1
     editorType:
       serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
@@ -7065,12 +7065,11 @@ MonoBehaviour:
   - id: 11
   - id: 12
   - id: 13
-  - id: 14
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -1245, y: -216, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: -170, y: 33, z: 0}
+  scale: {x: 0.7561437, y: 0.7561437, z: 1}
   functions: []
   functionID: 0
   states: []
@@ -7079,7 +7078,6 @@ MonoBehaviour:
   currentState: 0
   gameObjectGUID: fcb1eb14-966f-4d1d-beec-6df3c6e91443
   transformGUID: b58c6528-dd8d-43d3-b473-92d9d24d80f6
-  levelObjectTransformGUID: d0c1e43d-9af2-49ea-9575-84f658642d21
   levelObjectGUID: d6a18587-cfb9-455a-bb6d-90f0bc4f6113
   references:
     version: 1
@@ -7293,7 +7291,7 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 15
+          id: 14
         val: {fileID: 0}
     0000000C:
       type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
@@ -7308,7 +7306,7 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 16
+          id: 15
         val: {fileID: 0}
     0000000D:
       type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
@@ -7323,50 +7321,26 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 17
+          id: 16
         val: {fileID: 0}
     0000000E:
-      type: {class: GraphObjectTransformParamter, ns: GraphProcessor, asm: EveryAssembly}
-      data:
-        guid: d0c1e43d-9af2-49ea-9575-84f658642d21
-        name: LvObjTransform
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        canDelete: 0
-        settings:
-          id: 18
-        val:
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0, w: 0}
-          scale: {x: 0, y: 0, z: 0}
-    0000000F:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: fcb1eb14-966f-4d1d-beec-6df3c6e91443
-    00000010:
+    0000000F:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: b58c6528-dd8d-43d3-b473-92d9d24d80f6
-    00000011:
+    00000010:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: d6a18587-cfb9-455a-bb6d-90f0bc4f6113
-    00000012:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
-      data:
-        isHidden: 1
-        expanded: 0
-        guid: d0c1e43d-9af2-49ea-9575-84f658642d21
 --- !u!1 &1788049098
 GameObject:
   m_ObjectHideFlags: 0
@@ -7397,6 +7371,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc139a74d9a27804b8cf3761dfb32760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
   triggerType: 0
   triggerEvent:
     m_PersistentCalls:
@@ -7627,6 +7605,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8565ab475c4f7674b963f2ed061a2f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
   triggerType: 0
   triggerEvent:
     m_PersistentCalls:

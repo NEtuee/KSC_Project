@@ -227,36 +227,36 @@ public class GraphAnimator : MonoBehaviour
 
     }
 
-    public void Update()
-    {
-        if(ignorePause)
-        {
-            if(GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
-                return;
-        }
-        else
-        {
-            if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
-                return;
-        }
+    // public void Update()
+    // {
+    //     if(ignorePause)
+    //     {
+    //         if(GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
+    //             return;
+    //     }
+    //     else
+    //     {
+    //         if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
+    //             return;
+    //     }
         
         
-        Progress(Time.deltaTime);
+    //     Progress(Time.deltaTime);
 
-    }
+    // }
 
     public void FixedUpdate()
     {
-        if(ignorePause)
-        {
-            if(GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
-                return;
-        }
-        else
-        {
-            if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
-                return;
-        }
+        // if(ignorePause)
+        // {
+        //     if(GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+        //         return;
+        // }
+        // else
+        // {
+        //     if (GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
+        //         return;
+        // }
         
 
         Progress(Time.fixedDeltaTime);

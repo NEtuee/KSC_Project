@@ -61,7 +61,7 @@ public class MasterManager : MessageHub<ManagerBase>
 
     public void FixedUpdate()
     {
-        ManagersUpdateTransform();
+        ManagersFixedUpdate(Time.fixedDeltaTime);
     }
 
     public void ManagersUpdate(float deltaTime)
@@ -80,6 +80,14 @@ public class MasterManager : MessageHub<ManagerBase>
         }
     }
 
+    public void ManagersFixedUpdate(float deltaTime)
+    {
+        foreach(var receiver in _receivers.Values)
+        {
+            receiver.FixedProgress(deltaTime);
+        }
+    }
+
     public void ManagersSendMessageProcessing()
     {
         foreach(var receiver in _receivers.Values)
@@ -93,14 +101,6 @@ public class MasterManager : MessageHub<ManagerBase>
         foreach(var receiver in _receivers.Values)
         {
             receiver.CallReceiveMessageProcessing();
-        }
-    }
-
-    public void ManagersUpdateTransform()
-    {
-        foreach(var receiver in _receivers.Values)
-        {
-            receiver.UpdateTransform();
         }
     }
 

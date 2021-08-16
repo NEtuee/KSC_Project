@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DroneAIBase : MonoBehaviour
+public class DroneAIBase : ObjectBase
 {
     public bool directionRotation = false;
     public float speed;
@@ -17,35 +17,35 @@ public class DroneAIBase : MonoBehaviour
     protected float _directionUpdateTerm;
     protected float _targetDistance;
 
+    protected PlayerCtrl_Ver2 _player;
     protected Transform _target;
     protected TimeCounterEx _timeCounterEx = new TimeCounterEx();
 
-    public void Update()
+    public override void Assign()
     {
-        if(GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Update)
-            return;
+        base.Assign();
         
-        Progress(Time.deltaTime);
+        AddAction(MessageTitles.set_setplayer,(x)=>{
+            _player = (PlayerCtrl_Ver2)x.data;
+            _target = _player.transform;
+        });
     }
 
-    public void FixedUpdate()
+    public override void Initialize()
     {
-        if(GameManager.Instance.PAUSE || GameManager.Instance.GAMEUPDATE != GameManager.GameUpdate.Fixed)
-            return;
-        
-        Progress(Time.fixedDeltaTime);
-    }
+        base.Initialize();
 
-    public void Init()
-    {
         _velocity = Vector3.zero;
         _direction = Vector3.zero;
         _randomRotateDirectionFactor = Vector3.zero;
         _directionUpdateTerm = 0f;
         _timeCounterEx.InitTimer("directionUpdate",0f,_directionUpdateTerm);
+
+        RegisterRequest(GetSavedNumber("StageManager"));
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
     }
 
-    public virtual void Progress(float deltaTime)
+    public override void FixedProgress(float deltaTime)
     {
         if(_target != null)
             UpdateTargetDirection(deltaTime);

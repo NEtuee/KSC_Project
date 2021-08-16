@@ -83,11 +83,6 @@ public class BezierLightning : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.H))
-        {
-            Active(Vector3.zero,new Vector3(10f,10f,10f),5,1f,10f);
-        }
-
         for(int i = 0; i < _progressPack.Count;)
         {
             var progress = _progressPack[i];

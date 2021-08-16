@@ -1305,7 +1305,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             if (state != PlayerState.Aiming)
             {
-                if (isRun == true)
+                if (isRun == true && !_runLock)
                 {
                     currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, deltaTime * 20.0f);
                 }
@@ -2173,10 +2173,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     {
         if(isRun)
         {
-            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle) || _runLock)
+            if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle) || _runLock) 
                 isRun = false;
         }
-        else
+        else if(!_runLock)
         {
             if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
                 isRun = true;

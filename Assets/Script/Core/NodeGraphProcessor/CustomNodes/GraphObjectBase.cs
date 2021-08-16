@@ -251,7 +251,6 @@ public class GraphObjectBase : UnTransfromObjectBase
         _graph.GetExposedParameterFromGUID(_graph.transformGUID).value = transform;
         _graph.GetExposedParameterFromGUID(_graph.gameObjectGUID).value = gameObject;
         _graph.GetExposedParameterFromGUID(_graph.levelObjectGUID).value = this;
-        _graph.GetExposedParameterFromGUID(_graph.levelObjectTransformGUID).value = _objTransform;
 
         foreach(var node in entryNodeList)
         {

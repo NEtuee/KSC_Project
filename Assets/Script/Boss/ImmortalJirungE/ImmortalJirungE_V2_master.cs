@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ImmortalJirungE_V2_master : MonoBehaviour
+public class ImmortalJirungE_V2_master : ObjectBase
 {
     public List<ImmortalJirungE_V2_AI> aIs;
     public BezierLightning lightning;
@@ -21,20 +21,32 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
     private TimeCounterEx _timeCounterEx = new TimeCounterEx();
     private RayEx _wallRay;
 
-    public void Start()
+    private PlayerCtrl_Ver2 _player;
+
+    public override void Assign()
+    {
+        base.Assign();
+        
+        AddAction(MessageTitles.set_setplayer,(x)=>{
+            _player = (PlayerCtrl_Ver2)x.data;
+        });
+    }
+
+    public override void Initialize()
     {
         //Recovery();
+        base.Initialize();
+
+        RegisterRequest(GetSavedNumber("StageManager"));
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
 
         _timeCounterEx.InitTimer("time",0f,Random.Range(1f,2f));
         _wallRay = new RayEx(new Ray(),0f,wallLayer);
     }
 
-    public void FixedUpdate()
+    public override void Progress(float deltaTime)
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
-
-        _timeCounterEx.IncreaseTimer("time",out var limit);
+        _timeCounterEx.IncreaseTimerSelf("time",out var limit,deltaTime);
         if(limit)
         {
             for(int i = 0; i < aIs.Count + 0; ++i)
@@ -126,7 +138,6 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
     
     public void Explosion(Vector3 position, float radius,float damage)
     {
-        var player = GameManager.Instance.player;
         
         foreach (var jirung in aIs)
         {
@@ -145,11 +156,11 @@ public class ImmortalJirungE_V2_master : MonoBehaviour
             }
         }
 
-        if (Vector3.Distance(player.transform.position, position) <= radius)
+        if (Vector3.Distance(_player.transform.position, position) <= radius)
         {
-            player.TakeDamage(damage);
-            var ragdoll = player.GetComponent<PlayerRagdoll>();
-            ragdoll.ExplosionRagdoll(340f,(player.transform.position - position).normalized);
+            _player.TakeDamage(damage);
+            var ragdoll = _player.GetComponent<PlayerRagdoll>();
+            ragdoll.ExplosionRagdoll(340f,(_player.transform.position - position).normalized);
         }
         
     }
