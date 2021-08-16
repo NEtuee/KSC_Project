@@ -222,11 +222,11 @@ public class CameraManager : ManagerBase
         //     UpdateCameraSide();
         // }
 
-        var cross = Vector3.Cross(brainCameraTransfrom.forward,Vector3.up);
-        var side = Vector3.Dot(cross.normalized,_playerTransfrom.forward);
-        var currSide = playerFollowCam3rdPersonComponent.CameraSide;
+        // var cross = Vector3.Cross(brainCameraTransfrom.forward,Vector3.up);
+        // var side = Vector3.Dot(cross.normalized,_playerTransfrom.forward);
+        // var currSide = playerFollowCam3rdPersonComponent.CameraSide;
 
-        playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
+        // //playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
 
         RadialBlurLerpZero(Time.deltaTime);
     }
@@ -604,6 +604,8 @@ public class CameraManager : ManagerBase
         distanceBlendStartTime = Time.time;
     }
 
+
+    private int _currentSide = -1;
     private void BlendDistanceFollowCamera()
     {
         
@@ -615,6 +617,63 @@ public class CameraManager : ManagerBase
         {
             isBlendCameraDistance = false;
         }
+
+        var side = Mathf.Clamp01(playerFollowCam3rdPersonComponent.CameraSide);
+        var right = Camera.main.transform.right;
+        var shoulderOffset = playerFollowCam3rdPersonComponent.ShoulderOffset;
+        shoulderOffset.x = 0f;
+        shoulderOffset += Camera.main.transform.up * playerFollowCam3rdPersonComponent.VerticalArmLength;
+        var start = (followTarget.transform.position) - (Camera.main.transform.forward * (currentDist)) + shoulderOffset;//Camera.main.transform.position - (right * ((side - 0.5f) / 0.5f));
+
+        float camSide = playerFollowCam3rdPersonComponent.CameraSide;
+        float leftSide = 0f;
+        float rightSide = 0f;
+        float rayDist = 10f;
+        bool collisionCheck = false;
+
+        if(Physics.Raycast(start,right,out var hit,rayDist,collisionLayer))
+        {
+            var hitDist = Vector3.Distance(Camera.main.transform.position,hit.point);
+            rightSide = (((hitDist - rayDist) / rayDist) * 0.5f) + 0.5f;
+            collisionCheck = true;
+        }
+
+        if(Physics.Raycast(start,-right,out hit,rayDist,collisionLayer))
+        {
+            var hitDist = Vector3.Distance(Camera.main.transform.position,hit.point);
+            leftSide = (((rayDist - hitDist) / rayDist) * 0.5f) + 0.5f;
+            collisionCheck = true;
+        }
+
+        Debug.Log(rightSide);
+        Debug.Log(leftSide);
+
+        Debug.DrawLine(start,start + Vector3.up);
+        Debug.DrawLine(start,start + Camera.main.transform.right * rayDist);
+        Debug.DrawLine(start,start + Camera.main.transform.right * -rayDist);
+
+        if(collisionCheck)
+        {
+            camSide = (leftSide + rightSide);
+            if(leftSide != 0f && rightSide != 0f)
+                camSide = camSide * 0.5f;
+            //camSide = MathEx.abs(rightSide) > leftSide ? rightSide : leftSide;
+        }
+        else
+        {
+            camSide = Mathf.Lerp(camSide,0.5f,0.2f);
+        }
+
+        playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(playerFollowCam3rdPersonComponent.CameraSide, camSide,0.2f);
+
+
+        float testLeft = ((playerFollowCam3rdPersonComponent.CameraSide - 0.5f) / 0.5f);
+
+        var endpos = Camera.main.transform.position + (-right * rayDist) + (-right * testLeft);
+        Debug.DrawLine(Camera.main.transform.position,endpos,Color.red);
+        Debug.DrawLine(endpos,endpos + Camera.main.transform.forward,Color.red);
+
+        //playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
         
         var prev = isCameraCollision;
         var offset = playerFollowCam3rdPersonComponent.ShoulderOffset;
@@ -631,6 +690,8 @@ public class CameraManager : ManagerBase
             if (dist <= playerFollowCam3rdPersonComponent.CameraDistance)
                 playerFollowCam3rdPersonComponent.CameraDistance = dist;
         }
+
+
 
     }
 

@@ -108,6 +108,13 @@ public class ImmortalJirungE_V2_master : ObjectBase
                     ai.ChangeState(ImmortalJirungE_V2_AI.State.Stun);
                 }
 
+                MD.SetTimeScaleMsg data = MessageDataPooling.GetMessageData<MD.SetTimeScaleMsg>();
+                    data.timeScale = 0.2f;
+                    data.lerpTime = 3f;
+                    data.stopTime = 0f;
+                    data.startTime = 0f;
+                    SendMessageEx(MessageTitles.timemanager_settimescale, GetSavedNumber("TimeManager"), data);
+
                 whenAllShieldDestroy?.Invoke();
                 allShieldBroke = true;
             }

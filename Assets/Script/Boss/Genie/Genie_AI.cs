@@ -136,6 +136,8 @@ public class Genie_AI : ObjectBase
         _safeArea = new List<HexCube>();
         //SetSafeZone();
 
+        UpdateEyeColor();
+
         ChangeState(currentState);
     }
 
@@ -236,7 +238,16 @@ public class Genie_AI : ObjectBase
 
     public void SetRandomRespawnPoint()
     {
-        var cube = _safeArea.Count == 0 ? gridControll.GetRandomActiveCube(true) : _safeArea[Random.Range(0,_safeArea.Count)];
+        HexCube cube = null;
+        
+        while(true)
+        {
+            cube = _safeArea.Count == 0 ? gridControll.GetRandomActiveCube(true) : _safeArea[Random.Range(0,_safeArea.Count)];
+
+            if(Vector3.Distance(cube.transform.position,transform.position) > 7f)
+                break;
+        }
+        
         respawnPoint.position = cube.transform.position + Vector3.up;
     }
 
@@ -450,6 +461,13 @@ public class Genie_AI : ObjectBase
         centerShield.ToOrigin();
 
         var currState = currentState;
+
+        MD.SetTimeScaleMsg data = MessageDataPooling.GetMessageData<MD.SetTimeScaleMsg>();
+            data.timeScale = 0.2f;
+            data.lerpTime = 2f;
+            data.stopTime = 0f;
+            data.startTime = 0f;
+            SendMessageEx(MessageTitles.timemanager_settimescale, GetSavedNumber("TimeManager"), data);
 
         if(hitPoint == 0)
         {
