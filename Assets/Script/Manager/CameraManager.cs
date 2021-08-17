@@ -226,11 +226,11 @@ public class CameraManager : ManagerBase
         //     UpdateCameraSide();
         // }
 
-        // var cross = Vector3.Cross(brainCameraTransfrom.forward,Vector3.up);
-        // var side = Vector3.Dot(cross.normalized,_playerTransfrom.forward);
-        // var currSide = playerFollowCam3rdPersonComponent.CameraSide;
+        var cross = Vector3.Cross(brainCameraTransfrom.forward,Vector3.up);
+        var side = Vector3.Dot(cross.normalized,_playerTransfrom.forward);
+        var currSide = playerFollowCam3rdPersonComponent.CameraSide;
 
-        // //playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
+        playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
 
         RadialBlurLerpZero(Time.deltaTime);
     }
@@ -661,7 +661,7 @@ public class CameraManager : ManagerBase
             camSide = Mathf.Lerp(camSide,0.5f,0.2f);
         }
 
-        playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(playerFollowCam3rdPersonComponent.CameraSide, camSide,0.2f);
+        //playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(playerFollowCam3rdPersonComponent.CameraSide, camSide,0.2f);
 
 
         float testLeft = ((playerFollowCam3rdPersonComponent.CameraSide - 0.5f) / 0.5f);

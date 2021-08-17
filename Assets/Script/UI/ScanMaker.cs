@@ -13,20 +13,24 @@ public class ScanMaker : MonoBehaviour
         _rectTransform = GetComponent<RectTransform>();
     }
 
-    public void Active(Vector3 center, Vector3 min, Vector3 max, float time = 4f)
+    public void Active(/*Transform center, Vector3 min, Vector3 max,*/Collider collider, float time = 4f)
     {
-        StartCoroutine(Focus(center, min, max,time));
+        StartCoroutine(Focus(collider,time));//collider.bounds.center, collider.bounds.min, collider.bounds.max,time));
     }
 
-    IEnumerator Focus(Vector3 center, Vector3 min, Vector3 max, float time)
+    IEnumerator Focus(/*Vector3 center, Vector3 min, Vector3 max,*/ Collider collider, float time)
     {
         float curTime = 0f;
         _visible = true;
         while (curTime < time)
         {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(center);
-            Vector3 minPos = Camera.main.WorldToScreenPoint(min);
-            Vector3 maxPos = Camera.main.WorldToScreenPoint(max);
+            if(collider == null)
+            {
+                break;
+            }
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(collider.bounds.center);
+            Vector3 minPos = Camera.main.WorldToScreenPoint(collider.bounds.min);
+            Vector3 maxPos = Camera.main.WorldToScreenPoint(collider.bounds.max);
 
             float height = Mathf.Abs(maxPos.y - minPos.y);
             float width = Mathf.Abs(maxPos.x - minPos.x);

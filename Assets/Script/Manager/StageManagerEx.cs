@@ -44,6 +44,11 @@ public class StageManagerEx : ManagerBase
 
         AddAction(MessageTitles.stage_getPath,GetPath);
     }
+    
+    public override void HandleMessage(Message msg)
+    {
+        base.HandleMessage(msg);
+    }
 
 
 #region StageTrigger
