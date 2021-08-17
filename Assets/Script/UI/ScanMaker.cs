@@ -31,7 +31,7 @@ public class ScanMaker : MonoBehaviour
             float height = Mathf.Abs(maxPos.y - minPos.y);
             float width = Mathf.Abs(maxPos.x - minPos.x);
             float size = height > width ? height : width;
-            size = Mathf.Clamp(size, 80.0f, 180.0f);
+            size = Mathf.Clamp(size, 50.0f, 150.0f);
 
             _rectTransform.transform.position = new Vector2(screenPos.x, screenPos.y);
             _rectTransform.sizeDelta = new Vector2(size, size);
