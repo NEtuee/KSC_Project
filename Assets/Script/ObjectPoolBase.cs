@@ -50,6 +50,16 @@ public class ObjectPoolBase<T> : MonoBehaviour
         return t;
     }
 
+    public T Active()
+    {
+        var t = GetCachedItem();
+        _activeDelegate(t, new Vector3(), new Quaternion());
+
+        _progressList.Add(t);
+
+        return t;
+    }
+
     public void Init(int count = 1)
     {
         CreateCacheItems(count);

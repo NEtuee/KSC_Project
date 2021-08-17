@@ -28,12 +28,15 @@ public class ScanMaker : MonoBehaviour
             Vector3 minPos = Camera.main.WorldToScreenPoint(min);
             Vector3 maxPos = Camera.main.WorldToScreenPoint(max);
 
-            float height = Mathf.Sign(maxPos.y - minPos.y);
-            float width = Mathf.Sign(maxPos.x - minPos.x);
+            float height = Mathf.Abs(maxPos.y - minPos.y);
+            float width = Mathf.Abs(maxPos.x - minPos.x);
             float size = height > width ? height : width;
+            size = Mathf.Clamp(size, 50.0f, 150.0f);
 
-            _rectTransform.anchoredPosition = new Vector2(screenPos.x, screenPos.y);
+            _rectTransform.transform.position = new Vector2(screenPos.x, screenPos.y);
             _rectTransform.sizeDelta = new Vector2(size, size);
+
+            curTime += Time.fixedDeltaTime;
 
             yield return new WaitForFixedUpdate();
         }

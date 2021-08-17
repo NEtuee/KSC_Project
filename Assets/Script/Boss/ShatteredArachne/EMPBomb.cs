@@ -44,7 +44,7 @@ public class EMPBomb : MonoBehaviour
                 PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
                 if(ragdoll != null)
                 {
-                    if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Ragdoll)
+                    if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Ragdoll || player.GetState() == PlayerCtrl_Ver2.PlayerState.Respawn)
                         continue;
 
                     ragdoll.ExplosionRagdoll(explosionForce, (ragdoll.transform.position - transform.position).normalized);

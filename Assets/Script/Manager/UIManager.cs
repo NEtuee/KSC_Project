@@ -72,6 +72,10 @@ public class UIManager : ManagerBase
     [Header("GuideText")]
     [SerializeField] private GuideText guideText;
 
+    [Header("ScanMaker")]
+    [SerializeField] private Canvas scanMakerCanvas;
+    [SerializeField] private ScanMakerPool scanMakerPool;
+
     private EventSystem _eventSystem;
 
     private void Start()
@@ -261,6 +265,13 @@ public class UIManager : ManagerBase
         {
             ActiveGameOverUI();
         });
+
+        AddAction(MessageTitles.uimanager_activeScanMaker, (msg) =>
+         {
+             var maker = scanMakerPool.Active();
+             ScanMakerData data = MessageDataPooling.CastData<ScanMakerData>(msg.data);
+             maker.Active(data.center, data.min, data.max);
+         });
     }
 
     public override void Initialize()
@@ -675,6 +686,13 @@ namespace MD
     {
         public int value;
         public bool visible;
+    }
+
+    public class ScanMakerData : MessageData
+    {
+        public Vector3 center;
+        public Vector3 min;
+        public Vector3 max;
     }
 }
 //public class HpPackValueType : MessageData

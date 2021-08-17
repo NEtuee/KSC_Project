@@ -649,13 +649,6 @@ public class CameraManager : ManagerBase
             collisionCheck = true;
         }
 
-        Debug.Log(rightSide);
-        Debug.Log(leftSide);
-
-        Debug.DrawLine(start,start + Vector3.up);
-        Debug.DrawLine(start,start + Camera.main.transform.right * rayDist);
-        Debug.DrawLine(start,start + Camera.main.transform.right * -rayDist);
-
         if(collisionCheck)
         {
             camSide = (leftSide + rightSide);

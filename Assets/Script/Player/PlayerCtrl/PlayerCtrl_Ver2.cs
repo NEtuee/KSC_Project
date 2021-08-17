@@ -164,15 +164,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private bool decharging = false;
     [SerializeField] private TMPro.TextMeshProUGUI chargingCountText;
     private Color _chargingCountTextColor;
-    private Material pelvisGunMaterial;
+    private List<Material> pelvisGunMaterial = new List<Material>();
     private IEnumerator _dechargingCoroutine;
-    [SerializeField] private GameObject playerPelvisGunObject;
     [SerializeField] private Drone drone;
     [SerializeField] private AnimationCurve reloadWeightCurve;
     [SerializeField] private Animator gunAnim;
 
-    [Header("EnergyRestore")] [SerializeField]
-    private float walkRestoreEnergyValue;
+    [Header("EnergyRestore")] 
+    [SerializeField] private float walkRestoreEnergyValue;
 
     [SerializeField] private float runRestoreEnergyValue;
     [SerializeField] private float aimRestoreEnergyValue;
@@ -194,7 +193,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     private IEnumerator restoreHpPackCoroutine;
 
 
-    [Header("Stamina")] [SerializeField] private float maxStamina = 100.0f;
+    [Header("Stamina")] 
+    [SerializeField] private float maxStamina = 100.0f;
     [SerializeField] private float idleConsumeValue = 1f;
     [SerializeField] private float climbingMoveConsumeValue = 2f;
     [SerializeField] private float climbingJumpConsumeValue = 5f;
@@ -274,8 +274,14 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         _chargeDelayTimer.InitTimer("ChargeDelay", chargeDelayTime, chargeDelayTime);
 
-        pelvisGunMaterial = pelvisGunObject.GetComponent<Renderer>().material;
-        _originalEmissionColor = pelvisGunMaterial.GetColor("_EmissionColor");
+        foreach(var renderer in pelvisGunObject.GetComponentsInChildren<Renderer>())
+        {
+            pelvisGunMaterial.Add(renderer.material);
+            _originalEmissionColor = renderer.material.GetColor("_EmissionColor");
+        }
+
+        //pelvisGunMaterial = pelvisGunObject.GetComponent<Renderer>().material;
+        //_originalEmissionColor = pelvisGunMaterial.GetColor("_EmissionColor");
 
         if (chargingCountText != null)
             _chargingCountTextColor = chargingCountText.color;
@@ -675,8 +681,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 break;
             case PlayerState.Jump:
             {
-                    airTime += deltaTime;
-
+                airTime += deltaTime;
 
                 if (movement.isGrounded == true)
                 {
@@ -2257,7 +2262,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         ChangeState(PlayerState.Default);
         ActiveAim(false);
         chargeTime.Value = 0.0f;
-        playerPelvisGunObject.SetActive(true);
+        //playerPelvisGunObject.SetActive(true);
+        pelvisGunObject.SetActive(true);
     }
 
     //private void InputChargeShot()
@@ -2691,7 +2697,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             time += Time.deltaTime;
             float intencity = (dechargingDuration - time) / dechargingDuration * _emissionTargetValue;
-            pelvisGunMaterial.SetColor("_EmissionColor", _originalEmissionColor * intencity);
+            //pelvisGunMaterial.SetColor("_EmissionColor", _originalEmissionColor * intencity);
+            foreach(var mat in pelvisGunMaterial)
+            {
+                mat.SetColor("_EmissionColor", _originalEmissionColor * intencity);
+            }
 
             yield return null;
         }
@@ -3042,7 +3052,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                 //_charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
                 ChangeState(PlayerState.Aiming);
                 ActiveAim(true);
-                playerPelvisGunObject.SetActive(false);
+                //playerPelvisGunObject.SetActive(false);
+                pelvisGunObject.SetActive(false);
                 return;
             }
         }

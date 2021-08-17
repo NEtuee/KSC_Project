@@ -302,7 +302,12 @@ public class EMPShield : Hitable
             StartCoroutine(ActiveEffect());
         }
 
-        
+        ScanMakerData data = MessageDataPooling.GetMessageData<ScanMakerData>();
+        data.center = collider.bounds.center;
+        data.min = collider.bounds.min;
+        data.max = collider.bounds.max;
+        SendMessageEx(MessageTitles.uimanager_activeScanMaker, GetSavedNumber("UIManager"),data);
+
         whenScanned?.Invoke();
     }
 
