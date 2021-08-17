@@ -24,9 +24,7 @@ public class StageManagerEx : ManagerBase
     {
         base.Assign();
 
-        Debug.Log("assign");
-
-        AddAction(MessageTitles.scene_sceneChanged, (msg) =>
+        AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
         {
             PositionRotation data = MessageDataPooling.GetMessageData<PositionRotation>();
             data.position = loadedPlayerPosition.position;
@@ -34,15 +32,10 @@ public class StageManagerEx : ManagerBase
             SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
 
             PitchYawPositionData camData = MessageDataPooling.GetMessageData<PitchYawPositionData>();
-            camData.yaw = loadedPlayerPosition.rotation.eulerAngles.y;
-            camData.pitch = loadedPlayerPosition.rotation.eulerAngles.x;
             camData.position = loadedPlayerPosition.position;
+            camData.pitch = loadedPlayerPosition.eulerAngles.x;
+            camData.yaw = loadedPlayerPosition.eulerAngles.y;
             SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
-
-            Vector3Data position = MessageDataPooling.GetMessageData<Vector3Data>();
-            position.value = loadedPlayerPosition.position;
-            SendMessageEx(MessageTitles.cameramanager_setBrainCameraPosition, GetSavedNumber("CameraManager"), position);
-            //Debug.Log("send");
         });
 
         AddAction(MessageTitles.boolTrigger_getTriggerAsset,GetStageTriggerAsset);
@@ -50,10 +43,6 @@ public class StageManagerEx : ManagerBase
         AddAction(MessageTitles.boolTrigger_setTrigger,SetStageTrigger);
 
         AddAction(MessageTitles.stage_getPath,GetPath);
-
-        AddAction(MessageTitles.scene_afterSceneChange,(x)=>{
-            //Debug.Log("GOGOGOGOGOGOGOGOGO");
-        });
     }
 
 

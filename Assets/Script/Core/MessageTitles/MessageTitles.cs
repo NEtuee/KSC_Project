@@ -351,6 +351,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort playermanager_ragdoll = 0x0908;
 
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort playermanager_droneText = 0x0909;
+
     #endregion
 
     #region Setter

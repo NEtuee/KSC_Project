@@ -280,10 +280,8 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.Scanned)
         {
-            Debug.Log(_scannedPosition);
             if(LookTarget_Head(_scannedPosition, deltaTime))
             {
-                Debug.Log("Check1");
                 if(!scanner.scaning)
                 {
                     if (_scanCheck)
@@ -302,7 +300,6 @@ public class BrokenMedusa_AI : IKBossBase
 
             if(ScanCheck())
             {
-                Debug.Log("Check2");
                 UpdateMoveLine();
                 ChangeState(State.LockOnMove);
 
@@ -596,6 +593,16 @@ public class BrokenMedusa_AI : IKBossBase
 
     public void Dead()
     {
+        MD.SetTimeScaleMsg data = MessageDataPooling.GetMessageData<MD.SetTimeScaleMsg>();
+            data.timeScale = 0.2f;
+            data.lerpTime = 4f;
+            data.stopTime = 0f;
+            data.startTime = 0f;
+            SendMessageEx(MessageTitles.timemanager_settimescale, GetSavedNumber("TimeManager"), data);
+
+        graphAnimator.Stop();
+        graphAnimator.enabled = false;
+
         SoundPlay(1510,null,transform.position);
         SoundPlay(1700,null,transform.position);
         //_soundManager.Play(1510,transform.position);

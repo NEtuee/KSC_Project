@@ -81,6 +81,8 @@ public class Drone : UnTransfromObjectBase
     {
         base.Assign();
 
+        SaveMyNumber("Drone");
+
         AddAction(MessageTitles.set_setplayer, (msg) =>
         {
             player = (PlayerCtrl_Ver2)msg.data;

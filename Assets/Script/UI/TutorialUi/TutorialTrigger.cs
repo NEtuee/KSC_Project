@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class TutorialTrigger : UnTransfromObjectBase
 {
+    [TextArea]
+    public string droneText = "";
     public bool isOver = false;
     public bool IsOver { get => IsOver; set => isOver = value; }
 
@@ -26,7 +28,7 @@ public class TutorialTrigger : UnTransfromObjectBase
     public override void Initialize()
     {
         base.Initialize();
-        RegisterRequest(GetSavedNumber("ObjectManager"));
+        RegisterRequest(GetSavedNumber("StageManager"));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,5 +42,12 @@ public class TutorialTrigger : UnTransfromObjectBase
         
         isOver = true;
         gameObject.SetActive(false);
+
+        if(droneText != "")
+        {
+            var stringData = MessageDataPooling.GetMessageData<MD.StringData>();
+            stringData.value = droneText;
+            SendMessageEx(MessageTitles.playermanager_droneText,GetSavedNumber("PlayerManager"),stringData);
+        }
     }
 }
