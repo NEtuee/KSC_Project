@@ -33,7 +33,16 @@ public class StageManagerEx : ManagerBase
             data.rotation = loadedPlayerPosition.rotation;
             SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
 
-            Debug.Log("send");
+            PitchYawPositionData camData = MessageDataPooling.GetMessageData<PitchYawPositionData>();
+            camData.yaw = loadedPlayerPosition.rotation.eulerAngles.y;
+            camData.pitch = loadedPlayerPosition.rotation.eulerAngles.x;
+            camData.position = loadedPlayerPosition.position;
+            SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
+
+            Vector3Data position = MessageDataPooling.GetMessageData<Vector3Data>();
+            position.value = loadedPlayerPosition.position;
+            SendMessageEx(MessageTitles.cameramanager_setBrainCameraPosition, GetSavedNumber("CameraManager"), position);
+            //Debug.Log("send");
         });
 
         AddAction(MessageTitles.boolTrigger_getTriggerAsset,GetStageTriggerAsset);
@@ -43,7 +52,7 @@ public class StageManagerEx : ManagerBase
         AddAction(MessageTitles.stage_getPath,GetPath);
 
         AddAction(MessageTitles.scene_afterSceneChange,(x)=>{
-            Debug.Log("GOGOGOGOGOGOGOGOGO");
+            //Debug.Log("GOGOGOGOGOGOGOGOGO");
         });
     }
 
