@@ -63,8 +63,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     [SerializeField] private List<MeshRenderer> legBlur = new List<MeshRenderer>();
     [SerializeField] private Transform steamPosition;
 
-    [Header("State")] [SerializeField] private bool isRun = false;
-    public bool IsRun { get=> isRun; set => isRun = value; }
+    [Header("State")] [SerializeField] private bool isWalk = false;
+    public bool IsWalk { get=> isWalk; set => isWalk = value; }
     [SerializeField] private PlayerState state;
     private PlayerState prevState;
     [SerializeField] private bool isClimbingMove = false;
@@ -1012,6 +1012,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                     if (climbingJumpDirection != ClimbingJumpDirection.Left &&
                         climbingJumpDirection != ClimbingJumpDirection.Right)
                         currentJumpPower = currentClimbingJumpPower;
+                    TryGrab();
                 }
             }
                 break;
@@ -1134,10 +1135,10 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if ((state == PlayerState.Grab || state == PlayerState.HangLedge || state == PlayerState.HangEdge) &&
             isClimbingMove == false)
         {
-            if (_pressedJumpInput == true)
-            {
-                return;
-            }
+            //if (_pressedJumpInput == true)
+            //{
+            //    return;
+            //}
 
             if (vertical == 0.0f)
             {
@@ -1311,13 +1312,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             if (state != PlayerState.Aiming)
             {
-                if (isRun == true && !_runLock)
+                if (isWalk == true && !_runLock)
                 {
-                    currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, deltaTime * 20.0f);
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, deltaTime * 20.0f);
                 }
                 else
                 {
-                    currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, deltaTime * 20.0f);
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, deltaTime * 20.0f);
                 }
             }
             else
@@ -1399,7 +1400,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Aiming:
             {
-                ActiveAim(false);
+                //ActiveAim(false);
+
+                    if(changeState == PlayerState.Default)
+                    {
+                        Debug.Log("!!!!!!!");
+                    }
 
                     if (!_aimLock)
                         SendMessageEx(MessageTitles.cameramanager_activeplayerfollocamera, GetSavedNumber("CameraManager"), null);
@@ -2177,15 +2183,15 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     private void InputRun()
     {
-        if(isRun)
+        if(isWalk)
         {
             if (InputManager.Instance.GetRelease(KeybindingActions.RunToggle) || _runLock) 
-                isRun = false;
+                isWalk = false;
         }
         else if(!_runLock)
         {
             if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
-                isRun = true;
+                isWalk = true;
         }
 
         //if (InputManager.Instance.GetInput(KeybindingActions.RunToggle))
@@ -2772,6 +2778,129 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         }
     }
 
+    private bool TryGrab()
+    {
+        if (state == PlayerState.Default ||
+               state == PlayerState.Jump ||
+               state == PlayerState.RunToStop ||
+               state == PlayerState.ClimbingJump)
+        {
+            Vector3 point1;
+            RaycastHit hit;
+            //if (InputManager.Instance.GetAction(KeybindingActions.Grab))
+            if (stamina.Value >= 0.0f)
+            {
+                point1 = transform.position + collider.center - transform.forward;
+                //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
+                if (Physics.SphereCast(point1, collider.radius * 1.5f, transform.forward, out hit, 3f, detectionLayer))
+                {
+                    // Vector3 surfaceNormal = hit.normal;
+                    // //surfaceNormal.z = 0;
+                    // surfaceNormal.x = 0;
+                    // float angle = Vector3.Angle(Vector3.forward, surfaceNormal);
+                    // surfaceNormal.z = 0;
+                    // //Debug.Log(Vector3.Angle(Vector3.forward, surfaceNormal));
+                    // if (surfaceNormal.normalized.y < 0 && angle > 45f)
+                    //     return false;
+
+                    if (DetectionCanClimbingAreaByVertexColor(point1, transform.forward, 3f) == true)
+                    {
+                        return false;
+                    }
+
+                    if (Physics.Raycast(transform.position + transform.TransformDirection(wallUnderCheckOffset), transform.forward, 3f, detectionLayer) == false)
+                    {
+                        return false;
+                    }
+
+                    movement.SetParent(hit.collider.transform);
+                    movement.Attach();
+
+                    if (ledgeChecker.IsDetectedLedge() == false)
+                    {
+                        //ChangeState(PlayerState.Grab);
+                        ChangeState(PlayerState.ReadyGrab);
+                    }
+                    else
+                    {
+                        ChangeState(PlayerState.Grab);
+                        ChangeState(PlayerState.HangLedge);
+                    }
+
+                    transform.rotation = Quaternion.LookRotation(-hit.normal);
+                    transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
+
+                    prevSpeed = currentSpeed;
+                    moveDir = Vector3.zero;
+
+                    // movement.SetParent(hit.collider.transform);
+                    // movement.Attach();
+
+                    //Debug.Log("default");
+
+                    return true;
+                }
+                else
+                {
+                    point1 = transform.position + Vector3.up;
+                    if (Physics.Raycast(point1, -transform.up, out hit, 1.5f, detectionLayer))
+                    {
+                        point1 += transform.forward;
+                        if (Physics.Raycast(point1, -transform.up, 1.5f, detectionLayer) == false)
+                            return false;
+
+                        transform.rotation = Quaternion.LookRotation(-hit.normal, transform.forward);
+                        transform.position = (hit.point) + (hit.normal) * collider.radius;
+
+                        //ChangeState(PlayerState.Grab);
+                        ChangeState(PlayerState.ReadyGrab);
+
+                        movement.SetParent(hit.collider.transform);
+                        movement.Attach();
+                        moveDir = Vector3.zero;
+
+                        //Debug.Log("groundgrab");
+
+                        return true;
+                    }
+                }
+
+                point1 = transform.position + transform.up * collider.height * 0.5f - transform.forward;
+                if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 5f, ledgeAbleLayer))
+                {
+                    RaycastHit ledgePointHit;
+                    point1 = transform.position + transform.up * collider.height * 2;
+                    if (Physics.SphereCast(point1, collider.radius * 2f, -transform.up, out ledgePointHit,
+                        collider.height * 2, adjustAbleLayer))
+                    {
+                        if (Vector3.Distance(ledgePointHit.point, transform.position) > hangAbleEdgeDist)
+                        {
+                            return false;
+                        }
+
+                        transform.rotation = Quaternion.LookRotation(-hit.normal);
+                        transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
+
+                        ChangeState(PlayerState.Grab);
+                        ChangeState(PlayerState.HangEdge);
+
+                        InitVelocity();
+                        prevSpeed = currentSpeed;
+                        moveDir = Vector3.zero;
+
+                        movement.SetParent(hit.collider.transform);
+                        movement.Attach();
+
+                        //Debug.Log("ledgegrab");
+
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     #region New Input System
 
     public void OnMove(InputAction.CallbackContext value)
@@ -2786,13 +2915,13 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (value.performed == false)
             return;
 
-        if(isRun)
+        if(isWalk)
         {
-            isRun = false;
+            isWalk = false;
         }
         else
         {
-            isRun = true;
+            isWalk = true;
         }
     }
 
@@ -2858,130 +2987,11 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (value.performed == false)
             return;
 
-        if (value.action.IsPressed())
-        {
-            if (state == PlayerState.Default ||
-                state == PlayerState.Jump ||
-                state == PlayerState.RunToStop ||
-                state == PlayerState.ClimbingJump)
-            {
-                Vector3 point1;
-                RaycastHit hit;
-                //if (InputManager.Instance.GetAction(KeybindingActions.Grab))
-                if (stamina.Value >= 0.0f)
-                {
-                    point1 = transform.position + collider.center - transform.forward;
-                    //Physics.CapsuleCast(point1, point2, collider.radius, transform.forward, out hit, 1f, detectionLayer)
-                    if (Physics.SphereCast(point1, collider.radius * 1.5f, transform.forward, out hit, 3f, detectionLayer))
-                    {
-                        // Vector3 surfaceNormal = hit.normal;
-                        // //surfaceNormal.z = 0;
-                        // surfaceNormal.x = 0;
-                        // float angle = Vector3.Angle(Vector3.forward, surfaceNormal);
-                        // surfaceNormal.z = 0;
-                        // //Debug.Log(Vector3.Angle(Vector3.forward, surfaceNormal));
-                        // if (surfaceNormal.normalized.y < 0 && angle > 45f)
-                        //     return false;
 
-                        if (DetectionCanClimbingAreaByVertexColor(point1, transform.forward, 3f) == true)
-                        {
-                            return;
-                        }
+        if (TryGrab() == true)
+            return;
 
-                        if (Physics.Raycast(transform.position + transform.TransformDirection(wallUnderCheckOffset), transform.forward, 3f, detectionLayer) == false)
-                        {
-                            return;
-                        }
-
-                        movement.SetParent(hit.collider.transform);
-                        movement.Attach();
-
-                        if (ledgeChecker.IsDetectedLedge() == false)
-                        {
-                            //ChangeState(PlayerState.Grab);
-                            ChangeState(PlayerState.ReadyGrab);
-                        }
-                        else
-                        {
-                            ChangeState(PlayerState.Grab);
-                            ChangeState(PlayerState.HangLedge);
-                        }
-
-                        transform.rotation = Quaternion.LookRotation(-hit.normal);
-                        transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
-
-                        prevSpeed = currentSpeed;
-                        moveDir = Vector3.zero;
-
-                        // movement.SetParent(hit.collider.transform);
-                        // movement.Attach();
-
-                        //Debug.Log("default");
-
-                        return;
-                    }
-                    else
-                    {
-                        point1 = transform.position + Vector3.up;
-                        if (Physics.Raycast(point1, -transform.up, out hit, 1.5f, detectionLayer))
-                        {
-                            point1 += transform.forward;
-                            if (Physics.Raycast(point1, -transform.up, 1.5f, detectionLayer) == false)
-                                return;
-
-                            transform.rotation = Quaternion.LookRotation(-hit.normal, transform.forward);
-                            transform.position = (hit.point) + (hit.normal) * collider.radius;
-
-                            //ChangeState(PlayerState.Grab);
-                            ChangeState(PlayerState.ReadyGrab);
-
-                            movement.SetParent(hit.collider.transform);
-                            movement.Attach();
-                            moveDir = Vector3.zero;
-
-                            //Debug.Log("groundgrab");
-
-                            return;
-                        }
-                    }
-
-                    point1 = transform.position + transform.up * collider.height * 0.5f - transform.forward;
-                    if (Physics.SphereCast(point1, collider.radius, transform.forward, out hit, 5f, ledgeAbleLayer))
-                    {
-                        RaycastHit ledgePointHit;
-                        point1 = transform.position + transform.up * collider.height * 2;
-                        if (Physics.SphereCast(point1, collider.radius * 2f, -transform.up, out ledgePointHit,
-                            collider.height * 2, adjustAbleLayer))
-                        {
-                            if (Vector3.Distance(ledgePointHit.point, transform.position) > hangAbleEdgeDist)
-                            {
-                                return;
-                            }
-
-                            transform.rotation = Quaternion.LookRotation(-hit.normal);
-                            transform.position = (hit.point - transform.up * (collider.height * 0.5f)) + (hit.normal) * 0.05f;
-
-                            ChangeState(PlayerState.Grab);
-                            ChangeState(PlayerState.HangEdge);
-
-                            InitVelocity();
-                            prevSpeed = currentSpeed;
-                            moveDir = Vector3.zero;
-
-                            movement.SetParent(hit.collider.transform);
-                            movement.Attach();
-
-                            //Debug.Log("ledgegrab");
-
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (value.action.WasReleasedThisFrame())
-        {
+       
             if (state == PlayerState.Grab ||
             state == PlayerState.ReadyGrab ||
             state == PlayerState.HangEdge ||
@@ -3023,7 +3033,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
                         }
                 }
             }
-        }
+        
 
         return;
     }
@@ -3087,70 +3097,124 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (value.performed == false)
             return;
 
-        if (value.action.IsPressed())
+        //if (value.action.IsPressed())
+        //{
+        //    _pressedJumpInput = true;
+        //    switch (state)
+        //    {
+        //        case PlayerState.Default:
+        //            {
+        //                if (pressJump == false)
+        //                {
+        //                    pressJump = true;
+        //                    animator.SetTrigger("Jump");
+        //                }
+        //            }
+        //            break;
+        //        case PlayerState.Grab:
+        //            {
+        //                animator.SetTrigger("ClimbingCancel");
+        //                handIK.DisableHandIK();
+        //            }
+        //            break;
+        //    }
+        //}
+
+        switch(state)
         {
-            _pressedJumpInput = true;
-            switch (state)
-            {
-                case PlayerState.Default:
+            case PlayerState.Default:
+                {
+                    if (pressJump == false)
                     {
-                        if (pressJump == false)
-                        {
-                            pressJump = true;
-                            animator.SetTrigger("Jump");
-                        }
+                        pressJump = true;
+                        animator.SetTrigger("Jump");
                     }
-                    break;
-                case PlayerState.Grab:
-                    {
-                        animator.SetTrigger("ClimbingCancel");
-                        handIK.DisableHandIK();
-                    }
-                    break;
-            }
-        }
-       
-        if(value.action.WasReleasedThisFrame())
-        {
-            _pressedJumpInput = false;
-            switch (state)
-            {
-                case PlayerState.HangEdge:
-                case PlayerState.HangLedge:
-                    {
-                        if (currentVerticalValue == 1.0f)
-                        {
-                            ChangeState(PlayerState.ReadyClimbingJump);
-                            return;
-                        }
-
-                        if (DetectLedgeCanHangLedgeByVertexColor() == true)
-                            return;
-
-                        if (isLedge == true && isClimbingMove == false && spaceChecker.Overlapped() == false)
-                        {
-                            isLedge = false;
-                            animator.SetTrigger("LedgeUp");
-                            animator.SetBool("IsLedge", false);
-
-                            Vector3 currentRot = transform.rotation.eulerAngles;
-                            currentRot.x = 0.0f;
-                            currentRot.z = 0.0f;
-                            transform.rotation = Quaternion.Euler(currentRot);
-
-                            ChangeState(PlayerState.LedgeUp);
-
-                            return;
-                        }
-                    }
-                    break;
-                case PlayerState.Grab:
+                }
+                break;
+            //case PlayerState.Grab:
+            //    {
+            //        animator.SetTrigger("ClimbingCancel");
+            //        handIK.DisableHandIK();
+            //    }
+            //    break;
+            case PlayerState.HangEdge:
+            case PlayerState.HangLedge:
+                {
+                    if (currentVerticalValue == 1.0f)
                     {
                         ChangeState(PlayerState.ReadyClimbingJump);
+                        return;
                     }
-                    break;
-            }
+
+                    if (DetectLedgeCanHangLedgeByVertexColor() == true)
+                        return;
+
+                    if (isLedge == true && isClimbingMove == false && spaceChecker.Overlapped() == false)
+                    {
+                        isLedge = false;
+                        animator.SetTrigger("LedgeUp");
+                        animator.SetBool("IsLedge", false);
+
+                        Vector3 currentRot = transform.rotation.eulerAngles;
+                        currentRot.x = 0.0f;
+                        currentRot.z = 0.0f;
+                        transform.rotation = Quaternion.Euler(currentRot);
+
+                        ChangeState(PlayerState.LedgeUp);
+
+                        return;
+                    }
+                }
+                break;
+            case PlayerState.Grab:
+                {
+                    ChangeState(PlayerState.ReadyClimbingJump);
+                }
+                break;
         }
+
+       
+        //if(value.action.WasReleasedThisFrame())
+        //{
+        //    _pressedJumpInput = false;
+        //    switch (state)
+        //    {
+        //        case PlayerState.HangEdge:
+        //        case PlayerState.HangLedge:
+        //            {
+        //                if (currentVerticalValue == 1.0f)
+        //                {
+        //                    ChangeState(PlayerState.ReadyClimbingJump);
+        //                    return;
+        //                }
+
+        //                if (DetectLedgeCanHangLedgeByVertexColor() == true)
+        //                    return;
+
+        //                if (isLedge == true && isClimbingMove == false && spaceChecker.Overlapped() == false)
+        //                {
+        //                    isLedge = false;
+        //                    animator.SetTrigger("LedgeUp");
+        //                    animator.SetBool("IsLedge", false);
+
+        //                    Vector3 currentRot = transform.rotation.eulerAngles;
+        //                    currentRot.x = 0.0f;
+        //                    currentRot.z = 0.0f;
+        //                    transform.rotation = Quaternion.Euler(currentRot);
+
+        //                    ChangeState(PlayerState.LedgeUp);
+
+        //                    return;
+        //                }
+        //            }
+        //            break;
+        //        case PlayerState.Grab:
+        //            {
+        //                ChangeState(PlayerState.ReadyClimbingJump);
+        //            }
+        //            break;
+        //    }
+        //}
     }
 
     #endregion
