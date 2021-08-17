@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
   m_Name: NewSoundData
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 49965d56371649e4599bf3262433611e, type: 3}
+  csvData: {fileID: 4900000, guid: 68475ab1aa76ff24da3ce4150ac80b26, type: 3}
   soundData:
   - path: global data
     name: 
@@ -297,6 +297,14 @@ MonoBehaviour:
   - path: event:/Drone/Action/DR_Talking
     name: DR_Talking
     id: 1302
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Drone/Action/DR_Scan_Confirm
+    name: DR_Scan_Confirm
+    id: 1303
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}
@@ -733,6 +741,14 @@ MonoBehaviour:
   - path: snapshot:/Local_Setting/MedusaLevelReverb
     name: MedusaLevelReverb
     id: 4005
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/Local_Setting/MiningLevelReverb
+    name: MiningLevelReverb
+    id: 4006
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}
