@@ -280,10 +280,8 @@ public class BrokenMedusa_AI : IKBossBase
         }
         else if(currentState == State.Scanned)
         {
-            Debug.Log(_scannedPosition);
             if(LookTarget_Head(_scannedPosition, deltaTime))
             {
-                Debug.Log("Check1");
                 if(!scanner.scaning)
                 {
                     if (_scanCheck)
@@ -302,7 +300,6 @@ public class BrokenMedusa_AI : IKBossBase
 
             if(ScanCheck())
             {
-                Debug.Log("Check2");
                 UpdateMoveLine();
                 ChangeState(State.LockOnMove);
 

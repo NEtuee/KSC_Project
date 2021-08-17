@@ -150,6 +150,10 @@ public class CameraManager : ManagerBase
         {
             PitchYawPositionData data = MessageDataPooling.CastData<PitchYawPositionData>(msg.data);
             followTarget.SetPitchYawPosition(data.pitch, data.yaw,data.position);
+
+            playerFollowCam.ForceCameraPosition(data.position,followTarget.transform.rotation);
+            playerAimCam.ForceCameraPosition(data.position,followTarget.transform.rotation);
+            //brainCameraTransfrom.position = data.position;
         });
 
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
