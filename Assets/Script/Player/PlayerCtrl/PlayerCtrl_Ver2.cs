@@ -89,6 +89,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
     public float HorizonWeight => horizonWeight;
     [SerializeField] private float rotAngle = 0.0f;
     [SerializeField] private float airRotateSpeed = 2.5f;
+    private float _runToStopTime = 0.0f;
 
     [Header("Jump Value")] 
     public bool pressJump = false;
@@ -286,7 +287,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (chargingCountText != null)
             _chargingCountTextColor = chargingCountText.color;
 
-        StartCoroutine(StopCheck());
+        //StartCoroutine(StopCheck());
 
     }
 
@@ -385,6 +386,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
 
         UpdateStamina(Time.fixedDeltaTime);
+
+        CheckRunToStop(Time.fixedDeltaTime);
 
         if (updateMethod == UpdateMethod.FixedUpdate)
         {
@@ -1769,6 +1772,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
         while (true)
         {
+            Debug.Log(time);
             if (time >= 0.05f && currentSpeed > walkSpeed && inputVertical == 0.0f && inputHorizontal == 0.0f)
             {
                 ChangeState(PlayerState.RunToStop);
@@ -1777,14 +1781,32 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
             if (state == PlayerState.Default && currentSpeed > 0.0f && inputVertical == 0.0f && inputHorizontal == 0.0f)
             {
-                time += Time.fixedDeltaTime;
+                time += Time.deltaTime;
             }
             else
             {
                 time = 0.0f;
             }
 
-            yield return new WaitForFixedUpdate();
+            yield return null;
+        }
+    }
+
+    private void CheckRunToStop(float deltaTime)
+    {
+        if (_runToStopTime >= 0.05f && currentSpeed > walkSpeed && inputVertical == 0.0f && inputHorizontal == 0.0f)
+        {
+            ChangeState(PlayerState.RunToStop);
+            _runToStopTime = 0.0f;
+        }
+
+        if (state == PlayerState.Default && currentSpeed > 0.0f && inputVertical == 0.0f && inputHorizontal == 0.0f)
+        {
+            _runToStopTime += deltaTime;
+        }
+        else
+        {
+            _runToStopTime = 0.0f;
         }
     }
 

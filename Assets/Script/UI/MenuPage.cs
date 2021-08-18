@@ -40,7 +40,7 @@ public class MenuPage : MonoBehaviour
     {
         Init();
 
-        onFisrtActive.Invoke();
+        //onFisrtActive.Invoke();
     }
 
     public void Init()
@@ -68,11 +68,11 @@ public class MenuPage : MonoBehaviour
         if (active)
         {
             onActive.Invoke();
-            //if (_isFirst)
-            //{
-            //    _isFirst = true;
-            //    onFisrtActive.Invoke();
-            //}
+            if (_isFirst == false)
+            {
+                _isFirst = true;
+                onFisrtActive.Invoke();
+            }
         }
         else
         {

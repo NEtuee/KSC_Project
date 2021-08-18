@@ -264,7 +264,6 @@ public class RebindingUI : MonoBehaviour
     {
         if (!ResolveActionAndBinding(out var action, out var bindingIndex))
             return;
-
         // If the binding is a composite, we need to rebind each part in turn.
         if (action.bindings[bindingIndex].isComposite)
         {
@@ -318,10 +317,7 @@ public class RebindingUI : MonoBehaviour
                         return;
                     }
 
-                    m_KeyOption = KeyOption.Toggle;
-                    InputBinding binding = action.ChangeBindingWithId(m_BindingId).binding;
-                    binding.overrideInteractions = "Press(behavior=2)";
-                    action.ApplyBindingOverride(bindingIndex, binding);
+                    m_KeyOption = KeyOption.Hold;
 
                     UpdateBindingDisplay();
                     CleanUp();
@@ -334,6 +330,10 @@ public class RebindingUI : MonoBehaviour
                         if (nextBindingIndex < action.bindings.Count && action.bindings[nextBindingIndex].isPartOfComposite)
                             PerformInteractiveRebind(action, nextBindingIndex, true);
                     }
+
+                    //InputBinding binding = action.ChangeBindingWithId(m_BindingId).binding;
+                    //binding.overrideInteractions = "Press(behavior=2)";
+                    //action.ApplyBindingOverride(bindingIndex, binding);
                 });
 
         // If it's a part binding, show the name of the part in the UI.
@@ -360,6 +360,14 @@ public class RebindingUI : MonoBehaviour
         m_RebindStartEvent?.Invoke(this, m_RebindOperation);
 
         m_RebindOperation.Start();
+
+        //if(changeInteraction)
+        //{
+        //    CleanUp();
+        //    InputBinding binding = action.ChangeBindingWithId(m_BindingId).binding;
+        //    binding.overrideInteractions = "Press(behavior=2)";
+        //    //action.ApplyBindingOverride(bindingIndex, binding);
+        //}
     }
 
     private void PerformInteractiveRebindToggle(InputAction action, int bindingIndex, bool allCompositeParts = false)
@@ -403,10 +411,10 @@ public class RebindingUI : MonoBehaviour
                     }
 
                     UpdateBindingDisplay();
-                    m_KeyOption = KeyOption.Toggle;
-                    InputBinding binding = action.ChangeBindingWithId(m_BindingId).binding;
-                    binding.overrideInteractions = "Press(behavior=0)";
-                    action.ApplyBindingOverride(bindingIndex, binding);
+                    //m_KeyOption = KeyOption.Toggle;
+                    //InputBinding binding = action.ChangeBindingWithId(m_BindingId).binding;
+                    //binding.overrideInteractions = "Press(behavior=0)";
+                    //action.ApplyBindingOverride(bindingIndex, binding);
                     CleanUp();
 
                     // If there's more composite parts we should bind, initiate a rebind

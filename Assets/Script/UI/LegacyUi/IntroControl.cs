@@ -13,8 +13,8 @@ public class IntroControl : MonoBehaviour
     public Vector3 rot;
 
     private bool rotate = false;
-    
 
+    public string mainTitleScene;
     void Start()
     {
         black.DOFade(0.0f, 0.5f);
@@ -47,6 +47,6 @@ public class IntroControl : MonoBehaviour
         black.DOFade(2.0f, 1.5f);
         yield return new WaitForSeconds(2.0f);
 
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(mainTitleScene);
     }
 }

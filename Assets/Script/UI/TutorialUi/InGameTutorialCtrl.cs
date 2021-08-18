@@ -14,6 +14,7 @@ public class InGameTutorialCtrl : MonoBehaviour
     [SerializeField] private Canvas keyGuideCanvas;
     [SerializeField] private GameObject layoutImage;
     [SerializeField] private MenuPage earlyTutorialButtonPage;
+    [SerializeField] private MenuPage noticeTutorialPage;
 
     [SerializeField] private MenuPage[] tutorialElements;
     
@@ -85,6 +86,19 @@ public class InGameTutorialCtrl : MonoBehaviour
                     page.Active(false);
                 }
                 break;
+            case InGameTutorialType.Notice:
+                climbingTapButton.gameObject.SetActive(false);
+                moveTapButton.gameObject.SetActive(false);
+                specialTapButton.gameObject.SetActive(false);
+                scanEmpTapButton.gameObject.SetActive(false);
+                empTapButton.gameObject.SetActive(false);
+                videoCanvas.enabled = false;
+                noticeTutorialPage.Active(true);
+                foreach (var page in tutorialElements)
+                {
+                    page.Active(false);
+                }
+                break;
         }
     }
 
@@ -99,13 +113,14 @@ public class InGameTutorialCtrl : MonoBehaviour
         keyGuideCanvas.enabled = false;
         layoutImage.SetActive(true);
         earlyTutorialButtonPage.Active(false);
+        noticeTutorialPage.Active(false);
 
         tutorialPage.Active(false);
     }
 
     public enum InGameTutorialType
     {
-        Climbing,Move,Special,Scan,Emp,Key,Ealry
+        Climbing,Move,Special,Scan,Emp,Key,Ealry,Notice
     }
 }
 

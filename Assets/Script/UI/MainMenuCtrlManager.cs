@@ -104,9 +104,17 @@ public class MainMenuCtrlManager : ManagerBase
     private void Start()
     {
         pauseButton.performed += _ => Prev();
-
         _currentPage = mainPage;
-        _currentPage.Active(true);
+
+        fadeCanvas.enabled = true;
+        fadeImage.color = Color.black;
+        fadeImage.DOFade(0f, 1f).OnComplete(() =>
+        {
+            _currentPage.Active(true);
+            fadeCanvas.enabled = false;
+        });
+        //_currentPage = mainPage;
+        //_currentPage.Active(true);
     }
 
     public void Prev()

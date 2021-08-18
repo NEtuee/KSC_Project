@@ -135,8 +135,11 @@ public class SettingManager : ManagerBase
         ControlSettingData saveData;
         saveData.yawRotateSpeed = pitch * MaxRotateSpeed;
         saveData.pitchRotateSpeed = yaw * MaxRotateSpeed;
-        followTarget.YawRotateSpeed = saveData.yawRotateSpeed;
-        followTarget.PitchRotateSpeed = saveData.pitchRotateSpeed;
+        if (followTarget != null)
+        {
+            followTarget.YawRotateSpeed = saveData.yawRotateSpeed;
+            followTarget.PitchRotateSpeed = saveData.pitchRotateSpeed;
+        }
         SaveDataHelper.SaveSetting(saveData);
     }
 
