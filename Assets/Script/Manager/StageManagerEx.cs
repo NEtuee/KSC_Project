@@ -27,15 +27,23 @@ public class StageManagerEx : ManagerBase
         AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
         {
             var loadTransform = entranceElevator == null ? loadedPlayerPosition : entranceElevator.transform;
+            var rotation = loadTransform.rotation;
+
+            if(entranceElevator != null)
+            {
+                entranceElevator.Open();
+                rotation.eulerAngles += new Vector3(0f,180f,0f);
+            }
+
             PositionRotation data = MessageDataPooling.GetMessageData<PositionRotation>();
             data.position = loadTransform.position;
-            data.rotation = loadTransform.rotation;
+            data.rotation = rotation;
             SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
 
             PitchYawPositionData camData = MessageDataPooling.GetMessageData<PitchYawPositionData>();
             camData.position = loadTransform.position;
-            camData.pitch = loadTransform.eulerAngles.x;
-            camData.yaw = loadTransform.eulerAngles.y;
+            camData.pitch = rotation.eulerAngles.x;
+            camData.yaw = rotation.eulerAngles.y;
             SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
         });
 
