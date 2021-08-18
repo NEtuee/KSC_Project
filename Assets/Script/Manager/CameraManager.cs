@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using Cinemachine;
 using MD;
+using UnityEngine.SceneManagement;
 
 namespace MD
 {
@@ -161,6 +162,12 @@ public class CameraManager : ManagerBase
             DontDestroyOnLoad(Camera.main.transform);
             DontDestroyOnLoad(followTarget.transform);
         });
+
+        AddAction(MessageTitles.scene_beforeSceneChangeNotAsync, (msg) =>
+         {
+             SceneManager.MoveGameObjectToScene(Camera.main.gameObject, SceneManager.GetActiveScene());
+             SceneManager.MoveGameObjectToScene(followTarget.gameObject, SceneManager.GetActiveScene());
+         });
 
         AddAction(MessageTitles.cameramanager_setBrainCameraPosition, (msg) =>
         {

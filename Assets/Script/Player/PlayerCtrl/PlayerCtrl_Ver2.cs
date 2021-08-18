@@ -1315,7 +1315,7 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             if (state != PlayerState.Aiming)
             {
-                if (isWalk == true && !_runLock)
+                if (isWalk == true || _runLock)
                 {
                     currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, deltaTime * 20.0f);
                 }
@@ -3065,39 +3065,45 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         if (value.performed == false)
             return;
 
-        if(state == PlayerState.Default||
-            state == PlayerState.Jump)
+        if (value.action.IsPressed())
         {
-            if(_aimLock == false)
+            if (state == PlayerState.Default ||
+                state == PlayerState.Jump)
             {
-                //GameManager.Instance.soundManager.Play(1008, Vector3.up, transform);
-                AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
-                soundData.id = 1008; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
-                SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
+                if (_aimLock == false)
+                {
+                    //GameManager.Instance.soundManager.Play(1008, Vector3.up, transform);
+                    AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+                    soundData.id = 1008; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+                    SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
 
 
-                
-                AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
-                chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = transform; chargeSoundPlayData.returnValue = true;
-                SendMessageQuick(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), chargeSoundPlayData);
-         
-                //_charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
-                ChangeState(PlayerState.Aiming);
-                ActiveAim(true);
-                //playerPelvisGunObject.SetActive(false);
-                pelvisGunObject.SetActive(false);
-                return;
+
+                    AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+                    chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = transform; chargeSoundPlayData.returnValue = true;
+                    SendMessageQuick(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), chargeSoundPlayData);
+
+                    //_charge = GameManager.Instance.soundManager.Play(1013, Vector3.up, transform);
+                    ChangeState(PlayerState.Aiming);
+                    ActiveAim(true);
+                    //playerPelvisGunObject.SetActive(false);
+                    pelvisGunObject.SetActive(false);
+                    return;
+                }
             }
         }
 
-        if(state == PlayerState.Aiming)
+        if (value.action.WasReleasedThisFrame())
         {
-            AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
-            soundData.id = 1009; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
-            SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
-            //GameManager.Instance.soundManager.Play(1009, Vector3.up, transform);
-            ReleaseAiming();
-            return;
+            if (state == PlayerState.Aiming)
+            {
+                AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+                soundData.id = 1009; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+                SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
+                //GameManager.Instance.soundManager.Play(1009, Vector3.up, transform);
+                ReleaseAiming();
+                return;
+            }
         }
     }
 

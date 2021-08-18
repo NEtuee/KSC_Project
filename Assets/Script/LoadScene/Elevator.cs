@@ -28,12 +28,28 @@ public class Elevator : UnTransfromObjectBase
         StartCoroutine(LoadNextSceneCoroutine());
     }
 
+    public void LoadOutScene()
+    {
+        StartCoroutine(LoadNextSceneNotAsynCoroutine());
+    }
+
     public IEnumerator LoadNextSceneCoroutine()
     {
         WaitForSeconds se = new WaitForSeconds(2f);
         yield return se;
         
         SendMessageEx(MessageTitles.scene_loadNextLevel,GetSavedNumber("SceneManager"),null);
+        //_sceneManager.LoadNextlevel();
+    }
+
+    public IEnumerator LoadNextSceneNotAsynCoroutine()
+    {
+        WaitForSeconds se = new WaitForSeconds(2f);
+        yield return se;
+
+        MD.StringData data = MessageDataPooling.GetMessageData<MD.StringData>();
+        data.value = "OutScene";
+        SendMessageEx(MessageTitles.scene_loadSceneNotAsync, GetSavedNumber("SceneManager"), data);
         //_sceneManager.LoadNextlevel();
     }
 

@@ -210,4 +210,10 @@ public class MasterManager : MessageHub<ManagerBase>
             _receivers[msg.target].DeleteReceiver(target);
         }
     }
+
+    protected virtual void OnDestroy()
+    {
+        Dispose();
+        InitUniqueNumber();
+    }
 }

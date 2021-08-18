@@ -42,6 +42,12 @@ public class PlayerManager : ManagerBase
              DontDestroyOnLoad(_drone.transform);
          });
 
+        AddAction(MessageTitles.scene_beforeSceneChangeNotAsync, (msg) =>
+         {
+             SceneManager.MoveGameObjectToScene(_player.gameObject, SceneManager.GetActiveScene());
+             SceneManager.MoveGameObjectToScene(_drone.gameObject, SceneManager.GetActiveScene());
+         });
+
         AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
         {
             _player.InitializeMove();
@@ -230,10 +236,14 @@ public class PlayerManager : ManagerBase
     {
         base.Progress(deltaTime);
 
+        if (LevelEdit_TimelinePlayer.CUTSCENEPLAY == true)
+            return;
+
         if(Keyboard.current.pKey.wasPressedThisFrame)
         {
             SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
         }
+
     }
 
     public void GameQuit()

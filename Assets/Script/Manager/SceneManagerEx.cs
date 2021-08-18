@@ -29,6 +29,12 @@ public class SceneManagerEx : ManagerBase
         AddAction(MessageTitles.scene_loadPrevLevel,LoadPrevlevel);
         AddAction(MessageTitles.scene_loadNextLevel,LoadNextLevel);
         AddAction(MessageTitles.scene_loadSpecificLevel,LoadSpecificLevel);
+        AddAction(MessageTitles.scene_loadSceneNotAsync, (msg) =>
+        {
+            StringData data = MessageDataPooling.CastData<StringData>(msg.data);
+            StartCoroutine(LoadSceneNotAsync(data.value));
+        });
+
     }
 
     public override void Initialize()
@@ -38,10 +44,10 @@ public class SceneManagerEx : ManagerBase
 
     public override void Progress(float deltaTime)
     {
-        if(Keyboard.current.kKey.wasPressedThisFrame)
-        {
-            SendMessageEx(MessageTitles.scene_loadNextLevel,GetSavedNumber("SceneManager"),null);
-        }
+        //if(Keyboard.current.kKey.wasPressedThisFrame)
+        //{
+        //    SendMessageEx(MessageTitles.scene_loadNextLevel,GetSavedNumber("SceneManager"),null);
+        //}
     }
 
 
@@ -276,4 +282,12 @@ public class SceneManagerEx : ManagerBase
         --_loadedScenes;
     }
 
+    IEnumerator LoadSceneNotAsync(string sceneName)
+    {
+        SendBroadcastMessage(MessageTitles.scene_beforeSceneChangeNotAsync, null, false);
+
+        yield return null;
+
+        SceneManager.LoadScene(sceneName);
+    }
 }

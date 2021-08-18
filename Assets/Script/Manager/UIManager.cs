@@ -361,6 +361,8 @@ public class UIManager : ManagerBase
         //}
     }
 
+
+
     public override void Progress(float deltaTime)
     {
         base.Progress(deltaTime);
@@ -652,7 +654,12 @@ public class UIManager : ManagerBase
 
     public void OnTitleButton()
     {
-
+        BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
+        timeStop.value = false;
+        SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
+        MD.StringData data = MessageDataPooling.GetMessageData<MD.StringData>();
+        data.value = "MainTitle_NewStucture";
+        SendMessageEx(MessageTitles.scene_loadSceneNotAsync, GetSavedNumber("SceneManager"), data);
     }
 
     public enum PauseMenuState

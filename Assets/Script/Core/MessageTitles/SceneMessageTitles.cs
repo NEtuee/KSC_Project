@@ -39,4 +39,14 @@ public static partial class MessageTitles
     /// data = string
     /// </summary>
     public const ushort scene_loadSpecificLevel = 0x0607;
+
+    /// <summary>
+    /// data = stringData
+    /// </summary>
+    public const ushort scene_loadSceneNotAsync = 0x0608;
+
+    /// <summary>
+    // data = null
+    /// </summary>
+    public const ushort scene_beforeSceneChangeNotAsync = 0x0609;
 }

@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 {
+    public static bool CUTSCENEPLAY;
     public PlayableDirector playableDirector;
 
     public List<GameObject> activeLists = new List<GameObject>();
@@ -156,6 +157,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),false);
         }
+        CUTSCENEPLAY = true;
     }
 
     public void EndTrigger()
@@ -165,5 +167,6 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
         }
+        CUTSCENEPLAY = false;
     }
 }

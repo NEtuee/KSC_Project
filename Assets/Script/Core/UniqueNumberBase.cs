@@ -65,4 +65,10 @@ public class UniqueNumberBase : MonoBehaviour
             _numberStorage.Add(key,_uniqueNumber);
         }
     }
+
+    public static void InitUniqueNumber()
+    {
+        _numberOrder = 1;
+        _numberStorage?.Clear();
+    }
 }
