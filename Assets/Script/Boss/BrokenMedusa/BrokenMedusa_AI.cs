@@ -759,10 +759,10 @@ public class BrokenMedusa_AI : IKBossBase
                 
                 if (ragdoll != null)
                 {
+                    _player.TakeDamage(5f);
                     ragdoll.ExplosionRagdoll(250.0f, transform.forward);
                         //Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
-                    
-                    _player.TakeDamage(5f);
+                
                     break;
                 }
 
