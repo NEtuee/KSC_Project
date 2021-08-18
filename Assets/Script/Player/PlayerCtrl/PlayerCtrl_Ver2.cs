@@ -1403,12 +1403,12 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
         {
             case PlayerState.Aiming:
             {
-                //ActiveAim(false);
+                    ActiveAim(false);
 
-                    if(changeState == PlayerState.Default)
-                    {
-                        Debug.Log("!!!!!!!");
-                    }
+                    //if(changeState == PlayerState.Default)
+                    //{
+                    //    Debug.Log("!!!!!!!");
+                    //}
 
                     if (!_aimLock)
                         SendMessageEx(MessageTitles.cameramanager_activeplayerfollocamera, GetSavedNumber("CameraManager"), null);
