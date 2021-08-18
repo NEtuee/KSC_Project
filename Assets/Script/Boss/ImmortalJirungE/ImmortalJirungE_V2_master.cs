@@ -108,6 +108,8 @@ public class ImmortalJirungE_V2_master : ObjectBase
                     ai.ChangeState(ImmortalJirungE_V2_AI.State.Stun);
                 }
 
+                
+
                 MD.SetTimeScaleMsg data = MessageDataPooling.GetMessageData<MD.SetTimeScaleMsg>();
                     data.timeScale = 0.2f;
                     data.lerpTime = 3f;
@@ -163,12 +165,12 @@ public class ImmortalJirungE_V2_master : ObjectBase
             }
         }
 
-        if (Vector3.Distance(_player.transform.position, position) <= radius)
-        {
-            _player.TakeDamage(damage);
-            var ragdoll = _player.GetComponent<PlayerRagdoll>();
-            ragdoll.ExplosionRagdoll(340f,(_player.transform.position - position).normalized);
-        }
+        // if (Vector3.Distance(_player.transform.position, position) <= radius)
+        // {
+        //     _player.TakeDamage(damage);
+        //     var ragdoll = _player.GetComponent<PlayerRagdoll>();
+        //     ragdoll.ExplosionRagdoll(340f,(_player.transform.position - position).normalized);
+        // }
         
     }
     

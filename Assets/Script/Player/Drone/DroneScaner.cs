@@ -22,18 +22,28 @@ public class DroneScaner : UnTransfromObjectBase
     [SerializeField] private List<string> scanableTags = new List<string>();
     [SerializeField] private List<Scanable> scanableObjects = new List<Scanable>();
 
+    public List<MessageReceiver> _scanableMessageObjects = new List<MessageReceiver>();
+    private HashSet<int> _scannedNumbers = new HashSet<int>();
+
     private RaycastHit hit;
     protected override void Awake()
     {
         base.Awake();
         FindScanableObjects();
-        SceneManager.sceneLoaded += (s, w) => { FindScanableObjects(); };
+        SceneManager.sceneLoaded += (s, w) => 
+        { 
+            FindScanableObjects(); 
+            //_scanableMessageObjects.Clear();
+            _scannedNumbers.Clear();
+        };
     }
 
     public override void Initialize()
     {
         base.Initialize();
         RegisterRequest(GetSavedNumber("PlayerManager"));
+
+        scanMat.SetFloat("_Distance", 0f);
     }
 
     public void Scanning()
@@ -52,6 +62,8 @@ public class DroneScaner : UnTransfromObjectBase
         AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1301; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
+
+        _scannedNumbers.Clear();
     }
 
     void Update()
@@ -81,51 +93,113 @@ public class DroneScaner : UnTransfromObjectBase
 
         if (scaning == true)
         {
-            for (int i = 0; i < scanableObjects.Count;)
-            { 
-                Vector3 scanObjPosition = scanableObjects[i].transform.position;
-                Vector3 startPosition = scanStartPosition;
-                scanObjPosition.y = startPosition.y = 0.0f;
+            ScanObject();
+            ScanMessageObject();
+        }
+    }
 
-                //Vector3 forwardDir = forward.forward;
-                //forwardDir.y = 0f;
-                //forwardDir.Normalize();
+    public void AddScanMessageObject(MessageReceiver receiver)
+    {
+        if(receiver == null)
+        {
+            Debug.Log("MIkk");
+        }
+        _scanableMessageObjects.Add(receiver);
+    }
 
-                if (Mathf.Acos(Vector3.Dot(scanForward, (scanObjPosition - startPosition).normalized)) * Mathf.Rad2Deg < arc)
-                {
-                    float mag = (scanObjPosition - startPosition).magnitude;
-
-                    if (mag <= _range && mag >= _range - 3f)
-                    {
-                        //Physics.Raycast(scanStartPosition, scanableObjects[i].transform.position - scanStartPosition, out hit, maxRange);
-
-                        //if (hit.collider.gameObject == scanableObjects[i].gameObject)
-                        //{
-                        //    scanableObjects[i].Scanned();
-                        //    scanableObjects.Remove(scanableObjects[i]);
-                        //    continue;
-                        //}
-
-                        if (scanableObjects[i].CheckInAngle(scanStartPosition))
-                        {
-                            if(!scanableObjects[i].IsTriggered())
-                                scanableObjects[i].Scanned();
-                            
-                            if(scanableObjects[i].removeCheck)
-                                scanableObjects.Remove(scanableObjects[i]);
-                            else
-                            {
-                                ++i;
-                            }
-                            
-                            continue;
-                        }
-
-                    }
-                }
-             
-                i++;
+    public void ScanMessageObject()
+    {
+        for (int i = 0; i < _scanableMessageObjects.Count;)
+        { 
+            if(_scanableMessageObjects[i] == null)
+            {
+                _scanableMessageObjects.RemoveAt(i);
+                continue;
             }
+
+            if(_scannedNumbers.Contains(_scanableMessageObjects[i].uniqueNumber))
+            {
+                ++i;
+                continue;
+            }
+
+
+            Vector3 scanObjPosition = _scanableMessageObjects[i].transform.position;
+            Vector3 startPosition = scanStartPosition;
+            scanObjPosition.y = startPosition.y = 0.0f;
+
+            if (Mathf.Acos(Vector3.Dot(scanForward, (scanObjPosition - startPosition).normalized)) * Mathf.Rad2Deg < arc)
+            {
+                float mag = (scanObjPosition - startPosition).magnitude;
+
+                if (mag <= _range && mag >= _range - 3f)
+                {
+                    _scannedNumbers.Add(_scanableMessageObjects[i].uniqueNumber);
+                    SendMessageEx(_scanableMessageObjects[i],MessageTitles.scan_scanned,null);
+
+                }
+            }
+         
+            i++;
+        }
+    }
+
+    public void ScanObject()
+    {
+        for (int i = 0; i < scanableObjects.Count;)
+        { 
+            if(scanableObjects[i] == null)
+            {
+                scanableObjects.RemoveAt(i);
+                continue;
+            }
+
+            if(_scannedNumbers.Contains(scanableObjects[i].uniqueNumber))
+            {
+                ++i;
+                continue;
+            }
+
+            Vector3 scanObjPosition = scanableObjects[i].transform.position;
+            Vector3 startPosition = scanStartPosition;
+            scanObjPosition.y = startPosition.y = 0.0f;
+
+            //Vector3 forwardDir = forward.forward;
+            //forwardDir.y = 0f;
+            //forwardDir.Normalize();
+
+            if (Mathf.Acos(Vector3.Dot(scanForward, (scanObjPosition - startPosition).normalized)) * Mathf.Rad2Deg < arc)
+            {
+                float mag = (scanObjPosition - startPosition).magnitude;
+
+                if (mag <= _range && mag >= _range - 3f)
+                {
+                    if(!scanableObjects[i].IsTriggered())
+                    {
+                        scanableObjects[i].Scanned();
+                        _scannedNumbers.Add(scanableObjects[i].uniqueNumber);
+                    }
+                    
+
+                    // if (scanableObjects[i].CheckInAngle(scanStartPosition))
+                    // {
+                    //     if(!scanableObjects[i].IsTriggered())
+                    //         scanableObjects[i].Scanned();
+                        
+                    //     if(scanableObjects[i].removeCheck)
+                    //         scanableObjects.Remove(scanableObjects[i]);
+                    //     else
+                    //     {
+                    //         ++i;
+                    //     }
+                        
+                    //     continue;
+                    // }
+
+                }
+            }
+         
+            i++;
         }
     }
 

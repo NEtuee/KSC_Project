@@ -270,7 +270,7 @@ public class UIManager : ManagerBase
          {
              var maker = scanMakerPool.Active();
              ScanMakerData data = MessageDataPooling.CastData<ScanMakerData>(msg.data);
-             maker.Active(data.center, data.min, data.max);
+             maker.Active(data.collider);//data.center, data.min, data.max);
          });
     }
 
@@ -690,9 +690,10 @@ namespace MD
 
     public class ScanMakerData : MessageData
     {
-        public Vector3 center;
-        public Vector3 min;
-        public Vector3 max;
+        public Collider collider;
+        // public Vector3 center;
+        // public Vector3 min;
+        // public Vector3 max;
     }
 }
 //public class HpPackValueType : MessageData

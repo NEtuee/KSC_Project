@@ -41,6 +41,7 @@ public class GraphObjectBase : UnTransfromObjectBase
     {
         base.Assign();
         AddAction(MessageTitles.player_EMPHit,EMPHitMessage);
+        AddAction(MessageTitles.scan_scanned,ScannedMessage);
 
         RunGraph("Assign");
     }
@@ -62,6 +63,8 @@ public class GraphObjectBase : UnTransfromObjectBase
         {
             ((ObjectProgressEntryNode)node).deltaTime = deltaTime;
             RunGraph(node);
+
+            ClearMessageQueue();
         }
     }
 
@@ -90,6 +93,8 @@ public class GraphObjectBase : UnTransfromObjectBase
         {
             ((ObjectTriggerEnterEntryNode)node).collider = coll;
             RunGraph(node);
+
+            ClearMessageQueue();
         }
     }
 
@@ -100,6 +105,8 @@ public class GraphObjectBase : UnTransfromObjectBase
         {
             ((ObjectTriggerEnterEntryNode)node).collider = coll;
             RunGraph(node);
+
+            ClearMessageQueue();
         }
     }
 
@@ -110,6 +117,8 @@ public class GraphObjectBase : UnTransfromObjectBase
         {
             ((ObjectTriggerExitEntryNode)node).collider = coll;
             RunGraph(node);
+
+            ClearMessageQueue();
         }
     }
 
@@ -120,7 +129,16 @@ public class GraphObjectBase : UnTransfromObjectBase
         {
             ((ObjectEMPHitEntryNode)node).damage = damage;
             RunGraph(node);
+
+            ClearMessageQueue();
         }
+    }
+
+    public void WhenScanned()
+    {
+        RunGraph("Scanned");
+
+        ClearMessageQueue();
     }
 
 #region Behaviour
@@ -150,6 +168,11 @@ public class GraphObjectBase : UnTransfromObjectBase
 
 #region Message
 
+    public void ScannedMessage(Message msg)
+    {
+        WhenScanned();
+    }
+
     public void EMPHitMessage(Message msg)
     {
         var data = MessageDataPooling.CastData<MD.FloatData>(msg.data);
@@ -169,7 +192,7 @@ public class GraphObjectBase : UnTransfromObjectBase
 
     public override void MessageProcessing(Message msg)
     {
-        if(msg.title == MessageTitles.player_EMPHit)
+        if(msg.title == MessageTitles.player_EMPHit || msg.title == MessageTitles.scan_scanned)
         {
             base.MessageProcessing(msg);
         }

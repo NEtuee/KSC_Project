@@ -87,6 +87,12 @@ public class Drone : UnTransfromObjectBase
         {
             player = (PlayerCtrl_Ver2)msg.data;
         });
+
+        AddAction(MessageTitles.scan_registerScanObject, (msg) =>
+        {
+            Debug.Log("What");
+            _droneScaner.AddScanMessageObject((MessageReceiver)msg.data);
+        });
     }
 
     public override void Initialize()
