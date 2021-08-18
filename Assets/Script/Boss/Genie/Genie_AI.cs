@@ -145,6 +145,7 @@ public class Genie_AI : ObjectBase
     {
         UpdateDroneCount();
         _currentStateDelegate(deltaTime);
+        UpdateEyeColor();
     }
 
     public void ChangeState(State state)
@@ -497,7 +498,8 @@ public class Genie_AI : ObjectBase
     {
         foreach(var eye in eyes)
         {
-            eye.material.color = eyeColor[hitPoint];
+
+            eye.material.SetColor("_EmissionColor",eyeColor[hitPoint]);
         }
     }
 

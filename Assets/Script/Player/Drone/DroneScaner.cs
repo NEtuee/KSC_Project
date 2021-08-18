@@ -117,7 +117,7 @@ public class DroneScaner : UnTransfromObjectBase
                 continue;
             }
 
-            if(_scannedNumbers.Contains(_scanableMessageObjects[i].uniqueNumber))
+            if(_scannedNumbers.Contains(_scanableMessageObjects[i].uniqueNumber) || !_scanableMessageObjects[i].gameObject.activeInHierarchy)
             {
                 ++i;
                 continue;
