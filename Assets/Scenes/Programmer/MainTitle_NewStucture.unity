@@ -266,7 +266,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 919076776}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 919076778}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4df330576d9864479173e9213b34c52, type: 3}
@@ -3664,7 +3664,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 4592083381741091018}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4592083381741091020}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25c69ff0071d19943aae544b5f0ffd2e, type: 3}
@@ -11784,10 +11784,58 @@ MonoBehaviour:
       m_Calls: []
   onActive:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 884165282}
+        m_TargetAssemblyTypeName: UnityEngine.EventSystems.EventSystem, UnityEngine.UI
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 4592083381741091020}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onDisable:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 200858122}
+        m_TargetAssemblyTypeName: TMPro.TMP_Dropdown, Unity.TextMeshPro
+        m_MethodName: Hide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 838379603}
+        m_TargetAssemblyTypeName: TMPro.TMP_Dropdown, Unity.TextMeshPro
+        m_MethodName: Hide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2009756763}
+        m_TargetAssemblyTypeName: TMPro.TMP_Dropdown, Unity.TextMeshPro
+        m_MethodName: Hide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!225 &515817525
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -13661,6 +13709,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7440585931416788960, guid: 98094a38e1989aa4e94fc52c9c12d90b,
         type: 3}
+      propertyPath: m_Options.m_Options.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7440585931416788960, guid: 98094a38e1989aa4e94fc52c9c12d90b,
+        type: 3}
       propertyPath: m_Options.m_Options.Array.data[0].m_Text
       value: 1920x1080
       objectReference: {fileID: 0}
@@ -15173,7 +15226,19 @@ MonoBehaviour:
       m_Calls: []
   onActive:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 884165282}
+        m_TargetAssemblyTypeName: UnityEngine.EventSystems.EventSystem, UnityEngine.UI
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 4844743729379225901}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onDisable:
     m_PersistentCalls:
       m_Calls: []
@@ -29671,6 +29736,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 919076776}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &919076778 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5617211481147054253, guid: c73c69eacce31a445994ee2b0b4266bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 919076776}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &928099095
 GameObject:
   m_ObjectHideFlags: 0
@@ -39468,7 +39539,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 4844743729379225899}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4844743729379225901}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4df330576d9864479173e9213b34c52, type: 3}
@@ -47589,7 +47660,19 @@ MonoBehaviour:
       m_Calls: []
   onActive:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 884165282}
+        m_TargetAssemblyTypeName: UnityEngine.EventSystems.EventSystem, UnityEngine.UI
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 640226607}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onDisable:
     m_PersistentCalls:
       m_Calls: []
@@ -51132,6 +51215,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 884165282}
+        m_TargetAssemblyTypeName: UnityEngine.EventSystems.EventSystem, UnityEngine.UI
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1215539880}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -61427,7 +61522,19 @@ MonoBehaviour:
       m_Calls: []
   onActive:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 884165282}
+        m_TargetAssemblyTypeName: UnityEngine.EventSystems.EventSystem, UnityEngine.UI
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 919076778}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onDisable:
     m_PersistentCalls:
       m_Calls: []
@@ -62725,6 +62832,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4592083381741091018}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4592083381741091020 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3721948444040822393, guid: 98094a38e1989aa4e94fc52c9c12d90b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4592083381741091018}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4844743729379225899
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62992,6 +63105,12 @@ PrefabInstance:
 --- !u!224 &4844743729379225900 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6391350500499999602, guid: c73c69eacce31a445994ee2b0b4266bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 4844743729379225899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4844743729379225901 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5617211481147054253, guid: c73c69eacce31a445994ee2b0b4266bb,
     type: 3}
   m_PrefabInstance: {fileID: 4844743729379225899}
   m_PrefabAsset: {fileID: 0}
