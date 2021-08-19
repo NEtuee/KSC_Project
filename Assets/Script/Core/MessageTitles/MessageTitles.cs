@@ -296,6 +296,11 @@ public static partial class MessageTitles
     /// data = IntData
     /// </summary>
     public const ushort setting_setVsync = 0x0905;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort setting_saveDisplaySetting = 0x0906;
     #endregion
 
     #region Player

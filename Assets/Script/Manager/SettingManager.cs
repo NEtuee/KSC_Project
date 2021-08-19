@@ -11,6 +11,8 @@ public class SettingManager : ManagerBase
     private List<Resolution> _respondResolutions = new List<Resolution>();
 
     private const float MaxRotateSpeed = 1000f;
+    private int width;
+    private int height;
 
     public override void Assign()
     {
@@ -67,6 +69,7 @@ public class SettingManager : ManagerBase
 
         DisplaySettingData displaySettingData = SaveDataHelper.LoadSetting<DisplaySettingData>();
         QualitySettings.vSyncCount = displaySettingData.activeVsync == true ? 1 : 0;
+        width = displaySettingData.screenWidth; height = displaySettingData.screenHeight;
         Screen.SetResolution(displaySettingData.screenWidth, displaySettingData.screenHeight, Screen.fullScreen);
 
         Resolution[] resolutions = Screen.resolutions;
@@ -170,6 +173,7 @@ public class SettingManager : ManagerBase
     public void SetResolution(int value)
     {
         Screen.SetResolution(_respondResolutions[value].width, _respondResolutions[value].height, Screen.fullScreen);
+        width = _respondResolutions[value].width; height = _respondResolutions[value].height;
         SaveDisplaySetting();
     }
 
@@ -198,8 +202,8 @@ public class SettingManager : ManagerBase
     {
         DisplaySettingData displaySettingData;
         displaySettingData.activeVsync = QualitySettings.vSyncCount != 0;
-        displaySettingData.screenWidth = Screen.currentResolution.width;
-        displaySettingData.screenHeight = Screen.currentResolution.height;
+        displaySettingData.screenWidth = width;
+        displaySettingData.screenHeight = height;
         SaveDataHelper.SaveSetting(displaySettingData);
     }
 
