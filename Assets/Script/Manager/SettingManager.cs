@@ -11,8 +11,8 @@ public class SettingManager : ManagerBase
     private List<Resolution> _respondResolutions = new List<Resolution>();
 
     private const float MaxRotateSpeed = 1000f;
-    private int width;
-    private int height;
+    private int currentWidth;
+    private int currentHeight;
 
     public override void Assign()
     {
@@ -69,7 +69,8 @@ public class SettingManager : ManagerBase
 
         DisplaySettingData displaySettingData = SaveDataHelper.LoadSetting<DisplaySettingData>();
         QualitySettings.vSyncCount = displaySettingData.activeVsync == true ? 1 : 0;
-        width = displaySettingData.screenWidth; height = displaySettingData.screenHeight;
+        currentWidth = displaySettingData.screenWidth; currentHeight = displaySettingData.screenHeight;
+        //Debug.Log("Start : "+currentWidth + " x " + currentHeight);
         Screen.SetResolution(displaySettingData.screenWidth, displaySettingData.screenHeight, Screen.fullScreen);
 
         Resolution[] resolutions = Screen.resolutions;
@@ -94,8 +95,8 @@ public class SettingManager : ManagerBase
 
         for (int i = 0; i < _respondResolutions.Count; i++)
         {
-            if (Screen.currentResolution.height == _respondResolutions[i].height &&
-                Screen.currentResolution.width == _respondResolutions[i].width)
+            if (currentHeight == _respondResolutions[i].height &&
+                currentWidth == _respondResolutions[i].width)
             {
                 IntData intData = MessageDataPooling.GetMessageData<IntData>();
                 intData.value = i;
@@ -173,7 +174,8 @@ public class SettingManager : ManagerBase
     public void SetResolution(int value)
     {
         Screen.SetResolution(_respondResolutions[value].width, _respondResolutions[value].height, Screen.fullScreen);
-        width = _respondResolutions[value].width; height = _respondResolutions[value].height;
+        currentWidth = _respondResolutions[value].width; currentHeight = _respondResolutions[value].height;
+        //Debug.Log(currentWidth + " x " + currentHeight);
         SaveDisplaySetting();
     }
 
@@ -202,8 +204,9 @@ public class SettingManager : ManagerBase
     {
         DisplaySettingData displaySettingData;
         displaySettingData.activeVsync = QualitySettings.vSyncCount != 0;
-        displaySettingData.screenWidth = width;
-        displaySettingData.screenHeight = height;
+        displaySettingData.screenWidth = currentWidth;
+        displaySettingData.screenHeight = currentHeight;
+        //Debug.Log("Save : " + displaySettingData.screenWidth + " x " + displaySettingData.screenHeight);
         SaveDataHelper.SaveSetting(displaySettingData);
     }
 

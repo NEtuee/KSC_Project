@@ -6,17 +6,22 @@ public class PlayerState_Jump : PlayerState
 {
     
 
-    public override void Enter(PlayerUnit playerUnit)
+    public override void Enter(PlayerUnit playerUnit,Animator animator)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void Exit(PlayerUnit playerUnit)
+    public override void Exit(PlayerUnit playerUnit, Animator animator)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateState(PlayerUnit playerUnit)
+    public override void UpdateState(PlayerUnit playerUnit, Animator animator)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
         throw new System.NotImplementedException();
     }

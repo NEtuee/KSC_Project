@@ -149,9 +149,6 @@ public class PlayerMovement : MonoBehaviour
     
     private void Update()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
-
         if(groundAngle >= invalidityAngle)
         {
             currentJumpPower -= gravity * Time.deltaTime;
@@ -172,9 +169,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
-
         velocity = transform.position - prevPosition;
         trueSpeed = velocity.magnitude;
         speed = trueSpeed * 100f;

@@ -242,6 +242,7 @@ public class MainMenuCtrlManager : ManagerBase
 
     public void RequestSetResolution()
     {
+        Debug.Log("RequestSetResolution");
         IntData data = MessageDataPooling.GetMessageData<IntData>();
         data.value = resolutionDropdown.value;
         SendMessageEx(MessageTitles.setting_setResolution, GetSavedNumber("SettingManager"), data);
