@@ -7,9 +7,9 @@ public class PlayerUnit : UnTransfromObjectBase
 {
 
     public static PlayerState_Default defaultState;
-    public PlayerState_Default DefaultStata { get { return defaultState; } }
+    public PlayerState_Default DefaultState { get { return defaultState; } }
     public static PlayerState_Jump jumpState;
-    public PlayerState_Jump JumpStata { get { return jumpState; } }
+    public PlayerState_Jump JumpState => jumpState;
 
     public float InputVertical { get => _inputVertical; }
     public float InputHorizontal { get => _inputHorizontal; }
@@ -17,16 +17,21 @@ public class PlayerUnit : UnTransfromObjectBase
 
     public Transform Transform { get => _transform; }
 
-    public float CurrentSpeed { get => currentSpeed; }
+    public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
     public float RotationSpeed { get => rotationSpeed; }
     public CapsuleCollider CapsuleCollider { get => _capsuleCollider; }
     public LayerMask FrontCheckLayer { get => frontCheckLayer; }
     
     public bool IsGround { get => isGrounded; }
     public float JumpPower { get => jumpTime; }
+    public float MinJumpPower { get => minJumpPower; }
+    public float Gravity { get => gravity; }
+
+    public float CurrentJumpPower { get => currentJumpPower; set => currentJumpPower = value; }
 
     private PlayerState _currentState;
     private PlayerState _prevState;
+    public string currentStateName;
 
     [Header("Moving")]
     [SerializeField] private bool isWalk;
@@ -38,6 +43,7 @@ public class PlayerUnit : UnTransfromObjectBase
 
     [Header("Jump")]
     [SerializeField] private float jumpPower;
+    [SerializeField] private float minJumpPower = -20;
     [SerializeField] private float currentJumpPower;
     [SerializeField] private float groundMinDistance = 0.1f;
     [SerializeField] private float groundMaxDistance = 0.5f;
@@ -51,11 +57,12 @@ public class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float invalidityAngle = 70.0f;
     [SerializeField] private float groundDistance;
     [SerializeField] private float groundAngle = 0.0f;
+    [SerializeField] private float gravity = 20f;
     private Vector3 slidingVector = Vector3.zero;
 
     /// Input
-    private float _inputVertical;
-    private float _inputHorizontal;
+    [SerializeField]private float _inputVertical;
+    [SerializeField] private float _inputHorizontal;
 
     private Animator _animator;
     private Transform _transform;
@@ -92,8 +99,11 @@ public class PlayerUnit : UnTransfromObjectBase
 
     public void ChangeState(PlayerState state)
     {
-        _prevState = _currentState;
-        _prevState.Exit(this, _animator);
+        if (_currentState != null)
+        {
+            _prevState = _currentState;
+            _prevState.Exit(this, _animator);
+        }
 
         _currentState = state;
         _currentState.Enter(this, _animator);
@@ -101,7 +111,7 @@ public class PlayerUnit : UnTransfromObjectBase
 
     public void Move(Vector3 direction, float deltaTime = 0f ,bool noDelta = false)
     {
-        if(noDelta)
+        if(noDelta == false)
             transform.position += direction * deltaTime;
         else
             transform.position += direction;
@@ -112,19 +122,29 @@ public class PlayerUnit : UnTransfromObjectBase
         isJumping = true;
         jumpTime = Time.time;
         currentJumpPower = jumpPower;
+        isGrounded = false;
         ChangeState(jumpState);
     }
 
     private void UpdateMoveSpeed()
     {
-        if(isWalk == true)
+        if (_inputVertical != 0 || _inputHorizontal != 0)
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+            if (isWalk == true)
+            {
+                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+            }
+            else
+            {
+                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+            }
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed *2);
         }
+
+        _animator.SetFloat("Speed", currentSpeed);
     }
 
     private void CheckGround()
@@ -157,6 +177,8 @@ public class PlayerUnit : UnTransfromObjectBase
                 isGrounded = false;
             }
         }
+
+        _animator.SetBool("IsGround", isGrounded);
     }
 
     private void CheckGroundDistance()
@@ -211,11 +233,32 @@ public class PlayerUnit : UnTransfromObjectBase
         Vector2 inputVector = value.ReadValue<Vector2>();
         _inputVertical = inputVector.y;
         _inputHorizontal = inputVector.x;
+
+        _animator.SetFloat("InputVertical", Mathf.Abs(_inputVertical));
+        _animator.SetFloat("InputHorizontal", Mathf.Abs(_inputHorizontal));
     }
 
     public void OnJump(InputAction.CallbackContext value)
     {
+        if (value.performed == false)
+            return;
 
+        _animator.SetTrigger("Jump");
+    }
+
+    public void OnRun(InputAction.CallbackContext value)
+    {
+        if (value.performed == false)
+            return;
+
+        if (isWalk)
+        {
+            isWalk = false;
+        }
+        else
+        {
+            isWalk = true;
+        }
     }
 
     #endregion
