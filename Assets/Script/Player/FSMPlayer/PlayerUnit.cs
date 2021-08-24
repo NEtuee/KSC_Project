@@ -7,9 +7,10 @@ public class PlayerUnit : UnTransfromObjectBase
 {
 
     public static PlayerState_Default defaultState;
-    public PlayerState_Default DefaultState { get { return defaultState; } }
     public static PlayerState_Jump jumpState;
-    public PlayerState_Jump JumpState => jumpState;
+    public static PlayerState_Default DefaultState => defaultState;
+
+    public static PlayerState_Jump JumpState => jumpState;
 
     public float InputVertical { get => _inputVertical; }
     public float InputHorizontal { get => _inputHorizontal; }

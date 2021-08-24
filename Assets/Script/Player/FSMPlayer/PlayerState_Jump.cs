@@ -27,7 +27,7 @@ public class PlayerState_Jump : PlayerState
 
         if(playerUnit.IsGround == true)
         {
-            playerUnit.ChangeState(playerUnit.DefaultState);
+            playerUnit.ChangeState(PlayerUnit.DefaultState);
         }
         Vector3 moveDir;
         Vector3 lookDir;

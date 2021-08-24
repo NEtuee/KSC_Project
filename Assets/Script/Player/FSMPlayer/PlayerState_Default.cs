@@ -28,7 +28,7 @@ public class PlayerState_Default : PlayerState
 
         if (playerUnit.IsGround == false)
         {
-            playerUnit.ChangeState(playerUnit.JumpState);
+            playerUnit.ChangeState(PlayerUnit.JumpState);
             return;
         }
 
