@@ -28,11 +28,10 @@ public class PlayerState_Default : PlayerState
 
         if (playerUnit.IsGround == false)
         {
-            playerUnit.ChangeState(PlayerUnit.JumpState);
+            playerUnit.ChangeState(PlayerUnit.jumpState);
             return;
         }
 
-        Vector3 moveDir;
         Vector3 lookDir;
         Vector3 camForward = Camera.main.transform.forward;
         camForward.y = 0;
@@ -41,48 +40,58 @@ public class PlayerState_Default : PlayerState
 
         if(playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
         {
-            moveDir = (camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal);
-            moveDir.Normalize();
-            lookDir = moveDir;
+            playerUnit.MoveDir = (camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal);
+            playerUnit.MoveDir.Normalize();
+            playerUnit.LookDir = playerUnit.MoveDir;
         }
         else
         {
-            moveDir = prevDir;
-            moveDir.Normalize();
-            lookDir = moveDir;
+            playerUnit.MoveDir = prevDir;
+            playerUnit.MoveDir.Normalize();
+            playerUnit.LookDir = playerUnit.MoveDir;
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(playerUnit.Transform.position + Vector3.up, Vector3.down, out hit, 2f, playerUnit.GrounLayer))
+        if (Physics.Raycast(playerUnit.transform.position + Vector3.up, Vector3.down, out hit, 2f, playerUnit.GrounLayer))
         {
-            moveDir = (Vector3.ProjectOnPlane(playerUnit.Transform.forward, hit.normal)).normalized;
+            playerUnit.MoveDir = (Vector3.ProjectOnPlane(playerUnit.transform.forward, hit.normal)).normalized;
         }
 
         Quaternion targetRotation = Quaternion.identity;
-        if (playerUnit.CurrentSpeed != 0.0f && lookDir != Vector3.zero)
+        if (playerUnit.CurrentSpeed != 0.0f && playerUnit.LookDir != Vector3.zero)
         {
-            targetRotation = Quaternion.LookRotation(lookDir, Vector3.up);
-            playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation,
-                Quaternion.LookRotation(lookDir, Vector3.up), Time.fixedDeltaTime * playerUnit.RotationSpeed);
+            targetRotation = Quaternion.LookRotation(playerUnit.LookDir, Vector3.up);
+            playerUnit.transform.rotation = Quaternion.Lerp(playerUnit.transform.rotation,
+                Quaternion.LookRotation(playerUnit.LookDir, Vector3.up), Time.fixedDeltaTime * playerUnit.RotationSpeed);
         }
         else
         {
-            targetRotation = Quaternion.LookRotation(playerUnit.Transform.forward, Vector3.up);
-            playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation,
-                Quaternion.LookRotation(playerUnit.Transform.forward, Vector3.up), Time.fixedDeltaTime * playerUnit.RotationSpeed);
+            targetRotation = Quaternion.LookRotation(playerUnit.transform.forward, Vector3.up);
+            playerUnit.transform.rotation = Quaternion.Lerp(playerUnit.transform.rotation,
+                Quaternion.LookRotation(playerUnit.transform.forward, Vector3.up), Time.fixedDeltaTime * playerUnit.RotationSpeed);
         }
 
-        moveDir *= playerUnit.CurrentSpeed;
+        playerUnit.MoveDir *= playerUnit.CurrentSpeed;
 
-        if (Physics.Raycast(playerUnit.Transform.position + playerUnit.CapsuleCollider.center, moveDir,
+        if (Physics.Raycast(playerUnit.transform.position + playerUnit.CapsuleCollider.center, playerUnit.MoveDir,
                     playerUnit.CapsuleCollider.radius + playerUnit.CurrentSpeed * Time.fixedDeltaTime, playerUnit.FrontCheckLayer) == false)
         {
-            playerUnit.Move(moveDir,Time.fixedDeltaTime);
+            playerUnit.Move(playerUnit.MoveDir, Time.fixedDeltaTime);
         }
+
+        //playerUnit.PrevDir = playerUnit.MoveDir;
     }
 
-    public override void AnimatorMove(Animator animator)
+    public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
     }
 
+    public override void OnJump(PlayerUnit playerUnit, Animator animator)
+    {
+        if(playerUnit.JumpStart == false)
+        {
+            playerUnit.JumpStart = true;
+            animator.SetTrigger("Jump");
+        }
+    }
 }
