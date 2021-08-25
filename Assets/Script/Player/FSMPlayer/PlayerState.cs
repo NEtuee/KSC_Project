@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class PlayerState : MonoBehaviour
 {
@@ -19,7 +20,11 @@ public abstract class PlayerState : MonoBehaviour
     {
     }
 
-    public virtual void OnAim(PlayerUnit playerUnit, Animator animator)
+    public virtual void OnAim(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+    }
+
+    public virtual void OnShot(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
     }
 }

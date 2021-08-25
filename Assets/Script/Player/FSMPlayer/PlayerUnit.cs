@@ -21,10 +21,11 @@ public class PlayerUnit : UnTransfromObjectBase
 
     public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
     public float WalkSpeed => walkSpeed;
+    public float RunSpeed => runSpeed;
     public float RotationSpeed { get => rotationSpeed; }
     public CapsuleCollider CapsuleCollider { get => _capsuleCollider; }
     public LayerMask FrontCheckLayer { get => frontCheckLayer; }
-    
+
     public bool IsGround { get => isGrounded; }
     public float JumpPower { get => jumpTime; }
     public float MinJumpPower { get => minJumpPower; }
@@ -40,6 +41,22 @@ public class PlayerUnit : UnTransfromObjectBase
 
     public float HorizonWeight { get => _horizonWeight; set => _horizonWeight = value; }
 
+    public float Energy { get => energy.Value;
+        set
+        {
+            energy.Value += value;
+            energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+        }
+    }
+    public float WalkRestoreEnergyValue => walkRestoreEnergyValue;
+    public float RunRestoreEnergyValue => runRestoreEnergyValue;
+    public float AimRestoreEnergyValue => aimRestoreEnergyValue;
+    public float ClimbingRestoreEnergyValue => climbingJumpEnergyRestoreValue;
+    public float HitEnergyRestoreEnergyValue => HitEnergyRestoreEnergyValue;
+    public float JumpEnergyRestoreEnergyValue => jumpEnergyRestoreValue;
+    public float ClimbingJumpRestoreEnrgyValue => climbingJumpEnergyRestoreValue;
+
+
     [SerializeField] private PlayerState _currentState;
     public PlayerState GetState => _currentState;
 
@@ -50,6 +67,7 @@ public class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private bool isWalk;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
+    [SerializeField] private float aimingWalkSpeed = 5.5f;
     [SerializeField] private float currentSpeed;
     [SerializeField] private float accelerateSpeed = 20.0f;
     [SerializeField] private float rotationSpeed = 6.0f;
@@ -80,19 +98,77 @@ public class PlayerUnit : UnTransfromObjectBase
     private bool _jumpStart = false;
     private Vector3 slidingVector = Vector3.zero;
 
+    private bool decharging = false;
+    private bool _aimLock = false;
+
+    public bool AimLock { get => _aimLock; set => _aimLock = value; }
+    public bool Decharging { get => decharging; set => decharging = value; }
+
+    public Transform DechargingEffectTransform => dechargingEffectTransform;
+
+    [Header("Energy")]
+    [SerializeField] private float walkRestoreEnergyValue;
+    [SerializeField] private float runRestoreEnergyValue;
+    [SerializeField] private float aimRestoreEnergyValue;
+    [SerializeField] private float climbingRestoreEnergyValue;
+    [SerializeField] private float hitEnergyRestoreValue = 0.0f;
+    [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
+    [SerializeField] private float climbingJumpEnergyRestoreValue;
+
+    [Header("Input")]
     /// Input
-    [SerializeField]private float _inputVertical;
+    [SerializeField] private float _inputVertical;
     [SerializeField] private float _inputHorizontal;
+
+    [Header("Spine")]
+    [SerializeField] private Transform lookAtAim;
+    [SerializeField] private Vector3 relativeVector;
+    private Transform spine;
+
+    [Header("Gun")]
+    [SerializeField] private Animator gunAnim;
+    [SerializeField] private Transform dechargingEffectTransform;
+    private float dechargingDuration = 2.5f;
+    private GameObject pelvisGunObject;
+    private List<Material> pelvisGunMaterial = new List<Material>();
+    private float _emissionTargetValue = 10f;
+    private Color _originalEmissionColor;
+
+    public FMODUnity.StudioEventEmitter _chargeSoundEmitter = null;
 
     private Animator _animator;
     private Transform _transform;
     private CapsuleCollider _capsuleCollider;
+    private EMPGun _empGun;
 
+    public EMPGun EmpGun => _empGun;
+    public Animator GunAnimator => gunAnim;
 
     public override void Assign()
     {
         base.Assign();
         SaveMyNumber("Player");
+
+        AddAction(MessageTitles.player_initalizemove, (msg) =>
+        {
+            //InitializeMove();
+        });
+
+        AddAction(MessageTitles.player_initVelocity, (msg) =>
+        {
+            //InitVelocity();
+        });
+
+        AddAction(MessageTitles.player_visibledrone, (msg) =>
+        {
+            //bool visible = (bool)msg.data;
+            //drone.Visible = visible;
+        });
+
+        AddAction(MessageTitles.fmod_soundEmitter, (msg) =>
+        {
+            _chargeSoundEmitter = (FMODUnity.StudioEventEmitter)msg.data;
+        });
     }
 
     public override void Initialize()
@@ -103,12 +179,22 @@ public class PlayerUnit : UnTransfromObjectBase
         _transform = GetComponent<Transform>();
         _animator = GetComponent<Animator>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
+        _empGun = GetComponent<EMPGun>();
 
         if (defaultState == null) defaultState = gameObject.AddComponent<PlayerState_Default>();
         if (jumpState == null) jumpState = gameObject.AddComponent<PlayerState_Jump>();
         if (runToStopState == null) runToStopState = gameObject.AddComponent<PlayerState_RunToStop>();
         if (turnBackState == null) turnBackState = gameObject.AddComponent<PlayerState_TurnBack>();
         if (aimingState == null) aimingState = gameObject.AddComponent<PlayerState_Aiming>();
+
+        pelvisGunObject = _empGun.PelvisGunObject;
+        foreach (var renderer in pelvisGunObject.GetComponentsInChildren<Renderer>())
+        {
+            pelvisGunMaterial.Add(renderer.material);
+            _originalEmissionColor = renderer.material.GetColor("_EmissionColor");
+        }
+
+        spine = _animator.GetBoneTransform(HumanBodyBones.Spine);
 
         ChangeState(defaultState);
     }
@@ -130,6 +216,20 @@ public class PlayerUnit : UnTransfromObjectBase
         _currentState.FixedUpdateState(this, _animator);
 
         CheckTurnBack();
+    }
+
+    private void LateUpdate()
+    {
+        if(_currentState == aimingState)
+        {
+            Vector3 dir = (spine.position - lookAtAim.position).normalized;
+            Quaternion originalRot = spine.rotation;
+            var spineRotation = spine.rotation;
+            spineRotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVector);
+            spineRotation *= Quaternion.Inverse(transform.rotation);
+            spineRotation *= originalRot;
+            spine.rotation = spineRotation;
+        }
     }
 
     private void OnAnimatorMove()
@@ -176,13 +276,20 @@ public class PlayerUnit : UnTransfromObjectBase
 
         if (_inputVertical != 0 || _inputHorizontal != 0)
         {
-            if (isWalk == true)
+            if (_currentState != aimingState)
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+                if (isWalk == true)
+                {
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+                }
+                else
+                {
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+                }
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, aimingWalkSpeed, Time.deltaTime * accelerateSpeed);
             }
         }
         else
@@ -212,7 +319,6 @@ public class PlayerUnit : UnTransfromObjectBase
             {
                 isGrounded = false;
             }
-
         }
         else
         {
@@ -338,12 +444,37 @@ public class PlayerUnit : UnTransfromObjectBase
 
     public void SetAimLock(bool value)
     {
-        //_aimLock = value;
+        _aimLock = value;
     }
 
     public void SetRunningLock(bool value)
     {
         //_runLock = value;
+    }
+
+    public IEnumerator DechargingCoroutine()
+    {
+        Decharging = true;
+        //if (chargingCountText != null)
+        //    chargingCountText.color = Color.red;
+
+        float time = 0;
+        while (time < dechargingDuration)
+        {
+            time += Time.deltaTime;
+            float intencity = (dechargingDuration - time) / dechargingDuration * _emissionTargetValue;
+            ////pelvisGunMaterial.SetColor("_EmissionColor", _originalEmissionColor * intencity);
+            foreach (var mat in pelvisGunMaterial)
+            {
+                mat.SetColor("_EmissionColor", _originalEmissionColor * intencity);
+            }
+
+            yield return null;
+        }
+
+        Decharging = false;
+        //if (chargingCountText != null)
+        //    chargingCountText.color = _chargingCountTextColor;
     }
 
 
@@ -392,6 +523,22 @@ public class PlayerUnit : UnTransfromObjectBase
         {
             isWalk = true;
         }
+    }
+
+    public void OnAim(InputAction.CallbackContext value)
+    {
+        if (value.performed == false)
+            return;
+
+        _currentState.OnAim(value,this,_animator);
+    }
+
+    public void OnShot(InputAction.CallbackContext value)
+    {
+        if (value.performed == false)
+            return;
+
+        _currentState.OnShot(value, this, _animator);
     }
 
     #endregion

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using MD;
 
 public class PlayerState_Default : PlayerState
 {
@@ -17,14 +19,21 @@ public class PlayerState_Default : PlayerState
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.HorizonWeight = 0.0f;
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)
     {
+
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
+        if (playerUnit.CurrentSpeed >= playerUnit.WalkSpeed)
+            playerUnit.Energy=playerUnit.RunRestoreEnergyValue * Time.fixedDeltaTime;
+        else if(playerUnit.CurrentSpeed > 0.0f)
+            playerUnit.Energy = playerUnit.WalkSpeed * Time.fixedDeltaTime;
+
         playerUnit.CurrentJumpPower = 0.0f;
 
         if (playerUnit.IsGround == false)
@@ -112,6 +121,25 @@ public class PlayerState_Default : PlayerState
         {
             playerUnit.JumpStart = true;
             animator.SetTrigger("Jump");
+        }
+    }
+
+    public override void OnAim(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+        if (value.action.IsPressed())
+        {
+            if (playerUnit.AimLock == false)
+            {
+                AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+                soundData.id = 1008; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+                playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
+
+                AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+                chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = transform; chargeSoundPlayData.returnValue = true;
+                playerUnit.SendMessageQuick(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), chargeSoundPlayData);
+
+                playerUnit.ChangeState(PlayerUnit.aimingState);
+            }
         }
     }
 }

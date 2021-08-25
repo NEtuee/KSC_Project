@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using MD;
 
 public class PlayerState_Jump : PlayerState
 {
@@ -86,5 +88,24 @@ public class PlayerState_Jump : PlayerState
 
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
+    }
+
+    public override void OnAim(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+        if (value.action.IsPressed())
+        {
+            if (playerUnit.AimLock == false)
+            {
+                AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+                soundData.id = 1008; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+                playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
+
+                AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+                chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = transform; chargeSoundPlayData.returnValue = true;
+                playerUnit.SendMessageQuick(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), chargeSoundPlayData);
+
+                playerUnit.ChangeState(PlayerUnit.aimingState);
+            }
+        }
     }
 }
