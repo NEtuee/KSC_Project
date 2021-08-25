@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UniRx;
 
 public class PlayerUnit : UnTransfromObjectBase
 {
@@ -10,6 +11,7 @@ public class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_Jump jumpState;
     public static PlayerState_RunToStop runToStopState;
     public static PlayerState_TurnBack turnBackState;
+    public static PlayerState_Aiming aimingState;
 
     public float InputVertical { get => _inputVertical; }
     public float InputHorizontal { get => _inputHorizontal; }
@@ -36,7 +38,11 @@ public class PlayerUnit : UnTransfromObjectBase
 
     public bool JumpStart { get => _jumpStart; set => _jumpStart = value; }
 
+    public float HorizonWeight { get => _horizonWeight; set => _horizonWeight = value; }
+
     [SerializeField] private PlayerState _currentState;
+    public PlayerState GetState => _currentState;
+
     private PlayerState _prevState;
     public string currentStateName;
 
@@ -47,6 +53,7 @@ public class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float currentSpeed;
     [SerializeField] private float accelerateSpeed = 20.0f;
     [SerializeField] private float rotationSpeed = 6.0f;
+    private float _horizonWeight = 0.0f;
     private Vector3 _moveDir;
     private Vector3 _prevDir;
     private Vector3 _lookDir;
@@ -82,9 +89,16 @@ public class PlayerUnit : UnTransfromObjectBase
     private CapsuleCollider _capsuleCollider;
 
 
+    public override void Assign()
+    {
+        base.Assign();
+        SaveMyNumber("Player");
+    }
+
     public override void Initialize()
     {
         base.Initialize();
+        RegisterRequest(GetSavedNumber("PlayerManager"));
 
         _transform = GetComponent<Transform>();
         _animator = GetComponent<Animator>();
@@ -94,6 +108,7 @@ public class PlayerUnit : UnTransfromObjectBase
         if (jumpState == null) jumpState = gameObject.AddComponent<PlayerState_Jump>();
         if (runToStopState == null) runToStopState = gameObject.AddComponent<PlayerState_RunToStop>();
         if (turnBackState == null) turnBackState = gameObject.AddComponent<PlayerState_TurnBack>();
+        if (aimingState == null) aimingState = gameObject.AddComponent<PlayerState_Aiming>();
 
         ChangeState(defaultState);
     }
@@ -154,6 +169,7 @@ public class PlayerUnit : UnTransfromObjectBase
     private void UpdateMoveSpeed()
     {
         _animator.SetFloat("Speed", currentSpeed);
+        _animator.SetFloat("HorizonWeight", _horizonWeight);
 
         if (_currentState == runToStopState)
             return;
@@ -271,6 +287,11 @@ public class PlayerUnit : UnTransfromObjectBase
         }
     }
 
+    public void TakeDamage(float damage)
+    {
+        hp.Value -= damage;
+    }
+
     private void CheckTurnBack()
     {
         Vector3 moveForward = _moveDir;
@@ -288,6 +309,55 @@ public class PlayerUnit : UnTransfromObjectBase
         }
     }
 
+    public bool IsNowClimbingBehavior()
+    {
+        return false;
+    }
+
+    public void SetJumpPower(float value)
+    {
+        if (dead)
+            return;
+        currentJumpPower = value;
+    }
+
+    public void SetVelocity(Vector3 velocity)
+    {
+        //리지드 바디 벨로시티 설정
+    }
+
+    public void AddVelocity(Vector3 velocity)
+    {
+        //rigidbody.velocity += velocity;
+    }
+
+    public void InitVelocity()
+    {
+        SetVelocity(Vector3.zero);
+    }
+
+    public void SetAimLock(bool value)
+    {
+        //_aimLock = value;
+    }
+
+    public void SetRunningLock(bool value)
+    {
+        //_runLock = value;
+    }
+
+
+    #region Status
+    public FloatReactiveProperty stamina = new FloatReactiveProperty(100);
+    public FloatReactiveProperty hp = new FloatReactiveProperty(100f);
+    public FloatReactiveProperty charge = new FloatReactiveProperty(0.0f);
+    public FloatReactiveProperty energy = new FloatReactiveProperty(0.0f);
+    public IntReactiveProperty loadCount = new IntReactiveProperty(0);
+    public FloatReactiveProperty chargeTime = new FloatReactiveProperty(0.0f);
+    public IntReactiveProperty hpPackCount = new IntReactiveProperty(0);
+
+    protected bool dead = false;
+    #endregion
 
     #region InputSystem
 

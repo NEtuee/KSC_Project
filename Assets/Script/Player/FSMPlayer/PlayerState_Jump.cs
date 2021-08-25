@@ -10,6 +10,7 @@ public class PlayerState_Jump : PlayerState
     public override void Enter(PlayerUnit playerUnit,Animator animator)
     {
         playerUnit.currentStateName = "Jump";
+        playerUnit.HorizonWeight = 0.0f;
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)

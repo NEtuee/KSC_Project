@@ -18,8 +18,10 @@ public class PlayerState_RunToStop : PlayerState
         playerUnit.currentStateName = "RunToStop";
 
         animator.SetTrigger("RunToStop");
+        animator.SetFloat("HorizonWeight", 0.0f);
 
         playerUnit.CurrentSpeed = 0.0f;
+        playerUnit.HorizonWeight = 0.0f;
 
         ComputeMoveDir(playerUnit);
     }

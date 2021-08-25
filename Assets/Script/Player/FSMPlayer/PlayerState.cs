@@ -18,4 +18,8 @@ public abstract class PlayerState : MonoBehaviour
     public virtual void OnJump(PlayerUnit playerUnit, Animator animator)
     {
     }
+
+    public virtual void OnAim(PlayerUnit playerUnit, Animator animator)
+    {
+    }
 }

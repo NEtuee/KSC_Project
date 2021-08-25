@@ -80,7 +80,7 @@ public class Genie_AI : ObjectBase
     private TimeCounterEx _timeCounterEx;
     private GraphAnimator _animator;
     private Animator _animatorController;
-    private PlayerCtrl_Ver2 _player;
+    private PlayerUnit _player;
     private Transform _target;
     private Transform _groundLookTarget;
     private Vector3 _originPos;
@@ -96,7 +96,7 @@ public class Genie_AI : ObjectBase
         base.Assign();
 
         AddAction(MessageTitles.set_setplayer,(x)=>{
-            _player = (PlayerCtrl_Ver2)x.data;
+            _player = (PlayerUnit)x.data;
             _target = _player.transform;
         });
     }

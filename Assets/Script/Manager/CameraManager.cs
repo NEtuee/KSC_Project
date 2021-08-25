@@ -78,7 +78,7 @@ public class CameraManager : ManagerBase
     //Damping
     private Vector3 prevDamping = Vector3.zero;
 
-    private PlayerCtrl_Ver2 _player;
+    private PlayerUnit _player;
     private Transform _playerTransfrom;
 
     public override void Assign()
@@ -132,7 +132,7 @@ public class CameraManager : ManagerBase
 
         AddAction(MessageTitles.set_setplayer, (msg) => 
         {
-            _player = (PlayerCtrl_Ver2)msg.data;
+            _player = (PlayerUnit)msg.data;
             _playerTransfrom = _player.transform;
         });
 
@@ -205,16 +205,19 @@ public class CameraManager : ManagerBase
 
         InitializeCameraAtGameStart();
 
-        if (_player.updateMethod == UpdateMethod.FixedUpdate)
-        {
-            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
-            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
-        }
-        else
-        {
-            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
-            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
-        }
+        brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
+        brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+
+        //if (_player.updateMethod == UpdateMethod.FixedUpdate)
+        //{
+        //    brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
+        //    brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+        //}
+        //else
+        //{
+        //    brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
+        //    brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
+        //}
 
         for (int i = 0; i < distanceBlendProfiles.Length; i++)
         {
@@ -707,16 +710,18 @@ public class CameraManager : ManagerBase
 
     public void SetUpdateMethod()
     {
-        if(_player.updateMethod == UpdateMethod.FixedUpdate)
-        {
-            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
-            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
-        }
-        else
-        {
-            brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
-            brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
-        }
+        //if(_player.updateMethod == UpdateMethod.FixedUpdate)
+        //{
+        //    brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
+        //    brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+        //}
+        //else
+        //{
+        //    brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
+        //    brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.LateUpdate;
+        //}
+        brain.m_UpdateMethod = CinemachineBrain.UpdateMethod.FixedUpdate;
+        brain.m_BlendUpdateMethod = CinemachineBrain.BrainUpdateMethod.FixedUpdate;
     }
 
     private void BlendDistanceAimCamera()

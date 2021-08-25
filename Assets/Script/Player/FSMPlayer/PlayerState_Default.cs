@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerState_Default : PlayerState
 {
     private Vector3 prevDir;
+    private float rotationAngle;
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
     {
@@ -70,6 +71,25 @@ public class PlayerState_Default : PlayerState
             playerUnit.transform.rotation = Quaternion.Lerp(playerUnit.transform.rotation,
                 Quaternion.LookRotation(playerUnit.transform.forward, Vector3.up), Time.fixedDeltaTime * playerUnit.RotationSpeed);
         }
+
+        if(playerUnit.CurrentSpeed > playerUnit.WalkSpeed && targetRotation != Quaternion.identity)
+        {
+            if (playerUnit.LookDir == Vector3.zero)
+                playerUnit.LookDir = playerUnit.Transform.forward;
+
+            rotationAngle=(int)Quaternion.Angle(playerUnit.Transform.rotation, Quaternion.LookRotation(playerUnit.LookDir, Vector3.up));
+            if (Vector3.Dot(Vector3.Cross(transform.forward, playerUnit.LookDir), transform.up) < 0)
+            {
+                rotationAngle = -rotationAngle;
+            }
+
+            playerUnit.HorizonWeight = Mathf.Lerp(playerUnit.HorizonWeight, rotationAngle, Time.fixedDeltaTime * playerUnit.RotationSpeed);
+        }
+        else
+        {
+            playerUnit.HorizonWeight = Mathf.Lerp(playerUnit.HorizonWeight, 0.0f, Time.fixedDeltaTime * 12f);
+        }
+
 
         playerUnit.MoveDir *= playerUnit.CurrentSpeed;
 
