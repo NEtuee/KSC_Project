@@ -142,7 +142,7 @@ public class PlayerState_ClimbingJump : PlayerState
         Vector3 point1;
         RaycastHit hit;
         Transform playerTransform = playerUnit.Transform;
-        if (playerUnit.stamina.Value >= 0.0f)
+        if (playerUnit.stamina.Value > 0.0f)
         {
             point1 = playerTransform.position + playerUnit.CapsuleCollider.center - playerTransform.forward;
             if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius * 1.5f, playerTransform.forward, out hit, 3f, playerUnit.DetectionLayer))
@@ -200,8 +200,8 @@ public class PlayerState_ClimbingJump : PlayerState
                 }
             }
 
-            point1 = playerTransform.position + playerTransform.up * playerUnit.CapsuleCollider.height * 0.5f - transform.forward;
-            if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius, transform.forward, out hit, 5f, playerUnit.LedgeAbleLayer))
+            point1 = playerTransform.position + playerTransform.up * playerUnit.CapsuleCollider.height * 0.5f - playerTransform.forward;
+            if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius, playerTransform.forward, out hit, 5f, playerUnit.LedgeAbleLayer))
             {
                 RaycastHit ledgePointHit;
                 point1 = playerTransform.position + playerTransform.up * playerUnit.CapsuleCollider.height * 2;
@@ -216,7 +216,7 @@ public class PlayerState_ClimbingJump : PlayerState
                     playerTransform.rotation = Quaternion.LookRotation(-hit.normal);
                     playerTransform.position = (hit.point - playerTransform.up * (playerUnit.CapsuleCollider.height * 0.5f)) + (hit.normal) * 0.05f;
 
-                    //InitVelocity();
+                    playerUnit.InitVelocity();
                     playerUnit.MoveDir = Vector3.zero;
 
                     playerTransform.SetParent(hit.collider.transform);

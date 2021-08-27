@@ -12,7 +12,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
     public Transform respawn;
     public Transform bip;
 
-    private PlayerCtrl_Ver2 _player;
+    private PlayerUnit _player;
 
     protected override void Awake()
     {
@@ -21,7 +21,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
         AddAction(MessageTitles.set_setplayer, (msg) =>
         {
-            _player = (PlayerCtrl_Ver2)msg.data;
+            _player = (PlayerUnit)msg.data;
         });
     }
 
@@ -62,12 +62,12 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
     IEnumerator Defferd(Collider coll)
     {
-        if (coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
+        if (coll.TryGetComponent<PlayerUnit>(out var ctrl))
         {
-            if (ctrl.Dead == true || ctrl.GetState() == PlayerCtrl_Ver2.PlayerState.Respawn)
+            if (ctrl.Dead == true || ctrl.GetState == PlayerUnit.respawnState)
                 yield break;
 
-            ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
+            ctrl.ChangeState(PlayerUnit.respawnState);
             yield return new WaitForSeconds(1.0f);
 
             var rot = Quaternion.LookRotation(respawn.forward);
@@ -97,10 +97,10 @@ public class PlayerRePositionor : UnTransfromObjectBase
         {
             //PlayerCtrl_Ver2 player = ((PlayerCtrl_Ver2)(GameManager.Instance.player));
 
-            if (_player.Dead == true || _player.GetState() == PlayerCtrl_Ver2.PlayerState.Respawn)
+            if (_player.Dead == true || ctrl.GetState == PlayerUnit.respawnState)
                 yield break;
 
-            _player.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
+            _player.ChangeState(PlayerUnit.respawnState);
             yield return new WaitForSeconds(1.0f);
             //GameManager.Instance.player.transform.position = respawn.position;
             //bip.position = respawn.position;

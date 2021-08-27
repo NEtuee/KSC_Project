@@ -14,7 +14,7 @@ public class PlayerState_LedgeUp : PlayerState
     public override void Enter(PlayerUnit playerUnit, Animator animator)
     {
         playerUnit.currentStateName = "LedgeUp";
-        //handIK.DisableHandIK();
+        playerUnit.HandIK.DisableHandIK();
         playerUnit.CapsuleCollider.isTrigger = true;
     }
 

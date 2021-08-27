@@ -18,9 +18,9 @@ public class PlayerState_Default : PlayerState
         animator.SetBool("IsGrab", false);
         animator.SetBool("IsLedge", false);
         animator.SetTrigger("Landing");
-        //footIK.EnableFeetIk();
-        //handIK.DisableHandIK();
-        playerUnit.CapsuleCollider.height = 1.898009f; ;
+        playerUnit.FootIK.EnableFeetIk();
+        playerUnit.HandIK.DisableHandIK();
+        playerUnit.CapsuleCollider.height = 1.898009f;
         playerUnit.CapsuleCollider.center = new Vector3(0.0f, 0.95622f, 0.0f);
 
         playerUnit.AirTime = 0.0f;
@@ -71,7 +71,7 @@ public class PlayerState_Default : PlayerState
         }
         else
         {
-            playerUnit.MoveDir = prevDir;
+            playerUnit.MoveDir = playerUnit.PrevDir;
             playerUnit.MoveDir.Normalize();
             playerUnit.LookDir = playerUnit.MoveDir;
         }
@@ -123,7 +123,7 @@ public class PlayerState_Default : PlayerState
             playerUnit.Move(playerUnit.MoveDir, Time.fixedDeltaTime);
         }
 
-        //playerUnit.PrevDir = playerUnit.MoveDir;
+        playerUnit.PrevDir = playerUnit.LookDir;
     }
 
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
@@ -155,7 +155,7 @@ public class PlayerState_Default : PlayerState
         Vector3 point1;
         RaycastHit hit;
         Transform playerTransform = playerUnit.Transform;
-        if (playerUnit.stamina.Value >= 0.0f)
+        if (playerUnit.stamina.Value > 0.0f)
         {
             point1 = playerTransform.position + playerUnit.CapsuleCollider.center - playerTransform.forward;
             if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius * 1.5f, playerTransform.forward, out hit, 3f, playerUnit.DetectionLayer))
@@ -229,7 +229,7 @@ public class PlayerState_Default : PlayerState
                     playerTransform.rotation = Quaternion.LookRotation(-hit.normal);
                     playerTransform.position = (hit.point - playerTransform.up * (playerUnit.CapsuleCollider.height * 0.5f)) + (hit.normal) * 0.05f;
 
-                    //InitVelocity();
+                    playerUnit.InitVelocity();
                     playerUnit.MoveDir = Vector3.zero;
 
                     playerTransform.SetParent(hit.collider.transform);

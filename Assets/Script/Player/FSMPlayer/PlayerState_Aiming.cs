@@ -48,8 +48,8 @@ public class PlayerState_Aiming : PlayerState
         BoolData visibleDisable = MessageDataPooling.GetMessageData<BoolData>();
         visibleDisable.value = false;
         playerUnit.SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, UniqueNumberBase.GetSavedNumberStatic("UIManager"), visibleDisable);
-        //footIK.DisableFeetIk();
-        //drone.OrderAimHelp(true);
+        playerUnit.FootIK.DisableFeetIk();
+        playerUnit.Drone.OrderAimHelp(true);
         BoolData data = MessageDataPooling.GetMessageData<BoolData>();
         data.value = true;
         playerUnit.SendMessageEx(MessageTitles.uimanager_activegunui, UniqueNumberBase.GetSavedNumberStatic("UIManager"), data);
@@ -97,7 +97,7 @@ public class PlayerState_Aiming : PlayerState
         }
 
         playerUnit.SendMessageEx(MessageTitles.cameramanager_activeplayerfollocamera, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), null);
-        //drone.OrderAimHelp(false);
+        playerUnit.Drone.OrderAimHelp(false);
         BoolData data = MessageDataPooling.GetMessageData<BoolData>();
         data.value = false;
         playerUnit.SendMessageEx(MessageTitles.uimanager_activegunui, UniqueNumberBase.GetSavedNumberStatic("UIManager"), data);
@@ -199,6 +199,8 @@ public class PlayerState_Aiming : PlayerState
                 _transformingCount = (int)playerUnit.chargeTime.Value;
             }
         }
+
+        playerUnit.PrevDir = playerUnit.MoveDir;
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)

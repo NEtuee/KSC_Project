@@ -22,6 +22,7 @@ public partial class PlayerUnit
     [SerializeField] private float speedKeepTime = 5f;
     private Vector3 prevParentPrevPos;
 
+
     private Transform detectObject;
 
     private void MoveConservation()
@@ -115,13 +116,35 @@ public partial class PlayerUnit
         if (isClimbingMove == true)
             return;
 
+        if(_inputVertical == 0.0f)
+        {
+            climbingVertical = 0.0f;
+        }
+        else if(_inputVertical > 0.0f)
+        {
+            climbingVertical = 1.0f;
+        }    
+        else
+        {
+            climbingVertical = -1.0f;
+        }
+
+        if(_inputHorizontal > 0.0f)
+        {
+            climbingHorizon = Mathf.Ceil(_inputHorizontal);
+        }
+        else
+        {
+            climbingHorizon = Mathf.Floor(_inputHorizontal);
+        }
+
         if(isLedge == false)
         {
-            if(_inputVertical != 0.0f)
+            if(climbingVertical != 0.0f)
             {
-                if(_inputVertical > 0.0f)
+                if(climbingVertical > 0.0f)
                 {
-                    if(_inputHorizontal == 0.0f)
+                    if(climbingHorizon == 0.0f)
                     {
                         if(UpDetection() == false)
                         {
@@ -131,7 +154,7 @@ public partial class PlayerUnit
                     }
                     else
                     {
-                        if (_inputHorizontal > 0.0f)
+                        if (climbingHorizon > 0.0f)
                         {
                             _animator.SetTrigger("UpRightClimbing");
                             isClimbingMove = true;
@@ -145,7 +168,7 @@ public partial class PlayerUnit
                 }
                 else
                 {
-                    if (_inputHorizontal == 0.0f)
+                    if (climbingHorizon == 0.0f)
                     {
                         if (DownDetection() == true)
                         {
@@ -155,7 +178,7 @@ public partial class PlayerUnit
                     }
                     else
                     {
-                        if (_inputHorizontal > 0.0f)
+                        if (climbingHorizon > 0.0f)
                         {
                             _animator.SetTrigger("DownRightClimbing");
                             isClimbingMove = true;
@@ -170,12 +193,12 @@ public partial class PlayerUnit
             }
             else
             {
-                if (_inputHorizontal > 0.0f)
+                if (climbingHorizon > 0.0f)
                 {
                     _animator.SetTrigger("RightClimbing");
                     isClimbingMove = true;
                 }
-                else if (_inputHorizontal < 0.0f)
+                else if (climbingHorizon < 0.0f)
                 {
                     _animator.SetTrigger("LeftClimbing");
                     isClimbingMove = true;
@@ -184,7 +207,7 @@ public partial class PlayerUnit
         }
         else
         {
-            if (_inputVertical == -1.0f)
+            if (climbingVertical == -1.0f)
             {
                 if (_currentState != hangEdgeState)
                 {
@@ -196,9 +219,9 @@ public partial class PlayerUnit
                     ChangeState(grabState);
                 }
             }
-            else if (_inputVertical == 0.0f && _inputHorizontal != 0.0f)
+            else if (climbingVertical == 0.0f && climbingHorizon != 0.0f)
             {
-                if (_inputHorizontal == 1.0f)
+                if (climbingHorizon == 1.0f)
                 {
                     _animator.SetTrigger("RightClimbing");
                     isClimbingMove = true;

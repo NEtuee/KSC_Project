@@ -35,7 +35,6 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
     public void SendMessageQuick(ushort title, int target, System.Object data)
     {
-        Debug.Log(title);
         var msg = MessagePack(title,target,data);
         MasterManager.instance.HandleMessageQuick(msg);
 #if UNITY_EDITOR

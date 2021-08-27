@@ -53,10 +53,13 @@ public class PlayerState_Grab : PlayerState
         playerUnit.CapsuleCollider.height = 1f;
         playerUnit.CapsuleCollider.center = new Vector3(0.0f,0.5f,0.0f);
 
-        playerUnit.IsClimbingMove = false;
+        //playerUnit.IsClimbingMove = false;
         playerUnit.IsJump = false;
 
         playerUnit.InitVelocity();
+        playerUnit.HandIK.ActiveHandIK(true);
+        playerUnit.HandIK.ActiveLedgeIK(false);
+        playerUnit.FootIK.DisableFeetIk();
 
         StringData data = MessageDataPooling.GetMessageData<StringData>();
         data.value = "Grab";
@@ -65,6 +68,7 @@ public class PlayerState_Grab : PlayerState
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.IsClimbingMove = false;
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)

@@ -10,6 +10,11 @@ public partial class PlayerUnit
         SetClimbMove(false);
     }
 
+    private void EndGetUp()
+    {
+        ChangeState(defaultState);
+    }
+
     private void Left()
     {
         _animator.SetBool("Left", false);
@@ -58,57 +63,14 @@ public partial class PlayerUnit
         ChangeState(grabState);
     }
 
-    private void TraceUp(int left)
+    private void GetupSound()
     {
-
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+        soundData.id = 1017; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
 
-    private void TraceDown(int left)
-    {
-
-    }
-
-    private void TraceUpLeft()
-    {
-
-    }
-
-    private void TraceUpRight()
-    {
-
-    }
-
-    private void TraceDownLeft()
-    {
-
-    }
-
-    private void TraceDownRight()
-    {
-
-    }
-
-    private void TraceLedge()
-    {
-
-    }
-
-    private void UpdateRightHandPos()
-    {
-
-    }
-
-    private void RightTrace()
-    {
-
-    }
-
-    private void UpdateLeftHandPos()
-    {
-
-    }
-
-    private void LeftTrace()
+    private void LandingSound()
     {
 
     }

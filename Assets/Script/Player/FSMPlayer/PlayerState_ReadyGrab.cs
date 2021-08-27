@@ -16,14 +16,14 @@ public class PlayerState_ReadyGrab : PlayerState
     {
         playerUnit.CurrentJumpPower = 0.0f;
         playerUnit.CurrentSpeed = 0.0f;
-        //Init Velocity()
+        playerUnit.InitVelocity();
 
         animator.SetBool("IsGrab", true);
         animator.SetInteger("ReadyClimbNum", (int)playerUnit.ClimbingJumpDirection);
 
-        //handIK.ActiveHandIK(true);
-        //handIK.ActiveLedgeIK(false);
-        //footIK.DisableFeetIk();
+        //playerUnit.HandIK.ActiveHandIK(true);
+        playerUnit.HandIK.ActiveLedgeIK(false);
+        playerUnit.FootIK.DisableFeetIk();
         playerUnit.IsCanReadyClimbingCancel = false;
 
         playerUnit.IsClimbingMove = false;

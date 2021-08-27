@@ -6,8 +6,7 @@ using UnityEngine;
 public class IKCtrl : MonoBehaviour
 {
     protected Animator animator;
-    private PlayerCtrl_Ver2 player;
-    private PlayerMovement movement;
+    private PlayerUnit player;
 
     [Range(0f, 1f)] public float distanceToGround;
     public LayerMask layerMask;
@@ -34,8 +33,7 @@ public class IKCtrl : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        player = GetComponent<PlayerCtrl_Ver2>();
-        movement = GetComponent<PlayerMovement>();
+        player = GetComponent<PlayerUnit>();
 
         if(animator != null)
         {
@@ -98,7 +96,7 @@ public class IKCtrl : MonoBehaviour
             return;
         }
 
-        if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Jump || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab || player.GetState() == PlayerCtrl_Ver2.PlayerState.HangLedge)
+        if (player.GetState == PlayerUnit.jumpState || player.GetState == PlayerUnit.grabState || player.GetState == PlayerUnit.hangLedgeState)
             return;
 
         animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, rightWeight);
@@ -147,9 +145,9 @@ public class IKCtrl : MonoBehaviour
 
     private void MovePelvisHeight()
     {
-        if (movement.isGrounded == false 
-            || player.GetState() == PlayerCtrl_Ver2.PlayerState.Grab
-            || player.GetState() == PlayerCtrl_Ver2.PlayerState.ClimbingJump)
+        if (player.IsGround == false 
+            || player.GetState == PlayerUnit.grabState
+            || player.GetState == PlayerUnit.climbingJumpState)
         {
             lastPelvisPositionY = animator.bodyPosition.y;
             return;

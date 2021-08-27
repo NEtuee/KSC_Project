@@ -18,6 +18,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_ClimbingJump climbingJumpState;
     public static PlayerState_ReadyClimbingJump readyClimbingJumpState;
     public static PlayerState_HangEdge hangEdgeState;
+    public static PlayerState_Ragdoll ragdollState;
+    public static PlayerState_HighLanding highLandingState;
+    public static PlayerState_Respawn respawnState;
 
     public float InputVertical { get => _inputVertical; }
     public float InputHorizontal { get => _inputHorizontal; }
@@ -160,6 +163,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private Vector3 slidingVector = Vector3.zero;
     private float climbingJumpStartTime;
 
+    public float LandingFactor => landingFactor;
     public float AirTime { get => airTime; set => airTime = value; }
     public float ClimbingJumpStartTime { get => climbingJumpStartTime; set => climbingJumpStartTime = value; }
     public float CurrentClimbingJumpPower { get => currentClimbingJumpPower; set => currentClimbingJumpPower = value; }
@@ -205,6 +209,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     /// Input
     [SerializeField] private float _inputVertical;
     [SerializeField] private float _inputHorizontal;
+    private float climbingVertical = 0.0f;
+    private float climbingHorizon = 0.0f;
 
     [Header("Spine")]
     [SerializeField] private Transform lookAtAim;
@@ -232,14 +238,31 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public FMODUnity.StudioEventEmitter _chargeSoundEmitter = null;
 
+    [Header("Drone")]
+    [SerializeField] private Drone drone;
+
+    public Drone Drone => drone;
+
+    [Header("HpPack")]
+    [SerializeField] private float hpPackRestoreValue = 6.0f;
+    [SerializeField] private float _hpPackRestoreDuration = 10.0f;
+    [SerializeField] private bool isHpRestore = false;
+    private IEnumerator restoreHpPackCoroutine;
+
     private Animator _animator;
     private Transform _transform;
     private CapsuleCollider _capsuleCollider;
     private EMPGun _empGun;
     private Rigidbody _rigidbody;
+    private PlayerRagdoll _ragdoll;
+    private HandIKCtrl _handIk;
+    private IKCtrl _footIk;
     public EMPGun EmpGun => _empGun;
     public Animator GunAnimator => gunAnim;
     public Rigidbody Rigidbody => _rigidbody;
+    public PlayerRagdoll Ragdoll => _ragdoll;
+    public HandIKCtrl HandIK => _handIk;
+    public IKCtrl FootIK => _footIk;
 
     public override void Assign()
     {
@@ -248,18 +271,18 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         AddAction(MessageTitles.player_initalizemove, (msg) =>
         {
-            //InitializeMove();
+            InitializeMove();
         });
 
         AddAction(MessageTitles.player_initVelocity, (msg) =>
         {
-            //InitVelocity();
+            InitVelocity();
         });
 
         AddAction(MessageTitles.player_visibledrone, (msg) =>
         {
-            //bool visible = (bool)msg.data;
-            //drone.Visible = visible;
+            bool visible = (bool)msg.data;
+            drone.Visible = visible;
         });
 
         AddAction(MessageTitles.fmod_soundEmitter, (msg) =>
@@ -278,6 +301,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _empGun = GetComponent<EMPGun>();
         _rigidbody = GetComponent<Rigidbody>();
+        _handIk = GetComponent<HandIKCtrl>();
+        _footIk = GetComponent<IKCtrl>();
 
         if (defaultState == null) defaultState = gameObject.AddComponent<PlayerState_Default>();
         if (jumpState == null) jumpState = gameObject.AddComponent<PlayerState_Jump>();
@@ -291,6 +316,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (hangEdgeState == null) hangEdgeState = gameObject.AddComponent<PlayerState_HangEdge>();
         if (climbingJumpState == null) climbingJumpState = gameObject.AddComponent<PlayerState_ClimbingJump>();
         if (readyClimbingJumpState == null) readyClimbingJumpState = gameObject.AddComponent<PlayerState_ReadyClimbingJump>();
+        if (ragdollState == null) ragdollState = gameObject.AddComponent<PlayerState_Ragdoll>();
+        if (highLandingState == null) highLandingState = gameObject.AddComponent<PlayerState_HighLanding>();
+        if (respawnState == null) respawnState = gameObject.AddComponent<PlayerState_Respawn>();
 
         pelvisGunObject = _empGun.PelvisGunObject;
         foreach (var renderer in pelvisGunObject.GetComponentsInChildren<Renderer>())
@@ -375,9 +403,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void Move(Vector3 direction, float deltaTime = 0f ,bool noDelta = false)
     {
         if(noDelta == false)
-            base.transform.position += direction * deltaTime;
+            transform.position += direction * deltaTime;
         else
-            base.transform.position += direction;
+            transform.position += direction;
     }
 
     public void Jump()
@@ -386,6 +414,16 @@ public partial class PlayerUnit : UnTransfromObjectBase
         jumpTime = Time.time;
         currentJumpPower = jumpPower;
         isGrounded = false;
+
+        keepSpeed = true;
+        prevParent = transform.parent;
+        detachTime = Time.time;
+        if (prevParent != null)
+        {
+            prevParentPrevPos = prevParent.position;
+            keepSpeed = true;
+        }
+
         ChangeState(jumpState);
     }
 
@@ -394,7 +432,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _animator.SetFloat("Speed", currentSpeed);
         _animator.SetFloat("HorizonWeight", _horizonWeight);
 
-        if (_currentState == runToStopState)
+        if (_currentState == grabState || _currentState == runToStopState || _currentState == highLandingState)
             return;
 
         if (_inputVertical != 0 || _inputHorizontal != 0)
@@ -457,7 +495,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         if (_currentState == grabState ||
             _currentState == ledgeUpState ||
-            //_currentState == PlayerCtrl_Ver2.PlayerState.Ragdoll ||
+            _currentState == ragdollState ||
             //player.GetState() == PlayerCtrl_Ver2.PlayerState.HangRagdoll ||
             _currentState == hangLedgeState)
             //player.GetState() == PlayerCtrl_Ver2.PlayerState.HangShake)
@@ -490,7 +528,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
                     if(JumpStart == false &&
                         _currentState != grabState &&
                         _currentState != ledgeUpState &&
-                        _currentState != hangLedgeState)
+                        _currentState != hangLedgeState &&
+                        _currentState != ragdollState)
                     {
                         transform.SetParent(null);
                     }
@@ -518,10 +557,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
                         keepSpeed = true;
                     }
 
-                    //if(_currentState == grabstate)
-                    //{
-                    //    keepSpeed = false;
-                    //}
+                    if (_currentState == grabState)
+                    {
+                        keepSpeed = false;
+                    }
                 }
 
                 isGrounded = false;
@@ -532,7 +571,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
                         _currentState != hangLedgeState &&
                         _currentState != readyGrabState &&
                         _currentState != readyClimbingJumpState &&
-                        _currentState != climbingJumpState)
+                        _currentState != climbingJumpState &&
+                        _currentState != ragdollState)
                 {
                     transform.SetParent(null);
                 }
@@ -612,7 +652,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void CheckLedge()
     {
-        if (InputVertical.Equals(-1.0f))
+        if (climbingVertical == -1.0)
             return;
 
         if(ledgeChecker.IsDetectedLedge() == true && isClimbingGround == false)
@@ -751,9 +791,58 @@ public partial class PlayerUnit : UnTransfromObjectBase
         return false;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, bool restoreEnergy = true)
     {
+        if (_currentState == respawnState && _currentState == ragdollState)
+            return;
+
         hp.Value -= damage;
+        if(restoreEnergy == true)
+        {
+            AddEnergy(hitEnergyRestoreValue);
+        }
+
+        if(isHpRestore == true)
+        {
+            isHpRestore = false;
+            StopCoroutine(restoreHpPackCoroutine);
+        }
+
+        if(hp.Value <= 0.0f)
+        {
+            //Dead
+        }
+
+        SendMessageEx(MessageTitles.uimanager_damageEffect, GetSavedNumber("UIManager"), null);
+    }
+
+    public void TakeDamage(float damage, float ragdollPower, Vector3 ragdollDir)
+    {
+        if (_currentState == ragdollState)
+            return;
+
+        hp.Value -= damage;
+
+        if (isHpRestore == true)
+        {
+            isHpRestore = false;
+            StopCoroutine(restoreHpPackCoroutine);
+        }
+
+        if (hp.Value <= 0.0f)
+        {
+            //Dead
+        }
+
+        SendMessageEx(MessageTitles.uimanager_damageEffect, GetSavedNumber("UIManager"), null);
+
+        _ragdoll.ExplosionRagdoll(ragdollPower, ragdollDir);
+    }
+
+    public void InitializeMove()
+    {
+        _animator.SetFloat("Speed", 0.0f);
+        ChangeState(defaultState);
     }
 
     private void CheckTurnBack()
@@ -775,7 +864,17 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public bool IsNowClimbingBehavior()
     {
-        return false;
+        if (_currentState == defaultState ||
+            _currentState == jumpState ||
+            _currentState == runToStopState ||
+            _currentState == turnBackState ||
+            _currentState == aimingState ||
+            _currentState == ragdollState ||
+            _currentState == respawnState ||
+            _currentState == highLandingState)
+            return false;
+        else
+            return true;
     }
 
     public void SetJumpPower(float value)
@@ -835,6 +934,21 @@ public partial class PlayerUnit : UnTransfromObjectBase
         //    chargingCountText.color = _chargingCountTextColor;
     }
 
+    private IEnumerator HpRestore()
+    {
+        float time = 0.0f;
+        isHpRestore = true;
+        while (time < _hpPackRestoreDuration && hp.Value < 100.0f)
+        {
+            time += Time.fixedDeltaTime;
+            hp.Value += hpPackRestoreValue * Time.fixedDeltaTime;
+            hp.Value = Mathf.Clamp(hp.Value, 0.0f, 100.0f);
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        isHpRestore = false;
+    }
 
     #region Status
     public FloatReactiveProperty stamina = new FloatReactiveProperty(100);
@@ -846,6 +960,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public IntReactiveProperty hpPackCount = new IntReactiveProperty(0);
 
     protected bool dead = false;
+    public bool Dead => dead;
+
     #endregion
 
     #region InputSystem
@@ -864,7 +980,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void OnJump(InputAction.CallbackContext value)
     {
-        if (value.performed == false)
+        if (value.performed == false || Time.timeScale == 0f)
             return;
 
         _currentState.OnJump(this, _animator);
@@ -872,7 +988,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void OnRun(InputAction.CallbackContext value)
     {
-        if (value.performed == false)
+        if (value.performed == false || Time.timeScale == 0f)
             return;
 
         if (isWalk)
@@ -887,7 +1003,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void OnAim(InputAction.CallbackContext value)
     {
-        if (value.performed == false)
+        if (value.performed == false || Time.timeScale == 0f)
             return;
 
         _currentState.OnAim(value,this,_animator);
@@ -895,7 +1011,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void OnShot(InputAction.CallbackContext value)
     {
-        if (value.performed == false)
+        if (value.performed == false || Time.timeScale == 0f)
             return;
 
         _currentState.OnShot(value, this, _animator);
@@ -903,10 +1019,23 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void OnGrab(InputAction.CallbackContext value)
     {
-        if (value.performed == false)
+        if (value.performed == false || Time.timeScale == 0f)
             return;
 
         _currentState.OnGrab(value, this, _animator);
+    }
+
+    public void OnUseHpPack(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        if (hp.Value < 100.0f && hpPackCount.Value > 0 && isHpRestore == false)
+        {
+            hpPackCount.Value--;
+            restoreHpPackCoroutine = HpRestore();
+            StartCoroutine(restoreHpPackCoroutine);
+        }
     }
 
     #endregion

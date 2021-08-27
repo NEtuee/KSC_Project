@@ -7,8 +7,6 @@ using MD;
 public class PlayerState_Jump : PlayerState
 {
 
-    private Vector3 prevDir;
-
     public override void Enter(PlayerUnit playerUnit,Animator animator)
     {
         if (playerUnit.GetPrevState != PlayerUnit.climbingJumpState)
@@ -32,7 +30,16 @@ public class PlayerState_Jump : PlayerState
 
         if(playerUnit.IsGround == true)
         {
-            playerUnit.ChangeState(PlayerUnit.defaultState);
+            if (playerUnit.AirTime >= playerUnit.LandingFactor)
+            {
+                playerUnit.ChangeState(PlayerUnit.highLandingState);
+                return;
+            }
+            else
+            {
+                playerUnit.ChangeState(PlayerUnit.defaultState);
+                return;
+            }
         }
 
         Vector3 camForward = Camera.main.transform.forward;
@@ -48,7 +55,7 @@ public class PlayerState_Jump : PlayerState
         }
         else
         {
-            playerUnit.MoveDir = prevDir;
+            playerUnit.MoveDir = playerUnit.PrevDir;
             playerUnit.MoveDir.Normalize();
             playerUnit.LookDir = playerUnit.MoveDir;
         }
@@ -85,7 +92,7 @@ public class PlayerState_Jump : PlayerState
             playerUnit.Move(playerUnit.MoveDir + (Vector3.up * playerUnit.CurrentJumpPower), Time.fixedDeltaTime);        
         }
 
-        //playerUnit.PrevDir = playerUnit.MoveDir;
+        playerUnit.PrevDir = playerUnit.LookDir;
     }
 
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
@@ -116,7 +123,7 @@ public class PlayerState_Jump : PlayerState
         Vector3 point1;
         RaycastHit hit;
         Transform playerTransform = playerUnit.Transform;
-        if (playerUnit.stamina.Value >= 0.0f)
+        if (playerUnit.stamina.Value > 0.0f)
         {
             point1 = playerTransform.position + playerUnit.CapsuleCollider.center - playerTransform.forward;
             if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius * 1.5f, playerTransform.forward, out hit, 3f, playerUnit.DetectionLayer))
@@ -174,23 +181,23 @@ public class PlayerState_Jump : PlayerState
                 }
             }
 
-            point1 = playerTransform.position + playerTransform.up * playerUnit.CapsuleCollider.height * 0.5f - transform.forward;
-            if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius, transform.forward, out hit, 5f, playerUnit.LedgeAbleLayer))
+            point1 = playerTransform.position + playerTransform.up * playerUnit.CapsuleCollider.height * 0.5f - playerTransform.forward;
+            if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius, playerTransform.forward, out hit, 5f, playerUnit.LedgeAbleLayer))
             {
                 RaycastHit ledgePointHit;
-                point1 = transform.position + transform.up * playerUnit.CapsuleCollider.height * 2;
-                if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius * 2f, -transform.up, out ledgePointHit,
+                point1 = playerTransform.position + playerTransform.up * playerUnit.CapsuleCollider.height * 2;
+                if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius * 2f, -playerTransform.up, out ledgePointHit,
                     playerUnit.CapsuleCollider.height * 2, playerUnit.AdjustAbleLayer))
                 {
-                    if (Vector3.Distance(ledgePointHit.point, transform.position) > playerUnit.HangAbleEdgeDist)
+                    if (Vector3.Distance(ledgePointHit.point, playerTransform.position) > playerUnit.HangAbleEdgeDist)
                     {
                         return;
                     }
 
                     playerTransform.rotation = Quaternion.LookRotation(-hit.normal);
-                    playerTransform.position = (hit.point - transform.up * (playerUnit.CapsuleCollider.height * 0.5f)) + (hit.normal) * 0.05f;
+                    playerTransform.position = (hit.point - playerTransform.up * (playerUnit.CapsuleCollider.height * 0.5f)) + (hit.normal) * 0.05f;
 
-                    //InitVelocity();
+                    playerUnit.InitVelocity();
                     playerUnit.MoveDir = Vector3.zero;
 
                     playerTransform.SetParent(hit.collider.transform);

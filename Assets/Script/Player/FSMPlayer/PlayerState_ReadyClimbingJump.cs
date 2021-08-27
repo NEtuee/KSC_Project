@@ -50,7 +50,7 @@ public class PlayerState_ReadyClimbingJump : PlayerState
 
                 playerUnit.SetVelocity(playerUnit.MoveDir);
 
-                //handIK.DisableHandIK();
+                playerUnit.HandIK.DisableHandIK();
                 playerUnit.Jump();
                 playerUnit.ChangeState(PlayerUnit.jumpState);
 
@@ -60,7 +60,7 @@ public class PlayerState_ReadyClimbingJump : PlayerState
 
         playerUnit.InitVelocity();
 
-        //handIK.DisableHandIK();
+        playerUnit.HandIK.DisableHandIK();
         animator.SetBool("IsGrab", false);
         animator.SetTrigger("ClimbingJump");
     }
