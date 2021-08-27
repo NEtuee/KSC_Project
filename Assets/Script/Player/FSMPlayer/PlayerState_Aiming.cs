@@ -27,6 +27,8 @@ public class PlayerState_Aiming : PlayerState
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.currentStateName = "Aiming";
+
         AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1008; soundData.localPosition = Vector3.up; soundData.parent = playerUnit.Transform; soundData.returnValue = false;
         playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
@@ -34,6 +36,8 @@ public class PlayerState_Aiming : PlayerState
         AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = playerUnit.Transform; chargeSoundPlayData.returnValue = true;
         playerUnit.SendMessageQuick(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), chargeSoundPlayData);
+
+        Debug.Log(playerUnit._chargeSoundEmitter);
 
         playerUnit.loadCount.Value = 1;
         playerUnit.EmpGun.Active(true);
@@ -105,7 +109,7 @@ public class PlayerState_Aiming : PlayerState
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {       
         if (playerUnit.CurrentSpeed > 0.0f)
-            playerUnit.Energy = playerUnit.AimRestoreEnergyValue * Time.fixedDeltaTime;
+            playerUnit.AddEnergy(playerUnit.AimRestoreEnergyValue * Time.fixedDeltaTime);
 
         RaycastHit hit;
         Vector3 camForward = Camera.main.transform.forward;
@@ -170,7 +174,8 @@ public class PlayerState_Aiming : PlayerState
         {
             if (playerUnit._chargeSoundEmitter == null)
             {
-                AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>(); ;
+                //Debug.Log(playerUnit._chargeSoundEmitter);
+                AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
                 chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = playerUnit.Transform; chargeSoundPlayData.returnValue = true;
                 playerUnit.SendMessageQuick(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), chargeSoundPlayData);
             }
@@ -244,7 +249,7 @@ public class PlayerState_Aiming : PlayerState
 
             playerUnit.chargeTime.Value = 0.0f;
             playerUnit.EmpGun.LaunchLaser(loadCount * 40.0f);
-            playerUnit.Energy = -loadCount * _gunCost;
+            playerUnit.AddEnergy(-loadCount * _gunCost);
             FloatData camDist = MessageDataPooling.GetMessageData<FloatData>();
             camDist.value = 0.333f * (float)loadCount;
             playerUnit.SendMessageEx(MessageTitles.cameramanager_setaimcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), camDist);
