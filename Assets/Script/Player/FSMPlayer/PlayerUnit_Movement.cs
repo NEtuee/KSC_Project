@@ -36,13 +36,23 @@ public partial class PlayerUnit
             difference.y = 0;
             difference.Normalize();
             prevParentPrevPos = prevParent.position;
-            Move(velocity * amount * difference, 0.0f, true);
+            Move_Nodelta(velocity * amount * difference);
 
             if(Mathf.Abs(amount) < Mathf.Epsilon)
             {
                 keepSpeed = false;
             }
         }
+    }
+
+    public void Move_Nodelta(Vector3 direction)
+    {
+        if (Physics.Raycast(transform.position + _capsuleCollider.center, direction, _capsuleCollider.radius + direction.magnitude) == true)
+        {
+            return;
+        }
+
+        transform.position += direction;
     }
 
     public void Attach()
