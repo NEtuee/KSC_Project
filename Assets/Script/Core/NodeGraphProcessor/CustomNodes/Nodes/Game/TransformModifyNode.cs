@@ -125,3 +125,93 @@ public class TurnNode : LinearConditionalNode
 		transform.RotateAround(transform.position,transform.up,factor);
 	}
 }
+
+[System.Serializable, NodeMenuItem("Game/Plane Move")]
+public class DefaultMoveNode : LinearConditionalNode
+{
+	[Input(name = "GraphObject")]
+	public GraphObjectBase graphObject;
+
+    [Input(name = "Target")]
+	public Transform target;
+
+	[Input(name = "deltaTime")]
+	public float deltaTime;
+
+	[Input(name = "speed"),SerializeField]
+	public float speed;
+
+	[Input(name = "Distance Accuracy"),SerializeField]
+	public float accur;
+
+	[Output(name = "Arrived")]
+	public bool arrived;
+
+	private float _accelSpeed = 0f;
+
+	public override string		name => "Plane Move";
+
+	protected override void Process()
+	{
+		if(Vector3.Distance(graphObject.transform.position,target.position) <= accur)
+		{
+			arrived = true;
+			return;
+		}
+
+		_accelSpeed = Mathf.Lerp(_accelSpeed,speed,0.2f);
+		var direction = (target.position - graphObject.transform.position).normalized;
+		direction = Vector3.ProjectOnPlane(direction,graphObject.transform.up);
+
+        graphObject.transform.position += direction * (_accelSpeed * deltaTime);
+
+		arrived = false;
+	}
+}
+
+[System.Serializable, NodeMenuItem("Game/Plane Move : Vector")]
+public class DefaultMoveVectorNode : LinearConditionalNode
+{
+	[Input(name = "GraphObject")]
+	public GraphObjectBase graphObject;
+
+    [Input(name = "Target")]
+	public Vector3C target;
+
+	[Input(name = "deltaTime")]
+	public float deltaTime;
+
+	[Input(name = "speed"),SerializeField]
+	public float speed;
+
+	[Input(name = "Distance Accuracy"),SerializeField]
+	public float accur;
+
+	[Output(name = "Arrived")]
+	public bool arrived;
+
+	private float _accelSpeed = 0f;
+
+	public override string		name => "Plane Move";
+
+	protected override void Process()
+	{
+		if(Vector3.Distance(graphObject.transform.position,(Vector3)target) <= accur)
+		{
+			_accelSpeed -= speed * deltaTime;
+			_accelSpeed = _accelSpeed <= 0f ? 0f : _accelSpeed;
+			arrived = true;
+			return;
+		}
+
+		_accelSpeed += speed * deltaTime;
+		_accelSpeed = _accelSpeed >= speed ? speed : _accelSpeed;
+		//_accelSpeed = Mathf.Lerp(_accelSpeed,speed,0.2f);
+		var direction = ((Vector3)target - graphObject.transform.position).normalized;
+		direction = Vector3.ProjectOnPlane(direction,graphObject.transform.up);
+
+        graphObject.transform.position += direction * (_accelSpeed * deltaTime);
+
+		arrived = false;
+	}
+}

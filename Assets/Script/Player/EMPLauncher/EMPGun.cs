@@ -133,6 +133,13 @@ public class EMPGun : UnTransfromObjectBase
 
                 SendMessageEx(receiver,MessageTitles.player_EMPHit,empData);
             }
+            if(hit.collider.TryGetComponent<MessageEmpTarget>(out var empTarget))
+            {
+                var empData = MessageDataPooling.GetMessageData<FloatData>();
+                empData.value = damage;
+
+                SendMessageEx(empTarget.parent,MessageTitles.player_EMPHit,empData);
+            }
             if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
             {
                 hitable.Hit(damage);

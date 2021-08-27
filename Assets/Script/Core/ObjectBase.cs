@@ -86,7 +86,6 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
     protected virtual void OnDestroy()
     {
-        Debug.Log("Delete");
         Dispose();
     }
 }
