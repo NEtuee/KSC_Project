@@ -418,6 +418,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         keepSpeed = true;
         prevParent = transform.parent;
         detachTime = Time.time;
+        transform.SetParent(null);
         if (prevParent != null)
         {
             prevParentPrevPos = prevParent.position;

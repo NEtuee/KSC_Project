@@ -11,6 +11,8 @@ public class PlayerState_Respawn : PlayerState
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.currentStateName = "Respawn";
+
         animator.SetFloat("Speed", 0.0f);
         playerUnit.InitVelocity();
 

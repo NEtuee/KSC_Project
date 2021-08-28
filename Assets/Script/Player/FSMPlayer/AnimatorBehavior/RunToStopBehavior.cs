@@ -15,6 +15,7 @@ public class RunToStopBehavior : StateMachineBehaviour
     {
         base.OnStateExit(animator, stateInfo, layerIndex);
 
+        if(_playerUnit.GetState != PlayerUnit.respawnState)
         _playerUnit.ChangeState(PlayerUnit.defaultState);
     }
 }

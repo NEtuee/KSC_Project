@@ -74,4 +74,10 @@ public partial class PlayerUnit
     {
 
     }
+
+    private void EndRespawn()
+    {
+        _animator.SetBool("Respawn", false);
+        ChangeState(defaultState);
+    }
 }
