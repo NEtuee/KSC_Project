@@ -117,7 +117,7 @@ public class HandIKCtrl : MonoBehaviour
     [SerializeField]private Transform nextLeftHandPointObject;
     [SerializeField] private Transform nextRightHandPointObject;
 
-    void Start()
+    private void Awake()
     {
         animator = GetComponent<Animator>();
 
@@ -133,6 +133,23 @@ public class HandIKCtrl : MonoBehaviour
         nextLeftHandPointObject.SetParent(this.transform);
 
         GenerateDetectPoint();
+    }
+    void Start()
+    {
+        //animator = GetComponent<Animator>();
+
+        //leftHandPointObjet = new GameObject("LeftHandPoint").transform;
+        //rightHandPointObject = new GameObject("RightHandPoint").transform;
+        //nextLeftHandPointObject = new GameObject("NextLeftHandPoint").transform;
+        //nextRightHandPointObject = new GameObject("NextRightHandPoint").transform;
+        //leftHandPointObjet.SetParent(this.transform);
+        //leftHandPointObjet.position = Vector3.zero;
+        //rightHandPointObject.SetParent(this.transform);
+        //rightHandPointObject.position = Vector3.zero;
+        //nextRightHandPointObject.SetParent(this.transform);
+        //nextLeftHandPointObject.SetParent(this.transform);
+
+        //GenerateDetectPoint();
     }
 
     void Update()

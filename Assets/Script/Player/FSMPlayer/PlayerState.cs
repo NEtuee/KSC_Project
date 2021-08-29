@@ -27,4 +27,8 @@ public abstract class PlayerState : MonoBehaviour
     public virtual void OnShot(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
     }
+
+    public virtual void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+    }
 }

@@ -753,21 +753,22 @@ public class BrokenMedusa_AI : IKBossBase
 
         if(playerColl.Length != 0)
         {
-            foreach(Collider curr in playerColl)
-            {
-                PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
+            //foreach(Collider curr in playerColl)
+            //{
+            //    PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
                 
-                if (ragdoll != null)
-                {
-                    _player.TakeDamage(5f);
-                    ragdoll.ExplosionRagdoll(250.0f, transform.forward);
-                        //Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
+            //    if (ragdoll != null)
+            //    {
+            //        _player.TakeDamage(5f);
+            //        ragdoll.ExplosionRagdoll(250.0f, transform.forward);
+            //            //Vector3.ProjectOnPlane((_target.position - _perpendicularPoint),Vector3.up).normalized);
                 
-                    break;
-                }
+            //        break;
+            //    }
 
                 
-            }
+            //}
+            _player.TakeDamage(5f, 250.0f, transform.forward);
         }
     }
 

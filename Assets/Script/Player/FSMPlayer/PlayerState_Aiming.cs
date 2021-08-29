@@ -27,6 +27,8 @@ public class PlayerState_Aiming : PlayerState
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.currentStateName = "Aiming";
+
         AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1008; soundData.localPosition = Vector3.up; soundData.parent = playerUnit.Transform; soundData.returnValue = false;
         playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
@@ -34,6 +36,8 @@ public class PlayerState_Aiming : PlayerState
         AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = playerUnit.Transform; chargeSoundPlayData.returnValue = true;
         playerUnit.SendMessageQuick(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), chargeSoundPlayData);
+
+        Debug.Log(playerUnit._chargeSoundEmitter);
 
         playerUnit.loadCount.Value = 1;
         playerUnit.EmpGun.Active(true);
@@ -44,8 +48,8 @@ public class PlayerState_Aiming : PlayerState
         BoolData visibleDisable = MessageDataPooling.GetMessageData<BoolData>();
         visibleDisable.value = false;
         playerUnit.SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, UniqueNumberBase.GetSavedNumberStatic("UIManager"), visibleDisable);
-        //footIK.DisableFeetIk();
-        //drone.OrderAimHelp(true);
+        playerUnit.FootIK.DisableFeetIk();
+        playerUnit.Drone.OrderAimHelp(true);
         BoolData data = MessageDataPooling.GetMessageData<BoolData>();
         data.value = true;
         playerUnit.SendMessageEx(MessageTitles.uimanager_activegunui, UniqueNumberBase.GetSavedNumberStatic("UIManager"), data);
@@ -93,7 +97,7 @@ public class PlayerState_Aiming : PlayerState
         }
 
         playerUnit.SendMessageEx(MessageTitles.cameramanager_activeplayerfollocamera, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), null);
-        //drone.OrderAimHelp(false);
+        playerUnit.Drone.OrderAimHelp(false);
         BoolData data = MessageDataPooling.GetMessageData<BoolData>();
         data.value = false;
         playerUnit.SendMessageEx(MessageTitles.uimanager_activegunui, UniqueNumberBase.GetSavedNumberStatic("UIManager"), data);
@@ -105,7 +109,7 @@ public class PlayerState_Aiming : PlayerState
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {       
         if (playerUnit.CurrentSpeed > 0.0f)
-            playerUnit.Energy = playerUnit.AimRestoreEnergyValue * Time.fixedDeltaTime;
+            playerUnit.AddEnergy(playerUnit.AimRestoreEnergyValue * Time.fixedDeltaTime);
 
         RaycastHit hit;
         Vector3 camForward = Camera.main.transform.forward;
@@ -170,7 +174,8 @@ public class PlayerState_Aiming : PlayerState
         {
             if (playerUnit._chargeSoundEmitter == null)
             {
-                AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>(); ;
+                //Debug.Log(playerUnit._chargeSoundEmitter);
+                AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
                 chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = playerUnit.Transform; chargeSoundPlayData.returnValue = true;
                 playerUnit.SendMessageQuick(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), chargeSoundPlayData);
             }
@@ -194,6 +199,8 @@ public class PlayerState_Aiming : PlayerState
                 _transformingCount = (int)playerUnit.chargeTime.Value;
             }
         }
+
+        playerUnit.PrevDir = playerUnit.MoveDir;
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)
@@ -244,7 +251,7 @@ public class PlayerState_Aiming : PlayerState
 
             playerUnit.chargeTime.Value = 0.0f;
             playerUnit.EmpGun.LaunchLaser(loadCount * 40.0f);
-            playerUnit.Energy = -loadCount * _gunCost;
+            playerUnit.AddEnergy(-loadCount * _gunCost);
             FloatData camDist = MessageDataPooling.GetMessageData<FloatData>();
             camDist.value = 0.333f * (float)loadCount;
             playerUnit.SendMessageEx(MessageTitles.cameramanager_setaimcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), camDist);

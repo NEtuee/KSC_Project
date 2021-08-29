@@ -14,6 +14,8 @@ public class PlayerState_TurnBack : PlayerState
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.currentStateName = "TurnBack";
+
         AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1018; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
         playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
