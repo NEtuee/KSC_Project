@@ -16,7 +16,7 @@ public class TimeInitializeNode : LinearConditionalNode
     public string target;
 
 
-    [Input(name = "Time Limit")]
+    [Input(name = "Time Limit"),SerializeField]
 	public float limit;
 
 	public override string		name => "Initialize Timer";

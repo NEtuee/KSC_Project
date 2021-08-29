@@ -109,3 +109,87 @@ public class FloatMultiflyNode : BaseNode
 	    result = a * b;
 	}
 }
+
+[System.Serializable, NodeMenuItem("Operations/Float : Greater")]
+public class FloatGreaterNode : BaseNode
+{
+	[Input(name = "A"),SerializeField]
+	public float a;
+
+    [Input(name = "B"),SerializeField]
+	public float b;
+
+
+	[Output(name = "Result")]
+	public bool result;
+
+	public override string		name => "Greater";
+
+	protected override void Process()
+	{
+	    result = a > b;
+	}
+}
+
+[System.Serializable, NodeMenuItem("Operations/Float : Greater Equal")]
+public class FloatGreaterEqualNode : BaseNode
+{
+	[Input(name = "A"),SerializeField]
+	public float a;
+
+    [Input(name = "B"),SerializeField]
+	public float b;
+
+
+	[Output(name = "Result")]
+	public bool result;
+
+	public override string		name => "Greater Equal";
+
+	protected override void Process()
+	{
+	    result = a >= b;
+	}
+}
+
+[System.Serializable, NodeMenuItem("Operations/Float : Smaller")]
+public class FloatSmallerNode : BaseNode
+{
+	[Input(name = "A"),SerializeField]
+	public float a;
+
+    [Input(name = "B"),SerializeField]
+	public float b;
+
+
+	[Output(name = "Result")]
+	public bool result;
+
+	public override string		name => "Smaller";
+
+	protected override void Process()
+	{
+	    result = a < b;
+	}
+}
+
+[System.Serializable, NodeMenuItem("Operations/Float : Smaller Equal")]
+public class FloatSmallerEqualNode : BaseNode
+{
+	[Input(name = "A"),SerializeField]
+	public float a;
+
+    [Input(name = "B"),SerializeField]
+	public float b;
+
+
+	[Output(name = "Result")]
+	public bool result;
+
+	public override string		name => "Smaller Equal";
+
+	protected override void Process()
+	{
+	    result = a <= b;
+	}
+}

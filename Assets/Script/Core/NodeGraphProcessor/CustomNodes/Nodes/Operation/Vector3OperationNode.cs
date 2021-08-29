@@ -139,7 +139,7 @@ public class Vector3SplitNode : BaseNode
 	}
 }
 
-[System.Serializable, NodeMenuItem("Operations/Get Direction : Vector3")]
+[System.Serializable, NodeMenuItem("Get/Get Direction : Vector3")]
 public class GetDirectionVector3Node : BaseNode
 {
 	[Input(name = "A")]
@@ -160,7 +160,7 @@ public class GetDirectionVector3Node : BaseNode
 	}
 }
 
-[System.Serializable, NodeMenuItem("Operations/Get Distance : Vector3")]
+[System.Serializable, NodeMenuItem("Get/Get Distance : Vector3")]
 public class GetDistanceVector3Node : BaseNode
 {
 	[Input(name = "A")]
@@ -180,7 +180,7 @@ public class GetDistanceVector3Node : BaseNode
 	}
 }
 
-[System.Serializable, NodeMenuItem("Operations/Get 2D Distance : Vector3")]
+[System.Serializable, NodeMenuItem("Get/Get 2D Distance : Vector3")]
 public class Get2DDistanceVector3Node : BaseNode
 {
 	[Input(name = "A")]
@@ -206,7 +206,7 @@ public class Get2DDistanceVector3Node : BaseNode
 	}
 }
 
-[System.Serializable, NodeMenuItem("Operations/Get Direction : Transform")]
+[System.Serializable, NodeMenuItem("Get/Get Direction : Transform")]
 public class GetDirectionTransformNode : BaseNode
 {
 	[Input(name = "A")]
@@ -227,7 +227,7 @@ public class GetDirectionTransformNode : BaseNode
 	}
 }
 
-[System.Serializable, NodeMenuItem("Operations/Get 2D Direction : Transform")]
+[System.Serializable, NodeMenuItem("Get/Get 2D Direction : Transform")]
 public class Get2DDirectionTransformNode : BaseNode
 {
 	[Input(name = "A")]
@@ -255,7 +255,7 @@ public class Get2DDirectionTransformNode : BaseNode
 	}
 }
 
-[System.Serializable, NodeMenuItem("Operations/Get Distance : Transform")]
+[System.Serializable, NodeMenuItem("Get/Get Distance : Transform")]
 public class GetDistanceTransformNode : BaseNode
 {
 	[Input(name = "A")]
@@ -272,5 +272,22 @@ public class GetDistanceTransformNode : BaseNode
 	protected override void Process()
 	{
 	    distance = Vector3.Distance(a.position,b.position);
+	}
+}
+
+[System.Serializable, NodeMenuItem("Operations/Vector3 : Reverse")]
+public class Vector3ReverseNode : BaseNode
+{
+	[Input(name = "A")]
+	public Vector3C a;
+
+	[Output(name = "Output")]
+	public Vector3C output = new Vector3C();
+
+	public override string		name => "Reverse";
+
+	protected override void Process()
+	{
+	    output.Set(-(Vector3)a);
 	}
 }
