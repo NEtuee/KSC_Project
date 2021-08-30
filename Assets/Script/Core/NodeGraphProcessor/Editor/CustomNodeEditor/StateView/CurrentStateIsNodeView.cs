@@ -14,7 +14,7 @@ public class CurrentStateIsNodeView : BaseNodeView
 
 	public override void Enable()
 	{
-		var node = nodeTarget as StateChangeNode;
+		var node = nodeTarget as CurrentStateIsNode;
 		UpdateItemList();
 
         // Create your fields using node's variables and add them to the controlsContainer
@@ -29,7 +29,7 @@ public class CurrentStateIsNodeView : BaseNodeView
 
 	public void UpdateItemList()
 	{
-		var node = nodeTarget as StateChangeNode;
+		var node = nodeTarget as CurrentStateIsNode;
 		int defaultIndex = 0;
 		if(dropdown != null && contentContainer.Contains(dropdown))
 		{
