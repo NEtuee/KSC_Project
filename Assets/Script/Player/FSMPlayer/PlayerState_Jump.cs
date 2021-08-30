@@ -28,6 +28,8 @@ public class PlayerState_Jump : PlayerState
         playerUnit.CurrentJumpPower -= playerUnit.Gravity * Time.fixedDeltaTime;
         playerUnit.CurrentJumpPower = Mathf.Clamp(playerUnit.CurrentJumpPower, playerUnit.MinJumpPower, 50.0f);
 
+        playerUnit.AirTime += Time.fixedDeltaTime;
+
         if(playerUnit.IsGround == true)
         {
             if (playerUnit.AirTime >= playerUnit.LandingFactor)

@@ -49,7 +49,16 @@ public class PlayerState_Default : PlayerState
         else if(playerUnit.CurrentSpeed > 0.0f)
             playerUnit.AddEnergy(playerUnit.WalkSpeed * Time.fixedDeltaTime);
 
-        playerUnit.CurrentJumpPower = 0.0f;
+        if (playerUnit.IsGround == true)
+        {
+            playerUnit.CurrentJumpPower = 0.0f;
+            playerUnit.InitVelocity();
+        }
+        else
+        {
+            playerUnit.CurrentJumpPower -= playerUnit.Gravity * Time.fixedDeltaTime;
+            playerUnit.CurrentJumpPower = Mathf.Clamp(playerUnit.CurrentJumpPower, playerUnit.MinJumpPower, 50.0f);
+        }
 
         if (playerUnit.IsGround == false)
         {
@@ -170,7 +179,7 @@ public class PlayerState_Default : PlayerState
                     return;
                 }
 
-                playerUnit.Transform.SetParent(hit.collider.transform);
+                playerTransform.SetParent(hit.collider.transform);
                 playerUnit.Attach();
 
                 if (playerUnit.LedgeChecker.IsDetectedLedge() == false)
@@ -185,7 +194,7 @@ public class PlayerState_Default : PlayerState
                 }
 
                 playerUnit.Transform.rotation = Quaternion.LookRotation(-hit.normal);
-                playerUnit.Transform.position = (hit.point - playerUnit.Transform.up * (playerUnit.CapsuleCollider.height * 0.5f)) + (hit.normal) * 0.05f;
+                playerUnit.Transform.position = (hit.point - playerUnit.Transform.up * (playerUnit.CapsuleCollider.height * 0.5f)) + (hit.normal * 0.05f);
 
                 playerUnit.MoveDir = Vector3.zero;
 

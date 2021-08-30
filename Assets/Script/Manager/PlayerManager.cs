@@ -13,7 +13,7 @@ public class PlayerManager : ManagerBase
     [SerializeField] private EMPGun _emp;
     [SerializeField] private Renderer bagRenderer;
     private Material _bagMatrial;
-    private Drone _drone;
+    [SerializeField] private Drone _drone;
 
     public override void Assign()
     {
@@ -33,35 +33,36 @@ public class PlayerManager : ManagerBase
             PositionRotation data = MessageDataPooling.CastData<PositionRotation>(msg.data);
             _player.transform.SetPositionAndRotation(data.position, data.rotation);
             //_player.GetPlayerRagdoll().transform.position = data.position;
-            //_playerFootIK.InitPelvisHeight();
+            _player.FootIK.InitPelvisHeight();
         });
 
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
          {
              DontDestroyOnLoad(_player.transform);
-             //DontDestroyOnLoad(_drone.transform);
+             DontDestroyOnLoad(_drone.transform);
          });
 
         AddAction(MessageTitles.scene_beforeSceneChangeNotAsync, (msg) =>
          {
              SceneManager.MoveGameObjectToScene(_player.gameObject, SceneManager.GetActiveScene());
-             //SceneManager.MoveGameObjectToScene(_drone.gameObject, SceneManager.GetActiveScene());
+             SceneManager.MoveGameObjectToScene(_drone.gameObject, SceneManager.GetActiveScene());
          });
 
         AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
         {
-            //_player.InitializeMove();
-            //_player.InitVelocity();
+            _player.InitializeMove();
+            _player.InitVelocity();
         });
 
         AddAction(MessageTitles.playermanager_addDamageToPlayer, (msg) =>
         {
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
-            //_player.TakeDamage(data.value);
+            _player.TakeDamage(data.value);
         });
 
         AddAction(MessageTitles.playermanager_initPlayerStatus, (msg) =>
-        { //_player.InitStatus(); 
+        { 
+            _player.InitStatus(); 
         });
         AddAction(MessageTitles.playermanager_getPlayer,(msg)=>{
             var receiver = (MessageReceiver)msg.sender;
@@ -71,17 +72,17 @@ public class PlayerManager : ManagerBase
         AddAction(MessageTitles.playermanager_hidePlayer, (msg) =>
         {
             bool visible = (bool)msg.data;
-            //_player.GetDrone().gameObject.SetActive(visible);
+            _drone.gameObject.SetActive(visible);
             _player.gameObject.SetActive(visible);
         });
 
         AddAction(MessageTitles.playermanager_ragdoll,(msg)=>{
-            //_player.GetPlayerRagdoll().SlidingRagdoll(Vector3.zero);
+            _player.Ragdoll.SlidingRagdoll(Vector3.zero);
         });
 
         AddAction(MessageTitles.playermanager_droneText,(msg)=>{
             var data = MessageDataPooling.CastData<StringData>(msg.data);
-            //_player.GetDrone().DroneTextCall(data.value);
+            _drone.DroneTextCall(data.value);
         });
     }
 

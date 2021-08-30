@@ -25,10 +25,18 @@ public class PlayerRePositionor : UnTransfromObjectBase
         });
     }
 
-    protected override void Start()
+    //protected override void Start()
+    //{
+    //    base.Start();
+    //    //bip = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
+    //    SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
+    //    bip = _player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
+    //}
+
+    public override void Initialize()
     {
-        base.Start();
-        //bip = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
+        base.Initialize();
+
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
         bip = _player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
     }
@@ -64,6 +72,8 @@ public class PlayerRePositionor : UnTransfromObjectBase
     {
         if (coll.TryGetComponent<PlayerUnit>(out var ctrl))
         {
+            ctrl.TakeDamage(5.0f, false);
+
             if (ctrl.Dead == true || ctrl.GetState == PlayerUnit.respawnState)
                 yield break;
 
@@ -88,7 +98,6 @@ public class PlayerRePositionor : UnTransfromObjectBase
             PitchYawData data = MessageDataPooling.GetMessageData<PitchYawData>();
             data.pitch = rot.eulerAngles.x; data.yaw = rot.eulerAngles.y;
             SendMessageEx(MessageTitles.cameramanager_setYawPitch, GetSavedNumber("CameraManager"), data);
-            ctrl.TakeDamage(5.0f,false);
             whenFall?.Invoke();
             yield break;
         }
@@ -97,7 +106,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
         {
             //PlayerCtrl_Ver2 player = ((PlayerCtrl_Ver2)(GameManager.Instance.player));
 
-            if (_player.Dead == true || ctrl.GetState == PlayerUnit.respawnState)
+            if (_player.Dead == true)
                 yield break;
 
             _player.ChangeState(PlayerUnit.respawnState);

@@ -63,7 +63,7 @@ public partial class PlayerUnit
 
     public void Detach()
     {
-        if(_currentState == grabState)
+        if(_currentState == grabState || _currentState == readyGrabState)
         {
             keepSpeed = false;
             return;

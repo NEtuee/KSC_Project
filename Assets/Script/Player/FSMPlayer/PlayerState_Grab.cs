@@ -11,7 +11,7 @@ public class PlayerState_Grab : PlayerState
         if (playerUnit.CheckCanClimbingMoveByVertexColor() == false)
             return;
 
-        var p = transform.position;
+        var p = playerUnit.Transform.position;
         p += animator.deltaPosition;
 
         if (playerUnit.IsClimbingGround == false)
@@ -24,22 +24,22 @@ public class PlayerState_Grab : PlayerState
         bool detect = false;
         if (stateInfo.IsName("Climbing.Up_LtoR") || stateInfo.IsName("Climbing.Up_RtoL"))
         {
-            if (Physics.Raycast(p + transform.up * playerUnit.CapsuleCollider.height, transform.forward, 3f))
+            if (Physics.Raycast(p + playerUnit.Transform.up * playerUnit.CapsuleCollider.height, playerUnit.Transform.forward, 3f))
                 detect = true;
         }
         else if (stateInfo.IsName("Climbing.Down_LtoR") || stateInfo.IsName("Climbing.Down_RtoL"))
         {
-            if (Physics.Raycast(p, transform.forward, 3f))
+            if (Physics.Raycast(p, playerUnit.Transform.forward, 3f))
                 detect = true;
         }
         else if (stateInfo.IsName("Climb_Left") || stateInfo.IsName("Climb_Right"))
         {
-            if (Physics.Raycast(p + transform.up * playerUnit.CapsuleCollider.height * 0.5f, transform.forward, 3f))
+            if (Physics.Raycast(p + playerUnit.Transform.up * playerUnit.CapsuleCollider.height * 0.5f, playerUnit.Transform.forward, 3f))
                 detect = true;
         }
 
         if (detect == true)
-            transform.position = p;
+            playerUnit.Transform.position = p;
     }
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
@@ -73,6 +73,8 @@ public class PlayerState_Grab : PlayerState
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.InitVelocity();
+
         if(playerUnit.IsCanClimbingCancel == true)
         {
             if(playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f )
@@ -101,12 +103,12 @@ public class PlayerState_Grab : PlayerState
         }
 
         playerUnit.CheckLedge();
-
-        playerUnit.UpdateGrab();
         float climbingPlaneAngle = Vector3.Dot(Vector3.Cross(playerUnit.Transform.up, Vector3.right), Vector3.forward);
         playerUnit.IsClimbingGround = climbingPlaneAngle > -15f * Mathf.Deg2Rad;
 
         playerUnit.AddEnergy(playerUnit.IsClimbingMove == true ? playerUnit.ClimbingJumpRestoreEnrgyValue : 0.0f);
+
+        playerUnit.UpdateGrab();
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)
