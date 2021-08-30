@@ -221,7 +221,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private LedgeChecker ledgeChecker;
     [SerializeField] private SpaceChecker spaceChecker;
     [SerializeField] private Vector3 wallUnderCheckOffset;
-
+    private bool _ledUpAdjust = false;
+    public bool LedgeUpAdjust { get => _ledUpAdjust; set => _ledUpAdjust = value; }
 
     public LedgeChecker LedgeChecker => ledgeChecker;
     public SpaceChecker SpaceChecker => spaceChecker;
@@ -264,6 +265,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public HandIKCtrl HandIK => _handIk;
     public IKCtrl FootIK => _footIk;
 
+    private RaycastHit _wallHit;
+
     public override void Assign()
     {
         base.Assign();
@@ -303,6 +306,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _rigidbody = GetComponent<Rigidbody>();
         _handIk = GetComponent<HandIKCtrl>();
         _footIk = GetComponent<IKCtrl>();
+        _ragdoll = GetComponent<PlayerRagdoll>();
 
         if (defaultState == null) defaultState = gameObject.AddComponent<PlayerState_Default>();
         if (jumpState == null) jumpState = gameObject.AddComponent<PlayerState_Jump>();
@@ -356,6 +360,11 @@ public partial class PlayerUnit : UnTransfromObjectBase
         CheckTurnBack();
 
         MoveConservation();
+
+        if(_currentState != jumpState)
+        {
+            InitVelocity();
+        }
     }
 
     private void LateUpdate()
@@ -497,9 +506,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (_currentState == grabState ||
             _currentState == ledgeUpState ||
             _currentState == ragdollState ||
-            //player.GetState() == PlayerCtrl_Ver2.PlayerState.HangRagdoll ||
             _currentState == hangLedgeState)
-            //player.GetState() == PlayerCtrl_Ver2.PlayerState.HangShake)
         {
             groundDistance = 0.0f;
             return;
@@ -558,7 +565,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
                         keepSpeed = true;
                     }
 
-                    if (_currentState == grabState)
+                    if (_currentState == grabState || _currentState == readyGrabState)
                     {
                         keepSpeed = false;
                     }
@@ -670,26 +677,26 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void UpdateGrab()
     {
-        RaycastHit wallHit;
         Vector3 startPos = transform.position + transform.up * (_capsuleCollider.height * 0.5f) + (-transform.forward * 1f);
 
-        if (Physics.SphereCast(startPos, _capsuleCollider.radius, transform.forward, out wallHit, 3.0f, adjustAbleLayer))
+        if (Physics.SphereCast(startPos, _capsuleCollider.radius, transform.forward, out _wallHit, 3.0f, adjustAbleLayer))
         {
-            float distToWall = (wallHit.point - (transform.position + transform.up * (_capsuleCollider.height * 0.5f)))
+            float distToWall = (_wallHit.point - (transform.position + transform.up * (_capsuleCollider.height * 0.5f)))
                 .magnitude;
-            if (distToWall > 0.6f || distToWall < 0.35f)
+            if (distToWall > 0.65f || distToWall < 0.35f)
             {
-                transform.position = (wallHit.point - transform.up * (_capsuleCollider.height * 0.5f)) + wallHit.normal * 0.35f;
+                transform.position = (_wallHit.point - transform.up * (_capsuleCollider.height * 0.5f)) + _wallHit.normal * 0.35f;
+                //Debug.Log(distToWall);
             }
 
             if (isClimbingMove == true)
             {
-                transform.rotation = Quaternion.LookRotation(-wallHit.normal, transform.up);
+                transform.rotation = Quaternion.LookRotation(-_wallHit.normal, transform.up);
             }
 
-            if (wallHit.collider.transform != transform.parent)
+            if (_wallHit.collider.transform != transform.parent)
             {
-                transform.SetParent(wallHit.collider.transform);
+                transform.SetParent(_wallHit.collider.transform);
             }
         }
         else
@@ -811,7 +818,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if(hp.Value <= 0.0f)
         {
-            //Dead
+            PlayerDead();
         }
 
         SendMessageEx(MessageTitles.uimanager_damageEffect, GetSavedNumber("UIManager"), null);
@@ -832,7 +839,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (hp.Value <= 0.0f)
         {
-            //Dead
+            PlayerDead();
         }
 
         SendMessageEx(MessageTitles.uimanager_damageEffect, GetSavedNumber("UIManager"), null);
@@ -843,6 +850,19 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void InitializeMove()
     {
         _animator.SetFloat("Speed", 0.0f);
+        ChangeState(defaultState);
+    }
+
+    public void InitStatus()
+    {
+        stamina.Value = 100.0f;
+        hp.Value = 100.0f;
+        energy.Value = 0.0f;
+        _ragdoll.ResetRagdoll();
+        _rigidbody.velocity = Vector3.zero;
+        _footIk.InitPelvisHeight();
+        dead = false;
+        airTime = 0.0f;
         ChangeState(defaultState);
     }
 
@@ -910,6 +930,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
         //_runLock = value;
     }
 
+    public void PlayerDead()
+    {
+        dead = true;
+        SendMessageEx(MessageTitles.uimanager_activeGameOverUi, GetSavedNumber("UIManager"), null);
+    }
+
     public IEnumerator DechargingCoroutine()
     {
         Decharging = true;
@@ -960,7 +986,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public FloatReactiveProperty chargeTime = new FloatReactiveProperty(0.0f);
     public IntReactiveProperty hpPackCount = new IntReactiveProperty(0);
 
-    protected bool dead = false;
+    [SerializeField] protected bool dead = false;
     public bool Dead => dead;
 
     #endregion

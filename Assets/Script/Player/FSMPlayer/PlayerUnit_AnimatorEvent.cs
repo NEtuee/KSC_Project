@@ -80,4 +80,9 @@ public partial class PlayerUnit
         _animator.SetBool("Respawn", false);
         ChangeState(defaultState);
     }
+
+    private void StartLedupAdjust()
+    {
+        LedgeUpAdjust = true;
+    }
 }

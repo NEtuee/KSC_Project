@@ -81,8 +81,8 @@ public class IKCtrl : MonoBehaviour
 
         float leftWeight = animator.GetFloat("LeftIkWeight");
         float rightWeight = animator.GetFloat("RightIkWeight");
-        float leftRotWeight = animator.GetFloat("LeftRotationWeight");
-        float rightRotWeight = animator.GetFloat("RightRotationWeight");
+        //float leftRotWeight = animator.GetFloat("LeftRotationWeight");
+        //float rightRotWeight = animator.GetFloat("RightRotationWeight");
 
         if (leftWeight != 0.0f || rightWeight != 0.0f)
             MovePelvisHeight();
