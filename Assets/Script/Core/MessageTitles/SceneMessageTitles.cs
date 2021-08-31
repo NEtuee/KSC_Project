@@ -49,4 +49,14 @@ public static partial class MessageTitles
     // data = null
     /// </summary>
     public const ushort scene_beforeSceneChangeNotAsync = 0x0609;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort scene_loadRestartLevel = 0x0610;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort scene_restarted = 0x0611;
 }

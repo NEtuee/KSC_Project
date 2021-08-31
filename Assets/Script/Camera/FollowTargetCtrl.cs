@@ -121,6 +121,9 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         //if (GameManager.Instance.PAUSE == true)
         //    return;
 
+        if (_player.GetState == PlayerUnit.deadState)
+            return;
+
         if (!visible)
             return;
 
@@ -151,15 +154,15 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     private void LateUpdate()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
+        //if (GameManager.Instance.PAUSE == true)
+        //    return;
 
-        if (updateMode == false)
-            return;
+        //if (updateMode == false)
+        //    return;
 
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, followSmooth * Time.deltaTime);
         //transform.position = target.position + Vector3.up + Vector3.up * ((PlayerCtrl_Ver2)GameManager.Instance.player).GetFootStepOffset() * 0.1f;
-        transform.position = target.position + Vector3.up;
+        //transform.position = target.position + Vector3.up;
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
         //transform.position = Vector3.MoveTowards(transform.position, target.position + Vector3.up, 8.0f * Time.deltaTime);
     }

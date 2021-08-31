@@ -30,6 +30,13 @@ public class PlayerState_Default : PlayerState
         StringData data = MessageDataPooling.GetMessageData<StringData>();
         data.value = "Default";
         playerUnit.SendMessageEx(MessageTitles.cameramanager_setfollowcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), data);
+
+        if (playerUnit.GetPrevState == PlayerUnit.jumpState)
+        {
+            AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+            soundData.id = 1004; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+            playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
+        }
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -251,5 +258,13 @@ public class PlayerState_Default : PlayerState
                 }
             }
         }
+    }
+
+    public override void OnDash(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+        if (playerUnit.CurrentSpeed < playerUnit.WalkSpeed)
+            return;
+
+        playerUnit.ChangeState(PlayerUnit.dashState);
     }
 }

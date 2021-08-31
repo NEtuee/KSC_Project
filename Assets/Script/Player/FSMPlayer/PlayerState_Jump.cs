@@ -17,6 +17,7 @@ public class PlayerState_Jump : PlayerState
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
     {
+       
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)

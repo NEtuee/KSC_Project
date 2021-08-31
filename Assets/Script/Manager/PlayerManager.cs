@@ -40,6 +40,7 @@ public class PlayerManager : ManagerBase
          {
              DontDestroyOnLoad(_player.transform);
              DontDestroyOnLoad(_drone.transform);
+             _player.CapsuleCollider.enabled = false;
          });
 
         AddAction(MessageTitles.scene_beforeSceneChangeNotAsync, (msg) =>
@@ -50,8 +51,19 @@ public class PlayerManager : ManagerBase
 
         AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
         {
-            _player.InitializeMove();
-            _player.InitVelocity();
+            
+        });
+
+        AddAction(MessageTitles.scene_sceneChanged, (msg) =>
+         {
+             _player.InitializeMove();
+             _player.InitVelocity();
+             _player.CapsuleCollider.enabled = true;
+         });
+
+        AddAction(MessageTitles.scene_restarted, (msg) =>
+        {
+            _player.InitStatus();
         });
 
         AddAction(MessageTitles.playermanager_addDamageToPlayer, (msg) =>
@@ -64,6 +76,7 @@ public class PlayerManager : ManagerBase
         { 
             _player.InitStatus(); 
         });
+
         AddAction(MessageTitles.playermanager_getPlayer,(msg)=>{
             var receiver = (MessageReceiver)msg.sender;
             SendMessageQuick(receiver,MessageTitles.playermanager_getPlayer,_player);

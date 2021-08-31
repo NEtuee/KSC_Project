@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UniRx;
+using MD;
 
 public partial class PlayerUnit : UnTransfromObjectBase
 {
@@ -21,6 +22,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_Ragdoll ragdollState;
     public static PlayerState_HighLanding highLandingState;
     public static PlayerState_Respawn respawnState;
+    public static PlayerState_Dash dashState;
+    public static PlayerState_Dead deadState;
 
     public float InputVertical { get => _inputVertical; }
     public float InputHorizontal { get => _inputHorizontal; }
@@ -173,7 +176,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float KeepClimbingJumpTime => keepClimbingJumpTime;
     public AnimationCurve ClimbingHorizonJumpSpeedCurve => climbingHorizonJumpSpeedCurve;
 
-    private bool decharging = false;
+    [SerializeField]private bool decharging = false;
     private bool _aimLock = false;
 
     public bool AimLock { get => _aimLock; set => _aimLock = value; }
@@ -248,6 +251,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float hpPackRestoreValue = 6.0f;
     [SerializeField] private float _hpPackRestoreDuration = 10.0f;
     [SerializeField] private bool isHpRestore = false;
+    [SerializeField] private Transform steamPosition;
+
+    public Transform SteamPosition => steamPosition;
     private IEnumerator restoreHpPackCoroutine;
 
     private Animator _animator;
@@ -266,6 +272,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public IKCtrl FootIK => _footIk;
 
     private RaycastHit _wallHit;
+
+    private Transform _leftFootTransform;
+    private Transform _rightFootTransform;
 
     public override void Assign()
     {
@@ -323,6 +332,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (ragdollState == null) ragdollState = gameObject.AddComponent<PlayerState_Ragdoll>();
         if (highLandingState == null) highLandingState = gameObject.AddComponent<PlayerState_HighLanding>();
         if (respawnState == null) respawnState = gameObject.AddComponent<PlayerState_Respawn>();
+        if (deadState == null) deadState = gameObject.AddComponent<PlayerState_Dead>();
+        if (dashState == null) dashState = gameObject.AddComponent<PlayerState_Dash>();
 
         pelvisGunObject = _empGun.PelvisGunObject;
         foreach (var renderer in pelvisGunObject.GetComponentsInChildren<Renderer>())
@@ -335,6 +346,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _staminaTimer.InitTimer("Stamina", 0.0f, staminaRestoreDelayTime);
 
         spine = _animator.GetBoneTransform(HumanBodyBones.Spine);
+
+        _leftFootTransform = _animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+        _rightFootTransform = _animator.GetBoneTransform(HumanBodyBones.RightFoot);
 
         ChangeState(defaultState);
     }
@@ -353,7 +367,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         UpdateStamina(Time.fixedDeltaTime);
 
         CheckGround();
-        CheckRunToStop(Time.fixedDeltaTime);
+        //CheckRunToStop(Time.fixedDeltaTime);
 
         _currentState.FixedUpdateState(this, _animator);
 
@@ -433,6 +447,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
             prevParentPrevPos = prevParent.position;
             keepSpeed = true;
         }
+
+        AddEnergy(jumpEnergyRestoreValue);
+
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+        soundData.id = 1003; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
 
         ChangeState(jumpState);
     }
@@ -850,6 +870,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void InitializeMove()
     {
         _animator.SetFloat("Speed", 0.0f);
+        _animator.SetBool("Respawn", false);
         ChangeState(defaultState);
     }
 
@@ -933,6 +954,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void PlayerDead()
     {
         dead = true;
+        ChangeState(deadState);
         SendMessageEx(MessageTitles.uimanager_activeGameOverUi, GetSavedNumber("UIManager"), null);
     }
 
@@ -1063,6 +1085,14 @@ public partial class PlayerUnit : UnTransfromObjectBase
             restoreHpPackCoroutine = HpRestore();
             StartCoroutine(restoreHpPackCoroutine);
         }
+    }
+
+    public void OnDash(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        _currentState.OnDash(value, this, _animator);
     }
 
     #endregion

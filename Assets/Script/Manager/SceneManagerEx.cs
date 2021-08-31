@@ -35,6 +35,11 @@ public class SceneManagerEx : ManagerBase
             StartCoroutine(LoadSceneNotAsync(data.value));
         });
 
+        AddAction(MessageTitles.scene_loadRestartLevel, (msg) =>
+         {
+             LoadRestart();
+         });
+
     }
 
     public override void Initialize()
@@ -103,7 +108,7 @@ public class SceneManagerEx : ManagerBase
         StartCoroutine(SceneLoadingProgress(true));
     }
 
-    public void LoadLevel(int level)
+    public void LoadLevel(int level, bool restart = false)
     {
         if(!_isLoaded)
             return;
@@ -111,7 +116,7 @@ public class SceneManagerEx : ManagerBase
         currentLevel = level;
         
         _currentScene = sceneInfo.FindScene(currentLevel);
-        StartCoroutine(SceneLoadingProgress(true));
+        StartCoroutine(SceneLoadingProgress(true, restart));
     }
 
     public void LoadCurrentLevel()
@@ -122,6 +127,11 @@ public class SceneManagerEx : ManagerBase
 
         // _currentScene = sceneInfo.FindScene(currentLevel);
         // StartCoroutine(SceneLoadingProgress(true));
+    }
+
+    public void LoadRestart()
+    {
+        LoadLevel(currentLevel, true);
     }
 
     public void LoadPrevlevel()
@@ -143,7 +153,7 @@ public class SceneManagerEx : ManagerBase
     //     return levels.Find(x => x.levelCode == code);
     // }
 
-    IEnumerator SceneLoadingProgress(bool setPos)
+    IEnumerator SceneLoadingProgress(bool setPos ,bool restart = false)
     {
         if(!_isLoaded)
             yield break;
@@ -192,6 +202,9 @@ public class SceneManagerEx : ManagerBase
 
 
         _isLoaded = true;
+
+        if(restart)
+            SendBroadcastMessage(MessageTitles.scene_restarted, _currentScene, false);
 
         SendBroadcastMessage(MessageTitles.scene_sceneChanged,_currentScene,false);
     }

@@ -9,6 +9,8 @@ public class EffectManager : ManagerBase
 
     private Dictionary<string, ParticlePool> _particleDic = new Dictionary<string, ParticlePool>();
 
+    public int count;
+
     public override void Assign()
     {
         base.Assign();
@@ -35,6 +37,11 @@ public class EffectManager : ManagerBase
         });
     }
 
+    private void Update()
+    {
+        //count = _receiveQueue.Count;
+    }
+
     private void Start()
     {
         for (int i = 0; i < particlePairReference.pairs.Length; i++)
@@ -49,7 +56,6 @@ public class EffectManager : ManagerBase
 
     public ParticleSystem Active(string key,Vector3 position, Quaternion rotation)
     {
-        //Debug.Log(key);
         if (_particleDic.ContainsKey(key) == false)
         {
             Debug.LogWarning("Not Exist EffectKey");
