@@ -16,6 +16,7 @@ public class IKFootPointRotator : MonoBehaviour
     public float rotateFactor = 0.07f;
 
     public bool rotation = true;
+    public bool setParentToGround = false;
 
     private RayEx ray;
 
@@ -49,6 +50,14 @@ public class IKFootPointRotator : MonoBehaviour
             }
         }
 
+        if(setParentToGround)
+        {
+            if(ray.Cast(transform.position,out hit))
+            {
+                transform.SetParent(hit.transform);
+            }
+        }
+
         if(!rayPointCast)
         {
             if(ray.Cast(transform.position,out hit))
@@ -70,6 +79,14 @@ public class IKFootPointRotator : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation,(Quaternion.FromToRotation(transform.up,avg) * transform.rotation),rotateFactor);
 
         
+    }
+
+    public void DisableAllLegs()
+    {
+        foreach(var leg in legs)
+        {
+            leg.iKFabric.enabled = false;
+        }
     }
 
     public void IKUnHold()

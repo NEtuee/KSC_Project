@@ -5,7 +5,6 @@ using UnityEngine;
 public class LevelEdit_ExplosionPhysics : MonoBehaviour
 {
     public List<GameObject> targets = new List<GameObject>();
-    public LayerMask changeLayer;
 
     public float force = 100f;
     public float torque = 100f;
@@ -14,9 +13,9 @@ public class LevelEdit_ExplosionPhysics : MonoBehaviour
     {
         foreach(var item in targets)
         {
-            var collider = item.GetComponent<Collider>();
-            if(collider != null)
-                collider.enabled = false;
+            // var collider = item.GetComponent<Collider>();
+            // if(collider != null)
+            //     collider.enabled = false;
 
             var rig = item.AddComponent<Rigidbody>();
             var dir = (item.transform.position - transform.position).normalized;

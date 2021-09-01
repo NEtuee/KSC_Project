@@ -73,6 +73,7 @@ public class IKLegMovement : MonoBehaviour
                 if(rayDist < dist)
                 {
                     ik.transform.position = check.point;
+                    ik.transform.SetParent(check.transform);
                     return;
                 }
 
