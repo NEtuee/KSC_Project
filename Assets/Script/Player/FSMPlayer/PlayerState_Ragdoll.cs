@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerState_Ragdoll : PlayerState
 {
+    private bool _isCanUseQuickStand = true;
+    private float _quickStandCoolTime = 15.0f;
+
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
     }
@@ -39,5 +43,26 @@ public class PlayerState_Ragdoll : PlayerState
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)
     {
+    }
+
+    private IEnumerator UpdateCoolTime()
+    {
+        _isCanUseQuickStand = false;
+        float time = 0.0f;
+        while(time < _quickStandCoolTime)
+        {
+            time += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        _isCanUseQuickStand = true;
+    }
+
+    public override void OnQuickStand(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+        if(playerUnit.Ragdoll.GetRagdollState() == PlayerRagdoll.RagdollState.Ragdoll && playerUnit.Ragdoll.PelvisGrounded == true && _isCanUseQuickStand == true)
+        {
+            playerUnit.Ragdoll.ReturnAnimated();
+            StartCoroutine(UpdateCoolTime());
+        }
     }
 }

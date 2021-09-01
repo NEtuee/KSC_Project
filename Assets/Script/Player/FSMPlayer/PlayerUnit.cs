@@ -1086,6 +1086,14 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _currentState.OnGrab(value, this, _animator);
     }
 
+    public void OnGrabRelease(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        _currentState.OnGrabRelease(value, this, _animator);
+    }
+
     public void OnUseHpPack(InputAction.CallbackContext value)
     {
         if (value.performed == false || Time.timeScale == 0f)
@@ -1105,6 +1113,14 @@ public partial class PlayerUnit : UnTransfromObjectBase
             return;
 
         _currentState.OnDash(value, this, _animator);
+    }
+
+    public void OnQuickStand(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        _currentState.OnQuickStand(value, this, _animator);
     }
 
     #endregion

@@ -43,7 +43,7 @@
                     "id": "2670cc27-12cd-4ac9-9b21-264dbaa01835",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Press"
                 },
                 {
                     "name": "EmpAim",
@@ -92,6 +92,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "MultiTap"
+                },
+                {
+                    "name": "QuickStand",
+                    "type": "Button",
+                    "id": "98b6f6ba-fb98-44dc-8674-27ae07fe74f0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
@@ -230,8 +238,8 @@
                 {
                     "name": "",
                     "id": "df39379b-d8e2-440c-b905-a051eac7c059",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "Press",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Grab",
@@ -241,8 +249,8 @@
                 {
                     "name": "",
                     "id": "57f83003-21ae-4d2a-8b9c-ab5fdcf7093d",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "Press",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Grab",
@@ -252,7 +260,7 @@
                 {
                     "name": "",
                     "id": "5ca2a85d-5139-41b1-a870-9f807e3f46ab",
-                    "path": "<Keyboard>/c",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "Press(pressPoint=0.1,behavior=2)",
                     "processors": "",
                     "groups": "Keyboard",
@@ -263,7 +271,7 @@
                 {
                     "name": "",
                     "id": "e50cb511-9891-4984-aa3f-0a4adf8a51f7",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Gamepad",
@@ -378,6 +386,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "GrabRelease",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8817a465-6d77-4cd7-866a-b143637dfa12",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "QuickStand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3e0a045-bef4-43f5-bb38-d96fb00efd71",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "QuickStand",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
