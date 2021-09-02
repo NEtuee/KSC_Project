@@ -112,10 +112,12 @@ public class PlayerManager : ManagerBase
 
         if(bagRenderer == null)
         {
-            Debug.LogError("Not Set Bag Renderer");
+            Debug.Log("Not Set Bag Renderer");
         }
-
-        _bagMatrial = bagRenderer.material;
+        else
+        {
+            _bagMatrial = bagRenderer.material;
+        }
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -124,6 +126,7 @@ public class PlayerManager : ManagerBase
 
         _player.hp.Subscribe(value =>
         {
+            if(_bagMatrial != null)
             _bagMatrial.SetFloat("Vector1_5338de784f7d4439aba250082f9a53e3", value * 0.01f);
 
             StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();

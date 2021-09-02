@@ -204,10 +204,14 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (dashState == null) dashState = gameObject.AddComponent<PlayerState_Dash>();
 
         pelvisGunObject = _empGun.PelvisGunObject;
-        foreach (var renderer in pelvisGunObject.GetComponentsInChildren<Renderer>())
+
+        if (pelvisGunObject != null)
         {
-            pelvisGunMaterial.Add(renderer.material);
-            _originalEmissionColor = renderer.material.GetColor("_EmissionColor");
+            foreach (var renderer in pelvisGunObject.GetComponentsInChildren<Renderer>())
+            {
+                pelvisGunMaterial.Add(renderer.material);
+                _originalEmissionColor = renderer.material.GetColor("_EmissionColor");
+            }
         }
 
         _staminaTimer = new TimeCounterEx();
