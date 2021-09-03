@@ -17,6 +17,7 @@ namespace MD
 public class EMPGun : UnTransfromObjectBase
 {
     [SerializeField] private GameObject _gunObject;
+    [SerializeField] private GameObject _pelvisGunObject;
     [SerializeField] private Animator gunAnim;
     [SerializeField] private Animator playerAnim;
     [SerializeField] private Transform launchPos;
@@ -25,6 +26,8 @@ public class EMPGun : UnTransfromObjectBase
     [SerializeField] private CrossHair crossHair;
     [SerializeField] private float layserRadius = 1.0f;
     [SerializeField] private LayerMask hitLayer;
+
+    public GameObject PelvisGunObject => _pelvisGunObject;
 
     private float aimWeight;
     
@@ -200,6 +203,11 @@ public class EMPGun : UnTransfromObjectBase
         if (_gunObject != null)
         {
             _gunObject.SetActive(active);
+        }
+
+        if(_pelvisGunObject != null)
+        {
+            _pelvisGunObject.SetActive(!active);
         }
 
         //if(crossHair != null)

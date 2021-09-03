@@ -21,14 +21,14 @@ public class ImmortalJirungE_V2_master : ObjectBase
     private TimeCounterEx _timeCounterEx = new TimeCounterEx();
     private RayEx _wallRay;
 
-    private PlayerCtrl_Ver2 _player;
+    private PlayerUnit _player;
 
     public override void Assign()
     {
         base.Assign();
         
         AddAction(MessageTitles.set_setplayer,(x)=>{
-            _player = (PlayerCtrl_Ver2)x.data;
+            _player = (PlayerUnit)x.data;
         });
     }
 

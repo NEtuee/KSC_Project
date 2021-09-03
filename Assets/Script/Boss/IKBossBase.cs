@@ -16,7 +16,7 @@ public class IKBossBase : Hitable
     public List<IKLegMovement> legs = new List<IKLegMovement>();
 
     protected TimeCounterEx _timeCounter = new TimeCounterEx();
-    protected PlayerCtrl_Ver2 _player;
+    protected PlayerUnit _player;
     protected Transform _target;
 
     protected Vector3 _centerPosition;
@@ -27,7 +27,7 @@ public class IKBossBase : Hitable
         base.Assign();
 
         AddAction(MessageTitles.set_setplayer,(x)=>{
-            _player = (PlayerCtrl_Ver2)x.data;
+            _player = (PlayerUnit)x.data;
             _target = _player.transform;
         });
     }

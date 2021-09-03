@@ -48,7 +48,7 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
 
         AddAction(MessageTitles.set_setplayer,(x)=>{
-            _ragdoll = ((PlayerCtrl_Ver2)x.data).GetPlayerRagdoll();
+            _ragdoll = ((PlayerUnit)x.data).GetComponent<PlayerRagdoll>();
         });
 
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);

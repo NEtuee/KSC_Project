@@ -62,7 +62,7 @@ public class Drone : UnTransfromObjectBase
     private Transform mainCam;
 
     private Transform playerHead;
-    private PlayerCtrl_Ver2 player;
+    private PlayerUnit player;
 
     private DroneHelperRoot droneHelperRoot;
     
@@ -85,7 +85,7 @@ public class Drone : UnTransfromObjectBase
 
         AddAction(MessageTitles.set_setplayer, (msg) =>
         {
-            player = (PlayerCtrl_Ver2)msg.data;
+            player = (PlayerUnit)msg.data;
         });
 
         AddAction(MessageTitles.scan_registerScanObject, (msg) =>
@@ -144,8 +144,8 @@ public class Drone : UnTransfromObjectBase
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (player.updateMethod != UpdateMethod.FixedUpdate)
-            return;
+        //if (player.updateMethod != UpdateMethod.FixedUpdate)
+        //    return;
 
         UpdateDrone(Time.fixedDeltaTime);
     }
@@ -158,10 +158,10 @@ public class Drone : UnTransfromObjectBase
         //    Scan();
         //}
 
-        if (player.updateMethod != UpdateMethod.Update)
-            return;
+        //if (player.updateMethod != UpdateMethod.Update)
+        //    return;
 
-        UpdateDrone(Time.deltaTime);
+        //UpdateDrone(Time.deltaTime);
     }
 
     private void UpdateDrone(float deltaTime)
@@ -187,7 +187,7 @@ public class Drone : UnTransfromObjectBase
 
                     
                     
-                    if (player.IsMove)
+                    if (player.CurrentSpeed > 0.0f)
                     {
                         if (Vector3.Dot(Vector3.Cross(camForward.normalized, target.forward), Vector3.up) > 0.9f )
                         {

@@ -34,6 +34,8 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private Transform rightHandPoint;
     [SerializeField] private GameObject fixObject;
 
+    [SerializeField] private bool _isPelvisGrounded = false;
+    public bool PelvisGrounded => _isPelvisGrounded;
 
     [SerializeField] private string prevPlayAnimation;
     [SerializeField] private string standUpBackAnimation;
@@ -68,7 +70,7 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private CopyTargetCharacter copyTargetCharacter;
 
     private GameObject _ragdollContainer;
-    private PlayerCtrl_Ver2 player;
+    private PlayerUnit _player;
 
     private TimeCounterEx _timeCounter;
 
@@ -77,7 +79,7 @@ public class PlayerRagdoll : MonoBehaviour
         anim = GetComponent<Animator>();
         collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
-        player = GetComponent<PlayerCtrl_Ver2>();
+        _player = GetComponent<PlayerUnit>();
 
 
         hipTransform = anim.GetBoneTransform(HumanBodyBones.Hips);
@@ -135,7 +137,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (player.Dead == true)
+        if (_player.Dead == true)
             return;
 
         if (isFlyRagdoll == true && Time.time - ragdollTime > 0.1f && hipTransform.GetComponent<Rigidbody>().velocity.magnitude < 0.05f && simulateState != RagdollSimulateState.Shock)
@@ -196,6 +198,9 @@ public class PlayerRagdoll : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (state == RagdollState.Ragdoll)
+            CheckPelvisGrounded();
+
         if (state == RagdollState.BlendToAnim)
         {
             float ragdollBlendAmount = 1f - Mathf.InverseLerp(ragdollEndTime, ragdollEndTime + ragdollToAnimBlendTime, Time.time);
@@ -241,6 +246,18 @@ public class PlayerRagdoll : MonoBehaviour
         //{
         //    rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
         //}
+    }
+
+    private void CheckPelvisGrounded()
+    {
+        if(Physics.Raycast(pelvis.position, Vector3.down,0.5f,_player.GrounLayer))
+        {
+            _isPelvisGrounded = true;
+        }
+        else
+        {
+            _isPelvisGrounded = false;
+        }
     }
     
     public void SetPlayerShock(float time)
@@ -290,7 +307,7 @@ public class PlayerRagdoll : MonoBehaviour
         ReturnAnimated();
         FixRightHand(false);
         FixLeftHand(false);
-        player.BackPrevState();
+        _player.ChangeState(_player.GetPrevState);
     }
 
     public void ReleaseHangRagdoll()
@@ -300,7 +317,7 @@ public class PlayerRagdoll : MonoBehaviour
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);
-        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+        _player.ChangeState(PlayerUnit.ragdollState);
         ragdollTime = Time.time;
     }
 
@@ -313,7 +330,7 @@ public class PlayerRagdoll : MonoBehaviour
     public void FlyRagdoll()
     {
         //GameManager.Instance.PauseControl(true);
-        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+        _player.ChangeState(PlayerUnit.ragdollState);
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);
@@ -336,7 +353,7 @@ public class PlayerRagdoll : MonoBehaviour
         ActiveRagdoll(true);
         SetRagdollContainer(true);
         anim.GetBoneTransform(HumanBodyBones.Head).GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
-        player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+        _player.ChangeState(PlayerUnit.ragdollState);
         ragdollTime = Time.time;
     }
 
@@ -355,9 +372,9 @@ public class PlayerRagdoll : MonoBehaviour
         hipTransform.GetComponent<Rigidbody>().velocity = (hipTransform.position - exlosionPos).normalized;
         hipTransform.GetComponent<Rigidbody>().AddForce(((hipTransform.position - exlosionPos).normalized + Vector3.up).normalized * power, ForceMode.Impulse);
         //hipTransform.GetComponent<Rigidbody>().AddExplosionForce(power, exlosionPos, radius,100.0f);
-        if (player != null)
+        if (_player != null)
         {
-            player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+            _player.ChangeState(PlayerUnit.ragdollState);
         }
         ragdollTime = Time.time;
         ragdollToAnimBlendTime = 0.5f;
@@ -365,8 +382,6 @@ public class PlayerRagdoll : MonoBehaviour
 
     public void ExplosionRagdoll(float power, Vector3 dir)
     {
-        
-
         if (isFlyRagdoll == true)
         {
             hipTransform.GetComponent<Rigidbody>().AddForce(dir * power, ForceMode.Impulse);
@@ -377,9 +392,9 @@ public class PlayerRagdoll : MonoBehaviour
         SetRagdollContainer(true);
         hipTransform.GetComponent<Rigidbody>().AddForce(dir * power, ForceMode.Impulse);
         //hipTransform.GetComponent<Rigidbody>().AddExplosionForce(power, exlosionPos, radius,100.0f);
-        if (player != null)
+        if (_player != null)
         {
-            player.ChangeState(PlayerCtrl_Ver2.PlayerState.Ragdoll);
+            _player.ChangeState(PlayerUnit.ragdollState);
         }
         ragdollTime = Time.time;
         ragdollToAnimBlendTime = 0.5f;
@@ -481,7 +496,7 @@ public class PlayerRagdoll : MonoBehaviour
         }
     }
 
-    private void ReturnAnimated()
+    public void ReturnAnimated()
     {
         SetRagdollContainer(false);
 
@@ -521,7 +536,7 @@ public class PlayerRagdoll : MonoBehaviour
             anim.Play(getUpAnimation, 0, 0);
         }
 
-        player.InitVelocity();
+        _player.InitVelocity();
         ActiveRagdoll(false);
 
         foreach(var effect in lightningEffect)

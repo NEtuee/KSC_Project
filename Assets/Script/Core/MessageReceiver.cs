@@ -47,7 +47,6 @@ public abstract class MessageReceiver : UniqueNumberBase
         foreach(var msg in _receiveQueue)
         {
             MessageProcessing(msg);
-
             MessagePool.ReturnMessage(msg);
         }
 
@@ -60,7 +59,7 @@ public abstract class MessageReceiver : UniqueNumberBase
     }
 
     public virtual void MessageProcessing(Message msg)
-    {        
+    {
         _msgProcActions[msg.title](msg);
     }
 
