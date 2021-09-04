@@ -239,7 +239,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         UpdateStamina(Time.fixedDeltaTime);
 
         CheckGround();
-        //CheckRunToStop(Time.fixedDeltaTime);
+        CheckRunToStop(Time.fixedDeltaTime);
 
         _currentState.FixedUpdateState(this, _animator);
 
