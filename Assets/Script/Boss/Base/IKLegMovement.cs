@@ -144,6 +144,14 @@ public class IKLegMovement : MonoBehaviour
         iKFabric.enabled = value;
     }
 
+    public void DisableMovement()
+    {
+        this.enabled = false;
+
+        _timer = 0;
+        _isMove = false;
+    }
+
     public void Hold(bool value, bool groundCheck = true)
     {
         _hold = value;

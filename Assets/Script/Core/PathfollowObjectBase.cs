@@ -69,6 +69,14 @@ public class PathfollowObjectBase : ObjectBase
         return true;
     }
 
+    public bool Move(Vector3 direction, float speed, float deltaTime)
+    {
+        accelSpeed = Mathf.Lerp(accelSpeed,speed,0.2f);
+        transform.position += direction * (accelSpeed * deltaTime);
+        
+        return true;
+    }
+
     public bool IsArrivedTarget(float dist)
     {
         return Vector3.Distance(transform.position,targetTransform.position) <= dist;
@@ -171,6 +179,46 @@ public class PathfollowObjectBase : ObjectBase
             SetNearestPointInArc(30f);
         else
             SetNearestPointToTarget();
+    }
+
+    public Vector3 PlaneDirection(Transform tp)
+    {
+        return Vector3.ProjectOnPlane(tp.rotation * Vector3.forward,transform.up).normalized;
+    }
+
+    public bool SyncTurn(Transform target, float deltaTime)
+    {
+        var dir = Vector3.ProjectOnPlane(target.rotation * Vector3.forward,transform.up).normalized;
+        var angle = Vector3.SignedAngle(transform.forward,dir,transform.up);
+
+        if(Mathf.Abs(angle) > turnAccuracy)
+        {
+            if(angle > 0)
+                Turn(true,this.transform,rotationSpeed,deltaTime);
+            else
+                Turn(false,this.transform,rotationSpeed,deltaTime);
+
+            return false;
+        }
+        else
+            return true;
+    }
+
+    public bool Turn(Vector3 direction, float deltaTime)
+    {
+        var angle = Vector3.SignedAngle(transform.forward,direction,transform.up);
+
+        if(Mathf.Abs(angle) > turnAccuracy)
+        {
+            if(angle > 0)
+                Turn(true,this.transform,rotationSpeed,deltaTime);
+            else
+                Turn(false,this.transform,rotationSpeed,deltaTime);
+
+            return false;
+        }
+        else
+            return true;
     }
 
     public void Turn(bool isLeft, Transform target, float rotationSpeed, float deltaTime)

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(ManagerBase),true)]
+[CustomEditor(typeof(ManagerBase),true),CanEditMultipleObjects]
 public class ManagerBaseEditor : MessageReceiverEditor
 {
     const string receiverListField_Text = "Message Receivers : ";
