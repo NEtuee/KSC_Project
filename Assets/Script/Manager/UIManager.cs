@@ -649,8 +649,12 @@ public class UIManager : ManagerBase
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         gameoverPage.Active(false);
-        SendMessageEx(MessageTitles.playermanager_initPlayerStatus, GetSavedNumber("PlayerManager"), null);
-        SendMessageEx(MessageTitles.scene_loadCurrentLevel, GetSavedNumber("SceneManager"), null);
+        //PositionRotation data = MessageDataPooling.GetMessageData<PositionRotation>();
+        //data.position = Vector3.zero;
+        //data.rotation = Quaternion.identity;
+        //SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
+        //SendMessageEx(MessageTitles.playermanager_initPlayerStatus, GetSavedNumber("PlayerManager"), null);
+        SendMessageEx(MessageTitles.scene_loadRestartLevel, GetSavedNumber("SceneManager"), null);
     }
 
     public void OnTitleButton()

@@ -34,6 +34,8 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private Transform rightHandPoint;
     [SerializeField] private GameObject fixObject;
 
+    [SerializeField] private bool _isPelvisGrounded = false;
+    public bool PelvisGrounded => _isPelvisGrounded;
 
     [SerializeField] private string prevPlayAnimation;
     [SerializeField] private string standUpBackAnimation;
@@ -196,6 +198,9 @@ public class PlayerRagdoll : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (state == RagdollState.Ragdoll)
+            CheckPelvisGrounded();
+
         if (state == RagdollState.BlendToAnim)
         {
             float ragdollBlendAmount = 1f - Mathf.InverseLerp(ragdollEndTime, ragdollEndTime + ragdollToAnimBlendTime, Time.time);
@@ -241,6 +246,18 @@ public class PlayerRagdoll : MonoBehaviour
         //{
         //    rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
         //}
+    }
+
+    private void CheckPelvisGrounded()
+    {
+        if(Physics.Raycast(pelvis.position, Vector3.down,0.5f,_player.GrounLayer))
+        {
+            _isPelvisGrounded = true;
+        }
+        else
+        {
+            _isPelvisGrounded = false;
+        }
     }
     
     public void SetPlayerShock(float time)
@@ -479,7 +496,7 @@ public class PlayerRagdoll : MonoBehaviour
         }
     }
 
-    private void ReturnAnimated()
+    public void ReturnAnimated()
     {
         SetRagdollContainer(false);
 

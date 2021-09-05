@@ -72,7 +72,9 @@ public partial class PlayerUnit
 
     private void LandingSound()
     {
-
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+        soundData.id = 1004; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
 
     private void EndRespawn()
@@ -84,5 +86,31 @@ public partial class PlayerUnit
     private void StartLedupAdjust()
     {
         LedgeUpAdjust = true;
+    }
+
+    private void JogFootStep(int left)
+    {
+        Vector3 footStepPosition;
+        if (left == 0)
+            footStepPosition = _leftFootTransform.position;
+        else
+            footStepPosition = _rightFootTransform.position;
+
+        SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
+        soundData.id = 1000; soundData.position = footStepPosition; soundData.returnValue = false; soundData.dontStop = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+    }
+
+    private void RunFootStep(int left)
+    {
+        Vector3 footStepPosition;
+        if (left == 0)
+            footStepPosition = _leftFootTransform.position;
+        else
+            footStepPosition = _rightFootTransform.position;
+
+        SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
+        soundData.id = 1001; soundData.position = footStepPosition; soundData.returnValue = false; soundData.dontStop = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
 }

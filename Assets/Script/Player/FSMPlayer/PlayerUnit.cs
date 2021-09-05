@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UniRx;
+using MD;
 
 public partial class PlayerUnit : UnTransfromObjectBase
 {
+    #region State
     public static PlayerState_Default defaultState;
     public static PlayerState_Jump jumpState;
     public static PlayerState_RunToStop runToStopState;
@@ -21,47 +23,60 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_Ragdoll ragdollState;
     public static PlayerState_HighLanding highLandingState;
     public static PlayerState_Respawn respawnState;
+    public static PlayerState_Dash dashState;
+    public static PlayerState_Dead deadState;
+    #endregion
 
-    public float InputVertical { get => _inputVertical; }
-    public float InputHorizontal { get => _inputHorizontal; }
-    public LayerMask GrounLayer { get => groundLayer; }
-
-    public Transform Transform => _transform;
-
-    public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
+    #region Move Property
     public float WalkSpeed => walkSpeed;
     public float RunSpeed => runSpeed;
+    public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
     public float RotationSpeed { get => rotationSpeed; }
-    public CapsuleCollider CapsuleCollider { get => _capsuleCollider; }
-    public LayerMask FrontCheckLayer { get => frontCheckLayer; }
-    public LayerMask DetectionLayer { get => detectionLayer; }
-
-    public bool IsGround { get => isGrounded; set => isGrounded = value; }
-    public float JumpPower { get => jumpPower; set => jumpPower = value; }
-    public float MinJumpPower { get => minJumpPower; }
-    public float Gravity { get => gravity; }
-
-    public float CurrentJumpPower { get => currentJumpPower; set => currentJumpPower = value; }
-
     public Vector3 MoveDir { get => _moveDir; set => _moveDir = value; }
     public Vector3 PrevDir { get => _prevDir; set => _prevDir = value; }
     public Vector3 LookDir { get => _lookDir; set => _lookDir = value; }
-
-    public bool JumpStart { get => _jumpStart; set => _jumpStart = value; }
-
     public float HorizonWeight { get => _horizonWeight; set => _horizonWeight = value; }
+    #endregion
 
-    public float Energy { get => energy.Value;
-        set{energy.Value = value;}}
+    #region Climbing Property
+    public bool IsClimbingMove { get => isClimbingMove; set => isClimbingMove = value; }
+    public bool IsCanClimbingCancel { get => isCanClimbingCancel; set => isCanClimbingCancel = value; }
+    public bool IsClimbingGround { get => isClimbingGround; set => isClimbingGround = value; }
+    public bool IsCanReadyClimbingCancel { get => isCanReadyClimbingCancel; set => isCanReadyClimbingCancel = value; }
+    public bool IsLedge { get => isLedge; set => isLedge = value; }
+    public float HangAbleEdgeDist => hangAbleEdgeDist;
+    public ClimbingJumpDirection ClimbingJumpDirection { get => climbingJumpDirection; set => climbingJumpDirection = value; }
+    #endregion
 
-    public void AddEnergy(float value)
-    {
-        energy.Value += value;
-        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
-    }
+    #region Layer Property
+    public LayerMask AdjustAbleLayer => adjustAbleLayer;
+    public LayerMask DetectionLayer { get => detectionLayer; }
+    public LayerMask LedgeAbleLayer => ledgeAbleLayer;
+    public LayerMask GrounLayer { get => groundLayer; }
+    public LayerMask FrontCheckLayer { get => frontCheckLayer; }
+    #endregion
 
+    #region Jump Property
+    public float JumpPower { get => jumpPower; set => jumpPower = value; }
+    public float MinJumpPower { get => minJumpPower; }
+    public float CurrentJumpPower { get => currentJumpPower; set => currentJumpPower = value; }
+    public bool IsGround { get => isGrounded; set => isGrounded = value; }
+    public float Gravity { get => gravity; }
+    public bool JumpStart { get => _jumpStart; set => _jumpStart = value; }
     public bool IsJump { get => isJumping; set => isJumping = value; }
+    public float LandingFactor => landingFactor;
+    public float AirTime { get => airTime; set => airTime = value; }
+    public float ClimbingJumpStartTime { get => climbingJumpStartTime; set => climbingJumpStartTime = value; }
+    public float CurrentClimbingJumpPower { get => currentClimbingJumpPower; set => currentClimbingJumpPower = value; }
+    public float ClimbingHorizonJumpPower => climbingHorizonJumpPower;
+    public float ClimbingUpJumpPower => climbingUpJumpPower;
+    public float KeepClimbingJumpTime => keepClimbingJumpTime;
+    public AnimationCurve ClimbingHorizonJumpSpeedCurve => climbingHorizonJumpSpeedCurve;
 
+    #endregion
+
+    #region Energy Property
+    public float Energy { get => energy.Value; set { energy.Value = value; } }
     public float WalkRestoreEnergyValue => walkRestoreEnergyValue;
     public float RunRestoreEnergyValue => runRestoreEnergyValue;
     public float AimRestoreEnergyValue => aimRestoreEnergyValue;
@@ -69,185 +84,44 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float HitEnergyRestoreEnergyValue => HitEnergyRestoreEnergyValue;
     public float JumpEnergyRestoreEnergyValue => jumpEnergyRestoreValue;
     public float ClimbingJumpRestoreEnrgyValue => climbingJumpEnergyRestoreValue;
+    #endregion
 
-
-    [SerializeField] private PlayerState _currentState;
-    public PlayerState GetState => _currentState;
-
-    private PlayerState _prevState;
-    public PlayerState GetPrevState => _prevState;
-    public string currentStateName;
-
-    [Header("Moving")]
-    [SerializeField] private bool isWalk;
-    [SerializeField] private float walkSpeed;
-    [SerializeField] private float runSpeed;
-    [SerializeField] private float aimingWalkSpeed = 5.5f;
-    [SerializeField] private float currentSpeed;
-    [SerializeField] private float accelerateSpeed = 20.0f;
-    [SerializeField] private float rotationSpeed = 6.0f;
-    private float _horizonWeight = 0.0f;
-    private Vector3 _moveDir;
-    private Vector3 _prevDir;
-    private Vector3 _lookDir;
-
-    float _runToStopTime = 0.0f;
-
-    [Header("Climbing")]
-    [SerializeField] private bool isClimbingMove = false;
-    [SerializeField] private bool isCanClimbingCancel = false;
-    [SerializeField] private bool isClimbingGround = false;
-    [SerializeField] private bool isCanReadyClimbingCancel = false;
-    [SerializeField] private bool isLedge = false;
-    [SerializeField] private float hangAbleEdgeDist = 2f;
-    [SerializeField] private ClimbingJumpDirection climbingJumpDirection;
-
-    public float HangAbleEdgeDist => hangAbleEdgeDist;
-    public bool IsClimbingMove { get => isClimbingMove; set => isClimbingMove = value; }
-    public bool IsCanClimbingCancel { get => isCanClimbingCancel; set => isCanClimbingCancel = value; }
-    public bool IsClimbingGround { get => isClimbingGround; set => isClimbingGround = value; }
-    public bool IsCanReadyClimbingCancel { get => isCanReadyClimbingCancel; set => isCanReadyClimbingCancel = value; }
-    public bool IsLedge { get => isLedge; set => isLedge = value; }
-    public ClimbingJumpDirection ClimbingJumpDirection{ get => climbingJumpDirection; set => climbingJumpDirection = value; }
-    public void SetClimbMove(bool move)
-    {
-        isClimbingMove = move;
-        if( move == false)
-        {
-            isCanClimbingCancel = false;
-        }
-    }
-
-    public void SetCanClimbingCancel(bool result)
-    {
-        isCanClimbingCancel = result;
-        isClimbingMove = false;
-    }
-
-    [Header("Layer")]
-    [SerializeField] private LayerMask adjustAbleLayer;
-    [SerializeField] private LayerMask climbingPaintLayer;
-    [SerializeField] private LayerMask detectionLayer;
-    [SerializeField] private LayerMask ledgeAbleLayer;
-    [SerializeField] private Vector3 detectionOffset;
-
-    public LayerMask LedgeAbleLayer => ledgeAbleLayer;
-    public LayerMask AdjustAbleLayer => adjustAbleLayer;
-
-    [Header("Jump")]
-    [SerializeField] private float jumpPower;
-    [SerializeField] private float minJumpPower = -20;
-    [SerializeField] private float currentJumpPower;
-    [SerializeField] private float groundMinDistance = 0.1f;
-    [SerializeField] private float groundMaxDistance = 0.5f;
-    [SerializeField] private float groundSlopMinDistanc = 0.6f;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask frontCheckLayer;
-    [SerializeField] private bool isGrounded;
-    [SerializeField] private bool isJumping;
-    [SerializeField] private float jumpMinTime = 0.5f;
-    [SerializeField] private float jumpTime;
-    [SerializeField] private float invalidityAngle = 70.0f;
-    [SerializeField] private float groundDistance;
-    [SerializeField] private float groundAngle = 0.0f;
-    [SerializeField] private float gravity = 20f;
-    [SerializeField] private float currentClimbingJumpPower = 0f;
-    [SerializeField] private float climbingHorizonJumpPower = 5.0f;
-    [SerializeField] private float climbingUpJumpPower = 8.0f;
-    [SerializeField] private float airTime = 0.0f;
-    [SerializeField] private float landingFactor = 2.0f;
-    [SerializeField] private float keepClimbingJumpTime = 0.8f;
-    [SerializeField] private AnimationCurve climbingHorizonJumpSpeedCurve;
-
-    private bool _jumpStart = false;
-    private Vector3 slidingVector = Vector3.zero;
-    private float climbingJumpStartTime;
-
-    public float LandingFactor => landingFactor;
-    public float AirTime { get => airTime; set => airTime = value; }
-    public float ClimbingJumpStartTime { get => climbingJumpStartTime; set => climbingJumpStartTime = value; }
-    public float CurrentClimbingJumpPower { get => currentClimbingJumpPower; set => currentClimbingJumpPower = value; }
-
-    public float ClimbingHorizonJumpPower => climbingHorizonJumpPower;
-    public float ClimbingUpJumpPower => climbingUpJumpPower;
-    public float KeepClimbingJumpTime => keepClimbingJumpTime;
-    public AnimationCurve ClimbingHorizonJumpSpeedCurve => climbingHorizonJumpSpeedCurve;
-
-    private bool decharging = false;
-    private bool _aimLock = false;
-
-    public bool AimLock { get => _aimLock; set => _aimLock = value; }
-    public bool Decharging { get => decharging; set => decharging = value; }
-
-    public Transform DechargingEffectTransform => dechargingEffectTransform;
-
-    [Header("Energy")]
-    [SerializeField] private float walkRestoreEnergyValue;
-    [SerializeField] private float runRestoreEnergyValue;
-    [SerializeField] private float aimRestoreEnergyValue;
-    [SerializeField] private float climbingRestoreEnergyValue;
-    [SerializeField] private float hitEnergyRestoreValue = 0.0f;
-    [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
-    [SerializeField] private float climbingJumpEnergyRestoreValue;
-
-    //public float ClimbingRestoreEnergyValue => climbingRestoreEnergyValue;
-
-    [Header("Stamina")]
-    [SerializeField] private float maxStamina = 100.0f;
-    [SerializeField] private float idleConsumeValue = 1f;
-    [SerializeField] private float climbingMoveConsumeValue = 2f;
-    [SerializeField] private float climbingJumpConsumeValue = 5f;
-    [SerializeField] private float wallJumpConsumeValue = 5f;
-    [SerializeField] private float staminaRestoreValue = 2f;
-    [SerializeField] private float staminaRestoreDelayTime = 2f;
-    private TimeCounterEx _staminaTimer;
-
+    #region Stamina Property
     public float MaxStamina => maxStamina;
     public float ClimbingJumpConsumeValue => climbingJumpConsumeValue;
+    #endregion
 
-    [Header("Input")]
-    /// Input
-    [SerializeField] private float _inputVertical;
-    [SerializeField] private float _inputHorizontal;
-    private float climbingVertical = 0.0f;
-    private float climbingHorizon = 0.0f;
+    #region Input Property
+    public float InputVertical { get => _inputVertical; }
+    public float InputHorizontal { get => _inputHorizontal; }
+    #endregion
 
-    [Header("Spine")]
-    [SerializeField] private Transform lookAtAim;
-    [SerializeField] private Vector3 relativeVector;
-    private Transform spine;
-
-    [Header("Detect")]
-    [SerializeField] private LedgeChecker ledgeChecker;
-    [SerializeField] private SpaceChecker spaceChecker;
-    [SerializeField] private Vector3 wallUnderCheckOffset;
-    private bool _ledUpAdjust = false;
-    public bool LedgeUpAdjust { get => _ledUpAdjust; set => _ledUpAdjust = value; }
-
+    #region Detect Property
     public LedgeChecker LedgeChecker => ledgeChecker;
     public SpaceChecker SpaceChecker => spaceChecker;
     public Vector3 WallUnderCheckOffset => wallUnderCheckOffset;
+    public bool LedgeUpAdjust { get => _ledUpAdjust; set => _ledUpAdjust = value; }
 
-    [Header("Gun")]
-    [SerializeField] private Animator gunAnim;
-    [SerializeField] private Transform dechargingEffectTransform;
-    private float dechargingDuration = 2.5f;
-    private GameObject pelvisGunObject;
-    private List<Material> pelvisGunMaterial = new List<Material>();
-    private float _emissionTargetValue = 10f;
-    private Color _originalEmissionColor;
+    #endregion
 
-    public FMODUnity.StudioEventEmitter _chargeSoundEmitter = null;
+    #region EMPGun Property
+    public bool AimLock { get => _aimLock; set => _aimLock = value; }
+    public bool Decharging { get => decharging; set => decharging = value; }
+    public Transform DechargingEffectTransform => dechargingEffectTransform;
+    public Transform SteamPosition => steamPosition;
 
-    [Header("Drone")]
-    [SerializeField] private Drone drone;
+    #endregion
+
+    public Transform Transform => _transform;
+
+    public CapsuleCollider CapsuleCollider { get => _capsuleCollider; }
+
+    public PlayerState GetState => _currentState;
+
+    public PlayerState GetPrevState => _prevState;
 
     public Drone Drone => drone;
 
-    [Header("HpPack")]
-    [SerializeField] private float hpPackRestoreValue = 6.0f;
-    [SerializeField] private float _hpPackRestoreDuration = 10.0f;
-    [SerializeField] private bool isHpRestore = false;
     private IEnumerator restoreHpPackCoroutine;
 
     private Animator _animator;
@@ -266,6 +140,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public IKCtrl FootIK => _footIk;
 
     private RaycastHit _wallHit;
+
+    private Transform _leftFootTransform;
+    private Transform _rightFootTransform;
 
     public override void Assign()
     {
@@ -323,18 +200,27 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (ragdollState == null) ragdollState = gameObject.AddComponent<PlayerState_Ragdoll>();
         if (highLandingState == null) highLandingState = gameObject.AddComponent<PlayerState_HighLanding>();
         if (respawnState == null) respawnState = gameObject.AddComponent<PlayerState_Respawn>();
+        if (deadState == null) deadState = gameObject.AddComponent<PlayerState_Dead>();
+        if (dashState == null) dashState = gameObject.AddComponent<PlayerState_Dash>();
 
         pelvisGunObject = _empGun.PelvisGunObject;
-        foreach (var renderer in pelvisGunObject.GetComponentsInChildren<Renderer>())
+
+        if (pelvisGunObject != null)
         {
-            pelvisGunMaterial.Add(renderer.material);
-            _originalEmissionColor = renderer.material.GetColor("_EmissionColor");
+            foreach (var renderer in pelvisGunObject.GetComponentsInChildren<Renderer>())
+            {
+                pelvisGunMaterial.Add(renderer.material);
+                _originalEmissionColor = renderer.material.GetColor("_EmissionColor");
+            }
         }
 
         _staminaTimer = new TimeCounterEx();
         _staminaTimer.InitTimer("Stamina", 0.0f, staminaRestoreDelayTime);
 
         spine = _animator.GetBoneTransform(HumanBodyBones.Spine);
+
+        _leftFootTransform = _animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+        _rightFootTransform = _animator.GetBoneTransform(HumanBodyBones.RightFoot);
 
         ChangeState(defaultState);
     }
@@ -433,6 +319,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
             prevParentPrevPos = prevParent.position;
             keepSpeed = true;
         }
+
+        AddEnergy(jumpEnergyRestoreValue);
+
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+        soundData.id = 1003; soundData.localPosition = Vector3.zero; soundData.parent = transform; soundData.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
 
         ChangeState(jumpState);
     }
@@ -607,7 +499,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
                 detectObject = groundHit.collider.transform;
                 groundAngle = Mathf.Acos(Vector3.Dot(groundHit.normal, Vector3.up)) * Mathf.Rad2Deg;
-                slidingVector = (Vector3.Project(Vector3.down, groundHit.normal) - Vector3.down).normalized;
+                //slidingVector = (Vector3.Project(Vector3.down, groundHit.normal) - Vector3.down).normalized;
             }
             else
             {
@@ -629,7 +521,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
                     }
 
                     groundAngle = Mathf.Acos(Vector3.Dot(groundHit.normal, Vector3.up)) * Mathf.Rad2Deg;
-                    slidingVector = (Vector3.Project(Vector3.down, groundHit.normal) - Vector3.down).normalized;
+                    //slidingVector = (Vector3.Project(Vector3.down, groundHit.normal) - Vector3.down).normalized;
                 }
             }
             groundDistance = (float)System.Math.Round(dist, 2);
@@ -850,6 +742,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void InitializeMove()
     {
         _animator.SetFloat("Speed", 0.0f);
+        _animator.SetBool("Respawn", false);
         ChangeState(defaultState);
     }
 
@@ -914,7 +807,11 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         _rigidbody.velocity += velocity;
     }
-
+    public void AddEnergy(float value)
+    {
+        energy.Value += value;
+        energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
+    }
     public void InitVelocity()
     {
         SetVelocity(Vector3.zero);
@@ -933,8 +830,24 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void PlayerDead()
     {
         dead = true;
+        ChangeState(deadState);
         SendMessageEx(MessageTitles.uimanager_activeGameOverUi, GetSavedNumber("UIManager"), null);
     }
+    public void SetClimbMove(bool move)
+    {
+        isClimbingMove = move;
+        if (move == false)
+        {
+            isCanClimbingCancel = false;
+        }
+    }
+
+    public void SetCanClimbingCancel(bool result)
+    {
+        isCanClimbingCancel = result;
+        isClimbingMove = false;
+    }
+
 
     public IEnumerator DechargingCoroutine()
     {
@@ -977,6 +890,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         isHpRestore = false;
     }
 
+    [SerializeField] private PlayerState _currentState;
+    private PlayerState _prevState;
+
     #region Status
     public FloatReactiveProperty stamina = new FloatReactiveProperty(100);
     public FloatReactiveProperty hp = new FloatReactiveProperty(100f);
@@ -990,6 +906,128 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public bool Dead => dead;
 
     #endregion
+
+    public string currentStateName;
+
+    [Header("Moving")]
+    [SerializeField] private bool isWalk;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
+    [SerializeField] private float aimingWalkSpeed = 5.5f;
+    [SerializeField] private float currentSpeed;
+    [SerializeField] private float accelerateSpeed = 20.0f;
+    [SerializeField] private float rotationSpeed = 6.0f;
+    private float _horizonWeight = 0.0f;
+    private Vector3 _moveDir;
+    private Vector3 _prevDir;
+    private Vector3 _lookDir;
+    private float _runToStopTime = 0.0f;
+
+    [Header("Climbing")]
+    [SerializeField] private bool isClimbingMove = false;
+    [SerializeField] private bool isCanClimbingCancel = false;
+    [SerializeField] private bool isClimbingGround = false;
+    [SerializeField] private bool isCanReadyClimbingCancel = false;
+    [SerializeField] private bool isLedge = false;
+    [SerializeField] private float hangAbleEdgeDist = 2f;
+    [SerializeField] private ClimbingJumpDirection climbingJumpDirection;
+
+    [Header("Layer")]
+    [SerializeField] private LayerMask adjustAbleLayer;
+    [SerializeField] private LayerMask climbingPaintLayer;
+    [SerializeField] private LayerMask detectionLayer;
+    [SerializeField] private LayerMask ledgeAbleLayer;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask frontCheckLayer;
+
+    [Header("Jump")]
+    [SerializeField] private float jumpPower;
+    [SerializeField] private float minJumpPower = -20;
+    [SerializeField] private float currentJumpPower;
+    [SerializeField] private float groundMinDistance = 0.1f;
+    [SerializeField] private float groundMaxDistance = 0.5f;
+    [SerializeField] private float groundSlopMinDistanc = 0.6f;
+    [SerializeField] private bool isGrounded;
+    [SerializeField] private bool isJumping;
+    [SerializeField] private float jumpMinTime = 0.5f;
+    [SerializeField] private float jumpTime;
+    [SerializeField] private float invalidityAngle = 70.0f;
+    [SerializeField] private float groundDistance;
+    [SerializeField] private float groundAngle = 0.0f;
+    [SerializeField] private float gravity = 20f;
+    [SerializeField] private float currentClimbingJumpPower = 0f;
+    [SerializeField] private float climbingHorizonJumpPower = 5.0f;
+    [SerializeField] private float climbingUpJumpPower = 8.0f;
+    [SerializeField] private float airTime = 0.0f;
+    [SerializeField] private float landingFactor = 2.0f;
+    [SerializeField] private float keepClimbingJumpTime = 0.8f;
+    [SerializeField] private AnimationCurve climbingHorizonJumpSpeedCurve;
+
+    private bool _jumpStart = false;
+    private float climbingJumpStartTime;
+
+    [Header("Energy")]
+    [SerializeField] private float walkRestoreEnergyValue;
+    [SerializeField] private float runRestoreEnergyValue;
+    [SerializeField] private float aimRestoreEnergyValue;
+    [SerializeField] private float climbingRestoreEnergyValue;
+    [SerializeField] private float hitEnergyRestoreValue = 0.0f;
+    [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
+    [SerializeField] private float climbingJumpEnergyRestoreValue;
+
+
+    [Header("Stamina")]
+    [SerializeField] private float maxStamina = 100.0f;
+    [SerializeField] private float idleConsumeValue = 1f;
+    [SerializeField] private float climbingMoveConsumeValue = 2f;
+    [SerializeField] private float climbingJumpConsumeValue = 5f;
+    [SerializeField] private float wallJumpConsumeValue = 5f;
+    [SerializeField] private float staminaRestoreValue = 2f;
+    [SerializeField] private float staminaRestoreDelayTime = 2f;
+    private TimeCounterEx _staminaTimer;
+
+    [Header("Input")]
+    [SerializeField] private float _inputVertical;
+    [SerializeField] private float _inputHorizontal;
+    private float climbingVertical = 0.0f;
+    private float climbingHorizon = 0.0f;
+
+    [Header("Spine")]
+    [SerializeField] private Transform lookAtAim;
+    [SerializeField] private Vector3 relativeVector;
+    private Transform spine;
+
+    [Header("Detect")]
+    [SerializeField] private LedgeChecker ledgeChecker;
+    [SerializeField] private SpaceChecker spaceChecker;
+    [SerializeField] private Vector3 wallUnderCheckOffset;
+    [SerializeField] private Vector3 detectionOffset;
+    private bool _ledUpAdjust = false;
+
+    [Header("Gun")]
+    [SerializeField] private Animator gunAnim;
+    [SerializeField] private bool decharging = false;
+    private bool _aimLock = false;
+    private float dechargingDuration = 2.5f;
+    private GameObject pelvisGunObject;
+    private List<Material> pelvisGunMaterial = new List<Material>();
+    private float _emissionTargetValue = 10f;
+    private Color _originalEmissionColor;
+
+    public FMODUnity.StudioEventEmitter _chargeSoundEmitter = null;
+
+    [Header("Drone")]
+    [SerializeField] private Drone drone;
+
+    [Header("HpPack")]
+    [SerializeField] private float hpPackRestoreValue = 6.0f;
+    [SerializeField] private float _hpPackRestoreDuration = 10.0f;
+    [SerializeField] private bool isHpRestore = false;
+
+    [Header("Reference")]
+    [SerializeField] private Transform steamPosition;
+    [SerializeField] private Transform dechargingEffectTransform;
+
 
     #region InputSystem
 
@@ -1052,6 +1090,14 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _currentState.OnGrab(value, this, _animator);
     }
 
+    public void OnGrabRelease(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        _currentState.OnGrabRelease(value, this, _animator);
+    }
+
     public void OnUseHpPack(InputAction.CallbackContext value)
     {
         if (value.performed == false || Time.timeScale == 0f)
@@ -1063,6 +1109,22 @@ public partial class PlayerUnit : UnTransfromObjectBase
             restoreHpPackCoroutine = HpRestore();
             StartCoroutine(restoreHpPackCoroutine);
         }
+    }
+
+    public void OnDash(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        _currentState.OnDash(value, this, _animator);
+    }
+
+    public void OnQuickStand(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        _currentState.OnQuickStand(value, this, _animator);
     }
 
     #endregion

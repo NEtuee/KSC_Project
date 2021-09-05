@@ -37,8 +37,6 @@ public class PlayerState_Aiming : PlayerState
         chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = playerUnit.Transform; chargeSoundPlayData.returnValue = true;
         playerUnit.SendMessageQuick(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), chargeSoundPlayData);
 
-        Debug.Log(playerUnit._chargeSoundEmitter);
-
         playerUnit.loadCount.Value = 1;
         playerUnit.EmpGun.Active(true);
         animator.SetLayerWeight(1, 1.0f);
@@ -62,13 +60,14 @@ public class PlayerState_Aiming : PlayerState
         soundData.id = 1009; soundData.localPosition = Vector3.up; soundData.parent = playerUnit.Transform; soundData.returnValue = false;
         playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
 
+        int loadCount = (int)(playerUnit.chargeTime.Value);
+
         playerUnit.loadCount.Value = 0;
         playerUnit.chargeTime.Value = 0.0f;
         playerUnit.EmpGun.Active(false);
         animator.SetLayerWeight(1, 0.0f);
         animator.SetLayerWeight(2, 0.0f);
 
-        int loadCount = (int)(playerUnit.chargeTime.Value);
         if (loadCount == 3)
         {
             if (playerUnit.Decharging == true)
@@ -79,15 +78,23 @@ public class PlayerState_Aiming : PlayerState
 
             EffectActiveData effectData = MessageDataPooling.GetMessageData<EffectActiveData>();
             effectData.key = "Decharging";
-            effectData.position = playerUnit.Transform.position;
-            effectData.rotation = Quaternion.LookRotation(-playerUnit.Transform.up);
-            effectData.parent = playerUnit.Transform;
+            effectData.position = playerUnit.SteamPosition.position;
+            effectData.rotation = Quaternion.LookRotation(-playerUnit.SteamPosition.up);
+            effectData.parent = playerUnit.SteamPosition;
             playerUnit.SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent, UniqueNumberBase.GetSavedNumberStatic("EffectManager"), effectData);
+
+            //EffectActiveData data1 = MessageDataPooling.GetMessageData<EffectActiveData>();
+            //data1.position = transform.position;
+            //data1.rotation = Quaternion.identity;
+            //data1.key = "Laser02";
+            //playerUnit.SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation, UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data1);
+
+            //playerUnit.SendMessageEx(MessageTitles.effectmanager_activeeffect, UniqueNumberBase.GetSavedNumberStatic("EffectManager"), effectData);
+            //Debug.Log("Decahrging effect");
 
             AttachSoundPlayData dechargingSoundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
             dechargingSoundData.id = 1025; dechargingSoundData.localPosition = Vector3.up; dechargingSoundData.parent = playerUnit.Transform; dechargingSoundData.returnValue = false;
             playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), dechargingSoundData);
-            GameManager.Instance.soundManager.Play(1025, Vector3.up, transform);
         }
 
         if (playerUnit._chargeSoundEmitter != null)

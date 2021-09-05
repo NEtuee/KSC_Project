@@ -116,7 +116,7 @@ public class PlayerState_Grab : PlayerState
         playerUnit.UpdateClimbingInput();
     }
 
-    public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    public override void OnGrabRelease(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
         playerUnit.IsClimbingMove = false;
         playerUnit.IsLedge = false;
@@ -135,6 +135,9 @@ public class PlayerState_Grab : PlayerState
 
     public override void OnJump(PlayerUnit playerUnit, Animator animator)
     {
+        if (playerUnit.InputVertical == 0.0f && playerUnit.InputHorizontal == 0.0f)
+            return;
+
         playerUnit.ChangeState(PlayerUnit.readyClimbingJumpState);
     }
 }

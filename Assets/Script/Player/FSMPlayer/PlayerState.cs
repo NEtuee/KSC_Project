@@ -31,4 +31,17 @@ public abstract class PlayerState : MonoBehaviour
     public virtual void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
     }
+
+    public virtual void OnDash(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+    }
+
+    public virtual void OnGrabRelease(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+
+    }
+
+    public virtual void OnQuickStand(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+    }
 }
