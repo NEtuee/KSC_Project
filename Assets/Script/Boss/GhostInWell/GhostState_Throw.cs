@@ -6,12 +6,24 @@ public class GhostState_Throw : GhostStateBase
 {
     public override string stateIdentifier => "Throw";
 
+    public float throwPower = 300f;
+
+    public Transform playerPosition;
+
     private bool _throw = false;
+    private Transform _hipParent;
 
     public override void StateInitialize(StateBase prevState)
     {
         base.StateInitialize(prevState);
         //fix ragdoll
+        target.target.Ragdoll.ExplosionRagdoll(100f,target.transform.forward);
+        target.target.Ragdoll.SetPlayerShock(7f);
+
+        _hipParent = target.target.Ragdoll.GetHipTransform().parent;
+        target.target.Ragdoll.GetHipTransform().GetComponent<Rigidbody>().isKinematic = true;
+        target.target.Ragdoll.GetHipTransform().SetParent(playerPosition);
+        target.target.Ragdoll.GetHipTransform().localPosition = Vector3.zero;
 
         target.AnimationChange(4);
 
@@ -45,6 +57,9 @@ public class GhostState_Throw : GhostStateBase
 
     public void ThrowRagdoll()
     {
+        target.target.Ragdoll.GetHipTransform().SetParent(_hipParent);
+        target.target.Ragdoll.GetHipTransform().GetComponent<Rigidbody>().isKinematic = false;
+        target.target.Ragdoll.GetHipTransform().GetComponent<Rigidbody>().AddForce(-target.transform.forward * throwPower);
         Debug.Log("Throw");
     }
 }

@@ -13,6 +13,7 @@ public class GhostState_MeleeAttack : GhostStateBase
 
     private Vector3 _armOrigin;
     private int _armTarget = 0;
+    private bool _attack = false;
 
 
     public override void StateInitialize(StateBase prevState)
@@ -39,6 +40,8 @@ public class GhostState_MeleeAttack : GhostStateBase
 
         _timeCounter.InitTimer("Attack");
         _timeCounter.InitTimer("Wait");
+
+        _attack = false;
     }
 
     public override void StateChanged(StateBase targetState)
@@ -55,6 +58,13 @@ public class GhostState_MeleeAttack : GhostStateBase
 
         if(limit)
         {
+            if(!_attack)
+            {
+                _attack = true;
+                var dir = MathEx.DeleteYPos(target.target.transform.position - target.transform.position).normalized;
+                target.target.Ragdoll.ExplosionRagdoll(200f,dir);
+            }
+
             _timeCounter.IncreaseTimerSelf("Wait",out limit,deltaTime);
             if(limit)
             {
@@ -63,7 +73,7 @@ public class GhostState_MeleeAttack : GhostStateBase
         }
         else
         {
-            target.arms[_armTarget].ik.transform.position = Vector3.Lerp(_armOrigin,target.target.position,time) + 
+            target.arms[_armTarget].ik.transform.position = Vector3.Lerp(_armOrigin,target.target.transform.position,time) + 
                                                 new Vector3(0f,attackCurve.Evaluate(time),0f);
         }
     }

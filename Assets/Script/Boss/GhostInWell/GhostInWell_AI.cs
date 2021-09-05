@@ -5,7 +5,7 @@ using UnityEngine;
 public class GhostInWell_AI : PathfollowObjectBase
 {
     public Animator animator;
-    public Transform target;
+    public PlayerUnit target;
 
     public Transform recognizeStartPoint;
     public StateProcessor stateProcessor;
@@ -20,6 +20,17 @@ public class GhostInWell_AI : PathfollowObjectBase
     {
         base.Assign();
         stateProcessor.InitializeProcessor(this);
+
+        AddAction(MessageTitles.set_setplayer,(x)=>{
+            target = (PlayerUnit)x.data;
+        });
+
+        AddAction(MessageTitles.player_EMPHit,(x)=>{
+            if(stateProcessor.currentState == "RandomMove")
+            {
+                stateProcessor.StateChange("ChaseMove");
+            }
+        });
     }
 
     public override void Initialize()
@@ -28,12 +39,16 @@ public class GhostInWell_AI : PathfollowObjectBase
 
         RegisterRequest(GetSavedNumber("StageManager"));
 
-        stateProcessor.StateChange("ChaseMove");
+        stateProcessor.StateChange("RandomMove");
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
     }
 
     public override void FixedProgress(float deltaTime)
     {
         base.FixedProgress(deltaTime);
+
+        if(target == null)
+            return;
         stateProcessor.StateProcess(deltaTime);
     }
 
@@ -74,6 +89,23 @@ public class GhostInWell_AI : PathfollowObjectBase
         // }
     }
 
+    public void ChaseMove()
+    {
+        stateProcessor.StateChange("ChaseMove");
+    }
+
+    public void HeadOut()
+    {
+        stateProcessor.StateChange("HeadOut");
+    }
+
+    public void Dead()
+    {
+        DisableMovement();
+        animator.enabled = false;
+        this.enabled = false;
+    }
+
     public void ExitPassage()
     {
         passageCheck = false;
@@ -85,8 +117,8 @@ public class GhostInWell_AI : PathfollowObjectBase
 
     public bool CheckTargetInArea(float recogAngle, float recogDist)
     {
-        var dir = (target.position - recognizeStartPoint.position).normalized;
-        var dist = Vector3.Distance(target.position, recognizeStartPoint.position);
+        var dir = (target.transform.position - recognizeStartPoint.position).normalized;
+        var dist = Vector3.Distance(target.transform.position, recognizeStartPoint.position);
         var angle = MathEx.abs(Vector3.SignedAngle(recognizeStartPoint.forward,dir,transform.up));
 
         return (angle <= recogAngle) && (dist <= recogDist);
@@ -94,8 +126,8 @@ public class GhostInWell_AI : PathfollowObjectBase
 
     public bool CheckTargetInAreaCenter(float recogAngle, float recogDist)
     {
-        var dir = (target.position - recognizeStartPoint.position).normalized;
-        var dist = Vector3.Distance(target.position, Vector3.zero);
+        var dir = (target.transform.position - recognizeStartPoint.position).normalized;
+        var dist = Vector3.Distance(target.transform.position, Vector3.zero);
         var angle = MathEx.abs(Vector3.SignedAngle(recognizeStartPoint.forward,dir,transform.up));
 
         return (angle <= recogAngle) && (dist <= recogDist);

@@ -34,8 +34,8 @@ public class GhostState_RandomMove : GhostStateBase
         if(target.CheckTargetInArea(recogAngle,recogDistance))
         {
             var dist = Vector3.Distance(MathEx.DeleteYPos(target.transform.position),
-                                        MathEx.DeleteYPos(target.target.position));
-            var dir = MathEx.DeleteYPos(target.target.position - target.recognizeStartPoint.position).normalized;
+                                        MathEx.DeleteYPos(target.target.transform.position));
+            var dir = MathEx.DeleteYPos(target.target.transform.position - target.recognizeStartPoint.position).normalized;
             if(!Physics.Raycast(target.recognizeStartPoint.position,dir,dist,obstacleLayer))
             {
                 StateChange("ChaseMove");

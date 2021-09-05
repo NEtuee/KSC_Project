@@ -46,6 +46,7 @@ public class GhostState_MoveToPassage : GhostStateBase
     public override void StateProgress(float deltaTime)
     {
         base.StateProgress(deltaTime);
+
         target.SetTarget(passage[_passageTarget].bodyPoint.position);
 
         if(target.SyncTurn(passage[_passageTarget].bodyPoint,deltaTime))
@@ -87,6 +88,8 @@ public class GhostState_MoveToPassage : GhostStateBase
                 {
                     if(target.passageCheck)
                     {
+                        target.SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, 
+                                        UniqueNumberBase.GetSavedNumberStatic("CameraManager"), null);
                         target.AnimationChange(1);
                         StateChange("CatchStance");
                     }
