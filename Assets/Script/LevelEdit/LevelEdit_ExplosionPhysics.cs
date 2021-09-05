@@ -21,6 +21,8 @@ public class LevelEdit_ExplosionPhysics : MonoBehaviour
             var dir = (item.transform.position - transform.position).normalized;
             rig.AddForce(dir * force);
             rig.AddTorque(MathEx.RandomCircle(1f).normalized * torque);
+
+            item.transform.SetParent(null);
             //item.layer = 1 << changeLayer.value;
         }
     }

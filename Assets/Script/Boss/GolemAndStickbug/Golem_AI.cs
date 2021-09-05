@@ -7,6 +7,8 @@ public class Golem_AI : PathfollowObjectBase
     public string mainPath;
     public float limitTime = 300f;
 
+    public MeshRenderer gague;
+
     public Transform mainBody;
     public GraphAnimator graphAnimator;
 
@@ -31,6 +33,8 @@ public class Golem_AI : PathfollowObjectBase
 
         _timeCounter.InitTimer("TimeCheck",0f,limitTime);
         graphAnimator.Play("Idle",mainBody);
+
+        Launch();
     }
 
     public override void FixedProgress(float deltaTime)
@@ -42,7 +46,9 @@ public class Golem_AI : PathfollowObjectBase
         if(!_launch)
             return;
 
-        _timeCounter.IncreaseTimerSelf("TimeCheck",out var limit,deltaTime);
+        var time = _timeCounter.IncreaseTimerSelf("TimeCheck",out var limit,deltaTime);
+
+        gague.material.SetFloat("Factor",time / limitTime);
         if(limit)
         {
             var effectData = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
@@ -64,5 +70,10 @@ public class Golem_AI : PathfollowObjectBase
     public void Launch()
     {
         _launch = true;
+    }
+
+    public void Stop()
+    {
+        _launch = false;
     }
 }

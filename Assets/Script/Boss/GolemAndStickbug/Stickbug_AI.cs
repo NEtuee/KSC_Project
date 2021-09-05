@@ -6,12 +6,23 @@ public class Stickbug_AI : PathfollowObjectBase
 {
     public string headPositionPath;
     public string mainPath;
+
+    public List<IKLegMovement> legMovements;
+    public GameObject coreObject;
+
     public Transform mainBody;
     public GraphAnimator graphAnimator;
     public LevelEdit_ExplosionPhysics explosionPhysics;
 
     private bool _dance;
     private TimeCounterEx _timeCounter = new TimeCounterEx();
+
+    public override void Assign()
+    {
+        base.Assign();
+
+        AddAction(MessageTitles.player_EMPHit,(x)=>{WhenHit();});
+    }
 
     public override void Initialize()
     {
@@ -61,6 +72,14 @@ public class Stickbug_AI : PathfollowObjectBase
 
     public void WhenDestroy()
     {
+        coreObject.SetActive(false);
+
+        foreach(var leg in legMovements)
+        {
+            leg.iKFabric.enabled = false;
+            leg.enabled = false;
+        }
+
         this.enabled = false;
         explosionPhysics.Launch();
     }
