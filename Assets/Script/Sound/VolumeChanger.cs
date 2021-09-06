@@ -19,4 +19,9 @@ public class VolumeChanger : MonoBehaviour
 
         targetAudio.volume = value;
     }
+
+    public void SetVolume(float volumeValue)
+    {
+         targetAudio.volume = volumeValue - minus;
+    }
 }

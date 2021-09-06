@@ -97,6 +97,12 @@ public class PlayerManager : ManagerBase
             var data = MessageDataPooling.CastData<StringData>(msg.data);
             _drone.DroneTextCall(data.value);
         });
+
+        AddAction(MessageTitles.playermanager_setDroneVolume, (msg) =>
+         {
+             var data = MessageDataPooling.CastData<FloatData>(msg.data);
+             _drone.GetComponent<VolumeChanger>().SetVolume(data.value);
+         });
     }
 
     public override void Initialize()

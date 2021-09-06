@@ -275,8 +275,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void ChangeState(PlayerState state)
     {
-        Debug.Log(state);
-
         if (_currentState == state)
             return;
 

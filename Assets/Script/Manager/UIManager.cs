@@ -417,6 +417,10 @@ public class UIManager : ManagerBase
                         data.ambient = ambientVolumeSlider.value;
                         data.bgm = bgmVolumeSlider.value;
                         SendMessageEx(MessageTitles.setting_saveVolume, GetSavedNumber("SettingManager"), data);
+
+                        FloatData droneVolume = MessageDataPooling.GetMessageData<FloatData>();
+                        droneVolume.value = masterVolumeSlider.value * sfxVolumeSlider.value;
+                        SendMessageEx(MessageTitles.playermanager_setDroneVolume, GetSavedNumber("PlayerManager"), droneVolume);
                     }
                     break;
                 case PauseMenuState.Tutorial:

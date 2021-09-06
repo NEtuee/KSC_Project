@@ -376,6 +376,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort playermanager_droneText = 0x0909;
 
+    /// <summary>
+    /// data = FloatData
+    /// </summarys
+    public const ushort playermanager_setDroneVolume = 0x090a;
+
     #endregion
 
     #region Setter
