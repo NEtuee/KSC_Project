@@ -61,6 +61,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float MinJumpPower { get => minJumpPower; }
     public float CurrentJumpPower { get => currentJumpPower; set => currentJumpPower = value; }
     public bool IsGround { get => isGrounded; set => isGrounded = value; }
+    public bool IsNearGround { get => isNearGround; }
     public float Gravity { get => gravity; }
     public bool JumpStart { get => _jumpStart; set => _jumpStart = value; }
     public bool IsJump { get => isJumping; set => isJumping = value; }
@@ -109,7 +110,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public bool Decharging { get => decharging; set => decharging = value; }
     public Transform DechargingEffectTransform => dechargingEffectTransform;
     public Transform SteamPosition => steamPosition;
-
+    public bool CanCharge { get => _bCanCharge; set => _bCanCharge = value; }
     #endregion
 
     public Transform Transform => _transform;
@@ -480,7 +481,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         }
 
         _animator.SetBool("IsGround", JumpStart == false ? isGrounded : false);
-        bool isNearGround = Physics.Raycast(transform.position, -transform.up, 1.0f, groundLayer);
+        isNearGround = Physics.Raycast(transform.position, -transform.up, 1.0f, groundLayer);
         _animator.SetBool("IsNearGround", isNearGround);
     }
     private void CheckGroundDistance()
@@ -948,6 +949,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float groundMaxDistance = 0.5f;
     [SerializeField] private float groundSlopMinDistanc = 0.6f;
     [SerializeField] private bool isGrounded;
+    [SerializeField] private bool isNearGround;
     [SerializeField] private bool isJumping;
     [SerializeField] private float jumpMinTime = 0.5f;
     [SerializeField] private float jumpTime;
@@ -1007,6 +1009,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Gun")]
     [SerializeField] private Animator gunAnim;
     [SerializeField] private bool decharging = false;
+    private bool _bCanCharge = true;
     private bool _aimLock = false;
     private float dechargingDuration = 2.5f;
     private GameObject pelvisGunObject;

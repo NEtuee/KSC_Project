@@ -76,6 +76,10 @@ public class UIManager : ManagerBase
     [SerializeField] private Canvas scanMakerCanvas;
     [SerializeField] private ScanMakerPool scanMakerPool;
 
+    [Header("DroneUI")]
+    [SerializeField] private Canvas droneUiCanvas;
+    [SerializeField] private Image droneCoolTimeCircle;
+
     private EventSystem _eventSystem;
 
     private void Start()
@@ -276,6 +280,18 @@ public class UIManager : ManagerBase
             soundPlay.id = 1303; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
          });
+
+        AddAction(MessageTitles.uimanager_visibleScanCoolTimeUi, (msg) =>
+         {
+             BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
+             droneUiCanvas.enabled = data.value;
+         });
+
+        AddAction(MessageTitles.uimanager_setScanCoolTimeValue, (msg) =>
+        {
+            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+            droneCoolTimeCircle.fillAmount = data.value;
+        });
     }
 
     public override void Initialize()

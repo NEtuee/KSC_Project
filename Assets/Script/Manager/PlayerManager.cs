@@ -249,6 +249,19 @@ public class PlayerManager : ManagerBase
             data.value = value;
             SendMessageEx(MessageTitles.uimanager_setgunenergyvalue, GetSavedNumber("UIManager"), data);
         });
+
+        _drone.scanLeftCoolTime.Subscribe(value =>
+        {
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = 1f - value / _drone.ScanCoolTime;
+            SendMessageEx(MessageTitles.uimanager_setScanCoolTimeValue, GetSavedNumber("UIManager"), data);
+            if(data.value >= 1f)
+            {
+                BoolData activeData = MessageDataPooling.GetMessageData<BoolData>();
+                activeData.value = false;
+                SendMessageEx(MessageTitles.uimanager_visibleScanCoolTimeUi, GetSavedNumber("UIManager"), activeData);
+            }
+        });
     }
 
     public override void Progress(float deltaTime)
@@ -258,9 +271,9 @@ public class PlayerManager : ManagerBase
         if (LevelEdit_TimelinePlayer.CUTSCENEPLAY == true)
             return;
 
-        if(Keyboard.current.pKey.wasPressedThisFrame)
+        if(Keyboard.current.iKey.wasPressedThisFrame)
         {
-            SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
+            SendMessageEx(MessageTitles.scene_loadCurrentLevel, GetSavedNumber("SceneManager"), null);
         }
 
     }

@@ -155,6 +155,16 @@ public static partial class MessageTitles
     /// data = ScanMakerData
     /// </summary>
     public const ushort uimanager_activeScanMaker = 0x0327;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort uimanager_visibleScanCoolTimeUi = 0x0328;
+
+    /// <summary>
+    /// data = FloatData
+    /// </summary>
+    public const ushort uimanager_setScanCoolTimeValue = 0x0329;
     #endregion
 
     /// <summary>
