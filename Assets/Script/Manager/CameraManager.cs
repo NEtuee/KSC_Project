@@ -687,16 +687,16 @@ public class CameraManager : ManagerBase
         offset.x = 0f;
         var dir = -(Camera.main.transform.rotation * Vector3.forward).normalized;
         
-        isCameraCollision =
-                        //collisionEx.Cast(GameManager.Instance.followTarget.transform.position + offset,dir,playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
-                        collisionEx.Cast(followTarget.transform.position, dir, playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
+        // isCameraCollision =
+        //                 //collisionEx.Cast(GameManager.Instance.followTarget.transform.position + offset,dir,playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
+        //                 collisionEx.Cast(followTarget.transform.position, dir, playerFollowCam3rdPersonComponent.CameraDistance + 1f, out var dist, out var center);
 
-        if (isCameraCollision)
-        {
-            //dist += 1f;
-            if (dist <= playerFollowCam3rdPersonComponent.CameraDistance)
-                playerFollowCam3rdPersonComponent.CameraDistance = dist;
-        }
+        // if (isCameraCollision)
+        // {
+        //     //dist += 1f;
+        //     if (dist <= playerFollowCam3rdPersonComponent.CameraDistance)
+        //         playerFollowCam3rdPersonComponent.CameraDistance = dist;
+        // }
 
 
 
