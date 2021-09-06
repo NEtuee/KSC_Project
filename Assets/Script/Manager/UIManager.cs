@@ -277,7 +277,7 @@ public class UIManager : ManagerBase
              maker.Active(data.collider);//data.center, data.min, data.max);
 
             SoundPlayData soundPlay = MessageDataPooling.GetMessageData<SoundPlayData>();
-            soundPlay.id = 1303; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
+            soundPlay.id = 1303; soundPlay.position = Camera.main.transform.position; soundPlay.returnValue = false; soundPlay.dontStop = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
          });
 
