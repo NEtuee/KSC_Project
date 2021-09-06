@@ -252,6 +252,18 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             InitVelocity();
         }
+
+        RaycastHit nearHit;
+        isNearGround = Physics.Raycast(transform.position, -transform.up,out nearHit, 1.0f, groundLayer);
+        float nearGroundAngle = Mathf.Acos(Vector3.Dot(nearHit.normal, Vector3.up)) * Mathf.Rad2Deg;
+        if (float.IsNaN(nearGroundAngle)) nearGroundAngle = 0f;
+
+        if (nearGroundAngle > invalidityAngle)
+            isNearGround = false;
+        else
+            isNearGround = true;
+
+        _animator.SetBool("IsNearGround", isNearGround);
     }
 
     private void LateUpdate()
@@ -484,8 +496,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
         }
 
         _animator.SetBool("IsGround", JumpStart == false ? isGrounded : false);
-        isNearGround = Physics.Raycast(transform.position, -transform.up, 1.0f, groundLayer);
-        _animator.SetBool("IsNearGround", isNearGround);
     }
     private void CheckGroundDistance()
     {

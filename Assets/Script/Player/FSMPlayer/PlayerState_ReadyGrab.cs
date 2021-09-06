@@ -14,6 +14,8 @@ public class PlayerState_ReadyGrab : PlayerState
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.currentStateName = "ReadyGrab";
+
         playerUnit.CurrentJumpPower = 0.0f;
         playerUnit.CurrentSpeed = 0.0f;
         playerUnit.InitVelocity();
