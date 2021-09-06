@@ -9,7 +9,7 @@ using NodeGraphProcessor.Examples;
 public class EMPEnergySetNode : LinearConditionalNode
 {
 	[Input(name = "Player")]
-    public PlayerCtrl_Ver2                player;
+    public PlayerUnit                player;
 
 	[Input(name = "Energy")]
     public float                energy;

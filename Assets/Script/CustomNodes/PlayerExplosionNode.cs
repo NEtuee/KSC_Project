@@ -10,7 +10,7 @@ using NodeGraphProcessor.Examples;
 public class PlayerExplosionNode : LinearConditionalNode
 {
     [Input(name = "Player")]
-	public PlayerCtrl_Ver2 player;
+	public PlayerUnit player;
 
     [Input(name = "Force"),SerializeField]
 	public float force;
@@ -23,7 +23,7 @@ public class PlayerExplosionNode : LinearConditionalNode
 
 	protected override void Process()
 	{
-        player.GetPlayerRagdoll()?.ExplosionRagdoll(force,(Vector3)direction);
+        player.Ragdoll?.ExplosionRagdoll(force,(Vector3)direction);
 	}
 
 }
