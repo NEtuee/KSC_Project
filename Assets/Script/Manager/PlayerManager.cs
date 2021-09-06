@@ -38,9 +38,13 @@ public class PlayerManager : ManagerBase
 
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
          {
+             _player.transform.SetParent(null);
+             _drone.transform.SetParent(null);
              DontDestroyOnLoad(_player.transform);
              DontDestroyOnLoad(_drone.transform);
+
              _player.CapsuleCollider.enabled = false;
+             _player.canGroundCheck = false;
          });
 
         AddAction(MessageTitles.scene_beforeSceneChangeNotAsync, (msg) =>
@@ -51,7 +55,7 @@ public class PlayerManager : ManagerBase
 
         AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
         {
-            
+            _player.canGroundCheck = true;
         });
 
         AddAction(MessageTitles.scene_sceneChanged, (msg) =>

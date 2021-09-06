@@ -36,6 +36,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public Vector3 PrevDir { get => _prevDir; set => _prevDir = value; }
     public Vector3 LookDir { get => _lookDir; set => _lookDir = value; }
     public float HorizonWeight { get => _horizonWeight; set => _horizonWeight = value; }
+
+    public bool canGroundCheck = true;
     #endregion
 
     #region Climbing Property
@@ -237,8 +239,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _prevDir = _lookDir;
 
         UpdateStamina(Time.fixedDeltaTime);
-
-        CheckGround();
+        
+        if(canGroundCheck)
+            CheckGround();
+            
         CheckRunToStop(Time.fixedDeltaTime);
 
         _currentState.FixedUpdateState(this, _animator);
@@ -289,8 +293,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
 
     /// <summary>
-    /// ¹æÇâ, µ¨Å¸ Å¸ÀÓ, µ¨Å¸ Å¸ÀÓ ¿µÇâ ¿©ºÎ
-    /// ÀÏ¹ÝÀûÀ¸·Î ²À µ¨Å¸ Å¸ÀÓÀ» ³Ñ°ÜÁÖÀÚ.
+    /// ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Å¸ Å¸ï¿½ï¿½, ï¿½ï¿½Å¸ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    /// ï¿½Ï¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Å¸ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ°ï¿½ï¿½ï¿½ï¿½ï¿½.
     /// </summary>
     /// <param name="direction"></param>
     /// <param name="deltaTime"></param>

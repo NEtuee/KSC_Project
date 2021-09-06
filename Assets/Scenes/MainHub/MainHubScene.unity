@@ -1100,6 +1100,261 @@ Transform:
   m_Father: {fileID: 654157317}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &182814314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8944f096533da428411dbec1367657, type: 3}
+  m_Name: Set Level(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  edges:
+  - GUID: 14b297da-80d9-46a5-98a4-f84133542f6e
+    owner: {fileID: 182814314}
+    inputNodeGUID: e4f8367a-e781-4290-9d72-b72e3d18ce7a
+    outputNodeGUID: a0814340-a847-45db-88b7-08829fcd581a
+    inputFieldName: obj
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: 0ccb5f8f-d2a8-4e3e-b4ea-d07c0253d150
+    owner: {fileID: 182814314}
+    inputNodeGUID: 4eb02de7-9f83-4d95-97eb-38f216d583c8
+    outputNodeGUID: a0814340-a847-45db-88b7-08829fcd581a
+    inputFieldName: obj
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: 1e99b214-386e-497e-a743-74b368f97b86
+    owner: {fileID: 182814314}
+    inputNodeGUID: 4eb02de7-9f83-4d95-97eb-38f216d583c8
+    outputNodeGUID: 20994581-73db-481a-8dcc-8d208f0d3980
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  exposedParameters:
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: -4, y: 14, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  functions: []
+  functionID: 0
+  states: []
+  stateID: 0
+  initializeState: 0
+  currentState: 0
+  gameObjectGUID: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+  transformGUID: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+  levelObjectGUID: 9bc98335-f367-440a-9f7a-b11844065343
+  references:
+    version: 1
+    00000000:
+      type: {class: ObjectEMPHitEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 20994581-73db-481a-8dcc-8d208f0d3980
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 424
+          y: 161
+          width: 157
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        damage: 0
+    00000001:
+      type: {class: SetGlobalTrigger, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: e4f8367a-e781-4290-9d72-b72e3d18ce7a
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 720
+          y: 161
+          width: 193
+          height: 147
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        triggerName: LastLevel
+        trigger: 1
+        obj: {fileID: 0}
+    00000002:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: a0814340-a847-45db-88b7-08829fcd581a
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 518
+          y: 344
+          width: 100
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: 9bc98335-f367-440a-9f7a-b11844065343
+        accessor: 0
+    00000003:
+      type: {class: SetStageTrigger, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 4eb02de7-9f83-4d95-97eb-38f216d583c8
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 720
+          y: 317
+          width: 193
+          height: 147
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        triggerName: LastLevel
+        trigger: 1
+        obj: {fileID: 0}
+    00000004:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+        name: GameObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 9
+        val: {fileID: 0}
+    00000005:
+      type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+        name: Transform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 10
+        val: {fileID: 0}
+    00000006:
+      type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 9bc98335-f367-440a-9f7a-b11844065343
+        name: LevelObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 11
+        val: {fileID: 0}
+    00000007:
+      type: {class: GraphObjectTransformParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 9698f696-87da-4f95-b1eb-e2135bad7631
+        name: LvObjTransform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 12
+        val:
+          position: {x: 0, y: 0, z: 0}
+          rotation: {x: 0, y: 0, z: 0, w: 0}
+          scale: {x: 0, y: 0, z: 0}
+    00000008:
+      type: {class: StringParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: c6964347-8f71-4c89-8018-f0d4d915a41c
+        name: Load Level
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 1
+        settings:
+          id: 13
+        val: GraphTest
+    00000009:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+    0000000A:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+    0000000B:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 9bc98335-f367-440a-9f7a-b11844065343
+    0000000C:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 9698f696-87da-4f95-b1eb-e2135bad7631
+    0000000D:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: c6964347-8f71-4c89-8018-f0d4d915a41c
 --- !u!1 &183531073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1130,6 +1385,102 @@ Transform:
   m_Father: {fileID: 654157317}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &193787884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 193787885}
+  - component: {fileID: 193787887}
+  - component: {fileID: 193787886}
+  m_Layer: 0
+  m_Name: LevelText (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &193787885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193787884}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 792833130}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!102 &193787886
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193787884}
+  m_Text: GhostInWell
+  m_OffsetZ: 0
+  m_CharacterSize: 0.1
+  m_LineSpacing: 1
+  m_Anchor: 4
+  m_Alignment: 1
+  m_TabSize: 4
+  m_FontSize: 100
+  m_FontStyle: 0
+  m_RichText: 0
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4286677503
+--- !u!23 &193787887
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193787884}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &219680173
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,6 +1604,121 @@ Transform:
   - {fileID: 1871033431}
   m_Father: {fileID: 1313531730}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &230066363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 230066368}
+  - component: {fileID: 230066367}
+  - component: {fileID: 230066366}
+  - component: {fileID: 230066365}
+  - component: {fileID: 230066364}
+  m_Layer: 0
+  m_Name: GolemAndStickbug
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &230066364
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230066363}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a510ced139d584841b5d818ee293b813, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &230066365
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230066363}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &230066366
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230066363}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &230066367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230066363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3832e99f5b0f734459526a2deb62b88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  graphOrigin: {fileID: 1088549584}
+--- !u!4 &230066368
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230066363}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.54, y: -4.66, z: 28.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 444111919}
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &249548011
 GameObject:
@@ -1779,7 +2245,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh179958
+  m_Name: pb_Mesh2739218
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3934,6 +4400,102 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &444111918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 444111919}
+  - component: {fileID: 444111921}
+  - component: {fileID: 444111920}
+  m_Layer: 0
+  m_Name: LevelText (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &444111919
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444111918}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 230066368}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!102 &444111920
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444111918}
+  m_Text: GolemAndStickbug
+  m_OffsetZ: 0
+  m_CharacterSize: 0.1
+  m_LineSpacing: 1
+  m_Anchor: 4
+  m_Alignment: 1
+  m_TabSize: 4
+  m_FontSize: 100
+  m_FontStyle: 0
+  m_RichText: 0
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4286677503
+--- !u!23 &444111921
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444111918}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &455683993
 GameObject:
   m_ObjectHideFlags: 0
@@ -8527,6 +9089,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 530479281}
+  - {fileID: 1435132856}
   - {fileID: 1919703660}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -8594,7 +9157,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 558c0da3ea76726449e58bc33e818c92, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10768,6 +11331,373 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000000074505806, y: -0.000000029802322, z: 0.057097804}
     m_Extent: {x: 0.225, y: 0.22158183, z: 0.09868248}
   m_DirtyAABB: 0
+--- !u!114 &752672122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8944f096533da428411dbec1367657, type: 3}
+  m_Name: Set Level(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  edges:
+  - GUID: 72675400-d98d-4fe6-8a7e-960027d6d2db
+    owner: {fileID: 752672122}
+    inputNodeGUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+    outputNodeGUID: 20994581-73db-481a-8dcc-8d208f0d3980
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 4dcf9907-3b0c-4ebf-af24-28d31d885e45
+    owner: {fileID: 752672122}
+    inputNodeGUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+    outputNodeGUID: 9d9a0b91-8e9a-4502-8e2e-ce8fff2eda3c
+    inputFieldName: target
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 847d07df-31f7-4488-8fb3-f9e66806eb7e
+    owner: {fileID: 752672122}
+    inputNodeGUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+    outputNodeGUID: f61aa069-7b4d-4365-933c-97f876d7ed05
+    inputFieldName: text
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  exposedParameters:
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: -103, y: 116, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  functions: []
+  functionID: 0
+  states: []
+  stateID: 0
+  initializeState: 0
+  currentState: 0
+  gameObjectGUID: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+  transformGUID: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+  levelObjectGUID: 9bc98335-f367-440a-9f7a-b11844065343
+  references:
+    version: 1
+    00000000:
+      type: {class: ObjectEMPHitEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 20994581-73db-481a-8dcc-8d208f0d3980
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 424
+          y: 161
+          width: 157
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        damage: 0
+    00000001:
+      type: {class: TextMeshNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 9d9a0b91-8e9a-4502-8e2e-ce8fff2eda3c
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 260
+          y: 279
+          width: 321
+          height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        output: {fileID: 1869424791}
+    00000002:
+      type: {class: Set3DTextNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 628
+          y: 250.5
+          width: 170
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        target: {fileID: 0}
+        text: 
+    00000003:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: f61aa069-7b4d-4365-933c-97f876d7ed05
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 486
+          y: 396
+          width: 95
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: c6964347-8f71-4c89-8018-f0d4d915a41c
+        accessor: 0
+    00000004:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+        name: GameObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 9
+        val: {fileID: 0}
+    00000005:
+      type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+        name: Transform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 10
+        val: {fileID: 0}
+    00000006:
+      type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 9bc98335-f367-440a-9f7a-b11844065343
+        name: LevelObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 11
+        val: {fileID: 0}
+    00000007:
+      type: {class: GraphObjectTransformParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 9698f696-87da-4f95-b1eb-e2135bad7631
+        name: LvObjTransform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 12
+        val:
+          position: {x: 0, y: 0, z: 0}
+          rotation: {x: 0, y: 0, z: 0, w: 0}
+          scale: {x: 0, y: 0, z: 0}
+    00000008:
+      type: {class: StringParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: c6964347-8f71-4c89-8018-f0d4d915a41c
+        name: Load Level
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 1
+        settings:
+          id: 13
+        val: GhostInWell
+    00000009:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+    0000000A:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+    0000000B:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 9bc98335-f367-440a-9f7a-b11844065343
+    0000000C:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 9698f696-87da-4f95-b1eb-e2135bad7631
+    0000000D:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: c6964347-8f71-4c89-8018-f0d4d915a41c
+--- !u!1 &792833125
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 792833130}
+  - component: {fileID: 792833129}
+  - component: {fileID: 792833128}
+  - component: {fileID: 792833127}
+  - component: {fileID: 792833126}
+  m_Layer: 0
+  m_Name: GhostInWellButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &792833126
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792833125}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a510ced139d584841b5d818ee293b813, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &792833127
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792833125}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &792833128
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792833125}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &792833129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792833125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3832e99f5b0f734459526a2deb62b88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  graphOrigin: {fileID: 752672122}
+--- !u!4 &792833130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792833125}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.71, y: -4.66, z: 28.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 193787885}
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &795645464
 GameObject:
   m_ObjectHideFlags: 0
@@ -13020,6 +13950,258 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b76c71a1e3f6c4fdab657f4fbf5466de, type: 3}
+--- !u!114 &1028099180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8944f096533da428411dbec1367657, type: 3}
+  m_Name: Set Level(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  edges:
+  - GUID: 72675400-d98d-4fe6-8a7e-960027d6d2db
+    owner: {fileID: 1028099180}
+    inputNodeGUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+    outputNodeGUID: 20994581-73db-481a-8dcc-8d208f0d3980
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 4dcf9907-3b0c-4ebf-af24-28d31d885e45
+    owner: {fileID: 1028099180}
+    inputNodeGUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+    outputNodeGUID: 9d9a0b91-8e9a-4502-8e2e-ce8fff2eda3c
+    inputFieldName: target
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 847d07df-31f7-4488-8fb3-f9e66806eb7e
+    owner: {fileID: 1028099180}
+    inputNodeGUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+    outputNodeGUID: f61aa069-7b4d-4365-933c-97f876d7ed05
+    inputFieldName: text
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  exposedParameters:
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: -38, y: 31, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  functions: []
+  functionID: 0
+  states: []
+  stateID: 0
+  initializeState: 0
+  currentState: 0
+  gameObjectGUID: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+  transformGUID: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+  levelObjectGUID: 9bc98335-f367-440a-9f7a-b11844065343
+  references:
+    version: 1
+    00000000:
+      type: {class: ObjectEMPHitEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 20994581-73db-481a-8dcc-8d208f0d3980
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 424
+          y: 161
+          width: 157
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        damage: 0
+    00000001:
+      type: {class: TextMeshNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 9d9a0b91-8e9a-4502-8e2e-ce8fff2eda3c
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 260
+          y: 279
+          width: 321
+          height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        output: {fileID: 1869424791}
+    00000002:
+      type: {class: Set3DTextNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 628
+          y: 250.5
+          width: 170
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        target: {fileID: 0}
+        text: 
+    00000003:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: f61aa069-7b4d-4365-933c-97f876d7ed05
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 486
+          y: 396
+          width: 95
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: c6964347-8f71-4c89-8018-f0d4d915a41c
+        accessor: 0
+    00000004:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+        name: GameObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 9
+        val: {fileID: 0}
+    00000005:
+      type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+        name: Transform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 10
+        val: {fileID: 0}
+    00000006:
+      type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 9bc98335-f367-440a-9f7a-b11844065343
+        name: LevelObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 11
+        val: {fileID: 0}
+    00000007:
+      type: {class: GraphObjectTransformParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 9698f696-87da-4f95-b1eb-e2135bad7631
+        name: LvObjTransform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 12
+        val:
+          position: {x: 0, y: 0, z: 0}
+          rotation: {x: 0, y: 0, z: 0, w: 0}
+          scale: {x: 0, y: 0, z: 0}
+    00000008:
+      type: {class: StringParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: c6964347-8f71-4c89-8018-f0d4d915a41c
+        name: Load Level
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 1
+        settings:
+          id: 13
+        val: Wanko
+    00000009:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+    0000000A:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+    0000000B:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 9bc98335-f367-440a-9f7a-b11844065343
+    0000000C:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 9698f696-87da-4f95-b1eb-e2135bad7631
+    0000000D:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: c6964347-8f71-4c89-8018-f0d4d915a41c
 --- !u!114 &1044797259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13555,7 +14737,7 @@ MonoBehaviour:
   debugExceptionTitles: []
   sendedCount: 0
   receivedCount: 0
-  stageTriggerAsset: {fileID: 0}
+  stageTriggerAsset: {fileID: 1126672095}
   pathManager: {fileID: 1077344040}
   entranceElevator: {fileID: 0}
   exitElevator: {fileID: 0}
@@ -13588,6 +14770,258 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1088549584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8944f096533da428411dbec1367657, type: 3}
+  m_Name: Set Level(Clone)
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  edges:
+  - GUID: 72675400-d98d-4fe6-8a7e-960027d6d2db
+    owner: {fileID: 1088549584}
+    inputNodeGUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+    outputNodeGUID: 20994581-73db-481a-8dcc-8d208f0d3980
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 4dcf9907-3b0c-4ebf-af24-28d31d885e45
+    owner: {fileID: 1088549584}
+    inputNodeGUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+    outputNodeGUID: 9d9a0b91-8e9a-4502-8e2e-ce8fff2eda3c
+    inputFieldName: target
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 847d07df-31f7-4488-8fb3-f9e66806eb7e
+    owner: {fileID: 1088549584}
+    inputNodeGUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+    outputNodeGUID: f61aa069-7b4d-4365-933c-97f876d7ed05
+    inputFieldName: text
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  exposedParameters:
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 61, y: 54, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  functions: []
+  functionID: 0
+  states: []
+  stateID: 0
+  initializeState: 0
+  currentState: 0
+  gameObjectGUID: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+  transformGUID: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+  levelObjectGUID: 9bc98335-f367-440a-9f7a-b11844065343
+  references:
+    version: 1
+    00000000:
+      type: {class: ObjectEMPHitEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 20994581-73db-481a-8dcc-8d208f0d3980
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 424
+          y: 161
+          width: 157
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        damage: 0
+    00000001:
+      type: {class: TextMeshNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 9d9a0b91-8e9a-4502-8e2e-ce8fff2eda3c
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 260
+          y: 279
+          width: 321
+          height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        output: {fileID: 1869424791}
+    00000002:
+      type: {class: Set3DTextNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 745653a0-0aee-4cc9-9aa4-bec44e983771
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 628
+          y: 250.5
+          width: 170
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        target: {fileID: 0}
+        text: 
+    00000003:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: f61aa069-7b4d-4365-933c-97f876d7ed05
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 486
+          y: 396
+          width: 95
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: c6964347-8f71-4c89-8018-f0d4d915a41c
+        accessor: 0
+    00000004:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+        name: GameObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 9
+        val: {fileID: 0}
+    00000005:
+      type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+        name: Transform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 10
+        val: {fileID: 0}
+    00000006:
+      type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 9bc98335-f367-440a-9f7a-b11844065343
+        name: LevelObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 11
+        val: {fileID: 0}
+    00000007:
+      type: {class: GraphObjectTransformParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 9698f696-87da-4f95-b1eb-e2135bad7631
+        name: LvObjTransform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 12
+        val:
+          position: {x: 0, y: 0, z: 0}
+          rotation: {x: 0, y: 0, z: 0, w: 0}
+          scale: {x: 0, y: 0, z: 0}
+    00000008:
+      type: {class: StringParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: c6964347-8f71-4c89-8018-f0d4d915a41c
+        name: Load Level
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 1
+        settings:
+          id: 13
+        val: GolemAndStickbug
+    00000009:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 15e6db33-4713-4a1f-a26d-d37bbbe06be0
+    0000000A:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 01aebd9f-fd58-480e-ae38-7c5ac4e8dae0
+    0000000B:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 9bc98335-f367-440a-9f7a-b11844065343
+    0000000C:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 9698f696-87da-4f95-b1eb-e2135bad7631
+    0000000D:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: c6964347-8f71-4c89-8018-f0d4d915a41c
 --- !u!1 &1094674123
 GameObject:
   m_ObjectHideFlags: 0
@@ -13684,6 +15118,360 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094674123}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1101211725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8944f096533da428411dbec1367657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  edges:
+  - GUID: 284266af-9c95-4887-b95f-b9efa4bd47e4
+    owner: {fileID: 1101211725}
+    inputNodeGUID: 9def0068-6064-42cd-9ef6-fcb0b1679c8f
+    outputNodeGUID: 387f9e92-a9c6-4dbf-8d73-76b016d0db4d
+    inputFieldName: b
+    outputFieldName: deltaTime
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 0bb84b1e-921b-4d54-b839-28e27a14f100
+    owner: {fileID: 1101211725}
+    inputNodeGUID: 6f406dc3-0b70-48a9-9a7e-9cece073e2fd
+    outputNodeGUID: 9def0068-6064-42cd-9ef6-fcb0b1679c8f
+    inputFieldName: b
+    outputFieldName: result
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 57d520cf-032d-44e7-9cfa-9f546d28d906
+    owner: {fileID: 1101211725}
+    inputNodeGUID: 6f406dc3-0b70-48a9-9a7e-9cece073e2fd
+    outputNodeGUID: ee5aa8f4-e4d3-474a-acd3-8b0189e04eb2
+    inputFieldName: a
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: 5fb809d3-0eb7-4e79-a203-37268662bcb4
+    owner: {fileID: 1101211725}
+    inputNodeGUID: cb7b1270-d8fd-4b5f-b47a-f965e7a28a16
+    outputNodeGUID: 71664b9f-0ff8-4bd7-b22d-8a6bc89b82fa
+    inputFieldName: obj
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: 7acd6cea-7587-4ccb-8663-aa93a16ea739
+    owner: {fileID: 1101211725}
+    inputNodeGUID: 0a7cb07a-135a-4996-9253-4f292482ee88
+    outputNodeGUID: 387f9e92-a9c6-4dbf-8d73-76b016d0db4d
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 1a6c79f0-7e96-49db-82b6-6da35ebcdfe5
+    owner: {fileID: 1101211725}
+    inputNodeGUID: 6f406dc3-0b70-48a9-9a7e-9cece073e2fd
+    outputNodeGUID: 0a7cb07a-135a-4996-9253-4f292482ee88
+    inputFieldName: executed
+    outputFieldName: true
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 85ebe852-0557-426d-aacf-029c1f6df746
+    owner: {fileID: 1101211725}
+    inputNodeGUID: 85f09402-b920-48dd-a611-bd7abbcd5a0a
+    outputNodeGUID: 71664b9f-0ff8-4bd7-b22d-8a6bc89b82fa
+    inputFieldName: obj
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: 3e52c3bb-2600-40f2-9c9e-6895d75e673b
+    owner: {fileID: 1101211725}
+    inputNodeGUID: 0a7cb07a-135a-4996-9253-4f292482ee88
+    outputNodeGUID: 85f09402-b920-48dd-a611-bd7abbcd5a0a
+    inputFieldName: condition
+    outputFieldName: trigger
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  exposedParameters:
+  - id: 8
+  - id: 9
+  - id: 10
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 787, y: -179, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
+  functions: []
+  functionID: 0
+  states: []
+  stateID: 0
+  initializeState: 0
+  currentState: 0
+  gameObjectGUID: f1b94880-5931-49b4-b5ac-77cb9d2ed2df
+  transformGUID: a7d7efb5-6841-4920-8060-0e31376ff829
+  levelObjectGUID: 128f9c1c-5479-48e5-af56-856c635c9450
+  references:
+    version: 1
+    00000000:
+      type: {class: ObjectFixedProgressEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 387f9e92-a9c6-4dbf-8d73-76b016d0db4d
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: -53.249985
+          y: 168
+          width: 197
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        deltaTime: 0
+    00000001:
+      type: {class: TranslateNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 6f406dc3-0b70-48a9-9a7e-9cece073e2fd
+        computeOrder: 6
+        position:
+          serializedVersion: 2
+          x: 452.1501
+          y: 168
+          width: 170
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        a: {fileID: 0}
+        b:
+          x: 0
+          y: 0
+          z: 0
+    00000002:
+      type: {class: Vector3MultiplyNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 9def0068-6064-42cd-9ef6-fcb0b1679c8f
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 290.00003
+          y: 316.50003
+          width: 114
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        a:
+          x: 0
+          y: -2
+          z: 0
+        b: 0
+        result:
+          x: 0
+          y: 0
+          z: 0
+    00000003:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: ee5aa8f4-e4d3-474a-acd3-8b0189e04eb2
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 311.00003
+          y: 282
+          width: 93
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: a7d7efb5-6841-4920-8060-0e31376ff829
+        accessor: 0
+    00000004:
+      type: {class: GetGlobalTrigger, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: cb7b1270-d8fd-4b5f-b47a-f965e7a28a16
+        computeOrder: 7
+        position:
+          serializedVersion: 2
+          x: -40.00003
+          y: 267
+          width: 184
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        triggerName: LastLevel
+        obj: {fileID: 0}
+        trigger: 0
+        find: 0
+    00000005:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 71664b9f-0ff8-4bd7-b22d-8a6bc89b82fa
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: -224.16205
+          y: 364.5
+          width: 100
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: 128f9c1c-5479-48e5-af56-856c635c9450
+        accessor: 0
+    00000006:
+      type: {class: IfNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 0a7cb07a-135a-4996-9253-4f292482ee88
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 250.75
+          y: 168
+          width: 153
+          height: 114
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        condition: 0
+        compareOperator: 0
+    00000007:
+      type: {class: GetStageTrigger, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 85f09402-b920-48dd-a611-bd7abbcd5a0a
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: -39.99996
+          y: 376.4467
+          width: 184
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        triggerName: LastLevel
+        obj: {fileID: 0}
+        trigger: 0
+        find: 0
+    00000008:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: f1b94880-5931-49b4-b5ac-77cb9d2ed2df
+        name: GameObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 11
+        val: {fileID: 0}
+    00000009:
+      type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: a7d7efb5-6841-4920-8060-0e31376ff829
+        name: Transform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 12
+        val: {fileID: 0}
+    0000000A:
+      type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 128f9c1c-5479-48e5-af56-856c635c9450
+        name: LevelObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 13
+        val: {fileID: 0}
+    0000000B:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: f1b94880-5931-49b4-b5ac-77cb9d2ed2df
+    0000000C:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: a7d7efb5-6841-4920-8060-0e31376ff829
+    0000000D:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 128f9c1c-5479-48e5-af56-856c635c9450
+--- !u!114 &1126672095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1f2a9b41dd1c94eb046fcf893e8986, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  booleans:
+  - id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: BooleanTuple, ns: , asm: EveryAssembly}
+      data:
+        name: LastLevel
+        description: 'trigger : LastLevel'
+        trigger: 0
 --- !u!1 &1134956744
 GameObject:
   m_ObjectHideFlags: 0
@@ -13823,6 +15611,102 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &1203173708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1203173709}
+  - component: {fileID: 1203173711}
+  - component: {fileID: 1203173710}
+  m_Layer: 0
+  m_Name: LevelText (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1203173709
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203173708}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2117860321}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!102 &1203173710
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203173708}
+  m_Text: Wanko
+  m_OffsetZ: 0
+  m_CharacterSize: 0.1
+  m_LineSpacing: 1
+  m_Anchor: 4
+  m_Alignment: 1
+  m_TabSize: 4
+  m_FontSize: 100
+  m_FontStyle: 0
+  m_RichText: 0
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4286677503
+--- !u!23 &1203173711
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203173708}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1205136175
 GameObject:
   m_ObjectHideFlags: 0
@@ -15927,7 +17811,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-228946
+  m_Name: pb_Mesh2739232
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16407,6 +18291,164 @@ MonoBehaviour:
         isHidden: 0
         expanded: 0
         guid: c6964347-8f71-4c89-8018-f0d4d915a41c
+--- !u!1 &1435132855
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1435132856}
+  - component: {fileID: 1435132858}
+  - component: {fileID: 1435132857}
+  m_Layer: 0
+  m_Name: LastLevelTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1435132856
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435132855}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -16.2, z: 8.224744}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 525699248}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1435132857
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435132855}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 50, y: 3, z: 50}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1435132858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435132855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3832e99f5b0f734459526a2deb62b88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  graphOrigin: {fileID: 1680427341}
+--- !u!1 &1449399628
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1449399629}
+  - component: {fileID: 1449399631}
+  - component: {fileID: 1449399630}
+  m_Layer: 0
+  m_Name: LevelText (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1449399629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449399628}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1640085757}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!102 &1449399630
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449399628}
+  m_Text: GO DOWN
+  m_OffsetZ: 0
+  m_CharacterSize: 0.1
+  m_LineSpacing: 1
+  m_Anchor: 4
+  m_Alignment: 1
+  m_TabSize: 4
+  m_FontSize: 100
+  m_FontStyle: 0
+  m_RichText: 0
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4286677503
+--- !u!23 &1449399631
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449399628}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1458570171
 GameObject:
   m_ObjectHideFlags: 0
@@ -18425,6 +20467,121 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1640085752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1640085757}
+  - component: {fileID: 1640085756}
+  - component: {fileID: 1640085755}
+  - component: {fileID: 1640085754}
+  - component: {fileID: 1640085753}
+  m_Layer: 0
+  m_Name: GraphStageButton (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1640085753
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640085752}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a510ced139d584841b5d818ee293b813, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1640085754
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640085752}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &1640085755
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640085752}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1640085756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640085752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3832e99f5b0f734459526a2deb62b88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  graphOrigin: {fileID: 182814314}
+--- !u!4 &1640085757
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640085752}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.71, y: 6.59, z: 29.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1449399629}
+  m_Father: {fileID: 0}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1648510692
 GameObject:
   m_ObjectHideFlags: 0
@@ -18606,6 +20763,186 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.029173382, y: 0.011787295, z: 0.0035043955}
     m_Extent: {x: 0.061621703, y: 0.10846067, z: 0.07565907}
   m_DirtyAABB: 0
+--- !u!114 &1680427341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8944f096533da428411dbec1367657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  edges:
+  - GUID: da489ebf-c2d1-40af-a9c1-18ae6bb97cb9
+    owner: {fileID: 1680427341}
+    inputNodeGUID: 4b9fcf55-4986-4b33-bf21-b46cc112463d
+    outputNodeGUID: 6ac02548-be17-47a1-9ec5-403c34cc30fe
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: af73b89a-5812-44c0-ad38-997c574ef5ce
+    owner: {fileID: 1680427341}
+    inputNodeGUID: 4b9fcf55-4986-4b33-bf21-b46cc112463d
+    outputNodeGUID: 3167f397-deab-4e8e-8a7d-22cb77d32c43
+    inputFieldName: obj
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  exposedParameters:
+  - id: 3
+  - id: 4
+  - id: 5
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 170, y: 31, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  functions: []
+  functionID: 0
+  states: []
+  stateID: 0
+  initializeState: 0
+  currentState: 0
+  gameObjectGUID: bbc13451-6561-4e33-96c3-7c4a60048b09
+  transformGUID: 9a382471-e91c-41ac-a306-f74164b210f3
+  levelObjectGUID: 475fb73d-4fce-4738-868a-4f6b79ab89ba
+  references:
+    version: 1
+    00000000:
+      type: {class: LoadSpecificLevelNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 4b9fcf55-4986-4b33-bf21-b46cc112463d
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 594
+          y: 182
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        obj: {fileID: 0}
+        level: LastPassage
+    00000001:
+      type: {class: ObjectTriggerEnterEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 6ac02548-be17-47a1-9ec5-403c34cc30fe
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 254
+          y: 182
+          width: 187
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        collider: {fileID: 0}
+    00000002:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 3167f397-deab-4e8e-8a7d-22cb77d32c43
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 341
+          y: 282
+          width: 100
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: 475fb73d-4fce-4738-868a-4f6b79ab89ba
+        accessor: 0
+    00000003:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: bbc13451-6561-4e33-96c3-7c4a60048b09
+        name: GameObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 6
+        val: {fileID: 0}
+    00000004:
+      type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 9a382471-e91c-41ac-a306-f74164b210f3
+        name: Transform
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 7
+        val: {fileID: 0}
+    00000005:
+      type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: 475fb73d-4fce-4738-868a-4f6b79ab89ba
+        name: LevelObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 0
+        settings:
+          id: 8
+        val: {fileID: 0}
+    00000006:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: bbc13451-6561-4e33-96c3-7c4a60048b09
+    00000007:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 9a382471-e91c-41ac-a306-f74164b210f3
+    00000008:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 475fb73d-4fce-4738-868a-4f6b79ab89ba
 --- !u!1 &1746687184
 GameObject:
   m_ObjectHideFlags: 0
@@ -19197,6 +21534,7 @@ GameObject:
   - component: {fileID: 1919703657}
   - component: {fileID: 1919703656}
   - component: {fileID: 1919703655}
+  - component: {fileID: 1919703661}
   m_Layer: 7
   m_Name: BossGround
   m_TagString: Enviroment
@@ -19246,7 +21584,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: a3b16ed8df9330747837f5991ddaf44f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -20511,8 +22849,25 @@ Transform:
   - {fileID: 927253839}
   - {fileID: 805683446}
   m_Father: {fileID: 525699248}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1919703661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919703654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3832e99f5b0f734459526a2deb62b88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  graphOrigin: {fileID: 1101211725}
 --- !u!1 &1932853054
 GameObject:
   m_ObjectHideFlags: 0
@@ -20971,7 +23326,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-211690
+  m_Name: pb_Mesh2739632
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -21700,6 +24055,121 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 73223884}
+--- !u!1 &2117860316
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2117860321}
+  - component: {fileID: 2117860320}
+  - component: {fileID: 2117860319}
+  - component: {fileID: 2117860318}
+  - component: {fileID: 2117860317}
+  m_Layer: 0
+  m_Name: WankoStageButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &2117860317
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117860316}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a510ced139d584841b5d818ee293b813, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &2117860318
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117860316}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &2117860319
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117860316}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2117860320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117860316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3832e99f5b0f734459526a2deb62b88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  graphOrigin: {fileID: 1028099180}
+--- !u!4 &2117860321
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117860316}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.71, y: -6.91, z: 27.56}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1203173709}
+  m_Father: {fileID: 0}
+  m_RootOrder: 21
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2136704551
 GameObject:
   m_ObjectHideFlags: 0
