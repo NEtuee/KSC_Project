@@ -165,6 +165,11 @@ public static partial class MessageTitles
     /// data = FloatData
     /// </summary>
     public const ushort uimanager_setScanCoolTimeValue = 0x0329;
+
+    /// <summary>
+    /// data = ColorData
+    /// </summary>
+    public const ushort uimanager_setChargingTextColor = 0x0330;
     #endregion
 
     /// <summary>

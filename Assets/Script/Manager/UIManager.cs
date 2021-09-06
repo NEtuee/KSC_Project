@@ -292,6 +292,12 @@ public class UIManager : ManagerBase
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
             droneCoolTimeCircle.fillAmount = data.value;
         });
+
+        AddAction(MessageTitles.uimanager_setChargingTextColor, (msg) =>
+        {
+            ColorData data = MessageDataPooling.CastData<ColorData>(msg.data);
+            gunChargeValueText.color = data.value;
+        });
     }
 
     public override void Initialize()

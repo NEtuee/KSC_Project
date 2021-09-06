@@ -111,6 +111,8 @@ public class PlayerState_Aiming : PlayerState
         data.value = false;
         playerUnit.SendMessageEx(MessageTitles.uimanager_activegunui, UniqueNumberBase.GetSavedNumberStatic("UIManager"), data);
 
+        animator.SetTrigger("ResetShot");
+
         verticalValue = 0.0f;
         horizonValue = 0.0f;
     }

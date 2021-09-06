@@ -14,5 +14,9 @@ public class ClimbingIdleBehavior : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _playerUnit.SetClimbMove(false);
+
+        if (_playerUnit.GetState == PlayerUnit.jumpState ||
+            _playerUnit.GetState == PlayerUnit.climbingJumpState)
+            _playerUnit.ChangeState(PlayerUnit.grabState);
     }
 }

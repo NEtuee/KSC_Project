@@ -244,7 +244,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         _currentState.FixedUpdateState(this, _animator);
 
-        CheckTurnBack();
+        //CheckTurnBack();
 
         MoveConservation();
 
@@ -275,6 +275,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void ChangeState(PlayerState state)
     {
+        Debug.Log(state);
+
         if (_currentState == state)
             return;
 
@@ -306,6 +308,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void Jump()
     {
+        if (_currentState == readyGrabState)
+            return;
+
         isJumping = true;
         jumpTime = Time.time;
         currentJumpPower = jumpPower;
@@ -535,19 +540,31 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     private void CheckRunToStop(float deltaTime)
     {
-        if (_runToStopTime >= 0.025f && currentSpeed > walkSpeed && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
+        if (_runTime > _runToStopMinmumTime)
         {
-            ChangeState(runToStopState);
-            _runToStopTime = 0.0f;
+            if (_runToStopTime >= 0.02f && currentSpeed > walkSpeed && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
+            {
+                ChangeState(runToStopState);
+                _runToStopTime = 0.0f;
+            }
+
+            if (_currentState == defaultState && currentSpeed > 0.0f && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
+            {
+                _runToStopTime += deltaTime;
+            }
+            else
+            {
+                _runToStopTime = 0.0f;
+            }
         }
 
-        if (_currentState == defaultState && currentSpeed > 0.0f && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
+        if (currentSpeed > walkSpeed)
         {
-            _runToStopTime += deltaTime;
+            _runTime += deltaTime;
         }
-        else
+        else if(currentSpeed == 0f)
         {
-            _runToStopTime = 0.0f;
+            _runTime = 0f;
         }
     }
 
@@ -855,6 +872,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         Decharging = true;
         //if (chargingCountText != null)
         //    chargingCountText.color = Color.red;
+        ColorData red = MessageDataPooling.GetMessageData<ColorData>();
+        red.value = Color.red;
+        SendMessageEx(MessageTitles.uimanager_setChargingTextColor, GetSavedNumber("UIManager"), red);
 
         float time = 0;
         while (time < dechargingDuration)
@@ -871,6 +891,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
         }
 
         Decharging = false;
+
+        ColorData white = MessageDataPooling.GetMessageData<ColorData>();
+        white.value = Color.white;
+        SendMessageEx(MessageTitles.uimanager_setChargingTextColor, GetSavedNumber("UIManager"), white);
         //if (chargingCountText != null)
         //    chargingCountText.color = _chargingCountTextColor;
     }
@@ -918,6 +942,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float currentSpeed;
     [SerializeField] private float accelerateSpeed = 20.0f;
     [SerializeField] private float rotationSpeed = 6.0f;
+    [SerializeField]private float _runTime = 0.0f;
+    private float _runToStopMinmumTime = 2f;
     private float _horizonWeight = 0.0f;
     private Vector3 _moveDir;
     private Vector3 _prevDir;

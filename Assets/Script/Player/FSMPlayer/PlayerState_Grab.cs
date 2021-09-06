@@ -55,6 +55,7 @@ public class PlayerState_Grab : PlayerState
 
         //playerUnit.IsClimbingMove = false;
         playerUnit.IsJump = false;
+        playerUnit.CurrentJumpPower = 0.0f;
 
         playerUnit.InitVelocity();
         playerUnit.HandIK.ActiveHandIK(true);
