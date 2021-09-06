@@ -7,6 +7,11 @@ public class VolumeChanger : MonoBehaviour
     public AudioSource targetAudio;
     public float minus = 0f;
 
+    public void Start()
+    {
+        VolumeSync();
+    }
+
     public void VolumeSync()
     {
         SoundSettingData soundSettingData = SaveDataHelper.LoadSetting<SoundSettingData>();
