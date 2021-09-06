@@ -29,33 +29,33 @@ public class PlayerState_ReadyClimbingJump : PlayerState
             {
                 playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Left;
             }
-            //else
-            //{
-            //    Vector3 backVector = -transform.forward;
-            //    backVector.y = 0f;
-            //    transform.rotation = Quaternion.LookRotation(backVector);
+            else
+            {
+                Vector3 backVector = -transform.forward;
+                backVector.y = 0f;
+                transform.rotation = Quaternion.LookRotation(backVector);
 
-            //    playerUnit.MoveDir = transform.forward;
-            //    playerUnit.MoveDir.Normalize();
-            //    playerUnit.CurrentSpeed = playerUnit.RunSpeed;
-            //    playerUnit.MoveDir *= playerUnit.CurrentSpeed;
-            //    playerUnit.CurrentJumpPower = playerUnit.JumpPower * 0.5f;
-            //    transform.position = transform.position +
-            //                         (playerUnit.MoveDir + (Vector3.up * playerUnit.CurrentJumpPower)) * Time.deltaTime;
+                playerUnit.MoveDir = transform.forward;
+                playerUnit.MoveDir.Normalize();
+                playerUnit.CurrentSpeed = playerUnit.RunSpeed;
+                playerUnit.MoveDir *= playerUnit.CurrentSpeed;
+                playerUnit.CurrentJumpPower = playerUnit.JumpPower * 0.5f;
+                transform.position = transform.position +
+                                     (playerUnit.MoveDir + (Vector3.up * playerUnit.CurrentJumpPower)) * Time.deltaTime;
 
-            //    animator.SetBool("IsGrab", false);
+                animator.SetBool("IsGrab", false);
 
-            //    //playerUnit.stamina.Value -= playerUnit.ClimbingJumpConsumeValue;
-            //    //playerUnit.stamina.Value = Mathf.Clamp(playerUnit.stamina.Value, 0.0f, playerUnit.MaxStamina);
+                //playerUnit.stamina.Value -= playerUnit.ClimbingJumpConsumeValue;
+                //playerUnit.stamina.Value = Mathf.Clamp(playerUnit.stamina.Value, 0.0f, playerUnit.MaxStamina);
 
-            //    playerUnit.SetVelocity(playerUnit.MoveDir);
+                playerUnit.SetVelocity(playerUnit.MoveDir);
 
-            //    playerUnit.HandIK.DisableHandIK();
-            //    playerUnit.Jump();
-            //    playerUnit.ChangeState(PlayerUnit.jumpState);
+                playerUnit.HandIK.DisableHandIK();
+                playerUnit.Jump();
+                playerUnit.ChangeState(PlayerUnit.jumpState);
 
-            //    return;
-            //}
+                return;
+            }
         }
 
         playerUnit.InitVelocity();

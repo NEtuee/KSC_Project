@@ -67,7 +67,7 @@ public class PlayerState_ReadyGrab : PlayerState
     {
     }
 
-    public override void OnGrabRelease(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
         playerUnit.IsClimbingMove = false;
         playerUnit.IsLedge = false;
@@ -80,5 +80,7 @@ public class PlayerState_ReadyGrab : PlayerState
         playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Falling;
 
         playerUnit.Detach();
+
+        playerUnit.ChangeState(PlayerUnit.defaultState);
     }
 }

@@ -534,7 +534,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     private void CheckRunToStop(float deltaTime)
     {
-        if (_runToStopTime >= 0.05f && currentSpeed > walkSpeed && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
+        if (_runToStopTime >= 0.025f && currentSpeed > walkSpeed && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
         {
             ChangeState(runToStopState);
             _runToStopTime = 0.0f;
