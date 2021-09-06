@@ -6,6 +6,14 @@ using Object = System.Object;
 
 public class DroneHelperRoot : MonoBehaviour
 {
+    public class DescData
+    {
+        public string desc;
+        public AudioClip audio;
+    }
+
+    [SerializeField] public AudioSource audioPlay;
+
     [SerializeField] public Drone drone;
     [SerializeField] private Canvas droneDiscriptCanvas;
     [SerializeField] private EnumerateText descriptText;
@@ -18,7 +26,7 @@ public class DroneHelperRoot : MonoBehaviour
     [SerializeField] public bool helping = false;
     [SerializeField] public bool active = false;
 
-    private Dictionary<string, string> descriptDictionary = new Dictionary<string, string>();
+    private Dictionary<string, DescData> descriptDictionary = new Dictionary<string, DescData>();
 
     public TimeCounterEx timer = new TimeCounterEx();
 
@@ -30,7 +38,11 @@ public class DroneHelperRoot : MonoBehaviour
 
         for (int i = 0; i < droneDescript.descripts.Count; i++)
         {
-            descriptDictionary.Add(droneDescript.descripts[i].key, droneDescript.descripts[i].descript);
+            var item = new DescData();
+            item.desc = droneDescript.descripts[i].descript;
+            item.audio = droneDescript.descripts[i].audioData;
+
+            descriptDictionary.Add(droneDescript.descripts[i].key, item);
         }
 
         //drone.whenHelp += () => { droneDiscriptCanvas.GetComponent<RectTransform>().localScale = helpStateScale; };
@@ -70,10 +82,19 @@ public class DroneHelperRoot : MonoBehaviour
 
         active = true;
         helping = true;
-        descriptText.SetTargetString(descriptDictionary[key]);
+        descriptText.SetTargetString(descriptDictionary[key].desc);
         droneDiscriptCanvas.enabled = true;
         drone.OrderHelp();
         timer.InitTimer("Help");
+
+        var audio = descriptDictionary[key].audio;
+        if(audio != null)
+        {
+            audioPlay.Stop();
+            audioPlay.clip = audio;
+            audioPlay.Play();
+        }
+
         return true;
     }
 
