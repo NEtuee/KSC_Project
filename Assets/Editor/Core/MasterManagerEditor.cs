@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(MasterManager),true)]
+[CustomEditor(typeof(MasterManager),true),CanEditMultipleObjects]
 public class MasterManagerEditor : MessageReceiverEditor
 {
     const string messageCountField_Text = "Message Count : ";

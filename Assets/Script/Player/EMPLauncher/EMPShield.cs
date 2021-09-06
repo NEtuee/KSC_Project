@@ -62,7 +62,11 @@ public class EMPShield : Hitable
         SetDistortion();
         StartCoroutine(HitEffect());
 
-        whenReactive += GameObject.FindGameObjectWithTag("Drone").GetComponent<DroneScaner>().AddScanableObjets;
+        var drone = GameObject.FindGameObjectWithTag("Drone")?.GetComponent<DroneScaner>();
+        if(drone != null)
+        {
+            whenReactive += drone.AddScanableObjets;
+        }
 
         //shieldParticle = GetComponent<ParticleSystem>();
     }

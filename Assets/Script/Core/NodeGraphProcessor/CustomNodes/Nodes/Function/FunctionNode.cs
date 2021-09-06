@@ -41,7 +41,6 @@ public class FunctionNode : LinearConditionalNode
 
 	protected override void Process()
 	{
-		Debug.Log("Function Call");
 	    //output = input * 42;
 	}
 

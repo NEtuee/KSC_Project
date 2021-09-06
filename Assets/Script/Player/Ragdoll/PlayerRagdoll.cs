@@ -400,6 +400,7 @@ public class PlayerRagdoll : MonoBehaviour
         ragdollToAnimBlendTime = 0.5f;
     }
 
+    public Transform GetHipTransform() {return pelvis;}
     public RagdollState GetRagdollState() { return state; }
 
     private void SetRagdollContainer(bool result)

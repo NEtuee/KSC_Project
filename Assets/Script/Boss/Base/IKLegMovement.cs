@@ -73,6 +73,7 @@ public class IKLegMovement : MonoBehaviour
                 if(rayDist < dist)
                 {
                     ik.transform.position = check.point;
+                    ik.transform.SetParent(check.transform);
                     return;
                 }
 
@@ -141,6 +142,14 @@ public class IKLegMovement : MonoBehaviour
     public void SetIKActive(bool value)
     {
         iKFabric.enabled = value;
+    }
+
+    public void DisableMovement()
+    {
+        this.enabled = false;
+
+        _timer = 0;
+        _isMove = false;
     }
 
     public void Hold(bool value, bool groundCheck = true)

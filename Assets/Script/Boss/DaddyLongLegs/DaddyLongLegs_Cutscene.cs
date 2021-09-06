@@ -21,7 +21,6 @@ public class DaddyLongLegs_Cutscene : IKBossBase
     {
         base.Initialize();
 
-        animator.ignorePause = true;
         //SetLegHitGroundSound(1507);
         if(randomStart)
             startTime = Random.Range(0f,3f);

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(MessageReceiver),true)]
+[CustomEditor(typeof(MessageReceiver),true),CanEditMultipleObjects]
 public class MessageReceiverEditor : Editor
 {
     protected MessageReceiver messageControl;

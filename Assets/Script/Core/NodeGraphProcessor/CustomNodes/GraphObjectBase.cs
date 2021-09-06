@@ -72,9 +72,28 @@ public class GraphObjectBase : UnTransfromObjectBase
     {
         base.AfterProgress(deltaTime);
 
-        RunGraph("AfterProgress");
+        var node = FindNode("AfterProgress");
+        if(node != null)
+        {
+            ((ObjectAfterProgressEntryNode)node).deltaTime = deltaTime;
+            RunGraph(node);
 
-        ClearMessageQueue();
+            ClearMessageQueue();
+        }
+    }
+
+    public override void FixedProgress(float deltaTime)
+    {
+        base.FixedProgress(deltaTime);
+
+        var node = FindNode("FixedProgress");
+        if(node != null)
+        {
+            ((ObjectFixedProgressEntryNode)node).deltaTime = deltaTime;
+            RunGraph(node);
+
+            ClearMessageQueue();
+        }
     }
 
     public override void Release()
