@@ -203,6 +203,9 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     public void OnCamera(InputAction.CallbackContext value)
     {
+        if (Time.timeScale == 0f)
+            return;
+
         Vector2 inputVector = value.ReadValue<Vector2>();
         _mouseY = inputVector.y;
         _mouseX = inputVector.x;

@@ -15,6 +15,7 @@ public class PlayerState_Aiming : PlayerState
     private float _chargeDelayTime;
     private float verticalValue = 0.0f;
     private float horizonValue = 0.0f;
+    private float _horizonAmount = 0.0f;
 
     private void Awake()
     {
@@ -52,6 +53,7 @@ public class PlayerState_Aiming : PlayerState
         data.value = true;
         playerUnit.SendMessageEx(MessageTitles.uimanager_activegunui, UniqueNumberBase.GetSavedNumberStatic("UIManager"), data);
         _transformingCount = 0;
+        playerUnit.CanCharge = true;
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -109,6 +111,8 @@ public class PlayerState_Aiming : PlayerState
         data.value = false;
         playerUnit.SendMessageEx(MessageTitles.uimanager_activegunui, UniqueNumberBase.GetSavedNumberStatic("UIManager"), data);
 
+        animator.SetTrigger("ResetShot");
+
         verticalValue = 0.0f;
         horizonValue = 0.0f;
     }
@@ -126,6 +130,8 @@ public class PlayerState_Aiming : PlayerState
 
         if (playerUnit.IsGround == true)
         {
+            float inputHorizonAmount = Mathf.Abs(animator.GetFloat("InputHorizon"));
+
             if (playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
             {
                 playerUnit.MoveDir = (camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal);
@@ -135,6 +141,11 @@ public class PlayerState_Aiming : PlayerState
             {
                 playerUnit.MoveDir= playerUnit.PrevDir;
                 playerUnit.MoveDir.Normalize();
+            }
+
+            if(playerUnit.InputVertical == 0.0f)
+            {
+                playerUnit.CurrentSpeed *= inputHorizonAmount;
             }
 
             Vector3 aimDir = camForward;
@@ -187,9 +198,12 @@ public class PlayerState_Aiming : PlayerState
                 playerUnit.SendMessageQuick(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), chargeSoundPlayData);
             }
 
-            playerUnit.chargeTime.Value += Time.deltaTime * (playerUnit.Decharging ? dechargingRatio : 1f);
-            playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, Mathf.Abs(playerUnit.energy.Value / _gunCost));
-            playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, 3.0f);
+            if (playerUnit.CanCharge == true)
+            {
+                playerUnit.chargeTime.Value += Time.deltaTime * (playerUnit.Decharging ? dechargingRatio : 1f);
+                playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, Mathf.Abs(playerUnit.energy.Value / _gunCost));
+                playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, 3.0f);
+            }
 
             SetParameterData setParameterData = MessageDataPooling.GetMessageData<SetParameterData>();
             setParameterData.soundId = 1013; setParameterData.paramId = 10131; setParameterData.value = (playerUnit.chargeTime.Value) * 100f;
@@ -289,6 +303,8 @@ public class PlayerState_Aiming : PlayerState
                 data.time = 0.8f;
                 playerUnit.SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), data);
             }
+
+            playerUnit.CanCharge = false;
         }
     }
 }

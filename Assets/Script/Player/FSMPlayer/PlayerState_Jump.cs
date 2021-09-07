@@ -121,6 +121,15 @@ public class PlayerState_Jump : PlayerState
         }
     }
 
+    public override void OnJump(PlayerUnit playerUnit, Animator animator)
+    {
+        if (playerUnit.IsNearGround == true && playerUnit.JumpStart == false)
+        {
+            playerUnit.JumpStart = true;
+            animator.SetTrigger("Jump");
+        }
+    }
+
     public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
         Vector3 point1;
