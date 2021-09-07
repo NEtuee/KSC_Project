@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Wanko_AI : PathfollowObjectBase
 {
+    public UnityEngine.Events.UnityEvent whenDead;
     public float hitTargetDist = 3f;
     public float hitGague = 5f;
     public float cooldownFactor = 0.1f;
@@ -81,6 +82,8 @@ public class Wanko_AI : PathfollowObjectBase
             {
                 _active = false;
                 graphAnimator.Play("Dead",model);
+
+                whenDead?.Invoke();
                 return;
             }
         }
