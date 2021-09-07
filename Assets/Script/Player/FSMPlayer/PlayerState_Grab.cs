@@ -107,7 +107,7 @@ public class PlayerState_Grab : PlayerState
         float climbingPlaneAngle = Vector3.Dot(Vector3.Cross(playerUnit.Transform.up, Vector3.right), Vector3.forward);
         playerUnit.IsClimbingGround = climbingPlaneAngle > -15f * Mathf.Deg2Rad;
 
-        playerUnit.AddEnergy(playerUnit.IsClimbingMove == true ? playerUnit.ClimbingJumpRestoreEnrgyValue : 0.0f);
+        playerUnit.AddEnergy(playerUnit.IsClimbingMove == true ? playerUnit.ClimbingJumpRestoreEnrgyValue * Time.fixedDeltaTime : 0.0f);
 
         playerUnit.UpdateGrab();
     }
