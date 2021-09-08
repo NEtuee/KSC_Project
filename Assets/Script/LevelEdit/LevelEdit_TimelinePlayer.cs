@@ -9,11 +9,13 @@ using UnityEngine.SceneManagement;
 public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 {
     public static bool CUTSCENEPLAY;
+
     public PlayableDirector playableDirector;
 
     public List<GameObject> activeLists = new List<GameObject>();
     public Transform endTransform;
 
+    public bool loadNextLevel = false;
     public bool startFade = true;
     public bool playerDisable = false;
     public bool ragdoll = false;
@@ -35,7 +37,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     {
         base.Initialize();
 
-        RegisterRequest(GetSavedNumber("StageManager"));
+        RegisterRequest(GetSavedNumber("CutsceneManager"));
         SendMessageQuick(MessageTitles.cameramanager_getCameraManager,GetSavedNumber("CameraManager"),null);
     }
 
@@ -46,7 +48,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
         StartTrigger();
 
-        if(startFade)
+        if (startFade)
         {
             var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
             actionData.value = ()=>{
@@ -96,27 +98,41 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
     public void End()
     {
-        var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
-        actionData.value = ()=>{
-            EndTrigger();
-            SetActiveObjects(false);
+        if(loadNextLevel)
+        {
+            var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
+            actionData.value = () => {
+                SendMessageEx(MessageTitles.cutscene_stop, GetSavedNumber("CutsceneManager"), null);
+                playableDirector.Stop();
+                LoadNextLevel();
+            };
 
-            if(endTransform != null)
-            {
-                var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
-                data.position = endTransform.position;
-                data.rotation = endTransform.rotation;
-                SendMessageEx(MessageTitles.playermanager_setPlayerTransform,GetSavedNumber("PlayerManager"),data);
-            }
+            SendMessageEx(MessageTitles.uimanager_fadeinout, GetSavedNumber("UIManager"), actionData);
+        }
+        else
+        {
+            var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
+            actionData.value = () => {
+                EndTrigger();
+                SetActiveObjects(false);
 
-            if(ragdoll)
-            {
-                SendMessageEx(MessageTitles.playermanager_ragdoll,GetSavedNumber("PlayerManager"),null);
-            }
-            
-        };
+                if (endTransform != null)
+                {
+                    var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
+                    data.position = endTransform.position;
+                    data.rotation = endTransform.rotation;
+                    SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
+                }
 
-        SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);
+                if (ragdoll)
+                {
+                    SendMessageEx(MessageTitles.playermanager_ragdoll, GetSavedNumber("PlayerManager"), null);
+                }
+
+            };
+
+            SendMessageEx(MessageTitles.uimanager_fadeinout, GetSavedNumber("UIManager"), actionData);
+        }
 
         //GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
         //    //GameManager.Instance.PAUSE = false;
@@ -153,7 +169,9 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
     public void StartTrigger()
     {
-        if(playerDisable)
+        SendMessageEx(MessageTitles.cutscene_play, GetSavedNumber("CutsceneManager"), this);
+
+        if (playerDisable)
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),false);
         }
@@ -163,7 +181,9 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public void EndTrigger()
     {
         SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod,GetSavedNumber("CameraManager"),null);
-        if(playerDisable)
+        SendMessageEx(MessageTitles.cutscene_stop, GetSavedNumber("CutsceneManager"), null);
+        playableDirector.Stop();
+        if (playerDisable)
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
         }

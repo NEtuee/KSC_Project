@@ -63,6 +63,8 @@ public class PlayerManager : ManagerBase
              _player.InitializeMove();
              _player.InitVelocity();
              _player.CapsuleCollider.enabled = true;
+
+             _drone.InitFollowPosition();
          });
 
         AddAction(MessageTitles.scene_restarted, (msg) =>
@@ -284,6 +286,11 @@ public class PlayerManager : ManagerBase
         if(Keyboard.current.iKey.wasPressedThisFrame)
         {
             SendMessageEx(MessageTitles.scene_loadCurrentLevel, GetSavedNumber("SceneManager"), null);
+        }
+
+        if(Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
         }
 
     }

@@ -603,7 +603,7 @@ public class BrokenMedusa_AI : IKBossBase
         graphAnimator.Stop();
         graphAnimator.enabled = false;
 
-        SoundPlay(1510,null,transform.position);
+        //SoundPlay(1510,null,transform.position);
         SoundPlay(1700,null,transform.position);
         //_soundManager.Play(1510,transform.position);
         //_soundManager.Play(1700,transform.position);

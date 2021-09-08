@@ -477,6 +477,15 @@ public class Drone : UnTransfromObjectBase
         }
     }
 
+    public void InitFollowPosition()
+    {
+        _targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x +
+                                     target.up * defaultFollowOffset.y) + target.position;
+        _finalTargetPosition = _targetPosition;
+
+        transform.position = _finalTargetPosition;
+    }
+
     public void OrderHelp()
     {
         help = true;
