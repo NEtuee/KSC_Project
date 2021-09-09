@@ -123,14 +123,14 @@ public class PlayerState_ClimbingJump : PlayerState
             playerUnit.MoveDir = playerUnit.MoveDir.normalized * finalDir.magnitude;
 
             playerUnit.IsGround = false;
-            //playerUnit.ClimbingJump();
+            playerUnit.ClimbingJump();
             playerUnit.ChangeState(PlayerUnit.jumpState);
             if (playerUnit.ClimbingJumpDirection != ClimbingJumpDirection.Left &&
                 playerUnit.ClimbingJumpDirection != ClimbingJumpDirection.Right)
                 playerUnit.CurrentJumpPower = playerUnit.CurrentClimbingJumpPower;
 
-            //InputAction.CallbackContext dummy = new InputAction.CallbackContext();
-            //OnGrab(dummy , playerUnit, animator);
+            InputAction.CallbackContext dummy = new InputAction.CallbackContext();
+            OnGrab(dummy , playerUnit, animator);
         }
     }
     
