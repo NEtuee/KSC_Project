@@ -14,8 +14,11 @@ public class LevelEdit_Trigger : UnTransfromObjectBase
     public delegate void TriggerEventDelegate();
     public TriggerEventDelegate triggerEventDelegate = ()=>{};
 
+    public bool keep = false;
+
     [SerializeField]private TriggerType triggerType;
     [SerializeField]private UnityEvent triggerEvent;
+    [SerializeField]private UnityEvent triggerStayEvent;
     [SerializeField]private UnityEvent triggerExitEvent;
     [SerializeField]private UnityEvent afterTriggerEvent = new UnityEvent();
     [SerializeField]private LayerMask targetLayer;
@@ -87,9 +90,15 @@ public class LevelEdit_Trigger : UnTransfromObjectBase
         }
     }
 
+    public void OnTriggerStay(Collider coll)
+    {
+        if (targetLayer == (targetLayer | (1<<coll.gameObject.layer)))
+            triggerStayEvent?.Invoke();
+    }
+
     public void OnTriggerExit(Collider coll)
     {
-        if ((coll.gameObject.layer & targetLayer.value) != 0)
+        if (targetLayer == (targetLayer | (1<<coll.gameObject.layer)))
         {
             triggerExitEvent.Invoke();
         }
@@ -97,7 +106,7 @@ public class LevelEdit_Trigger : UnTransfromObjectBase
 
     public void TriggerEnable()
     {
-        isTriggered = true;
+        isTriggered = !keep;
 
         triggerEventDelegate();
         triggerTimer = reloadTime;

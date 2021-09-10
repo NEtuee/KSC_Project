@@ -147,8 +147,6 @@ public class GraphAnimator : MonoBehaviour
 
     public List<GraphAnimation> animations = new List<GraphAnimation>();
 
-    public bool ignorePause = false;
-
     private List<GraphAnimation> _playList = new List<GraphAnimation>();
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 

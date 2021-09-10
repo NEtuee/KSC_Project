@@ -13,7 +13,7 @@ public class GetPlayerNode : BaseNode
 	public GraphObjectBase obj;
 
     [Output(name = "Player")]
-	public PlayerCtrl_Ver2 player;
+	public PlayerUnit player;
 
 
 	public override string		name => "Get Player";
@@ -25,7 +25,7 @@ public class GetPlayerNode : BaseNode
         var msg = obj.DequeueGraphMessage();
         if(msg != null)
         {
-            player = (PlayerCtrl_Ver2)msg.data;
+            player = (PlayerUnit)msg.data;
             MessagePool.ReturnMessage(msg);
         }
 	}

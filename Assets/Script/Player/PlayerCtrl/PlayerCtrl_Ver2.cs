@@ -143,8 +143,8 @@ public class PlayerCtrl_Ver2 : PlayerCtrl
 
     [Header("Edge")] [SerializeField] private float hangAbleEdgeDist = 2f;
 
-    [Header("EMP Lunacher")] [SerializeField]
-    private EMPGun empGun;
+    [Header("EMP Lunacher")] 
+    [SerializeField] private EMPGun empGun;
 
     [SerializeField] private float restoreValuePerSecond = 10f;
     [SerializeField] private float costValue = 25f;

@@ -9,10 +9,10 @@ namespace GraphProcessor
     [System.Serializable]
     public class PlayerParamter : ExposedParameter
     {
-        [SerializeField] PlayerCtrl_Ver2 val;
+        [SerializeField] PlayerUnit val;
 
-        public override object value { get => val; set => val = (PlayerCtrl_Ver2)value; }
-        public override Type GetValueType() => typeof(PlayerCtrl_Ver2);
+        public override object value { get => val; set => val = (PlayerUnit)value; }
+        public override Type GetValueType() => typeof(PlayerUnit);
     }
 
     [System.Serializable]

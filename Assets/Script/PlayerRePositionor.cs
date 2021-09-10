@@ -12,23 +12,47 @@ public class PlayerRePositionor : UnTransfromObjectBase
     public Transform respawn;
     public Transform bip;
 
-    private PlayerCtrl_Ver2 _player;
+    private PlayerUnit _player;
+    private Collider collider;
 
     protected override void Awake()
     {
         base.Awake();
         RegisterRequest(GetSavedNumber("ObjectManager"));
 
+        collider = GetComponent<Collider>();
+        //collider.enabled = false;
+
         AddAction(MessageTitles.set_setplayer, (msg) =>
         {
-            _player = (PlayerCtrl_Ver2)msg.data;
+            _player = (PlayerUnit)msg.data;
+        });
+
+        AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
+        {
+            if (collider != null)
+                collider.enabled = false;
+        });
+
+        AddAction(MessageTitles.scene_sceneChanged, (msg) =>
+        {
+            if (collider != null)
+                collider.enabled = true;
         });
     }
 
-    protected override void Start()
+    //protected override void Start()
+    //{
+    //    base.Start();
+    //    //bip = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
+    //    SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
+    //    bip = _player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
+    //}
+
+    public override void Initialize()
     {
-        base.Start();
-        //bip = GameManager.Instance.player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
+        base.Initialize();
+
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
         bip = _player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
     }
@@ -52,6 +76,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
         //    GameManager.Instance.player.transform.position = respawn.position;
         //    bip.position = respawn.position;
         //}
+        Debug.Log("RespawnColl");
         StartCoroutine(Defferd(coll));
 
         // else if(coll.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -62,48 +87,40 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
     IEnumerator Defferd(Collider coll)
     {
-        if (coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
+        if (coll.TryGetComponent<PlayerUnit>(out var ctrl))
         {
-            if (ctrl.Dead == true || ctrl.GetState() == PlayerCtrl_Ver2.PlayerState.Respawn)
+            ctrl.TakeDamage(5.0f, false);
+
+            if (ctrl.GetState == PlayerUnit.deadState || ctrl.GetState == PlayerUnit.respawnState)
                 yield break;
 
-            ctrl.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
+            ctrl.ChangeState(PlayerUnit.respawnState);
             yield return new WaitForSeconds(1.0f);
 
             var rot = Quaternion.LookRotation(respawn.forward);
 
-
-            //ctrl.transform.position = respawn.position;
-            //ctrl.transform.SetPositionAndRotation(respawn.position,rot);
             var respawnData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
             respawnData.position = respawn.position;
             respawnData.rotation = rot;
             SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), respawnData);
-            //GameManager.Instance.cameraManager.SetBrainCameraPosition(respawn.position);
             Vector3Data position = MessageDataPooling.GetMessageData<Vector3Data>();
             position.value = respawn.position;
             SendMessageEx(MessageTitles.cameramanager_setBrainCameraPosition, GetSavedNumber("CameraManager"), position);
 
-            //GameManager.Instance.followTarget.SetPitchYaw(rot.eulerAngles.x,rot.eulerAngles.y);
             PitchYawData data = MessageDataPooling.GetMessageData<PitchYawData>();
             data.pitch = rot.eulerAngles.x; data.yaw = rot.eulerAngles.y;
             SendMessageEx(MessageTitles.cameramanager_setYawPitch, GetSavedNumber("CameraManager"), data);
-            ctrl.TakeDamage(5.0f,false);
             whenFall?.Invoke();
             yield break;
         }
 
         if(playerLayer == (playerLayer | (1<<coll.gameObject.layer)))
         {
-            //PlayerCtrl_Ver2 player = ((PlayerCtrl_Ver2)(GameManager.Instance.player));
-
-            if (_player.Dead == true || _player.GetState() == PlayerCtrl_Ver2.PlayerState.Respawn)
+            if (_player.GetState == PlayerUnit.deadState || _player.GetState == PlayerUnit.respawnState)
                 yield break;
 
-            _player.ChangeState(PlayerCtrl_Ver2.PlayerState.Respawn);
+            _player.ChangeState(PlayerUnit.respawnState);
             yield return new WaitForSeconds(1.0f);
-            //GameManager.Instance.player.transform.position = respawn.position;
-            //bip.position = respawn.position;
             var rot = Quaternion.LookRotation(respawn.forward);
 
             var respawnData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
@@ -118,5 +135,10 @@ public class PlayerRePositionor : UnTransfromObjectBase
             SendMessageEx(MessageTitles.cameramanager_setYawPitch, GetSavedNumber("CameraManager"), data);
             whenFall?.Invoke();
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 }

@@ -43,7 +43,7 @@ public class ParameterVolume : UnTransfromObjectBase
         base.Assign();
 
         AddAction(MessageTitles.set_setplayer,(x)=>{
-            _targetTransform = ((PlayerCtrl_Ver2)x.data).transform;
+            _targetTransform = ((PlayerUnit)x.data).transform;
         });
     }
 

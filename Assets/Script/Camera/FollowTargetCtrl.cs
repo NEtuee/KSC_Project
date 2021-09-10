@@ -16,7 +16,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     [SerializeField] private float followSmooth = 8f;
     [SerializeField] private bool isPause;
 
-    [SerializeField]private PlayerCtrl_Ver2 _player;
+    [SerializeField]private PlayerUnit _player;
 
     private float _mouseX;
     private float _mouseY;
@@ -49,7 +49,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
         AddAction(MessageTitles.set_setplayer, (msg) =>
         {
-            _player = (PlayerCtrl_Ver2)msg.data;
+            _player = (PlayerUnit)msg.data;
             target = _player.transform;
         });
     }
@@ -63,24 +63,24 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         targetRot = currentRot;
 
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
-        if(_player.updateMethod == UpdateMethod.Update)
-        {
-            updateMode = true;
-        }
-        else
-        {
-            updateMode = false;
-        }
+        //if(_player.updateMethod == UpdateMethod.Update)
+        //{
+        //    updateMode = true;
+        //}
+        //else
+        //{
+        //    updateMode = false;
+        //}
     }
 
 
     void Update()
     {
-        if (updateMode == false)
-            return;
+        //if (updateMode == false)
+        //    return;
 
-        if (!visible)
-            return;
+        //if (!visible)
+        //    return;
         //if (Input.GetKeyDown(KeyCode.Alpha0))
         //{
         //    transform.rotation = Camera.main.transform.rotation;
@@ -95,30 +95,33 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         //transform.position = target.position + Vector3.up;
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
 
-        if(_player.CheckAimLock())
-            return;
+        //if(_player.CheckAimLock())
+        //    return;
 
         //float mouseX = InputManager.Instance.GetCameraAxisX();
         //float mouseY = InputManager.Instance.GetCameraAxisY();
 
-        targetRot.y += _mouseX * yawRotateSpeed * Time.unscaledDeltaTime;
-        targetRot.x += _mouseY * pitchRotateSpeed * Time.unscaledDeltaTime;
+        //targetRot.y += _mouseX * yawRotateSpeed * Time.unscaledDeltaTime;
+        //targetRot.x += _mouseY * pitchRotateSpeed * Time.unscaledDeltaTime;
 
-        targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+        //targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
 
-        currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
-        currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
+        //currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
+        //currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
 
-        //currentRot.x = targetRot.x;
-        //currentRot.y = targetRot.y;
+        ////currentRot.x = targetRot.x;
+        ////currentRot.y = targetRot.y;
 
-        Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
-        transform.rotation = localRotation;
+        //Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
+        //transform.rotation = localRotation;
     }
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.PAUSE == true)
+        //if (GameManager.Instance.PAUSE == true)
+        //    return;
+
+        if (_player.GetState == PlayerUnit.deadState)
             return;
 
         if (!visible)
@@ -151,15 +154,15 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     private void LateUpdate()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
+        //if (GameManager.Instance.PAUSE == true)
+        //    return;
 
-        if (updateMode == false)
-            return;
+        //if (updateMode == false)
+        //    return;
 
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, followSmooth * Time.deltaTime);
         //transform.position = target.position + Vector3.up + Vector3.up * ((PlayerCtrl_Ver2)GameManager.Instance.player).GetFootStepOffset() * 0.1f;
-        transform.position = target.position + Vector3.up;
+        //transform.position = target.position + Vector3.up;
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
         //transform.position = Vector3.MoveTowards(transform.position, target.position + Vector3.up, 8.0f * Time.deltaTime);
     }

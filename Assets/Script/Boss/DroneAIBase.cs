@@ -17,7 +17,7 @@ public class DroneAIBase : ObjectBase
     protected float _directionUpdateTerm;
     protected float _targetDistance;
 
-    protected PlayerCtrl_Ver2 _player;
+    protected PlayerUnit _player;
     protected Transform _target;
     protected TimeCounterEx _timeCounterEx = new TimeCounterEx();
 
@@ -26,7 +26,7 @@ public class DroneAIBase : ObjectBase
         base.Assign();
         
         AddAction(MessageTitles.set_setplayer,(x)=>{
-            _player = (PlayerCtrl_Ver2)x.data;
+            _player = (PlayerUnit)x.data;
             _target = _player.transform;
         });
     }

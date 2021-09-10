@@ -8,12 +8,12 @@ using MD;
 
 public class PlayerManager : ManagerBase
 {
-    [SerializeField] private PlayerCtrl_Ver2 _player;
+    [SerializeField] private PlayerUnit _player;
     private IKCtrl _playerFootIK;
     [SerializeField] private EMPGun _emp;
     [SerializeField] private Renderer bagRenderer;
     private Material _bagMatrial;
-    private Drone _drone;
+    [SerializeField] private Drone _drone;
 
     public override void Assign()
     {
@@ -32,14 +32,15 @@ public class PlayerManager : ManagerBase
         {
             PositionRotation data = MessageDataPooling.CastData<PositionRotation>(msg.data);
             _player.transform.SetPositionAndRotation(data.position, data.rotation);
-            _player.GetPlayerRagdoll().transform.position = data.position;
-            _playerFootIK.InitPelvisHeight();
+            //_player.GetPlayerRagdoll().transform.position = data.position;
+            _player.FootIK.InitPelvisHeight();
         });
 
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
          {
              DontDestroyOnLoad(_player.transform);
              DontDestroyOnLoad(_drone.transform);
+             _player.CapsuleCollider.enabled = false;
          });
 
         AddAction(MessageTitles.scene_beforeSceneChangeNotAsync, (msg) =>
@@ -50,8 +51,19 @@ public class PlayerManager : ManagerBase
 
         AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
         {
-            _player.InitializeMove();
-            _player.InitVelocity();
+            
+        });
+
+        AddAction(MessageTitles.scene_sceneChanged, (msg) =>
+         {
+             _player.InitializeMove();
+             _player.InitVelocity();
+             _player.CapsuleCollider.enabled = true;
+         });
+
+        AddAction(MessageTitles.scene_restarted, (msg) =>
+        {
+            _player.InitStatus();
         });
 
         AddAction(MessageTitles.playermanager_addDamageToPlayer, (msg) =>
@@ -60,7 +72,11 @@ public class PlayerManager : ManagerBase
             _player.TakeDamage(data.value);
         });
 
-        AddAction(MessageTitles.playermanager_initPlayerStatus, (msg) => _player.InitStatus());
+        AddAction(MessageTitles.playermanager_initPlayerStatus, (msg) =>
+        { 
+            _player.InitStatus(); 
+        });
+
         AddAction(MessageTitles.playermanager_getPlayer,(msg)=>{
             var receiver = (MessageReceiver)msg.sender;
             SendMessageQuick(receiver,MessageTitles.playermanager_getPlayer,_player);
@@ -69,17 +85,17 @@ public class PlayerManager : ManagerBase
         AddAction(MessageTitles.playermanager_hidePlayer, (msg) =>
         {
             bool visible = (bool)msg.data;
-            _player.GetDrone().gameObject.SetActive(visible);
+            _drone.gameObject.SetActive(visible);
             _player.gameObject.SetActive(visible);
         });
 
         AddAction(MessageTitles.playermanager_ragdoll,(msg)=>{
-            _player.GetPlayerRagdoll().SlidingRagdoll(Vector3.zero);
+            _player.Ragdoll.SlidingRagdoll(Vector3.zero);
         });
 
         AddAction(MessageTitles.playermanager_droneText,(msg)=>{
             var data = MessageDataPooling.CastData<StringData>(msg.data);
-            _player.GetDrone().DroneTextCall(data.value);
+            _drone.DroneTextCall(data.value);
         });
     }
 
@@ -87,33 +103,36 @@ public class PlayerManager : ManagerBase
     {
         base.Initialize();
 
-        _playerFootIK = _player.GetComponent<IKCtrl>();
+        //_playerFootIK = _player.GetComponent<IKCtrl>();
 
-        if(_playerFootIK == null)
-        {
-            Debug.LogError("Not Exits Player in IKCtrl");
-        }
+        //if(_playerFootIK == null)
+        //{
+        //    Debug.LogError("Not Exits Player in IKCtrl");
+        //}
 
         if(bagRenderer == null)
         {
-            Debug.LogError("Not Set Bag Renderer");
+            Debug.Log("Not Set Bag Renderer");
         }
-
-        _bagMatrial = bagRenderer.material;
+        else
+        {
+            _bagMatrial = bagRenderer.material;
+        }
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        _drone = _player.GetDrone();
+        //_drone = _player.GetDrone();
 
         _player.hp.Subscribe(value =>
         {
+            if(_bagMatrial != null)
             _bagMatrial.SetFloat("Vector1_5338de784f7d4439aba250082f9a53e3", value * 0.01f);
 
             StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
             data.type = UIManager.StateBarType.HP;
             data.value = value;
-            if (_player.GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
+            if (_player.GetState == PlayerUnit.aimingState)
             {
                 data.visible = false;
                 SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
@@ -133,7 +152,7 @@ public class PlayerManager : ManagerBase
             StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
             data.type = UIManager.StateBarType.Stamina;
             data.value = value;
-            if (_player.GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
+            if (_player.GetState == PlayerUnit.aimingState)
             {
                 data.visible = false;
                 SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
@@ -153,7 +172,7 @@ public class PlayerManager : ManagerBase
             StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
             data.type = UIManager.StateBarType.Energy;
             data.value = value;
-            if (_player.GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
+            if (_player.GetState == PlayerUnit.aimingState)
             {
                 data.visible = false;
                 SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
@@ -173,7 +192,7 @@ public class PlayerManager : ManagerBase
             HpPackValueType data = MessageDataPooling.GetMessageData<HpPackValueType>();
             data.value = value;
 
-            if (_player.GetState() == PlayerCtrl_Ver2.PlayerState.Aiming)
+            if (_player.GetState == PlayerUnit.aimingState)
             {
                 data.visible = false;
                 SendMessageEx(MessageTitles.uimanager_setvaluehppackui, GetSavedNumber("UIManager"), data);

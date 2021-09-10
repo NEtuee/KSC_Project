@@ -9,7 +9,7 @@ using NodeGraphProcessor.Examples;
 public class DroneDescNode : LinearConditionalNode
 {
 	[Input(name = "Player")]
-    public PlayerCtrl_Ver2                player;
+    public PlayerUnit                player;
 
 	[Input(name = "Text"),SerializeField]
     public string                text;
@@ -20,6 +20,6 @@ public class DroneDescNode : LinearConditionalNode
 	protected override void Process()
 	{
         Debug.Log("Check");
-	    player.GetDrone().DroneTextCall(text);
+	    //player.GetDrone().DroneTextCall(text);
 	}
 }

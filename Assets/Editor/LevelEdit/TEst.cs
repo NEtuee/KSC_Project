@@ -59,6 +59,7 @@ public class TEst : EditorWindow
     Vector2 _pathMenuScroll = new Vector2();
     string _pathCreateName = "";
     float _heightDist = 0f;
+    bool _setParent = false;
     int _pointSelect = -1;
 
 #endregion
@@ -516,6 +517,8 @@ public class TEst : EditorWindow
 
         GUI.enabled = true;
 
+        _setParent = GUILayout.Toggle(_setParent,"Set Parent To target");
+
         if(GUILayout.Button("Save"))
         {
             EditorUtility.SetDirty(_pathManager);
@@ -641,7 +644,7 @@ public class TEst : EditorWindow
 			Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay( new Vector3( e.mousePosition.x, Screen.height - e.mousePosition.y - 36, 0 ) );
 			if(Physics.Raycast(ray,out RaycastHit hit,Mathf.Infinity))
 			{
-				var point = CreatePoint();
+				var point = CreatePoint(_setParent ? hit.transform : null);
 				point.transform.position = hit.point + hit.normal * _heightDist;
 				point.transform.rotation = Quaternion.FromToRotation(point.transform.up,hit.normal);
 
@@ -664,13 +667,13 @@ public class TEst : EditorWindow
         } 
 	}
 
-    private MovePointEx CreatePoint()
+    private MovePointEx CreatePoint(Transform parent = null)
 	{
 		GameObject obj = new GameObject(_stageManager.GetPathManager().currentPath + " : Point");
 		var point = obj.AddComponent<MovePointEx>();
 
         obj.transform.position = SceneView.lastActiveSceneView.pivot;
-		obj.transform.SetParent(_stageManager.transform);
+		obj.transform.SetParent(parent == null ? _stageManager.transform : parent);
 
 		return point;
 	}
