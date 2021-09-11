@@ -21,6 +21,7 @@ public class PlayerState_LedgeUp : PlayerState
     public override void Exit(PlayerUnit playerUnit, Animator animator)
     {
         playerUnit.LedgeUpAdjust = false;
+        animator.SetBool("IsGround", true);
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
