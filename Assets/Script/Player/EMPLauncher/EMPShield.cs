@@ -258,9 +258,9 @@ public class EMPShield : Hitable
             //GameManager.Instance.soundManager.Play(1515, new Vector3(0, 1, 0), transform);
             //GameManager.Instance.soundManager.Play(1518, new Vector3(0, 1, 0), transform);
             //GameManager.Instance.soundManager.Play(1501,transform.position);
-            AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
-            soundData.id = 1515; soundData.localPosition = new Vector3(0,1,0); soundData.parent = transform; soundData.returnValue = false;
-            SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData); 
+            //AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+            //soundData.id = 1515; soundData.localPosition = new Vector3(0,1,0); soundData.parent = transform; soundData.returnValue = false;
+            //SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData); 
             AttachSoundPlayData soundData2 = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
             soundData2.id = 1518; soundData2.localPosition = new Vector3(0, 1, 0); soundData2.parent = transform; soundData2.returnValue = false;
             SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData2);

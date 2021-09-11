@@ -41,10 +41,11 @@ public class Golem_AI : PathfollowObjectBase
     {
         base.FixedProgress(deltaTime);
         graphAnimator.Progress(deltaTime);
-        FollowPath(deltaTime);
 
         if(!_launch)
             return;
+        
+        FollowPath(deltaTime);
 
         var time = _timeCounter.IncreaseTimerSelf("TimeCheck",out var limit,deltaTime);
 

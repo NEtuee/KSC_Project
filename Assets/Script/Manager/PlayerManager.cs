@@ -38,9 +38,13 @@ public class PlayerManager : ManagerBase
 
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
          {
+             _player.transform.SetParent(null);
+             _drone.transform.SetParent(null);
              DontDestroyOnLoad(_player.transform);
              DontDestroyOnLoad(_drone.transform);
+
              _player.CapsuleCollider.enabled = false;
+             _player.canGroundCheck = false;
          });
 
         AddAction(MessageTitles.scene_beforeSceneChangeNotAsync, (msg) =>
@@ -51,7 +55,7 @@ public class PlayerManager : ManagerBase
 
         AddAction(MessageTitles.scene_afterSceneChange, (msg) =>
         {
-            
+            _player.canGroundCheck = true;
         });
 
         AddAction(MessageTitles.scene_sceneChanged, (msg) =>
@@ -59,6 +63,8 @@ public class PlayerManager : ManagerBase
              _player.InitializeMove();
              _player.InitVelocity();
              _player.CapsuleCollider.enabled = true;
+
+             _drone.InitFollowPosition();
          });
 
         AddAction(MessageTitles.scene_restarted, (msg) =>
@@ -97,6 +103,12 @@ public class PlayerManager : ManagerBase
             var data = MessageDataPooling.CastData<StringData>(msg.data);
             _drone.DroneTextCall(data.value);
         });
+
+        AddAction(MessageTitles.playermanager_setDroneVolume, (msg) =>
+         {
+             var data = MessageDataPooling.CastData<FloatData>(msg.data);
+             _drone.GetComponent<VolumeChanger>().SetVolume(data.value);
+         });
     }
 
     public override void Initialize()
@@ -249,6 +261,19 @@ public class PlayerManager : ManagerBase
             data.value = value;
             SendMessageEx(MessageTitles.uimanager_setgunenergyvalue, GetSavedNumber("UIManager"), data);
         });
+
+        _drone.scanLeftCoolTime.Subscribe(value =>
+        {
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = 1f - value / _drone.ScanCoolTime;
+            SendMessageEx(MessageTitles.uimanager_setScanCoolTimeValue, GetSavedNumber("UIManager"), data);
+            if(data.value >= 1f)
+            {
+                BoolData activeData = MessageDataPooling.GetMessageData<BoolData>();
+                activeData.value = false;
+                SendMessageEx(MessageTitles.uimanager_visibleScanCoolTimeUi, GetSavedNumber("UIManager"), activeData);
+            }
+        });
     }
 
     public override void Progress(float deltaTime)
@@ -258,7 +283,12 @@ public class PlayerManager : ManagerBase
         if (LevelEdit_TimelinePlayer.CUTSCENEPLAY == true)
             return;
 
-        if(Keyboard.current.pKey.wasPressedThisFrame)
+        if(Keyboard.current.iKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.scene_loadCurrentLevel, GetSavedNumber("SceneManager"), null);
+        }
+
+        if(Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.nKey.wasPressedThisFrame)
         {
             SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
         }

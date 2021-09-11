@@ -121,5 +121,10 @@ namespace MD
     {
         public Quaternion value;
     }
+
+    public class ColorData : MessageData
+    {
+        public Color value;
+    }
 }
 #endregion

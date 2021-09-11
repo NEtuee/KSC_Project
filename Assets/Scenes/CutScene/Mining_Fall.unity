@@ -848,6 +848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetAudio: {fileID: 208262130}
+  minus: 0
 --- !u!82 &208262130
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1444,6 +1445,7 @@ MonoBehaviour:
   - {fileID: 890986310}
   - {fileID: 588008560}
   endTransform: {fileID: 0}
+  loadNextLevel: 0
   startFade: 0
   playerDisable: 1
   ragdoll: 0
@@ -2403,6 +2405,7 @@ MonoBehaviour:
   playableDirector: {fileID: 503965462}
   activeLists: []
   endTransform: {fileID: 0}
+  loadNextLevel: 1
   startFade: 1
   playerDisable: 1
   ragdoll: 0
@@ -2426,7 +2429,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 503965464}
           m_TargetAssemblyTypeName: LevelEdit_TimelinePlayer, Assembly-CSharp
-          m_MethodName: LoadNextLevel
+          m_MethodName: End
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -6908,9 +6911,6 @@ MonoBehaviour:
   - {fileID: 281830024}
   - {fileID: 2147121892}
   - {fileID: 2040412278}
-  changeLayer:
-    serializedVersion: 2
-    m_Bits: 1024
   force: 7000
   torque: 1000
 --- !u!1 &1376541483
@@ -8853,6 +8853,7 @@ MonoBehaviour:
   debugExceptionTitles: []
   sendedCount: 0
   receivedCount: 0
+  keep: 0
   triggerType: 0
   triggerEvent:
     m_PersistentCalls:
@@ -8869,6 +8870,9 @@ MonoBehaviour:
           m_StringArgument: Fall
           m_BoolArgument: 0
         m_CallState: 2
+  triggerStayEvent:
+    m_PersistentCalls:
+      m_Calls: []
   triggerExitEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -9087,6 +9091,7 @@ MonoBehaviour:
   debugExceptionTitles: []
   sendedCount: 0
   receivedCount: 0
+  keep: 0
   triggerType: 0
   triggerEvent:
     m_PersistentCalls:
@@ -9151,6 +9156,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  triggerStayEvent:
+    m_PersistentCalls:
+      m_Calls: []
   triggerExitEvent:
     m_PersistentCalls:
       m_Calls: []

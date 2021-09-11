@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UniRx;
 using MD;
 
 public class Drone : UnTransfromObjectBase
@@ -40,7 +41,9 @@ public class Drone : UnTransfromObjectBase
     [SerializeField] private FloatingMove floatingMove;
     [SerializeField] private bool help = false;
     [SerializeField] private float scanCoolTime = 3f;
+    public float ScanCoolTime => scanCoolTime;
     private float _scanLeftTime = 0.0f;
+    public FloatReactiveProperty scanLeftCoolTime;
     private Vector3 _targetPosition;
     private Vector3 _finalTargetPosition;
     private Vector3 _prevTargetPosition;
@@ -169,10 +172,10 @@ public class Drone : UnTransfromObjectBase
         if (visible == false || _respawn)
             return;
 
-        if(_scanLeftTime > 0.0f)
+        if(scanLeftCoolTime.Value > 0.0f)
         {
-            _scanLeftTime -= deltaTime;
-            _scanLeftTime = Mathf.Clamp(_scanLeftTime, 0.0f, 10.0f);
+            scanLeftCoolTime.Value -= deltaTime;
+            scanLeftCoolTime.Value = Mathf.Clamp(scanLeftCoolTime.Value, 0.0f, 10.0f);
         }
 
         switch(state)
@@ -412,10 +415,14 @@ public class Drone : UnTransfromObjectBase
 
     public void Scan()
     {
-        _scanLeftTime = scanCoolTime;
+        scanLeftCoolTime.Value = scanCoolTime;
         Vector3 targetDir = Camera.main.transform.forward;
         targetDir.y = 0;
         targetDir.Normalize();
+
+        BoolData activeData = MessageDataPooling.GetMessageData<BoolData>();
+        activeData.value = true;
+        SendMessageEx(MessageTitles.uimanager_visibleScanCoolTimeUi, GetSavedNumber("UIManager"), activeData);
 
         _scanTargetRotation = Quaternion.LookRotation(targetDir,Vector3.up);
         state = DroneState.Scan;
@@ -468,6 +475,15 @@ public class Drone : UnTransfromObjectBase
             state = DroneState.Default;
             _floatingMoveComponent.SetRangeRatio(1.0f);
         }
+    }
+
+    public void InitFollowPosition()
+    {
+        _targetPosition = (target.forward * defaultFollowOffset.z + target.right * defaultFollowOffset.x +
+                                     target.up * defaultFollowOffset.y) + target.position;
+        _finalTargetPosition = _targetPosition;
+
+        transform.position = _finalTargetPosition;
     }
 
     public void OrderHelp()
@@ -562,7 +578,7 @@ public class Drone : UnTransfromObjectBase
         if (value.performed == false)
             return;
 
-        if (_scanLeftTime <= 0.0f)
+        if (scanLeftCoolTime.Value <= 0.0f)
             Scan();
     }
 }

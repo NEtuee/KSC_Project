@@ -155,6 +155,21 @@ public static partial class MessageTitles
     /// data = ScanMakerData
     /// </summary>
     public const ushort uimanager_activeScanMaker = 0x0327;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort uimanager_visibleScanCoolTimeUi = 0x0328;
+
+    /// <summary>
+    /// data = FloatData
+    /// </summary>
+    public const ushort uimanager_setScanCoolTimeValue = 0x0329;
+
+    /// <summary>
+    /// data = ColorData
+    /// </summary>
+    public const ushort uimanager_setChargingTextColor = 0x0330;
     #endregion
 
     /// <summary>
@@ -360,6 +375,11 @@ public static partial class MessageTitles
     /// data = string
     /// </summary>
     public const ushort playermanager_droneText = 0x0909;
+
+    /// <summary>
+    /// data = FloatData
+    /// </summarys
+    public const ushort playermanager_setDroneVolume = 0x090a;
 
     #endregion
 

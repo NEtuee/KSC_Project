@@ -76,6 +76,10 @@ public class UIManager : ManagerBase
     [SerializeField] private Canvas scanMakerCanvas;
     [SerializeField] private ScanMakerPool scanMakerPool;
 
+    [Header("DroneUI")]
+    [SerializeField] private Canvas droneUiCanvas;
+    [SerializeField] private Image droneCoolTimeCircle;
+
     private EventSystem _eventSystem;
 
     private void Start()
@@ -273,9 +277,27 @@ public class UIManager : ManagerBase
              maker.Active(data.collider);//data.center, data.min, data.max);
 
             SoundPlayData soundPlay = MessageDataPooling.GetMessageData<SoundPlayData>();
-            soundPlay.id = 1303; soundPlay.position = Vector3.zero; soundPlay.returnValue = false; soundPlay.dontStop = false;
+            soundPlay.id = 1303; soundPlay.position = Camera.main.transform.position; soundPlay.returnValue = false; soundPlay.dontStop = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
          });
+
+        AddAction(MessageTitles.uimanager_visibleScanCoolTimeUi, (msg) =>
+         {
+             BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
+             droneUiCanvas.enabled = data.value;
+         });
+
+        AddAction(MessageTitles.uimanager_setScanCoolTimeValue, (msg) =>
+        {
+            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+            droneCoolTimeCircle.fillAmount = data.value;
+        });
+
+        AddAction(MessageTitles.uimanager_setChargingTextColor, (msg) =>
+        {
+            ColorData data = MessageDataPooling.CastData<ColorData>(msg.data);
+            gunChargeValueText.color = data.value;
+        });
     }
 
     public override void Initialize()
@@ -395,6 +417,10 @@ public class UIManager : ManagerBase
                         data.ambient = ambientVolumeSlider.value;
                         data.bgm = bgmVolumeSlider.value;
                         SendMessageEx(MessageTitles.setting_saveVolume, GetSavedNumber("SettingManager"), data);
+
+                        FloatData droneVolume = MessageDataPooling.GetMessageData<FloatData>();
+                        droneVolume.value = masterVolumeSlider.value * sfxVolumeSlider.value;
+                        SendMessageEx(MessageTitles.playermanager_setDroneVolume, GetSavedNumber("PlayerManager"), droneVolume);
                     }
                     break;
                 case PauseMenuState.Tutorial:

@@ -22,13 +22,16 @@ public class ScanMaker : MonoBehaviour
     {
         float curTime = 0f;
         _visible = true;
+
+        Vector3 screenPos = Vector3.zero;
         while (curTime < time)
         {
             if(collider == null)
             {
                 break;
             }
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(collider.bounds.center);
+            if(Vector3.Dot((collider.bounds.center - Camera.main.transform.position).normalized, Camera.main.transform.forward) > 0)
+                 screenPos = Camera.main.WorldToScreenPoint(collider.bounds.center);
             Vector3 minPos = Camera.main.WorldToScreenPoint(collider.bounds.min);
             Vector3 maxPos = Camera.main.WorldToScreenPoint(collider.bounds.max);
 
@@ -37,6 +40,9 @@ public class ScanMaker : MonoBehaviour
             float size = height > width ? height : width;
             size = Mathf.Clamp(size, 50.0f, 150.0f);
 
+            screenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.currentResolution.width);
+            screenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.currentResolution.height);
+            //Debug.Log(Vector3.Dot((collider.bounds.center - Camera.main.transform.position).normalized,Camera.main.transform.forward));
             _rectTransform.transform.position = new Vector2(screenPos.x, screenPos.y);
             _rectTransform.sizeDelta = new Vector2(size, size);
 

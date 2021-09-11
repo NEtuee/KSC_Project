@@ -25,6 +25,8 @@ public class PlayerState_ClimbingJump : PlayerState
         else
             playerUnit.CurrentClimbingJumpPower = playerUnit.ClimbingUpJumpPower;
 
+        playerUnit.ClimbingJump();
+
         playerUnit.stamina.Value -= playerUnit.ClimbingJumpConsumeValue;
         playerUnit.stamina.Value = Mathf.Clamp(playerUnit.stamina.Value, 0.0f, playerUnit.MaxStamina);
         playerUnit.AddEnergy(playerUnit.ClimbingJumpRestoreEnrgyValue);
@@ -128,7 +130,7 @@ public class PlayerState_ClimbingJump : PlayerState
                 playerUnit.CurrentJumpPower = playerUnit.CurrentClimbingJumpPower;
 
             InputAction.CallbackContext dummy = new InputAction.CallbackContext();
-            OnGrab(dummy , playerUnit, animator);
+            OnGrab(dummy, playerUnit, animator);
         }
     }
     

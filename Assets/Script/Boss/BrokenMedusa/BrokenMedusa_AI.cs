@@ -603,7 +603,7 @@ public class BrokenMedusa_AI : IKBossBase
         graphAnimator.Stop();
         graphAnimator.enabled = false;
 
-        SoundPlay(1510,null,transform.position);
+        //SoundPlay(1510,null,transform.position);
         SoundPlay(1700,null,transform.position);
         //_soundManager.Play(1510,transform.position);
         //_soundManager.Play(1700,transform.position);
@@ -784,7 +784,11 @@ public class BrokenMedusa_AI : IKBossBase
 
         var dir = (MathEx.DeleteYPos(_target.position) - MathEx.DeleteYPos(_perpendicularPoint)).normalized;
 
-        _player.TakeDamage(5f);
+        if(_player.GetState == PlayerUnit.grabState || _player.GetState == PlayerUnit.hangLedgeState)
+            _player.TakeDamage(5f, 250.0f, transform.forward);
+        else
+            _player.TakeDamage(5f);
+
         _player.SetJumpPower(20f);
         _player.SetVelocity(dir * 15f);
         

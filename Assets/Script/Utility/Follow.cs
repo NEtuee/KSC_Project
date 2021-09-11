@@ -29,9 +29,6 @@ public class Follow : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
-        if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.FixedUpdate)
-            return;
         Vector3 targetPosition;
         switch(standard)
         {
@@ -66,43 +63,43 @@ public class Follow : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
+    //private void Update()
+    //{
 
-        if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.Update)
-            return;
+    //    if (((PlayerCtrl_Ver2)GameManager.Instance.player).updateMethod != UpdateMethod.Update)
+    //        return;
 
-        Vector3 targetPosition;
-        switch (standard)
-        {
-            case Standard.ThisTransform:
-                targetPosition = (target.forward * forwardOffset + target.right * rightOffset + target.up * upOffset) + target.position;
-                break;
-            case Standard.Camera:
-                Vector3 camForward = Camera.main.transform.forward;
-                Vector3 camRight = Camera.main.transform.right;
-                camForward.y = 0;
-                camRight.y = 0;
-                targetPosition = (camForward * forwardOffset + camRight * rightOffset + Vector3.up * upOffset) + target.position;
-                break;
-            default:
-                targetPosition = (target.forward * forwardOffset + target.right * rightOffset + target.up * upOffset) + target.position;
-                break;
-        }
+    //    Vector3 targetPosition;
+    //    switch (standard)
+    //    {
+    //        case Standard.ThisTransform:
+    //            targetPosition = (target.forward * forwardOffset + target.right * rightOffset + target.up * upOffset) + target.position;
+    //            break;
+    //        case Standard.Camera:
+    //            Vector3 camForward = Camera.main.transform.forward;
+    //            Vector3 camRight = Camera.main.transform.right;
+    //            camForward.y = 0;
+    //            camRight.y = 0;
+    //            targetPosition = (camForward * forwardOffset + camRight * rightOffset + Vector3.up * upOffset) + target.position;
+    //            break;
+    //        default:
+    //            targetPosition = (target.forward * forwardOffset + target.right * rightOffset + target.up * upOffset) + target.position;
+    //            break;
+    //    }
 
-        if (interpolation == true)
-            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.fixedDeltaTime * 5f);
-        else
-            transform.position = targetPosition;
+    //    if (interpolation == true)
+    //        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.fixedDeltaTime * 5f);
+    //    else
+    //        transform.position = targetPosition;
 
-        if (billBoard == false)
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(target.forward) * Quaternion.AngleAxis(180.0f, transform.up), Time.deltaTime * billBoardRotationSpeed);
-            //transform.rotation = transform.rotation * Quaternion.AngleAxis(90.0f, transform.up);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-(mainCam.position - transform.position)), Time.deltaTime * billBoardRotationSpeed);
-        }
-    }
+    //    if (billBoard == false)
+    //    {
+    //        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(target.forward) * Quaternion.AngleAxis(180.0f, transform.up), Time.deltaTime * billBoardRotationSpeed);
+    //        //transform.rotation = transform.rotation * Quaternion.AngleAxis(90.0f, transform.up);
+    //    }
+    //    else
+    //    {
+    //        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-(mainCam.position - transform.position)), Time.deltaTime * billBoardRotationSpeed);
+    //    }
+    //}
 }

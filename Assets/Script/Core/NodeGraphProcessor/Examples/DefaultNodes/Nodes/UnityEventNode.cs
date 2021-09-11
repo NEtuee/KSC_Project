@@ -1,22 +1,17 @@
 using UnityEngine;
 using GraphProcessor;
 using UnityEngine.Events;
+using NodeGraphProcessor.Examples;
 
 [System.Serializable, NodeMenuItem("Custom/Unity Event Node")]
-public class UnityEventNode : BaseNode
+public class UnityEventNode : LinearConditionalNode
 {
-	[Input(name = "In")]
-    public float                input;
-
-	[Output(name = "Out")]
-	public float				output;
-
 	public UnityEvent			evt;
 
 	public override string		name => "Unity Event Node";
 
 	protected override void Process()
 	{
-	    output = input * 42;
+	    evt?.Invoke();
 	}
 }

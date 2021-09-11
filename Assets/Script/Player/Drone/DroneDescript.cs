@@ -7,6 +7,7 @@ public class Descript
 {
     public string key;
     public string descript;
+    public AudioClip audioData;
 }
 
 [CreateAssetMenu(fileName = "DroneDescript", menuName = "DroneDescript")]

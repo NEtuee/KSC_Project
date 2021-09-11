@@ -11,6 +11,8 @@ public class Genie_BombDroneAI : DroneAIBase
     public Vector2 randomOffset;
     public EMPShield shield;
 
+    public bool destroyGround = true;
+
     public float targetUpdateTime = 0.2f;
     public float lifeTime = 60f;
     public float launchTime = 2f;

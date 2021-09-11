@@ -5,6 +5,8 @@ using UnityEngine;
 public class Elevator : UnTransfromObjectBase
 {
     public bool isExit = false;
+    public string loadScene = "";
+    private Collider _coll;
 
     private Animator _animator;
 
@@ -16,11 +18,17 @@ public class Elevator : UnTransfromObjectBase
 
         //_sceneManager = GameObject.FindObjectOfType<AsynSceneManager>();
         _animator = GetComponent<Animator>();
+        _coll = GetComponent<Collider>();
 
         // if(!isExit)
         // {
         //     Open();
         // }
+    }
+
+    public void LoadSpecificScene()
+    {
+        StartCoroutine(LoadSpecificSceneCoroutine());
     }
 
     public void LoadNextScene()
@@ -31,6 +39,17 @@ public class Elevator : UnTransfromObjectBase
     public void LoadOutScene()
     {
         StartCoroutine(LoadNextSceneNotAsynCoroutine());
+    }
+
+    public IEnumerator LoadSpecificSceneCoroutine()
+    {
+        WaitForSeconds se = new WaitForSeconds(2f);
+        yield return se;
+
+        MD.StringData data = MessageDataPooling.GetMessageData<MD.StringData>();
+        data.value = loadScene;
+        SendMessageEx(MessageTitles.scene_loadSpecificLevel, GetSavedNumber("SceneManager"), data);
+        //_sceneManager.LoadNextlevel();
     }
 
     public IEnumerator LoadNextSceneCoroutine()
@@ -51,6 +70,12 @@ public class Elevator : UnTransfromObjectBase
         data.value = "OutScene";
         SendMessageEx(MessageTitles.scene_loadSceneNotAsync, GetSavedNumber("SceneManager"), data);
         //_sceneManager.LoadNextlevel();
+    }
+
+    public void ToExit()
+    {
+        _coll.enabled = true;
+        isExit = true;
     }
 
     public void Open()

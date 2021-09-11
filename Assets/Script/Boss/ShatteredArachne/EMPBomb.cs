@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EMPBomb : MonoBehaviour
 {
+    public UnityEngine.Events.UnityEvent whenHitPlayer;
     public Material scanMat;
     public EMPShield shield;
     public Rigidbody rig;
@@ -37,7 +38,6 @@ public class EMPBomb : MonoBehaviour
 
         if(playerColl.Length != 0)
         {
-            Debug.Log(playerColl.Length);
             foreach(Collider curr in playerColl)
             {
                
@@ -49,6 +49,8 @@ public class EMPBomb : MonoBehaviour
 
                     (GameManager.Instance.player as PlayerCtrl_Ver2).TakeDamage(damage);
                     ragdoll.ExplosionRagdoll(explosionForce, (ragdoll.transform.position - transform.position).normalized);
+
+                    whenHitPlayer?.Invoke();
 
                     break;
                 }
