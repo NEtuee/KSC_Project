@@ -27,6 +27,9 @@ public class EMPGun : UnTransfromObjectBase
     [SerializeField] private float layserRadius = 1.0f;
     [SerializeField] private LayerMask hitLayer;
 
+    private Transform mainCam;
+    private Vector3 targetPos;
+
     public GameObject PelvisGunObject => _pelvisGunObject;
 
     private float aimWeight;
@@ -38,8 +41,10 @@ public class EMPGun : UnTransfromObjectBase
     {
         base.Start();
         mainCamera = Camera.main.transform;
-        _gunObject.SetActive(false);
+        if(_gunObject != null)
+           _gunObject.SetActive(false);
         playerAnim = GetComponent<Animator>();
+        mainCam = Camera.main.transform;
         //GetComponent<PlayerCtrl_Ver2>().chargeTime.Subscribe(value => { 
         //    if(value >= 3f)
         //    {
@@ -67,8 +72,17 @@ public class EMPGun : UnTransfromObjectBase
     }
 
     void Update()
-    {
-        launchPos.LookAt(lookAim);
+    { 
+        if (Physics.Raycast(mainCam.position, mainCam.forward, out hit, 100f, hitLayer))
+        {
+            targetPos = hit.point;
+        }
+        else
+        {
+            targetPos = mainCam.position + mainCam.forward * 100.0f;
+        }
+
+        launchPos.rotation = Quaternion.RotateTowards(launchPos.rotation, Quaternion.LookRotation(targetPos - launchPos.position), 100.0f * Time.deltaTime);
 
         //if (Input.GetKeyDown(KeyCode.K))
         //{
@@ -105,7 +119,7 @@ public class EMPGun : UnTransfromObjectBase
             //InputManager.Instance.GamePadSetVibrate(0.3f,0.8f);
             data.key = "Laser_Level2";
             SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation, GetSavedNumber("EffectManager"), data);
-        }   
+        }
         else if (damage <= 120f)
         {
             //GameManager.Instance.effectManager.Active("Laser_Level3", laserEffectPos.position, laserEffectPos.rotation);
@@ -113,9 +127,9 @@ public class EMPGun : UnTransfromObjectBase
             data.key = "Laser_Level3";
             SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation, GetSavedNumber("EffectManager"), data);
         }
-        
-        
-        if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
+
+
+        if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
         //if (Physics.SphereCast(mainCamera.position,layserRadius, mainCamera.forward, out hit, 1000.0f,hitLayer))
         {
             //GameManager.Instance.effectManager.Active("LaserHit",hit.point);

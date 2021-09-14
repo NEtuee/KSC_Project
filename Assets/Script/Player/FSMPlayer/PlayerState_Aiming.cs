@@ -209,7 +209,8 @@ public class PlayerState_Aiming : PlayerState
             setParameterData.soundId = 1013; setParameterData.paramId = 10131; setParameterData.value = (playerUnit.chargeTime.Value) * 100f;
             playerUnit.SendMessageEx(MessageTitles.fmod_setParam, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), setParameterData);
 
-            playerUnit.GunAnimator.SetFloat("Energy", playerUnit.chargeTime.Value * 100.0f);
+            if(playerUnit.GunAnimator != null)
+               playerUnit.GunAnimator.SetFloat("Energy", playerUnit.chargeTime.Value * 100.0f);
 
             if (_transformingCount < (int)playerUnit.chargeTime.Value)
             {
