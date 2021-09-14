@@ -115,6 +115,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public bool CanCharge { get => _bCanCharge; set => _bCanCharge = value; }
     #endregion
 
+    #region QuickStanding
+    public float QuickStandCoolTime { get => quickStandingCoolTime; set => quickStandingCoolTime = value; }
+    public float CurrentQuickStandCoolTime => currentQuickStandingCoolTime;
+    public bool CanQuickStanding => bCanQuickStanding;
+
+    #endregion
+
     #region Dash Property
     public float DashTime { get => dashTime; set => dashTime = value; }
     public float DashSpeed { get => dashSpeed; set => dashSpeed = value; }
@@ -369,7 +376,11 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _animator.SetFloat("Speed", currentSpeed);
         _animator.SetFloat("HorizonWeight", _horizonWeight);
 
-        if (_currentState == grabState || _currentState == runToStopState || _currentState == highLandingState)
+        if (_currentState == grabState ||
+            _currentState == runToStopState ||
+            _currentState == highLandingState ||
+            _currentState == ragdollState ||
+            _currentState == respawnState )
             return;
 
         if (_inputVertical != 0 || _inputHorizontal != 0)
@@ -954,6 +965,18 @@ public partial class PlayerUnit : UnTransfromObjectBase
         bCanDash = true;
     }
 
+    public IEnumerator StartQuickStandingTime()
+    {
+        bCanQuickStanding = false;
+        currentQuickStandingCoolTime = 0.0f;
+        while (currentQuickStandingCoolTime < QuickStandCoolTime)
+        {
+            currentQuickStandingCoolTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        bCanQuickStanding = true;
+    }
+
     [SerializeField] private PlayerState _currentState;
     private PlayerState _prevState;
 
@@ -1098,6 +1121,11 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float dashCoolTime = 5.0f;
     private float currentDashCoolTime = 0.0f;
     [SerializeField] private bool bCanDash = true;
+
+    [Header("QuickStanding")]
+    [SerializeField] private float quickStandingCoolTime = 5.0f;
+    private float currentQuickStandingCoolTime = 0.0f;
+    private bool bCanQuickStanding = true;
 
     [Header("Reference")]
     [SerializeField] private Transform steamPosition;
