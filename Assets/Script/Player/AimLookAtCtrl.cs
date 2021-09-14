@@ -13,7 +13,7 @@ public class AimLookAtCtrl : MonoBehaviour
         mainCam = Camera.main.transform;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         if(Physics.Raycast(mainCam.position, mainCam.forward, out hit, 100f, hitLayer))
         {

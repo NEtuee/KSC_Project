@@ -28,7 +28,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     #endregion
 
     #region Move Property
-    public float WalkSpeed => walkSpeed;
+    public float WalkSpeed { get => walkSpeed; set => walkSpeed = value; }
     public float RunSpeed => runSpeed;
     public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
     public float RotationSpeed { get => rotationSpeed; }
@@ -113,6 +113,14 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public Transform DechargingEffectTransform => dechargingEffectTransform;
     public Transform SteamPosition => steamPosition;
     public bool CanCharge { get => _bCanCharge; set => _bCanCharge = value; }
+    #endregion
+
+    #region Dash Property
+    public float DashTime { get => dashTime; set => dashTime = value; }
+    public float DashSpeed { get => dashSpeed; set => dashSpeed = value; }
+    public float DashCoolTime { get => dashCoolTime; set => dashCoolTime = value; }
+    public float CurrentDashCoolTime => currentDashCoolTime;
+    public bool CanDash { get => bCanDash; }
     #endregion
 
     public Transform Transform => _transform;
@@ -233,6 +241,11 @@ public partial class PlayerUnit : UnTransfromObjectBase
         UpdateMoveSpeed();
 
         _currentState.UpdateState(this, _animator);
+
+        if(Keyboard.current.qKey.wasPressedThisFrame)
+        {
+            energy.Value = 100.0f;
+        }
     }
 
     private void FixedUpdate()
@@ -248,7 +261,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         _currentState.FixedUpdateState(this, _animator);
 
-        //CheckTurnBack();
+        CheckTurnBack();
 
         MoveConservation();
 
@@ -929,6 +942,18 @@ public partial class PlayerUnit : UnTransfromObjectBase
         isHpRestore = false;
     }
 
+    public IEnumerator StartDashCoolTime()
+    {
+        bCanDash = false;
+        currentDashCoolTime = 0.0f;
+        while(currentDashCoolTime < DashCoolTime)
+        {
+            currentDashCoolTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        bCanDash = true;
+    }
+
     [SerializeField] private PlayerState _currentState;
     private PlayerState _prevState;
 
@@ -1066,6 +1091,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float hpPackRestoreValue = 6.0f;
     [SerializeField] private float _hpPackRestoreDuration = 10.0f;
     [SerializeField] private bool isHpRestore = false;
+
+    [Header("Dash")]
+    [SerializeField] private float dashTime = 0.3f;
+    [SerializeField] private float dashSpeed = 25f;
+    [SerializeField] private float dashCoolTime = 5.0f;
+    private float currentDashCoolTime = 0.0f;
+    [SerializeField] private bool bCanDash = true;
 
     [Header("Reference")]
     [SerializeField] private Transform steamPosition;

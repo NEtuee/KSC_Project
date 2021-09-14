@@ -19,6 +19,8 @@ public class PlayerState_Dash : PlayerState
         playerUnit.currentStateName = "Dash";
         _originAnimatorSpeed = animator.speed;
         animator.speed = 0.0f;
+
+        StartCoroutine(playerUnit.StartDashCoolTime());
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -29,8 +31,8 @@ public class PlayerState_Dash : PlayerState
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
-        if (_lateTime < _dashTime)
-            playerUnit.Move(playerUnit.Transform.forward * _dashSpeed, Time.fixedDeltaTime);
+        if (_lateTime < playerUnit.DashTime)
+            playerUnit.Move(playerUnit.Transform.forward * playerUnit.DashSpeed, Time.fixedDeltaTime);
         else
             playerUnit.ChangeState(playerUnit.GetPrevState);
 
