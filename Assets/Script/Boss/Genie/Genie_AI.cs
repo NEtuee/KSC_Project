@@ -32,6 +32,7 @@ public class Genie_AI : ObjectBase
 
     public Transform respawnPoint;
 
+    public Transform body;
     public Transform head;
     public Transform droneSpawnPoint;
 
@@ -39,6 +40,8 @@ public class Genie_AI : ObjectBase
     public Transform rightChest;
     public Boogie_GridControll gridControll;
     public Genie_CenterShield centerShield;
+
+    public Animator animatorController;
 
     public List<Genie_BombDroneAI> droneAIs;
     public List<Transform> handIKs;
@@ -160,6 +163,8 @@ public class Genie_AI : ObjectBase
             _timeCounterEx.InitTimer("droneSpawnTiming",0f,droneSpawnTiming);
             _animator.Play("DroneSpawn",handIKs[1]);
 
+            ChangeAnimation(3);
+
             _droneSpawnLimit = _currentDroneCount;
             _droneSpawnCount = 0;
             UpdateDroneCount();
@@ -197,6 +202,8 @@ public class Genie_AI : ObjectBase
             _animator.Play("HitLeft",handIKs[0]);
             _animator.Play("HitRight",handIKs[1]);
             _animator.Play("HitHead",head);
+
+            ChangeAnimation(1);
         }
         else if(state == State.Groggy)
         {
@@ -205,6 +212,8 @@ public class Genie_AI : ObjectBase
             _animator.Play("GroggyRight",handIKs[1]);
             _animator.Play("GroggyHead",head);
             _animator.Play("GroggyRotate",head);
+
+            ChangeAnimation(2);
 
             _animatorController.SetBool("RockHand",true);
 
@@ -293,6 +302,8 @@ public class Genie_AI : ObjectBase
             _animatorController.SetBool("RockHand",true);
             _animator.Play("GroundAttackLeft",handIKs[0]);
             _animator.Play("GroundAttackRight",handIKs[1]);
+
+            ChangeAnimation(4);
 
             centerShield.ToTarget();
             SetSafeZone();
@@ -422,11 +433,17 @@ public class Genie_AI : ObjectBase
         if(limit)
         {
             _timeCounterEx.InitTimer("droneSpawnTiming",0f,droneSpawnTiming);
-            RespawnDrone(_droneSpawnCount++);
-            if(_droneSpawnCount >= droneAIs.Count - _droneSpawnLimit)
+            for(int i = _droneSpawnCount; i < droneAIs.Count - _droneSpawnLimit; ++i)
             {
-                ChangeState(State.LookTarget);
+                RespawnDrone(i);
             }
+
+            _droneSpawnCount = droneAIs.Count - _droneSpawnLimit;
+            
+            //if(_droneSpawnCount >= droneAIs.Count - _droneSpawnLimit)
+            //{
+                ChangeState(State.LookTarget);
+            //}
             
         }
 
@@ -561,8 +578,10 @@ public class Genie_AI : ObjectBase
             BodySpread();
         }
 
-        transform.position = _originPos + transform.forward * 3f;
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir,Vector3.up), speed);
+        //transform.position = _originPos + transform.forward * 3f;
+        var rot = Quaternion.LookRotation(dir, Vector3.up);
+        rot *= Quaternion.Euler(-90f,90f,0f);
+        body.transform.rotation = Quaternion.Lerp(body.transform.rotation, rot, speed);
     }
 
     public void BodyTilt()
@@ -581,5 +600,11 @@ public class Genie_AI : ObjectBase
             _currentAnimation = "BodySpread";
             _animator.Play(_currentAnimation,head);
         }
+    }
+
+    public void ChangeAnimation(int code)
+    {
+        animatorController.SetTrigger("Change");
+        animatorController.SetInteger("Code",code);
     }
 }
