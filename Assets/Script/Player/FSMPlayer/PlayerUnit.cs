@@ -29,9 +29,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     #region Move Property
     public float WalkSpeed { get => walkSpeed; set => walkSpeed = value; }
-    public float RunSpeed => runSpeed;
+    public float RunSpeed { get => runSpeed; set => runSpeed = value; }
     public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
     public float RotationSpeed { get => rotationSpeed; }
+    public float AccelerateSpeed { get => accelerateSpeed; set => accelerateSpeed = value; }
     public Vector3 MoveDir { get => _moveDir; set => _moveDir = value; }
     public Vector3 PrevDir { get => _prevDir; set => _prevDir = value; }
     public Vector3 LookDir { get => _lookDir; set => _lookDir = value; }
@@ -117,7 +118,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     #region QuickStanding
     public float QuickStandCoolTime { get => quickStandingCoolTime; set => quickStandingCoolTime = value; }
-    public float CurrentQuickStandCoolTime => currentQuickStandingCoolTime;
+    public FloatReactiveProperty CurrentQuickStandCoolTime => currentQuickStandingCoolTime;
     public bool CanQuickStanding => bCanQuickStanding;
 
     #endregion
@@ -126,7 +127,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float DashTime { get => dashTime; set => dashTime = value; }
     public float DashSpeed { get => dashSpeed; set => dashSpeed = value; }
     public float DashCoolTime { get => dashCoolTime; set => dashCoolTime = value; }
-    public float CurrentDashCoolTime => currentDashCoolTime;
+    public FloatReactiveProperty CurrentDashCoolTime => currentDashCoolTime;
     public bool CanDash { get => bCanDash; }
     #endregion
 
@@ -239,6 +240,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         _leftFootTransform = _animator.GetBoneTransform(HumanBodyBones.LeftFoot);
         _rightFootTransform = _animator.GetBoneTransform(HumanBodyBones.RightFoot);
+
+        CurrentQuickStandCoolTime.Value = quickStandingCoolTime;
+        CurrentDashCoolTime.Value = dashCoolTime;
 
         ChangeState(defaultState);
     }
@@ -956,10 +960,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public IEnumerator StartDashCoolTime()
     {
         bCanDash = false;
-        currentDashCoolTime = 0.0f;
-        while(currentDashCoolTime < DashCoolTime)
+        currentDashCoolTime.Value = 0.0f;
+        while(currentDashCoolTime.Value < DashCoolTime)
         {
-            currentDashCoolTime += Time.fixedDeltaTime;
+            currentDashCoolTime.Value += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
         bCanDash = true;
@@ -968,10 +972,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public IEnumerator StartQuickStandingTime()
     {
         bCanQuickStanding = false;
-        currentQuickStandingCoolTime = 0.0f;
-        while (currentQuickStandingCoolTime < QuickStandCoolTime)
+        currentQuickStandingCoolTime.Value = 0.0f;
+        while (currentQuickStandingCoolTime.Value < QuickStandCoolTime)
         {
-            currentQuickStandingCoolTime += Time.fixedDeltaTime;
+            currentQuickStandingCoolTime.Value += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
         bCanQuickStanding = true;
@@ -1028,7 +1032,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private LayerMask ledgeAbleLayer;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask frontCheckLayer;
-
+    [SerializeField] private LayerMask kickLayer;
+    
     [Header("Jump")]
     [SerializeField] private float jumpPower;
     [SerializeField] private float minJumpPower = -20;
@@ -1119,18 +1124,17 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float dashTime = 0.3f;
     [SerializeField] private float dashSpeed = 25f;
     [SerializeField] private float dashCoolTime = 5.0f;
-    private float currentDashCoolTime = 0.0f;
+    private FloatReactiveProperty currentDashCoolTime = new FloatReactiveProperty(0.0f);
     [SerializeField] private bool bCanDash = true;
 
     [Header("QuickStanding")]
     [SerializeField] private float quickStandingCoolTime = 5.0f;
-    private float currentQuickStandingCoolTime = 0.0f;
+    private FloatReactiveProperty currentQuickStandingCoolTime = new FloatReactiveProperty(0.0f);
     private bool bCanQuickStanding = true;
 
     [Header("Reference")]
     [SerializeField] private Transform steamPosition;
     [SerializeField] private Transform dechargingEffectTransform;
-
 
     #region InputSystem
 
@@ -1228,6 +1232,24 @@ public partial class PlayerUnit : UnTransfromObjectBase
             return;
 
         _currentState.OnQuickStand(value, this, _animator);
+    }
+
+    public void OnKick(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position + CapsuleCollider.center, transform.forward, out hit, 4f, kickLayer))
+        {
+            MessageReceiver receiver;
+            if(hit.collider.TryGetComponent<MessageReceiver>(out receiver))
+            {
+                Message msg = new Message();
+                msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, null, (Object)this);
+                receiver.ReceiveMessage(msg);
+            }
+        }
     }
 
     #endregion

@@ -274,6 +274,20 @@ public class PlayerManager : ManagerBase
                 SendMessageEx(MessageTitles.uimanager_visibleScanCoolTimeUi, GetSavedNumber("UIManager"), activeData);
             }
         });
+
+        _player.CurrentQuickStandCoolTime.Subscribe(value =>
+        {
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = Mathf.Clamp(value / _player.QuickStandCoolTime, 0.0f, 1.0f);
+            SendMessageEx(MessageTitles.uimanager_setFactorQuickStandingCoolTime, GetSavedNumber("UIManager"), data);
+        });
+
+        _player.CurrentDashCoolTime.Subscribe(value =>
+        {
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = Mathf.Clamp(value / _player.DashCoolTime, 0.0f, 1.0f);
+            SendMessageEx(MessageTitles.uimanager_setFactorDashCoolTime, GetSavedNumber("UIManager"), data);
+        });
     }
 
     public override void Progress(float deltaTime)

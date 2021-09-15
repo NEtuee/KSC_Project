@@ -80,6 +80,10 @@ public class UIManager : ManagerBase
     [SerializeField] private Canvas droneUiCanvas;
     [SerializeField] private Image droneCoolTimeCircle;
 
+    [Header("3D Ojbect UI")]
+    [SerializeField] private HorizontalGageCtrl quickStandingGage;
+    [SerializeField] private HorizontalGageCtrl dashGage;
+
     private EventSystem _eventSystem;
 
     private void Start()
@@ -297,6 +301,20 @@ public class UIManager : ManagerBase
         {
             ColorData data = MessageDataPooling.CastData<ColorData>(msg.data);
             gunChargeValueText.color = data.value;
+        });
+
+        AddAction(MessageTitles.uimanager_setFactorQuickStandingCoolTime, (msg) =>
+         {
+             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+             if(quickStandingGage != null)
+                 quickStandingGage.SetFactor(data.value);
+         });
+
+        AddAction(MessageTitles.uimanager_setFactorDashCoolTime, (msg) =>
+        {
+            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+            if (dashGage != null)
+                dashGage.SetFactor(data.value);
         });
     }
 

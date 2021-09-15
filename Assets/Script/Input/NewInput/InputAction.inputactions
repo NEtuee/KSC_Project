@@ -100,6 +100,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
+                },
+                {
+                    "name": "Kick",
+                    "type": "Button",
+                    "id": "6d4627e0-a238-4625-8dce-22c5fa092835",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
@@ -194,8 +202,8 @@
                 {
                     "name": "",
                     "id": "ef1ec1b7-527e-4e0d-8227-ec146152dc0f",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "Press(behavior=2)",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Run",
@@ -206,7 +214,7 @@
                     "name": "",
                     "id": "d8a10ca4-9ac1-40cd-bced-5c96277a3310",
                     "path": "<Gamepad>/leftShoulder",
-                    "interactions": "Press(behavior=2)",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Run",
@@ -408,6 +416,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "QuickStand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c39da8c-b4d7-421c-81eb-6ebba643f5e6",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Kick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1057377a-6665-4d16-bcbe-c3ae3627f1f5",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Kick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

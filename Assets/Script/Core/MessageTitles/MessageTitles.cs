@@ -170,6 +170,16 @@ public static partial class MessageTitles
     /// data = ColorData
     /// </summary>
     public const ushort uimanager_setChargingTextColor = 0x0330;
+
+    /// <summary>
+    /// data = FloatData
+    /// </summary>
+    public const ushort uimanager_setFactorQuickStandingCoolTime = 0x0331;
+
+    /// <summary>
+    /// data = FloatData
+    /// </summary>
+    public const ushort uimanager_setFactorDashCoolTime = 0x0332;
     #endregion
 
     /// <summary>
@@ -379,7 +389,7 @@ public static partial class MessageTitles
     /// <summary>
     /// data = FloatData
     /// </summarys
-    public const ushort playermanager_setDroneVolume = 0x090a;
+    public const ushort playermanager_setDroneVolume = 0x0910;
 
     #endregion
 
@@ -405,4 +415,8 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort set_setCameraManager = 0x1003;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort object_kick = 0x1004;
 }
