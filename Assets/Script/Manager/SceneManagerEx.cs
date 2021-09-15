@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 using MD;
 public class SceneManagerEx : ManagerBase
 {
-    public SceneInfoItem sceneInfo;
+    public BuildScenesSetEx sceneInfo;
 
     public int currentLevel = 0;
 
@@ -15,7 +15,9 @@ public class SceneManagerEx : ManagerBase
 
     public string nullScene;
 
-    private SceneInfoItem.SceneInformation _currentScene;
+    public bool loadOnStart = true;
+
+    private SceneInfoEx _currentScene;
     private List<Scene> _unloadScenes = new List<Scene>();
 
     private bool _isLoaded = true;
@@ -44,7 +46,8 @@ public class SceneManagerEx : ManagerBase
 
     public override void Initialize()
     {
-        LoadCurrentLevel();
+        if(loadOnStart)
+            LoadCurrentLevel();
     }
 
     public override void Progress(float deltaTime)
@@ -186,7 +189,10 @@ public class SceneManagerEx : ManagerBase
 
         for(int i = 0; i < _currentScene.targetScenes.Count; ++i)
         {
-            StartCoroutine(LoadSceneCoroutine(setPos,i == 0,_currentScene.targetScenes[i]));
+            if(_currentScene.targetScenes[i].canLoad)
+                StartCoroutine(LoadSceneCoroutine(setPos,i == 0,_currentScene.targetScenes[i].target));
+            else
+                --_loadedScenes;
         }
         
         while(_loadedScenes != 0)
@@ -252,9 +258,9 @@ public class SceneManagerEx : ManagerBase
         --_loadedScenes;
     }
 
-    IEnumerator LoadSceneCoroutine(bool setPos, bool sceneActive, string target)
+    IEnumerator LoadSceneCoroutine(bool setPos, bool sceneActive, Object target)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(target,LoadSceneMode.Additive);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(target.name,LoadSceneMode.Additive);
         operation.allowSceneActivation = false;
         
         while (operation.isDone == false)
@@ -279,7 +285,7 @@ public class SceneManagerEx : ManagerBase
             SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), data);
         }
 
-        var scene = SceneManager.GetSceneByName(target);
+        var scene = SceneManager.GetSceneByName(target.name);
 
         if(sceneActive)
             SceneManager.SetActiveScene(scene);
