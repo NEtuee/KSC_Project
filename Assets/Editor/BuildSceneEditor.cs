@@ -9,6 +9,9 @@ public class BuildSceneEditor : EditorWindow
     private static BuildScenesSetEx _setData;
     private TriggerEx _openTriggers = new TriggerEx();
     private TriggerEx _setTriggers = new TriggerEx();
+    private TriggerEx _selectTriggers = new TriggerEx();
+
+    private int _selectItem = -1;
 
     [MenuItem("CustomWindow/Build Scene Editor")]
     public static void ShowWindow()
@@ -26,6 +29,30 @@ public class BuildSceneEditor : EditorWindow
             return;
         }
 
+        GUILayout.BeginHorizontal();
+        GUI.enabled = _selectItem > -1 && _selectItem < _setData.scenes.Count;
+
+        if(GUILayout.Button("▲") && _selectItem > 0)
+        {
+            var target = _setData.scenes[_selectItem];
+            _setData.scenes[_selectItem] = _setData.scenes[_selectItem - 1];
+            _setData.scenes[_selectItem - 1] = target;
+
+            --_selectItem;
+        }
+
+        if(GUILayout.Button("▼") && _selectItem < _setData.scenes.Count - 1)
+        {
+            var target = _setData.scenes[_selectItem];
+            _setData.scenes[_selectItem] = _setData.scenes[_selectItem + 1];
+            _setData.scenes[_selectItem + 1] = target;
+
+            ++_selectItem;
+        }
+
+        GUI.enabled = true;
+        GUILayout.EndHorizontal();
+
         for(int i = 0; i < _setData.scenes.Count;)
         {
             if(_setData.scenes[i] == null)
@@ -34,16 +61,17 @@ public class BuildSceneEditor : EditorWindow
             }
             else
             {
-                ShowSceneSet(_setData.scenes[i]);
+                ShowSceneSet(_setData.scenes[i],i);
                 ++i;
             }
         }
     }
 
-    public void ShowSceneSet(SceneInfoEx data)
+    public void ShowSceneSet(SceneInfoEx data, int point)
     {
         var trigger = _openTriggers.GetTrigger(data.setName);
         var setTrigger = _setTriggers.GetTrigger(data.setName,true);
+        var selectTrigger = _selectTriggers.GetTrigger(data.setName);
 
         GUILayout.BeginHorizontal();
         if(GUILayout.Button(trigger ? "▼" : "▶",GUILayout.Width(25f)))
@@ -52,10 +80,22 @@ public class BuildSceneEditor : EditorWindow
             _openTriggers.SetTrigger(data.setName,trigger);
         }
 
+        GUI.enabled = !selectTrigger;
+
         if(GUILayout.Button("···",GUILayout.Width(25f)))
         {
             Selection.activeObject = data;
+
+            if(_selectItem != -1)
+            {
+                _selectTriggers.SetTrigger(_setData.scenes[_selectItem].setName,false);
+            }
+
+            _selectTriggers.SetTrigger(data.setName,true);
+            _selectItem = point;
         }
+
+        GUI.enabled = true;
 
         setTrigger = GUILayout.Toggle(setTrigger,data.setName);
         if(_setTriggers.SetTrigger(data.setName,setTrigger))
@@ -86,6 +126,9 @@ public class BuildSceneEditor : EditorWindow
         // if(!trigger)
         //     return;
         
+        if(trigger)
+            GUILayout.BeginVertical("box");
+
         var scenes = EditorBuildSettings.scenes;
         int stateCount = 0;
         
@@ -128,6 +171,9 @@ public class BuildSceneEditor : EditorWindow
             }
 
         }
+
+        if(trigger)
+            GUILayout.EndVertical();
 
         _setTriggers.SetTrigger(data.setName,stateCount != 0);
         EditorBuildSettings.scenes = scenes;
