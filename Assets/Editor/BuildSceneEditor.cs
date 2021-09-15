@@ -26,9 +26,17 @@ public class BuildSceneEditor : EditorWindow
             return;
         }
 
-        foreach(var item in _setData.scenes)
+        for(int i = 0; i < _setData.scenes.Count;)
         {
-            ShowSceneSet(item);
+            if(_setData.scenes[i] == null)
+            {
+                _setData.scenes.RemoveAt(i);
+            }
+            else
+            {
+                ShowSceneSet(_setData.scenes[i]);
+                ++i;
+            }
         }
     }
 
