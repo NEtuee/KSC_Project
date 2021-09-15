@@ -189,7 +189,10 @@ public class SceneManagerEx : ManagerBase
 
         for(int i = 0; i < _currentScene.targetScenes.Count; ++i)
         {
-            StartCoroutine(LoadSceneCoroutine(setPos,i == 0,_currentScene.targetScenes[i]));
+            if(_currentScene.targetScenes[i].canLoad)
+                StartCoroutine(LoadSceneCoroutine(setPos,i == 0,_currentScene.targetScenes[i].target));
+            else
+                --_loadedScenes;
         }
         
         while(_loadedScenes != 0)

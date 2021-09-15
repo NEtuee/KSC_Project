@@ -41,6 +41,7 @@ public class BuildScenesSetEx : ScriptableObject
             scenes.Add(data);
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
 #endif
         }
         else

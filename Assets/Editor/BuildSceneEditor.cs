@@ -55,13 +55,14 @@ public class BuildSceneEditor : EditorWindow
             var sceneTarget = EditorBuildSettings.scenes;
             foreach(var item in data.targetScenes)
             {
-                var path = AssetDatabase.GetAssetPath(item);
+                var path = AssetDatabase.GetAssetPath(item.target);
                 
                 foreach(var scene in sceneTarget)
                 {
                     if(scene.path == path)
                     {
                         scene.enabled = setTrigger;
+                        item.canLoad = setTrigger;
                         break;
                     }
                 }
@@ -82,7 +83,7 @@ public class BuildSceneEditor : EditorWindow
         
         foreach(var item in data.targetScenes)
         {
-            var path = AssetDatabase.GetAssetPath(item);
+            var path = AssetDatabase.GetAssetPath(item.target);
             
             foreach(var scene in scenes)
             {
@@ -94,9 +95,10 @@ public class BuildSceneEditor : EditorWindow
                         GUILayout.Space(25f);
                         if(GUILayout.Button("···",GUILayout.Width(25f)))
                         {
-                            Selection.activeObject = item;
+                            Selection.activeObject = item.target;
                         }
-                        scene.enabled = GUILayout.Toggle(scene.enabled,item.name);
+                        scene.enabled = GUILayout.Toggle(scene.enabled,item.target.name);
+                        item.canLoad = scene.enabled;
                         GUILayout.EndHorizontal();
                     }
                     

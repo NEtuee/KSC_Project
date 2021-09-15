@@ -5,17 +5,28 @@ using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using System.IO;
 #endif
 
 [CreateAssetMenu(fileName = "SceneSet", menuName = "Options/SceneSet")]
 public class SceneInfoEx : ScriptableObject
 {
+    [System.Serializable]
+    public class TargetItem
+    {
+        [SerializeField]
+        public Object target;
+
+        [SerializeField]
+        public bool canLoad = true;
+    }
+
     [SerializeField]
     public string setName;
 
     [SerializeField]
-    public List<Object> targetScenes; 
+    public List<TargetItem> targetScenes; 
 
 }
 
@@ -38,6 +49,7 @@ public class SceneInfoExEditor : Editor
         {
             AutoFill();
             EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 
         if(GUILayout.Button("Add To Build Set"))
@@ -47,6 +59,34 @@ public class SceneInfoExEditor : Editor
                 LoadAssetAtPath("Assets/Settings/BuildScenesSetEx.asset",typeof(BuildScenesSetEx))).
                 AddSceneSet(infoEx);
         }
+
+
+        GUILayout.Space(10f);
+
+
+        if(GUILayout.Button("Open Scenes By Additive"))
+        {
+            LoadScenes(OpenSceneMode.Additive);
+        }
+        if(GUILayout.Button("Open Scenes By Single"))
+        {
+            LoadScenes(OpenSceneMode.Single);
+        }
+    }
+
+    public void LoadScenes(OpenSceneMode mode)
+    {
+        for(int i = 0; i < infoEx.targetScenes.Count; ++i)
+        {
+            var path = AssetDatabase.GetAssetPath(infoEx.targetScenes[i].target);
+            var scene = EditorSceneManager.OpenScene(path,mode == OpenSceneMode.Single ? 
+                                                    (i == 0 ? mode : OpenSceneMode.Additive) : OpenSceneMode.Additive);
+            if(i == 0)
+            {
+                EditorSceneManager.SetActiveScene(scene);
+            }
+        }
+        
     }
 
     public void AddToBuildSettings()
@@ -54,7 +94,7 @@ public class SceneInfoExEditor : Editor
         var sceneList = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
         foreach(var item in infoEx.targetScenes)
         {
-            var path = AssetDatabase.GetAssetPath(item);
+            var path = AssetDatabase.GetAssetPath(item.target);
 
             if(sceneList.Find((x)=>{return x.path == path;}) == null)
             {
@@ -83,7 +123,10 @@ public class SceneInfoExEditor : Editor
             string assetPath = "Assets" + scenePath.Replace(Application.dataPath, "").Replace('\\', '/');
             SceneAsset scene = (SceneAsset)AssetDatabase.LoadAssetAtPath(assetPath, typeof(SceneAsset));
 
-            infoEx.targetScenes.Add(scene);
+            var item = new SceneInfoEx.TargetItem();
+            item.target = scene;
+
+            infoEx.targetScenes.Add(item);
         }
 
     }
