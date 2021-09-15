@@ -580,7 +580,7 @@ public class Genie_AI : ObjectBase
 
         //transform.position = _originPos + transform.forward * 3f;
         var rot = Quaternion.LookRotation(dir, Vector3.up);
-        rot *= Quaternion.Euler(-90f,90f,0f);
+//        rot *= Quaternion.Euler(-90f,90f,0f);
         body.transform.rotation = Quaternion.Lerp(body.transform.rotation, rot, speed);
     }
 
