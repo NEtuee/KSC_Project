@@ -25,6 +25,9 @@ public class PlayerParamaterWindow : EditorWindow
         playerUnit.DashTime = EditorGUILayout.FloatField("대쉬 시간", playerUnit.DashTime);
         playerUnit.DashCoolTime = EditorGUILayout.FloatField("대쉬 쿨타임", playerUnit.DashCoolTime);
 
+        GUILayout.Label("퀵 스탠드", EditorStyles.boldLabel);
+        playerUnit.QuickStandCoolTime = EditorGUILayout.FloatField("대쉬 속도", playerUnit.QuickStandCoolTime);
+
     }
 
     private PlayerUnit playerUnit;

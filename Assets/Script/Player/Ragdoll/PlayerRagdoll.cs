@@ -41,6 +41,7 @@ public class PlayerRagdoll : MonoBehaviour
     [SerializeField] private string standUpBackAnimation;
     [SerializeField] private string standUpBallyAnimation;
     [SerializeField] private string climbingIdleAnimation;
+    [SerializeField] private string defaultAnimation;
     private Transform bip;
     [SerializeField] private Transform pelvis;
     private float ragdollTime;
@@ -541,6 +542,19 @@ public class PlayerRagdoll : MonoBehaviour
         ActiveRagdoll(false);
 
         foreach(var effect in lightningEffect)
+            effect.SetActive(false);
+    }
+
+    public void ReturnDefaultAnimation()
+    {
+        isFlyRagdoll = false;
+        SetRagdollContainer(false);
+        anim.enabled = true;
+        state = RagdollState.Animated;
+        anim.Play(defaultAnimation, 0, 0);
+        _player.InitVelocity();
+        ActiveRagdoll(false);
+        foreach (var effect in lightningEffect)
             effect.SetActive(false);
     }
 

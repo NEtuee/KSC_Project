@@ -5,9 +5,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerState_Ragdoll : PlayerState
 {
-    private bool _isCanUseQuickStand = true;
-    private float _quickStandCoolTime = 15.0f;
-
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
     }
@@ -31,6 +28,7 @@ public class PlayerState_Ragdoll : PlayerState
         playerUnit.Transform.SetParent(null);
         playerUnit.HandIK.DisableHandIK();
         playerUnit.AirTime = 0.0f;
+        playerUnit.CurrentSpeed = 0.0f;
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -45,24 +43,13 @@ public class PlayerState_Ragdoll : PlayerState
     {
     }
 
-    private IEnumerator UpdateCoolTime()
-    {
-        _isCanUseQuickStand = false;
-        float time = 0.0f;
-        while(time < _quickStandCoolTime)
-        {
-            time += Time.fixedDeltaTime;
-            yield return new WaitForFixedUpdate();
-        }
-        _isCanUseQuickStand = true;
-    }
-
     public override void OnQuickStand(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if(playerUnit.Ragdoll.GetRagdollState() == PlayerRagdoll.RagdollState.Ragdoll && playerUnit.Ragdoll.PelvisGrounded == true && _isCanUseQuickStand == true)
+        if(playerUnit.Ragdoll.GetRagdollState() == PlayerRagdoll.RagdollState.Ragdoll && playerUnit.Ragdoll.PelvisGrounded == true && playerUnit.CanQuickStanding == true)
         {
-            playerUnit.Ragdoll.ReturnAnimated();
-            StartCoroutine(UpdateCoolTime());
+            playerUnit.Ragdoll.ReturnDefaultAnimation();
+            playerUnit.ChangeState(PlayerUnit.defaultState);
+            StartCoroutine(playerUnit.StartQuickStandingTime());
         }
     }
 }
