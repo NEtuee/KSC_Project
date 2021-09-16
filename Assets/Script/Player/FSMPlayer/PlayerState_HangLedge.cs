@@ -20,18 +20,19 @@ public class PlayerState_HangLedge : PlayerState
         playerUnit.IsClimbingMove = false;
         animator.SetBool("IsLedge", true);
         playerUnit.HandIK.ActiveLedgeIK(true);
-        playerUnit.AdjustLedgeOffset();
+        //playerUnit.AdjustLedgeOffset();
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
     {
+        Debug.Log("Exit HangLedge");
         animator.SetBool("IsLedge", false);
         playerUnit.IsLedge = false;
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
-        playerUnit.UpdateGrab();
+        //playerUnit.UpdateGrab();
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)
@@ -58,27 +59,27 @@ public class PlayerState_HangLedge : PlayerState
 
     public override void OnJump(PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.InputVertical == 1.0f)
-        {
-            playerUnit.ChangeState(PlayerUnit.readyClimbingJumpState);
-            return;
-        }
+        //if (playerUnit.InputVertical == 1.0f)
+        //{
+        //    playerUnit.ChangeState(PlayerUnit.readyClimbingJumpState);
+        //    return;
+        //}
 
-        if (playerUnit.DetectLedgeCanHangLedgeByVertexColor() == true)
-            return;
+        //if (playerUnit.DetectLedgeCanHangLedgeByVertexColor() == true)
+        //    return;
 
-        if (playerUnit.IsLedge == true && playerUnit.IsClimbingMove == false && playerUnit.SpaceChecker.Overlapped() == false)
-        {
-            playerUnit.IsLedge = false;
-            animator.SetTrigger("LedgeUp");
-            animator.SetBool("IsLedge", false);
+        //if (playerUnit.IsLedge == true && playerUnit.IsClimbingMove == false && playerUnit.SpaceChecker.Overlapped() == false)
+        //{
+        //    playerUnit.IsLedge = false;
+        //    animator.SetTrigger("LedgeUp");
+        //    animator.SetBool("IsLedge", false);
 
-            Vector3 currentRot = transform.rotation.eulerAngles;
-            currentRot.x = 0.0f;
-            currentRot.z = 0.0f;
-            transform.rotation = Quaternion.Euler(currentRot);
+        //    Vector3 currentRot = transform.rotation.eulerAngles;
+        //    currentRot.x = 0.0f;
+        //    currentRot.z = 0.0f;
+        //    transform.rotation = Quaternion.Euler(currentRot);
 
-            playerUnit.ChangeState(PlayerUnit.ledgeUpState);
-        }
+        //    playerUnit.ChangeState(PlayerUnit.ledgeUpState);
+        //}
     }
 }

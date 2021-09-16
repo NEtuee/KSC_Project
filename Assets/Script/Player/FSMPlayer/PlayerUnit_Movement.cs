@@ -289,4 +289,22 @@ public partial class PlayerUnit
             prevParentPrevPos = prevParent.position;
         }
     }
+
+    public void StartLineClimbing(Vector3 nearPoint)
+    {
+        Vector3 lookVec = nearPoint - transform.position;
+        lookVec.y = 0.0f;
+        lookVec.Normalize();
+
+        Vector3 finalPosition;
+        finalPosition = nearPoint + (transform.up * detectionOffset.y);
+        finalPosition += transform.forward * detectionOffset.z;
+        transform.position = finalPosition;
+
+        transform.SetPositionAndRotation(finalPosition, Quaternion.LookRotation(lookVec));
+        transform.rotation = Quaternion.LookRotation(lookVec);
+
+        ChangeState(grabState);
+        ChangeState(hangLedgeState);
+    }
 }
