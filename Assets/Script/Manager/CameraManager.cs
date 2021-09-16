@@ -622,7 +622,6 @@ public class CameraManager : ManagerBase
     private int _currentSide = -1;
     private void BlendDistanceFollowCamera()
     {
-        
         float t = (Time.time - distanceBlendStartTime) / distanceBlendDuration;
         float currentDist = playerFollowCam3rdPersonComponent.CameraDistance;
 

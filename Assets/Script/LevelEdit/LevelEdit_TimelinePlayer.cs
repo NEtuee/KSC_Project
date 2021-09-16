@@ -113,21 +113,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         {
             var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
             actionData.value = () => {
-                EndTrigger();
-                SetActiveObjects(false);
-
-                if (endTransform != null)
-                {
-                    var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
-                    data.position = endTransform.position;
-                    data.rotation = endTransform.rotation;
-                    SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
-                }
-
-                if (ragdoll)
-                {
-                    SendMessageEx(MessageTitles.playermanager_ragdoll, GetSavedNumber("PlayerManager"), null);
-                }
+                EndSet();
 
             };
 
@@ -140,6 +126,31 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         //    GameManager.Instance.player.transform.position = endTransform.position;
         //    EndTrigger();
         //});
+    }
+
+    public void EndSet()
+    {
+        EndTrigger();
+        SetActiveObjects(false);
+
+        if (endTransform != null)
+        {
+            var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
+            data.position = endTransform.position;
+            data.rotation = endTransform.rotation;
+            SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
+
+            MD.PitchYawPositionData camData = MessageDataPooling.GetMessageData<MD.PitchYawPositionData>();
+            camData.position = endTransform.position;
+            camData.pitch = endTransform.eulerAngles.x;
+            camData.yaw = endTransform.eulerAngles.y;
+            SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
+        }
+
+        if (ragdoll)
+        {
+            SendMessageEx(MessageTitles.playermanager_ragdoll, GetSavedNumber("PlayerManager"), null);
+        }
     }
 
     public void LoadSceneFromManager(string target)

@@ -57,6 +57,9 @@ public class EMPShield : Hitable
             _initWpo = originalWpo;
         }
 
+        if(isActive)
+            StartCoroutine(ActiveEffect());
+
         factor = Mathf.Pow(2, intencity);
 
         SetDistortion();
