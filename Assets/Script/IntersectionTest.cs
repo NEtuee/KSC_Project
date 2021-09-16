@@ -19,7 +19,7 @@ public class IntersectionTest : MonoBehaviour
 
     private void Update()
     {
-        minDist = Intersection.DistanceLineAndLine(p1.position, p2.position, p3.position, p4.position);
+        minDist = Intersection.DistanceLineAndLine(p1.position, p2.position, p3.position, p4.position,out s,out t);
         roundDist = Mathf.Round(minDist);
 
         overlap = Intersection.IntersectionCapsuleAndLine(capsuleP1.position, capsuleP2.position, radius, p1.position, p2.position);
