@@ -2,11 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct Line
+{
+    public Transform p1;
+    public Transform p2;
+}
+
 public class ClimbingLine : MonoBehaviour
 {
     [SerializeField] private Transform[] points;
+    [SerializeField] private GameObject maker;
 
-    public bool DetectLine(Vector3 start, Vector3 end, float radius, out Vector3 nearPoint)
+    public bool DetectLine(Vector3 start, Vector3 end, float radius, Transform playerPos,out Vector3 nearPoint, ref Line line)
     {
         nearPoint = Vector3.zero;
         if (points.Length <= 1)
@@ -21,19 +28,31 @@ public class ClimbingLine : MonoBehaviour
             {
                 detect = true;
                 Vector3 u = points[i].position - points[i - 1].position;
-                Vector3 v = start - points[i - 1].position;
+                Vector3 v = playerPos.position - points[i - 1].position;
                 Vector3 near = points[i - 1].position + Vector3.Project(v, u);
-                if(nearPoint == Vector3.zero)
+
+                if (nearPoint == Vector3.zero)
                 {
                     nearPoint = near;
+                    line.p1 = points[i - 1];
+                    line.p2 = points[i];
                     continue;
                 }
 
-                if(Vector3.SqrMagnitude(near - start)< Vector3.SqrMagnitude(nearPoint - start))
+                //Debug.Log(Vector3.SqrMagnitude(near - playerPos.position));
+                //Debug.Log(Vector3.SqrMagnitude(nearPoint - playerPos.position));
+                if (Vector3.SqrMagnitude(near - playerPos.position) < Vector3.SqrMagnitude(nearPoint - playerPos.position))
                 {
                     nearPoint = near;
+                    line.p1 = points[i - 1];
+                    line.p2 = points[i];
                 }
             }
+        }
+
+        if(detect == true)
+        {
+            Instantiate(maker, nearPoint, Quaternion.identity).transform.SetParent(this.transform);
         }
 
         return detect;

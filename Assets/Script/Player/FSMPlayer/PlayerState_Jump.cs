@@ -133,10 +133,11 @@ public class PlayerState_Jump : PlayerState
     public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
         Vector3 nearPosition;
-        if (playerUnit.Line.DetectLine(playerUnit.CapsuleStart, playerUnit.CapsuleEnd, playerUnit.CapsuleRadius, out nearPosition))
+        Line line = new Line();
+        if (playerUnit.Line.DetectLine(playerUnit.CapsuleStart, playerUnit.CapsuleEnd, playerUnit.CapsuleRadius,playerUnit.Transform, out nearPosition,ref line))
         {
-            Debug.Log(nearPosition);
             playerUnit.StartLineClimbing(nearPosition);
+            playerUnit.SetLine(line);
         }
 
         //Vector3 point1;

@@ -1138,6 +1138,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     [Header("ClimbingLine")]
     [SerializeField] private ClimbingLine testLine;
+    public Transform leftPoint;
+    public Transform rightPoint;
     public ClimbingLine Line => testLine;
 
     [Header("Detection Capsule")]
@@ -1148,6 +1150,26 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public Vector3 CapsuleStart { get { return transform.TransformPoint(start); } }
     public Vector3 CapsuleEnd { get { return transform.TransformPoint(end); } }
     public float CapsuleRadius => radius;
+
+    public Transform LeftPoint { get => leftPoint; set => leftPoint = value; }
+    public Transform RightPoint { get => rightPoint; set => rightPoint = value; }
+
+    public void SetLine(Line line)
+    {
+        Vector3 playerToP1 = (line.p1.position - transform.position).normalized;
+        Vector3 cross = Vector3.Cross(playerToP1, transform.forward);
+        if(Vector3.Dot(cross,Vector3.up)>0)
+        {
+            RightPoint = line.p2;
+            LeftPoint = line.p1;
+        }
+        else
+        {
+            RightPoint = line.p1;
+            LeftPoint = line.p2;
+        }
+    }
+
 
     private void OnDrawGizmos()
     {

@@ -219,15 +219,15 @@ public partial class PlayerUnit
         {
             if (climbingVertical == -1.0f)
             {
-                if (_currentState != hangEdgeState)
-                {
-                    _animator.SetBool("IsLedge", false);
-                    _animator.SetTrigger("DownClimbing");
+                //if (_currentState != hangEdgeState)
+                //{
+                //    _animator.SetBool("IsLedge", false);
+                //    _animator.SetTrigger("DownClimbing");
 
-                    isLedge = false;
-                    isClimbingMove = true;
-                    ChangeState(grabState);
-                }
+                //    isLedge = false;
+                //    isClimbingMove = true;
+                //    ChangeState(grabState);
+                //}
             }
             else if (climbingVertical == 0.0f && climbingHorizon != 0.0f)
             {
@@ -302,7 +302,7 @@ public partial class PlayerUnit
         transform.position = finalPosition;
 
         transform.SetPositionAndRotation(finalPosition, Quaternion.LookRotation(lookVec));
-        transform.rotation = Quaternion.LookRotation(lookVec);
+        //transform.rotation = Quaternion.LookRotation(lookVec);
 
         ChangeState(grabState);
         ChangeState(hangLedgeState);
