@@ -64,6 +64,25 @@ public class TEst : EditorWindow
 
 #endregion
 
+#region PlaceObjectEditorMenu
+
+    private Texture2D _preview;
+    private bool _xRandom;
+    private bool _yRandom;
+    private bool _zRandom;
+    private bool _followNormal;
+
+    private Transform _sortParent;
+    private bool _attatchTarget = false;
+
+    private EditorPrefabObjectList _prefabs;
+
+    private Vector2 _placeObjMenuScroll = new Vector2();
+    private Vector3 _normalCorrection = new Vector2();
+    private int _placeObjSelect = -1;
+
+#endregion
+
     Dictionary<int,Action> _menuFunc = new Dictionary<int, Action>();
     List<GraphObjectBase> _levelObjects = new List<GraphObjectBase>();
 
@@ -76,7 +95,7 @@ public class TEst : EditorWindow
     {
         _itemMenu = new string[]
         {
-            "Boolean Triggers","Level Object Manage","Path Editor","","","","","","",""
+            "Boolean Triggers","Level Object Manage","Path Editor","Place Object","","","","","",""
         };
         _booleanTriggerMenu = new string[]{"GlobalTrigger","StageTrigger"};
 
@@ -91,6 +110,7 @@ public class TEst : EditorWindow
         _menuFunc.Add(0,BooleanTriggerMenu);
         _menuFunc.Add(1,LevelObjectMenu);
         _menuFunc.Add(2,PathEditorMenu);
+        _menuFunc.Add(3,PlaceObjectEditorMenu);
     }
 
     void OnGUI()
@@ -444,6 +464,10 @@ public class TEst : EditorWindow
     void PathEditorMenu()
     {
         GUILayout.BeginVertical("box",GUILayout.Width(150f));
+
+        if(_pathManager == null && _stageManager == null)
+            return;
+
         if(_pathManager == null)
         {
             _pathManager = _stageManager.GetPathManager();
@@ -583,6 +607,59 @@ public class TEst : EditorWindow
 
     }
 
+    void PlaceObjectEditorMenu()
+    {
+        if(_prefabs == null)
+        {
+            _prefabs = (EditorPrefabObjectList)AssetDatabase.LoadAssetAtPath("Assets/Settings/PlaceObjectList.asset",typeof(EditorPrefabObjectList));
+            return;
+        }
+
+        GUILayout.BeginVertical("box",GUILayout.Width(150f),GUILayout.ExpandHeight(true));
+
+        var labelWidth = EditorGUIUtility.labelWidth;
+        EditorGUIUtility.labelWidth = 80f;
+
+        _preview = (Texture2D)EditorGUILayout.ObjectField("",
+                    _preview,typeof(Texture2D), false,GUILayout.Width(150f),GUILayout.Height(150f));
+        
+        GUI.enabled = !_attatchTarget;
+        _sortParent = (Transform)EditorGUILayout.ObjectField("parent",_sortParent,typeof(Transform),true);
+        GUI.enabled = true;
+
+        _attatchTarget = EditorGUILayout.Toggle("AttatchTarget",_attatchTarget);
+
+        _followNormal = EditorGUILayout.Toggle("Follow Normal",_followNormal);
+        GUI.enabled = _followNormal;
+        _normalCorrection = EditorGUILayout.Vector3Field("Correction", _normalCorrection);
+        GUI.enabled = true;
+
+        _xRandom = EditorGUILayout.Toggle("X Random",_xRandom);
+        _zRandom = EditorGUILayout.Toggle("Y Random",_zRandom);
+        _yRandom = EditorGUILayout.Toggle("Z Random",_yRandom);
+
+        EditorGUIUtility.labelWidth = labelWidth;
+
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("box",GUILayout.Width(300f));
+        GUILayout.BeginScrollView(_placeObjMenuScroll);
+
+        for(int i = 0; i < _prefabs.prefabs.Length; ++i)
+        {
+            GUI.enabled = i != _placeObjSelect;
+            if(GUILayout.Button(_prefabs.prefabs[i].name))
+            {
+                _placeObjSelect = i;
+                _preview = AssetPreview.GetAssetPreview(_prefabs.prefabs[i]);
+            }
+            GUI.enabled = true;
+        }
+
+        GUILayout.EndScrollView();
+        GUILayout.EndVertical();
+    }
+
     void OnEnable()
     {
         SceneView.duringSceneGui += this.OnSceneGUI;
@@ -600,6 +677,45 @@ public class TEst : EditorWindow
             AddPointToCursorPoint();
             DrawPointButtons();
         }
+        else if(_itemMenuSelect == 3)
+        {
+            AddPrefabToCursorPoint();
+        }
+    }
+
+    public void AddPrefabToCursorPoint()
+    {
+        Event e = Event.current;
+
+        if(e.type == EventType.KeyDown && 
+			e.keyCode == KeyCode.P &&
+			(_placeObjSelect >= 0 && _placeObjSelect < _prefabs.prefabs.Length))
+		{
+			Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay( new Vector3( e.mousePosition.x, Screen.height - e.mousePosition.y - 36, 0 ) );
+			if(Physics.Raycast(ray,out RaycastHit hit,Mathf.Infinity))
+			{
+				var obj = Instantiate(_prefabs.prefabs[_placeObjSelect],hit.point, Quaternion.identity);
+                obj.transform.SetParent(_attatchTarget ? hit.transform : (_sortParent != null ? _sortParent : null));
+
+                obj.transform.rotation = _followNormal ? Quaternion.FromToRotation(obj.transform.up,hit.normal) : obj.transform.rotation;
+                var angle = obj.transform.eulerAngles;
+
+                angle.x = _xRandom ? UnityEngine.Random.Range(0f,360f) : angle.x;
+                angle.y = _yRandom ? UnityEngine.Random.Range(0f,360f) : angle.y;
+                angle.z = _zRandom ? UnityEngine.Random.Range(0f,360f) : angle.z;
+
+                angle += _normalCorrection;
+
+                obj.transform.eulerAngles = angle;
+
+                Undo.RegisterCreatedObjectUndo(obj, "Created obj");
+                Repaint();
+			}
+			else
+			{
+				Debug.Log("raycast failed");
+			}
+		}
     }
 
     public void DrawPointButtons()

@@ -93,7 +93,7 @@ public class SceneManagerEx : ManagerBase
         int level = -1;
         for(int i = 0; i < sceneInfo.scenes.Count; ++i)
         {
-            if(sceneInfo.scenes[i].name == key)
+            if(sceneInfo.scenes[i].setName == key)
             {
                 level = i;
             }
