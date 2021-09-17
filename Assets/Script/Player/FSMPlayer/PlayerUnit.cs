@@ -104,6 +104,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public LedgeChecker LedgeChecker => ledgeChecker;
     public SpaceChecker SpaceChecker => spaceChecker;
     public Vector3 WallUnderCheckOffset => wallUnderCheckOffset;
+    public Vector3 DetectionOffset => detectionOffset;
     public bool LedgeUpAdjust { get => _ledUpAdjust; set => _ledUpAdjust = value; }
 
     #endregion
@@ -1140,6 +1141,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private ClimbingLine testLine;
     public Transform leftPoint;
     public Transform rightPoint;
+    public int leftPointNum;
+    public int rightPointNum;
+    public Transform nearPointMarker;
+    public ClimbDir climbDir;
     public ClimbingLine Line => testLine;
 
     [Header("Detection Capsule")]
@@ -1156,18 +1161,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void SetLine(Line line)
     {
-        Vector3 playerToP1 = (line.p1.position - transform.position).normalized;
-        Vector3 cross = Vector3.Cross(playerToP1, transform.forward);
-        if(Vector3.Dot(cross,Vector3.up)>0)
-        {
-            RightPoint = line.p2;
-            LeftPoint = line.p1;
-        }
-        else
-        {
-            RightPoint = line.p1;
-            LeftPoint = line.p2;
-        }
+        
     }
 
 
@@ -1178,7 +1172,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
         Gizmos.DrawWireSphere(CapsuleEnd, radius);
         Gizmos.DrawLine(CapsuleStart, CapsuleEnd);
     }
-
 
     #region InputSystem
 
@@ -1297,4 +1290,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     }
 
     #endregion
+}
+
+public enum ClimbDir
+{
+    Left,Right
 }

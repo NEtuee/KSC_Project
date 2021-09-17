@@ -7,9 +7,101 @@ public class PlayerState_HangLedge : PlayerState
 {
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
-        var p = playerUnit.Transform.position;
-        p += animator.deltaPosition;
-        playerUnit.Transform.position = p;
+        //var p = playerUnit.Transform.position;
+        //p += animator.deltaPosition;
+        //playerUnit.Transform.position = p;
+
+        if(playerUnit.climbDir == ClimbDir.Left)
+        {
+            Vector3 leftPoint = playerUnit.Line.points[playerUnit.leftPointNum].position;
+            Vector3 rightPoint = playerUnit.Line.points[playerUnit.rightPointNum].position;
+            Vector3 moveDir = leftPoint - rightPoint;
+            moveDir.Normalize();
+            Vector3 adjustForward = Vector3.Cross(-moveDir, Vector3.up);
+            moveDir *= animator.deltaPosition.magnitude;
+            //playerUnit.Transform.position += moveDir;
+            //playerUnit.nearPointMarker.position += moveDir;
+
+            Vector3 destPointPosition = playerUnit.nearPointMarker.position + moveDir;
+
+            Vector3 u = leftPoint - rightPoint;
+            Vector3 v = destPointPosition - rightPoint;
+            float s;
+            if (u.x != 0.0f)
+                s = v.x / u.x;
+            else if(u.y != 0.0f)
+                s = v.y / u.y;
+            else
+                s = v.z / u.z;
+
+            //Debug.Log(s);
+            if (s > 1.0f)
+            {
+                if(playerUnit.Line.PassLeft(ref playerUnit.leftPointNum, ref playerUnit.rightPointNum))
+                {
+                    playerUnit.nearPointMarker.position = destPointPosition;
+                    //playerUnit.Transform.position += moveDir;
+                    Vector3 pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
+                    pos += adjustForward * playerUnit.DetectionOffset.z;
+                    playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
+                    playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime*5.0f);
+                }
+            }
+            else
+            {
+                playerUnit.nearPointMarker.position = destPointPosition;
+                //playerUnit.Transform.position += moveDir;
+                Vector3 pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
+                pos += adjustForward * playerUnit.DetectionOffset.z;
+                playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
+                playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime * 5.0f);
+            }
+        }
+        else
+        {
+            Vector3 leftPoint = playerUnit.Line.points[playerUnit.leftPointNum].position;
+            Vector3 rightPoint = playerUnit.Line.points[playerUnit.rightPointNum].position;
+            Vector3 moveDir = rightPoint - leftPoint;
+            moveDir.Normalize();
+            Vector3 adjustForward = Vector3.Cross(moveDir, Vector3.up);
+            moveDir *= animator.deltaPosition.magnitude;
+            //playerUnit.Transform.position += moveDir;
+            //playerUnit.nearPointMarker.position += moveDir;
+
+            Vector3 destPointPosition = playerUnit.nearPointMarker.position + moveDir;
+
+            Vector3 u = rightPoint - leftPoint;
+            Vector3 v = destPointPosition - leftPoint;
+            float s;
+            if (u.x != 0.0f)
+                s = v.x / u.x;
+            else if (u.y != 0.0f)
+                s = v.y / u.y;
+            else
+                s = v.z / u.z;
+            //Debug.Log(s);
+            if (s > 1.0f)
+            {
+                if(playerUnit.Line.PassRight(ref playerUnit.leftPointNum, ref playerUnit.rightPointNum))
+                {
+                    playerUnit.nearPointMarker.position = destPointPosition;
+                    //playerUnit.Transform.position += moveDir;
+                    Vector3 pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
+                    pos += adjustForward * playerUnit.DetectionOffset.z;
+                    playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
+                    playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime * 5.0f);
+                }
+            }
+            else
+            {
+                playerUnit.nearPointMarker.position = destPointPosition;
+                //playerUnit.Transform.position += moveDir;
+                Vector3 pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
+                pos += adjustForward * playerUnit.DetectionOffset.z;
+                playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
+                playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime * 5.0f);
+            }
+        }
     }
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)

@@ -9,7 +9,7 @@ public partial class PlayerUnit
     {
         Vector3 near;
         Line line = new Line();
-        Line.DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, transform, out near, ref line);
+        //Line.DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, transform, out near, ref line);
     }
 
     private void EndClimbMove()
@@ -17,7 +17,7 @@ public partial class PlayerUnit
         SetClimbMove(false);
         Vector3 near;
         Line line = new Line();
-        Line.DetectLine(CapsuleStart,CapsuleEnd,CapsuleRadius,transform, out near, ref line);
+        //Line.DetectLine(CapsuleStart,CapsuleEnd,CapsuleRadius,transform, out near, ref line);
     }
 
     private void EndGetUp()

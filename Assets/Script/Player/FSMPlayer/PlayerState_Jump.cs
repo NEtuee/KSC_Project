@@ -136,8 +136,20 @@ public class PlayerState_Jump : PlayerState
         Line line = new Line();
         if (playerUnit.Line.DetectLine(playerUnit.CapsuleStart, playerUnit.CapsuleEnd, playerUnit.CapsuleRadius,playerUnit.Transform, out nearPosition,ref line))
         {
+            playerUnit.nearPointMarker.position = nearPosition;
             playerUnit.StartLineClimbing(nearPosition);
-            playerUnit.SetLine(line);
+            Vector3 playerToP1 = (playerUnit.Line.points[line.p1].position - transform.position).normalized;
+            Vector3 cross = Vector3.Cross(playerToP1, transform.forward);
+            if (Vector3.Dot(cross, Vector3.up) > 0)
+            {
+                playerUnit.rightPointNum = line.p2;
+                playerUnit.leftPointNum = line.p1;
+            }
+            else
+            {
+                playerUnit.rightPointNum = line.p1;
+                playerUnit.leftPointNum = line.p2;
+            }
         }
 
         //Vector3 point1;

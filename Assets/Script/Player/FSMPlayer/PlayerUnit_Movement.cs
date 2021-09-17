@@ -235,11 +235,13 @@ public partial class PlayerUnit
                 {
                     _animator.SetTrigger("RightClimbing");
                     isClimbingMove = true;
+                    climbDir = ClimbDir.Right;
                 }
                 else
                 {
                     _animator.SetTrigger("LeftClimbing");
                     isClimbingMove = true;
+                    climbDir = ClimbDir.Left;
                 }
             }
         }
