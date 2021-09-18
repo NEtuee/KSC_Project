@@ -11,6 +11,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public static bool CUTSCENEPLAY;
 
     public PlayableDirector playableDirector;
+    public float endSignalTime;
 
     public List<GameObject> activeLists = new List<GameObject>();
     public Transform endTransform;
