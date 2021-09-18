@@ -15,7 +15,7 @@ public class ClimbingLineEditor : EditorWindow
     {
         _modeItem = new string[]
         {
-            "None","CreateLine","Add Point"
+            "None","CreateLine","Add Point", "View PlaneInfo"
         };
     }
 
@@ -75,10 +75,34 @@ public class ClimbingLineEditor : EditorWindow
 
                             if(GUILayout.Button("Delete", GUILayout.Width(50.0f)))
                             {
-                                _currentLine.points.Remove(point);
+                                _currentLine.RemovePoint(point);
                                 break;
                             }
 
+                            GUILayout.EndHorizontal();
+                        }
+
+                        GUILayout.EndScrollView();
+                    }
+                    GUILayout.EndVertical();
+                }
+                break;
+            case 3:
+                {
+                    GUILayout.BeginVertical("box", GUILayout.Width(300.0f));
+                    GUILayout.Label("Plane Info List");
+
+                    if (_currentLine != null)
+                    {
+                        _pointListScroll = GUILayout.BeginScrollView(_pointListScroll);
+
+                        foreach (var planeInfo in _currentLine.planeInfo)
+                        {
+                            GUILayout.BeginHorizontal("box");
+                            if (GUILayout.Button(planeInfo.gameObject.name, GUILayout.Width(100.0f)))
+                            {
+                                Selection.activeObject = planeInfo.gameObject;
+                            }
                             GUILayout.EndHorizontal();
                         }
 
@@ -117,12 +141,12 @@ public class ClimbingLineEditor : EditorWindow
 
     private void OnSceneGUI(SceneView view)
     {
-        if (_currentMode == 0)
+        if (_currentMode == 0 || _currentMode == 3)
         {
             SceneVisibilityManager.instance.EnableAllPicking();
             return;
         }
-
+        
         Event currentEvent = Event.current;
         if (currentEvent.type == EventType.KeyDown && currentEvent.keyCode == KeyCode.N)
         {
@@ -142,7 +166,7 @@ public class ClimbingLineEditor : EditorWindow
         {
             if(_currentMode == 1)
             {
-                Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay(new Vector3(currentEvent.mousePosition.x, Screen.height - currentEvent.mousePosition.y, 0));
+                Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay(new Vector3(currentEvent.mousePosition.x, Screen.height - currentEvent.mousePosition.y -36, 0));
                 if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
                 {
                     GameObject newClimbingLineObject = new GameObject("ClimbingLine" + _climbingLineCount);
@@ -155,7 +179,7 @@ public class ClimbingLineEditor : EditorWindow
                     newPoint.transform.position = hit.point;
                     newPoint.transform.SetParent(_currentLine.transform);
 
-                    _currentLine.points.Add(newPoint.transform);
+                    _currentLine.AddPoint(newPoint.transform);
                     _climbingLineCount++;
                     _currentMode = 2;
 
@@ -173,7 +197,7 @@ public class ClimbingLineEditor : EditorWindow
                     GameObject newPoint = new GameObject("point"+ _currentLine.points.Count);
                     newPoint.transform.position = hit.point;
                     newPoint.transform.SetParent(_currentLine.transform);
-                    _currentLine.points.Add(newPoint.transform);
+                    _currentLine.AddPoint(newPoint.transform);
                 }
             }
         }
