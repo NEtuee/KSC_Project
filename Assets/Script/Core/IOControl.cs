@@ -78,7 +78,7 @@ public static class IOControl {
 
 			if(file == null || st == null)
 			{
-				Debug.Log("file is does not exists");
+				Debug.Log("file does not exists");
 				return null;
 			}
 
