@@ -109,12 +109,12 @@ public class PlayerState_Grab : PlayerState
 
         playerUnit.AddEnergy(playerUnit.IsClimbingMove == true ? playerUnit.ClimbingJumpRestoreEnrgyValue * Time.fixedDeltaTime : 0.0f);
 
-        playerUnit.UpdateGrab();
+        //playerUnit.UpdateGrab();
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)
     {
-        playerUnit.UpdateClimbingInput();
+        //playerUnit.UpdateClimbingInput();
     }
 
     public override void OnGrabRelease(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)

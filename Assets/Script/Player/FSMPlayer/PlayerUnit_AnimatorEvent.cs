@@ -5,9 +5,19 @@ using MD;
 
 public partial class PlayerUnit
 {
+    private void StartClimbingMove()
+    {
+        Vector3 near;
+        Line line = new Line();
+        //Line.DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, transform, out near, ref line);
+    }
+
     private void EndClimbMove()
     {
         SetClimbMove(false);
+        Vector3 near;
+        Line line = new Line();
+        //Line.DetectLine(CapsuleStart,CapsuleEnd,CapsuleRadius,transform, out near, ref line);
     }
 
     private void EndGetUp()
@@ -42,7 +52,7 @@ public partial class PlayerUnit
 
     private void ClimbingSound()
     {
-        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>(); ;
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>(); 
         soundData.id = 1006; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
