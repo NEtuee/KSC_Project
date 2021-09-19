@@ -47,8 +47,10 @@ public class PlayerState_Jump : PlayerState
 
         Vector3 camForward = Camera.main.transform.forward;
         camForward.y = 0;
+        camForward.Normalize();
         Vector3 camRight = Camera.main.transform.right;
         camRight.y = 0;
+        camForward.Normalize();
 
         if (playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
         {

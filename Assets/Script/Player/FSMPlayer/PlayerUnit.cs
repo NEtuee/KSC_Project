@@ -810,6 +810,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _animator.SetFloat("Speed", 0.0f);
         _animator.SetBool("Respawn", false);
         ChangeState(defaultState);
+
+        bCanDash = true;
+        bCanQuickStanding = true;
+
+        currentDashCoolTime.Value = dashCoolTime;
+        currentQuickStandingCoolTime.Value = quickStandingCoolTime;
     }
 
     public void InitStatus()
@@ -1021,6 +1027,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private Vector3 _prevDir;
     private Vector3 _lookDir;
     private float _runToStopTime = 0.0f;
+    private bool _runKeyRevert = false;
 
     [Header("Climbing")]
     [SerializeField] private bool isClimbingMove = false;
@@ -1208,14 +1215,40 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (value.performed == false || Time.timeScale == 0f)
             return;
 
-        if (isWalk)
-        {
-            isWalk = false;
-        }
-        else
-        {
-            isWalk = true;
-        }
+        //if (value.action.WasPressedThisFrame())
+        //{
+        //    if(_runKeyRevert == false)
+        //    {
+        //        isWalk = true;
+        //    }
+        //    else
+        //    {
+        //        isWalk = false;
+        //    }
+        //}
+        //else if(value.action.WasReleasedThisFrame())
+        //{
+        //    if (_runKeyRevert == false)
+        //    {
+        //        isWalk = false;
+        //    }
+        //    else
+        //    {
+        //        isWalk = true;
+        //    }
+        //}
+
+        isWalk = !isWalk;
+    }
+
+    public void OnRunConvert(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        //Debug.Log("RunConvert");
+        //_runKeyRevert = !_runKeyRevert;
+        isWalk = !isWalk;
     }
 
     public void OnAim(InputAction.CallbackContext value)
