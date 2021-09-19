@@ -76,10 +76,12 @@ public class PlayerState_Default : PlayerState
         Vector3 lookDir;
         Vector3 camForward = Camera.main.transform.forward;
         camForward.y = 0;
+        camForward.Normalize();
         Vector3 camRight = Camera.main.transform.right;
         camRight.y = 0;
+        camRight.Normalize();
 
-        if(playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
+        if (playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
         {
             playerUnit.MoveDir = (camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal);
             playerUnit.MoveDir.Normalize();
