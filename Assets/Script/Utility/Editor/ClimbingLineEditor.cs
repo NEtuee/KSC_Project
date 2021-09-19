@@ -130,6 +130,8 @@ public class ClimbingLineEditor : EditorWindow
                 _climbingLineCount++;
             }
         }
+
+        CheckClimbingManager();
     }
 
     private void OnDisable()
@@ -137,6 +139,8 @@ public class ClimbingLineEditor : EditorWindow
         SceneView.duringSceneGui -= this.OnSceneGUI;
         SceneVisibilityManager.instance.EnableAllPicking();
         _lineList.Clear();
+
+        _climbingLineManager = null;
     }
 
     private void OnSceneGUI(SceneView view)
@@ -169,11 +173,16 @@ public class ClimbingLineEditor : EditorWindow
                 Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay(new Vector3(currentEvent.mousePosition.x, Screen.height - currentEvent.mousePosition.y -36, 0));
                 if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
                 {
+                    CheckClimbingManager();
+
                     GameObject newClimbingLineObject = new GameObject("ClimbingLine" + _climbingLineCount);
                     _currentLine = newClimbingLineObject.AddComponent<ClimbingLine>();
                     newClimbingLineObject.tag = "ClimbingLine";
 
                     newClimbingLineObject.transform.position = hit.point;
+                    newClimbingLineObject.transform.SetParent(_climbingLineManager.transform);
+
+                    _climbingLineManager.AddClimbingLines(_currentLine);
 
                     GameObject newPoint = new GameObject("point");
                     newPoint.transform.position = hit.point;
@@ -203,6 +212,22 @@ public class ClimbingLineEditor : EditorWindow
         }
     }
 
+    private void CheckClimbingManager()
+    {
+        if (_climbingLineManager == null)
+        {
+            if (GameObject.Find("ClimbingLineManager") == null)
+            {
+                GameObject climbingLineManger = new GameObject("ClimbingLineManager");
+                _climbingLineManager = climbingLineManger.AddComponent<ClimbingLineManager>();
+            }
+            else
+            {
+                _climbingLineManager = GameObject.Find("ClimbingLineManager").GetComponent<ClimbingLineManager>();
+            }
+        }
+    }
+
     private string[] _modeItem;
     private int _currentMode = 0;
     private ClimbingLine _currentLine;
@@ -211,4 +236,6 @@ public class ClimbingLineEditor : EditorWindow
     private int _climbingLineCount = 0;
     private Vector2 _lineListScroll = Vector2.zero;
     private Vector2 _pointListScroll = Vector2.zero;
+
+    private ClimbingLineManager _climbingLineManager = null;
 }

@@ -189,6 +189,11 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             _chargeSoundEmitter = (FMODUnity.StudioEventEmitter)msg.data;
         });
+
+        AddAction(MessageTitles.set_climbingLineManager, (msg) =>
+        {
+            _climbingLineManager = (ClimbingLineManager)msg.data;
+        });
     }
 
     public override void Initialize()
@@ -1145,7 +1150,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public int rightPointNum;
     public Transform nearPointMarker;
     public ClimbDir climbDir;
-    public ClimbingLine Line => testLine;
+    public ClimbingLine Line { get => testLine; set => testLine = value; }
+
+    private ClimbingLineManager _climbingLineManager;
+    public ClimbingLineManager ClimbingLineManager => _climbingLineManager;
 
     [Header("Detection Capsule")]
     [SerializeField] private Vector3 start;

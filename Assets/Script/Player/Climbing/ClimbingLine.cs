@@ -53,7 +53,7 @@ public class ClimbingLine : MonoBehaviour
 
         if(detect == true)
         {
-            Instantiate(maker, nearPoint, Quaternion.identity).transform.SetParent(this.transform);
+            //Instantiate(maker, nearPoint, Quaternion.identity).transform.SetParent(this.transform);
         }
 
         return detect;
@@ -129,6 +129,12 @@ public class ClimbingLine : MonoBehaviour
 
         DestroyImmediate(removePoint.gameObject);
         DestroyImmediate(removePlaneInfo.gameObject);
+    }
+
+    public Transform GetPlaneInfo(int leftNum, int rightNum)
+    {
+        int result = Mathf.Min(leftNum, rightNum);
+        return planeInfo[result];
     }
 
     private void OnDrawGizmos()
