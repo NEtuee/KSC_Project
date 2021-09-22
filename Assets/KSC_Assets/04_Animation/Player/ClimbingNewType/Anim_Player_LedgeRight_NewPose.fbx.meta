@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 7260d268d3a058c4f855e739012b43d8
 ModelImporter:
-  serializedVersion: 20200
+  serializedVersion: 21100
   internalIDToNameTable:
   - first:
       74: -3906954188295640198
@@ -46,7 +46,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
@@ -60,21 +60,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0
-        functionName: RightTrace
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.7089552
-        functionName: UpdateLeftHandPos
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 1
-        functionName: EndClimbMove
+        functionName: StartClimbingMove
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -89,6 +75,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.81500006
         functionName: ClimbingSound
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: EndClimbMove
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
