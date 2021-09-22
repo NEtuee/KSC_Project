@@ -15,6 +15,10 @@ public class PlayerRePositionor : UnTransfromObjectBase
     private PlayerUnit _player;
     private Collider collider;
 
+    private bool _active;
+
+    private TimeCounterEx _timeCounter = new TimeCounterEx();
+
     protected override void Awake()
     {
         base.Awake();
@@ -38,6 +42,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
         {
             if (collider != null)
                 collider.enabled = true;
+        
         });
     }
 
@@ -55,10 +60,24 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
         bip = _player.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
+
+        _timeCounter.InitTimer("Check",0,3f);
+        
+    }
+
+    public override void Progress(float deltaTime)
+    {
+        base.Progress(deltaTime);
+
+        _timeCounter.IncreaseTimerSelf("Check", out var limit, deltaTime);
+        _active = limit;
     }
 
     public void OnTriggerEnter(Collider coll)
     {
+        if(!_active)
+            return;
+
         if(playerLayer == (playerLayer | (1<<coll.gameObject.layer)))
         {
             beforeFall?.Invoke();

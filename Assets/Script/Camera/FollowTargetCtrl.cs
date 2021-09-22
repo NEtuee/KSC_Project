@@ -116,7 +116,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                 var euler = transform.eulerAngles;
                 euler.x = ToWrapAngle(euler.x);
 
-                var rot = (Vector3)(camFactor * crosshairMovingSpeed * aimMovingSpeed * Time.fixedUnscaledDeltaTime) + euler;
+                var rot = (Vector3)(camFactor * crosshairMovingSpeed * aimMovingSpeed * Time.fixedDeltaTime) + euler;
                 rot.x = Mathf.Clamp(rot.x, pitchLimitMin, pitchLimitMax);
                 Quaternion rotation = Quaternion.Euler(rot.x, rot.y, 0f);
                 transform.rotation = rotation;
