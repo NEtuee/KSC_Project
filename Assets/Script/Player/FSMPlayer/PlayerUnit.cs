@@ -25,6 +25,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_Respawn respawnState;
     public static PlayerState_Dash dashState;
     public static PlayerState_Dead deadState;
+    public static PlayerState_Kick kickState;
     #endregion
 
     #region Move Property
@@ -228,6 +229,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (respawnState == null) respawnState = gameObject.AddComponent<PlayerState_Respawn>();
         if (deadState == null) deadState = gameObject.AddComponent<PlayerState_Dead>();
         if (dashState == null) dashState = gameObject.AddComponent<PlayerState_Dash>();
+        if (kickState == null) kickState = gameObject.AddComponent<PlayerState_Kick>();
 
         pelvisGunObject = _empGun.PelvisGunObject;
 
@@ -1320,17 +1322,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (value.performed == false || Time.timeScale == 0f)
             return;
 
-        RaycastHit hit;
-        if(Physics.Raycast(transform.position + CapsuleCollider.center, transform.forward, out hit, 4f, kickLayer))
-        {
-            MessageReceiver receiver;
-            if(hit.collider.TryGetComponent<MessageReceiver>(out receiver))
-            {
-                Message msg = new Message();
-                msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, null, (Object)this);
-                receiver.ReceiveMessage(msg);
-            }
-        }
+        _currentState.OnKick(value, this, _animator);
     }
 
     #endregion

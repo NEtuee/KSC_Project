@@ -148,6 +148,7 @@ public class ClimbingLine : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+#if UNITY_EDITOR
         if (points.Count == 0)
             return;
 
@@ -186,5 +187,6 @@ public class ClimbingLine : MonoBehaviour
             Handles.color = Handles.yAxisColor;
             Handles.ArrowHandleCap(0, planeInfo.position, Quaternion.LookRotation(planeInfo.up), 1, EventType.Repaint);
         }
+#endif
     }
 }
