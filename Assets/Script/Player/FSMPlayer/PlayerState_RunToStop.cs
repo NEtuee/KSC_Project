@@ -23,6 +23,8 @@ public class PlayerState_RunToStop : PlayerState
         playerUnit.CurrentSpeed = 0.0f;
         playerUnit.HorizonWeight = 0.0f;
 
+        playerUnit.CanSkipRunToStop = false;
+
         ComputeMoveDir(playerUnit);
     }
 
@@ -41,6 +43,14 @@ public class PlayerState_RunToStop : PlayerState
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)
     {
+        if (playerUnit.CanSkipRunToStop == true)
+        {
+            if (playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
+            {
+                animator.SetTrigger("SkipRunToStop");
+                playerUnit.ChangeState(PlayerUnit.defaultState);
+            }
+        }
     }
 
     private void ComputeMoveDir(PlayerUnit playerUnit)

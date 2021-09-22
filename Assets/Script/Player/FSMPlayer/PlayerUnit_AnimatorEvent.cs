@@ -123,4 +123,9 @@ public partial class PlayerUnit
         soundData.id = 1001; soundData.position = footStepPosition; soundData.returnValue = false; soundData.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
+
+    private void CanSkipRunToStopEvent()
+    {
+        CanSkipRunToStop = true;
+    }
 }

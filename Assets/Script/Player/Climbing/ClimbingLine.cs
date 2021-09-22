@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEditor;
 public struct Line
 {
     public int p1;
     public int p2;
+}
+
+public enum DirectionType
+{
+    LeftMin, LeftMax
 }
 
 public class ClimbingLine : MonoBehaviour
@@ -13,6 +18,7 @@ public class ClimbingLine : MonoBehaviour
     [SerializeField] public List<Transform> points = new List<Transform>();
     [SerializeField] public List<Transform> planeInfo = new List<Transform>();
     [SerializeField] private GameObject maker;
+    public DirectionType directionType;
 
     public bool DetectLine(Vector3 start, Vector3 end, float radius, Transform playerPos,out Vector3 nearPoint, ref Line line)
     {
@@ -134,6 +140,9 @@ public class ClimbingLine : MonoBehaviour
     public Transform GetPlaneInfo(int leftNum, int rightNum)
     {
         int result = Mathf.Min(leftNum, rightNum);
+        if (planeInfo.Count < result + 1)
+            return null;
+
         return planeInfo[result];
     }
 
@@ -148,9 +157,13 @@ public class ClimbingLine : MonoBehaviour
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(points[i].position, size);
+            Handles.Label(points[i].position, i.ToString());
 
             if (i == 0)
+            {
+                Handles.Label(points[i].position + Vector3.up*0.5f, gameObject.name);
                 continue;
+            }
 
             Gizmos.color = Color.red;
             Gizmos.DrawLine(points[i].position, points[i - 1].position);
@@ -158,12 +171,20 @@ public class ClimbingLine : MonoBehaviour
 
         foreach(var planeInfo in planeInfo)
         {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawRay(planeInfo.position, planeInfo.forward * 0.5f);
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(planeInfo.position, planeInfo.right * 0.5f);
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(planeInfo.position, planeInfo.up * 0.5f);
+            //Gizmos.color = Color.blue;
+            //Gizmos.DrawRay(planeInfo.position, planeInfo.forward * 0.75f);
+            Handles.color = Handles.zAxisColor;
+            Handles.ArrowHandleCap(0, planeInfo.position, Quaternion.LookRotation(planeInfo.forward),1,EventType.Repaint);
+
+            //Gizmos.color = Color.red;
+            //Gizmos.DrawRay(planeInfo.position, planeInfo.right * 0.75f);
+            Handles.color = Handles.xAxisColor;
+            Handles.ArrowHandleCap(0, planeInfo.position, Quaternion.LookRotation(planeInfo.right), 1, EventType.Repaint);
+
+            //Gizmos.color = Color.green;
+            //Gizmos.DrawRay(planeInfo.position, planeInfo.up * 0.75f);
+            Handles.color = Handles.yAxisColor;
+            Handles.ArrowHandleCap(0, planeInfo.position, Quaternion.LookRotation(planeInfo.up), 1, EventType.Repaint);
         }
     }
 }

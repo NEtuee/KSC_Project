@@ -39,6 +39,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float HorizonWeight { get => _horizonWeight; set => _horizonWeight = value; }
 
     public bool canGroundCheck = true;
+    public bool CanSkipRunToStop { get => _canSkipRunToStop; set => _canSkipRunToStop = value; }
     #endregion
 
     #region Climbing Property
@@ -1021,6 +1022,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private Vector3 _prevDir;
     private Vector3 _lookDir;
     private float _runToStopTime = 0.0f;
+    private bool _canSkipRunToStop = false;
 
     [Header("Climbing")]
     [SerializeField] private bool isClimbingMove = false;
@@ -1302,5 +1304,5 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
 public enum ClimbDir
 {
-    Left,Right
+    Left,Right,Stop
 }
