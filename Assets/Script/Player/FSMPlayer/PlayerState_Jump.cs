@@ -64,6 +64,12 @@ public class PlayerState_Jump : PlayerState
             playerUnit.MoveDir.Normalize();
             playerUnit.LookDir = playerUnit.MoveDir;
         }
+        else
+        {
+            playerUnit.MoveDir = playerUnit.PrevDir;
+            playerUnit.MoveDir.Normalize();
+            playerUnit.LookDir = playerUnit.MoveDir;
+        }
 
         Quaternion targetRotation = Quaternion.identity;
         if (playerUnit.CurrentSpeed != 0.0f && playerUnit.LookDir != Vector3.zero)

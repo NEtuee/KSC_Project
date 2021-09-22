@@ -44,6 +44,9 @@ public class CutsceneManager : ManagerBase
 
     public void SkipCutscene()
     {
-        _currentTimeline?.End();
+        _currentTimeline.playableDirector.time = _currentTimeline.endSignalTime;
+        // _currentTimeline.playableDirector.Pause();
+        // _currentTimeline?.End();
+        
     }
 }

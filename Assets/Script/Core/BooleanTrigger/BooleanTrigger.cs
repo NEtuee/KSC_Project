@@ -66,6 +66,21 @@ public class BooleanTrigger : ScriptableObject
         });
     }
 
+    public void CopyTarget(BooleanTrigger target)
+    {
+        booleans.Clear();
+
+        foreach(var item in target.booleans)
+        {
+            var boolean = new BooleanTuple();
+            boolean.description = item.description;
+            boolean.name = item.name;
+            boolean.trigger = item.trigger;
+
+            booleans.Add(boolean);
+        }
+    }
+
     public void SaveDataToFile(string name)
     {
         List<string> dataList = new List<string>();
@@ -78,29 +93,48 @@ public class BooleanTrigger : ScriptableObject
         IOControl.WriteStringToFile_NoMark(dataList.ToArray(),name);
     }
 
-    public void LoadDataFromFile(string name, bool addMissing)
+    public bool LoadDataFromFile(string name, bool addMissing)
     {
         var dataArray = IOControl.ReadStringFromFile(name);
 
-        foreach(var data in dataArray)
-        {
-            var tuple = DataToTuple(data);
-            var trigger = FindTrigger(tuple.name);
+        if(dataArray == null)
+            return false;
 
-            if(trigger == null && addMissing)
+        try
+        {
+            foreach(var data in dataArray)
             {
-                booleans.Add(tuple);
-            }
-            else if(trigger != null)
-            {
-                trigger.trigger = tuple.trigger;
+                if(data == "")
+                    continue;
+                    
+                var tuple = DataToTuple(data);
+                var trigger = FindTrigger(tuple.name);
+
+                if(trigger == null && addMissing)
+                {
+                    booleans.Add(tuple);
+                }
+                else if(trigger != null)
+                {
+                    trigger.trigger = tuple.trigger;
+                }
             }
         }
+        catch
+        {
+            Debug.Log("Incorrect Save Data!");
+            return false;
+        }
+
+        
+
+        return true;
     }
 
     public BooleanTuple DataToTuple(string data)
     {
         var dataArray = data.Split(':');
+        Debug.Log(data);
 
         return new BooleanTuple{name = dataArray[0], trigger = dataArray[1] == "1"};
     }
