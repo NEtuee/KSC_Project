@@ -108,6 +108,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
+                },
+                {
+                    "name": "RunConvert",
+                    "type": "Button",
+                    "id": "5899864d-300c-4cde-967d-26623f910748",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
@@ -202,8 +210,8 @@
                 {
                     "name": "",
                     "id": "ef1ec1b7-527e-4e0d-8227-ec146152dc0f",
-                    "path": "<Keyboard>/leftCtrl",
-                    "interactions": "Press",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Run",
@@ -214,7 +222,7 @@
                     "name": "",
                     "id": "d8a10ca4-9ac1-40cd-bced-5c96277a3310",
                     "path": "<Gamepad>/leftShoulder",
-                    "interactions": "Press",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Run",
@@ -438,6 +446,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Kick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d2c6aef1-0707-4bce-9768-fdde1e9d9b60",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "RunConvert",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

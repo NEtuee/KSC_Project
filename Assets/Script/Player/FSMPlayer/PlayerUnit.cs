@@ -104,6 +104,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public LedgeChecker LedgeChecker => ledgeChecker;
     public SpaceChecker SpaceChecker => spaceChecker;
     public Vector3 WallUnderCheckOffset => wallUnderCheckOffset;
+    public Vector3 DetectionOffset => detectionOffset;
     public bool LedgeUpAdjust { get => _ledUpAdjust; set => _ledUpAdjust = value; }
 
     #endregion
@@ -188,6 +189,11 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             _chargeSoundEmitter = (FMODUnity.StudioEventEmitter)msg.data;
         });
+
+        AddAction(MessageTitles.set_climbingLineManager, (msg) =>
+        {
+            _climbingLineManager = (ClimbingLineManager)msg.data;
+        });
     }
 
     public override void Initialize()
@@ -253,7 +259,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         _currentState.UpdateState(this, _animator);
 
-        if(Keyboard.current.qKey.wasPressedThisFrame)
+        if (Keyboard.current.qKey.wasPressedThisFrame)
         {
             energy.Value = 100.0f;
         }
@@ -264,25 +270,25 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _prevDir = _lookDir;
 
         UpdateStamina(Time.fixedDeltaTime);
-        
-        if(canGroundCheck)
+
+        if (canGroundCheck)
             CheckGround();
-            
+
         CheckRunToStop(Time.fixedDeltaTime);
 
         _currentState.FixedUpdateState(this, _animator);
 
-        CheckTurnBack();
+        //CheckTurnBack();
 
         MoveConservation();
 
-        if(_currentState != jumpState)
+        if (_currentState != jumpState)
         {
             InitVelocity();
         }
 
         RaycastHit nearHit;
-        isNearGround = Physics.Raycast(transform.position, -transform.up,out nearHit, 1.0f, groundLayer);
+        isNearGround = Physics.Raycast(transform.position, -transform.up, out nearHit, 1.0f, groundLayer);
         float nearGroundAngle = Mathf.Acos(Vector3.Dot(nearHit.normal, Vector3.up)) * Mathf.Rad2Deg;
         if (float.IsNaN(nearGroundAngle)) nearGroundAngle = 0f;
 
@@ -296,7 +302,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     private void LateUpdate()
     {
-        if(_currentState == aimingState)
+        if (_currentState == aimingState)
         {
             Vector3 dir = (spine.position - lookAtAim.position).normalized;
             Quaternion originalRot = spine.rotation;
@@ -338,9 +344,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     /// <param name="direction"></param>
     /// <param name="deltaTime"></param>
     /// <param name="noDelta"></param>
-    public void Move(Vector3 direction, float deltaTime = 0f ,bool noDelta = false)
+    public void Move(Vector3 direction, float deltaTime = 0f, bool noDelta = false)
     {
-        if(noDelta == false)
+        if (noDelta == false)
             transform.position += direction * deltaTime;
         else
             transform.position += direction;
@@ -384,7 +390,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
             _currentState == runToStopState ||
             _currentState == highLandingState ||
             _currentState == ragdollState ||
-            _currentState == respawnState )
+            _currentState == respawnState)
             return;
 
         if (_inputVertical != 0 || _inputHorizontal != 0)
@@ -407,22 +413,22 @@ public partial class PlayerUnit : UnTransfromObjectBase
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed *2);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed * 2);
         }
     }
 
     private void UpdateStamina(float deltaTime)
     {
-        if(_currentState == grabState ||
-            _currentState == readyGrabState||
-            _currentState == hangLedgeState||
-            _currentState == readyClimbingJumpState||
-            _currentState == climbingJumpState||
+        if (_currentState == grabState ||
+            _currentState == readyGrabState ||
+            _currentState == hangLedgeState ||
+            _currentState == readyClimbingJumpState ||
+            _currentState == climbingJumpState ||
             _currentState == ledgeUpState)
         {
             _staminaTimer.InitTimer("Stamina", 0.0f, staminaRestoreDelayTime);
 
-            if(isClimbingMove == false)
+            if (isClimbingMove == false)
             {
                 stamina.Value -= idleConsumeValue * deltaTime;
             }
@@ -469,13 +475,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
                 isGrounded = true;
                 isJumping = false;
 
-                if(detectObject != null && detectObject.CompareTag("Enviroment"))
+                if (detectObject != null && detectObject.CompareTag("Enviroment"))
                 {
                     transform.SetParent(detectObject);
                 }
                 else
                 {
-                    if(JumpStart == false &&
+                    if (JumpStart == false &&
                         _currentState != grabState &&
                         _currentState != ledgeUpState &&
                         _currentState != hangLedgeState &&
@@ -496,12 +502,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             if (groundDistance >= groundMaxDistance)
             {
-                if(isGrounded == true)
+                if (isGrounded == true)
                 {
                     prevParent = transform.parent;
                     detachTime = Time.time;
 
-                    if(prevParent != null)
+                    if (prevParent != null)
                     {
                         prevParentPrevPos = prevParent.position;
                         keepSpeed = true;
@@ -514,7 +520,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
                 }
 
                 isGrounded = false;
-                if(JumpStart == false &&
+                if (JumpStart == false &&
                         _currentState != grabState &&
                         _currentState != readyGrabState &&
                         _currentState != ledgeUpState &&
@@ -604,7 +610,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             _runTime += deltaTime;
         }
-        else if(currentSpeed == 0f)
+        else if (currentSpeed == 0f)
         {
             _runTime = 0f;
         }
@@ -615,7 +621,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (climbingVertical == -1.0)
             return;
 
-        if(ledgeChecker.IsDetectedLedge() == true && isClimbingGround == false)
+        if (ledgeChecker.IsDetectedLedge() == true && isClimbingGround == false)
         {
             if (DetectLedgeCanHangLedgeByVertexColor() == true)
             {
@@ -757,18 +763,18 @@ public partial class PlayerUnit : UnTransfromObjectBase
             return;
 
         hp.Value -= damage;
-        if(restoreEnergy == true)
+        if (restoreEnergy == true)
         {
             AddEnergy(hitEnergyRestoreValue);
         }
 
-        if(isHpRestore == true)
+        if (isHpRestore == true)
         {
             isHpRestore = false;
             StopCoroutine(restoreHpPackCoroutine);
         }
 
-        if(hp.Value <= 0.0f)
+        if (hp.Value <= 0.0f)
         {
             PlayerDead();
         }
@@ -804,6 +810,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _animator.SetFloat("Speed", 0.0f);
         _animator.SetBool("Respawn", false);
         ChangeState(defaultState);
+
+        bCanDash = true;
+        bCanQuickStanding = true;
+
+        currentDashCoolTime.Value = dashCoolTime;
+        currentQuickStandingCoolTime.Value = quickStandingCoolTime;
     }
 
     public void InitStatus()
@@ -961,7 +973,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         bCanDash = false;
         currentDashCoolTime.Value = 0.0f;
-        while(currentDashCoolTime.Value < DashCoolTime)
+        while (currentDashCoolTime.Value < DashCoolTime)
         {
             currentDashCoolTime.Value += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
@@ -1008,13 +1020,14 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float currentSpeed;
     [SerializeField] private float accelerateSpeed = 20.0f;
     [SerializeField] private float rotationSpeed = 6.0f;
-    [SerializeField]private float _runTime = 0.0f;
+    [SerializeField] private float _runTime = 0.0f;
     private float _runToStopMinmumTime = 2f;
     private float _horizonWeight = 0.0f;
     private Vector3 _moveDir;
     private Vector3 _prevDir;
     private Vector3 _lookDir;
     private float _runToStopTime = 0.0f;
+    private bool _runKeyRevert = false;
 
     [Header("Climbing")]
     [SerializeField] private bool isClimbingMove = false;
@@ -1033,7 +1046,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask frontCheckLayer;
     [SerializeField] private LayerMask kickLayer;
-    
+
     [Header("Jump")]
     [SerializeField] private float jumpPower;
     [SerializeField] private float minJumpPower = -20;
@@ -1136,6 +1149,45 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private Transform steamPosition;
     [SerializeField] private Transform dechargingEffectTransform;
 
+    [Header("ClimbingLine")]
+    [SerializeField] private ClimbingLine testLine;
+    public Transform leftPoint;
+    public Transform rightPoint;
+    public int leftPointNum;
+    public int rightPointNum;
+    public Transform nearPointMarker;
+    public ClimbDir climbDir;
+    public ClimbingLine Line { get => testLine; set => testLine = value; }
+
+    private ClimbingLineManager _climbingLineManager;
+    public ClimbingLineManager ClimbingLineManager => _climbingLineManager;
+
+    [Header("Detection Capsule")]
+    [SerializeField] private Vector3 start;
+    [SerializeField] private Vector3 end;
+    [SerializeField] private float radius;
+
+    public Vector3 CapsuleStart { get { return transform.TransformPoint(start); } }
+    public Vector3 CapsuleEnd { get { return transform.TransformPoint(end); } }
+    public float CapsuleRadius => radius;
+
+    public Transform LeftPoint { get => leftPoint; set => leftPoint = value; }
+    public Transform RightPoint { get => rightPoint; set => rightPoint = value; }
+
+    public void SetLine(Line line)
+    {
+        
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(CapsuleStart, radius);
+        Gizmos.DrawWireSphere(CapsuleEnd, radius);
+        Gizmos.DrawLine(CapsuleStart, CapsuleEnd);
+    }
+
     #region InputSystem
 
     public void OnMove(InputAction.CallbackContext value)
@@ -1163,14 +1215,40 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (value.performed == false || Time.timeScale == 0f)
             return;
 
-        if (isWalk)
-        {
-            isWalk = false;
-        }
-        else
-        {
-            isWalk = true;
-        }
+        //if (value.action.WasPressedThisFrame())
+        //{
+        //    if(_runKeyRevert == false)
+        //    {
+        //        isWalk = true;
+        //    }
+        //    else
+        //    {
+        //        isWalk = false;
+        //    }
+        //}
+        //else if(value.action.WasReleasedThisFrame())
+        //{
+        //    if (_runKeyRevert == false)
+        //    {
+        //        isWalk = false;
+        //    }
+        //    else
+        //    {
+        //        isWalk = true;
+        //    }
+        //}
+
+        isWalk = !isWalk;
+    }
+
+    public void OnRunConvert(InputAction.CallbackContext value)
+    {
+        if (value.performed == false || Time.timeScale == 0f)
+            return;
+
+        //Debug.Log("RunConvert");
+        //_runKeyRevert = !_runKeyRevert;
+        isWalk = !isWalk;
     }
 
     public void OnAim(InputAction.CallbackContext value)
@@ -1253,4 +1331,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     }
 
     #endregion
+}
+
+public enum ClimbDir
+{
+    Left,Right
 }
