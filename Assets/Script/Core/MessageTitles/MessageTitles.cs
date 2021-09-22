@@ -398,6 +398,14 @@ public static partial class MessageTitles
 
     #endregion
 
+    #region ClimbingLineManager
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort climbingLineManager_getClimbingLineManager = 0x1101;
+    #endregion
+
     #region Setter
     /// data = null
     /// </summary>
@@ -429,4 +437,9 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort object_kick = 0x1004;
+
+    /// <summary>
+    /// data = ClimbingLineManager
+    /// </summary>
+    public const ushort set_climbingLineManager = 0x1005;
 }
