@@ -38,6 +38,8 @@ public class BuildSceneEditor : EditorWindow
             _setData.scenes[_selectItem] = _setData.scenes[_selectItem - 1];
             _setData.scenes[_selectItem - 1] = target;
 
+            EditorUtility.SetDirty(_setData);
+
             --_selectItem;
         }
 
@@ -46,6 +48,8 @@ public class BuildSceneEditor : EditorWindow
             var target = _setData.scenes[_selectItem];
             _setData.scenes[_selectItem] = _setData.scenes[_selectItem + 1];
             _setData.scenes[_selectItem + 1] = target;
+
+            EditorUtility.SetDirty(_setData);
 
             ++_selectItem;
         }

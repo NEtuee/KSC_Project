@@ -5,6 +5,13 @@ using UnityEngine.InputSystem;
 
 public class FollowTargetCtrl : UnTransfromObjectBase
 {
+
+    public RectTransform aimTransform;
+    public float crosshairMovingSpeed = 5f;
+    public float aimLimitDist = 500f;
+    public float aimMovingSpeed = 2.5f;
+    public float spineRotateDivide = 1000f;
+
     [SerializeField] private bool visible = true;
     public bool Visible => visible;
     [SerializeField] private Transform target;
@@ -20,6 +27,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     private float _mouseX;
     private float _mouseY;
+
+    private bool _isAim = false;
 
     public float YawRotateSpeed
     {
@@ -38,6 +47,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     private float currentYawRotVelocity;
     private float currentPitchRotVelocity;
+
+    private Vector2 currentAimVelocity;
 
     private Vector3 smoothVelocity;
 
@@ -63,64 +74,11 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         targetRot = currentRot;
 
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
-        //if(_player.updateMethod == UpdateMethod.Update)
-        //{
-        //    updateMode = true;
-        //}
-        //else
-        //{
-        //    updateMode = false;
-        //}
-    }
 
-
-    void Update()
-    {
-        //if (updateMode == false)
-        //    return;
-
-        //if (!visible)
-        //    return;
-        //if (Input.GetKeyDown(KeyCode.Alpha0))
-        //{
-        //    transform.rotation = Camera.main.transform.rotation;
-        //    transform.position = Camera.main.transform.position;
-        //    currentRot = Camera.main.transform.rotation.eulerAngles;
-        //    targetRot = Camera.main.transform.rotation.eulerAngles;
-        //    Resume();
-        //}
-
-        //transform.position = Vector3.SmoothDamp(transform.position, target.position + Vector3.up, ref smoothVelocity, 3.0f * Time.deltaTime);
-        //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, Time.unscaledDeltaTime * followSmooth);
-        //transform.position = target.position + Vector3.up;
-        //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
-
-        //if(_player.CheckAimLock())
-        //    return;
-
-        //float mouseX = InputManager.Instance.GetCameraAxisX();
-        //float mouseY = InputManager.Instance.GetCameraAxisY();
-
-        //targetRot.y += _mouseX * yawRotateSpeed * Time.unscaledDeltaTime;
-        //targetRot.x += _mouseY * pitchRotateSpeed * Time.unscaledDeltaTime;
-
-        //targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
-
-        //currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
-        //currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
-
-        ////currentRot.x = targetRot.x;
-        ////currentRot.y = targetRot.y;
-
-        //Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
-        //transform.rotation = localRotation;
     }
 
     private void FixedUpdate()
     {
-        //if (GameManager.Instance.PAUSE == true)
-        //    return;
-
         if (_player.GetState == PlayerUnit.deadState)
             return;
 
@@ -129,27 +87,59 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
         transform.position = target.position + Vector3.up;
 
-        //float mouseX = InputManager.Instance.GetCameraAxisX();
-        //float mouseY = InputManager.Instance.GetCameraAxisY();
 
         targetRot.y += _mouseX * yawRotateSpeed * Time.fixedUnscaledDeltaTime;
         targetRot.x += _mouseY * pitchRotateSpeed * Time.fixedUnscaledDeltaTime;
 
-        targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+        if(_isAim)
+        {
+            var target = targetRot;
+            target.x = target.y;
+            target.y = -targetRot.x;
+            aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition,target * crosshairMovingSpeed,
+                                                            ref currentAimVelocity,rotSmooth);
+            
+            if(aimTransform.anchoredPosition.magnitude > aimLimitDist)
+            {
+                var dir = aimTransform.anchoredPosition.normalized;
+                var camFactor = aimTransform.anchoredPosition - (dir * aimLimitDist);
+                aimTransform.anchoredPosition -= camFactor;
+                
+                targetRot.x = -aimTransform.anchoredPosition.y;
+                targetRot.y = aimTransform.anchoredPosition.x;
+                targetRot /= crosshairMovingSpeed;
 
-        currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
-        currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
+                var x = camFactor.x;
+                camFactor.x = -camFactor.y;
+                camFactor.y = x;
 
-        //currentRot.x = targetRot.x;
-        //currentRot.y = targetRot.y;
+                var euler = transform.eulerAngles;
+                euler.x = ToWrapAngle(euler.x);
 
-        Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
-        transform.rotation = localRotation;
+                var rot = (Vector3)(camFactor * crosshairMovingSpeed * aimMovingSpeed * Time.fixedUnscaledDeltaTime) + euler;
+                rot.x = Mathf.Clamp(rot.x, pitchLimitMin, pitchLimitMax);
+                Quaternion rotation = Quaternion.Euler(rot.x, rot.y, 0f);
+                transform.rotation = rotation;
+            }
 
-        //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, followSmooth * Time.fixedDeltaTime);
-        //transform.position = Vector3.SmoothDamp(transform.position, target.position + Vector3.up, ref smoothVelocity,5.0f*Time.fixedDeltaTime);
-        //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.fixedDeltaTime);
-        //transform.position = Vector3.MoveTowards(transform.position, target.position + Vector3.up, 8.0f * Time.fixedDeltaTime);
+            var spineRot = aimTransform.anchoredPosition / spineRotateDivide;
+            spineRot.y *= -1f;
+            MathEx.Swap<float>(ref spineRot.x, ref spineRot.y);
+            
+            var data = MessageDataPooling.GetMessageData<MD.Vector3Data>();
+            data.value = spineRot;
+            SendMessageEx(MessageTitles.playermanager_setSpineRotation,GetSavedNumber("PlayerManager"),data);
+        }
+        else
+        {
+            targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+            currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
+            currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
+
+            Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
+            transform.rotation = localRotation;
+        }
+
     }
 
     private void LateUpdate()
@@ -209,5 +199,36 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         Vector2 inputVector = value.ReadValue<Vector2>();
         _mouseY = inputVector.y;
         _mouseX = inputVector.x;
+    }
+
+    public void SetAim(bool active)
+    {
+        _isAim = active;
+
+        if(_isAim)
+        {
+            aimTransform.anchoredPosition = Vector2.zero;
+            currentRot = Vector3.zero;
+        }
+        else
+        {
+            currentRot = transform.rotation.eulerAngles;
+
+            currentRot.x = ToWrapAngle(currentRot.x);
+
+            currentPitchRotVelocity = 0f;
+            currentYawRotVelocity = 0f;
+        }
+        
+        targetRot = currentRot;
+    }
+
+    public float ToWrapAngle(float angle)
+    {
+        angle %= 360;
+        if(angle >180)
+            angle -= 360;
+        
+        return angle;
     }
 }
