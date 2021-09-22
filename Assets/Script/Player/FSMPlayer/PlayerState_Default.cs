@@ -269,4 +269,12 @@ public class PlayerState_Default : PlayerState
 
         playerUnit.ChangeState(PlayerUnit.dashState);
     }
+
+    public override void OnKick(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+        if(playerUnit.CurrentSpeed == 0.0f)
+        {
+            playerUnit.ChangeState(PlayerUnit.kickState);
+        }
+    }
 }

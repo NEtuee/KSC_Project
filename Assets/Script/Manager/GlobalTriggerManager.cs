@@ -15,6 +15,16 @@ public class GlobalTriggerManager : ManagerBase
         AddAction(MessageTitles.boolTrigger_getTriggerAsset,GetGlobalTriggerAsset);
         AddAction(MessageTitles.boolTrigger_getTrigger,GetGlobalTrigger);
         AddAction(MessageTitles.boolTrigger_setTrigger,SetGlobalTrigger);
+
+        var save = ScriptableObject.Instantiate(globalTrigger);
+
+        if(!globalTrigger.LoadDataFromFile("SaveData",true))
+        {
+            globalTrigger.CopyTarget(save);
+            globalTrigger.SaveDataToFile("SaveData");
+        }
+
+        ScriptableObject.DestroyImmediate(save,true);
     }
 
     public void GetGlobalTriggerAsset(Message msg)

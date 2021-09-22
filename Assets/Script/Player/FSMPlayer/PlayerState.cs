@@ -44,4 +44,8 @@ public abstract class PlayerState : MonoBehaviour
     public virtual void OnQuickStand(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
     }
+
+    public virtual void OnKick(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+    }
 }

@@ -123,4 +123,24 @@ public partial class PlayerUnit
         soundData.id = 1001; soundData.position = footStepPosition; soundData.returnValue = false; soundData.dontStop = false;
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
+
+    private void CanSkipRunToStopEvent()
+    {
+        CanSkipRunToStop = true;
+    }
+
+    private void Kick()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + CapsuleCollider.center, transform.forward, out hit, 4f, kickLayer))
+        {
+            MessageReceiver receiver;
+            if (hit.collider.TryGetComponent<MessageReceiver>(out receiver))
+            {
+                Message msg = new Message();
+                msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, null, (Object)this);
+                receiver.ReceiveMessage(msg);
+            }
+        }
+    }
 }

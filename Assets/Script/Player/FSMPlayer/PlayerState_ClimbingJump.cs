@@ -141,94 +141,73 @@ public class PlayerState_ClimbingJump : PlayerState
 
     public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        Vector3 point1;
-        RaycastHit hit;
-        Transform playerTransform = playerUnit.Transform;
-        if (playerUnit.stamina.Value > 0.0f)
+        if (playerUnit.ClimbingLineManager == null)
+            return;
+
+        Vector3 nearPosition = new Vector3();
+        Line line = new Line();
+
+        bool detect = false;
+        ClimbingLine detectLine = null;
+        Line detectLineElement = new Line();
+        Vector3 prevNearPosition = new Vector3();
+        Vector3 finalNearPosition = new Vector3();
+        foreach (var climbingLine in playerUnit.ClimbingLineManager.climbingLines)
         {
-            point1 = playerTransform.position + playerUnit.CapsuleCollider.center - playerTransform.forward;
-            if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius * 1.5f, playerTransform.forward, out hit, 3f, playerUnit.DetectionLayer))
+            if (climbingLine.DetectLine(playerUnit.CapsuleStart, playerUnit.CapsuleEnd, playerUnit.CapsuleRadius, playerUnit.Transform, out nearPosition, ref line))
             {
-                if (playerUnit.DetectionCanClimbingAreaByVertexColor(point1, playerTransform.forward, 3f) == true)
+                detect = true;
+                if (detectLine == null)
                 {
-                    return;
-                }
-
-                if (Physics.Raycast(playerTransform.position + playerTransform.TransformDirection(playerUnit.WallUnderCheckOffset), playerTransform.forward, 3f, playerUnit.DetectionLayer) == false)
-                {
-                    return;
-                }
-
-                playerUnit.Transform.SetParent(hit.collider.transform);
-                playerUnit.Attach();
-
-                if (playerUnit.LedgeChecker.IsDetectedLedge() == false)
-                {
-                    playerUnit.ChangeState(PlayerUnit.readyGrabState);
+                    detectLine = climbingLine;
+                    detectLineElement = line;
+                    prevNearPosition = nearPosition;
+                    finalNearPosition = nearPosition;
                 }
                 else
                 {
-                    playerUnit.ChangeState(PlayerUnit.grabState);
-                    playerUnit.ChangeState(PlayerUnit.hangLedgeState);
-
+                    if (Vector3.SqrMagnitude(nearPosition - playerUnit.CapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - playerUnit.CapsuleStart))
+                    {
+                        detectLine = climbingLine;
+                        detectLineElement = line;
+                        prevNearPosition = nearPosition;
+                        finalNearPosition = nearPosition;
+                    }
                 }
+            }
+        }
 
-                playerUnit.Transform.rotation = Quaternion.LookRotation(-hit.normal);
-                playerUnit.Transform.position = (hit.point - playerUnit.Transform.up * (playerUnit.CapsuleCollider.height * 0.5f)) + (hit.normal) * 0.05f;
 
-                playerUnit.MoveDir = Vector3.zero;
+        if (detect == true)
+        {
+            playerUnit.Line = detectLine;
+            playerUnit.nearPointMarker.position = finalNearPosition;
+            playerUnit.StartLineClimbing(finalNearPosition);
+            //Vector3 playerToP1 = (playerUnit.Line.points[detectLineElement.p1].position - playerUnit.Transform.position).normalized;
+            //Vector3 playerForward = playerUnit.Transform.forward;
+            //playerForward.y = 0.0f;
+            //playerForward.Normalize();
+            //Vector3 cross = Vector3.Cross(playerToP1, playerForward);
+            //if (Vector3.Dot(cross, Vector3.up) > 0)
+            //{
+            //    playerUnit.rightPointNum = detectLineElement.p2;
+            //    playerUnit.leftPointNum = detectLineElement.p1;
+            //}
+            //else
+            //{
+            //    playerUnit.rightPointNum = detectLineElement.p1;
+            //    playerUnit.leftPointNum = detectLineElement.p2;
+            //}
 
-                return;
+            if(playerUnit.Line.directionType == DirectionType.LeftMin)
+            {
+                playerUnit.leftPointNum = Mathf.Min(detectLineElement.p1, detectLineElement.p2);
+                playerUnit.rightPointNum = Mathf.Max(detectLineElement.p1, detectLineElement.p2);
             }
             else
             {
-                point1 = playerTransform.position + Vector3.up;
-                if (Physics.Raycast(point1, -playerTransform.up, out hit, 1.5f, playerUnit.DetectionLayer))
-                {
-                    point1 += playerTransform.forward;
-                    if (Physics.Raycast(point1, -playerTransform.up, 1.5f, playerUnit.DetectionLayer) == false)
-                        return;
-
-                    playerTransform.rotation = Quaternion.LookRotation(-hit.normal, playerTransform.forward);
-                    playerTransform.position = (hit.point) + (hit.normal) * playerUnit.CapsuleCollider.radius;
-
-                    playerTransform.SetParent(hit.collider.transform);
-                    playerUnit.Attach();
-                    playerUnit.MoveDir = Vector3.zero;
-
-                    playerUnit.ChangeState(PlayerUnit.readyGrabState);
-
-                    return;
-                }
-            }
-
-            point1 = playerTransform.position + playerTransform.up * playerUnit.CapsuleCollider.height * 0.5f - playerTransform.forward;
-            if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius, playerTransform.forward, out hit, 5f, playerUnit.LedgeAbleLayer))
-            {
-                RaycastHit ledgePointHit;
-                point1 = playerTransform.position + playerTransform.up * playerUnit.CapsuleCollider.height * 2;
-                if (Physics.SphereCast(point1, playerUnit.CapsuleCollider.radius * 2f, -playerTransform.up, out ledgePointHit,
-                    playerUnit.CapsuleCollider.height * 2, playerUnit.AdjustAbleLayer))
-                {
-                    if (Vector3.Distance(ledgePointHit.point, playerTransform.position) > playerUnit.HangAbleEdgeDist)
-                    {
-                        return;
-                    }
-
-                    playerTransform.rotation = Quaternion.LookRotation(-hit.normal);
-                    playerTransform.position = (hit.point - playerTransform.up * (playerUnit.CapsuleCollider.height * 0.5f)) + (hit.normal) * 0.05f;
-
-                    playerUnit.InitVelocity();
-                    playerUnit.MoveDir = Vector3.zero;
-
-                    playerTransform.SetParent(hit.collider.transform);
-                    playerUnit.Attach();
-
-                    playerUnit.ChangeState(PlayerUnit.grabState);
-                    playerUnit.ChangeState(PlayerUnit.hangEdgeState);
-
-                    return;
-                }
+                playerUnit.leftPointNum = Mathf.Max(detectLineElement.p1, detectLineElement.p2);
+                playerUnit.rightPointNum = Mathf.Min(detectLineElement.p1, detectLineElement.p2);
             }
         }
     }
