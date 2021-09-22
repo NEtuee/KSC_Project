@@ -308,7 +308,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
             Vector3 dir = (spine.position - lookAtAim.position).normalized;
             Quaternion originalRot = spine.rotation;
             var spineRotation = spine.rotation;
-            spineRotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVector);
+            spineRotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVector + addibleSpineVector);
             spineRotation *= Quaternion.Inverse(transform.rotation);
             spineRotation *= originalRot;
             spine.rotation = spineRotation;
@@ -1105,6 +1105,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Spine")]
     [SerializeField] private Transform lookAtAim;
     [SerializeField] private Vector3 relativeVector;
+    [HideInInspector]public Vector3 addibleSpineVector;
     private Transform spine;
 
     [Header("Detect")]

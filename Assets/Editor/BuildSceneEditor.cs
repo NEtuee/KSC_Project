@@ -24,9 +24,15 @@ public class BuildSceneEditor : EditorWindow
     {
         if(_setData == null)
         {
-            Debug.Log("Set data is missing");
-            Close();
-            return;
+            _setData = (BuildScenesSetEx)AssetDatabase.LoadAssetAtPath("Assets/Settings/BuildScenesSetEx.asset",typeof(BuildScenesSetEx));
+
+            if(_setData == null)
+            {
+                Debug.Log("Set data is missing");
+                Close();
+                return;
+            }
+            
         }
 
         GUILayout.BeginHorizontal();
@@ -38,6 +44,8 @@ public class BuildSceneEditor : EditorWindow
             _setData.scenes[_selectItem] = _setData.scenes[_selectItem - 1];
             _setData.scenes[_selectItem - 1] = target;
 
+            EditorUtility.SetDirty(_setData);
+
             --_selectItem;
         }
 
@@ -46,6 +54,8 @@ public class BuildSceneEditor : EditorWindow
             var target = _setData.scenes[_selectItem];
             _setData.scenes[_selectItem] = _setData.scenes[_selectItem + 1];
             _setData.scenes[_selectItem + 1] = target;
+
+            EditorUtility.SetDirty(_setData);
 
             ++_selectItem;
         }

@@ -14,6 +14,7 @@ public class PlayerParamaterWindow : EditorWindow
     private void OnEnable()
     {
         playerUnit = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerUnit>();
+        followTarget = GameObject.Find("FollowTarget").GetComponent<FollowTargetCtrl>();
     }
 
     private void OnGUI()
@@ -21,19 +22,25 @@ public class PlayerParamaterWindow : EditorWindow
         if (playerUnit == null)
             return;
 
-        GUILayout.Label("ÀÌµ¿", EditorStyles.boldLabel);
-        playerUnit.WalkSpeed = EditorGUILayout.FloatField("°È´Â ¼Óµµ", playerUnit.WalkSpeed);
-        playerUnit.RunSpeed = EditorGUILayout.FloatField("¶Ù´Â ¼Óµµ", playerUnit.RunSpeed);
-        playerUnit.AccelerateSpeed = EditorGUILayout.FloatField("°¡¼Ó ¼Óµµ", playerUnit.AccelerateSpeed);
+        GUILayout.Label("ï¿½Ìµï¿½", EditorStyles.boldLabel);
+        playerUnit.WalkSpeed = EditorGUILayout.FloatField("ï¿½È´ï¿½ ï¿½Óµï¿½", playerUnit.WalkSpeed);
+        playerUnit.RunSpeed = EditorGUILayout.FloatField("ï¿½Ù´ï¿½ ï¿½Óµï¿½", playerUnit.RunSpeed);
+        playerUnit.AccelerateSpeed = EditorGUILayout.FloatField("ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½", playerUnit.AccelerateSpeed);
 
-        GUILayout.Label("Ã»°­ ´ë½¬", EditorStyles.boldLabel);
-        playerUnit.DashSpeed = EditorGUILayout.FloatField("´ë½¬ ¼Óµµ", playerUnit.DashSpeed);
-        playerUnit.DashTime = EditorGUILayout.FloatField("´ë½¬ ½Ã°£", playerUnit.DashTime);
-        playerUnit.DashCoolTime = EditorGUILayout.FloatField("´ë½¬ ÄðÅ¸ÀÓ", playerUnit.DashCoolTime);
+        GUILayout.Label("Ã»ï¿½ï¿½ ï¿½ë½¬", EditorStyles.boldLabel);
+        playerUnit.DashSpeed = EditorGUILayout.FloatField("ï¿½ë½¬ ï¿½Óµï¿½", playerUnit.DashSpeed);
+        playerUnit.DashTime = EditorGUILayout.FloatField("ï¿½ë½¬ ï¿½Ã°ï¿½", playerUnit.DashTime);
+        playerUnit.DashCoolTime = EditorGUILayout.FloatField("ï¿½ë½¬ ï¿½ï¿½Å¸ï¿½ï¿½", playerUnit.DashCoolTime);
 
-        GUILayout.Label("Äü ½ºÅÄµù", EditorStyles.boldLabel);
-        playerUnit.QuickStandCoolTime = EditorGUILayout.FloatField("Äü ½ºÅÄµù ÄðÅ¸ÀÓ", playerUnit.QuickStandCoolTime);
+        GUILayout.Label("ï¿½ï¿½ ï¿½ï¿½ï¿½Äµï¿½", EditorStyles.boldLabel);
+        playerUnit.QuickStandCoolTime = EditorGUILayout.FloatField("ï¿½ï¿½ ï¿½ï¿½ï¿½Äµï¿½ ï¿½ï¿½Å¸ï¿½ï¿½", playerUnit.QuickStandCoolTime);
+
+        GUILayout.Label("Aim", EditorStyles.boldLabel);
+        followTarget.crosshairMovingSpeed = EditorGUILayout.FloatField("Crosshair Moving Speed",followTarget.crosshairMovingSpeed);
+        followTarget.aimMovingSpeed = EditorGUILayout.FloatField("Aim Moving Speed",followTarget.aimMovingSpeed);
+        followTarget.aimLimitDist = EditorGUILayout.FloatField("Aim Limit Distance",followTarget.aimLimitDist);
     }
 
     private PlayerUnit playerUnit;
+    private FollowTargetCtrl followTarget;
 }

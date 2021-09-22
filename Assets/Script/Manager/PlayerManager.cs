@@ -109,6 +109,13 @@ public class PlayerManager : ManagerBase
              var data = MessageDataPooling.CastData<FloatData>(msg.data);
              _drone.GetComponent<VolumeChanger>().SetVolume(data.value);
          });
+
+        
+        AddAction(MessageTitles.playermanager_setSpineRotation, (msg) =>
+         {
+             var data = MessageDataPooling.CastData<Vector3Data>(msg.data);
+             _player.addibleSpineVector = data.value;
+         });
     }
 
     public override void Initialize()
