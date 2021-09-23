@@ -93,7 +93,7 @@ public class DroneScaner : UnTransfromObjectBase
 
         if (scaning == true)
         {
-            ScanObject();
+            //ScanObject();
             ScanMessageObject();
         }
     }
@@ -176,6 +176,7 @@ public class DroneScaner : UnTransfromObjectBase
                 {
                     if(!scanableObjects[i].IsTriggered())
                     {
+                        Debug.Log(scanableObjects[i].name);
                         scanableObjects[i].Scanned();
                         _scannedNumbers.Add(scanableObjects[i].uniqueNumber);
                     }
@@ -214,6 +215,7 @@ public class DroneScaner : UnTransfromObjectBase
             {
                 if(scanableObj[i].TryGetComponent<Scanable>(out currentScanable))
                 {
+                    
                     scanableObjects.Add(currentScanable);
                 }
             }

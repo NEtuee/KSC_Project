@@ -19,6 +19,9 @@ public class SceneInfoEx : ScriptableObject
         public Object target;
 
         [SerializeField]
+        public string targetName;
+
+        [SerializeField]
         public bool canLoad = true;
     }
 
@@ -125,9 +128,12 @@ public class SceneInfoExEditor : Editor
 
             var item = new SceneInfoEx.TargetItem();
             item.target = scene;
+            item.targetName = scene.name;
 
             infoEx.targetScenes.Add(item);
         }
+
+        EditorUtility.SetDirty(infoEx);
 
     }
 }

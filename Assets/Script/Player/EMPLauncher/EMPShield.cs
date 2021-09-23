@@ -71,13 +71,22 @@ public class EMPShield : Hitable
             whenReactive += drone.AddScanableObjets;
         }
 
-        //shieldParticle = GetComponent<ParticleSystem>();
+        AddAction(MessageTitles.scan_scanned,(x)=>{
+
+            MD.ScanMakerData data = MessageDataPooling.GetMessageData<MD.ScanMakerData>();
+            data.collider = collider;
+            
+            SendMessageEx(MessageTitles.uimanager_activeScanMaker,GetSavedNumber("UIManager"),data);
+            Scanned();
+        });
     }
 
     public override void Initialize()
     {
         base.Initialize();
         RegisterRequest(GetSavedNumber("ObjectManager"));
+
+        SendMessageQuick(MessageTitles.scan_registerScanObject,UniqueNumberBase.GetSavedNumberStatic("Drone"),this);
     }
 
     // Update is called once per frame

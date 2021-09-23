@@ -190,7 +190,7 @@ public class SceneManagerEx : ManagerBase
         for(int i = 0; i < _currentScene.targetScenes.Count; ++i)
         {
             if(_currentScene.targetScenes[i].canLoad)
-                StartCoroutine(LoadSceneCoroutine(setPos,i == 0,_currentScene.targetScenes[i].target));
+                StartCoroutine(LoadSceneCoroutine(setPos,i == 0,_currentScene.targetScenes[i].targetName));
             else
                 --_loadedScenes;
         }
@@ -258,9 +258,9 @@ public class SceneManagerEx : ManagerBase
         --_loadedScenes;
     }
 
-    IEnumerator LoadSceneCoroutine(bool setPos, bool sceneActive, Object target)
+    IEnumerator LoadSceneCoroutine(bool setPos, bool sceneActive, string target)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(target.name,LoadSceneMode.Additive);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(target,LoadSceneMode.Additive);
         operation.allowSceneActivation = false;
         
         while (operation.isDone == false)
@@ -285,7 +285,7 @@ public class SceneManagerEx : ManagerBase
             SendMessageEx(MessageTitles.uimanager_setloadinggagevalue, GetSavedNumber("UIManager"), data);
         }
 
-        var scene = SceneManager.GetSceneByName(target.name);
+        var scene = SceneManager.GetSceneByName(target);
 
         if(sceneActive)
             SceneManager.SetActiveScene(scene);
