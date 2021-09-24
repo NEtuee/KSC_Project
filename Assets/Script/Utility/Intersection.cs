@@ -16,43 +16,77 @@ public static class Intersection
         float d = Vector3.Dot(u, w);
         float e = Vector3.Dot(v, w);
 
-        float den = a * c - (b * b);
-        if (den == 0)
-            den = Mathf.Epsilon;
+        float den = (a * c) - (b * b);
 
-        float s = ((b * e) - (c * d)) / den;
-        float t = ((a * e) - (b * d)) / den;
+        float sc, sn;
+        float sd = den;
+        float tc, tn;
+        float td = den;
 
-        //if(s <= 0)
-        //{
-        //    s = Vector3.Dot(u, w) / Vector3.Dot(u,u);
-        //}
-        //else if(s>=1)
-        //{
-        //    s = (Vector3.Dot(u, w) + Vector3.Dot(v,u)) / Vector3.Dot(u, u);
-        //}
-
-        if(s <= 0)
+        if (den < Mathf.Epsilon)
         {
-            s = 0;
-            t = Vector3.Dot(v, w) / Vector3.Dot(v, v);
+            sn = 0.0f;
+            sd = 1.0f;
+            tn = e;
+            td = c;
         }
-        else if(s>=1)
+        else
         {
-            s = 1;
-            t = (Vector3.Dot(v, w) + Vector3.Dot(u, v)) / Vector3.Dot(v, v);
+            sn = (b * e - c * d);
+            tn = (a * e - b * d);
+            if (sn < 0.0f)
+            {
+                sn = 0.0f;
+                tn = e;
+                td = c;
+            }
+            else if (sn > sd)
+            {
+                sn = sd;
+                tn = e + b;
+                td = c;
+            }
         }
 
-        s = Mathf.Clamp(t, 0.0f, 1.0f);
-        t = Mathf.Clamp(t, 0.0f, 1.0f);
+        if (tn < 0.0)
+        {
+            tn = 0.0f;
+            if (-d < 0.0f)
+            {
+                sn = 0.0f;
+            }
+            else if (-d > a)
+            {
+                sn = sd;
+            }
+            else
+            {
+                sn = -d;
+                sd = a;
+            }
+        }
+        else if (tn > td)
+        {
+            tn = td;
+            if ((-d + b) < 0.0f)
+            {
+                sn = 0;
+            }
+            else if ((-d + b) > a)
+            {
+                sn = sd;
+            }
+            else
+            {
+                sn = (-d + b);
+                sd = a;
+            }
+        }
 
-        //outS = s;
-        //outT = t;
+        sc = (Mathf.Abs(sn) < Mathf.Epsilon ? 0.0f : sn / sd);
+        tc = (Mathf.Abs(tn) < Mathf.Epsilon ? 0.0f : tn / td);
 
-        Vector3 point1 = p1 + s * u;
-        Vector3 point2 = p3 + t * v;
-
-        return Vector3.Distance(point1, point2);
+        return Vector3.Magnitude(w + (sc * u) - (tc * v));
     }
 
     public static float DistanceLineAndLine(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4,out float outS, out float outT)
@@ -67,12 +101,81 @@ public static class Intersection
         float d = Vector3.Dot(u, w);
         float e = Vector3.Dot(v, w);
 
-        float den = a * c - (b * b);
-        if (den == 0)
-            den = Mathf.Epsilon;
+        float den = (a * c) - (b * b);
 
-        float s = ((b * e) - (c * d)) / den;
-        float t = ((a * e) - (b * d)) / den;
+        float sc, sn;
+        float sd = den;
+        float tc, tn;
+        float td = den;
+
+        if(den < Mathf.Epsilon)
+        {
+            sn = 0.0f;
+            sd = 1.0f;
+            tn = e;
+            td = c;
+        }
+        else
+        {
+            sn = (b * e - c * d);
+            tn = (a * e - b * d);
+            if(sn < 0.0f)
+            {
+                sn = 0.0f;
+                tn = e;
+                td = c;
+            }
+            else if(sn > sd)
+            {
+                sn = sd;
+                tn = e + b;
+                td = c;
+            }
+        }
+
+        if(tn < 0.0)
+        {
+            tn = 0.0f;
+            if(-d < 0.0f)
+            {
+                sn = 0.0f;
+            }
+            else if(-d > a)
+            {
+                sn = sd;
+            }
+            else
+            {
+                sn = -d;
+                sd = a;
+            }
+        }
+        else if(tn > td)
+        {
+            tn = td;
+            if((-d+b)<0.0f)
+            {
+                sn = 0;
+            }
+            else if((-d + b)>a)
+            {
+                sn = sd;
+            }
+            else
+            {
+                sn = (-d + b);
+                sd = a;
+            }
+        }
+
+        sc = (Mathf.Abs(sn) < Mathf.Epsilon ? 0.0f : sn / sd);
+        tc = (Mathf.Abs(tn) < Mathf.Epsilon ? 0.0f : tn / td);
+
+        outS = sc;
+        outT = tc;
+
+        return Vector3.Magnitude(w + (sc * u) - (tc * v));
+
 
         //if(s <= 0)
         //{
@@ -83,30 +186,6 @@ public static class Intersection
         //    s = (Vector3.Dot(u, w) + Vector3.Dot(v,u)) / Vector3.Dot(u, u);
         //}
 
-        if (s <= 0)
-        {
-            s = 0;
-            t = Vector3.Dot(v, w) / Vector3.Dot(v, v);
-        }
-        else if (s >= 1)
-        {
-            s = 1;
-            t = (Vector3.Dot(v, w) + Vector3.Dot(u, v)) / Vector3.Dot(v, v);
-        }
-
-        s = Mathf.Clamp(t, 0.0f, 1.0f);
-        t = Mathf.Clamp(t, 0.0f, 1.0f);
-
-        outS = s;
-        outT = t;
-
-        //outS = s;
-        //outT = t;
-
-        Vector3 point1 = p1 + s * u;
-        Vector3 point2 = p3 + t * v;
-
-        return Vector3.Distance(point1, point2);
     }
 
     public static bool IntersectionCapsuleAndLine(Vector3 start, Vector3 end, float radius, Vector3 lineStart, Vector3 lineEnd)
@@ -116,5 +195,13 @@ public static class Intersection
             return true;
 
         return false;
+    }
+
+    public static Vector3 ShortestPointLineSegmentAndPoint(Vector3 p1, Vector3 p2, Vector3 point)
+    {
+        Vector3 u = p2 - p1;
+        Vector3 v = point - p1;
+
+        return Vector3.Project(v, u);
     }
 }

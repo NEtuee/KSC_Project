@@ -39,6 +39,7 @@ public class ClimbingLineEditor : EditorWindow
             {
                 if (GUILayout.Button(line.gameObject.name))
                 {
+                    Selection.activeObject = line.gameObject;
                     _currentLine = line;
                     _currentMode = 2;
                 }
@@ -62,6 +63,26 @@ public class ClimbingLineEditor : EditorWindow
 
                     if (_currentLine != null)
                     {
+                        if(GUILayout.Button("Direction Filp"))
+                        {
+                            if (_currentLine.directionType == DirectionType.LeftMin)
+                            {
+                                _currentLine.directionType = DirectionType.LeftMax;
+                            }
+                            else 
+                            {
+                                _currentLine.directionType = DirectionType.LeftMin;
+                            }
+                        }
+                        if(_currentLine.directionType == DirectionType.LeftMin)
+                        {
+                            GUILayout.Label("Left : Min  Right : Max");
+                        }
+                        else
+                        {
+                            GUILayout.Label("Left : Max  Right : Min");
+                        }
+
                         _pointListScroll = GUILayout.BeginScrollView(_pointListScroll);
 
                         foreach (var point in _currentLine.points)

@@ -119,19 +119,19 @@ public class PlayerState_Grab : PlayerState
 
     public override void OnGrabRelease(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        playerUnit.IsClimbingMove = false;
-        playerUnit.IsLedge = false;
+        //playerUnit.IsClimbingMove = false;
+        //playerUnit.IsLedge = false;
 
-        Vector3 currentRot = transform.rotation.eulerAngles;
-        currentRot.x = 0.0f;
-        currentRot.z = 0.0f;
-        transform.rotation = Quaternion.Euler(currentRot);
+        //Vector3 currentRot = transform.rotation.eulerAngles;
+        //currentRot.x = 0.0f;
+        //currentRot.z = 0.0f;
+        //transform.rotation = Quaternion.Euler(currentRot);
 
-        playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Falling;
+        //playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Falling;
 
-        playerUnit.Detach();
+        //playerUnit.Detach();
 
-        playerUnit.ChangeState(PlayerUnit.defaultState);
+        //playerUnit.ChangeState(PlayerUnit.defaultState);
     }
 
     public override void OnJump(PlayerUnit playerUnit, Animator animator)

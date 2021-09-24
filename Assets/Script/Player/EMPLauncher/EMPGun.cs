@@ -16,6 +16,9 @@ namespace MD
 
 public class EMPGun : UnTransfromObjectBase
 {
+    public RectTransform aimTransform;
+    public Canvas aimCanvas;
+
     [SerializeField] private GameObject _gunObject;
     [SerializeField] private GameObject _pelvisGunObject;
     [SerializeField] private Animator gunAnim;
@@ -129,7 +132,11 @@ public class EMPGun : UnTransfromObjectBase
         }
 
 
-        if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
+        //var rayPosition = aimCanvas.worldCamera.ScreenToWorldPoint(aimTransform.position);
+        Vector3 rayPosition = aimTransform.position;
+        var ray = Camera.main.ScreenPointToRay(rayPosition);
+        
+        if (Physics.Raycast(ray, out hit, 100.0f))
         //if (Physics.SphereCast(mainCamera.position,layserRadius, mainCamera.forward, out hit, 1000.0f,hitLayer))
         {
             //GameManager.Instance.effectManager.Active("LaserHit",hit.point);

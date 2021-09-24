@@ -303,6 +303,8 @@ public class HandIKCtrl : MonoBehaviour
 
     public void ActiveHandIK(bool result)
     {
+        return;
+
         enableHandIK = result;
         if (result == false)
         {
