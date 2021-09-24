@@ -270,6 +270,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     private void FixedUpdate()
     {
+        if (_climbingLineManager == null)
+            _currentTestClimbingLines = null;
+        else
+        {
+            _currentTestClimbingLines = _climbingLineManager.GetCurrentCheckClimbingLines(transform.position);
+        }
+
         _prevDir = _lookDir;
 
         UpdateStamina(Time.fixedDeltaTime);
@@ -364,6 +371,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         jumpTime = Time.time;
         currentJumpPower = jumpPower;
         isGrounded = false;
+        AirTime = 0.0f;
 
         keepSpeed = true;
         prevParent = transform.parent;
@@ -393,8 +401,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
             _currentState == runToStopState ||
             _currentState == highLandingState ||
             _currentState == ragdollState ||
-            _currentState == respawnState)
+            _currentState == respawnState ||
+            _currentState == hangLedgeState||
+            _currentState == climbingJumpState)
+        {
+            currentSpeed = 0.0f;
             return;
+        }
 
         if (_inputVertical != 0 || _inputHorizontal != 0)
         {
@@ -1166,6 +1179,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     private ClimbingLineManager _climbingLineManager;
     public ClimbingLineManager ClimbingLineManager => _climbingLineManager;
+
+    private List<ClimbingLine> _currentTestClimbingLines = null;
+    public List<ClimbingLine> TestClimbingLines => _currentTestClimbingLines;
 
     [Header("Detection Capsule")]
     [SerializeField] private Vector3 start;

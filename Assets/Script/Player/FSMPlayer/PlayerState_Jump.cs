@@ -33,6 +33,7 @@ public class PlayerState_Jump : PlayerState
 
         if(playerUnit.IsGround == true)
         {
+            //Debug.Log(playerUnit.AirTime);
             if (playerUnit.AirTime >= playerUnit.LandingFactor)
             {
                 playerUnit.ChangeState(PlayerUnit.highLandingState);
@@ -43,11 +44,6 @@ public class PlayerState_Jump : PlayerState
                 playerUnit.ChangeState(PlayerUnit.defaultState);
                 return;
             }
-        }
-
-        if(playerUnit.IsNearGround == true)
-        {
-            playerUnit.AirTime = 0.0f;
         }
 
         Vector3 camForward = Camera.main.transform.forward;
@@ -139,8 +135,11 @@ public class PlayerState_Jump : PlayerState
 
     public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.ClimbingLineManager == null)
+        if (playerUnit.TestClimbingLines == null)
+        {
+            //Debug.Log("Interation : " + 0);
             return;
+        }
 
         Vector3 nearPosition = new Vector3();
         Line line = new Line();
@@ -167,7 +166,8 @@ public class PlayerState_Jump : PlayerState
         Line detectLineElement = new Line();
         Vector3 prevNearPosition = new Vector3();
         Vector3 finalNearPosition = new Vector3();
-        foreach (var climbingLine in playerUnit.ClimbingLineManager.climbingLines)
+        //Debug.Log("Interation : " + playerUnit.TestClimbingLines.Count);
+        foreach (var climbingLine in playerUnit.TestClimbingLines)
         {
             if(climbingLine.DetectLine(playerUnit.CapsuleStart, playerUnit.CapsuleEnd, playerUnit.CapsuleRadius, playerUnit.Transform, out nearPosition, ref line))
             {

@@ -141,7 +141,7 @@ public class PlayerState_ClimbingJump : PlayerState
 
     public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.ClimbingLineManager == null)
+        if (playerUnit.TestClimbingLines == null)
             return;
 
         Vector3 nearPosition = new Vector3();
@@ -152,7 +152,7 @@ public class PlayerState_ClimbingJump : PlayerState
         Line detectLineElement = new Line();
         Vector3 prevNearPosition = new Vector3();
         Vector3 finalNearPosition = new Vector3();
-        foreach (var climbingLine in playerUnit.ClimbingLineManager.climbingLines)
+        foreach (var climbingLine in playerUnit.TestClimbingLines)
         {
             if (climbingLine.DetectLine(playerUnit.CapsuleStart, playerUnit.CapsuleEnd, playerUnit.CapsuleRadius, playerUnit.Transform, out nearPosition, ref line))
             {
