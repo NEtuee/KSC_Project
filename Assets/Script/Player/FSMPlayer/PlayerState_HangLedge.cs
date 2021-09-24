@@ -18,7 +18,14 @@ public class PlayerState_HangLedge : PlayerState
         //playerUnit.Transform.position = p;
 
         if (Mathf.Abs(playerUnit.InputHorizontal) == 0.0f)
+        {
+            Transform planInfo = playerUnit.Line.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
+            if (planInfo != null)
+            {
+                playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(-planInfo.forward), Time.deltaTime * 5.0f);
+            }
             return;
+        }
 
         if(playerUnit.climbDir == ClimbDir.Left)
         {
@@ -90,7 +97,7 @@ public class PlayerState_HangLedge : PlayerState
                 playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
             }
         }
-        else
+        else if(playerUnit.climbDir == ClimbDir.Right)
         {
             Vector3 leftPoint = playerUnit.Line.points[playerUnit.leftPointNum].position;
             Vector3 rightPoint = playerUnit.Line.points[playerUnit.rightPointNum].position;
