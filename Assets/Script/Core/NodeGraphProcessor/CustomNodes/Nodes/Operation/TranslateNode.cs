@@ -16,7 +16,7 @@ public class TranslateNode : LinearConditionalNode
 	public Vector3C b = new Vector3C();
 
 
-	public override string		name => "Equal";
+	public override string		name => "Translate";
 
 	protected override void Process()
 	{

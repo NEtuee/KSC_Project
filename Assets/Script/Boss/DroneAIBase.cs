@@ -44,7 +44,6 @@ public class DroneAIBase : ObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
 
-        Debug.Log("?");
     }
 
     public override void FixedProgress(float deltaTime)

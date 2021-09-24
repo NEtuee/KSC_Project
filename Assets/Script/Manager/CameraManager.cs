@@ -187,6 +187,12 @@ public class CameraManager : ManagerBase
                 SetUpdateMethod(brainUpdate.update,brainUpdate.blend);
             }
         });
+
+        AddAction(MessageTitles.cameramanager_setAim, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data).value;
+            followTarget.SetAim(data);
+        });
     }
 
     public override void Initialize()

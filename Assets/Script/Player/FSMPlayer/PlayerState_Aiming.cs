@@ -54,6 +54,13 @@ public class PlayerState_Aiming : PlayerState
         playerUnit.SendMessageEx(MessageTitles.uimanager_activegunui, UniqueNumberBase.GetSavedNumberStatic("UIManager"), data);
         _transformingCount = 0;
         playerUnit.CanCharge = true;
+
+        
+        BoolData aimData = MessageDataPooling.GetMessageData<BoolData>();
+        aimData.value = true;
+        playerUnit.SendMessageEx(MessageTitles.cameramanager_setAim,UniqueNumberBase.GetSavedNumberStatic("CameraManager"),aimData);
+
+        playerUnit.addibleSpineVector = Vector3.zero;
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -115,6 +122,13 @@ public class PlayerState_Aiming : PlayerState
 
         verticalValue = 0.0f;
         horizonValue = 0.0f;
+
+
+        BoolData aimData = MessageDataPooling.GetMessageData<BoolData>();
+        aimData.value = false;
+        playerUnit.SendMessageEx(MessageTitles.cameramanager_setAim,UniqueNumberBase.GetSavedNumberStatic("CameraManager"),aimData);
+
+        playerUnit.addibleSpineVector = Vector3.zero;
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)

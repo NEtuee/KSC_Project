@@ -25,6 +25,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_Respawn respawnState;
     public static PlayerState_Dash dashState;
     public static PlayerState_Dead deadState;
+    public static PlayerState_Kick kickState;
     #endregion
 
     #region Move Property
@@ -39,6 +40,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float HorizonWeight { get => _horizonWeight; set => _horizonWeight = value; }
 
     public bool canGroundCheck = true;
+    public bool CanSkipRunToStop { get => _canSkipRunToStop; set => _canSkipRunToStop = value; }
     #endregion
 
     #region Climbing Property
@@ -227,6 +229,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (respawnState == null) respawnState = gameObject.AddComponent<PlayerState_Respawn>();
         if (deadState == null) deadState = gameObject.AddComponent<PlayerState_Dead>();
         if (dashState == null) dashState = gameObject.AddComponent<PlayerState_Dash>();
+        if (kickState == null) kickState = gameObject.AddComponent<PlayerState_Kick>();
 
         pelvisGunObject = _empGun.PelvisGunObject;
 
@@ -307,7 +310,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
             Vector3 dir = (spine.position - lookAtAim.position).normalized;
             Quaternion originalRot = spine.rotation;
             var spineRotation = spine.rotation;
-            spineRotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVector);
+            spineRotation = Quaternion.LookRotation(dir) * Quaternion.Euler(relativeVector + addibleSpineVector);
             spineRotation *= Quaternion.Inverse(transform.rotation);
             spineRotation *= originalRot;
             spine.rotation = spineRotation;
@@ -1027,6 +1030,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private Vector3 _prevDir;
     private Vector3 _lookDir;
     private float _runToStopTime = 0.0f;
+    private bool _canSkipRunToStop = false;
     private bool _runKeyRevert = false;
 
     [Header("Climbing")]
@@ -1103,6 +1107,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Spine")]
     [SerializeField] private Transform lookAtAim;
     [SerializeField] private Vector3 relativeVector;
+    [HideInInspector]public Vector3 addibleSpineVector;
     private Transform spine;
 
     [Header("Detect")]
@@ -1317,17 +1322,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (value.performed == false || Time.timeScale == 0f)
             return;
 
-        RaycastHit hit;
-        if(Physics.Raycast(transform.position + CapsuleCollider.center, transform.forward, out hit, 4f, kickLayer))
-        {
-            MessageReceiver receiver;
-            if(hit.collider.TryGetComponent<MessageReceiver>(out receiver))
-            {
-                Message msg = new Message();
-                msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, null, (Object)this);
-                receiver.ReceiveMessage(msg);
-            }
-        }
+        _currentState.OnKick(value, this, _animator);
     }
 
     #endregion
@@ -1335,5 +1330,5 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
 public enum ClimbDir
 {
-    Left,Right
+    Left,Right,Stop
 }

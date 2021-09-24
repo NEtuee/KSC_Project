@@ -45,6 +45,11 @@ public class PlayerState_Jump : PlayerState
             }
         }
 
+        if(playerUnit.IsNearGround == true)
+        {
+            playerUnit.AirTime = 0.0f;
+        }
+
         Vector3 camForward = Camera.main.transform.forward;
         camForward.y = 0;
         camForward.Normalize();
@@ -134,7 +139,10 @@ public class PlayerState_Jump : PlayerState
 
     public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        Vector3 nearPosition;
+        if (playerUnit.ClimbingLineManager == null)
+            return;
+
+        Vector3 nearPosition = new Vector3();
         Line line = new Line();
         //if (playerUnit.Line.DetectLine(playerUnit.CapsuleStart, playerUnit.CapsuleEnd, playerUnit.CapsuleRadius,playerUnit.Transform, out nearPosition,ref line))
         //{
@@ -154,26 +162,67 @@ public class PlayerState_Jump : PlayerState
         //    }
         //}
 
-        foreach(var climbingLine in playerUnit.ClimbingLineManager.climbingLines)
+        bool detect = false;
+        ClimbingLine detectLine = null;
+        Line detectLineElement = new Line();
+        Vector3 prevNearPosition = new Vector3();
+        Vector3 finalNearPosition = new Vector3();
+        foreach (var climbingLine in playerUnit.ClimbingLineManager.climbingLines)
         {
             if(climbingLine.DetectLine(playerUnit.CapsuleStart, playerUnit.CapsuleEnd, playerUnit.CapsuleRadius, playerUnit.Transform, out nearPosition, ref line))
             {
-                playerUnit.Line = climbingLine;
-                playerUnit.nearPointMarker.position = nearPosition;
-                playerUnit.StartLineClimbing(nearPosition);
-                Vector3 playerToP1 = (playerUnit.Line.points[line.p1].position - transform.position).normalized;
-                Vector3 cross = Vector3.Cross(playerToP1, transform.forward);
-                if (Vector3.Dot(cross, Vector3.up) > 0)
+                detect = true;
+                if (detectLine == null)
                 {
-                    playerUnit.rightPointNum = line.p2;
-                    playerUnit.leftPointNum = line.p1;
+                    detectLine = climbingLine;
+                    detectLineElement = line;
+                    prevNearPosition = nearPosition;
+                    finalNearPosition = nearPosition;
                 }
                 else
                 {
-                    playerUnit.rightPointNum = line.p1;
-                    playerUnit.leftPointNum = line.p2;
+                    if(Vector3.SqrMagnitude(nearPosition - playerUnit.CapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - playerUnit.CapsuleStart))
+                    {
+                        detectLine = climbingLine;
+                        detectLineElement = line;
+                        prevNearPosition = nearPosition;
+                        finalNearPosition = nearPosition;
+                    }
                 }
-                break;
+            }
+        }
+
+
+        if (detect == true)
+        {
+            playerUnit.Line = detectLine;
+            playerUnit.nearPointMarker.position = finalNearPosition;
+            playerUnit.StartLineClimbing(finalNearPosition);
+            //Vector3 playerToP1 = (playerUnit.Line.points[detectLineElement.p1].position - playerUnit.Transform.position).normalized;
+            //Vector3 playerForward = playerUnit.Transform.forward;
+            //playerForward.y = 0.0f;
+            //playerForward.Normalize();
+            //Vector3 cross = Vector3.Cross(playerToP1, playerForward);
+            //if (Vector3.Dot(cross, Vector3.up) > 0)
+            //{
+            //    playerUnit.rightPointNum = detectLineElement.p2;
+            //    playerUnit.leftPointNum = detectLineElement.p1;
+            //}
+            //else
+            //{
+            //    playerUnit.rightPointNum = detectLineElement.p1;
+            //    playerUnit.leftPointNum = detectLineElement.p2;
+            //}
+
+            if (playerUnit.Line.directionType == DirectionType.LeftMin)
+            {
+                playerUnit.leftPointNum = Mathf.Min(detectLineElement.p1, detectLineElement.p2);
+                playerUnit.rightPointNum = Mathf.Max(detectLineElement.p1, detectLineElement.p2);
+            }
+            else
+            {
+                playerUnit.leftPointNum = Mathf.Max(detectLineElement.p1, detectLineElement.p2);
+                playerUnit.rightPointNum = Mathf.Min(detectLineElement.p1, detectLineElement.p2);
             }
         }
 

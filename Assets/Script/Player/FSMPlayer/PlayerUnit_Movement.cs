@@ -123,6 +123,27 @@ public partial class PlayerUnit
 
     public void UpdateClimbingInput()
     {
+        if(isLedge)
+        {
+            if (_inputHorizontal > 0.0f)
+            {
+                _animator.SetTrigger("RightClimbing");
+                isClimbingMove = true;
+                climbDir = ClimbDir.Right;
+            }
+            else if (_inputHorizontal == 0.0f)
+            {
+                isClimbingMove = false;
+                climbDir = ClimbDir.Stop;
+            }
+            else
+            {
+                _animator.SetTrigger("LeftClimbing");
+                isClimbingMove = true;
+                climbDir = ClimbDir.Left;
+            }
+        }
+
         if (isClimbingMove == true)
             return;
 
@@ -217,33 +238,55 @@ public partial class PlayerUnit
         }
         else
         {
-            if (climbingVertical == -1.0f)
-            {
-                //if (_currentState != hangEdgeState)
-                //{
-                //    _animator.SetBool("IsLedge", false);
-                //    _animator.SetTrigger("DownClimbing");
+            //if (_inputHorizontal > 0.0f)
+            //{
+            //    _animator.SetTrigger("RightClimbing");
+            //    isClimbingMove = true;
+            //    climbDir = ClimbDir.Right;
+            //}
+            //else if (_inputHorizontal == 0.0f)
+            //{
+            //    isClimbingMove = false;
+            //    climbDir = ClimbDir.Stop;
+            //}
+            //else
+            //{
+            //    _animator.SetTrigger("LeftClimbing");
+            //    isClimbingMove = true;
+            //    climbDir = ClimbDir.Left;
+            //}
+            //if (climbingVertical == -1.0f)
+            //{
+            //    //if (_currentState != hangEdgeState)
+            //    //{
+            //    //    _animator.SetBool("IsLedge", false);
+            //    //    _animator.SetTrigger("DownClimbing");
 
-                //    isLedge = false;
-                //    isClimbingMove = true;
-                //    ChangeState(grabState);
-                //}
-            }
-            else if (climbingVertical == 0.0f && climbingHorizon != 0.0f)
-            {
-                if (climbingHorizon == 1.0f)
-                {
-                    _animator.SetTrigger("RightClimbing");
-                    isClimbingMove = true;
-                    climbDir = ClimbDir.Right;
-                }
-                else
-                {
-                    _animator.SetTrigger("LeftClimbing");
-                    isClimbingMove = true;
-                    climbDir = ClimbDir.Left;
-                }
-            }
+            //    //    isLedge = false;
+            //    //    isClimbingMove = true;
+            //    //    ChangeState(grabState);
+            //    //}
+            //}
+            //else if (climbingVertical == 0.0f)
+            //{
+            //    if (_inputHorizontal > 0.0f)
+            //    {
+            //        _animator.SetTrigger("RightClimbing");
+            //        isClimbingMove = true;
+            //        climbDir = ClimbDir.Right;
+            //    }
+            //    else if (_inputHorizontal == 0.0f)
+            //    {
+            //        isClimbingMove = false;
+            //        climbDir = ClimbDir.Stop;
+            //    }
+            //    else
+            //    {
+            //        _animator.SetTrigger("LeftClimbing");
+            //        isClimbingMove = true;
+            //        climbDir = ClimbDir.Left;
+            //    }
+            //}
         }
     }
 
@@ -294,17 +337,29 @@ public partial class PlayerUnit
 
     public void StartLineClimbing(Vector3 nearPoint)
     {
-        Vector3 lookVec = nearPoint - transform.position;
-        lookVec.y = 0.0f;
-        lookVec.Normalize();
-
+        Transform planInfo = Line.GetPlaneInfo(leftPointNum, rightPointNum);
         Vector3 finalPosition;
-        finalPosition = nearPoint + (transform.up * detectionOffset.y);
-        finalPosition += transform.forward * detectionOffset.z;
-        transform.position = finalPosition;
 
-        transform.SetPositionAndRotation(finalPosition, Quaternion.LookRotation(lookVec));
-        //transform.rotation = Quaternion.LookRotation(lookVec);
+        if (planInfo != null)
+        {
+            finalPosition = nearPoint + (planInfo.up * DetectionOffset.y);
+            finalPosition -= planInfo.forward * DetectionOffset.z;
+
+            transform.rotation = Quaternion.LookRotation(-planInfo.forward);
+        }
+        else
+        {
+            finalPosition = nearPoint + (transform.up * detectionOffset.y);
+            finalPosition += transform.forward * detectionOffset.z;
+            transform.position = finalPosition;
+
+            Vector3 lookVec = nearPoint - transform.position;
+            lookVec.y = 0.0f;
+            lookVec.Normalize();
+            transform.rotation = Quaternion.LookRotation(lookVec);
+        }
+
+        transform.position = finalPosition;
 
         ChangeState(grabState);
         ChangeState(hangLedgeState);
