@@ -264,6 +264,16 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         UpdateMoveSpeed();
 
+        if(_inputHorizontal != 0.0f)
+        {
+            _climbingWeight = _inputHorizontal;
+        }
+        else
+        {
+            _climbingWeight = Mathf.MoveTowards(_climbingWeight, 0.0f, 2f * Time.deltaTime);
+        }
+        _animator.SetFloat("ClimbingWeight", _climbingWeight);
+
         _currentState.UpdateState(this, _animator);
 
         if (Keyboard.current.qKey.wasPressedThisFrame)
@@ -1296,6 +1306,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public int leftPointNum;
     public int rightPointNum;
     public ClimbDir climbDir;
+    private float _climbingWeight = 0.0f;
     private ClimbingLineManager _climbingLineManager;
     private List<ClimbingLine> _currentTestClimbingLines = null;
 
