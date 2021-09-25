@@ -190,6 +190,28 @@ public class PlayerState_HangLedge : PlayerState
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
         //playerUnit.UpdateGrab();
+        playerUnit.InitVelocity();
+
+        if (playerUnit.stamina.Value <= 0.0f)
+        {
+            playerUnit.IsClimbingMove = false;
+            playerUnit.IsLedge = false;
+
+            Vector3 currentRot = transform.rotation.eulerAngles;
+            currentRot.x = 0.0f;
+            currentRot.z = 0.0f;
+            playerUnit.Transform.rotation = Quaternion.Euler(currentRot);
+
+            playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Falling;
+
+            playerUnit.Detach();
+
+            playerUnit.ChangeState(PlayerUnit.defaultState);
+            return;
+        }
+
+        if (playerUnit.climbDir != ClimbDir.Stop)
+           playerUnit.AddEnergy(playerUnit.ClimbingJumpRestoreEnrgyValue * Time.fixedDeltaTime);
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)

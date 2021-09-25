@@ -5,6 +5,7 @@ using UnityEngine;
 public class ClimbingLineManager : ManagerBase
 {
     public List<ClimbingLine> climbingLines = new List<ClimbingLine>();
+    public List<ClimbingLine> dynamicClimbingLines = new List<ClimbingLine>();
     public CL_Node _rootNode = null;
 
     private bool _drawNode = false;

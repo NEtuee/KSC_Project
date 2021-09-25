@@ -1301,6 +1301,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (value.performed == false || Time.timeScale == 0f)
             return;
 
+        Debug.Log("Test");
+
         _currentState.OnGrabRelease(value, this, _animator);
     }
 

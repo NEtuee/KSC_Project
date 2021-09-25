@@ -192,11 +192,40 @@ public class PlayerState_Jump : PlayerState
             }
         }
 
+        if (detect == false)
+        {
+            foreach (var climbingLine in playerUnit.ClimbingLineManager.dynamicClimbingLines)
+            {
+                if (climbingLine.DetectLine(playerUnit.CapsuleStart, playerUnit.CapsuleEnd, playerUnit.CapsuleRadius, playerUnit.Transform, out nearPosition, ref line))
+                {
+                    detect = true;
+                    if (detectLine == null)
+                    {
+                        detectLine = climbingLine;
+                        detectLineElement = line;
+                        prevNearPosition = nearPosition;
+                        finalNearPosition = nearPosition;
+                    }
+                    else
+                    {
+                        if (Vector3.SqrMagnitude(nearPosition - playerUnit.CapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - playerUnit.CapsuleStart))
+                        {
+                            detectLine = climbingLine;
+                            detectLineElement = line;
+                            prevNearPosition = nearPosition;
+                            finalNearPosition = nearPosition;
+                        }
+                    }
+                }
+            }
+        }
+
 
         if (detect == true)
         {
             playerUnit.Line = detectLine;
             playerUnit.nearPointMarker.position = finalNearPosition;
+            playerUnit.nearPointMarker.SetParent(detectLine.transform);
             playerUnit.StartLineClimbing(finalNearPosition);
             //Vector3 playerToP1 = (playerUnit.Line.points[detectLineElement.p1].position - playerUnit.Transform.position).normalized;
             //Vector3 playerForward = playerUnit.Transform.forward;
