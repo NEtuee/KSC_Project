@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using MD;
 
 public class PlayerState_HangLedge : PlayerState
 {
@@ -173,12 +174,27 @@ public class PlayerState_HangLedge : PlayerState
 
         playerUnit.IsLedge = true;
         playerUnit.IsClimbingMove = false;
-        animator.SetBool("IsLedge", true);
-        playerUnit.HandIK.ActiveLedgeIK(true);
+        //animator.SetBool("IsLedge", true);
+        animator.SetBool("IsGrab", true);
+        //playerUnit.HandIK.ActiveLedgeIK(true);
+
+        playerUnit.CurrentJumpPower = 0.0f;
+        playerUnit.CurrentSpeed = 0.0f;
+
+        playerUnit.CapsuleCollider.height = 1f;
+        playerUnit.CapsuleCollider.center = new Vector3(0.0f, 0.5f, 0.0f);
+        playerUnit.IsJump = false;
+        playerUnit.CurrentJumpPower = 0.0f;
+
+        playerUnit.InitVelocity();
+        playerUnit.FootIK.DisableFeetIk();
 
         _grabTimer.InitTimer("MinGrabTime", 0.0f, _minKeepGrabTime);
         _canRelease = false;
         //playerUnit.AdjustLedgeOffset();
+        StringData data = MessageDataPooling.GetMessageData<StringData>();
+        data.value = "Grab";
+        playerUnit.SendMessageEx(MessageTitles.cameramanager_setfollowcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), data);
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -243,7 +259,8 @@ public class PlayerState_HangLedge : PlayerState
         {
             playerUnit.IsLedge = false;
             animator.SetTrigger("LedgeUp");
-            animator.SetBool("IsLedge", false);
+            //animator.SetBool("IsLedge", false);
+            animator.SetBool("IsGrab", false);
 
             Vector3 currentRot = transform.rotation.eulerAngles;
             currentRot.x = 0.0f;

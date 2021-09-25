@@ -362,7 +362,7 @@ public partial class PlayerUnit
         transform.position = finalPosition;
         transform.SetParent(nearPointMarker);
 
-        ChangeState(grabState);
+        //ChangeState(grabState);
         ChangeState(hangLedgeState);
     }
 }
