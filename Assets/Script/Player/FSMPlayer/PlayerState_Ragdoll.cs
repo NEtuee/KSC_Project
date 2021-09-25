@@ -49,7 +49,8 @@ public class PlayerState_Ragdoll : PlayerState
         {
             playerUnit.Ragdoll.ReturnDefaultAnimation();
             playerUnit.ChangeState(PlayerUnit.defaultState);
-            StartCoroutine(playerUnit.StartQuickStandingTime());
+            //StartCoroutine(playerUnit.StartQuickStandingTime());
+            playerUnit.UseQuickStand();
         }
     }
 }

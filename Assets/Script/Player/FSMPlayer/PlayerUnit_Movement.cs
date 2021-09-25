@@ -337,7 +337,7 @@ public partial class PlayerUnit
 
     public void StartLineClimbing(Vector3 nearPoint)
     {
-        Transform planInfo = Line.GetPlaneInfo(leftPointNum, rightPointNum);
+        Transform planInfo = CurrentFollowLine.GetPlaneInfo(leftPointNum, rightPointNum);
         Vector3 finalPosition;
 
         if (planInfo != null)
@@ -360,7 +360,7 @@ public partial class PlayerUnit
         }
 
         transform.position = finalPosition;
-        transform.SetParent(nearPointMarker);
+        transform.SetParent(LineTracker);
 
         //ChangeState(grabState);
         ChangeState(hangLedgeState);
