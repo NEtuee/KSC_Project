@@ -289,7 +289,7 @@ public class PlayerState_Aiming : PlayerState
             playerUnit.EmpGun.LaunchLaser(loadCount * 40.0f);
             playerUnit.AddEnergy(-loadCount * _gunCost);
             FloatData camDist = MessageDataPooling.GetMessageData<FloatData>();
-            camDist.value = 0.333f * (float)loadCount;
+            camDist.value = 0.5f * (float)loadCount;
             playerUnit.SendMessageEx(MessageTitles.cameramanager_setaimcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), camDist);
 
             _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, _chargeDelayTime);
@@ -300,6 +300,12 @@ public class PlayerState_Aiming : PlayerState
             soundPlayData.parent = playerUnit.Transform;
             soundPlayData.returnValue = false;
             playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundPlayData);
+
+            SetRadialBlurData blurData = MessageDataPooling.GetMessageData<SetRadialBlurData>();
+            blurData.factor = 1.0f;
+            blurData.radius = 0.2f;
+            blurData.time = 0.8f;
+            playerUnit.SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
 
             if (loadCount >= 2)
             {
@@ -312,11 +318,7 @@ public class PlayerState_Aiming : PlayerState
             }
             if (loadCount == 3)
             {
-                SetRadialBlurData data = MessageDataPooling.GetMessageData<SetRadialBlurData>();
-                data.factor = 1.0f;
-                data.radius = 0.2f;
-                data.time = 0.8f;
-                playerUnit.SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), data);
+                
             }
 
             playerUnit.CanCharge = false;

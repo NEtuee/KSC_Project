@@ -148,10 +148,6 @@ public class Drone : UnTransfromObjectBase
     public override void FixedProgress(float deltaTime)
     {
         base.FixedProgress(deltaTime);
-        //if (player.updateMethod != UpdateMethod.FixedUpdate)
-        //    return;
-
-        //UpdateDrone(Time.fixedDeltaTime);
 
         if (visible == false || _respawn)
             return;
@@ -163,6 +159,7 @@ public class Drone : UnTransfromObjectBase
         }
 
         transform.position = Vector3.Lerp(transform.position,target.position,deltaTime * 12f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, deltaTime * 12f);
     }
 
     private void LateUpdate()
