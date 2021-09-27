@@ -56,6 +56,11 @@ public class ClimbingLineEditor : EditorWindow
 
         switch(_currentMode)
         {
+            case 1:
+                {
+                    _createDynamicClimbingLine = GUILayout.Toggle(_createDynamicClimbingLine, "DynamicClimbingLine");
+                }
+                break;
             case 2:
                 {
                     GUILayout.BeginVertical("box",GUILayout.Width(300.0f));
@@ -305,14 +310,21 @@ public class ClimbingLineEditor : EditorWindow
                 {
                     CheckClimbingManager();
 
-                    GameObject newClimbingLineObject = new GameObject("ClimbingLine" + _climbingLineCount);
+                    GameObject newClimbingLineObject = new GameObject(_createDynamicClimbingLine?"DynamicCL":"ClimbingLine" + _climbingLineCount);
                     _currentLine = newClimbingLineObject.AddComponent<ClimbingLine>();
                     newClimbingLineObject.tag = "ClimbingLine";
 
                     newClimbingLineObject.transform.position = hit.point;
-                    newClimbingLineObject.transform.SetParent(_climbingLineManager.transform);
-
-                    _climbingLineManager.AddClimbingLines(_currentLine);
+                    if (_createDynamicClimbingLine == false)
+                    {
+                        newClimbingLineObject.transform.SetParent(_climbingLineManager.transform);
+                        _climbingLineManager.AddClimbingLines(_currentLine);
+                    }
+                    else
+                    {
+                        newClimbingLineObject.transform.SetParent(hit.collider.transform);
+                        _climbingLineManager.dynamicClimbingLines.Add(_currentLine);
+                    }
 
                     GameObject newPoint = new GameObject("point");
                     newPoint.transform.position = hit.point;
@@ -372,5 +384,6 @@ public class ClimbingLineEditor : EditorWindow
     private Transform _nodeMinObject = null;
     private Transform _nodeMaxObject = null;
 
+    private bool _createDynamicClimbingLine = false;
     private int maxClimbingLineNum = 2;
 }
