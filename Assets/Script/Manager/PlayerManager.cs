@@ -40,8 +40,10 @@ public class PlayerManager : ManagerBase
          {
              _player.transform.SetParent(null);
              _drone.transform.SetParent(null);
+             _player.LineTracker.SetParent(null);
              DontDestroyOnLoad(_player.transform);
              DontDestroyOnLoad(_drone.transform);
+             DontDestroyOnLoad(_player.LineTracker);
 
              _player.CapsuleCollider.enabled = false;
              _player.canGroundCheck = false;
@@ -51,6 +53,7 @@ public class PlayerManager : ManagerBase
          {
              SceneManager.MoveGameObjectToScene(_player.gameObject, SceneManager.GetActiveScene());
              SceneManager.MoveGameObjectToScene(_drone.gameObject, SceneManager.GetActiveScene());
+             SceneManager.MoveGameObjectToScene(_player.LineTracker.gameObject, SceneManager.GetActiveScene());
          });
 
         AddAction(MessageTitles.scene_afterSceneChange, (msg) =>

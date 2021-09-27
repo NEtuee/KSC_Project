@@ -245,6 +245,8 @@ public class PlayerState_HangLedge : PlayerState
     {
         animator.SetBool("IsLedge", false);
         playerUnit.IsLedge = false;
+
+        playerUnit.LineTracker.SetParent(null);
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
