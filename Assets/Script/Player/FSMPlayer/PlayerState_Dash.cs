@@ -20,7 +20,8 @@ public class PlayerState_Dash : PlayerState
         _originAnimatorSpeed = animator.speed;
         animator.speed = 0.0f;
 
-        StartCoroutine(playerUnit.StartDashCoolTime());
+        //StartCoroutine(playerUnit.StartDashCoolTime());
+        playerUnit.UseDash();
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
