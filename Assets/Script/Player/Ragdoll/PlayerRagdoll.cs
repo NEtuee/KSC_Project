@@ -272,7 +272,7 @@ public class PlayerRagdoll : MonoBehaviour
     public void ActiveLeftHandFixRagdoll()
     {
         //GameManager.Instance.PauseControl(true);
-        FixLeftHand(true);
+        //FixLeftHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
         ragdollToAnimBlendTime = 0.5f;
@@ -281,7 +281,7 @@ public class PlayerRagdoll : MonoBehaviour
     public void ActiveRightHandFixRagdoll()
     {
         //GameManager.Instance.PauseControl(true);
-        FixRightHand(true);
+        //FixRightHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
         ragdollToAnimBlendTime = 0.5f;
@@ -289,15 +289,15 @@ public class PlayerRagdoll : MonoBehaviour
 
     public void ReleaseFix()
     {
-        FixRightHand(false);
-        FixLeftHand(false);
+        //FixRightHand(false);
+        //FixLeftHand(false);
     }
 
     public void ActiveBothHandFixRagdoll()
     {
         //GameManager.Instance.PauseControl(true);
-        FixLeftHand(true);
-        FixRightHand(true);
+        //FixLeftHand(true);
+        //FixRightHand(true);
         ActiveRagdoll(true);
         SetRagdollContainer(true);
         ragdollToAnimBlendTime = 0.5f;
@@ -306,15 +306,15 @@ public class PlayerRagdoll : MonoBehaviour
     public void DisableFixRagdoll()
     {
         ReturnAnimated();
-        FixRightHand(false);
-        FixLeftHand(false);
+        //FixRightHand(false);
+        //FixLeftHand(false);
         _player.ChangeState(_player.GetPrevState);
     }
 
     public void ReleaseHangRagdoll()
     {
-        FixRightHand(false);
-        FixLeftHand(false);
+        //FixRightHand(false);
+        //FixLeftHand(false);
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);
@@ -474,29 +474,29 @@ public class PlayerRagdoll : MonoBehaviour
             state = RagdollState.Ragdoll;
         }
     }
-    private void FixLeftHand(bool value)
-    {
-        isLeftHandFix = value;
+    //private void FixLeftHand(bool value)
+    //{
+    //    isLeftHandFix = value;
 
-        if (isLeftHandFix)
-        {
-            leftHandRigidBody.isKinematic = value;
-            leftHandPoint.SetPositionAndRotation(leftHandTransform.position, leftHandTransform.rotation);
-            leftHandPoint.SetParent(transform.parent);
-        }
-    }
+    //    if (isLeftHandFix)
+    //    {
+    //        leftHandRigidBody.isKinematic = value;
+    //        leftHandPoint.SetPositionAndRotation(leftHandTransform.position, leftHandTransform.rotation);
+    //        leftHandPoint.SetParent(transform.parent);
+    //    }
+    //}
 
-    private void FixRightHand(bool value)
-    {
-        isRightHandFix = value;
+    //private void FixRightHand(bool value)
+    //{
+    //    isRightHandFix = value;
 
-        if (isRightHandFix)
-        {
-            rightHandRigidBody.isKinematic = value;
-            rightHandPoint.SetPositionAndRotation(rightHandTransform.position, rightHandTransform.rotation);
-            rightHandPoint.SetParent(transform.parent);
-        }
-    }
+    //    if (isRightHandFix)
+    //    {
+    //        rightHandRigidBody.isKinematic = value;
+    //        rightHandPoint.SetPositionAndRotation(rightHandTransform.position, rightHandTransform.rotation);
+    //        rightHandPoint.SetParent(transform.parent);
+    //    }
+    //}
 
     public void ReturnAnimated()
     {

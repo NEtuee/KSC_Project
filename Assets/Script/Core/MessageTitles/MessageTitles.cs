@@ -434,7 +434,7 @@ public static partial class MessageTitles
     public const ushort set_setCameraManager = 0x1003;
 
     /// <summary>
-    /// data = null
+    /// data = PlayerUnit
     /// </summary>
     public const ushort object_kick = 0x1004;
 

@@ -26,7 +26,7 @@ public class PlayerState_Ragdoll : PlayerState
         }
 
         playerUnit.Transform.SetParent(null);
-        playerUnit.HandIK.DisableHandIK();
+        //playerUnit.HandIK.DisableHandIK();
         playerUnit.AirTime = 0.0f;
         playerUnit.CurrentSpeed = 0.0f;
     }

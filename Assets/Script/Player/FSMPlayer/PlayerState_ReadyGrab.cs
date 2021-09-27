@@ -24,7 +24,7 @@ public class PlayerState_ReadyGrab : PlayerState
         animator.SetInteger("ReadyClimbNum", (int)playerUnit.ClimbingJumpDirection);
 
         //playerUnit.HandIK.ActiveHandIK(true);
-        playerUnit.HandIK.ActiveLedgeIK(false);
+        //playerUnit.HandIK.ActiveLedgeIK(false);
         playerUnit.FootIK.DisableFeetIk();
         playerUnit.IsCanReadyClimbingCancel = false;
 

@@ -19,6 +19,7 @@ public class PlayerState_Default : PlayerState
         animator.SetBool("IsLedge", false);
         animator.SetTrigger("Landing");
         playerUnit.FootIK.EnableFeetIk();
+        //playerUnit.HandIK.DisableHandIK();
         playerUnit.HandIK.DisableHandIK();
         playerUnit.CapsuleCollider.height = 1.898009f;
         playerUnit.CapsuleCollider.center = new Vector3(0.0f, 0.95622f, 0.0f);

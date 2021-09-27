@@ -127,19 +127,28 @@ public partial class PlayerUnit
         {
             if (_inputHorizontal > 0.0f)
             {
-                _animator.SetTrigger("RightClimbing");
+                //_animator.SetTrigger("RightClimbing");
                 isClimbingMove = true;
+                //prevClimbDir = climbDir;
+                if (climbDir == ClimbDir.Stop)
+                    _animator.Play(0, -1, 0.0f);
+
                 climbDir = ClimbDir.Right;
             }
             else if (_inputHorizontal == 0.0f)
             {
                 isClimbingMove = false;
+                if (climbDir != ClimbDir.Stop)
+                    prevClimbDir = climbDir;
                 climbDir = ClimbDir.Stop;
             }
             else
             {
-                _animator.SetTrigger("LeftClimbing");
+                //_animator.SetTrigger("LeftClimbing");
                 isClimbingMove = true;
+                //prevClimbDir = climbDir;
+                if (climbDir == ClimbDir.Stop)
+                    _animator.Play(0, -1, 0.0f);
                 climbDir = ClimbDir.Left;
             }
         }
