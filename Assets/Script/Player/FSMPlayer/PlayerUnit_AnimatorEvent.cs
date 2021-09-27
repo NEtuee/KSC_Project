@@ -141,7 +141,7 @@ public partial class PlayerUnit
                 if (coll.TryGetComponent<MessageReceiver>(out receiver))
                 {
                     Message msg = new Message();
-                    msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, null, (Object)this);
+                    msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, this, this);
                     receiver.ReceiveMessage(msg);
                 }
             }

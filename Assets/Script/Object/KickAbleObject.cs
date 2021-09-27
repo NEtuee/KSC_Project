@@ -13,7 +13,7 @@ public class KickAbleObject : UnTransfromObjectBase
         AddAction(MessageTitles.object_kick, (msg) =>
         {
             PlayerUnit player = (PlayerUnit)msg.data;
-            _rigidbody.AddForce(player.Transform.forward * 100000.0f, ForceMode.Impulse);
+            _rigidbody.AddForce(player.transform.forward * 1200.0f, ForceMode.Force);
         });
 
         _rigidbody = GetComponent<Rigidbody>();
