@@ -17,7 +17,7 @@ public class GunGageUi : ActiveUi
         this.UpdateAsObservable()
             .Subscribe(_ =>
             {
-                frontGageImage.fillAmount = Mathf.MoveTowards(frontGageImage.fillAmount, _backTargetUpdateValue -_frontTargetUpdateValue, updateSpeed * Time.deltaTime);
+                frontGageImage.fillAmount = _frontTargetUpdateValue;
                 backGageImage.fillAmount = Mathf.MoveTowards(backGageImage.fillAmount, _backTargetUpdateValue, updateSpeed * Time.deltaTime);
             });
     }
@@ -30,6 +30,6 @@ public class GunGageUi : ActiveUi
 
     public void SetFrontValue(float value)
     {
-        _frontTargetUpdateValue = value * 0.25f;
+        _frontTargetUpdateValue = value / 3f;
     }
 }

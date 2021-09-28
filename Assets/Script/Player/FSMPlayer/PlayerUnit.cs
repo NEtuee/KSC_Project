@@ -329,6 +329,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     private void LateUpdate()
     {
+        //Debug.Log("PlayerUnit LateUpdate");
+
         if (_currentState == aimingState)
         {
             Vector3 dir = (spine.position - lookAtAim.position).normalized;
@@ -339,6 +341,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
             spineRotation *= originalRot;
             spine.rotation = spineRotation;
         }
+
+        _empGun.UpdateLaunchPos();
     }
 
     private void OnAnimatorMove()

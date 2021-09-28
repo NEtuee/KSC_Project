@@ -13,6 +13,7 @@ public class PlayerState_Jump : PlayerState
             playerUnit.MoveDir = playerUnit.Transform.forward * playerUnit.CurrentSpeed;
         playerUnit.currentStateName = "Jump";
         playerUnit.HorizonWeight = 0.0f;
+        playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Up;
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)

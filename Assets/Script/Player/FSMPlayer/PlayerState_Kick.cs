@@ -12,6 +12,7 @@ public class PlayerState_Kick : PlayerState
     {
         playerUnit.currentStateName = "Kick";
         animator.SetTrigger("Kick");
+        playerUnit.CurrentSpeed = 0.0f;
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
