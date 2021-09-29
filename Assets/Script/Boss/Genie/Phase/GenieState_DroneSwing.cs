@@ -14,13 +14,16 @@ public class GenieState_DroneSwing : GenieStateBase
     public Transform droneTarget;
     public LevelEdit_ExplosionPhysics explosionPhysics;
 
+    [Header("Ground Hit")]
     public float beforeGroundHitTime = 1f;
     public float groundHitTime = 1f;
+
+    [Header("Drone Summon")]
     public float beforeDroneSummonTime = 1f;
     public float droneSummonTime = 2f;
     public float patternStartTime = 2f;
 
-
+    [Header("Ground Cut")]
     public float groundCutAngle = 30f;
     public int groundCutThickness = 0;
     public float groundCutPatternTime = 5f;
