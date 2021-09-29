@@ -327,22 +327,6 @@ public class EMPGun : UnTransfromObjectBase
 
                 SendMessageEx(receiver, MessageTitles.player_EMPHit, empData);
             }
-            if (hit.collider.TryGetComponent<MessageEmpTarget>(out var empTarget))
-            {
-                var empData = MessageDataPooling.GetMessageData<FloatData>();
-                empData.value = damage;
-
-                SendMessageEx(empTarget.parent, MessageTitles.player_EMPHit, empData);
-            }
-            if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
-            {
-                hitable.Hit(damage);
-                crossHair.ActiveHitMark();
-                //GameManager.Instance.soundManager.Play(1022, hit.point);
-                SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
-                soundData.id = 1022; soundData.position = hit.point; soundData.returnValue = false; soundData.dontStop = false;
-                SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
-            }
             else
             {
                 //GameManager.Instance.soundManager.Play(1023, hit.point);

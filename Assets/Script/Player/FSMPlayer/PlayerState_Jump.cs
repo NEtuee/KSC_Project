@@ -112,14 +112,6 @@ public class PlayerState_Jump : PlayerState
         {
             if (playerUnit.AimLock == false)
             {
-                AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
-                soundData.id = 1008; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
-                playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
-
-                AttachSoundPlayData chargeSoundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
-                chargeSoundPlayData.id = 1013; chargeSoundPlayData.localPosition = Vector3.up; chargeSoundPlayData.parent = transform; chargeSoundPlayData.returnValue = true;
-                playerUnit.SendMessageQuick(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), chargeSoundPlayData);
-
                 playerUnit.ChangeState(PlayerUnit.aimingState);
             }
         }
@@ -127,7 +119,7 @@ public class PlayerState_Jump : PlayerState
 
     public override void OnJump(PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.IsNearGround == true && playerUnit.JumpStart == false)
+        if (playerUnit.IsNearGround == true && playerUnit.IsJump == false)
         {
             playerUnit.JumpStart = true;
             animator.SetTrigger("Jump");
