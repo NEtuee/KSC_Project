@@ -28,6 +28,7 @@ public class GenieState_DroneSwing : GenieStateBase
     public int groundCutThickness = 0;
     public float groundCutPatternTime = 5f;
     public float groundCutTime = 3f;
+    public float groundCutMoveTime = 0.5f;
     public int groundCutRepeat = 1;
     public float groundCutRepeatTime = 1f;
 
@@ -142,21 +143,26 @@ public class GenieState_DroneSwing : GenieStateBase
         dir.y = 0f;
         dir = Quaternion.Euler(0f,groundCutAngle,0f) * dir.normalized;
 
-        foreach(var item in _fallLine)
+        if(t < groundCutMoveTime)
         {
-            item.GetRenderer().material = target.gridControll.prev;
+            foreach(var item in _fallLine)
+            {
+                item.GetRenderer().material = target.gridControll.prev;
+            }
+    
+            _fallLine.Clear();
+            GetGridLine(ref _fallLine,dir,groundCutThickness);
+    
+            foreach(var item in _fallLine)
+            {
+                if(item.special || !item.IsActive())
+                    continue;
+    
+                item.GetRenderer().material = target.gridControll.curr;
+            }
         }
 
-        _fallLine.Clear();
-        GetGridLine(ref _fallLine,dir,groundCutThickness);
-
-        foreach(var item in _fallLine)
-        {
-            if(item.special || !item.IsActive())
-                continue;
-
-            item.GetRenderer().material = target.gridControll.curr;
-        }
+        
     }
 
 #endregion
