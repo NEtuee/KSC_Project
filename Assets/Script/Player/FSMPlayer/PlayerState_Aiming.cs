@@ -285,6 +285,7 @@ public class PlayerState_Aiming : PlayerState
 
             if (playerUnit.chargeTime.Value >= 3 && playerUnit.Energy >= _chargeCost)
             {
+                Debug.Log("L");
                 playerUnit.EmpGun.LaunchCharge(40.0f);
                 playerUnit.AddEnergy(-_chargeCost);
             }
