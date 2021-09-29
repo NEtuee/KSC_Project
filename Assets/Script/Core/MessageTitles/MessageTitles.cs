@@ -352,6 +352,8 @@ public static partial class MessageTitles
 
     public const ushort player_EMPHit = 0x0906;
 
+    public const ushort player_NormalHit = 0x0907;
+
     #endregion
 
     #region PlayerManager

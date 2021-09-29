@@ -22,18 +22,18 @@ public class PlayerParamaterWindow : EditorWindow
         if (playerUnit == null)
             return;
 
-        GUILayout.Label("�̵�", EditorStyles.boldLabel);
-        playerUnit.WalkSpeed = EditorGUILayout.FloatField("�ȴ� �ӵ�", playerUnit.WalkSpeed);
-        playerUnit.RunSpeed = EditorGUILayout.FloatField("�ٴ� �ӵ�", playerUnit.RunSpeed);
-        playerUnit.AccelerateSpeed = EditorGUILayout.FloatField("���� �ӵ�", playerUnit.AccelerateSpeed);
+        GUILayout.Label("이동", EditorStyles.boldLabel);
+        playerUnit.WalkSpeed = EditorGUILayout.FloatField("걷기 속도", playerUnit.WalkSpeed);
+        playerUnit.RunSpeed = EditorGUILayout.FloatField("뛰기 속도", playerUnit.RunSpeed);
+        playerUnit.AccelerateSpeed = EditorGUILayout.FloatField("가속 속도", playerUnit.AccelerateSpeed);
 
-        GUILayout.Label("û�� �뽬", EditorStyles.boldLabel);
-        playerUnit.DashSpeed = EditorGUILayout.FloatField("�뽬 �ӵ�", playerUnit.DashSpeed);
-        playerUnit.DashTime = EditorGUILayout.FloatField("�뽬 �ð�", playerUnit.DashTime);
-        playerUnit.DashCoolTime = EditorGUILayout.FloatField("�뽬 ��Ÿ��", playerUnit.DashCoolTime);
+        GUILayout.Label("대쉬", EditorStyles.boldLabel);
+        playerUnit.DashSpeed = EditorGUILayout.FloatField("대쉬 속도", playerUnit.DashSpeed);
+        playerUnit.DashTime = EditorGUILayout.FloatField("대쉬 시간", playerUnit.DashTime);
+        playerUnit.DashCoolTime = EditorGUILayout.FloatField("대쉬 쿨타임", playerUnit.DashCoolTime);
 
-        GUILayout.Label("�� ���ĵ�", EditorStyles.boldLabel);
-        playerUnit.QuickStandCoolTime = EditorGUILayout.FloatField("�� ���ĵ� ��Ÿ��", playerUnit.QuickStandCoolTime);
+        GUILayout.Label("퀵 스탠딩", EditorStyles.boldLabel);
+        playerUnit.QuickStandCoolTime = EditorGUILayout.FloatField("퀵스탠딩 쿨타임", playerUnit.QuickStandCoolTime);
 
         GUILayout.Label("Aim", EditorStyles.boldLabel);
         followTarget.crosshairMovingSpeed = EditorGUILayout.FloatField("Crosshair Moving Speed",followTarget.crosshairMovingSpeed);

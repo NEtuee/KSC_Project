@@ -273,9 +273,6 @@ public class PlayerState_Default : PlayerState
 
     public override void OnKick(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if(playerUnit.CurrentSpeed == 0.0f)
-        {
-            playerUnit.ChangeState(PlayerUnit.kickState);
-        }
+        playerUnit.ChangeState(PlayerUnit.kickState);
     }
 }

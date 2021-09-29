@@ -11,6 +11,8 @@ public class PlayerState_Aiming : PlayerState
     private TimeCounterEx _chargeDelayTimer = new TimeCounterEx();
     private float dechargingRatio = 0.3f;
     private float _gunCost = 25.0f;
+    private float _normalCost = 25.0f;
+    private float _chargeCost = 50.0f;
     private int _transformingCount = 0;
     private float _chargeDelayTime;
     private float verticalValue = 0.0f;
@@ -215,7 +217,7 @@ public class PlayerState_Aiming : PlayerState
             if (playerUnit.CanCharge == true)
             {
                 playerUnit.chargeTime.Value += Time.deltaTime * (playerUnit.Decharging ? dechargingRatio : 1f);
-                playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, Mathf.Abs(playerUnit.energy.Value / _gunCost));
+                //playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, Mathf.Abs(playerUnit.energy.Value / _gunCost));
                 playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, 3.0f);
             }
 
@@ -273,7 +275,7 @@ public class PlayerState_Aiming : PlayerState
 
     public override void OnShot(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.chargeTime.Value >= 1.0f)
+        if (playerUnit.CanCharge == true && playerUnit.Energy >= _normalCost)
         {
             if (playerUnit._chargeSoundEmitter != null)
             {
@@ -281,25 +283,31 @@ public class PlayerState_Aiming : PlayerState
                 playerUnit._chargeSoundEmitter = null;
             }
 
-            int loadCount = (int)(playerUnit.chargeTime.Value);
-            loadCount = loadCount > 3 ? 3 : loadCount;
-            _transformingCount = 0;
+            if (playerUnit.chargeTime.Value >= 3 && playerUnit.Energy >= _chargeCost)
+            {
+                playerUnit.EmpGun.LaunchCharge(40.0f);
+                playerUnit.AddEnergy(-_chargeCost);
+            }
+            else
+            {
+                playerUnit.EmpGun.LaunchNormal();
+                playerUnit.AddEnergy(-_normalCost);
+            }
 
-            playerUnit.chargeTime.Value = 0.0f;
-            playerUnit.EmpGun.LaunchLaser(loadCount * 40.0f);
-            playerUnit.AddEnergy(-loadCount * _gunCost);
             FloatData camDist = MessageDataPooling.GetMessageData<FloatData>();
-            camDist.value = 0.5f * (float)loadCount;
+            camDist.value = 0.5f * (float)(playerUnit.chargeTime.Value >= 3 ? 3 : 1);
             playerUnit.SendMessageEx(MessageTitles.cameramanager_setaimcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), camDist);
 
             _chargeDelayTimer.InitTimer("ChargeDelay", 0.0f, _chargeDelayTime);
 
             AttachSoundPlayData soundPlayData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
-            soundPlayData.id = 1009 + loadCount;
+            soundPlayData.id = 1009 + (playerUnit.chargeTime.Value >= 3?3:1);
             soundPlayData.localPosition = Vector3.up;
             soundPlayData.parent = playerUnit.Transform;
             soundPlayData.returnValue = false;
             playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundPlayData);
+
+            playerUnit.chargeTime.Value = 0.0f;
 
             SetRadialBlurData blurData = MessageDataPooling.GetMessageData<SetRadialBlurData>();
             blurData.factor = 1.0f;
@@ -307,7 +315,7 @@ public class PlayerState_Aiming : PlayerState
             blurData.time = 0.8f;
             playerUnit.SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
 
-            if (loadCount >= 2)
+            if (playerUnit.chargeTime.Value >= 3)
             {
                 SetTimeScaleMsg data = MessageDataPooling.GetMessageData<SetTimeScaleMsg>();
                 data.timeScale = 0.0f;
@@ -315,10 +323,6 @@ public class PlayerState_Aiming : PlayerState
                 data.stopTime = 0.2f;
                 data.startTime = 0.02f;
                 playerUnit.SendMessageEx(MessageTitles.timemanager_settimescale, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), data);
-            }
-            if (loadCount == 3)
-            {
-                
             }
 
             playerUnit.CanCharge = false;
