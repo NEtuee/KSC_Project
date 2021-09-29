@@ -12,6 +12,7 @@ public class Genie_BombDroneAI : DroneAIBase
     public EMPShield shield;
 
     public bool destroyGround = true;
+    public bool DeactiveStart = true;
 
     public float targetUpdateTime = 0.2f;
     public float lifeTime = 60f;
@@ -39,7 +40,12 @@ public class Genie_BombDroneAI : DroneAIBase
 
         _timeCounterEx.InitTimer("launch",0f,launchTime);
 
-        this.gameObject.SetActive(false);
+        if(DeactiveStart)
+            this.gameObject.SetActive(false);
+        else
+        {
+            Respawn(transform.position);
+        }
     }
 
     public override void FixedProgress(float deltaTime)

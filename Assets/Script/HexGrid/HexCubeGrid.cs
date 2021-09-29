@@ -17,11 +17,13 @@ public class HexCubeGrid : MonoBehaviour
     private float _cubeWidth;
     private float _cubeHeight;
     private List<Vector3Int> _cubeSaveList;
+    private List<HexCube> _hexCubeSaveList;
     private Dictionary<int,Vector3Int> _overlapCheckList;
 
     public void Awake()
     {
         _cubeSaveList = new List<Vector3Int>();
+        _hexCubeSaveList = new List<HexCube>();
         _overlapCheckList = new Dictionary<int, Vector3Int>();
         CubeListToDictionary();
     }
@@ -37,12 +39,13 @@ public class HexCubeGrid : MonoBehaviour
 
     public void GetCubeLineHeavy(ref List<HexCube> list,Vector3Int start ,Vector3Int end, int loopStart, int loopCount, bool overlapListClear = true)
     {
-        GetCubeLine(ref list,start,end);
+        _hexCubeSaveList.Clear();
+        GetCubeLine(ref _hexCubeSaveList,start,end);
 
         if(overlapListClear)
             _overlapCheckList.Clear();
 
-        foreach(var item in list)
+        foreach(var item in _hexCubeSaveList)
         {
             _cubeSaveList.Clear();
             HexGridHelperEx.GetCubeNear(ref _cubeSaveList,item.cubePoint,loopStart,loopCount);
