@@ -32,10 +32,7 @@ public class PlayerState_Dash : PlayerState
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
-        if (Physics.Raycast(playerUnit.Position + playerUnit.Transform.forward * playerUnit.CapsuleCollider.radius, playerUnit.Transform.forward, playerUnit.DashSpeed * Time.fixedDeltaTime) == false)
-        {
-            playerUnit.Move(playerUnit.Transform.forward * playerUnit.DashSpeed, Time.fixedDeltaTime);
-        }
+        playerUnit.Move(playerUnit.Transform.forward * playerUnit.DashSpeed, Time.fixedDeltaTime);
 
         _lateTime += Time.fixedDeltaTime;
 

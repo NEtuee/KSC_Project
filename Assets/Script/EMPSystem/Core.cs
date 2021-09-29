@@ -11,29 +11,24 @@ public class Core : Hitable
     {
         base.Awake();
 
-        AddAction(MessageTitles.scan_scanned,(x)=>{
+        AddAction(MessageTitles.scan_scanned, (x) => {
 
             MD.ScanMakerData data = MessageDataPooling.GetMessageData<MD.ScanMakerData>();
             data.collider = collider;
-            
-            SendMessageEx(MessageTitles.uimanager_activeScanMaker,GetSavedNumber("UIManager"),data);
+
+            SendMessageEx(MessageTitles.uimanager_activeScanMaker, GetSavedNumber("UIManager"), data);
             Scanned();
         });
 
-        AddAction(MessageTitles.player_NormalHit,(x)=>{
+        AddAction(MessageTitles.player_NormalHit, (x) => {
 
             Hit();
         });
 
-        AddAction(MessageTitles.player_EMPHit,(x)=>{
-                var damage = MessageDataPooling.CastData<MD.FloatData>(x.data).value;
-                Hit(damage);
+        AddAction(MessageTitles.player_EMPHit, (x) => {
+            var damage = MessageDataPooling.CastData<MD.FloatData>(x.data).value;
+            Hit(damage);
         });
-    }
-
-    void Update()
-    {
-
     }
 
     public override void Initialize()
