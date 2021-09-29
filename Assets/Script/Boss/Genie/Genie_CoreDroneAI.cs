@@ -5,6 +5,8 @@ using UnityEngine;
 public class Genie_CoreDroneAI : Genie_BombDroneAI
 {
     public bool mirror = true;
+    public bool upside = true;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -20,11 +22,17 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
     {
         if(mirror)
             SetMirrorSideTarget();
-
-        if(GetTargetPosition().y > transform.position.y)
+        
+        if(GetTargetPosition().y > transform.position.y && upside)
         {
             var dist = MathEx.distance(GetTargetPosition().y, transform.position.y);
             AddForce(dist * 2f * Vector3.up * deltaTime);
+        }
+        else if(MathEx.distance(GetTargetPosition().y, transform.position.y) >= 1f)
+        {
+            var dir = GetTargetPosition().y > transform.position.y ? 1f : -1f;
+            var dist = MathEx.distance(GetTargetPosition().y, transform.position.y);
+            AddForce(dist * dir * Vector3.up * deltaTime);
         }
 
         var centerDist = Vector3.Distance(centerPosition.position,transform.position);
