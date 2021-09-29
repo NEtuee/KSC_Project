@@ -135,6 +135,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     #endregion
 
     public Transform Transform => _transform;
+    public Vector3 Position => _transform.position;
+    public Quaternion Rotation => _transform.rotation;
 
     public CapsuleCollider CapsuleCollider { get => _capsuleCollider; }
 
@@ -491,6 +493,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (isJumping == true && (Time.time - jumpTime < jumpMinTime))
         {
+            _animator.SetBool("IsGround", JumpStart == false ? isGrounded : false);
             return;
         }
 

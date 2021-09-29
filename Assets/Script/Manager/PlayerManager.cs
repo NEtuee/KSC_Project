@@ -96,6 +96,11 @@ public class PlayerManager : ManagerBase
             bool visible = (bool)msg.data;
             _drone.gameObject.SetActive(visible);
             _player.gameObject.SetActive(visible);
+
+            if(visible)
+            {
+                _player.ChangeState(PlayerUnit.defaultState);
+            }
         });
 
         AddAction(MessageTitles.playermanager_ragdoll,(msg)=>{
