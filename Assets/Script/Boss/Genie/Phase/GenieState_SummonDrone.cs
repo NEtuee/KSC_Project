@@ -30,6 +30,8 @@ public class GenieState_SummonDrone : GenieStateBase
         _droneSpawnCount = 0;
 
         _spawning = false;
+
+        ((Genie_CoreDroneAI)droneAIs[droneAIs.Count - 1]).mirror = true;
     }
 
     public override void StateProgress(float deltaTime)

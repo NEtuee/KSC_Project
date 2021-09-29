@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Genie_CoreDroneAI : Genie_BombDroneAI
 {
+    public bool mirror = true;
     public override void Initialize()
     {
         base.Initialize();
@@ -17,7 +18,8 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
 
     public override void FixedProgress(float deltaTime)
     {
-        SetMirrorSideTarget();
+        if(mirror)
+            SetMirrorSideTarget();
 
         if(GetTargetPosition().y > transform.position.y)
         {

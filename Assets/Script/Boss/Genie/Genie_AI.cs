@@ -472,7 +472,7 @@ public class Genie_AI : ObjectBase
     }
 
     public void Hit()
-    {
+    {   
         --hitPoint;
         UpdateEyeColor();
         SetGroundAreaMaterial(defaultMat);
@@ -516,7 +516,7 @@ public class Genie_AI : ObjectBase
         foreach(var eye in eyes)
         {
 
-            eye.material.SetColor("_EmissionColor",eyeColor[hitPoint]);
+//            eye.material.SetColor("_EmissionColor",eyeColor[hitPoint]);
         }
     }
 

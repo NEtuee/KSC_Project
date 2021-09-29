@@ -41,7 +41,7 @@ public class GenieState_DroneSwing : GenieStateBase
         _timeCounter.AddSequence("Process",beforeGroundHitTime,LookTarget,null);
         _timeCounter.AddSequence("Process",groundHitTime,GroundHit,GroundDisapear);
         _timeCounter.AddSequence("Process",beforeDroneSummonTime,null,null);
-        _timeCounter.AddSequence("Process",droneSummonTime,DroneApear,null);
+        _timeCounter.AddSequence("Process",droneSummonTime,DroneApear,SpawnCoreDrone);
         _timeCounter.AddSequence("Process",patternStartTime,null,null);
 
         _timeCounter.CreateSequencer("GroundCut");
@@ -118,6 +118,12 @@ public class GenieState_DroneSwing : GenieStateBase
     public void DroneExplosion()
     {
         droneAnimator.SetTrigger("Explosion");
+    }
+
+    public void SpawnCoreDrone(float time)
+    {
+        coreDroneAI.SetTarget(droneTarget);
+        coreDroneAI.Respawn(droneTarget.position);
     }
 
     public void Rotate(float deltaTime)
