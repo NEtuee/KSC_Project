@@ -12,12 +12,7 @@ public class PlayerState_ReadyClimbingJump : PlayerState
     {
         if (playerUnit.InputVertical >= 0.5f)
         {
-            if (playerUnit.InputHorizontal == 0.0f)
-                playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Up;
-            else if (playerUnit.InputHorizontal > 0.0f)
-                playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.UpRight;
-            else if (playerUnit.InputHorizontal < 0.0f)
-                playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.UpLeft;
+            playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Up;
         }
         else
         {
@@ -60,7 +55,7 @@ public class PlayerState_ReadyClimbingJump : PlayerState
 
         playerUnit.InitVelocity();
 
-        playerUnit.HandIK.DisableHandIK();
+        //playerUnit.HandIK.DisableHandIK();
         animator.SetBool("IsGrab", false);
         animator.SetTrigger("ClimbingJump");
     }

@@ -64,6 +64,13 @@ public class DroneScaner : UnTransfromObjectBase
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
 
         _scannedNumbers.Clear();
+
+        EffectActiveData effectData = MessageDataPooling.GetMessageData<EffectActiveData>();
+        effectData.key = "BirdyScanning";
+        effectData.position = transform.position + transform.forward * 0.4f;
+        effectData.rotation = transform.rotation;
+        effectData.parent = transform;
+        SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,GetSavedNumber("EffectManager"),effectData);
     }
 
     void Update()

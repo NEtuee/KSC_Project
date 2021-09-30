@@ -19,6 +19,7 @@ public class PlayerState_Default : PlayerState
         animator.SetBool("IsLedge", false);
         animator.SetTrigger("Landing");
         playerUnit.FootIK.EnableFeetIk();
+        //playerUnit.HandIK.DisableHandIK();
         playerUnit.HandIK.DisableHandIK();
         playerUnit.CapsuleCollider.height = 1.898009f;
         playerUnit.CapsuleCollider.center = new Vector3(0.0f, 0.95622f, 0.0f);
@@ -272,9 +273,6 @@ public class PlayerState_Default : PlayerState
 
     public override void OnKick(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if(playerUnit.CurrentSpeed == 0.0f)
-        {
-            playerUnit.ChangeState(PlayerUnit.kickState);
-        }
+        playerUnit.ChangeState(PlayerUnit.kickState);
     }
 }

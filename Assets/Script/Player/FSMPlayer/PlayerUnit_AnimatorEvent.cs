@@ -132,15 +132,29 @@ public partial class PlayerUnit
     private void Kick()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + CapsuleCollider.center, transform.forward, out hit, 4f, kickLayer))
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 4f, kickLayer);
+        if (colliders.Length != 0)
         {
-            MessageReceiver receiver;
-            if (hit.collider.TryGetComponent<MessageReceiver>(out receiver))
+            foreach(var coll in colliders)
             {
-                Message msg = new Message();
-                msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, null, (Object)this);
-                receiver.ReceiveMessage(msg);
+                MessageReceiver receiver;
+                if (coll.TryGetComponent<MessageReceiver>(out receiver))
+                {
+                    Message msg = new Message();
+                    msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, this, this);
+                    receiver.ReceiveMessage(msg);
+                }
             }
         }
+        //if (Physics.Raycast(transform.position + CapsuleCollider.center, transform.forward, out hit, 4f, kickLayer))
+        //{
+        //    MessageReceiver receiver;
+        //    if (hit.collider.TryGetComponent<MessageReceiver>(out receiver))
+        //    {
+        //        Message msg = new Message();
+        //        msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, null, (Object)this);
+        //        receiver.ReceiveMessage(msg);
+        //    }
+        //}
     }
 }

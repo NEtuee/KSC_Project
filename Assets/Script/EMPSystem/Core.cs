@@ -7,14 +7,28 @@ public class Core : Hitable
 {
     public GameObject destroyEffect;
 
-    void Start()
+    protected override void Awake()
     {
-        base.Start();
-    }
+        base.Awake();
 
-    void Update()
-    {
+        AddAction(MessageTitles.scan_scanned, (x) => {
 
+            MD.ScanMakerData data = MessageDataPooling.GetMessageData<MD.ScanMakerData>();
+            data.collider = collider;
+
+            SendMessageEx(MessageTitles.uimanager_activeScanMaker, GetSavedNumber("UIManager"), data);
+            Scanned();
+        });
+
+        AddAction(MessageTitles.player_NormalHit, (x) => {
+
+            Hit();
+        });
+
+        AddAction(MessageTitles.player_EMPHit, (x) => {
+            var damage = MessageDataPooling.CastData<MD.FloatData>(x.data).value;
+            Hit(damage);
+        });
     }
 
     public override void Initialize()

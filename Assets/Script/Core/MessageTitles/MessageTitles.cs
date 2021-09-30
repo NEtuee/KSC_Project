@@ -352,6 +352,8 @@ public static partial class MessageTitles
 
     public const ushort player_EMPHit = 0x0906;
 
+    public const ushort player_NormalHit = 0x0907;
+
     #endregion
 
     #region PlayerManager
@@ -434,7 +436,7 @@ public static partial class MessageTitles
     public const ushort set_setCameraManager = 0x1003;
 
     /// <summary>
-    /// data = null
+    /// data = PlayerUnit
     /// </summary>
     public const ushort object_kick = 0x1004;
 

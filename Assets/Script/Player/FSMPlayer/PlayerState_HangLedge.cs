@@ -14,15 +14,20 @@ public class PlayerState_HangLedge : PlayerState
     private float _minKeepGrabTime = 0.5f;
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
-        if (Mathf.Abs(playerUnit.InputHorizontal) == 0.0f)
-        {
-            Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
-            if (planInfo != null)
-            {
-                playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(-planInfo.forward), Time.deltaTime * 5.0f);
-            }
+        float deltaMagnitude = animator.deltaPosition.magnitude;
+
+        //if (Mathf.Abs(playerUnit.InputHorizontal) == 0.0f)
+        //{
+        //    Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
+        //    if (planInfo != null)
+        //    {
+        //        playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(-planInfo.forward), Time.deltaTime * 5.0f);
+        //    }
+        //    return;
+        //}
+
+        if (deltaMagnitude == 0.0f)
             return;
-        }
 
         Vector3 leftPoint;
         Vector3 rightPoint;
@@ -39,22 +44,52 @@ public class PlayerState_HangLedge : PlayerState
             moveDir = leftPoint - rightPoint;
             moveDir.Normalize();
             adjustForward = Vector3.Cross(-moveDir, Vector3.up);
-            moveDir *= animator.deltaPosition.magnitude;
+            moveDir *= deltaMagnitude;
 
             destPointPosition = playerUnit.LineTracker.position + moveDir;
             destPointPosition = rightPoint + Intersection.ShortestPointLineSegmentAndPoint(rightPoint, leftPoint, destPointPosition);
 
-             u = leftPoint - rightPoint;
-             v = destPointPosition - rightPoint;
+            u = leftPoint - rightPoint;
+            v = destPointPosition - rightPoint;
         }
-        else if(playerUnit.climbDir == ClimbDir.Right)
+        else if (playerUnit.climbDir == ClimbDir.Right)
         {
             leftPoint = playerUnit.CurrentFollowLine.points[playerUnit.leftPointNum].position;
             rightPoint = playerUnit.CurrentFollowLine.points[playerUnit.rightPointNum].position;
             moveDir = rightPoint - leftPoint;
             moveDir.Normalize();
             adjustForward = Vector3.Cross(moveDir, Vector3.up);
-            moveDir *= animator.deltaPosition.magnitude;
+            moveDir *= deltaMagnitude;
+
+            destPointPosition = playerUnit.LineTracker.position + moveDir;
+            destPointPosition = leftPoint + Intersection.ShortestPointLineSegmentAndPoint(leftPoint, rightPoint, destPointPosition);
+
+            u = rightPoint - leftPoint;
+            v = destPointPosition - leftPoint;
+        }
+        else if(playerUnit.prevClimbDir == ClimbDir.Left)
+        {
+            leftPoint = playerUnit.CurrentFollowLine.points[playerUnit.leftPointNum].position;
+            rightPoint = playerUnit.CurrentFollowLine.points[playerUnit.rightPointNum].position;
+            moveDir = leftPoint - rightPoint;
+            moveDir.Normalize();
+            adjustForward = Vector3.Cross(-moveDir, Vector3.up);
+            moveDir *= deltaMagnitude;
+
+            destPointPosition = playerUnit.LineTracker.position + moveDir;
+            destPointPosition = rightPoint + Intersection.ShortestPointLineSegmentAndPoint(rightPoint, leftPoint, destPointPosition);
+
+            u = leftPoint - rightPoint;
+            v = destPointPosition - rightPoint;
+        }
+        else if(playerUnit.prevClimbDir == ClimbDir.Right)
+        {
+            leftPoint = playerUnit.CurrentFollowLine.points[playerUnit.leftPointNum].position;
+            rightPoint = playerUnit.CurrentFollowLine.points[playerUnit.rightPointNum].position;
+            moveDir = rightPoint - leftPoint;
+            moveDir.Normalize();
+            adjustForward = Vector3.Cross(moveDir, Vector3.up);
+            moveDir *= deltaMagnitude;
 
             destPointPosition = playerUnit.LineTracker.position + moveDir;
             destPointPosition = leftPoint + Intersection.ShortestPointLineSegmentAndPoint(leftPoint, rightPoint, destPointPosition);
@@ -111,6 +146,50 @@ public class PlayerState_HangLedge : PlayerState
                     playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
                 }
             }
+            else if(playerUnit.prevClimbDir == ClimbDir.Left)
+            {
+                if (playerUnit.CurrentFollowLine.PassLeft(ref playerUnit.leftPointNum, ref playerUnit.rightPointNum))
+                {
+                    playerUnit.LineTracker.position = destPointPosition;
+                    Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
+                    Vector3 pos = new Vector3();
+                    if (planInfo != null)
+                    {
+                        pos = destPointPosition + (planInfo.up * playerUnit.DetectionOffset.y);
+                        pos -= planInfo.forward * playerUnit.DetectionOffset.z;
+                        playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(-planInfo.forward), Time.deltaTime * 5.0f);
+                    }
+                    else
+                    {
+                        pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
+                        pos += adjustForward * playerUnit.DetectionOffset.z;
+                        playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime * 5.0f);
+                    }
+                    playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
+                }
+            }
+            else if(playerUnit.prevClimbDir == ClimbDir.Right)
+            {
+                if (playerUnit.CurrentFollowLine.PassRight(ref playerUnit.leftPointNum, ref playerUnit.rightPointNum))
+                {
+                    playerUnit.LineTracker.position = destPointPosition;
+                    Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
+                    Vector3 pos = new Vector3();
+                    if (planInfo != null)
+                    {
+                        pos = destPointPosition + (planInfo.up * playerUnit.DetectionOffset.y);
+                        pos -= planInfo.forward * playerUnit.DetectionOffset.z;
+                        playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(-planInfo.forward), Time.deltaTime * 5.0f);
+                    }
+                    else
+                    {
+                        pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
+                        pos += adjustForward * playerUnit.DetectionOffset.z;
+                        playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime * 5.0f);
+                    }
+                    playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
+                }
+            }
         }
         else
         {
@@ -131,142 +210,6 @@ public class PlayerState_HangLedge : PlayerState
             }
             playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
         }
-
-        //if(playerUnit.climbDir == ClimbDir.Left)
-        //{
-        //    Vector3 leftPoint = playerUnit.CurrentFollowLine.points[playerUnit.leftPointNum].position;
-        //    Vector3 rightPoint = playerUnit.CurrentFollowLine.points[playerUnit.rightPointNum].position;
-        //    Vector3 moveDir = leftPoint - rightPoint;
-        //    moveDir.Normalize();
-        //    Vector3 adjustForward = Vector3.Cross(-moveDir, Vector3.up);
-        //    moveDir *= animator.deltaPosition.magnitude;
-
-        //    Vector3 destPointPosition = playerUnit.LineTracker.position + moveDir;
-        //    destPointPosition = rightPoint + Intersection.ShortestPointLineSegmentAndPoint(rightPoint, leftPoint, destPointPosition);
-
-        //    Vector3 u = leftPoint - rightPoint;
-        //    Vector3 v = destPointPosition - rightPoint;
-        //    float s;
-        //    if (u.x != 0.0f)
-        //        s = v.x / u.x;
-        //    else if(u.y != 0.0f)
-        //        s = v.y / u.y;
-        //    else
-        //        s = v.z / u.z;
-
-        //    //Debug.Log(s);
-        //    if (s > 1.0f)
-        //    {
-        //        if(playerUnit.CurrentFollowLine.PassLeft(ref playerUnit.leftPointNum, ref playerUnit.rightPointNum))
-        //        {
-        //            playerUnit.LineTracker.position = destPointPosition;
-        //            Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
-
-        //            Vector3 pos = new Vector3();
-        //            if (planInfo != null)
-        //            {
-        //                pos = destPointPosition + (planInfo.up * playerUnit.DetectionOffset.y);
-        //                pos -= planInfo.forward * playerUnit.DetectionOffset.z;
-        //                playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(-planInfo.forward), Time.deltaTime * 5.0f);
-        //            }
-        //            else
-        //            {
-        //                pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
-        //                pos += adjustForward * playerUnit.DetectionOffset.z;
-        //                playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime * 5.0f);
-        //            }
-        //            playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        playerUnit.LineTracker.position = destPointPosition;
-        //        //playerUnit.Transform.position += moveDir;
-        //        Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
-        //        Vector3 pos = new Vector3();
-        //        if (planInfo != null)
-        //        {
-        //            pos = destPointPosition + (planInfo.up * playerUnit.DetectionOffset.y);
-        //            pos -= planInfo.forward * playerUnit.DetectionOffset.z;
-        //            playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(-planInfo.forward), Time.deltaTime * 5.0f);
-        //        }
-        //        else
-        //        {
-        //            pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
-        //            pos += adjustForward * playerUnit.DetectionOffset.z;
-        //            playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime * 5.0f);
-        //        }
-        //        playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
-        //    }
-        //}
-        //else if(playerUnit.climbDir == ClimbDir.Right)
-        //{
-        //    Vector3 leftPoint = playerUnit.CurrentFollowLine.points[playerUnit.leftPointNum].position;
-        //    Vector3 rightPoint = playerUnit.CurrentFollowLine.points[playerUnit.rightPointNum].position;
-        //    Vector3 moveDir = rightPoint - leftPoint;
-        //    moveDir.Normalize();
-        //    Vector3 adjustForward = Vector3.Cross(moveDir, Vector3.up);
-        //    moveDir *= animator.deltaPosition.magnitude;
-        //    //playerUnit.Transform.position += moveDir;
-        //    //playerUnit.nearPointMarker.position += moveDir;
-
-        //    Vector3 destPointPosition = playerUnit.LineTracker.position + moveDir;
-        //    destPointPosition = leftPoint + Intersection.ShortestPointLineSegmentAndPoint(leftPoint, rightPoint, destPointPosition);
-
-        //    Vector3 u = rightPoint - leftPoint;
-        //    Vector3 v = destPointPosition - leftPoint;
-        //    float s;
-        //    if (u.x != 0.0f)
-        //        s = v.x / u.x;
-        //    else if (u.y != 0.0f)
-        //        s = v.y / u.y;
-        //    else
-        //        s = v.z / u.z;
-        //    //Debug.Log(s);
-        //    if (s > 1.0f)
-        //    {
-        //        if(playerUnit.CurrentFollowLine.PassRight(ref playerUnit.leftPointNum, ref playerUnit.rightPointNum))
-        //        {
-        //            playerUnit.LineTracker.position = destPointPosition;
-        //            //playerUnit.Transform.position += moveDir;
-        //            Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
-        //            Vector3 pos = new Vector3();
-        //            if (planInfo != null)
-        //            {
-        //                pos = destPointPosition + (planInfo.up * playerUnit.DetectionOffset.y);
-        //                pos -= planInfo.forward * playerUnit.DetectionOffset.z;
-        //                playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(-planInfo.forward), Time.deltaTime * 5.0f);
-        //            }
-        //            else
-        //            {
-        //                pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
-        //                pos += adjustForward * playerUnit.DetectionOffset.z;
-        //                playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime * 5.0f);
-        //            }
-        //            playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        playerUnit.LineTracker.position = destPointPosition;
-        //        //playerUnit.Transform.position += moveDir;
-        //        Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
-        //        Vector3 pos = new Vector3();
-        //        if (planInfo != null)
-        //        {
-        //            pos = destPointPosition + (planInfo.up * playerUnit.DetectionOffset.y);
-        //            pos -= planInfo.forward * playerUnit.DetectionOffset.z;
-        //            playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(-planInfo.forward), Time.deltaTime * 5.0f);
-        //        }
-        //        else
-        //        {
-        //            pos = destPointPosition + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
-        //            pos += adjustForward * playerUnit.DetectionOffset.z;
-        //            playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation, Quaternion.LookRotation(adjustForward), Time.deltaTime * 5.0f);
-        //        }
-        //        playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, pos, Time.deltaTime * 50.0f);
-        //    }
-        //}
     }
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
@@ -296,12 +239,30 @@ public class PlayerState_HangLedge : PlayerState
         StringData data = MessageDataPooling.GetMessageData<StringData>();
         data.value = "Grab";
         playerUnit.SendMessageEx(MessageTitles.cameramanager_setfollowcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), data);
+
+        //Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
+        //Vector3 pos = new Vector3();
+        //if (planInfo != null)
+        //{
+        //    pos = playerUnit.LineTracker.position + (planInfo.up * playerUnit.DetectionOffset.y);
+        //    pos -= planInfo.forward * playerUnit.DetectionOffset.z;
+        //    playerUnit.Transform.rotation = Quaternion.LookRotation(-planInfo.forward);
+        //}
+        //else
+        //{
+        //    pos = playerUnit.LineTracker.position + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
+        //    pos += playerUnit.Transform.forward * playerUnit.DetectionOffset.z;
+        //    playerUnit.Transform.rotation = Quaternion.LookRotation(playerUnit.Transform.forward);
+        //}
+        //playerUnit.Transform.position = pos;
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
     {
         animator.SetBool("IsLedge", false);
         playerUnit.IsLedge = false;
+
+        playerUnit.LineTracker.SetParent(null);
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
@@ -341,7 +302,7 @@ public class PlayerState_HangLedge : PlayerState
             _canRelease = true;
         }
 
-        if (playerUnit.InputVertical == 1.0f)
+        if (playerUnit.InputVertical >= 0.5f)
         {
             _ledgeUpInputTime += Time.deltaTime;
         }
@@ -356,7 +317,7 @@ public class PlayerState_HangLedge : PlayerState
 
     private void LedgeUp(PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.IsLedge == true && playerUnit.IsClimbingMove == false && playerUnit.SpaceChecker.Overlapped() == false)
+        if (playerUnit.IsLedge == true && playerUnit.SpaceChecker.Overlapped() == false)
         {
             playerUnit.IsLedge = false;
             animator.SetTrigger("LedgeUp");
@@ -397,7 +358,7 @@ public class PlayerState_HangLedge : PlayerState
         if (_canRelease == false)
             return;
 
-        if (playerUnit.InputVertical == 1.0f || playerUnit.InputHorizontal == 1.0f || playerUnit.InputHorizontal == -1.0f)
+        if (playerUnit.InputVertical >= 0.5f || playerUnit.InputHorizontal >= 0.5f || playerUnit.InputHorizontal <= -0.5f)
         {
             playerUnit.ChangeState(PlayerUnit.readyClimbingJumpState);
             return;

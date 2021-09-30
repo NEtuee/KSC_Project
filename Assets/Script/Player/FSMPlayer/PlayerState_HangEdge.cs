@@ -19,7 +19,7 @@ public class PlayerState_HangEdge : PlayerState
         playerUnit.IsLedge = true;
         playerUnit.IsClimbingMove = false;
         animator.SetBool("IsLedge", true);
-        playerUnit.HandIK.ActiveLedgeIK(true);
+        //playerUnit.HandIK.ActiveLedgeIK(true);
         playerUnit.AdjustLedgeOffset();
     }
 

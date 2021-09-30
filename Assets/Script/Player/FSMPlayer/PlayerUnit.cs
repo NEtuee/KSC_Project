@@ -135,6 +135,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     #endregion
 
     public Transform Transform => _transform;
+    public Vector3 Position => _transform.position;
+    public Quaternion Rotation => _transform.rotation;
 
     public CapsuleCollider CapsuleCollider { get => _capsuleCollider; }
 
@@ -152,13 +154,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private EMPGun _empGun;
     private Rigidbody _rigidbody;
     private PlayerRagdoll _ragdoll;
-    private HandIKCtrl _handIk;
+    private PlayerHandIK _handIk;
     private IKCtrl _footIk;
     public EMPGun EmpGun => _empGun;
     public Animator GunAnimator => gunAnim;
     public Rigidbody Rigidbody => _rigidbody;
     public PlayerRagdoll Ragdoll => _ragdoll;
-    public HandIKCtrl HandIK => _handIk;
+    public PlayerHandIK HandIK => _handIk;
     public IKCtrl FootIK => _footIk;
 
     private RaycastHit _wallHit;
@@ -208,7 +210,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _empGun = GetComponent<EMPGun>();
         _rigidbody = GetComponent<Rigidbody>();
-        _handIk = GetComponent<HandIKCtrl>();
+        _handIk = GetComponent<PlayerHandIK>();
         _footIk = GetComponent<IKCtrl>();
         _ragdoll = GetComponent<PlayerRagdoll>();
 
@@ -266,7 +268,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if(_inputHorizontal != 0.0f)
         {
-            _climbingWeight = _inputHorizontal;
+            //_climbingWeight = _inputHorizontal;
+            _climbingWeight = Mathf.MoveTowards(_climbingWeight, _inputHorizontal, 4f * Time.deltaTime);
         }
         else
         {
@@ -328,6 +331,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     private void LateUpdate()
     {
+        //Debug.Log("PlayerUnit LateUpdate");
+
         if (_currentState == aimingState)
         {
             Vector3 dir = (spine.position - lookAtAim.position).normalized;
@@ -338,6 +343,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
             spineRotation *= originalRot;
             spine.rotation = spineRotation;
         }
+
+        _empGun.UpdateLaunchPos();
     }
 
     private void OnAnimatorMove()
@@ -362,14 +369,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _currentState.Enter(this, _animator);
     }
 
-
-    /// <summary>
-    /// ����, ��Ÿ Ÿ��, ��Ÿ Ÿ�� ���� ����
-    /// �Ϲ������� �� ��Ÿ Ÿ���� �Ѱ�����.
-    /// </summary>
-    /// <param name="direction"></param>
-    /// <param name="deltaTime"></param>
-    /// <param name="noDelta"></param>
     public void Move(Vector3 direction, float deltaTime = 0f, bool noDelta = false)
     {
         if (noDelta == false)
@@ -494,6 +493,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (isJumping == true && (Time.time - jumpTime < jumpMinTime))
         {
+            _animator.SetBool("IsGround", JumpStart == false ? isGrounded : false);
             return;
         }
 
@@ -1306,6 +1306,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public int leftPointNum;
     public int rightPointNum;
     public ClimbDir climbDir;
+    public ClimbDir prevClimbDir;
     private float _climbingWeight = 0.0f;
     private ClimbingLineManager _climbingLineManager;
     private List<ClimbingLine> _currentTestClimbingLines = null;
