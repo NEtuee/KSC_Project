@@ -53,6 +53,7 @@ public class GenieState_SummonDrone : GenieStateBase
     public override void StateChanged(StateBase targetState)
     {
         base.StateChanged(targetState);
+        DeleteAllDrone();
     }
 
     public void SpawnIdle(float deltaTime)

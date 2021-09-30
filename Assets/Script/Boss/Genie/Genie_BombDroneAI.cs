@@ -117,19 +117,21 @@ public class Genie_BombDroneAI : DroneAIBase
             var dist = MathEx.distance(transform.position.y,currCube.transform.position.y);
             if(dist <= explosionDistance)
             {
-                currCube.SetActive(false,false);
-                currCube.special = true;
+                currCube.SetMove(false,0f,1.3f,2f);
             }
         }
         
         gridControll.GetCube_Near(point,3,true);
         foreach(var cube in gridControll.GetTargetCubes())
         {
+            if(cube == null)
+            {
+                Debug.Log("WTF");
+            }
             var dist = MathEx.distance(transform.position.y,cube.transform.position.y);
             if(dist <= explosionDistance)
             {
-                cube.SetActive(false,false);
-                cube.special = true;
+                currCube.SetMove(false,0f,1.3f,2f);
             }
             
         }

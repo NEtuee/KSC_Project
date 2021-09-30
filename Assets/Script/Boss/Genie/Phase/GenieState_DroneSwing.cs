@@ -95,6 +95,12 @@ public class GenieState_DroneSwing : GenieStateBase
         base.StateChanged(targetState);
         explosionPhysics.Launch();
         droneLine.gameObject.SetActive(false);
+
+        foreach(var item in _fallLine)
+        {
+            item.GetRenderer().material = target.gridControll.prev;
+        }
+
         foreach(var item in explosionPhysics.targets)
         {
             Destroy(item,5f);
