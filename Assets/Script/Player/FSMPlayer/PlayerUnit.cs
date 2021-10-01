@@ -30,6 +30,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     #region Move Property
     public float WalkSpeed { get => walkSpeed; set => walkSpeed = value; }
+    public float JogSpeed { get => jogSpeed; set => jogSpeed = value; }
     public float RunSpeed { get => runSpeed; set => runSpeed = value; }
     public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
     public float RotationSpeed { get => rotationSpeed; }
@@ -117,6 +118,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public Transform DechargingEffectTransform => dechargingEffectTransform;
     public Transform SteamPosition => steamPosition;
     public bool CanCharge { get => _bCanCharge; set => _bCanCharge = value; }
+    public float NoramlGunCost { get => normalCost; set => normalCost = value; }
+    public float ChargeGunCost { get => chargeCost; set => chargeCost = value; }
     #endregion
 
     #region QuickStanding
@@ -198,6 +201,28 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             _climbingLineManager = (ClimbingLineManager)msg.data;
         });
+
+        InputSystem.onDeviceChange +=
+            (device, change) =>
+            {
+                switch (change)
+                {
+                    case InputDeviceChange.Added:
+                    case InputDeviceChange.Removed:
+                        var gamepad = Gamepad.current;
+                        if (gamepad == null)
+                            _gamepadMode = false;
+                        else
+                            _gamepadMode = true;
+                        break;
+                }
+            };
+
+        var gamepad = Gamepad.current;
+        if (gamepad == null)
+            _gamepadMode = false;
+        else
+            _gamepadMode = true;
     }
 
     public override void Initialize()
@@ -410,6 +435,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private void UpdateMoveSpeed()
     {
         _animator.SetFloat("Speed", currentSpeed);
+        //_animator.SetFloat("HorizonWeight", currentSpeed == runSpeed ? _horizonWeight : 0.0f);
         _animator.SetFloat("HorizonWeight", _horizonWeight);
 
         if (_currentState == grabState ||
@@ -424,27 +450,49 @@ public partial class PlayerUnit : UnTransfromObjectBase
             return;
         }
 
-        if (_inputVertical != 0 || _inputHorizontal != 0)
+        if (_gamepadMode == false)
         {
-            if (_currentState != aimingState)
+            if (_inputVertical != 0 || _inputHorizontal != 0)
             {
-                if (isWalk == true)
+                if (_currentState != aimingState)
                 {
-                    currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+                    if (isWalk == true)
+                    {
+                        currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+                    }
+                    else
+                    {
+                        currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+                    }
                 }
                 else
                 {
-                    currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, aimingWalkSpeed, Time.deltaTime * accelerateSpeed);
                 }
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, aimingWalkSpeed, Time.deltaTime * accelerateSpeed);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed * 2);
             }
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed * 2);
+            if (_inputVertical != 0 || _inputHorizontal != 0)
+            {
+                float factor = Mathf.Clamp(_inputSum,0.0f,1.0f);
+                if (_currentState != aimingState)
+                {
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, Mathf.Clamp(runSpeed * factor,walkSpeed,runSpeed), Time.deltaTime * accelerateSpeed);
+                }
+                else
+                {
+                    currentSpeed = aimingWalkSpeed * factor;
+                }
+            }
+            else
+            {
+                currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed * 0.5f);
+            }
         }
     }
 
@@ -622,7 +670,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         if (_runTime > _runToStopMinmumTime)
         {
-            if (_runToStopTime >= 0.02f && currentSpeed > walkSpeed && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
+            if (_runToStopTime >= 0.01f && currentSpeed > walkSpeed && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
             {
                 ChangeState(runToStopState);
                 _runToStopTime = 0.0f;
@@ -1162,6 +1210,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Moving")]
     [SerializeField] private bool isWalk;
     [SerializeField] private float walkSpeed;
+    [SerializeField] private float jogSpeed = 5.5f;
     [SerializeField] private float runSpeed;
     [SerializeField] private float aimingWalkSpeed = 5.5f;
     [SerializeField] private float currentSpeed;
@@ -1245,8 +1294,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Input")]
     [SerializeField] private float _inputVertical;
     [SerializeField] private float _inputHorizontal;
+    [SerializeField] private float _inputSum;
     private float climbingVertical = 0.0f;
     private float climbingHorizon = 0.0f;
+    [SerializeField]private bool _gamepadMode = false;
 
     [Header("Spine")]
     [SerializeField] private Transform lookAtAim;
@@ -1264,6 +1315,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Gun")]
     [SerializeField] private Animator gunAnim;
     [SerializeField] private bool decharging = false;
+    [SerializeField] private float normalCost = 25.0f;
+    [SerializeField] private float chargeCost = 50.0f;
     private bool _bCanCharge = true;
     private bool _aimLock = false;
     private float dechargingDuration = 2.5f;
@@ -1351,6 +1404,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         Vector2 inputVector = value.ReadValue<Vector2>();
         _inputVertical = inputVector.y;
         _inputHorizontal = inputVector.x;
+        _inputSum = Mathf.Abs(_inputVertical) + Mathf.Abs(_inputHorizontal);
 
         _animator.SetFloat("InputVertical", Mathf.Abs(_inputVertical));
         _animator.SetFloat("InputHorizon", Mathf.Abs(_inputHorizontal));

@@ -115,7 +115,7 @@ public class PlayerState_Default : PlayerState
                 Quaternion.LookRotation(playerUnit.transform.forward, Vector3.up), Time.fixedDeltaTime * playerUnit.RotationSpeed);
         }
 
-        if(playerUnit.CurrentSpeed > playerUnit.WalkSpeed && targetRotation != Quaternion.identity)
+        if(playerUnit.CurrentSpeed == playerUnit.RunSpeed && targetRotation != Quaternion.identity)
         {
             if (playerUnit.LookDir == Vector3.zero)
                 playerUnit.LookDir = playerUnit.Transform.forward;
@@ -130,7 +130,8 @@ public class PlayerState_Default : PlayerState
         }
         else
         {
-            playerUnit.HorizonWeight = Mathf.Lerp(playerUnit.HorizonWeight, 0.0f, Time.fixedDeltaTime * 12f);
+            //playerUnit.HorizonWeight = Mathf.Lerp(playerUnit.HorizonWeight, 0.0f, Time.fixedDeltaTime * 12f);
+            playerUnit.HorizonWeight = 0.0f;
         }
 
 
