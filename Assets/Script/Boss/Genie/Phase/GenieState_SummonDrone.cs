@@ -18,6 +18,8 @@ public class GenieState_SummonDrone : GenieStateBase
 
     private bool _spawning = false;
 
+    private Genie_BombDroneAI _toPlayerDrone;
+
     public override void StateInitialize(StateBase prevState)
     {
         base.StateInitialize(prevState);
@@ -70,6 +72,20 @@ public class GenieState_SummonDrone : GenieStateBase
                 _droneSpawnLimit = _currentDroneCount;
             }
         }
+        else if(_toPlayerDrone != null && !_toPlayerDrone.gameObject.activeInHierarchy)
+        {
+            for(int i = 0; i < droneAIs.Count - 1; ++i)
+            {
+                if(droneAIs[i].gameObject.activeInHierarchy)
+                {
+                    _toPlayerDrone = droneAIs[i];
+                    _toPlayerDrone.ToMainTarget();
+                    _toPlayerDrone.targetExplosion = true;
+                    
+                    break;
+                }
+            }
+        }
     }
 
     public void SpawnProgress(float deltaTime)
@@ -80,7 +96,20 @@ public class GenieState_SummonDrone : GenieStateBase
         {
             for(int i = 0; i < droneAIs.Count - _droneSpawnLimit; ++i)
             {
+                if(i == 0)
+                {
+                    _toPlayerDrone = droneAIs[i];
+                    _toPlayerDrone.ToMainTarget();
+                    _toPlayerDrone.targetExplosion = true;
+                }
+                else if(i < droneAIs.Count - 1)
+                {
+                    droneAIs[i]._mainTarget = droneAIs[droneAIs.Count - 1].transform;
+                    droneAIs[i].targetExplosion = false;
+                }
                 RespawnDrone(i);
+
+
             }
             
             _spawning = false;
@@ -103,7 +132,7 @@ public class GenieState_SummonDrone : GenieStateBase
         foreach(var drone in droneAIs)
         {
             if(!drone.IsDead())
-                drone.shield.Destroy();
+                drone.shield.Hit();
         }
     }
 

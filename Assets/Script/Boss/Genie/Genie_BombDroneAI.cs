@@ -13,6 +13,7 @@ public class Genie_BombDroneAI : DroneAIBase
 
     public bool destroyGround = true;
     public bool DeactiveStart = true;
+    public bool targetExplosion = true;
 
     public float targetUpdateTime = 0.2f;
     public float lifeTime = 60f;
@@ -24,7 +25,7 @@ public class Genie_BombDroneAI : DroneAIBase
 
     protected float _lifeTime;
 
-    private Transform _mainTarget;
+    public Transform _mainTarget;
 
     public override void Initialize()
     {
@@ -72,7 +73,8 @@ public class Genie_BombDroneAI : DroneAIBase
                 _target = _mainTarget;
             }
 
-            ExplosionCheck();
+            if(targetExplosion)
+                ExplosionCheck();
         }
 
         var centerDist = Vector3.Distance(centerPosition.position,transform.position);
@@ -140,6 +142,12 @@ public class Genie_BombDroneAI : DroneAIBase
     public bool IsDead()
     {
         return shield.isOver;
+    }
+
+    public void ToMainTarget()
+    {
+        _target = _player.transform;
+        _mainTarget = _player.transform;
     }
 
     public virtual void Respawn(Vector3 spawnPosition, bool launch = true)

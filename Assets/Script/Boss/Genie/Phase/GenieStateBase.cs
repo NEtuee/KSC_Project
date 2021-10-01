@@ -15,7 +15,7 @@ public class GenieStateBase : StateBase
     public void GetGridLine(ref List<HexCube> list, Vector3 dir, int loop = 6)
     {
         var start = target.gridControll.cubeGrid.GetCubePointFromWorld(transform.position);
-        var end = transform.position + dir * 50f;
+        var end = transform.position + dir * 60f;
         var endPoint = target.gridControll.cubeGrid.GetCubePointFromWorld(end);
         if(loop > 0)
             target.gridControll.cubeGrid.GetCubeLineHeavy(ref list, start,endPoint,0,loop);

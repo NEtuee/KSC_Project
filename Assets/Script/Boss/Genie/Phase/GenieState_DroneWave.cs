@@ -25,6 +25,8 @@ public class GenieState_DroneWave : GenieStateBase
             CoreDrone,
         };
 
+        public AnimationCurve heightGraph;
+
         public Direction direction;
         public Height height;
         public DroneType type;
@@ -119,7 +121,7 @@ public class GenieState_DroneWave : GenieStateBase
         base.StateChanged(targetState);
         foreach(var item in _groundList)
         {
-            item.SetMove(true,0f,1f);
+            item.SetMove(true,Random.Range(0f,0.2f),1f);
         }
 
         foreach(var item in _droneLinePool.GetActiveObjects())
@@ -137,9 +139,18 @@ public class GenieState_DroneWave : GenieStateBase
         var type = info.type == WavePatternEvent.DroneType.CoreDrone;
 
         var droneLine = _droneLinePool.Active(transform.position,Quaternion.identity);
-        droneLine.Active(transform.position,startDir,endDir,droneStartHeight,height,type);
+        droneLine.Active(info.heightGraph,transform.position,startDir,endDir,droneStartHeight,height,type);
 
         _currentPattern = _currentPattern + 1 >= patternEvents.Count ? 0 : _currentPattern + 1;
+
+        if(info.direction == WavePatternEvent.Direction.Left)
+        {
+            target.ChangeAnimation(7);
+        }
+        else
+        {
+            target.ChangeAnimation(8);
+        }
     }
 
     public void BeforeGroundCut(float t)
@@ -171,7 +182,7 @@ public class GenieState_DroneWave : GenieStateBase
     {
         foreach(var item in _groundList)
         {
-            item.SetMove(false,0f,1f);
+            item.SetMove(false,Random.Range(0f,0.2f),1f);
             item.GetRenderer().material = target.gridControll.prev;
         }
     }

@@ -65,7 +65,7 @@ public class HexCube : MonoBehaviour
             }
             else if(_inoutMoveTime < 1f)
             {
-                _inoutMoveTime += deltaTime;
+                _inoutMoveTime += _moveSpeed * deltaTime;
                 _inoutMoveTime = _inoutMoveTime >= 1f ? 1f : _inoutMoveTime;
                 var pos = transform.localPosition;
                 if(_inMove)
@@ -119,6 +119,17 @@ public class HexCube : MonoBehaviour
     public bool IsActive()
     {
         return _isActive;
+    }
+
+    public void MoveToUp()
+    {
+        _inMove = false;
+        _outMove = false;
+        _isActive = true;
+        _inverseMoveTime = 0f;
+        var pos = transform.position;
+        pos.y = inCurve.Evaluate(1f);
+        transform.position = pos;
     }
 
     public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f)

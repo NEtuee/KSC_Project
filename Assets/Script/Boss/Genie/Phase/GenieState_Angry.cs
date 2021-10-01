@@ -63,7 +63,7 @@ public class GenieState_Angry : GenieStateBase
         foreach(var item in _disapearList)
         {
             item.GetRenderer().material = target.gridControll.prev;
-            item.SetMove(false,0f,1f,disapearTime);
+            item.SetMove(false,Random.Range(0f,0.2f),1f,disapearTime);
         }
 
         _disapearList.Clear();
@@ -86,6 +86,7 @@ public class GenieState_Angry : GenieStateBase
     public void ChangeAngry(float t)
     {
         //ani change
+        target.ChangeAnimation(9);
         coreDroneAI.Respawn(spawnPosition.position,false);
     }
 

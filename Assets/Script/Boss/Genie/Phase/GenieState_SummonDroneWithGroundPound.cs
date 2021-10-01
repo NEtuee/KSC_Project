@@ -34,6 +34,8 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
     private List<HexCube> _areaList = new List<HexCube>();
     private List<HexCube> _safeArea = new List<HexCube>();
 
+    private Genie_BombDroneAI _toPlayerDrone;
+
     public override void Assign()
     {
         base.Assign();
@@ -96,6 +98,21 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
                 _pattern = !_timeCounter.ProcessSequencer("SpawnDrones",deltaTime);
             }
         }
+
+        if(_toPlayerDrone != null && !_toPlayerDrone.gameObject.activeInHierarchy)
+        {
+            for(int i = 0; i < droneAIs.Count - 1; ++i)
+            {
+                if(droneAIs[i].gameObject.activeInHierarchy)
+                {
+                    _toPlayerDrone = droneAIs[i];
+                    _toPlayerDrone.ToMainTarget();
+                    _toPlayerDrone.targetExplosion = true;
+
+                    break;
+                }
+            }
+        }
     }
 
     public override void StateChanged(StateBase targetState)
@@ -115,7 +132,15 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
             cube.special = false;
         }
 
-        Debug.Log("One");
+        _toPlayerDrone = null;
+
+        for(int i = 0; i < droneAIs.Count - 1; ++i)
+        {
+            if(droneAIs[i].gameObject.activeInHierarchy)
+            {
+                droneAIs[i].ToMainTarget();
+            }
+        }
     }
 
     public void SetGroundAreaMaterial(Material mat)
@@ -198,6 +223,17 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
     {
         for(int i = 0; i < droneAIs.Count - _droneSpawnLimit; ++i)
         {
+            if(i == 0)
+            {
+                _toPlayerDrone = droneAIs[i];
+                _toPlayerDrone.ToMainTarget();
+                _toPlayerDrone.targetExplosion = true;
+            }
+            else if(i < droneAIs.Count - 1)
+            {
+                droneAIs[i]._mainTarget = droneAIs[droneAIs.Count - 1].transform;
+                droneAIs[i].targetExplosion = false;
+            }
             RespawnDrone(i);
         }
     }

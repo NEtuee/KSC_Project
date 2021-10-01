@@ -40,6 +40,7 @@ public class TimeCounterEx
             while(processTime >= sq.time)
             {
                 processTime -= sq.time;
+                currentTime -= sq.time;
                 //sq.process?.Invoke(sq.time);
                 sq.triggerd?.Invoke(sq.time);
 
@@ -84,7 +85,6 @@ public class TimeCounterEx
             current = 0;
             currentTime = 0f;
             processTime = 0f;
-            _length = 0f;
         }
 
         public void AddSequence(float time, System.Action<float> processEvent = null, System.Action<float> triggerEvent = null)

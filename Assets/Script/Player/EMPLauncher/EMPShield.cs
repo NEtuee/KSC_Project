@@ -171,6 +171,9 @@ public class EMPShield : Hitable
 
     public override void Hit() 
     {
+        if(!gameObject.activeInHierarchy)
+            return;
+
         if(isActive == false)
             StartCoroutine(ActiveEffect());
 
@@ -186,7 +189,6 @@ public class EMPShield : Hitable
 
             //Destroy(gameObject);
         }
-
         whenHit.Invoke();
     }
 
@@ -253,7 +255,6 @@ public class EMPShield : Hitable
 
         if(renderer != null)
         {
-            Debug.Log("Check");
             renderer.enabled = true;
             mat = renderer.material;
         }

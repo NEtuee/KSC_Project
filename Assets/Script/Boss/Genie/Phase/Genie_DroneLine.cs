@@ -15,6 +15,7 @@ public class Genie_DroneLine : ObjectBase
     private float _spinTime;
     private float _apearTime;
 
+    private AnimationCurve _heightCurve;
 
     private TimeCounterEx _timeCounter = new TimeCounterEx();
     private Quaternion _startQuaternion;
@@ -35,8 +36,10 @@ public class Genie_DroneLine : ObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
     }
 
-    public void Active(Vector3 basePosition, Quaternion startQuat, Quaternion endQuat, float startHeight, float endHeight, bool isCore)
+    public void Active(AnimationCurve heightCurve, Vector3 basePosition, Quaternion startQuat, Quaternion endQuat, float startHeight, float endHeight, bool isCore)
     {
+        _heightCurve = heightCurve;
+
         _startQuaternion = startQuat;
         _targetQuaternion = endQuat;
 
@@ -74,6 +77,10 @@ public class Genie_DroneLine : ObjectBase
         var rot = transform.rotation;
         rot = Quaternion.Lerp(_startQuaternion, _targetQuaternion,spinCurve.Evaluate(time / _spinTime));
         transform.rotation = rot;
+
+        var pos = transform.position;
+        pos.y = _targetHeight + _heightCurve.Evaluate(time / _spinTime);
+        transform.position = pos;
     }
 
     public void Disapear(float time)

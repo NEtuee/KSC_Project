@@ -43,7 +43,17 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
         }
 
         if(_target != null)
+        {
             UpdateTargetDirection(deltaTime);
+
+            if(_target.position.y <= 0f)
+                _targetDirection.y = 0f;
+        }
+        else
+        {
+            _targetDirection = -(transform.position).normalized;
+            _targetDirection.y = 0f;
+        }
 
         if(directionRotation)
         {

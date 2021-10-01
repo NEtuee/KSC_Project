@@ -116,7 +116,7 @@ public class GenieState_DroneSwing : GenieStateBase
             if(item.special || !item.IsActive())
                 continue;
 
-            item.SetMove(false,0f,1f,3f);
+            item.SetMove(false,Random.Range(0f,0.2f),1f,3f);
             //item.SetActive(false,true,3f);
             item.GetRenderer().material = target.gridControll.prev;
         }
@@ -182,7 +182,7 @@ public class GenieState_DroneSwing : GenieStateBase
     public void SpawnCoreDrone(float time)
     {
         coreDroneAI.SetTarget(droneTarget);
-        coreDroneAI.Respawn(droneTarget.position,false);
+        coreDroneAI.Respawn(droneTarget.position - Vector3.up,false);
     }
 
     public void Rotate(float deltaTime)
@@ -209,7 +209,7 @@ public class GenieState_DroneSwing : GenieStateBase
     {
         foreach(var item in _fallLine)
         {
-            item.SetMove(false,0f,1f,beforeDroneSummonTime + droneSummonTime + 1);
+            item.SetMove(false,Random.Range(0f,0.2f),1f,beforeDroneSummonTime + droneSummonTime + 1);
             //item.SetActive(false,true,beforeDroneSummonTime + droneSummonTime + 1);
             item.GetRenderer().material = target.gridControll.prev;
         }
