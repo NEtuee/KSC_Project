@@ -8,6 +8,9 @@ using UnityEditor;
 
 public class HexCubeGrid : MonoBehaviour
 {
+    public AnimationCurve inCurve;
+    public AnimationCurve outCurve;
+
     public GameObject gridOrigin;
     public int mapSize;
     public float cubeSize;
@@ -355,6 +358,9 @@ public class HexCubeGrid : MonoBehaviour
 
         cube.Init(q - half,r - half,mapSize,cubeSize);
         cube.transform.position = HexGridHelperEx.AxialToWorld(_cubeWidth,_cubeHeight,cube.axialPoint);
+
+        cube.inCurve = inCurve;
+        cube.outCurve = outCurve;
 
         return cube;
     }

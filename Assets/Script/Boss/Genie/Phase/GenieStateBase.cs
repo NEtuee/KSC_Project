@@ -12,6 +12,17 @@ public class GenieStateBase : StateBase
         target = (Genie_Phase_AI)targetObject;
     }
 
+    public void GetGridLine(ref List<HexCube> list, Vector3 dir, int loop = 6)
+    {
+        var start = target.gridControll.cubeGrid.GetCubePointFromWorld(transform.position);
+        var end = transform.position + dir * 60f;
+        var endPoint = target.gridControll.cubeGrid.GetCubePointFromWorld(end);
+        if(loop > 0)
+            target.gridControll.cubeGrid.GetCubeLineHeavy(ref list, start,endPoint,0,loop);
+        else
+            target.gridControll.cubeGrid.GetCubeLine(ref list,start,endPoint);
+    }
+
     public void HeadLookTarget(Transform rotateTarget,Vector3 position)
     {
         var dir = (position - rotateTarget.position).normalized;
