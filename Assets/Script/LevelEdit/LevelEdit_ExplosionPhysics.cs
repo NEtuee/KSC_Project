@@ -17,7 +17,14 @@ public class LevelEdit_ExplosionPhysics : MonoBehaviour
             // if(collider != null)
             //     collider.enabled = false;
 
-            var rig = item.AddComponent<Rigidbody>();
+            if(item.TryGetComponent<Rigidbody>(out var rig))
+            {
+                rig.isKinematic = false;
+                rig.useGravity = true;
+            }
+            else
+                rig = item.AddComponent<Rigidbody>();
+            
             var dir = (item.transform.position - transform.position).normalized;
             rig.AddForce(dir * force);
             rig.AddTorque(MathEx.RandomCircle(1f).normalized * torque);

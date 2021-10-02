@@ -13,6 +13,7 @@ public class Genie_BombDroneAI : DroneAIBase
 
     public bool destroyGround = true;
     public bool DeactiveStart = true;
+    public bool targetExplosion = true;
 
     public float targetUpdateTime = 0.2f;
     public float lifeTime = 60f;
@@ -24,7 +25,7 @@ public class Genie_BombDroneAI : DroneAIBase
 
     protected float _lifeTime;
 
-    private Transform _mainTarget;
+    public Transform _mainTarget;
 
     public override void Initialize()
     {
@@ -72,7 +73,8 @@ public class Genie_BombDroneAI : DroneAIBase
                 _target = _mainTarget;
             }
 
-            ExplosionCheck();
+            if(targetExplosion)
+                ExplosionCheck();
         }
 
         var centerDist = Vector3.Distance(centerPosition.position,transform.position);
@@ -117,19 +119,21 @@ public class Genie_BombDroneAI : DroneAIBase
             var dist = MathEx.distance(transform.position.y,currCube.transform.position.y);
             if(dist <= explosionDistance)
             {
-                currCube.SetActive(false,false);
-                currCube.special = true;
+                currCube.SetMove(false,0f,1.3f,2f);
             }
         }
         
         gridControll.GetCube_Near(point,3,true);
         foreach(var cube in gridControll.GetTargetCubes())
         {
+            if(cube == null)
+            {
+                Debug.Log("WTF");
+            }
             var dist = MathEx.distance(transform.position.y,cube.transform.position.y);
             if(dist <= explosionDistance)
             {
-                cube.SetActive(false,false);
-                cube.special = true;
+                currCube.SetMove(false,0f,1.3f,2f);
             }
             
         }
@@ -140,7 +144,13 @@ public class Genie_BombDroneAI : DroneAIBase
         return shield.isOver;
     }
 
-    public virtual void Respawn(Vector3 spawnPosition)
+    public void ToMainTarget()
+    {
+        _target = _player.transform;
+        _mainTarget = _player.transform;
+    }
+
+    public virtual void Respawn(Vector3 spawnPosition, bool launch = true)
     {
         _lifeTime = lifeTime;
 
@@ -150,9 +160,14 @@ public class Genie_BombDroneAI : DroneAIBase
 
         transform.position = spawnPosition;
         _timeCounterEx.InitTimer("launch",0f,launchTime);
-        var rand = Quaternion.Euler(0f,Random.Range(0f,360f),Random.Range(0f,360f)) * Vector3.forward;
-        _direction = rand.normalized;
-        AddForce(rand.normalized * maxSpeed * 100f);
+
+        if(launch)
+        {
+            var rand = Quaternion.Euler(0f,Random.Range(0f,360f),Random.Range(0f,360f)) * Vector3.forward;
+            _direction = rand.normalized;
+            AddForce(rand.normalized * maxSpeed * 100f);
+        }
+        
         shield.gameObject.SetActive(true);
         this.gameObject.SetActive(true);
     }
