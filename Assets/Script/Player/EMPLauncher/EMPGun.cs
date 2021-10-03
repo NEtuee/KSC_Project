@@ -287,7 +287,8 @@ public class EMPGun : UnTransfromObjectBase
 
         if (gunAnim != null)
         {
-            gunAnim.SetTrigger("ToZero");
+            //gunAnim.SetTrigger("ToZero");
+            gunAnim.SetTrigger("Normal");
         }
     }
 
@@ -340,7 +341,8 @@ public class EMPGun : UnTransfromObjectBase
 
         if (gunAnim != null)
         {
-            gunAnim.SetTrigger("ToZero");
+            //gunAnim.SetTrigger("ToZero");
+            gunAnim.SetTrigger("Charge");
         }
     }
 

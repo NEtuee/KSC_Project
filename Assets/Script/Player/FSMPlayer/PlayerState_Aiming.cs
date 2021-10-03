@@ -275,7 +275,7 @@ public class PlayerState_Aiming : PlayerState
 
     public override void OnShot(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.CanCharge == true && playerUnit.Energy >= _normalCost)
+        if (playerUnit.CanCharge == true && playerUnit.Energy >= playerUnit.NoramlGunCost)
         {
             if (playerUnit._chargeSoundEmitter != null)
             {
@@ -283,15 +283,15 @@ public class PlayerState_Aiming : PlayerState
                 playerUnit._chargeSoundEmitter = null;
             }
 
-            if (playerUnit.chargeTime.Value >= 3 && playerUnit.Energy >= _chargeCost)
+            if (playerUnit.chargeTime.Value >= 3 && playerUnit.Energy >= playerUnit.ChargeGunCost)
             {
                 playerUnit.EmpGun.LaunchCharge(40.0f);
-                playerUnit.AddEnergy(-_chargeCost);
+                playerUnit.AddEnergy(-playerUnit.ChargeGunCost);
             }
             else
             {
                 playerUnit.EmpGun.LaunchNormal();
-                playerUnit.AddEnergy(-_normalCost);
+                playerUnit.AddEnergy(-playerUnit.NoramlGunCost);
             }
 
             FloatData camDist = MessageDataPooling.GetMessageData<FloatData>();
