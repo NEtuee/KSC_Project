@@ -75,9 +75,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float AirTime { get => airTime; set => airTime = value; }
     public float ClimbingJumpStartTime { get => climbingJumpStartTime; set => climbingJumpStartTime = value; }
     public float CurrentClimbingJumpPower { get => currentClimbingJumpPower; set => currentClimbingJumpPower = value; }
-    public float ClimbingHorizonJumpPower => climbingHorizonJumpPower;
-    public float ClimbingUpJumpPower => climbingUpJumpPower;
-    public float KeepClimbingJumpTime => keepClimbingJumpTime;
+    public float ClimbingHorizonJumpPower { get => climbingHorizonJumpPower; set => climbingHorizonJumpPower = value; }
+    public float ClimbingUpJumpPower { get => climbingUpJumpPower; set => climbingUpJumpPower = value; }
+    public float KeepClimbingUpJumpTime { get => keepClimbingUpJumpTime; set => keepClimbingUpJumpTime = value; }
+    public float KeepClimbingHorizonJumpTime { get => keepClimbingHorizonJumpTime; set => keepClimbingHorizonJumpTime = value; }
+
+
+
     public AnimationCurve ClimbingHorizonJumpSpeedCurve => climbingHorizonJumpSpeedCurve;
 
     #endregion
@@ -479,13 +483,20 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             if (_inputVertical != 0 || _inputHorizontal != 0)
             {
-                float factor = Mathf.Clamp(_inputSum,0.0f,1.0f);
                 if (_currentState != aimingState)
                 {
-                    currentSpeed = Mathf.MoveTowards(currentSpeed, Mathf.Clamp(runSpeed * factor,walkSpeed,runSpeed), Time.deltaTime * accelerateSpeed);
+                    if(_inputSum >= 1.0f)
+                    {
+                        currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+                    }
+                    else if(_inputSum < 1.0f)
+                    {
+                        currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+                    }
                 }
                 else
                 {
+                    float factor = Mathf.Clamp(_inputSum, 0.0f, 1.0f);
                     currentSpeed = aimingWalkSpeed * factor;
                 }
             }
@@ -1265,7 +1276,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float climbingUpJumpPower = 8.0f;
     [SerializeField] private float airTime = 0.0f;
     [SerializeField] private float landingFactor = 2.0f;
-    [SerializeField] private float keepClimbingJumpTime = 0.8f;
+    [SerializeField] private float keepClimbingUpJumpTime = 0.4f;
+    [SerializeField] private float keepClimbingHorizonJumpTime = 0.4f;
     [SerializeField] private AnimationCurve climbingHorizonJumpSpeedCurve;
 
     private bool _jumpStart = false;
@@ -1298,6 +1310,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private float climbingVertical = 0.0f;
     private float climbingHorizon = 0.0f;
     [SerializeField]private bool _gamepadMode = false;
+
+    public bool GamepadMode => _gamepadMode;
 
     [Header("Spine")]
     [SerializeField] private Transform lookAtAim;

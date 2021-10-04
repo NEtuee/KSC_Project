@@ -13,6 +13,7 @@ public class PlayerState_ReadyClimbingJump : PlayerState
         if (playerUnit.InputVertical >= 0.5f)
         {
             playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Up;
+            animator.SetTrigger("ClimbingJump");
         }
         else
         {

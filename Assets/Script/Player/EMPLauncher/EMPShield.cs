@@ -100,6 +100,7 @@ public class EMPShield : Hitable
         RegisterRequest(GetSavedNumber("ObjectManager"));
 
         SendMessageQuick(MessageTitles.scan_registerScanObject,UniqueNumberBase.GetSavedNumberStatic("Drone"),this);
+        SendMessageEx(MessageTitles.set_gunTargetMessageObject, UniqueNumberBase.GetSavedNumberStatic("FollowTargetCtrl"), this.transform);
     }
 
     // Update is called once per frame
