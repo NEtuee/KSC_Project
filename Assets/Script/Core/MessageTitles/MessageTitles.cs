@@ -444,4 +444,9 @@ public static partial class MessageTitles
     /// data = ClimbingLineManager
     /// </summary>
     public const ushort set_climbingLineManager = 0x1005;
+
+    /// <summary>
+    /// data 
+    /// </summary>
+    public const ushort set_gunTargetMessageObject = 0x1006;
 }

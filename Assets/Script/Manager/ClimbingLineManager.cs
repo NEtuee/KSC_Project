@@ -140,10 +140,12 @@ public class ClimbingLineManager : ManagerBase
         {
             Vector3 dir = line.points[i - 1].position - line.points[i].position;
             dir.Normalize();
-            if(RayIntersectWithCLNode(line.points[i].position,dir,node) == true)
-            {
+            //if(RayIntersectWithCLNode(line.points[i].position,dir,node) == true)
+            //{
+            //    return true;
+            //}
+            if (LineSegmentWithCLNode(line.points[i - 1].position, line.points[i].position, node) == true)
                 return true;
-            }
         }
 
         return false;
@@ -178,6 +180,17 @@ public class ClimbingLineManager : ManagerBase
 
         t = tmin;
         return true;
+    }
+
+    private static bool LineSegmentWithCLNode(Vector3 start, Vector3 end, CL_Node node)
+    {
+        if(RayIntersectWithCLNode(start, end - start, node)&&
+           RayIntersectWithCLNode(end, start - end, node))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public bool CheckPositionInNode(CL_Node node, Vector3 position)
