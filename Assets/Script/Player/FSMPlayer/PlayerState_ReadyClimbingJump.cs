@@ -10,10 +10,17 @@ public class PlayerState_ReadyClimbingJump : PlayerState
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.currentStateName = "ReadyClimbingJump";
+
         if (playerUnit.InputVertical >= 0.5f)
         {
             playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Up;
-            animator.SetTrigger("ClimbingJump");
+            if(playerUnit.CheckUpClimbingLine() == true)
+            {
+                playerUnit.ChangeState(PlayerUnit.climbingUpperLineState);
+                //Debug.Log(playerUnit.Transform.position);
+                return;
+            }
         }
         else
         {
@@ -25,33 +32,6 @@ public class PlayerState_ReadyClimbingJump : PlayerState
             {
                 playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Left;
             }
-            //else
-            //{
-            //    Vector3 backVector = -transform.forward;
-            //    backVector.y = 0f;
-            //    transform.rotation = Quaternion.LookRotation(backVector);
-
-            //    playerUnit.MoveDir = transform.forward;
-            //    playerUnit.MoveDir.Normalize();
-            //    playerUnit.CurrentSpeed = playerUnit.RunSpeed;
-            //    playerUnit.MoveDir *= playerUnit.CurrentSpeed;
-            //    playerUnit.CurrentJumpPower = playerUnit.JumpPower * 0.5f;
-            //    transform.position = transform.position +
-            //                         (playerUnit.MoveDir + (Vector3.up * playerUnit.CurrentJumpPower)) * Time.deltaTime;
-
-            //    animator.SetBool("IsGrab", false);
-
-            //    //playerUnit.stamina.Value -= playerUnit.ClimbingJumpConsumeValue;
-            //    //playerUnit.stamina.Value = Mathf.Clamp(playerUnit.stamina.Value, 0.0f, playerUnit.MaxStamina);
-
-            //    playerUnit.SetVelocity(playerUnit.MoveDir);
-
-            //    playerUnit.HandIK.DisableHandIK();
-            //    playerUnit.Jump();
-            //    playerUnit.ChangeState(PlayerUnit.jumpState);
-
-            //    return;
-            //}
         }
 
         playerUnit.InitVelocity();
@@ -71,5 +51,6 @@ public class PlayerState_ReadyClimbingJump : PlayerState
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)
     {
+        //Debug.Log(playerUnit.Transform.position);
     }
 }
