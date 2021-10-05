@@ -39,6 +39,10 @@ public class PlayerParamaterWindow : EditorWindow
         followTarget.crosshairMovingSpeed = EditorGUILayout.FloatField("Crosshair Moving Speed",followTarget.crosshairMovingSpeed);
         followTarget.aimMovingSpeed = EditorGUILayout.FloatField("Aim Moving Speed",followTarget.aimMovingSpeed);
         followTarget.aimLimitDist = EditorGUILayout.FloatField("Aim Limit Distance",followTarget.aimLimitDist);
+
+        GUILayout.Label("EMP 건", EditorStyles.boldLabel);
+        playerUnit.NoramlGunCost = EditorGUILayout.FloatField("노말 샷 코스트", playerUnit.NoramlGunCost);
+        playerUnit.ChargeGunCost = EditorGUILayout.FloatField("차지 샷 코스트", playerUnit.ChargeGunCost);
     }
 
     private PlayerUnit playerUnit;
