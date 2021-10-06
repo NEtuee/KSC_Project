@@ -88,6 +88,15 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
     }
+    public static float Clamp0360(float eulerAngles)
+    {
+        float result = eulerAngles - Mathf.Ceil(eulerAngles / 360f) * 360f;
+        if (result < 0)
+        {
+            result += 360f;
+        }
+        return result;
+    }
 
     private void FixedUpdate()
     {
@@ -100,8 +109,9 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         transform.position = target.position + Vector3.up;
 
 
-        targetRot.y += _mouseX * yawRotateSpeed * Time.fixedUnscaledDeltaTime;
-        targetRot.x += _mouseY * pitchRotateSpeed * Time.fixedUnscaledDeltaTime;
+        targetRot.y += _mouseX * yawRotateSpeed * Time.fixedDeltaTime;
+        targetRot.y = Clamp0360(targetRot.y);
+        targetRot.x += _mouseY * pitchRotateSpeed * Time.fixedDeltaTime;
 
         if(_isAim)
         {
@@ -187,7 +197,10 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         }
         else
         {
-            if (_mouseX == 0.0f && _mouseY == 0.0f && _player.GetState == PlayerUnit.hangLedgeState && _player.climbDir != ClimbDir.Stop)
+            if (_mouseX == 0.0f && _mouseY == 0.0f &&
+                Mathf.Abs(_player.InputHorizontal) > 0.6f
+                && _player.GetState == PlayerUnit.hangLedgeState 
+                && _player.climbDir != ClimbDir.Stop)
             {
                 Vector3 look = new Vector3();
                 if (_player.climbDir == ClimbDir.Left)
@@ -199,21 +212,20 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                     look = _player.Transform.forward + _player.Transform.right;
                 }
 
-                targetRot = Quaternion.LookRotation(look).eulerAngles;
-                targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
-                currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, revisionSpeed);
-                currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, revisionSpeed);
-                Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
+                Vector3 target = Quaternion.LookRotation(look).eulerAngles;
+                target.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+                targetRot.x = Mathf.SmoothDamp(targetRot.x, target.x, ref currentPitchRotVelocity, revisionSpeed);
+                targetRot.y = Mathf.SmoothDamp(targetRot.y, target.y, ref currentYawRotVelocity, revisionSpeed);
+                Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
                 transform.rotation = localRotation;
-                targetRot = currentRot;
             }
             else
             {
                 targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
                 currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
                 currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
-
-                Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
+              
+                Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
                 transform.rotation = localRotation;
             }
         }
