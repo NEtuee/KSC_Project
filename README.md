@@ -1,4 +1,8 @@
 # KSC_Project
 Game Project
 
-나중에 알아서 쓰셈
+# LICENSE
+## unity-toolbar-extender by Marijn Zwemmer
+
+https://github.com/marijnz/unity-toolbar-extender/blob/master/LICENSE
+
