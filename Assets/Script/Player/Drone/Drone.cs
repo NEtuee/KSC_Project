@@ -26,7 +26,10 @@ public class Drone : UnTransfromObjectBase
         }
     }
 
+    [SerializeField] public LayerMask droneCollisionLayer;
     [SerializeField] private Transform target;
+    [SerializeField] private Transform scanPosition;
+    [SerializeField] public List<Transform> dronePoints = new List<Transform>();
     [SerializeField] private DroneState state;
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Vector3 defaultFollowOffset;
@@ -60,6 +63,8 @@ public class Drone : UnTransfromObjectBase
 
     private float collectStartTime;
     
+    private int _droneSide = 0;
+
     private Transform approachTarget;
     private Stack<Transform> orderList = new Stack<Transform>();
     private Transform mainCam;
@@ -68,7 +73,13 @@ public class Drone : UnTransfromObjectBase
     private PlayerUnit player;
 
     private DroneHelperRoot droneHelperRoot;
-    
+
+    private TimeCounterEx _timeCounter = new TimeCounterEx();
+
+    private Vector3 _droneMovePosition;
+    private bool _frontHit = false;
+    private bool _scanning = false;
+
     //스캔
     private Quaternion _scanTargetRotation;
     private float _rotationSpeed = 800.0f;
@@ -95,6 +106,10 @@ public class Drone : UnTransfromObjectBase
         {
             _droneScaner.AddScanMessageObject((MessageReceiver)msg.data);
         });
+
+        _timeCounter.CreateSequencer("ScanProcess");
+        _timeCounter.AddSequence("ScanProcess",0.3f,null,Scan);
+        _timeCounter.AddSequence("ScanProcess",0.4f,null,null);
     }
 
     public override void Initialize()
@@ -141,6 +156,9 @@ public class Drone : UnTransfromObjectBase
         camRight.y = 0;
         _targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
         _finalTargetPosition = _targetPosition;
+
+        _droneMovePosition = transform.position;
+        _timeCounter.InitSequencer("ScanProcess");
     }
 
     // Update is called once per frame
@@ -157,8 +175,58 @@ public class Drone : UnTransfromObjectBase
             scanLeftCoolTime.Value = Mathf.Clamp(scanLeftCoolTime.Value, 0.0f, 10.0f);
         }
 
-        transform.position = Vector3.Lerp(transform.position,target.position,deltaTime * 12f);
-        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, deltaTime * 12f);
+        if(_scanning)
+        {
+            _scanning = !_timeCounter.ProcessSequencer("ScanProcess",deltaTime);
+        }
+
+        UpdateDroneSide();
+
+        if(player.IsMoving() || player.IsJump)
+        {
+            _droneMovePosition = GetDronePoint();
+        }
+        
+        if(player.IsClimbing())
+        {
+            _droneMovePosition = dronePoints[_droneSide * 2 + 1].position;
+        }
+
+        if(_scanning)
+        {
+            _droneMovePosition = scanPosition.position;
+        }
+
+        transform.position = Vector3.Lerp(transform.position,_droneMovePosition,deltaTime * 13f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, deltaTime * 13f);
+
+    }
+
+    public void UpdateDroneSide()
+    {
+        var left = Physics.Raycast(transform.position,-transform.right,out var leftHit,1f,droneCollisionLayer);
+        var right = Physics.Raycast(transform.position,transform.right,out var rightHit,1f,droneCollisionLayer);
+
+        if(left || right)
+        {
+            _droneSide = left && right ? (leftHit.distance < rightHit.distance ? 0 : 1) : (left ? 1 : 0);
+        }
+    }
+
+    public Vector3 GetDronePoint()
+    {
+        var cam = MathEx.DeleteYPos(Camera.main.transform.forward).normalized;
+        var targetDir = MathEx.DeleteYPos(target.forward).normalized;
+        float angle = Vector3.Angle(cam,targetDir);
+        float factor = Mathf.Clamp01(angle / 90f);
+
+        var forward = Physics.Raycast(transform.position,transform.forward,out var hit,_frontHit ? 4f : 2f,droneCollisionLayer);
+        _frontHit = forward;
+        factor = forward ? 0f : factor;
+        var position = Vector3.Lerp(dronePoints[_droneSide * 2 + (forward ? 1 : 0)].position,
+                                dronePoints[_droneSide * 2 + (forward ? 0 : 1)].position,factor);
+
+        return position;
     }
 
     private void LateUpdate()
@@ -420,7 +488,7 @@ public class Drone : UnTransfromObjectBase
         // }
     }
 
-    public void Scan()
+    public void Scan(float t = 0f)
     {
         scanLeftCoolTime.Value = scanCoolTime;
         Vector3 targetDir = Camera.main.transform.forward;
@@ -586,6 +654,9 @@ public class Drone : UnTransfromObjectBase
             return;
 
         if (scanLeftCoolTime.Value <= 0.0f)
-            Scan();
+        {
+            _timeCounter.InitSequencer("ScanProcess");
+            _scanning = true;
+        }
     }
 }
