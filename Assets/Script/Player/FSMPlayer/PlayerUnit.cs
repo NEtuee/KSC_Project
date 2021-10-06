@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 using UniRx;
 using MD;
 
@@ -18,6 +19,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_HangLedge hangLedgeState;
     public static PlayerState_LedgeUp ledgeUpState;
     public static PlayerState_ClimbingJump climbingJumpState;
+    public static PlayerState_ClimbingUpperLine climbingUpperLineState;
     public static PlayerState_ReadyClimbingJump readyClimbingJumpState;
     public static PlayerState_HangEdge hangEdgeState;
     public static PlayerState_Ragdoll ragdollState;
@@ -30,6 +32,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     #region Move Property
     public float WalkSpeed { get => walkSpeed; set => walkSpeed = value; }
+    public float JogSpeed { get => jogSpeed; set => jogSpeed = value; }
     public float RunSpeed { get => runSpeed; set => runSpeed = value; }
     public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
     public float RotationSpeed { get => rotationSpeed; }
@@ -74,10 +77,15 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float AirTime { get => airTime; set => airTime = value; }
     public float ClimbingJumpStartTime { get => climbingJumpStartTime; set => climbingJumpStartTime = value; }
     public float CurrentClimbingJumpPower { get => currentClimbingJumpPower; set => currentClimbingJumpPower = value; }
-    public float ClimbingHorizonJumpPower => climbingHorizonJumpPower;
-    public float ClimbingUpJumpPower => climbingUpJumpPower;
-    public float KeepClimbingJumpTime => keepClimbingJumpTime;
+    public float ClimbingHorizonJumpPower { get => climbingHorizonJumpPower; set => climbingHorizonJumpPower = value; }
+    public float ClimbingUpJumpPower { get => climbingUpJumpPower; set => climbingUpJumpPower = value; }
+    public float KeepClimbingUpJumpTime { get => keepClimbingUpJumpTime; set => keepClimbingUpJumpTime = value; }
+    public float KeepClimbingHorizonJumpTime { get => keepClimbingHorizonJumpTime; set => keepClimbingHorizonJumpTime = value; }
+
+
+
     public AnimationCurve ClimbingHorizonJumpSpeedCurve => climbingHorizonJumpSpeedCurve;
+    public AnimationCurve ClimbingUpperLineInterpolateCurve => climbingUpperLineInterpolateCurve;
 
     #endregion
 
@@ -117,6 +125,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public Transform DechargingEffectTransform => dechargingEffectTransform;
     public Transform SteamPosition => steamPosition;
     public bool CanCharge { get => _bCanCharge; set => _bCanCharge = value; }
+    public float NoramlGunCost { get => normalCost; set => normalCost = value; }
+    public float ChargeGunCost { get => chargeCost; set => chargeCost = value; }
     #endregion
 
     #region QuickStanding
@@ -135,6 +145,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     #endregion
 
     public Transform Transform => _transform;
+    public Vector3 Position => _transform.position;
+    public Quaternion Rotation => _transform.rotation;
 
     public CapsuleCollider CapsuleCollider { get => _capsuleCollider; }
 
@@ -196,6 +208,58 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             _climbingLineManager = (ClimbingLineManager)msg.data;
         });
+
+        //InputSystem.onDeviceChange +=
+        //    (device, change) =>
+        //    {
+        //        switch (change)
+        //        {
+        //            case InputDeviceChange.Added:
+        //            case InputDeviceChange.Removed:
+        //                Debug.Log("Added or Removed");
+        //                var gamepad = Gamepad.current;
+        //                if (gamepad == null)
+        //                    _gamepadMode = false;
+        //                else
+        //                    _gamepadMode = true;
+        //                break;
+        //            case InputDeviceChange.Disconnected:
+        //                Debug.Log("Disconnected");
+        //                break;
+        //            case InputDeviceChange.Reconnected:
+        //                Debug.Log("Reconnected");
+        //                break;
+        //            case InputDeviceChange.Enabled:
+        //                Debug.Log("Enabled");
+        //                break;
+        //            case InputDeviceChange.Disabled:
+        //                Debug.Log("Disable");
+        //                break;
+        //            case InputDeviceChange.UsageChanged:
+        //                Debug.Log("UsageChanged");
+        //                break;
+        //            case InputDeviceChange.ConfigurationChanged:
+        //                Debug.Log("ConfigurationChanged");
+        //                break;
+        //        }
+        //    };
+
+        InputUser.onChange +=
+            (user, change, device) =>
+            {
+                if(change == InputUserChange.ControlSchemeChanged)
+                {
+                    switch(user.controlScheme.Value.name)
+                    {
+                        case "Gamepad":
+                            _gamepadMode = true;
+                            break;
+                        case "Keyboard":
+                            _gamepadMode = false;
+                            break;
+                    }
+                }
+            };
     }
 
     public override void Initialize()
@@ -230,6 +294,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (deadState == null) deadState = gameObject.AddComponent<PlayerState_Dead>();
         if (dashState == null) dashState = gameObject.AddComponent<PlayerState_Dash>();
         if (kickState == null) kickState = gameObject.AddComponent<PlayerState_Kick>();
+        if(climbingUpperLineState == null) climbingUpperLineState = gameObject.AddComponent<PlayerState_ClimbingUpperLine>();
 
         pelvisGunObject = _empGun.PelvisGunObject;
 
@@ -258,6 +323,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
         CurrentDashCoolTime.Value = dashCoolTime;
 
         ChangeState(defaultState);
+
+        //var gamepad = Gamepad.current;
+        //if (gamepad == null)
+        //    _gamepadMode = false;
+        //else
+        //    _gamepadMode = true;
     }
 
     private void Update()
@@ -305,7 +376,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         _currentState.FixedUpdateState(this, _animator);
 
-        //CheckTurnBack();
+        CheckTurnBack();
 
         MoveConservation();
 
@@ -329,6 +400,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     private void LateUpdate()
     {
+        //Debug.Log("PlayerUnit LateUpdate");
+
         if (_currentState == aimingState)
         {
             Vector3 dir = (spine.position - lookAtAim.position).normalized;
@@ -339,6 +412,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
             spineRotation *= originalRot;
             spine.rotation = spineRotation;
         }
+
+        _empGun.UpdateLaunchPos();
     }
 
     private void OnAnimatorMove()
@@ -404,6 +479,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private void UpdateMoveSpeed()
     {
         _animator.SetFloat("Speed", currentSpeed);
+        //_animator.SetFloat("HorizonWeight", currentSpeed == runSpeed ? _horizonWeight : 0.0f);
         _animator.SetFloat("HorizonWeight", _horizonWeight);
 
         if (_currentState == grabState ||
@@ -418,27 +494,56 @@ public partial class PlayerUnit : UnTransfromObjectBase
             return;
         }
 
-        if (_inputVertical != 0 || _inputHorizontal != 0)
+        if (_gamepadMode == false)
         {
-            if (_currentState != aimingState)
+            if (_inputVertical != 0 || _inputHorizontal != 0)
             {
-                if (isWalk == true)
+                if (_currentState != aimingState)
                 {
-                    currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+                    if (isWalk == true)
+                    {
+                        currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+                    }
+                    else
+                    {
+                        currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+                    }
                 }
                 else
                 {
-                    currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+                    currentSpeed = Mathf.MoveTowards(currentSpeed, aimingWalkSpeed, Time.deltaTime * accelerateSpeed);
                 }
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, aimingWalkSpeed, Time.deltaTime * accelerateSpeed);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed * 2);
             }
         }
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed * 2);
+            if (_inputVertical != 0 || _inputHorizontal != 0)
+            {
+                if (_currentState != aimingState)
+                {
+                    if(_inputSum >= 1.0f)
+                    {
+                        currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * accelerateSpeed);
+                    }
+                    else if(_inputSum < 1.0f)
+                    {
+                        currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, Time.deltaTime * accelerateSpeed);
+                    }
+                }
+                else
+                {
+                    float factor = Mathf.Clamp(_inputSum, 0.0f, 1.0f);
+                    currentSpeed = aimingWalkSpeed * factor;
+                }
+            }
+            else
+            {
+                currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed * 0.5f);
+            }
         }
     }
 
@@ -487,6 +592,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (isJumping == true && (Time.time - jumpTime < jumpMinTime))
         {
+            _animator.SetBool("IsGround", JumpStart == false ? isGrounded : false);
             return;
         }
 
@@ -510,7 +616,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
                         _currentState != grabState &&
                         _currentState != ledgeUpState &&
                         _currentState != hangLedgeState &&
-                        _currentState != ragdollState)
+                        _currentState != ragdollState &&
+                        _currentState != climbingUpperLineState &&
+                        _currentState != readyGrabState)
                     {
                         transform.SetParent(null);
                     }
@@ -553,7 +661,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
                         _currentState != readyGrabState &&
                         _currentState != readyClimbingJumpState &&
                         _currentState != climbingJumpState &&
-                        _currentState != ragdollState)
+                        _currentState != ragdollState &&
+                        _currentState != climbingUpperLineState)
                 {
                     transform.SetParent(null);
                 }
@@ -615,7 +724,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         if (_runTime > _runToStopMinmumTime)
         {
-            if (_runToStopTime >= 0.02f && currentSpeed > walkSpeed && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
+            if (_runToStopTime >= 0.01f && currentSpeed > walkSpeed && _inputVertical == 0.0f && _inputHorizontal == 0.0f)
             {
                 ChangeState(runToStopState);
                 _runToStopTime = 0.0f;
@@ -864,11 +973,15 @@ public partial class PlayerUnit : UnTransfromObjectBase
         moveForward.Normalize();
         prevForward.Normalize();
 
-        if (_currentState == defaultState && currentSpeed > 0.0f && Vector3.Dot(moveForward, prevForward) < -0.5f)
+        if (_runTime > _runToStopMinmumTime)
         {
-            if (currentSpeed > walkSpeed)
+            if (_currentState == defaultState && currentSpeed > 0.0f && Vector3.Dot(moveForward, prevForward) < -0.5f)
             {
-                ChangeState(turnBackState);
+                if (currentSpeed > walkSpeed)
+                {
+                    _runTime = 0.0f;
+                    ChangeState(turnBackState);
+                }
             }
         }
     }
@@ -1045,54 +1158,25 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void TryGrab()
     {
-        if (TestClimbingLines == null)
-        {
-            return;
-        }
-
+        bool detect = false;
         Vector3 nearPosition = new Vector3();
         Line line = new Line();
-       
-        bool detect = false;
+
         ClimbingLine detectLine = null;
         Line detectLineElement = new Line();
         Vector3 prevNearPosition = new Vector3();
         Vector3 finalNearPosition = new Vector3();
-        foreach (var climbingLine in TestClimbingLines)
-        {
-            if (climbingLine.DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, Transform, out nearPosition, ref line))
-            {
-                detect = true;
-                if (detectLine == null)
-                {
-                    detectLine = climbingLine;
-                    detectLineElement = line;
-                    prevNearPosition = nearPosition;
-                    finalNearPosition = nearPosition;
-                }
-                else
-                {
-                    if (Vector3.SqrMagnitude(nearPosition - CapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - CapsuleStart))
-                    {
-                        detectLine = climbingLine;
-                        detectLineElement = line;
-                        prevNearPosition = nearPosition;
-                        finalNearPosition = nearPosition;
-                    }
-                }
-            }
-        }
 
-        if (detect == false)
+        if (TestClimbingLines != null)
         {
-            foreach (var climbingLine in ClimbingLineManager.dynamicClimbingLines)
+            for (int i = 0; i < TestClimbingLines.Count; i++)
             {
-                if (climbingLine.DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, Transform, out nearPosition, ref line))
+                if (TestClimbingLines[i].DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, Transform, out nearPosition, ref line))
                 {
                     detect = true;
                     if (detectLine == null)
                     {
-                        detectLine = climbingLine;
+                        detectLine = TestClimbingLines[i];
                         detectLineElement = line;
                         prevNearPosition = nearPosition;
                         finalNearPosition = nearPosition;
@@ -1101,7 +1185,35 @@ public partial class PlayerUnit : UnTransfromObjectBase
                     {
                         if (Vector3.SqrMagnitude(nearPosition - CapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - CapsuleStart))
                         {
-                            detectLine = climbingLine;
+                            detectLine = TestClimbingLines[i];
+                            detectLineElement = line;
+                            prevNearPosition = nearPosition;
+                            finalNearPosition = nearPosition;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (detect == false)
+        {
+            for (int i = 0; i< ClimbingLineManager.dynamicClimbingLines.Count; i++)
+            {
+                if (ClimbingLineManager.dynamicClimbingLines[i].DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, Transform, out nearPosition, ref line))
+                {
+                    detect = true;
+                    if (detectLine == null)
+                    {
+                        detectLine = ClimbingLineManager.dynamicClimbingLines[i];
+                        detectLineElement = line;
+                        prevNearPosition = nearPosition;
+                        finalNearPosition = nearPosition;
+                    }
+                    else
+                    {
+                        if (Vector3.SqrMagnitude(nearPosition - CapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - CapsuleStart))
+                        {
+                            detectLine = ClimbingLineManager.dynamicClimbingLines[i];
                             detectLineElement = line;
                             prevNearPosition = nearPosition;
                             finalNearPosition = nearPosition;
@@ -1114,6 +1226,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (detect == true)
         {
+            prevFollowLine = currentFollowLine;
             CurrentFollowLine = detectLine;
             lineTracker.position = finalNearPosition;
             lineTracker.SetParent(detectLine.transform);
@@ -1130,6 +1243,96 @@ public partial class PlayerUnit : UnTransfromObjectBase
                 rightPointNum = Mathf.Min(detectLineElement.p1, detectLineElement.p2);
             }
         }
+    }
+
+    public bool CheckUpClimbingLine()
+    {
+        Vector3 nearPosition = new Vector3();
+        Line line = new Line();
+
+        bool detect = false;
+        ClimbingLine detectLine = null;
+        Line detectLineElement = new Line();
+        Vector3 prevNearPosition = new Vector3();
+        Vector3 finalNearPosition = new Vector3();
+
+        if (TestClimbingLines != null)
+        {
+            for (int i = 0; i < TestClimbingLines.Count; i++)
+            {
+                if (TestClimbingLines[i].DetectLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd, upCheckCapsuleRadius, Transform, out nearPosition, ref line))
+                {
+                    detect = true;
+                    if (detectLine == null)
+                    {
+                        detectLine = TestClimbingLines[i];
+                        detectLineElement = line;
+                        prevNearPosition = nearPosition;
+                        finalNearPosition = nearPosition;
+                    }
+                    else
+                    {
+                        if (Vector3.SqrMagnitude(nearPosition - UpperCheckCapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - UpperCheckCapsuleStart))
+                        {
+                            detectLine = TestClimbingLines[i];
+                            detectLineElement = line;
+                            prevNearPosition = nearPosition;
+                            finalNearPosition = nearPosition;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (detect == false)
+        {
+            for(int i = 0; i < ClimbingLineManager.dynamicClimbingLines.Count; i++)
+            {
+                if (ClimbingLineManager.dynamicClimbingLines[i].DetectLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd, upCheckCapsuleRadius, Transform, out nearPosition, ref line))
+                {
+                    detect = true;
+                    if (detectLine == null)
+                    {
+                        detectLine = ClimbingLineManager.dynamicClimbingLines[i];
+                        detectLineElement = line;
+                        prevNearPosition = nearPosition;
+                        finalNearPosition = nearPosition;
+                    }
+                    else
+                    {
+                        if (Vector3.SqrMagnitude(nearPosition - UpperCheckCapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - UpperCheckCapsuleStart))
+                        {
+                            detectLine = ClimbingLineManager.dynamicClimbingLines[i];
+                            detectLineElement = line;
+                            prevNearPosition = nearPosition;
+                            finalNearPosition = nearPosition;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (detect == true)
+        {
+            prevFollowLine = currentFollowLine;
+            CurrentFollowLine = detectLine;
+            transform.SetParent(null);
+            lineTracker.position = finalNearPosition;
+            lineTracker.SetParent(detectLine.transform);
+
+            if (CurrentFollowLine.directionType == DirectionType.LeftMin)
+            {
+                leftPointNum = Mathf.Min(detectLineElement.p1, detectLineElement.p2);
+                rightPointNum = Mathf.Max(detectLineElement.p1, detectLineElement.p2);
+            }
+            else
+            {
+                leftPointNum = Mathf.Max(detectLineElement.p1, detectLineElement.p2);
+                rightPointNum = Mathf.Min(detectLineElement.p1, detectLineElement.p2);
+            }
+        }
+
+        return detect;
     }
 
 
@@ -1155,6 +1358,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Moving")]
     [SerializeField] private bool isWalk;
     [SerializeField] private float walkSpeed;
+    [SerializeField] private float jogSpeed = 5.5f;
     [SerializeField] private float runSpeed;
     [SerializeField] private float aimingWalkSpeed = 5.5f;
     [SerializeField] private float currentSpeed;
@@ -1209,8 +1413,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float climbingUpJumpPower = 8.0f;
     [SerializeField] private float airTime = 0.0f;
     [SerializeField] private float landingFactor = 2.0f;
-    [SerializeField] private float keepClimbingJumpTime = 0.8f;
+    [SerializeField] private float keepClimbingUpJumpTime = 0.4f;
+    [SerializeField] private float keepClimbingHorizonJumpTime = 0.4f;
     [SerializeField] private AnimationCurve climbingHorizonJumpSpeedCurve;
+    [SerializeField] private AnimationCurve climbingUpperLineInterpolateCurve;
 
     private bool _jumpStart = false;
     private float climbingJumpStartTime;
@@ -1238,8 +1444,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Input")]
     [SerializeField] private float _inputVertical;
     [SerializeField] private float _inputHorizontal;
+    [SerializeField] private float _inputSum;
     private float climbingVertical = 0.0f;
     private float climbingHorizon = 0.0f;
+    [SerializeField]private bool _gamepadMode = false;
+
+    public bool GamepadMode => _gamepadMode;
 
     [Header("Spine")]
     [SerializeField] private Transform lookAtAim;
@@ -1257,6 +1467,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Gun")]
     [SerializeField] private Animator gunAnim;
     [SerializeField] private bool decharging = false;
+    [SerializeField] private float normalCost = 25.0f;
+    [SerializeField] private float chargeCost = 50.0f;
     private bool _bCanCharge = true;
     private bool _aimLock = false;
     private float dechargingDuration = 2.5f;
@@ -1293,6 +1505,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     [Header("ClimbingLine")]
     [SerializeField] private ClimbingLine currentFollowLine;
+    [SerializeField] private ClimbingLine prevFollowLine;
     [SerializeField] private Transform lineTracker;
     public Transform leftPoint;
     public Transform rightPoint;
@@ -1306,6 +1519,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public Transform LineTracker => lineTracker;
     public ClimbingLine CurrentFollowLine { get => currentFollowLine; set => currentFollowLine = value; }
+    public ClimbingLine PrevFollowLine { get => prevFollowLine; set => prevFollowLine = value; }
     public ClimbingLineManager ClimbingLineManager => _climbingLineManager;
     public List<ClimbingLine> TestClimbingLines => _currentTestClimbingLines;
 
@@ -1313,12 +1527,18 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private Vector3 start;
     [SerializeField] private Vector3 end;
     [SerializeField] private float radius;
+    [SerializeField] private Vector3 upCheckCapsuleStart;
+    [SerializeField] private Vector3 upCheckCapsuleEnd;
+    [SerializeField] private float upCheckCapsuleRadius;
 
     private TimeCounterEx _timer;
 
     public Vector3 CapsuleStart { get { return transform.TransformPoint(start); } }
     public Vector3 CapsuleEnd { get { return transform.TransformPoint(end); } }
     public float CapsuleRadius => radius;
+
+    public Vector3 UpperCheckCapsuleStart { get { return transform.TransformPoint(upCheckCapsuleStart); } }
+    public Vector3 UpperCheckCapsuleEnd { get { return transform.TransformPoint(upCheckCapsuleEnd); } }
 
     public Transform LeftPoint { get => leftPoint; set => leftPoint = value; }
     public Transform RightPoint { get => rightPoint; set => rightPoint = value; }
@@ -1328,14 +1548,20 @@ public partial class PlayerUnit : UnTransfromObjectBase
         
     }
 
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(CapsuleStart, radius);
         Gizmos.DrawWireSphere(CapsuleEnd, radius);
         Gizmos.DrawLine(CapsuleStart, CapsuleEnd);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(UpperCheckCapsuleStart, upCheckCapsuleRadius);
+        Gizmos.DrawWireSphere(UpperCheckCapsuleEnd, upCheckCapsuleRadius);
+        Gizmos.DrawLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd);
     }
+#endif
 
     #region InputSystem
 
@@ -1344,6 +1570,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         Vector2 inputVector = value.ReadValue<Vector2>();
         _inputVertical = inputVector.y;
         _inputHorizontal = inputVector.x;
+        _inputSum = Mathf.Abs(_inputVertical) + Mathf.Abs(_inputHorizontal);
 
         _animator.SetFloat("InputVertical", Mathf.Abs(_inputVertical));
         _animator.SetFloat("InputHorizon", Mathf.Abs(_inputHorizontal));

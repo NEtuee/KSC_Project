@@ -22,23 +22,33 @@ public class PlayerParamaterWindow : EditorWindow
         if (playerUnit == null)
             return;
 
-        GUILayout.Label("�̵�", EditorStyles.boldLabel);
-        playerUnit.WalkSpeed = EditorGUILayout.FloatField("�ȴ� �ӵ�", playerUnit.WalkSpeed);
-        playerUnit.RunSpeed = EditorGUILayout.FloatField("�ٴ� �ӵ�", playerUnit.RunSpeed);
-        playerUnit.AccelerateSpeed = EditorGUILayout.FloatField("���� �ӵ�", playerUnit.AccelerateSpeed);
+        GUILayout.Label("이동", EditorStyles.boldLabel);
+        playerUnit.WalkSpeed = EditorGUILayout.FloatField("걷기 속도", playerUnit.WalkSpeed);
+        playerUnit.RunSpeed = EditorGUILayout.FloatField("뛰기 속도", playerUnit.RunSpeed);
+        playerUnit.AccelerateSpeed = EditorGUILayout.FloatField("가속 속도", playerUnit.AccelerateSpeed);
 
-        GUILayout.Label("û�� �뽬", EditorStyles.boldLabel);
-        playerUnit.DashSpeed = EditorGUILayout.FloatField("�뽬 �ӵ�", playerUnit.DashSpeed);
-        playerUnit.DashTime = EditorGUILayout.FloatField("�뽬 �ð�", playerUnit.DashTime);
-        playerUnit.DashCoolTime = EditorGUILayout.FloatField("�뽬 ��Ÿ��", playerUnit.DashCoolTime);
+        GUILayout.Label("대쉬", EditorStyles.boldLabel);
+        playerUnit.DashSpeed = EditorGUILayout.FloatField("대쉬 속도", playerUnit.DashSpeed);
+        playerUnit.DashTime = EditorGUILayout.FloatField("대쉬 시간", playerUnit.DashTime);
+        playerUnit.DashCoolTime = EditorGUILayout.FloatField("대쉬 쿨타임", playerUnit.DashCoolTime);
 
-        GUILayout.Label("�� ���ĵ�", EditorStyles.boldLabel);
-        playerUnit.QuickStandCoolTime = EditorGUILayout.FloatField("�� ���ĵ� ��Ÿ��", playerUnit.QuickStandCoolTime);
+        GUILayout.Label("퀵 스탠딩", EditorStyles.boldLabel);
+        playerUnit.QuickStandCoolTime = EditorGUILayout.FloatField("퀵스탠딩 쿨타임", playerUnit.QuickStandCoolTime);
 
         GUILayout.Label("Aim", EditorStyles.boldLabel);
         followTarget.crosshairMovingSpeed = EditorGUILayout.FloatField("Crosshair Moving Speed",followTarget.crosshairMovingSpeed);
         followTarget.aimMovingSpeed = EditorGUILayout.FloatField("Aim Moving Speed",followTarget.aimMovingSpeed);
         followTarget.aimLimitDist = EditorGUILayout.FloatField("Aim Limit Distance",followTarget.aimLimitDist);
+
+        GUILayout.Label("EMP 건", EditorStyles.boldLabel);
+        playerUnit.NoramlGunCost = EditorGUILayout.FloatField("노말 샷 코스트", playerUnit.NoramlGunCost);
+        playerUnit.ChargeGunCost = EditorGUILayout.FloatField("차지 샷 코스트", playerUnit.ChargeGunCost);
+
+        GUILayout.Label("점프 관련", EditorStyles.boldLabel);
+        playerUnit.ClimbingUpJumpPower = EditorGUILayout.FloatField("클라이밍 위 점프 파워", playerUnit.ClimbingUpJumpPower);
+        playerUnit.ClimbingHorizonJumpPower = EditorGUILayout.FloatField("클라이밍 옆 점프 파워", playerUnit.ClimbingHorizonJumpPower);
+        playerUnit.KeepClimbingUpJumpTime = EditorGUILayout.FloatField("클라이밍 위 점프 지속시간", playerUnit.KeepClimbingUpJumpTime);
+        playerUnit.KeepClimbingHorizonJumpTime = EditorGUILayout.FloatField("클라이밍 옆 점프 지속시간", playerUnit.KeepClimbingHorizonJumpTime);
     }
 
     private PlayerUnit playerUnit;

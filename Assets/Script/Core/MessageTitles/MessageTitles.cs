@@ -352,6 +352,8 @@ public static partial class MessageTitles
 
     public const ushort player_EMPHit = 0x0906;
 
+    public const ushort player_NormalHit = 0x0907;
+
     #endregion
 
     #region PlayerManager
@@ -442,4 +444,9 @@ public static partial class MessageTitles
     /// data = ClimbingLineManager
     /// </summary>
     public const ushort set_climbingLineManager = 0x1005;
+
+    /// <summary>
+    /// data 
+    /// </summary>
+    public const ushort set_gunTargetMessageObject = 0x1006;
 }

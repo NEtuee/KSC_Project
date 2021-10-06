@@ -79,6 +79,19 @@ public class EMPShield : Hitable
             SendMessageEx(MessageTitles.uimanager_activeScanMaker,GetSavedNumber("UIManager"),data);
             Scanned();
         });
+
+        AddAction(MessageTitles.player_NormalHit,(x)=>{
+
+            if(!shieldEffect)
+                Hit();
+        });
+
+        AddAction(MessageTitles.player_EMPHit,(x)=>{
+                var damage = MessageDataPooling.CastData<MD.FloatData>(x.data).value;
+                Hit(damage);
+
+                Debug.Log("Chekc");
+        });
     }
 
     public override void Initialize()
@@ -87,6 +100,7 @@ public class EMPShield : Hitable
         RegisterRequest(GetSavedNumber("ObjectManager"));
 
         SendMessageQuick(MessageTitles.scan_registerScanObject,UniqueNumberBase.GetSavedNumberStatic("Drone"),this);
+        SendMessageEx(MessageTitles.set_gunTargetMessageObject, UniqueNumberBase.GetSavedNumberStatic("FollowTargetCtrl"), this.transform);
     }
 
     // Update is called once per frame
@@ -158,6 +172,9 @@ public class EMPShield : Hitable
 
     public override void Hit() 
     {
+        if(!gameObject.activeInHierarchy)
+            return;
+
         if(isActive == false)
             StartCoroutine(ActiveEffect());
 
@@ -173,20 +190,22 @@ public class EMPShield : Hitable
 
             //Destroy(gameObject);
         }
-
         whenHit.Invoke();
     }
 
     public override void Hit(float damage)
     {
-        if (isActive == false)
+        Debug.Log("HIT");
+        if (isActive == false && gameObject.activeInHierarchy)
             StartCoroutine(ActiveEffect());
 
         originalPosition = transform.localPosition;
         hp -= damage;
         _hitCount++;
         SetDistortion();
-        StartCoroutine(HitEffect());
+
+        if(gameObject.activeInHierarchy)
+            StartCoroutine(HitEffect());
         //shakeTime = 0.1f;
         if (hp <= 0f && !isImmortal)
         {
@@ -237,7 +256,6 @@ public class EMPShield : Hitable
 
         if(renderer != null)
         {
-            Debug.Log("Check");
             renderer.enabled = true;
             mat = renderer.material;
         }

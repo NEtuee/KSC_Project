@@ -36,6 +36,18 @@ public class PlayerState_ClimbingJump : PlayerState
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
     {
+        switch (playerUnit.ClimbingJumpDirection)
+        {
+            case ClimbingJumpDirection.Up:
+                animator.SetInteger("ReadyClimbNum", 0);
+                break;
+            case ClimbingJumpDirection.Left:
+                animator.SetInteger("ReadyClimbNum", 1);
+                break;
+            case ClimbingJumpDirection.Right:
+                animator.SetInteger("ReadyClimbNum", 2);
+                break;
+        }
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
@@ -47,12 +59,14 @@ public class PlayerState_ClimbingJump : PlayerState
         }
 
         Vector3 upDirect = Vector3.zero;
+        float keepJumpTime = 0.0f;
         switch (playerUnit.ClimbingJumpDirection)
         {
             case ClimbingJumpDirection.Up:
                 playerUnit.CurrentClimbingJumpPower -= playerUnit.Gravity * Time.fixedDeltaTime;
                 playerUnit.CurrentClimbingJumpPower = Mathf.Clamp(playerUnit.CurrentClimbingJumpPower, playerUnit.MinJumpPower, 50f);
                 playerUnit.MoveDir = transform.up;
+                keepJumpTime = playerUnit.KeepClimbingUpJumpTime;
                 break;
             case ClimbingJumpDirection.UpLeft:
                 playerUnit.CurrentClimbingJumpPower -= playerUnit.Gravity * Time.fixedDeltaTime;
@@ -83,7 +97,7 @@ public class PlayerState_ClimbingJump : PlayerState
             case ClimbingJumpDirection.Left:
                 {
                     playerUnit.MoveDir = -playerUnit.Transform.right;
-                    float normalizeTime = (Time.time - playerUnit.ClimbingJumpStartTime) / playerUnit.KeepClimbingJumpTime;
+                    float normalizeTime = (Time.time - playerUnit.ClimbingJumpStartTime) / playerUnit.KeepClimbingHorizonJumpTime;
                     if (normalizeTime < 0.5f)
                     {
                         upDirect = transform.up * 3f;
@@ -95,12 +109,13 @@ public class PlayerState_ClimbingJump : PlayerState
 
                     playerUnit.CurrentClimbingJumpPower = playerUnit.ClimbingHorizonJumpPower *
                                                playerUnit.ClimbingHorizonJumpSpeedCurve.Evaluate(normalizeTime);
+                    keepJumpTime = playerUnit.KeepClimbingHorizonJumpTime;
                 }
                 break;
             case ClimbingJumpDirection.Right:
                 {
                     playerUnit.MoveDir = transform.right;
-                    float normalizeTime = (Time.time - playerUnit.ClimbingJumpStartTime) / playerUnit.KeepClimbingJumpTime;
+                    float normalizeTime = (Time.time - playerUnit.ClimbingJumpStartTime) / playerUnit.KeepClimbingHorizonJumpTime;
                     if (normalizeTime < 0.5f)
                     {
                         upDirect = transform.up * 3f;
@@ -112,6 +127,7 @@ public class PlayerState_ClimbingJump : PlayerState
 
                     playerUnit.CurrentClimbingJumpPower = playerUnit.ClimbingHorizonJumpPower *
                                                playerUnit.ClimbingHorizonJumpSpeedCurve.Evaluate(normalizeTime);
+                    keepJumpTime = playerUnit.KeepClimbingHorizonJumpTime;
                 }
                 break;
         }
@@ -120,7 +136,7 @@ public class PlayerState_ClimbingJump : PlayerState
         Vector3 finalDir = playerUnit.MoveDir + upDirect;
         playerUnit.Move(finalDir,Time.fixedDeltaTime);
 
-        if (Time.time - playerUnit.ClimbingJumpStartTime >= playerUnit.KeepClimbingJumpTime)
+        if (Time.time - playerUnit.ClimbingJumpStartTime >= keepJumpTime)
         {
             playerUnit.MoveDir = playerUnit.MoveDir.normalized * finalDir.magnitude;
 

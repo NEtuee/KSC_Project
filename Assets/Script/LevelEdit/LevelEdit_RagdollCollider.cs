@@ -19,7 +19,7 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
     public enum HitForcePointType
     {
         CollisionPoint,
-        CenterPosition
+        CenterPosition,
     }
 
     public EventType eventType;
@@ -32,13 +32,14 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
     public float hitForce = 10f;
     public float collisionDistance = 1f;
 
+    public bool deleteY = false;
+
     private Collider _myCollider;
     private PlayerRagdoll _ragdoll;
 
     public override void Assign()
     {
         base.Assign();
-        Debug.Log("Check");
     }
 
     public override void Initialize()
@@ -139,7 +140,14 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
 
     public Vector3 GetTargetDirection()
     {
-        return ((_ragdoll.transform.position + Vector3.up * 3f) - transform.position).normalized; 
+        var dir = ((_ragdoll.transform.position + Vector3.up * 3f) - transform.position).normalized; 
+        if(deleteY)
+        {
+            dir.y = 0f;
+            dir = dir.normalized;
+        }
+
+        return dir;
     }
 
     public void ExplosionRagdoll(Vector3 dir)

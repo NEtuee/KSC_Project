@@ -11,7 +11,7 @@ public class PlayerState_HangLedge : PlayerState
 
     private bool _canRelease = false;
     private TimeCounterEx _grabTimer = new TimeCounterEx();
-    private float _minKeepGrabTime = 0.5f;
+    private float _minKeepGrabTime = 0.05f;
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
         float deltaMagnitude = animator.deltaPosition.magnitude;
@@ -239,6 +239,23 @@ public class PlayerState_HangLedge : PlayerState
         StringData data = MessageDataPooling.GetMessageData<StringData>();
         data.value = "Grab";
         playerUnit.SendMessageEx(MessageTitles.cameramanager_setfollowcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), data);
+
+        playerUnit.Attach();
+        //Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
+        //Vector3 pos = new Vector3();
+        //if (planInfo != null)
+        //{
+        //    pos = playerUnit.LineTracker.position + (planInfo.up * playerUnit.DetectionOffset.y);
+        //    pos -= planInfo.forward * playerUnit.DetectionOffset.z;
+        //    playerUnit.Transform.rotation = Quaternion.LookRotation(-planInfo.forward);
+        //}
+        //else
+        //{
+        //    pos = playerUnit.LineTracker.position + (playerUnit.Transform.up * playerUnit.DetectionOffset.y);
+        //    pos += playerUnit.Transform.forward * playerUnit.DetectionOffset.z;
+        //    playerUnit.Transform.rotation = Quaternion.LookRotation(playerUnit.Transform.forward);
+        //}
+        //playerUnit.Transform.position = pos;
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -286,7 +303,7 @@ public class PlayerState_HangLedge : PlayerState
             _canRelease = true;
         }
 
-        if (playerUnit.InputVertical == 1.0f)
+        if (playerUnit.InputVertical >= 0.5f)
         {
             _ledgeUpInputTime += Time.deltaTime;
         }
@@ -301,7 +318,7 @@ public class PlayerState_HangLedge : PlayerState
 
     private void LedgeUp(PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.IsLedge == true && playerUnit.IsClimbingMove == false && playerUnit.SpaceChecker.Overlapped() == false)
+        if (playerUnit.IsLedge == true && playerUnit.SpaceChecker.Overlapped() == false)
         {
             playerUnit.IsLedge = false;
             animator.SetTrigger("LedgeUp");
@@ -342,7 +359,7 @@ public class PlayerState_HangLedge : PlayerState
         if (_canRelease == false)
             return;
 
-        if (playerUnit.InputVertical == 1.0f || playerUnit.InputHorizontal == 1.0f || playerUnit.InputHorizontal == -1.0f)
+        if (playerUnit.InputVertical >= 0.5f || playerUnit.InputHorizontal >= 0.5f || playerUnit.InputHorizontal <= -0.5f)
         {
             playerUnit.ChangeState(PlayerUnit.readyClimbingJumpState);
             return;

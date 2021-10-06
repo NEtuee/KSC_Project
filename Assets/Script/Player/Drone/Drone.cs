@@ -93,7 +93,6 @@ public class Drone : UnTransfromObjectBase
 
         AddAction(MessageTitles.scan_registerScanObject, (msg) =>
         {
-            Debug.Log("What");
             _droneScaner.AddScanMessageObject((MessageReceiver)msg.data);
         });
     }

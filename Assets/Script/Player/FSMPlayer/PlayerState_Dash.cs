@@ -32,12 +32,12 @@ public class PlayerState_Dash : PlayerState
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
-        if (_lateTime < playerUnit.DashTime)
-            playerUnit.Move(playerUnit.Transform.forward * playerUnit.DashSpeed, Time.fixedDeltaTime);
-        else
-            playerUnit.ChangeState(playerUnit.GetPrevState);
+        playerUnit.Move(playerUnit.Transform.forward * playerUnit.DashSpeed, Time.fixedDeltaTime);
 
         _lateTime += Time.fixedDeltaTime;
+
+        if (_lateTime >= playerUnit.DashTime)
+            playerUnit.ChangeState(playerUnit.GetPrevState);
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)

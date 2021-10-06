@@ -368,10 +368,12 @@ public partial class PlayerUnit
             transform.rotation = Quaternion.LookRotation(lookVec);
         }
 
-        transform.position = finalPosition;
         transform.SetParent(LineTracker);
+        transform.position = finalPosition;
+        //Debug.Log(transform.position);
 
         //ChangeState(grabState);
-        ChangeState(hangLedgeState);
+        //ChangeState(hangLedgeState);
+        ChangeState(readyGrabState);
     }
 }

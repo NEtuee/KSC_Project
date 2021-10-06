@@ -7,20 +7,35 @@ public class Core : Hitable
 {
     public GameObject destroyEffect;
 
-    void Start()
+    protected override void Awake()
     {
-        base.Start();
-    }
+        base.Awake();
 
-    void Update()
-    {
+        AddAction(MessageTitles.scan_scanned, (x) => {
 
+            MD.ScanMakerData data = MessageDataPooling.GetMessageData<MD.ScanMakerData>();
+            data.collider = collider;
+
+            SendMessageEx(MessageTitles.uimanager_activeScanMaker, GetSavedNumber("UIManager"), data);
+            Scanned();
+        });
+
+        AddAction(MessageTitles.player_NormalHit, (x) => {
+
+            Destroy();
+        });
+
+        AddAction(MessageTitles.player_EMPHit, (x) => {
+            Destroy();
+        });
     }
 
     public override void Initialize()
     {
         base.Initialize();
-        RegisterRequest(GetSavedNumber("ObjectManager"));
+        RegisterRequest(GetSavedNumber("StageManager"));
+        SendMessageEx(MessageTitles.scan_registerScanObject,UniqueNumberBase.GetSavedNumberStatic("Drone"),this);
+        SendMessageEx(MessageTitles.set_gunTargetMessageObject, UniqueNumberBase.GetSavedNumberStatic("FollowTargetCtrl"), this.transform);
     }
 
     public override void Destroy()
