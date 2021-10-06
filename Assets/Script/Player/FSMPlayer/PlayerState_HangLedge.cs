@@ -11,7 +11,7 @@ public class PlayerState_HangLedge : PlayerState
 
     private bool _canRelease = false;
     private TimeCounterEx _grabTimer = new TimeCounterEx();
-    private float _minKeepGrabTime = 0.1f;
+    private float _minKeepGrabTime = 0.05f;
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
         float deltaMagnitude = animator.deltaPosition.magnitude;

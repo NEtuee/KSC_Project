@@ -7,6 +7,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 {
 
     public RectTransform aimTransform;
+    public RectTransform supportTransform;
     public float crosshairMovingSpeed = 5f;
     public float aimLimitDist = 500f;
     public float aimMovingSpeed = 2.5f;
@@ -24,6 +25,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     [SerializeField] private bool isPause;
 
     [SerializeField]private PlayerUnit _player;
+
+    public List<Transform> _gunTargetObjects = new List<Transform>();
 
     private float _mouseX;
     private float _mouseY;
@@ -49,6 +52,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     private float currentPitchRotVelocity;
 
     private Vector2 currentAimVelocity;
+    private Vector2 supportVelocity;
 
     private Vector3 smoothVelocity;
 
@@ -58,10 +62,17 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     {
         base.Assign();
 
+        SaveMyNumber("FollowTargetCtrl");
+
         AddAction(MessageTitles.set_setplayer, (msg) =>
         {
             _player = (PlayerUnit)msg.data;
             target = _player.transform;
+        });
+
+        AddAction(MessageTitles.set_gunTargetMessageObject, (msg) =>
+        {
+            _gunTargetObjects.Add((Transform)msg.data);
         });
     }
 
@@ -98,8 +109,51 @@ public class FollowTargetCtrl : UnTransfromObjectBase
             target.y = -targetRot.x;
             aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition,target * crosshairMovingSpeed,
                                                             ref currentAimVelocity,rotSmooth);
-            
-            if(aimTransform.anchoredPosition.magnitude > aimLimitDist)
+
+            if (_player.GamepadMode == true)
+            {
+                bool detect = false;
+                Vector2 nearestGunTarget = new Vector2();
+                Vector2 aimTransformPos = aimTransform.transform.position;
+                for (int i = 0; i < _gunTargetObjects.Count; i++)
+                {
+                    if (_gunTargetObjects[i] == null)
+                    {
+                        _gunTargetObjects.RemoveAt(i);
+                        continue;
+                    }
+
+                    if (_gunTargetObjects[i].gameObject.activeInHierarchy == false)
+                    {
+                        ++i;
+                        continue;
+                    }
+
+                    if (Vector3.Dot((_gunTargetObjects[i].position - Camera.main.transform.position).normalized, Camera.main.transform.forward) > 0.0f)
+                    {
+                        Vector2 screenPos = Camera.main.WorldToScreenPoint(_gunTargetObjects[i].position);
+                        if (detect == false)
+                        {
+                            nearestGunTarget = screenPos;
+                        }
+                        else if ((aimTransformPos - nearestGunTarget).sqrMagnitude > (aimTransformPos - screenPos).sqrMagnitude)
+                        {
+                            nearestGunTarget = screenPos;
+                        }
+                        detect = true;
+                    }
+                }
+
+                supportTransform.position = nearestGunTarget;
+                if (detect == true && (aimTransformPos - nearestGunTarget).magnitude <= 500.0f)
+                {
+                    //aimTransform.transform.position = Vector2.SmoothDamp(aimTransform.transform.position, nearestGunTarget, ref supportVelocity, 1f);
+                    aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, 300.0f * Time.fixedDeltaTime);
+                }
+            }
+
+
+            if (aimTransform.anchoredPosition.magnitude > aimLimitDist)
             {
                 var dir = aimTransform.anchoredPosition.normalized;
                 var camFactor = aimTransform.anchoredPosition - (dir * aimLimitDist);
