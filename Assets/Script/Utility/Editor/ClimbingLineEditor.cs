@@ -310,7 +310,7 @@ public class ClimbingLineEditor : EditorWindow
                 {
                     CheckClimbingManager();
 
-                    GameObject newClimbingLineObject = new GameObject(_createDynamicClimbingLine?"DynamicCL":"ClimbingLine" + _climbingLineCount);
+                    GameObject newClimbingLineObject = new GameObject(_createDynamicClimbingLine?"DynamicCL"+ _climbingLineCount : "ClimbingLine" + _climbingLineCount);
                     _currentLine = newClimbingLineObject.AddComponent<ClimbingLine>();
                     newClimbingLineObject.tag = "ClimbingLine";
 

@@ -85,6 +85,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
 
     public AnimationCurve ClimbingHorizonJumpSpeedCurve => climbingHorizonJumpSpeedCurve;
+    public AnimationCurve ClimbingUpperLineInterpolateCurve => climbingUpperLineInterpolateCurve;
 
     #endregion
 
@@ -615,7 +616,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
                         _currentState != grabState &&
                         _currentState != ledgeUpState &&
                         _currentState != hangLedgeState &&
-                        _currentState != ragdollState)
+                        _currentState != ragdollState &&
+                        _currentState != climbingUpperLineState &&
+                        _currentState != readyGrabState)
                     {
                         transform.SetParent(null);
                     }
@@ -658,7 +661,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
                         _currentState != readyGrabState &&
                         _currentState != readyClimbingJumpState &&
                         _currentState != climbingJumpState &&
-                        _currentState != ragdollState)
+                        _currentState != ragdollState &&
+                        _currentState != climbingUpperLineState)
                 {
                     transform.SetParent(null);
                 }
@@ -975,6 +979,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
             {
                 if (currentSpeed > walkSpeed)
                 {
+                    _runTime = 0.0f;
                     ChangeState(turnBackState);
                 }
             }
@@ -1153,54 +1158,25 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void TryGrab()
     {
-        if (TestClimbingLines == null)
-        {
-            return;
-        }
-
+        bool detect = false;
         Vector3 nearPosition = new Vector3();
         Line line = new Line();
-       
-        bool detect = false;
+
         ClimbingLine detectLine = null;
         Line detectLineElement = new Line();
         Vector3 prevNearPosition = new Vector3();
         Vector3 finalNearPosition = new Vector3();
-        foreach (var climbingLine in TestClimbingLines)
-        {
-            if (climbingLine.DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, Transform, out nearPosition, ref line))
-            {
-                detect = true;
-                if (detectLine == null)
-                {
-                    detectLine = climbingLine;
-                    detectLineElement = line;
-                    prevNearPosition = nearPosition;
-                    finalNearPosition = nearPosition;
-                }
-                else
-                {
-                    if (Vector3.SqrMagnitude(nearPosition - CapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - CapsuleStart))
-                    {
-                        detectLine = climbingLine;
-                        detectLineElement = line;
-                        prevNearPosition = nearPosition;
-                        finalNearPosition = nearPosition;
-                    }
-                }
-            }
-        }
 
-        if (detect == false)
+        if (TestClimbingLines != null)
         {
-            foreach (var climbingLine in ClimbingLineManager.dynamicClimbingLines)
+            for (int i = 0; i < TestClimbingLines.Count; i++)
             {
-                if (climbingLine.DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, Transform, out nearPosition, ref line))
+                if (TestClimbingLines[i].DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, Transform, out nearPosition, ref line))
                 {
                     detect = true;
                     if (detectLine == null)
                     {
-                        detectLine = climbingLine;
+                        detectLine = TestClimbingLines[i];
                         detectLineElement = line;
                         prevNearPosition = nearPosition;
                         finalNearPosition = nearPosition;
@@ -1209,7 +1185,35 @@ public partial class PlayerUnit : UnTransfromObjectBase
                     {
                         if (Vector3.SqrMagnitude(nearPosition - CapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - CapsuleStart))
                         {
-                            detectLine = climbingLine;
+                            detectLine = TestClimbingLines[i];
+                            detectLineElement = line;
+                            prevNearPosition = nearPosition;
+                            finalNearPosition = nearPosition;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (detect == false)
+        {
+            for (int i = 0; i< ClimbingLineManager.dynamicClimbingLines.Count; i++)
+            {
+                if (ClimbingLineManager.dynamicClimbingLines[i].DetectLine(CapsuleStart, CapsuleEnd, CapsuleRadius, Transform, out nearPosition, ref line))
+                {
+                    detect = true;
+                    if (detectLine == null)
+                    {
+                        detectLine = ClimbingLineManager.dynamicClimbingLines[i];
+                        detectLineElement = line;
+                        prevNearPosition = nearPosition;
+                        finalNearPosition = nearPosition;
+                    }
+                    else
+                    {
+                        if (Vector3.SqrMagnitude(nearPosition - CapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - CapsuleStart))
+                        {
+                            detectLine = ClimbingLineManager.dynamicClimbingLines[i];
                             detectLineElement = line;
                             prevNearPosition = nearPosition;
                             finalNearPosition = nearPosition;
@@ -1222,6 +1226,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (detect == true)
         {
+            prevFollowLine = currentFollowLine;
             CurrentFollowLine = detectLine;
             lineTracker.position = finalNearPosition;
             lineTracker.SetParent(detectLine.transform);
@@ -1242,11 +1247,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public bool CheckUpClimbingLine()
     {
-        if (TestClimbingLines == null)
-        {
-            return false;
-        }
-
         Vector3 nearPosition = new Vector3();
         Line line = new Line();
 
@@ -1255,26 +1255,58 @@ public partial class PlayerUnit : UnTransfromObjectBase
         Line detectLineElement = new Line();
         Vector3 prevNearPosition = new Vector3();
         Vector3 finalNearPosition = new Vector3();
-        foreach (var climbingLine in TestClimbingLines)
+
+        if (TestClimbingLines != null)
         {
-            if (climbingLine.DetectLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd, upCheckCapsuleRadius, Transform, out nearPosition, ref line))
+            for (int i = 0; i < TestClimbingLines.Count; i++)
             {
-                detect = true;
-                if (detectLine == null)
+                if (TestClimbingLines[i].DetectLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd, upCheckCapsuleRadius, Transform, out nearPosition, ref line))
                 {
-                    detectLine = climbingLine;
-                    detectLineElement = line;
-                    prevNearPosition = nearPosition;
-                    finalNearPosition = nearPosition;
-                }
-                else
-                {
-                    if (Vector3.SqrMagnitude(nearPosition - UpperCheckCapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - UpperCheckCapsuleStart))
+                    detect = true;
+                    if (detectLine == null)
                     {
-                        detectLine = climbingLine;
+                        detectLine = TestClimbingLines[i];
                         detectLineElement = line;
                         prevNearPosition = nearPosition;
                         finalNearPosition = nearPosition;
+                    }
+                    else
+                    {
+                        if (Vector3.SqrMagnitude(nearPosition - UpperCheckCapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - UpperCheckCapsuleStart))
+                        {
+                            detectLine = TestClimbingLines[i];
+                            detectLineElement = line;
+                            prevNearPosition = nearPosition;
+                            finalNearPosition = nearPosition;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (detect == false)
+        {
+            for(int i = 0; i < ClimbingLineManager.dynamicClimbingLines.Count; i++)
+            {
+                if (ClimbingLineManager.dynamicClimbingLines[i].DetectLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd, upCheckCapsuleRadius, Transform, out nearPosition, ref line))
+                {
+                    detect = true;
+                    if (detectLine == null)
+                    {
+                        detectLine = ClimbingLineManager.dynamicClimbingLines[i];
+                        detectLineElement = line;
+                        prevNearPosition = nearPosition;
+                        finalNearPosition = nearPosition;
+                    }
+                    else
+                    {
+                        if (Vector3.SqrMagnitude(nearPosition - UpperCheckCapsuleStart) < Vector3.SqrMagnitude(prevNearPosition - UpperCheckCapsuleStart))
+                        {
+                            detectLine = ClimbingLineManager.dynamicClimbingLines[i];
+                            detectLineElement = line;
+                            prevNearPosition = nearPosition;
+                            finalNearPosition = nearPosition;
+                        }
                     }
                 }
             }
@@ -1282,6 +1314,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (detect == true)
         {
+            prevFollowLine = currentFollowLine;
             CurrentFollowLine = detectLine;
             transform.SetParent(null);
             lineTracker.position = finalNearPosition;
@@ -1383,6 +1416,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float keepClimbingUpJumpTime = 0.4f;
     [SerializeField] private float keepClimbingHorizonJumpTime = 0.4f;
     [SerializeField] private AnimationCurve climbingHorizonJumpSpeedCurve;
+    [SerializeField] private AnimationCurve climbingUpperLineInterpolateCurve;
 
     private bool _jumpStart = false;
     private float climbingJumpStartTime;
@@ -1471,6 +1505,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     [Header("ClimbingLine")]
     [SerializeField] private ClimbingLine currentFollowLine;
+    [SerializeField] private ClimbingLine prevFollowLine;
     [SerializeField] private Transform lineTracker;
     public Transform leftPoint;
     public Transform rightPoint;
@@ -1484,6 +1519,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public Transform LineTracker => lineTracker;
     public ClimbingLine CurrentFollowLine { get => currentFollowLine; set => currentFollowLine = value; }
+    public ClimbingLine PrevFollowLine { get => prevFollowLine; set => prevFollowLine = value; }
     public ClimbingLineManager ClimbingLineManager => _climbingLineManager;
     public List<ClimbingLine> TestClimbingLines => _currentTestClimbingLines;
 

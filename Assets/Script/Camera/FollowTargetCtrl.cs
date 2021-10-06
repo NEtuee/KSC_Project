@@ -22,6 +22,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     [SerializeField] private float pitchLimitMax = 50f;
     [SerializeField] private float rotSmooth = 0.1f;
     [SerializeField] private float followSmooth = 8f;
+    [SerializeField] private float revisionSpeed = 100.0f;
     [SerializeField] private bool isPause;
 
     [SerializeField]private PlayerUnit _player;
@@ -45,8 +46,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         set => pitchRotateSpeed = value;
     }
 
-    private Vector3 currentRot;
-    private Vector3 targetRot;
+    [SerializeField]private Vector3 currentRot;
+    [SerializeField]private Vector3 targetRot;
 
     private float currentYawRotVelocity;
     private float currentPitchRotVelocity;
@@ -186,12 +187,35 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         }
         else
         {
-            targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
-            currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
-            currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
+            if (_mouseX == 0.0f && _mouseY == 0.0f && _player.GetState == PlayerUnit.hangLedgeState && _player.climbDir != ClimbDir.Stop)
+            {
+                Vector3 look = new Vector3();
+                if (_player.climbDir == ClimbDir.Left)
+                {
+                    look = _player.Transform.forward - _player.Transform.right;
+                }
+                else if (_player.climbDir == ClimbDir.Right)
+                {
+                    look = _player.Transform.forward + _player.Transform.right;
+                }
 
-            Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
-            transform.rotation = localRotation;
+                targetRot = Quaternion.LookRotation(look).eulerAngles;
+                targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+                currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, revisionSpeed);
+                currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, revisionSpeed);
+                Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
+                transform.rotation = localRotation;
+                targetRot = currentRot;
+            }
+            else
+            {
+                targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+                currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
+                currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
+
+                Quaternion localRotation = Quaternion.Euler(currentRot.x, currentRot.y, 0.0f);
+                transform.rotation = localRotation;
+            }
         }
 
     }

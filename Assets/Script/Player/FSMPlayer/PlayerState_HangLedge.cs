@@ -240,6 +240,7 @@ public class PlayerState_HangLedge : PlayerState
         data.value = "Grab";
         playerUnit.SendMessageEx(MessageTitles.cameramanager_setfollowcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), data);
 
+        playerUnit.Attach();
         //Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
         //Vector3 pos = new Vector3();
         //if (planInfo != null)
