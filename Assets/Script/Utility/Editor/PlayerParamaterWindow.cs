@@ -43,6 +43,7 @@ public class PlayerParamaterWindow : EditorWindow
         GUILayout.Label("EMP 건", EditorStyles.boldLabel);
         playerUnit.NoramlGunCost = EditorGUILayout.FloatField("노말 샷 코스트", playerUnit.NoramlGunCost);
         playerUnit.ChargeGunCost = EditorGUILayout.FloatField("차지 샷 코스트", playerUnit.ChargeGunCost);
+        playerUnit.ChargeConsumeTime = EditorGUILayout.FloatField("풀차지 소요 시간", playerUnit.ChargeConsumeTime);
 
         GUILayout.Label("점프 관련", EditorStyles.boldLabel);
         playerUnit.ClimbingUpJumpPower = EditorGUILayout.FloatField("클라이밍 위 점프 파워", playerUnit.ClimbingUpJumpPower);
