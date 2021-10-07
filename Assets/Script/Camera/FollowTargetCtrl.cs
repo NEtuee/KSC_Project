@@ -51,6 +51,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     private float currentYawRotVelocity;
     private float currentPitchRotVelocity;
+    private Vector3 revisionVelocity;
 
     private Vector2 currentAimVelocity;
     private Vector2 supportVelocity;
@@ -108,12 +109,12 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
         transform.position = target.position + Vector3.up;
 
-
         targetRot.y += _mouseX * yawRotateSpeed * Time.fixedDeltaTime;
-        targetRot.y = Clamp0360(targetRot.y);
         targetRot.x += _mouseY * pitchRotateSpeed * Time.fixedDeltaTime;
+        targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
 
-        if(_isAim)
+
+        if (_isAim)
         {
             var target = targetRot;
             target.x = target.y;
@@ -197,6 +198,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         }
         else
         {
+            targetRot.y = Clamp0360(targetRot.y);
+
             if (_mouseX == 0.0f && _mouseY == 0.0f &&
                 Mathf.Abs(_player.InputHorizontal) > 0.6f
                 && _player.GetState == PlayerUnit.hangLedgeState 
@@ -212,24 +215,49 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                     look = _player.Transform.forward + _player.Transform.right;
                 }
 
-                Vector3 target = Quaternion.LookRotation(look).eulerAngles;
-                target.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
-                targetRot.x = Mathf.SmoothDamp(targetRot.x, target.x, ref currentPitchRotVelocity, revisionSpeed);
-                targetRot.y = Mathf.SmoothDamp(targetRot.y, target.y, ref currentYawRotVelocity, revisionSpeed);
-                Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
-                transform.rotation = localRotation;
+                Vector3 target = Quaternion.LookRotation(look,Vector3.up).eulerAngles;
+                //target.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+                Quaternion tq = Quaternion.Euler(target.x, target.y, 0.0f);
+                Quaternion dq = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
+                //dq = Quaternion.Slerp(dq, tq, revisionSpeed * Time.fixedDeltaTime);
+                dq = SmoothDampQuaternion(dq,tq,ref revisionVelocity,revisionSpeed);
+                //targetRot.x = Mathf.SmoothDamp(targetRot.x, target.x, ref currentPitchRotVelocity, revisionSpeed);
+                //targetRot.y = Mathf.SmoothDamp(targetRot.y, target.y, ref currentYawRotVelocity, revisionSpeed);
+                //Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
+                transform.rotation = dq;
+                Vector3 targetEuler = dq.eulerAngles;
+                if (targetRot.x < 0.0f)
+                    targetRot = new Vector3(targetEuler.x > pitchLimitMax ? targetEuler.x - 360.0f : targetEuler.x, targetEuler.y, targetEuler.z);
+                else
+                    targetRot = targetEuler;
             }
             else
             {
-                targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+                //targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
                 currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
                 currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
               
                 Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
                 transform.rotation = localRotation;
+                Vector3 targetEuler = localRotation.eulerAngles;
+                if (targetRot.x < 0.0f)
+                    targetRot = new Vector3(targetEuler.x > pitchLimitMax ? targetEuler.x - 360.0f : targetEuler.x, targetEuler.y, targetEuler.z);
+                else
+                    targetRot = targetEuler;
             }
         }
 
+    }
+
+    public static Quaternion SmoothDampQuaternion(Quaternion current, Quaternion target, ref Vector3 currentVelocity, float smoothTime)
+    {
+        Vector3 c = current.eulerAngles;
+        Vector3 t = target.eulerAngles;
+        return Quaternion.Euler(
+          Mathf.SmoothDampAngle(c.x, t.x, ref currentVelocity.x, smoothTime),
+          Mathf.SmoothDampAngle(c.y, t.y, ref currentVelocity.y, smoothTime),
+          Mathf.SmoothDampAngle(c.z, t.z, ref currentVelocity.z, smoothTime)
+        );
     }
 
     private void LateUpdate()

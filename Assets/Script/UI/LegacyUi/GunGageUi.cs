@@ -30,6 +30,6 @@ public class GunGageUi : ActiveUi
 
     public void SetFrontValue(float value)
     {
-        _frontTargetUpdateValue = value / 3f;
+        _frontTargetUpdateValue = value;
     }
 }
