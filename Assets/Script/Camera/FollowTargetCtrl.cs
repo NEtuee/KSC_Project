@@ -57,6 +57,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     private float currentYawRotVelocity;
     private float currentPitchRotVelocity;
     private Vector3 revisionVelocity;
+    private Vector3 rotVelocity;
 
     private Vector2 currentAimVelocity;
     private Vector2 supportVelocity;
@@ -102,6 +103,165 @@ public class FollowTargetCtrl : UnTransfromObjectBase
             result += 360f;
         }
         return result;
+    }
+
+    private void Update()
+    {
+        //if (_player.GetState == PlayerUnit.deadState)
+        //    return;
+
+        //if (!visible)
+        //    return;
+
+        //transform.position = target.position + Vector3.up;
+
+        //targetRot.y += _mouseX * yawRotateSpeed * Time.deltaTime;
+        //targetRot.x += _mouseY * pitchRotateSpeed * Time.deltaTime;
+        //targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+
+
+        //if (_isAim)
+        //{
+        //    var target = targetRot;
+        //    target.x = target.y;
+        //    target.y = -targetRot.x;
+        //    aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition, target * crosshairMovingSpeed,
+        //                                                    ref currentAimVelocity, rotSmooth);
+
+        //    if (_player.GamepadMode == true)
+        //    {
+        //        bool detect = false;
+        //        Vector2 nearestGunTarget = new Vector2();
+        //        Vector2 aimTransformPos = aimTransform.transform.position;
+        //        for (int i = 0; i < _gunTargetObjects.Count; i++)
+        //        {
+        //            if (_gunTargetObjects[i] == null)
+        //            {
+        //                _gunTargetObjects.RemoveAt(i);
+        //                continue;
+        //            }
+
+        //            if (_gunTargetObjects[i].gameObject.activeInHierarchy == false)
+        //            {
+        //                ++i;
+        //                continue;
+        //            }
+
+        //            if (Vector3.Dot((_gunTargetObjects[i].position - Camera.main.transform.position).normalized, Camera.main.transform.forward) > 0.0f)
+        //            {
+        //                Vector2 screenPos = Camera.main.WorldToScreenPoint(_gunTargetObjects[i].position);
+        //                if (detect == false)
+        //                {
+        //                    nearestGunTarget = screenPos;
+        //                }
+        //                else if ((aimTransformPos - nearestGunTarget).sqrMagnitude > (aimTransformPos - screenPos).sqrMagnitude)
+        //                {
+        //                    nearestGunTarget = screenPos;
+        //                }
+        //                detect = true;
+        //            }
+        //        }
+
+        //        supportTransform.position = nearestGunTarget;
+        //        if (detect == true && (aimTransformPos - nearestGunTarget).magnitude <= 500.0f)
+        //        {
+        //            //aimTransform.transform.position = Vector2.SmoothDamp(aimTransform.transform.position, nearestGunTarget, ref supportVelocity, 1f);
+        //            aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, 300.0f * Time.deltaTime);
+        //        }
+        //    }
+
+
+        //    if (aimTransform.anchoredPosition.magnitude > aimLimitDist)
+        //    {
+        //        var dir = aimTransform.anchoredPosition.normalized;
+        //        var camFactor = aimTransform.anchoredPosition - (dir * aimLimitDist);
+        //        aimTransform.anchoredPosition -= camFactor;
+
+        //        targetRot.x = -aimTransform.anchoredPosition.y;
+        //        targetRot.y = aimTransform.anchoredPosition.x;
+        //        targetRot /= crosshairMovingSpeed;
+
+        //        var x = camFactor.x;
+        //        camFactor.x = -camFactor.y;
+        //        camFactor.y = x;
+
+        //        var euler = transform.eulerAngles;
+        //        euler.x = ToWrapAngle(euler.x);
+
+        //        var rot = (Vector3)(camFactor * crosshairMovingSpeed * aimMovingSpeed * Time.deltaTime) + euler;
+        //        rot.x = Mathf.Clamp(rot.x, pitchLimitMin, pitchLimitMax);
+        //        Quaternion rotation = Quaternion.Euler(rot.x, rot.y, 0f);
+        //        transform.rotation = rotation;
+        //    }
+
+        //    var spineRot = aimTransform.anchoredPosition / spineRotateDivide;
+        //    spineRot.y *= -1f;
+        //    MathEx.Swap<float>(ref spineRot.x, ref spineRot.y);
+
+        //    var data = MessageDataPooling.GetMessageData<MD.Vector3Data>();
+        //    data.value = spineRot;
+        //    SendMessageEx(MessageTitles.playermanager_setSpineRotation, GetSavedNumber("PlayerManager"), data);
+        //}
+        //else
+        //{
+        //    targetRot.y = Clamp0360(targetRot.y);
+
+        //    if (_mouseX == 0.0f && _mouseY == 0.0f &&
+        //       Mathf.Abs(_player.InputHorizontal) > 0.6f
+        //       && _player.GetState == PlayerUnit.hangLedgeState
+        //       && _player.climbDir != ClimbDir.Stop)
+        //    {
+        //        _lateTime += Time.deltaTime;
+        //    }
+        //    else
+        //    {
+        //        _lateTime = 0.0f;
+        //    }
+
+        //    if (_lateTime >= revisionStartTime)
+        //    {
+        //        Vector3 look = new Vector3();
+        //        if (_player.climbDir == ClimbDir.Left)
+        //        {
+        //            look = _player.Transform.forward - _player.Transform.right;
+        //        }
+        //        else if (_player.climbDir == ClimbDir.Right)
+        //        {
+        //            look = _player.Transform.forward + _player.Transform.right;
+        //        }
+
+        //        Vector3 target = Quaternion.LookRotation(look, Vector3.up).eulerAngles;
+        //        //target.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+        //        Quaternion tq = Quaternion.Euler(target.x, target.y, 0.0f);
+        //        Quaternion dq = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
+        //        //dq = Quaternion.Slerp(dq, tq, revisionSpeed * Time.fixedDeltaTime);
+        //        dq = SmoothDampQuaternion(dq, tq, ref revisionVelocity, revisionSpeed);
+        //        //targetRot.x = Mathf.SmoothDamp(targetRot.x, target.x, ref currentPitchRotVelocity, revisionSpeed);
+        //        //targetRot.y = Mathf.SmoothDamp(targetRot.y, target.y, ref currentYawRotVelocity, revisionSpeed);
+        //        //Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
+        //        transform.rotation = dq;
+        //        Vector3 targetEuler = dq.eulerAngles;
+        //        if (targetRot.x < 0.0f)
+        //            targetRot = new Vector3(targetEuler.x > pitchLimitMax ? targetEuler.x - 360.0f : targetEuler.x, targetEuler.y, targetEuler.z);
+        //        else
+        //            targetRot = targetEuler;
+        //    }
+        //    else
+        //    {
+        //        //targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
+        //        //currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
+        //        //currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
+
+        //        Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
+        //        //transform.rotation = localRotation;
+        //        transform.rotation = SmoothDampQuaternion(transform.rotation, localRotation, ref rotVelocity, rotSmooth);
+        //        Vector3 targetEuler = transform.rotation.eulerAngles;
+        //        if (targetRot.x < 0.0f)
+        //            targetRot = new Vector3(targetEuler.x > pitchLimitMax ? targetEuler.x - 360.0f : targetEuler.x, targetEuler.y, targetEuler.z);
+        //        else
+        //            targetRot = targetEuler;
+        //    }
+        //}
     }
 
     private void FixedUpdate()
@@ -248,12 +408,13 @@ public class FollowTargetCtrl : UnTransfromObjectBase
             else
             {
                 //targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
-                currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
-                currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
+                //currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
+                //currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
 
                 Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
-                transform.rotation = localRotation;
-                Vector3 targetEuler = localRotation.eulerAngles;
+                //transform.rotation = localRotation;
+                transform.rotation = Quaternion.RotateTowards(transform.rotation,localRotation,250.0f*Time.fixedDeltaTime);
+                Vector3 targetEuler = transform.rotation.eulerAngles;
                 if (targetRot.x < 0.0f)
                     targetRot = new Vector3(targetEuler.x > pitchLimitMax ? targetEuler.x - 360.0f : targetEuler.x, targetEuler.y, targetEuler.z);
                 else
