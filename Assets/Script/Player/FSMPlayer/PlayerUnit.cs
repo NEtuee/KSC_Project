@@ -889,6 +889,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         }
 
         SendMessageEx(MessageTitles.uimanager_damageEffect, GetSavedNumber("UIManager"), null);
+        SendMessageEx(MessageTitles.gamepadVibrationManager_vibrationByKey, GetSavedNumber("GamepadVibrationManager"), "TakeDamage");
     }
 
     public void TakeDamage(float damage, float ragdollPower, Vector3 ragdollDir)
