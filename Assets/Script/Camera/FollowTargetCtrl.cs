@@ -23,9 +23,14 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     [SerializeField] private float rotSmooth = 0.1f;
     [SerializeField] private float followSmooth = 8f;
     [SerializeField] private float revisionSpeed = 100.0f;
+    [SerializeField] private float revisionStartTime = 3.0f;
+    [SerializeField] private float _lateTime = 0.0f;
     [SerializeField] private bool isPause;
 
     [SerializeField]private PlayerUnit _player;
+
+    public float RevisionSpeed { get => revisionSpeed; set => revisionSpeed = value; }
+    public float RevisionStartTime { get => revisionStartTime; set => revisionStartTime = value; }
 
     public List<Transform> _gunTargetObjects = new List<Transform>();
 
@@ -119,8 +124,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
             var target = targetRot;
             target.x = target.y;
             target.y = -targetRot.x;
-            aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition,target * crosshairMovingSpeed,
-                                                            ref currentAimVelocity,rotSmooth);
+            aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition, target * crosshairMovingSpeed,
+                                                            ref currentAimVelocity, rotSmooth);
 
             if (_player.GamepadMode == true)
             {
@@ -170,7 +175,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                 var dir = aimTransform.anchoredPosition.normalized;
                 var camFactor = aimTransform.anchoredPosition - (dir * aimLimitDist);
                 aimTransform.anchoredPosition -= camFactor;
-                
+
                 targetRot.x = -aimTransform.anchoredPosition.y;
                 targetRot.y = aimTransform.anchoredPosition.x;
                 targetRot /= crosshairMovingSpeed;
@@ -191,19 +196,28 @@ public class FollowTargetCtrl : UnTransfromObjectBase
             var spineRot = aimTransform.anchoredPosition / spineRotateDivide;
             spineRot.y *= -1f;
             MathEx.Swap<float>(ref spineRot.x, ref spineRot.y);
-            
+
             var data = MessageDataPooling.GetMessageData<MD.Vector3Data>();
             data.value = spineRot;
-            SendMessageEx(MessageTitles.playermanager_setSpineRotation,GetSavedNumber("PlayerManager"),data);
+            SendMessageEx(MessageTitles.playermanager_setSpineRotation, GetSavedNumber("PlayerManager"), data);
         }
         else
         {
             targetRot.y = Clamp0360(targetRot.y);
 
             if (_mouseX == 0.0f && _mouseY == 0.0f &&
-                Mathf.Abs(_player.InputHorizontal) > 0.6f
-                && _player.GetState == PlayerUnit.hangLedgeState 
-                && _player.climbDir != ClimbDir.Stop)
+               Mathf.Abs(_player.InputHorizontal) > 0.6f
+               && _player.GetState == PlayerUnit.hangLedgeState
+               && _player.climbDir != ClimbDir.Stop)
+            {
+                _lateTime += Time.fixedDeltaTime;
+            }
+            else
+            {
+                _lateTime = 0.0f;
+            }
+
+            if (_lateTime >= revisionStartTime)
             {
                 Vector3 look = new Vector3();
                 if (_player.climbDir == ClimbDir.Left)
@@ -215,12 +229,12 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                     look = _player.Transform.forward + _player.Transform.right;
                 }
 
-                Vector3 target = Quaternion.LookRotation(look,Vector3.up).eulerAngles;
+                Vector3 target = Quaternion.LookRotation(look, Vector3.up).eulerAngles;
                 //target.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
                 Quaternion tq = Quaternion.Euler(target.x, target.y, 0.0f);
                 Quaternion dq = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
                 //dq = Quaternion.Slerp(dq, tq, revisionSpeed * Time.fixedDeltaTime);
-                dq = SmoothDampQuaternion(dq,tq,ref revisionVelocity,revisionSpeed);
+                dq = SmoothDampQuaternion(dq, tq, ref revisionVelocity, revisionSpeed);
                 //targetRot.x = Mathf.SmoothDamp(targetRot.x, target.x, ref currentPitchRotVelocity, revisionSpeed);
                 //targetRot.y = Mathf.SmoothDamp(targetRot.y, target.y, ref currentYawRotVelocity, revisionSpeed);
                 //Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
@@ -236,7 +250,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                 //targetRot.x = Mathf.Clamp(targetRot.x, pitchLimitMin, pitchLimitMax);
                 currentRot.x = Mathf.SmoothDamp(currentRot.x, targetRot.x, ref currentPitchRotVelocity, rotSmooth);
                 currentRot.y = Mathf.SmoothDamp(currentRot.y, targetRot.y, ref currentYawRotVelocity, rotSmooth);
-              
+
                 Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
                 transform.rotation = localRotation;
                 Vector3 targetEuler = localRotation.eulerAngles;
@@ -273,6 +287,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         //transform.position = target.position + Vector3.up;
         //transform.position = Vector3.Lerp(transform.position, target.position + Vector3.up, 5.0f * Time.deltaTime);
         //transform.position = Vector3.MoveTowards(transform.position, target.position + Vector3.up, 8.0f * Time.deltaTime);
+
+        
     }
 
     public void Pause(){ isPause = true; }

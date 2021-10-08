@@ -10,6 +10,8 @@ public class GamePadVibrationManager : ManagerBase
     private TimeCounterEx _timeCounter;
     private bool _vibrating = false;
     private Dictionary<string, VibrationSet> _vibrationSetDic = new Dictionary<string, VibrationSet>();
+
+    private PlayerUnit _playerUnit;
     public override void Assign()
     {
         base.Assign();
@@ -17,6 +19,9 @@ public class GamePadVibrationManager : ManagerBase
 
         AddAction(MessageTitles.gamepadVibrationManager_vibration, (msg) =>
         {
+            if (_playerUnit.GamepadMode == false)
+                return;
+
             _vibrating = true;
             var data = MessageDataPooling.CastData<VibrationData>(msg.data);
             _timeCounter.InitTimer("Vibration", 0f, data.time);
@@ -25,6 +30,9 @@ public class GamePadVibrationManager : ManagerBase
 
         AddAction(MessageTitles.gamepadVibrationManager_vibrationByKey, (msg) =>
         {
+            if (_playerUnit.GamepadMode == false)
+                return;
+
             _vibrating = true;
             var key = (string)msg.data;
             if (_vibrationSetDic.ContainsKey(key) == false)
@@ -34,6 +42,12 @@ public class GamePadVibrationManager : ManagerBase
             _timeCounter.InitTimer("Vibration", 0f, set.time);
             Gamepad.current.SetMotorSpeeds(set.leftSpeed, set.rightSpeed);
         });
+
+        AddAction(MessageTitles.set_setplayer, (x) => {
+            _playerUnit = (PlayerUnit)x.data;
+        });
+
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
     }
 
     public override void Initialize()
@@ -66,6 +80,8 @@ public class GamePadVibrationManager : ManagerBase
 
     private void OnDisable()
     {
+        if (_playerUnit.GamepadMode == false)
+            return;
         Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
     }
 }
