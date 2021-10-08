@@ -1134,6 +1134,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void TryGrab()
     {
+        if (ClimbingLineManager == null)
+            return;
+
         bool detect = false;
         Vector3 nearPosition = new Vector3();
         Line line = new Line();
@@ -1223,6 +1226,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public bool CheckUpClimbingLine()
     {
+        if (ClimbingLineManager == null)
+            return false;
+
         Vector3 nearPosition = new Vector3();
         Line line = new Line();
 
