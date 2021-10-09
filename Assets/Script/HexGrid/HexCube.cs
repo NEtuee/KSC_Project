@@ -38,6 +38,11 @@ public class HexCube : MonoBehaviour
         _collider = GetComponent<Collider>();
         _renderer = GetComponent<MeshRenderer>();
 
+        if(_renderer == null)
+        {
+            _renderer = GetComponentInChildren<MeshRenderer>();
+        }
+
         _originalLocalPosition = transform.localPosition;
         _moveTime = 1f;
     }
@@ -107,6 +112,15 @@ public class HexCube : MonoBehaviour
 
     public MeshRenderer GetRenderer()
     {
+        if(_renderer == null)
+        {
+            _renderer = GetComponent<MeshRenderer>();
+
+            if(_renderer == null)
+            {
+                _renderer = GetComponentInChildren<MeshRenderer>();
+            }
+        }
         return _renderer;
     }
 

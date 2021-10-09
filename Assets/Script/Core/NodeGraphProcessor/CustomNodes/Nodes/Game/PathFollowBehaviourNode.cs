@@ -33,6 +33,36 @@ public class PathFollowMoveNode : LinearConditionalNode
 	}
 }
 
+[System.Serializable, NodeMenuItem("Game/Follow Path Translate")]
+public class FollowPathTranslateNode : LinearConditionalNode
+{
+    [Input(name = "Path Follow Object")]
+	public PathFollowGraphObjectBase obj;
+
+    [Input(name = "speed"),SerializeField]
+	public float speed;
+
+	[Input(name = "Rotation Speed"),SerializeField]
+	public float rotationSpeed;
+
+	[Input(name = "Point Rotate"),SerializeField]
+	public bool pointRotate;
+
+	[Input(name = "deltaTime")]
+	public float deltaTime;
+
+	[Output(name = "Arrived")]
+	public bool isArrived;
+
+
+	public override string		name => "Follow Path Translate";
+
+	protected override void Process()
+	{
+	    isArrived = obj.FollowPathTranslate(speed,rotationSpeed,pointRotate,deltaTime);
+	}
+}
+
 [System.Serializable, NodeMenuItem("Game/Follow Path")]
 public class FollowPathNode : LinearConditionalNode
 {
@@ -93,7 +123,7 @@ public class SetPathNode : LinearConditionalNode
 		}
 		else
 		{
-			obj.SetPathTargetNear();
+			obj.SetPathTargetNear(false);
 		}
 
 		MessagePool.ReturnMessage(message);
