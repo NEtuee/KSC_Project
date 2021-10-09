@@ -475,6 +475,19 @@ public partial class PlayerUnit : UnTransfromObjectBase
         ChangeState(jumpState);
     }
 
+    public bool IsClimbing()
+    {
+        return _currentState == climbingJumpState || _currentState == grabState || 
+                _currentState == readyClimbingJumpState || _currentState == readyGrabState ||
+                _currentState == ledgeUpState || _currentState == hangLedgeState ||
+                _currentState == hangEdgeState || _currentState == climbingUpperLineState;
+    }
+
+    public bool IsMoving()
+    {
+        return currentSpeed != 0f;
+    }
+
     private void UpdateMoveSpeed()
     {
         _animator.SetFloat("Speed", currentSpeed);
