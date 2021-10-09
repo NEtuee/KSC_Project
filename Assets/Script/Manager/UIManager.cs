@@ -227,7 +227,7 @@ public class UIManager : ManagerBase
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
             gunChargeValueText.text = ((int)(data.value * 100.0f)).ToString();
             aimEnergyBar.SetFrontValue(data.value);
-            if(data.value == 3.0f)
+            if(data.value == 1.0f)
             {
                 aimEnergyBarImage.color = Color.blue;
             }

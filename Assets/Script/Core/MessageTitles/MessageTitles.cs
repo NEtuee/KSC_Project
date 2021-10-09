@@ -408,6 +408,19 @@ public static partial class MessageTitles
     public const ushort climbingLineManager_getClimbingLineManager = 0x1101;
     #endregion
 
+    #region GamePadVibrationManager
+
+    /// <summary>
+    /// data = VibrationData
+    /// </summary>
+    public const ushort gamepadVibrationManager_vibration = 0x1201;
+
+    /// <summary>
+    /// data = String
+    /// </summary>
+    public const ushort gamepadVibrationManager_vibrationByKey = 0x1202;
+    #endregion
+
     #region Setter
     /// data = null
     /// </summary>

@@ -44,6 +44,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public bool canGroundCheck = true;
     public bool CanSkipRunToStop { get => _canSkipRunToStop; set => _canSkipRunToStop = value; }
+
+    public float RunTime { get => _runTime; set => _runTime = value; }
     #endregion
 
     #region Climbing Property
@@ -127,6 +129,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public bool CanCharge { get => _bCanCharge; set => _bCanCharge = value; }
     public float NoramlGunCost { get => normalCost; set => normalCost = value; }
     public float ChargeGunCost { get => chargeCost; set => chargeCost = value; }
+    public float ChargeConsumeTime { get => chargeConsumeTime; set => chargeConsumeTime = value; }
     #endregion
 
     #region QuickStanding
@@ -209,41 +212,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
             _climbingLineManager = (ClimbingLineManager)msg.data;
         });
 
-        //InputSystem.onDeviceChange +=
-        //    (device, change) =>
-        //    {
-        //        switch (change)
-        //        {
-        //            case InputDeviceChange.Added:
-        //            case InputDeviceChange.Removed:
-        //                Debug.Log("Added or Removed");
-        //                var gamepad = Gamepad.current;
-        //                if (gamepad == null)
-        //                    _gamepadMode = false;
-        //                else
-        //                    _gamepadMode = true;
-        //                break;
-        //            case InputDeviceChange.Disconnected:
-        //                Debug.Log("Disconnected");
-        //                break;
-        //            case InputDeviceChange.Reconnected:
-        //                Debug.Log("Reconnected");
-        //                break;
-        //            case InputDeviceChange.Enabled:
-        //                Debug.Log("Enabled");
-        //                break;
-        //            case InputDeviceChange.Disabled:
-        //                Debug.Log("Disable");
-        //                break;
-        //            case InputDeviceChange.UsageChanged:
-        //                Debug.Log("UsageChanged");
-        //                break;
-        //            case InputDeviceChange.ConfigurationChanged:
-        //                Debug.Log("ConfigurationChanged");
-        //                break;
-        //        }
-        //    };
-
         InputUser.onChange +=
             (user, change, device) =>
             {
@@ -323,12 +291,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
         CurrentDashCoolTime.Value = dashCoolTime;
 
         ChangeState(defaultState);
-
-        //var gamepad = Gamepad.current;
-        //if (gamepad == null)
-        //    _gamepadMode = false;
-        //else
-        //    _gamepadMode = true;
     }
 
     private void Update()
@@ -380,7 +342,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         MoveConservation();
 
-        if (_currentState != jumpState)
+        if (_currentState != jumpState && _currentState != dashState)
         {
             InitVelocity();
         }
@@ -474,6 +436,19 @@ public partial class PlayerUnit : UnTransfromObjectBase
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
 
         ChangeState(jumpState);
+    }
+
+    public bool IsClimbing()
+    {
+        return _currentState == climbingJumpState || _currentState == grabState || 
+                _currentState == readyClimbingJumpState || _currentState == readyGrabState ||
+                _currentState == ledgeUpState || _currentState == hangLedgeState ||
+                _currentState == hangEdgeState || _currentState == climbingUpperLineState;
+    }
+
+    public bool IsMoving()
+    {
+        return currentSpeed != 0f;
     }
 
     private void UpdateMoveSpeed()
@@ -914,6 +889,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         }
 
         SendMessageEx(MessageTitles.uimanager_damageEffect, GetSavedNumber("UIManager"), null);
+        SendMessageEx(MessageTitles.gamepadVibrationManager_vibrationByKey, GetSavedNumber("GamepadVibrationManager"), "TakeDamage");
     }
 
     public void TakeDamage(float damage, float ragdollPower, Vector3 ragdollDir)
@@ -1158,6 +1134,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void TryGrab()
     {
+        if (ClimbingLineManager == null)
+            return;
+
         bool detect = false;
         Vector3 nearPosition = new Vector3();
         Line line = new Line();
@@ -1247,6 +1226,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public bool CheckUpClimbingLine()
     {
+        if (ClimbingLineManager == null)
+            return false;
+
         Vector3 nearPosition = new Vector3();
         Line line = new Line();
 
@@ -1469,6 +1451,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private bool decharging = false;
     [SerializeField] private float normalCost = 25.0f;
     [SerializeField] private float chargeCost = 50.0f;
+    [SerializeField] private float chargeConsumeTime = 3.0f;
     private bool _bCanCharge = true;
     private bool _aimLock = false;
     private float dechargingDuration = 2.5f;
@@ -1562,6 +1545,20 @@ public partial class PlayerUnit : UnTransfromObjectBase
         Gizmos.DrawLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd);
     }
 #endif
+
+    protected void OnCollisionEnter(Collision collision)
+    {
+        if(_currentState == dashState)
+        {
+            MessageReceiver receiver;
+            if (collision.gameObject.TryGetComponent<MessageReceiver>(out receiver))
+            {
+                Message msg = new Message();
+                msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, this, this);
+                receiver.ReceiveMessage(msg);
+            }
+        }
+    }
 
     #region InputSystem
 
@@ -1670,7 +1667,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (value.performed == false || Time.timeScale == 0f)
             return;
 
-        _currentState.OnKick(value, this, _animator);
+        //_currentState.OnKick(value, this, _animator);
     }
 
     #endregion

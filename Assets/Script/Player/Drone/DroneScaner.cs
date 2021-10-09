@@ -51,7 +51,7 @@ public class DroneScaner : UnTransfromObjectBase
         scaning = true;
         _range = 0f;
         scanMat.SetFloat("_ScanArc", arc);
-        scanStartPosition = scanStart.position;
+        scanStartPosition = transform.position;
         scanMat.SetVector("_WorldSpaceScannerPos", scanStart.position);
         scanForward = forward.forward;
         scanForward.y = 0.0f;
@@ -67,7 +67,7 @@ public class DroneScaner : UnTransfromObjectBase
 
         EffectActiveData effectData = MessageDataPooling.GetMessageData<EffectActiveData>();
         effectData.key = "BirdyScanning";
-        effectData.position = transform.position + transform.forward * 0.4f;
+        effectData.position = scanStart.position;
         effectData.rotation = transform.rotation;
         effectData.parent = transform;
         SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,GetSavedNumber("EffectManager"),effectData);

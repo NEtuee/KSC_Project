@@ -19,12 +19,9 @@ public class EMPBomb : MonoBehaviour
     private float _speed = 0f;
     private Material _matOrigin;
 
-    private PlayerCtrl_Ver2 player;
-
     public void Start()
     {
         _matOrigin = GetComponent<MeshRenderer>().material;
-        player = GameManager.Instance.player as PlayerCtrl_Ver2;
     }
 
     public void Hit()
@@ -41,14 +38,14 @@ public class EMPBomb : MonoBehaviour
             foreach(Collider curr in playerColl)
             {
                
-                PlayerRagdoll ragdoll = curr.GetComponent<PlayerRagdoll>();
-                if(ragdoll != null)
+                PlayerUnit player = curr.GetComponent<PlayerUnit>();
+                if(player != null)
                 {
-                    if (player.GetState() == PlayerCtrl_Ver2.PlayerState.Ragdoll || player.GetState() == PlayerCtrl_Ver2.PlayerState.Respawn)
+                    if (player.GetState == PlayerUnit.ragdollState || player.GetState == PlayerUnit.respawnState)
                         continue;
 
-                    (GameManager.Instance.player as PlayerCtrl_Ver2).TakeDamage(damage);
-                    ragdoll.ExplosionRagdoll(explosionForce, (ragdoll.transform.position - transform.position).normalized);
+                    player.TakeDamage(damage);
+                    player.Ragdoll.ExplosionRagdoll(explosionForce, (player.Transform.position - transform.position).normalized);
 
                     whenHitPlayer?.Invoke();
 
