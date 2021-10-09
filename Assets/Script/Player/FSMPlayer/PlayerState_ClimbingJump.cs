@@ -6,6 +6,8 @@ using MD;
 
 public class PlayerState_ClimbingJump : PlayerState
 {
+    private float _minKeepJumpTime = 0.5f;
+
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
     }
@@ -159,6 +161,8 @@ public class PlayerState_ClimbingJump : PlayerState
 
     public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
+        if (Time.time - playerUnit.ClimbingJumpStartTime < _minKeepJumpTime)
+            return;
         playerUnit.TryGrab();
     }
 }
