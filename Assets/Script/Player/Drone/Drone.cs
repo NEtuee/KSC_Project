@@ -30,6 +30,7 @@ public class Drone : UnTransfromObjectBase
     [SerializeField] private Transform target;
     [SerializeField] private Transform scanPosition;
     [SerializeField] public List<Transform> dronePoints = new List<Transform>();
+    [SerializeField] public Transform droneAimPoint;
     [SerializeField] private DroneState state;
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Vector3 defaultFollowOffset;
@@ -190,6 +191,11 @@ public class Drone : UnTransfromObjectBase
         if(player.IsClimbing())
         {
             _droneMovePosition = dronePoints[_droneSide * 2 + 1].position;
+        }
+
+        if(player.IsAiming())
+        {
+            _droneMovePosition = droneAimPoint.position;
         }
 
         if(_scanning)

@@ -451,6 +451,11 @@ public partial class PlayerUnit : UnTransfromObjectBase
         return currentSpeed != 0f;
     }
 
+    public bool IsAiming()
+    {
+        return _currentState == aimingState;
+    }
+
     private void UpdateMoveSpeed()
     {
         _animator.SetFloat("Speed", currentSpeed);
