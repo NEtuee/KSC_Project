@@ -1205,6 +1205,15 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (detect == true)
         {
+            Vector3 leftPoint = detectLine.points[detectLineElement.p1].position;
+            Vector3 rightPoint = detectLine.points[detectLineElement.p2].position;
+            Vector3 u = leftPoint - rightPoint;
+            Vector3 v = finalNearPosition - rightPoint;
+            float s = u.x != 0.0f ? v.x / u.x : (u.y != 0.0f ? v.y / u.y : v.z / u.z);
+
+            if (s > 1.0f || s < 0f)
+                return;
+
             prevFollowLine = currentFollowLine;
             CurrentFollowLine = detectLine;
             lineTracker.position = finalNearPosition;
@@ -1426,6 +1435,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Input")]
     [SerializeField] private float _inputVertical;
     [SerializeField] private float _inputHorizontal;
+    private float _prevInputHorizontal;
     [SerializeField] private float _inputSum;
     private float climbingVertical = 0.0f;
     private float climbingHorizon = 0.0f;
@@ -1565,6 +1575,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void OnMove(InputAction.CallbackContext value)
     {
         Vector2 inputVector = value.ReadValue<Vector2>();
+        _prevInputHorizontal = _inputHorizontal;
         _inputVertical = inputVector.y;
         _inputHorizontal = inputVector.x;
         _inputSum = Mathf.Abs(_inputVertical) + Mathf.Abs(_inputHorizontal);
