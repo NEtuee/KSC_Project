@@ -267,7 +267,7 @@ public class PlayerManager : ManagerBase
         _player.chargeTime.Subscribe(value => 
         {
             FloatData data = MessageDataPooling.GetMessageData<FloatData>();
-            data.value = value;
+            data.value = value / _player.ChargeConsumeTime;
             SendMessageEx(MessageTitles.uimanager_setgunchargetimevalue, GetSavedNumber("UIManager"), data);
         });
         _player.energy.Subscribe(value =>
