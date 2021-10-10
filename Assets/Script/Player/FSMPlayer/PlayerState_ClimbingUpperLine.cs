@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class PlayerState_ClimbingUpperLine : PlayerState
 {
-    private Vector3 _startPosition;
-    private Vector3 _endPosition;
+    private Transform _startPosition;
+    private Transform _endPosition;
+
+    private void Start()
+    {
+        _startPosition = new GameObject("sp").transform;
+        _endPosition = new GameObject("ep").transform;
+    }
 
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
@@ -19,10 +25,12 @@ public class PlayerState_ClimbingUpperLine : PlayerState
         Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
 
         //playerUnit.Transform.SetParent(null);
-        _startPosition = playerUnit.Transform.position;
+        _startPosition.SetParent(playerUnit.PrevFollowLine.transform);
+        _startPosition.position = playerUnit.Transform.position;
         //Debug.Log(_startPosition);
-        _endPosition = playerUnit.LineTracker.position + (planInfo.up * playerUnit.DetectionOffset.y) - (planInfo.forward * playerUnit.DetectionOffset.z);
-
+        _endPosition.SetParent(playerUnit.CurrentFollowLine.transform);
+        _endPosition.position = playerUnit.LineTracker.position + (planInfo.up * playerUnit.DetectionOffset.y) - (planInfo.forward * playerUnit.DetectionOffset.z);
+        playerUnit.Transform.SetParent(playerUnit.LineTracker);
         animator.SetTrigger("ClimbingUpper");
     }
 
@@ -35,7 +43,7 @@ public class PlayerState_ClimbingUpperLine : PlayerState
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Climb_ShortJump") == false)
         {
-            playerUnit.Transform.position = _startPosition;
+            playerUnit.Transform.position = _startPosition.position;
             return;
         }
 
@@ -43,12 +51,12 @@ public class PlayerState_ClimbingUpperLine : PlayerState
         
         if (normalizeTime < 1.0f)
         {
-            Vector3 startToEnd = _endPosition - _startPosition;
-            playerUnit.Transform.position = _startPosition + startToEnd * normalizeTime;
+            Vector3 startToEnd = _endPosition.position - _startPosition.position;
+            float t = playerUnit.ClimbingUpperLineInterpolateCurve.Evaluate(normalizeTime);
+            playerUnit.Transform.position = _startPosition.position + startToEnd * t;
         }
         else if(normalizeTime >= 1.0f)
         {
-            playerUnit.Transform.SetParent(playerUnit.LineTracker);
             animator.SetTrigger("EndClimbingUpperLine");
             playerUnit.ChangeState(PlayerUnit.readyGrabState);
         }
@@ -58,7 +66,7 @@ public class PlayerState_ClimbingUpperLine : PlayerState
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Climb_ShortJump") == false)
         {
-            playerUnit.Transform.position = _startPosition;
+            playerUnit.Transform.position = _startPosition.position;
             return;
         }
     }

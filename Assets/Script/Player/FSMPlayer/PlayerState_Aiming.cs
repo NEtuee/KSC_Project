@@ -218,15 +218,12 @@ public class PlayerState_Aiming : PlayerState
             {
                 playerUnit.chargeTime.Value += Time.deltaTime * (playerUnit.Decharging ? dechargingRatio : 1f);
                 //playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, Mathf.Abs(playerUnit.energy.Value / _gunCost));
-                playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, 3.0f);
+                playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, playerUnit.ChargeConsumeTime);
             }
 
             SetParameterData setParameterData = MessageDataPooling.GetMessageData<SetParameterData>();
             setParameterData.soundId = 1013; setParameterData.paramId = 10131; setParameterData.value = (playerUnit.chargeTime.Value) * 100f;
             playerUnit.SendMessageEx(MessageTitles.fmod_setParam, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), setParameterData);
-
-            if(playerUnit.GunAnimator != null)
-               playerUnit.GunAnimator.SetFloat("Energy", playerUnit.chargeTime.Value * 100.0f);
 
             if (_transformingCount < (int)playerUnit.chargeTime.Value)
             {
