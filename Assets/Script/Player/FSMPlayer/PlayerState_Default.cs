@@ -82,7 +82,7 @@ public class PlayerState_Default : PlayerState
         camRight.y = 0;
         camRight.Normalize();
 
-        if (playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
+        if (playerUnit.InputVertical != 0.2f || playerUnit.InputHorizontal != 0.2f)
         {
             playerUnit.MoveDir = (camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal);
             playerUnit.MoveDir.Normalize();

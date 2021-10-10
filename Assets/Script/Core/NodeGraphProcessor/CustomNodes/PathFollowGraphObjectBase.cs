@@ -24,6 +24,36 @@ public class PathFollowGraphObjectBase : GraphObjectBase
         _graph.GetExposedParameter("PathFollow Object").value = this;
     }
 
+    public bool FollowPathTranslate(float mainSpeed, float rotationSpeed, bool followPointRotate, float deltaTime)
+    {
+        if(pathArrived)
+            return true;
+
+        targetDirection = (targetTransform.position - transform.position).normalized;
+        Move(targetDirection,mainSpeed, deltaTime);
+
+        if(followPointRotate)
+            targetDirection = targetTransform.forward;
+        else
+            SetTarget(targetTransform.position);
+
+        Turn(targetTransform.forward,rotationSpeed,deltaTime);
+        if(IsArrivedTarget(distanceAccuracy))
+        {
+            var target = GetNextPoint(out bool isEnd).transform;
+
+            targetTransform = target;
+            if(isEnd && !pathLoop)
+            {
+                pathArrived = true;
+            }
+            
+            return isEnd;
+        }
+
+        return false;
+    }
+
     public bool FollowPath(float mainSpeed, float rotationSpeed, float deltaTime)
     {
         if(pathArrived)
@@ -63,6 +93,27 @@ public class PathFollowGraphObjectBase : GraphObjectBase
         transform.position += direction * (accelSpeed * deltaTime);
         
         return true;
+    }
+
+    public bool Move(Vector3 direction, float speed, float deltaTime)
+    {
+        accelSpeed = Mathf.Lerp(accelSpeed,speed,0.2f);
+        transform.position += direction * (accelSpeed * deltaTime);
+        
+        return true;
+    }
+
+    public void Turn(Vector3 direction, float rotationSpeed, float deltaTime)
+    {
+        var angle = Vector3.SignedAngle(transform.forward,direction,transform.up);
+
+        if(Mathf.Abs(angle) > turnAccuracy)
+        {
+            if(angle > 0)
+                Turn(true,this.transform,rotationSpeed,deltaTime);
+            else
+                Turn(false,this.transform,rotationSpeed,deltaTime);
+        }
     }
 
     public bool IsArrivedTarget(float dist)

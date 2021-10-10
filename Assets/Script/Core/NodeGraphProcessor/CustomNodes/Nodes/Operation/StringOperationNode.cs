@@ -46,3 +46,24 @@ public class StringAddNode : BaseNode
 	    result = a + b;
 	}
 }
+
+[System.Serializable, NodeMenuItem("Operations/String : Add Object")]
+public class StringAddObjectNode : BaseNode
+{
+	[Input(name = "A"),SerializeField]
+	public string a;
+
+    [Input(name = "B")]
+	public System.Object b;
+
+
+	[Output(name = "Result")]
+	public string result;
+
+	public override string		name => "Add";
+
+	protected override void Process()
+	{
+	    result = a + b.ToString();
+	}
+}
