@@ -8,18 +8,82 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: GenieFloor_Blend
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: a6e07cba87caa4543821210fa8cf9ad3,
+    type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
-  stringTagMap:
-    RenderType: Opaque
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Coat_Mask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - MAIN_TEX1_Blend_Noise_R:
+        m_Texture: {fileID: 2800000, guid: b1c4838ca128ad441b92b13e4300dcf6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Main_Albedo_Black:
+        m_Texture: {fileID: 2800000, guid: f9fa50de95e2aca488b6be4d90192fbe, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Main_Normal:
+        m_Texture: {fileID: 2800000, guid: 0c418e04ea05134449e170f9a1be2dfd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Main_SAM:
+        m_Texture: {fileID: 2800000, guid: b2ff220336bbc1143923711fa3b36fc5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - TEX2_Blend_Noise_G:
+        m_Texture: {fileID: 2800000, guid: c30889625c50bd745a8fce3ff150666b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - TEX3_Blend_Noise_B:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Tex1_Albedo_Red:
+        m_Texture: {fileID: 2800000, guid: 5cb54429bec7a5340b77b956307106e6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Tex1_Normal:
+        m_Texture: {fileID: 2800000, guid: bd00d8bf7eb72984482bfb497281ac00, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Tex1_SAM:
+        m_Texture: {fileID: 2800000, guid: 9a46d67389e066749822b06156d58c06, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Tex2_Albedo_Green:
+        m_Texture: {fileID: 2800000, guid: 6cbf23bcd06b3114b89e3a8e7a59d8f4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Tex2_Normal:
+        m_Texture: {fileID: 2800000, guid: 477c619f2acb6134391a21e233f9a7c1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Tex2_SAM:
+        m_Texture: {fileID: 2800000, guid: a0ed2473c39532448be8389caf104ef6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Tex3_Albedo_Blue:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Tex3_Normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Tex3_SAM:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -78,6 +142,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - CoatTex_Intensity: 0
+    - Coat_Smoothness: 0.5
+    - MAIN_TEX1_Blend_Contrast: 1
+    - Main_Normal_Intensity: 1
+    - Main_Smoothness: 0.725
+    - TEX2_Blend_Contrast: 4.34
+    - TEX3_Blend_Contrast: 1
+    - Tex1_Normal_Intensity: 1
+    - Tex1_Smoothness: 0.5
+    - Tex2_Normal_Intensity: 1
+    - Tex2_Smoothness: 0.087
+    - Tex3_Normal_Intensity: 1
+    - Tex3_Smoothness: 0.5
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -105,6 +182,17 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - MAIN_TEX1_Blend_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
+    - Main_Color: {r: 1, g: 1, b: 1, a: 0}
+    - Main_Tiling_Offset: {r: 1, g: 1, b: 0, a: 0}
+    - TEX2_Blend_TilingOffset: {r: 3, g: 3, b: 3, a: 0}
+    - TEX3_Blend_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
+    - Tex1_Color: {r: 1, g: 1, b: 1, a: 0}
+    - Tex1_Tiling_Offset: {r: 1, g: 1, b: 0, a: 0}
+    - Tex2_Color: {r: 0, g: 0, b: 0, a: 0}
+    - Tex2_Tiling_Offset: {r: 3, g: 3, b: 3, a: 0}
+    - Tex3_Color: {r: 1, g: 1, b: 1, a: 0}
+    - Tex3_Tiling_Offset: {r: 1, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
