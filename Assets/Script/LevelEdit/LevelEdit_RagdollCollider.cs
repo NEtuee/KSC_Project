@@ -152,9 +152,9 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
 
     public void ExplosionRagdoll(Vector3 dir)
     {
-        GameManager.Instance.player.transform.SetParent(null);
+        //GameManager.Instance.player.transform.SetParent(null);
 
-        GameManager.Instance.player.TakeDamage(hitDamage);
+        //GameManager.Instance.player.TakeDamage(hitDamage);
 
         if(ragdollType == RagdollType.ElectricShock)
             _ragdoll.SetPlayerShock(shockTime);

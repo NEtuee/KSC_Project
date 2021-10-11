@@ -172,8 +172,6 @@ public class PlayerRagdoll : MonoBehaviour
             if (limit)
             {
                 simulateState = RagdollSimulateState.Default;
-                foreach(var effect in lightningEffect)
-                    effect.SetActive(false);
             }
             
         }
@@ -264,8 +262,6 @@ public class PlayerRagdoll : MonoBehaviour
     public void SetPlayerShock(float time)
     {
         _timeCounter.InitTimer("shockProgress", 0f, time);
-        foreach(var effect in lightningEffect)
-            effect.SetActive(true);
         simulateState = RagdollSimulateState.Shock;
     }
 
@@ -552,8 +548,7 @@ public class PlayerRagdoll : MonoBehaviour
         anim.Play(defaultAnimation, 0, 0);
         _player.InitVelocity();
         ActiveRagdoll(false);
-        foreach (var effect in lightningEffect)
-            effect.SetActive(false);
+
     }
 
     public void ResetRagdoll()
