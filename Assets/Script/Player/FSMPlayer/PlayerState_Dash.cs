@@ -24,11 +24,11 @@ public class PlayerState_Dash : PlayerState
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
     {
-        Debug.Log("ExitDash");
-
         animator.SetBool("Dash", false);
         _lateTime = 0.0f;
         playerUnit.InitVelocity();
+
+        playerUnit.RunTime = 0.0f;
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
