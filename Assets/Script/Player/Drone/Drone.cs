@@ -62,6 +62,14 @@ public class Drone : UnTransfromObjectBase
     private FloatingMove _floatingMoveComponent;
     private bool _respawn = false;
 
+
+    [Header("DroneEffects")]
+    public Material cooltimeMat;
+    public Material jetMat;
+    public Transform backEffectPos;
+
+
+
     private float collectStartTime;
     
     private int _droneSide = 0;
@@ -174,7 +182,21 @@ public class Drone : UnTransfromObjectBase
         {
             scanLeftCoolTime.Value -= deltaTime;
             scanLeftCoolTime.Value = Mathf.Clamp(scanLeftCoolTime.Value, 0.0f, 10.0f);
+            if(scanLeftCoolTime.Value <= 0f)
+            {
+                EffectActiveData effectData = MessageDataPooling.GetMessageData<EffectActiveData>();
+                effectData.key = "BirdyScanReady";
+                effectData.position = backEffectPos.position;
+                effectData.rotation = transform.rotation;
+                effectData.parent = transform;
+                SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,GetSavedNumber("EffectManager"),effectData);
+            }
         }
+
+        Debug.Log(scanLeftCoolTime.Value);
+
+        var coolGague = (scanCoolTime - scanLeftCoolTime.Value) / scanCoolTime;
+        cooltimeMat.SetFloat("Cooltime_gauge",coolGague);
 
         if(_scanning)
         {
@@ -202,6 +224,9 @@ public class Drone : UnTransfromObjectBase
         {
             _droneMovePosition = scanPosition.position;
         }
+
+        var dist = Vector3.Distance(transform.position,_droneMovePosition);
+        jetMat.SetFloat("Power",Mathf.Clamp(dist * 0.7f,0.3f,1f));
 
         transform.position = Vector3.Lerp(transform.position,_droneMovePosition,deltaTime * 13f);
         transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, deltaTime * 13f);

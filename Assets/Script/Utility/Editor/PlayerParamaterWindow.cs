@@ -11,7 +11,30 @@ public class PlayerParamaterWindow : EditorWindow
         EditorWindow.GetWindow(typeof(PlayerParamaterWindow));
     }
 
+    SerializedProperty revisionSpeed;
+
     private void OnEnable()
+    {
+        playerUnit = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerUnit>();
+        followTarget = GameObject.Find("FollowTarget").GetComponent<FollowTargetCtrl>();
+
+        EditorApplication.playModeStateChanged += ChangeState;
+    }
+
+    private void OnDisable()
+    {
+        EditorApplication.playModeStateChanged -= ChangeState;
+    }
+
+    private void ChangeState(PlayModeStateChange state)
+    {
+        if(state == PlayModeStateChange.EnteredEditMode)
+        {
+            GetObject();
+        }
+    }
+
+    private void GetObject()
     {
         playerUnit = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerUnit>();
         followTarget = GameObject.Find("FollowTarget").GetComponent<FollowTargetCtrl>();
@@ -19,8 +42,10 @@ public class PlayerParamaterWindow : EditorWindow
 
     private void OnGUI()
     {
-        if (playerUnit == null)
+        if (playerUnit == null || followTarget == null)
+        {
             return;
+        }
 
         GUILayout.Label("이동", EditorStyles.boldLabel);
         playerUnit.WalkSpeed = EditorGUILayout.FloatField("걷기 속도", playerUnit.WalkSpeed);
@@ -54,6 +79,11 @@ public class PlayerParamaterWindow : EditorWindow
         GUILayout.Label("카메라 보정", EditorStyles.boldLabel);
         followTarget.RevisionSpeed = EditorGUILayout.FloatField("보정 회전 속도", followTarget.RevisionSpeed);
         followTarget.RevisionStartTime = EditorGUILayout.FloatField("보정 시작 시간", followTarget.RevisionStartTime);
+
+        if(GUI.changed)
+        {
+            EditorUtility.SetDirty(followTarget);
+        }
     }
 
     private PlayerUnit playerUnit;
