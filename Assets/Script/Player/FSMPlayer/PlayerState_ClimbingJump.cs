@@ -6,7 +6,7 @@ using MD;
 
 public class PlayerState_ClimbingJump : PlayerState
 {
-    private float _minKeepJumpTime = 0.5f;
+    private float _minKeepJumpTime = 0.1f;
 
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {

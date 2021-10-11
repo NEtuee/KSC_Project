@@ -6,6 +6,11 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
 {
     public bool mirror = true;
     public bool upside = true;
+    public bool centerMove = true;
+
+    public Transform coreTarget;
+
+    private Vector3 _spawnPos;
 
     public override void Initialize()
     {
@@ -15,6 +20,8 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
         SetTargetDirectionUpdateTime(0.2f);
         maxSpeed = Random.Range(randomMaxSpeed.x,randomMaxSpeed.y);
 
+        _spawnPos = transform.position;
+
         this.gameObject.SetActive(false);
     }
 
@@ -23,24 +30,33 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
         if(mirror)
             SetMirrorSideTarget();
         
+        if(coreTarget != null)
+        {
+            SetTarget(coreTarget);
+        }
+        
         if(GetTargetPosition().y > transform.position.y && upside)
         {
             var dist = MathEx.distance(GetTargetPosition().y, transform.position.y);
             AddForce(dist * 2f * Vector3.up * deltaTime);
         }
-        else if(MathEx.distance(GetTargetPosition().y, transform.position.y) >= 1f)
+        else if(MathEx.distance(GetTargetPosition().y, transform.position.y) >= 1f && upside)
         {
             var dir = GetTargetPosition().y > transform.position.y ? 1f : -1f;
             var dist = MathEx.distance(GetTargetPosition().y, transform.position.y);
             AddForce(dist * dir * Vector3.up * deltaTime);
         }
 
-        var centerDist = Vector3.Distance(centerPosition.position,transform.position);
-        if(centerDist >= maxDistance)
+        if(centerMove)
         {
-            var dir = (centerPosition.position - transform.position).normalized;
-            AddForce(dir * maxSpeed * deltaTime * 3f);
+            var centerDist = Vector3.Distance(centerPosition.position,transform.position);
+            if(centerDist >= maxDistance)
+            {
+                var dir = (centerPosition.position - transform.position).normalized;
+                AddForce(dir * maxSpeed * deltaTime * 3f);
+            }
         }
+        
 
         if(_target != null)
         {
@@ -82,5 +98,10 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
             _target = null;
             _direction = (_player.transform.position - transform.position).normalized;
         }
+    }
+
+    public void Respawn(bool launch)
+    {
+        Respawn(_spawnPos,launch);
     }
 }

@@ -38,6 +38,11 @@ public class HexCube : MonoBehaviour
         _collider = GetComponent<Collider>();
         _renderer = GetComponent<MeshRenderer>();
 
+        if(_renderer == null)
+        {
+            _renderer = GetComponentInChildren<MeshRenderer>();
+        }
+
         _originalLocalPosition = transform.localPosition;
         _moveTime = 1f;
     }
@@ -107,6 +112,15 @@ public class HexCube : MonoBehaviour
 
     public MeshRenderer GetRenderer()
     {
+        if(_renderer == null)
+        {
+            _renderer = GetComponent<MeshRenderer>();
+
+            if(_renderer == null)
+            {
+                _renderer = GetComponentInChildren<MeshRenderer>();
+            }
+        }
         return _renderer;
     }
 
@@ -127,9 +141,9 @@ public class HexCube : MonoBehaviour
         _outMove = false;
         _isActive = true;
         _inverseMoveTime = 0f;
-        var pos = transform.position;
+        var pos = transform.localPosition;
         pos.y = inCurve.Evaluate(1f);
-        transform.position = pos;
+        transform.localPosition = pos;
     }
 
     public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f)

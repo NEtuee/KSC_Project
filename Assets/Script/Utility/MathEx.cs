@@ -24,6 +24,13 @@ public class MathEx : MonoBehaviour {
 		return new Vector3(Mathf.LerpAngle(start.x,end.x,time),Mathf.LerpAngle(start.y,end.y,time),Mathf.LerpAngle(start.z,end.z,time));
 	}
 
+	public static Vector3 PlaneLineIntersect(Vector3 planeP, Vector3 planeN, Vector3 rayP, Vector3 rayD)
+	{
+	    var d = Vector3.Dot(planeP, -planeN);
+	    var t = -(d + rayP.z * planeN.z + rayP.y * planeN.y + rayP.x * planeN.x) / (rayD.z * planeN.z + rayD.y * planeN.y + rayD.x * planeN.x);
+	    return rayP + t * rayD;
+	}
+
 	public static float PlaneAngle(Vector3 one, Vector3 two, Vector3 axis)
 	{
 		var o = Vector3ToVector2(one,axis);
