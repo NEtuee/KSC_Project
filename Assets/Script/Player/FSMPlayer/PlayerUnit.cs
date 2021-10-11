@@ -26,6 +26,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_HighLanding highLandingState;
     public static PlayerState_Respawn respawnState;
     public static PlayerState_Dash dashState;
+    public static PlayerState_DashEnd dashEndState;
     public static PlayerState_Dead deadState;
     public static PlayerState_Kick kickState;
     #endregion
@@ -262,6 +263,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (deadState == null) deadState = gameObject.AddComponent<PlayerState_Dead>();
         if (dashState == null) dashState = gameObject.AddComponent<PlayerState_Dash>();
         if (kickState == null) kickState = gameObject.AddComponent<PlayerState_Kick>();
+        if (dashEndState == null) dashEndState = gameObject.AddComponent<PlayerState_DashEnd>();
         if(climbingUpperLineState == null) climbingUpperLineState = gameObject.AddComponent<PlayerState_ClimbingUpperLine>();
 
         pelvisGunObject = _empGun.PelvisGunObject;
@@ -429,6 +431,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
             keepSpeed = true;
         }
 
+        InitVelocity();
         AddEnergy(jumpEnergyRestoreValue);
 
         AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
@@ -478,8 +481,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             if (_inputVertical != 0 || _inputHorizontal != 0)
             {
-                if(currentSpeed == 0.0f && _currentState == defaultState)
-                    _animator.Play(0, -1, 0.0f);
+                //if(currentSpeed == 0.0f && _currentState == defaultState)
+                //    _animator.Play(0, -1, 0.0f);
 
                 if (_currentState != aimingState)
                 {
@@ -506,8 +509,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             if (_inputVertical != 0 || _inputHorizontal != 0)
             {
-                if (currentSpeed == 0.0f && _currentState == defaultState)
-                    _animator.Play(0, -1, 0.0f);
+                //if (currentSpeed == 0.0f && _currentState == defaultState)
+                //    _animator.Play(0, -1, 0.0f);
 
                 if (_currentState != aimingState)
                 {

@@ -39,7 +39,16 @@ public class PlayerState_Dash : PlayerState
         _lateTime += Time.fixedDeltaTime;
 
         if (_lateTime >= playerUnit.DashTime)
-            playerUnit.ChangeState(playerUnit.GetPrevState);
+        {
+            if(playerUnit.IsGround && playerUnit.InputVertical == 0.0f && playerUnit.InputHorizontal == 0.0f)
+            {
+                playerUnit.ChangeState(PlayerUnit.dashEndState);
+            }
+            else
+            {
+                playerUnit.ChangeState(playerUnit.GetPrevState);
+            }
+        }
     }
 
     public override void UpdateState(PlayerUnit playerUnit, Animator animator)
