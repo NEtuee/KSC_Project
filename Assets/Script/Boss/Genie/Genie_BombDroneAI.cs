@@ -133,7 +133,7 @@ public class Genie_BombDroneAI : DroneAIBase
             var dist = MathEx.distance(transform.position.y,cube.transform.position.y);
             if(dist <= explosionDistance)
             {
-                currCube.SetMove(false,0f,1.3f,2f);
+                cube.SetMove(false,0f,1.3f,2f);
             }
             
         }

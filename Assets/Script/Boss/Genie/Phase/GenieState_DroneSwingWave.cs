@@ -263,6 +263,10 @@ public class GenieState_DroneSwingWave : GenieStateBase
             GetGridLine(ref _fallLine,right,groundWheelThickness);
             foreach(var item in _fallLine)
             {
+                if(item.special)
+                {
+                    continue;
+                }
                 item.SetMove(false,((float)i) * groundWheelTimingTime + Random.Range(0f,0.2f),groundWheelMoveSpeed,groundWheelTime);
             }
 

@@ -111,8 +111,6 @@ public class Genie_AI : ObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
 
-        gridControll.Init();
-
         _originPos = transform.position;
 
         _headOriginPos = head.position;

@@ -35,6 +35,7 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
     public bool deleteY = false;
 
     private Collider _myCollider;
+    private PlayerUnit _player;
     private PlayerRagdoll _ragdoll;
 
     public override void Assign()
@@ -49,7 +50,8 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
 
         AddAction(MessageTitles.set_setplayer,(x)=>{
-            _ragdoll = ((PlayerUnit)x.data).GetComponent<PlayerRagdoll>();
+            _player = (PlayerUnit)x.data;
+            _ragdoll = _player.GetComponent<PlayerRagdoll>();
         });
 
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
@@ -152,9 +154,8 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
 
     public void ExplosionRagdoll(Vector3 dir)
     {
-        GameManager.Instance.player.transform.SetParent(null);
-
-        GameManager.Instance.player.TakeDamage(hitDamage);
+        _player.transform.SetParent(null);
+        _player.TakeDamage(hitDamage);
 
         if(ragdollType == RagdollType.ElectricShock)
             _ragdoll.SetPlayerShock(shockTime);

@@ -64,9 +64,14 @@ public class Drone : UnTransfromObjectBase
 
 
     [Header("DroneEffects")]
+    public List<GameObject> disapearTargets = new List<GameObject>();
     public Material cooltimeMat;
+    public Material dissolveMat;
     public Material jetMat;
     public Transform backEffectPos;
+    public float dissolveTime = 1f;
+    public float dissolveStartTime = 0.2f;
+    private bool _dissolve = false;
 
 
 
@@ -119,6 +124,15 @@ public class Drone : UnTransfromObjectBase
         _timeCounter.CreateSequencer("ScanProcess");
         _timeCounter.AddSequence("ScanProcess",0.3f,null,Scan);
         _timeCounter.AddSequence("ScanProcess",0.4f,null,null);
+
+        _timeCounter.CreateSequencer("DissolvProcess");
+        _timeCounter.AddSequence("DissolvProcess",dissolveStartTime,null,(x)=>{
+            foreach(var item in disapearTargets)
+            {
+                item.SetActive(true);
+            }
+        });
+        _timeCounter.AddSequence("DissolvProcess",dissolveTime,UpdateDissolve,null);
     }
 
     public override void Initialize()
@@ -167,7 +181,9 @@ public class Drone : UnTransfromObjectBase
         _finalTargetPosition = _targetPosition;
 
         _droneMovePosition = transform.position;
+
         _timeCounter.InitSequencer("ScanProcess");
+        _timeCounter.InitSequencer("DissolvProcess");
     }
 
     // Update is called once per frame
@@ -223,12 +239,22 @@ public class Drone : UnTransfromObjectBase
             _droneMovePosition = scanPosition.position;
         }
 
+        if(_dissolve)
+        {
+            _dissolve = !_timeCounter.ProcessSequencer("DissolvProcess",deltaTime);
+        }
+
         var dist = Vector3.Distance(transform.position,_droneMovePosition);
         jetMat.SetFloat("Power",Mathf.Clamp(dist * 0.7f,0.3f,1f));
 
         transform.position = Vector3.Lerp(transform.position,_droneMovePosition,deltaTime * 13f);
         transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, deltaTime * 13f);
 
+    }
+
+    public void UpdateDissolve(float t)
+    {
+        dissolveMat.SetFloat("Dissvole", 1f - (t / dissolveTime));
     }
 
     public void UpdateDroneSide()
@@ -239,6 +265,15 @@ public class Drone : UnTransfromObjectBase
         if(left || right)
         {
             _droneSide = left && right ? (leftHit.distance < rightHit.distance ? 0 : 1) : (left ? 1 : 0);
+
+            dissolveMat.SetFloat("Dissvole",1f);
+            _timeCounter.InitSequencer("DissolvProcess");
+            _dissolve = true;
+
+            foreach(var item in disapearTargets)
+            {
+                item.SetActive(false);
+            }
         }
     }
 
