@@ -35,8 +35,6 @@ public class Genie_Phase_AI : PathfollowObjectBase
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
         stateProcessor.StateChange("Idle");
-        gridControll.Init();
-
         _timeCounter.InitTimer("spawn");
         _respawn = false;
     }

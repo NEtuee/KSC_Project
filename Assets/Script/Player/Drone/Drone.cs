@@ -64,6 +64,7 @@ public class Drone : UnTransfromObjectBase
 
 
     [Header("DroneEffects")]
+    public List<GameObject> disapearTargets = new List<GameObject>();
     public Material cooltimeMat;
     public Material dissolveMat;
     public Material jetMat;
@@ -125,7 +126,12 @@ public class Drone : UnTransfromObjectBase
         _timeCounter.AddSequence("ScanProcess",0.4f,null,null);
 
         _timeCounter.CreateSequencer("DissolvProcess");
-        _timeCounter.AddSequence("DissolvProcess",dissolveStartTime,null,null);
+        _timeCounter.AddSequence("DissolvProcess",dissolveStartTime,null,(x)=>{
+            foreach(var item in disapearTargets)
+            {
+                item.SetActive(true);
+            }
+        });
         _timeCounter.AddSequence("DissolvProcess",dissolveTime,UpdateDissolve,null);
     }
 
@@ -263,6 +269,11 @@ public class Drone : UnTransfromObjectBase
             dissolveMat.SetFloat("Dissvole",1f);
             _timeCounter.InitSequencer("DissolvProcess");
             _dissolve = true;
+
+            foreach(var item in disapearTargets)
+            {
+                item.SetActive(false);
+            }
         }
     }
 

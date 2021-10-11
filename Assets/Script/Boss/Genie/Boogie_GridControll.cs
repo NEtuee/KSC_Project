@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boogie_GridControll : MonoBehaviour
+public class Boogie_GridControll : ObjectBase
 {
     public HexCubeGrid cubeGrid;
     public Material prev;
@@ -12,6 +12,7 @@ public class Boogie_GridControll : MonoBehaviour
 
     public HexCube centerCube;
     public Transform _target;
+    public PlayerUnit _player;
     private List<HexCube> _targetCubes;
 
     private Vector3 _prevCheck;
@@ -23,40 +24,31 @@ public class Boogie_GridControll : MonoBehaviour
     private float _pathAngle = 0f;
 
 
-    public void Init()
+    public override void Assign()
+    {
+        base.Assign();
+        AddAction(MessageTitles.set_setplayer,(x)=>{
+            _player = (PlayerUnit)x.data;
+            _target = _player.transform;
+        });
+    }
+
+    public override void Initialize()
     {
         _targetCubes = new List<HexCube>();
         centerCube = cubeGrid.GetCube(Vector3Int.zero,false);
-        _target = GameManager.Instance.player.transform;
+
+        RegisterRequest(GetSavedNumber("StageManager"));
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl,GetSavedNumber("PlayerManager"),null);
     }
 
     public void Update()
     {
-        Progress(Time.deltaTime);
-    }
-
-    public void Progress(float deltaTime)
-    {
-        //CoreCubeUpdate(deltaTime);
         if(_prevCheck != _target.position)
         {
             _prevTargetPosition = _prevCheck;
             _prevCheck = _target.position;
         }
-        
-        // foreach(var n in _targetCubes)
-        // {
-        //     if(n == null)
-        //         continue;
-        //     n.GetComponent<MeshRenderer>().material = prev;
-        // }
-
-        // foreach(var n in _targetCubes)
-        // {
-        //     if(n == null)
-        //         continue;
-        //     n.GetComponent<MeshRenderer>().material = curr;
-        // }
     }
 
     public HexCube GetRandomActiveCube(bool ignoreSpecial) {return cubeGrid.GetRandomActiveCube(ignoreSpecial);}
