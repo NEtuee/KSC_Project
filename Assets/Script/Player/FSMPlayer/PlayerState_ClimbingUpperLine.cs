@@ -9,8 +9,7 @@ public class PlayerState_ClimbingUpperLine : PlayerState
 
     private void Start()
     {
-        _startPosition = new GameObject("sp").transform;
-        _endPosition = new GameObject("ep").transform;
+        CreatePoint();
     }
 
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
@@ -20,6 +19,8 @@ public class PlayerState_ClimbingUpperLine : PlayerState
 
     public override void Enter(PlayerUnit playerUnit, Animator animator)
     {
+        CreatePoint();
+
         playerUnit.currentStateName = "ClimbingUpperLine";
 
         Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
@@ -68,6 +69,19 @@ public class PlayerState_ClimbingUpperLine : PlayerState
         {
             playerUnit.Transform.position = _startPosition.position;
             return;
+        }
+    }
+
+    private void CreatePoint()
+    {
+        if(_startPosition == null)
+        {
+            _startPosition = new GameObject("sp").transform;
+        }
+
+        if(_endPosition == null)
+        {
+            _endPosition = new GameObject("ep").transform;
         }
     }
 }
