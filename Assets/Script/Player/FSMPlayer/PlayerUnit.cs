@@ -478,7 +478,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             if (_inputVertical != 0 || _inputHorizontal != 0)
             {
-                if(currentSpeed == 0.0f)
+                if(currentSpeed == 0.0f && _currentState == defaultState)
                     _animator.Play(0, -1, 0.0f);
 
                 if (_currentState != aimingState)
@@ -506,7 +506,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             if (_inputVertical != 0 || _inputHorizontal != 0)
             {
-                if (currentSpeed == 0.0f)
+                if (currentSpeed == 0.0f && _currentState == defaultState)
                     _animator.Play(0, -1, 0.0f);
 
                 if (_currentState != aimingState)
