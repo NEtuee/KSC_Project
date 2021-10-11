@@ -193,8 +193,6 @@ public class Drone : UnTransfromObjectBase
             }
         }
 
-        Debug.Log(scanLeftCoolTime.Value);
-
         var coolGague = (scanCoolTime - scanLeftCoolTime.Value) / scanCoolTime;
         cooltimeMat.SetFloat("Cooltime_gauge",coolGague);
 
