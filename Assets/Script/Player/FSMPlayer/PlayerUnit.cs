@@ -473,6 +473,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             if (_inputVertical != 0 || _inputHorizontal != 0)
             {
+                if(currentSpeed == 0.0f)
+                    _animator.Play(0, -1, 0.0f);
+
                 if (_currentState != aimingState)
                 {
                     if (isWalk == true)
@@ -498,6 +501,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             if (_inputVertical != 0 || _inputHorizontal != 0)
             {
+                if (currentSpeed == 0.0f)
+                    _animator.Play(0, -1, 0.0f);
+
                 if (_currentState != aimingState)
                 {
                     if(_inputSum >= 1.0f)
@@ -517,7 +523,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
             }
             else
             {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed * 0.5f);
+                currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed*2);
             }
         }
     }
