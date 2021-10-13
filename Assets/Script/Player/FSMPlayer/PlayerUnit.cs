@@ -360,6 +360,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
             isNearGround = true;
 
         _animator.SetBool("IsNearGround", isNearGround);
+
+
+        if(Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.stage_droneSpecial,GetSavedNumber("StageManager"),null);
+        }
     }
 
     private void LateUpdate()

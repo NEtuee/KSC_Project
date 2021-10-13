@@ -53,7 +53,7 @@ public class TimeCounterEx
 
         public bool Process(float deltaTime)
         {
-            if(isEnd)
+            if(isEnd || sequences.Count == 0)
                 return true;
 
             currentTime += deltaTime;
