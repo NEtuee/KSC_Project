@@ -11,7 +11,7 @@ public class PlayerState_HangLedge : PlayerState
 
     private bool _canRelease = false;
     private TimeCounterEx _grabTimer = new TimeCounterEx();
-    private float _minKeepGrabTime = 0.5f;
+    private float _minKeepGrabTime = 0.05f;
     public override void AnimatorMove(PlayerUnit playerUnit, Animator animator)
     {
         float deltaMagnitude = animator.deltaPosition.magnitude;
@@ -240,6 +240,7 @@ public class PlayerState_HangLedge : PlayerState
         data.value = "Grab";
         playerUnit.SendMessageEx(MessageTitles.cameramanager_setfollowcameradistance, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), data);
 
+        playerUnit.Attach();
         //Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
         //Vector3 pos = new Vector3();
         //if (planInfo != null)

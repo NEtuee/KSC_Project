@@ -43,6 +43,7 @@ public class UIManager : ManagerBase
     [SerializeField] private TextMeshProUGUI gunLoadValueText;
     [SerializeField] private TextMeshProUGUI gunChargeValueText;
     [SerializeField] private GunGageUi aimEnergyBar;
+    [SerializeField] private Image aimEnergyBarImage;
     [SerializeField] private Image aimEnergyBar2;
 
     [Header("TutorialMenu")]
@@ -226,6 +227,14 @@ public class UIManager : ManagerBase
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
             gunChargeValueText.text = ((int)(data.value * 100.0f)).ToString();
             aimEnergyBar.SetFrontValue(data.value);
+            if(data.value == 1.0f)
+            {
+                aimEnergyBarImage.color = Color.blue;
+            }
+            else
+            {
+                aimEnergyBarImage.color = Color.white;
+            }
         });
         AddAction(MessageTitles.uimanager_setgunenergyvalue, (msg) =>
         {

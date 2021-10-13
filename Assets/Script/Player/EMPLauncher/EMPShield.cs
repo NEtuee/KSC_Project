@@ -89,6 +89,8 @@ public class EMPShield : Hitable
         AddAction(MessageTitles.player_EMPHit,(x)=>{
                 var damage = MessageDataPooling.CastData<MD.FloatData>(x.data).value;
                 Hit(damage);
+
+                Debug.Log("Chekc");
         });
     }
 
@@ -98,6 +100,7 @@ public class EMPShield : Hitable
         RegisterRequest(GetSavedNumber("ObjectManager"));
 
         SendMessageQuick(MessageTitles.scan_registerScanObject,UniqueNumberBase.GetSavedNumberStatic("Drone"),this);
+        SendMessageEx(MessageTitles.set_gunTargetMessageObject, UniqueNumberBase.GetSavedNumberStatic("FollowTargetCtrl"), this.transform);
     }
 
     // Update is called once per frame
@@ -169,6 +172,9 @@ public class EMPShield : Hitable
 
     public override void Hit() 
     {
+        if(!gameObject.activeInHierarchy)
+            return;
+
         if(isActive == false)
             StartCoroutine(ActiveEffect());
 
@@ -184,12 +190,12 @@ public class EMPShield : Hitable
 
             //Destroy(gameObject);
         }
-
         whenHit.Invoke();
     }
 
     public override void Hit(float damage)
     {
+        Debug.Log("HIT");
         if (isActive == false && gameObject.activeInHierarchy)
             StartCoroutine(ActiveEffect());
 
@@ -250,7 +256,6 @@ public class EMPShield : Hitable
 
         if(renderer != null)
         {
-            Debug.Log("Check");
             renderer.enabled = true;
             mat = renderer.material;
         }

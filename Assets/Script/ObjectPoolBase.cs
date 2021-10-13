@@ -50,6 +50,11 @@ public class ObjectPoolBase<T> : MonoBehaviour
         return t;
     }
 
+    public ref List<T> GetActiveObjects()
+    {
+        return ref _progressList;
+    }
+
     public T Active()
     {
         var t = GetCachedItem();

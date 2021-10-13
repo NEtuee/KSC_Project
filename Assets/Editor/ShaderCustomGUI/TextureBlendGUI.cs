@@ -12,6 +12,10 @@ public class TextureBlendGUI : ShaderGUI
     MaterialProperty MainNormalInt = null;
     MaterialProperty MainTilingOffset = null;
 
+    MaterialProperty CoatMask = null;
+    MaterialProperty CoatTexIntensity = null;
+    MaterialProperty CoatSmoothness = null;
+
     MaterialProperty Tex1 = null;
     MaterialProperty Tex1Color = null;
     MaterialProperty Tex1SAM = null;
@@ -80,6 +84,10 @@ public class TextureBlendGUI : ShaderGUI
         MainNormalInt = FindProperty("Main_Normal_Intensity", properties);
         MainTilingOffset = FindProperty("Main_Tiling_Offset", properties);
 
+        CoatMask = FindProperty("Coat_Mask", properties);
+        CoatTexIntensity = FindProperty("CoatTex_Intensity", properties);
+        CoatSmoothness = FindProperty("Coat_Smoothness", properties);
+
         Tex1 = FindProperty("Tex1_Albedo_Red", properties);
         Tex1Color = FindProperty("Tex1_Color", properties);
         Tex1SAM = FindProperty("Tex1_SAM", properties);
@@ -132,6 +140,12 @@ public class TextureBlendGUI : ShaderGUI
         EditorGUILayout.Space(10);
         materialEditor.TexturePropertySingleLine(Styles.getTexGUI("Main Normal"), MainNormal, MainNormalInt);
         EditorGUILayout.Space(20);
+        
+        materialEditor.TexturePropertySingleLine(Styles.getTexGUI("Clear Coat"), CoatMask ,CoatTexIntensity);
+        EditorGUILayout.Space(10);
+        materialEditor.RangeProperty(CoatSmoothness,"Clear Coat Smoothness");
+        EditorGUILayout.Space(20);
+
 
         EditorGUILayout.LabelField(Styles.getTexGUIcolor(("----------- Tex 1 (R)-----------"),Color.red), EditorStyles.boldLabel);
         GUI.contentColor = Color.white;

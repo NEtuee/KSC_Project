@@ -218,15 +218,12 @@ public class PlayerState_Aiming : PlayerState
             {
                 playerUnit.chargeTime.Value += Time.deltaTime * (playerUnit.Decharging ? dechargingRatio : 1f);
                 //playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, Mathf.Abs(playerUnit.energy.Value / _gunCost));
-                playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, 3.0f);
+                playerUnit.chargeTime.Value = Mathf.Clamp(playerUnit.chargeTime.Value, 0.0f, playerUnit.ChargeConsumeTime);
             }
 
             SetParameterData setParameterData = MessageDataPooling.GetMessageData<SetParameterData>();
             setParameterData.soundId = 1013; setParameterData.paramId = 10131; setParameterData.value = (playerUnit.chargeTime.Value) * 100f;
             playerUnit.SendMessageEx(MessageTitles.fmod_setParam, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), setParameterData);
-
-            if(playerUnit.GunAnimator != null)
-               playerUnit.GunAnimator.SetFloat("Energy", playerUnit.chargeTime.Value * 100.0f);
 
             if (_transformingCount < (int)playerUnit.chargeTime.Value)
             {
@@ -275,7 +272,7 @@ public class PlayerState_Aiming : PlayerState
 
     public override void OnShot(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.CanCharge == true && playerUnit.Energy >= _normalCost)
+        if (playerUnit.CanCharge == true && playerUnit.Energy >= playerUnit.NoramlGunCost)
         {
             if (playerUnit._chargeSoundEmitter != null)
             {
@@ -283,16 +280,15 @@ public class PlayerState_Aiming : PlayerState
                 playerUnit._chargeSoundEmitter = null;
             }
 
-            if (playerUnit.chargeTime.Value >= 3 && playerUnit.Energy >= _chargeCost)
+            if (playerUnit.chargeTime.Value >= 3 && playerUnit.Energy >= playerUnit.ChargeGunCost)
             {
-                Debug.Log("L");
                 playerUnit.EmpGun.LaunchCharge(40.0f);
-                playerUnit.AddEnergy(-_chargeCost);
+                playerUnit.AddEnergy(-playerUnit.ChargeGunCost);
             }
             else
             {
                 playerUnit.EmpGun.LaunchNormal();
-                playerUnit.AddEnergy(-_normalCost);
+                playerUnit.AddEnergy(-playerUnit.NoramlGunCost);
             }
 
             FloatData camDist = MessageDataPooling.GetMessageData<FloatData>();

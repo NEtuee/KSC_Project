@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
 using DG.Tweening;
 using UniRx;
@@ -285,9 +286,12 @@ public class EMPGun : UnTransfromObjectBase
 
         crossHair.Launch();
 
+        SendMessageEx(MessageTitles.gamepadVibrationManager_vibrationByKey, GetSavedNumber("GamepadVibrationManager"),"NormalShot");
+
         if (gunAnim != null)
         {
-            gunAnim.SetTrigger("ToZero");
+            //gunAnim.SetTrigger("ToZero");
+            gunAnim.SetTrigger("Normal");
         }
     }
 
@@ -337,10 +341,12 @@ public class EMPGun : UnTransfromObjectBase
         }
 
         crossHair.Launch();
+        SendMessageEx(MessageTitles.gamepadVibrationManager_vibrationByKey, GetSavedNumber("GamepadVibrationManager"), "ChargeShot");
 
         if (gunAnim != null)
         {
-            gunAnim.SetTrigger("ToZero");
+            //gunAnim.SetTrigger("ToZero");
+            gunAnim.SetTrigger("Charge");
         }
     }
 

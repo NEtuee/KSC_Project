@@ -11,7 +11,30 @@ public class PlayerParamaterWindow : EditorWindow
         EditorWindow.GetWindow(typeof(PlayerParamaterWindow));
     }
 
+    SerializedProperty revisionSpeed;
+
     private void OnEnable()
+    {
+        playerUnit = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerUnit>();
+        followTarget = GameObject.Find("FollowTarget").GetComponent<FollowTargetCtrl>();
+
+        EditorApplication.playModeStateChanged += ChangeState;
+    }
+
+    private void OnDisable()
+    {
+        EditorApplication.playModeStateChanged -= ChangeState;
+    }
+
+    private void ChangeState(PlayModeStateChange state)
+    {
+        if(state == PlayModeStateChange.EnteredEditMode)
+        {
+            GetObject();
+        }
+    }
+
+    private void GetObject()
     {
         playerUnit = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerUnit>();
         followTarget = GameObject.Find("FollowTarget").GetComponent<FollowTargetCtrl>();
@@ -19,8 +42,10 @@ public class PlayerParamaterWindow : EditorWindow
 
     private void OnGUI()
     {
-        if (playerUnit == null)
+        if (playerUnit == null || followTarget == null)
+        {
             return;
+        }
 
         GUILayout.Label("이동", EditorStyles.boldLabel);
         playerUnit.WalkSpeed = EditorGUILayout.FloatField("걷기 속도", playerUnit.WalkSpeed);
@@ -39,6 +64,26 @@ public class PlayerParamaterWindow : EditorWindow
         followTarget.crosshairMovingSpeed = EditorGUILayout.FloatField("Crosshair Moving Speed",followTarget.crosshairMovingSpeed);
         followTarget.aimMovingSpeed = EditorGUILayout.FloatField("Aim Moving Speed",followTarget.aimMovingSpeed);
         followTarget.aimLimitDist = EditorGUILayout.FloatField("Aim Limit Distance",followTarget.aimLimitDist);
+
+        GUILayout.Label("EMP 건", EditorStyles.boldLabel);
+        playerUnit.NoramlGunCost = EditorGUILayout.FloatField("노말 샷 코스트", playerUnit.NoramlGunCost);
+        playerUnit.ChargeGunCost = EditorGUILayout.FloatField("차지 샷 코스트", playerUnit.ChargeGunCost);
+        playerUnit.ChargeConsumeTime = EditorGUILayout.FloatField("풀차지 소요 시간", playerUnit.ChargeConsumeTime);
+
+        GUILayout.Label("점프 관련", EditorStyles.boldLabel);
+        playerUnit.ClimbingUpJumpPower = EditorGUILayout.FloatField("클라이밍 위 점프 파워", playerUnit.ClimbingUpJumpPower);
+        playerUnit.ClimbingHorizonJumpPower = EditorGUILayout.FloatField("클라이밍 옆 점프 파워", playerUnit.ClimbingHorizonJumpPower);
+        playerUnit.KeepClimbingUpJumpTime = EditorGUILayout.FloatField("클라이밍 위 점프 지속시간", playerUnit.KeepClimbingUpJumpTime);
+        playerUnit.KeepClimbingHorizonJumpTime = EditorGUILayout.FloatField("클라이밍 옆 점프 지속시간", playerUnit.KeepClimbingHorizonJumpTime);
+
+        GUILayout.Label("카메라 보정", EditorStyles.boldLabel);
+        followTarget.RevisionSpeed = EditorGUILayout.FloatField("보정 회전 속도", followTarget.RevisionSpeed);
+        followTarget.RevisionStartTime = EditorGUILayout.FloatField("보정 시작 시간", followTarget.RevisionStartTime);
+
+        if(GUI.changed)
+        {
+            EditorUtility.SetDirty(followTarget);
+        }
     }
 
     private PlayerUnit playerUnit;

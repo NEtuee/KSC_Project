@@ -16,7 +16,8 @@ public class SimpleReturnMove : MonoBehaviour
     public enum MoveType
     {
         Horizontal,
-        Vertical
+        Vertical,
+        Z
     }
 
     [SerializeField]
@@ -28,6 +29,9 @@ public class SimpleReturnMove : MonoBehaviour
         {
             case MoveType.Horizontal:
                  endPos = transform.position + Vector3.right * dist;
+                break;
+            case MoveType.Z:
+                 endPos = transform.position + Vector3.forward * dist;
                 break;
             case MoveType.Vertical:
                 endPos = transform.position + Vector3.up * dist;

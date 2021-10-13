@@ -8,14 +8,17 @@ using UnityEditor;
 
 public class HexCubeGrid : MonoBehaviour
 {
+    public AnimationCurve inCurve;
+    public AnimationCurve outCurve;
+
     public GameObject gridOrigin;
     public int mapSize;
     public float cubeSize;
 
     [SerializeField] private List<HexCube> _serializedCubeMap;
     private Dictionary<int,HexCube> _cubeMap;
-    private float _cubeWidth;
-    private float _cubeHeight;
+    [SerializeField] private float _cubeWidth;
+    [SerializeField] private float _cubeHeight;
     private List<Vector3Int> _cubeSaveList;
     private List<HexCube> _hexCubeSaveList;
     private Dictionary<int,Vector3Int> _overlapCheckList;
@@ -260,9 +263,7 @@ public class HexCubeGrid : MonoBehaviour
         else
             DisposeGrid();
 
-        mapSize = mapSize % 2 == 0 ? mapSize + 1 : mapSize;
-        _cubeWidth = HexGridHelperEx.GetWidth(cubeSize);
-        _cubeHeight = HexGridHelperEx.GetHeight(cubeSize);
+        SetMapSize();
         
         for(int i = 0; i < mapSize; ++i)
         {
@@ -274,6 +275,18 @@ public class HexCubeGrid : MonoBehaviour
                 AddCubeToList(j,i);
             }
         }
+    }
+
+    public void SetMapSize()
+    {
+        mapSize = mapSize % 2 == 0 ? mapSize + 1 : mapSize;
+        _cubeWidth = HexGridHelperEx.GetWidth(cubeSize);
+        _cubeHeight = HexGridHelperEx.GetHeight(cubeSize);
+    }
+
+    public void AddCubeToList(HexCube cube)
+    {
+        _serializedCubeMap.Add(cube);
     }
 
     public void AddCubeToList(int q, int r)
@@ -312,12 +325,33 @@ public class HexCubeGrid : MonoBehaviour
         return cube;
     }
 
+    public Vector3 CubePointToWorld(Vector3Int point)
+    {
+        return HexGridHelperEx.CubeToWorld(_cubeWidth,_cubeHeight,point) + transform.position;
+    }
+
+    public Vector2Int CubePointToAxial(Vector3Int point)
+    {
+        return HexGridHelperEx.CubeToAxial(point);
+    }
+
+    public Vector2Int WorldToAxial(Vector3 world)
+    {
+        return HexGridHelperEx.WorldToAxial(cubeSize * .5f, world);
+    }
+
     public HexCube GetCubeFromWorld(Vector3 world, bool ignoreSpecial = true)
     {
         world = world - transform.position;
         var hex = HexGridHelperEx.WorldToAxial(cubeSize * .5f, world);
         return GetCube(hex,ignoreSpecial);
         
+    }
+
+    public HexCube GetCubeFromList(Vector2Int hex, bool ignoreSpecial = true)
+    {
+        var key = HexGridHelperEx.GetKeyFromAxial(hex.x,hex.y,mapSize);
+        return _serializedCubeMap.Find((x)=>{return x.key == key;});
     }
 
     public HexCube GetCube(Vector3Int cube, bool ignoreSpecial = true)
@@ -348,13 +382,31 @@ public class HexCubeGrid : MonoBehaviour
         }
     }
 
+    public HexCube GetCube(int key, bool ignoreSpecial = true)
+    {
+
+        if(_cubeMap.ContainsKey(key))
+        {
+            var cube = _cubeMap[key];
+            if(cube.special && ignoreSpecial)
+                return null;
+            else
+                return cube;
+        }
+        else
+        {
+            //Debug.Log("Out Of Range");
+            return null;
+        }
+    }
+
     public HexCube CreateCube(int q,int r)
     {
         var cube = CreateCube();
         int half = (mapSize - 1) / 2;
 
         cube.Init(q - half,r - half,mapSize,cubeSize);
-        cube.transform.position = HexGridHelperEx.AxialToWorld(_cubeWidth,_cubeHeight,cube.axialPoint);
+        cube.transform.position = HexGridHelperEx.AxialToWorld(_cubeWidth,_cubeHeight,cube.axialPoint) + transform.position;
 
         return cube;
     }
@@ -365,6 +417,9 @@ public class HexCubeGrid : MonoBehaviour
         var cube = obj.GetComponent<HexCube>();
 
         obj.transform.SetParent(this.transform);
+
+        cube.inCurve = inCurve;
+        cube.outCurve = outCurve;
 
         return cube;
     }
@@ -379,6 +434,10 @@ public class HexCubeGridEdit : Editor
         base.OnInspectorGUI();
 
         HexCubeGrid changer = (HexCubeGrid)target;
+        if (GUILayout.Button("SetMapSize"))
+        {
+            changer.SetMapSize();
+        }
         if (GUILayout.Button("Create"))
         {
             changer.CreateCubeMap();

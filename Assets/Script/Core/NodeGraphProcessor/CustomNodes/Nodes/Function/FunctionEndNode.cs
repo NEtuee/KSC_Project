@@ -10,7 +10,7 @@ public class FunctionEndNode : LinearConditionalNode, IConditionalNode
 {
     public Action onTitleChange;
     public string title = "";
-    public List<ConditionalNode> nextNode;
+    public List<ConditionalNode> nextNode = new List<ConditionalNode>();
     
     public override bool deletable => false;
 

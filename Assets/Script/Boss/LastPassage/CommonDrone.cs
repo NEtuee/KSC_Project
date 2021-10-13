@@ -9,6 +9,9 @@ public class CommonDrone : DroneAIBase
     public Vector2 randomOffset;
     public EMPShield shield;
 
+    public bool startActive = false;
+    public bool launch = true;
+
     public float damage = 10f;
     public float targetUpdateTime = 0.2f;
     public float lifeTime = 60f;
@@ -38,7 +41,7 @@ public class CommonDrone : DroneAIBase
         _timeCounterEx.InitTimer("launch",0f,launchTime);
         UpdateTargetDirection();
 
-        this.gameObject.SetActive(false);
+        this.gameObject.SetActive(startActive);
 
         _spawnPos = transform.position;
         _spawnRot = transform.rotation;
@@ -46,6 +49,9 @@ public class CommonDrone : DroneAIBase
 
     public override void FixedProgress(float deltaTime)
     {
+        if(!launch)
+            return;
+
         _lifeTime -= deltaTime;
         if(_lifeTime <= 0f)
         {
@@ -93,12 +99,31 @@ public class CommonDrone : DroneAIBase
         return shield.isOver;
     }
 
+    public void LaunchToTarget(float power)
+    {
+        Launch(_targetDirection * power);
+    }
+
+    public void LaunchUp(float power)
+    {
+        UpdateTargetDirection();
+        Launch(Vector3.up * power);
+    }
+
+    public void Launch(Vector3 dir)
+    {
+        launch = true;
+        AddForce(dir);
+    }
+
     public void Respawn()
     {
         Respawn(_spawnPos);
         transform.rotation = _spawnRot;
         rig.rotation = _spawnRot;
         _direction = transform.forward;
+
+        launch = true;
         //AddForce(transform.forward * maxSpeed * 100f);
     }
 
@@ -122,5 +147,7 @@ public class CommonDrone : DroneAIBase
 
         rig.position = spawnPosition;
         rig.velocity = Vector3.zero;
+
+        launch = true;
     }
 }

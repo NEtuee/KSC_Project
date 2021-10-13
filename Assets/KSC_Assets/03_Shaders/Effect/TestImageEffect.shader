@@ -6,19 +6,17 @@ Shader "KSC/TestImageEffect"
     {
         [HideInInspector]_MainTex ("Texture", 2D) = "white" {}
 
-        _MainNoiseTex ("MainNoiseTex Texture", 2D) = "black" {}
-
-        _PatternTex ("Pattern Texture", 2D) = "white" {}
-        _PatternTex2 ("Noise Texture", 2D) = "white" {}
+        _NoiseTex ("Noise Texture", 2D) = "black" {}
 
         _Distance ("Distance",float) = 0
 
         _ScanHeightLimit("Scan Height", float) = 9999
-        _ScanWidth("Scan Width", float) = 10
-        _ScanAlpha("Scan Alpha", float) = 1
-		_LeadSharp("Leading Edge Sharpness", float) = 10
+        _ScanWidth("Scan Width", Range(1,100)) = 10
+        _ScanAlpha("Scan Alpha", Range(0.05,1)) = 1
+		_LeadSharp("Leading Edge Sharpness", Range(1,100)) = 10
 
         [HDR]_NosieColor("Main NoiseColor", Color) = (1,1,1,1)
+        [Space][Space][Space]
 		[HDR]_LeadColor("Leading Edge Color", Color) = (1, 1, 1, 0)
 		[HDR]_MidColor("Mid Color", Color) = (1, 1, 1, 0)
 		[HDR]_TrailColor("Trail Color", Color) = (1, 1, 1, 0)
@@ -65,19 +63,12 @@ Shader "KSC/TestImageEffect"
             // 서순은 모델 , 월드 , 뷰 , 프로젝션 이니까 역으로 프로젝션 -> 뷰 -> 월드 순임
            
             sampler2D _MainTex;
-            sampler2D _MainNoiseTex;
+            sampler2D _NoiseTex;
 
-            float4 _MainNoiseTex_ST;
-
-            float4 _PatternTex_ST;
-            float4 _PatternTex2_ST;
+            float4 _NoiseTex_ST;
 
 
-            Texture2D _PatternTex;
-            Texture2D _PatternTex2;
-        
             SamplerState sampler_PatternTex;
-           
 
             
 
@@ -105,7 +96,7 @@ Shader "KSC/TestImageEffect"
                 VertOut o;
                 o.pos = UnityObjectToClipPos (v.vertex); // MVP 끝남. 클릭 공간으로 슉 
                 o.uv = v.uv;
-                o.uv2 = v.uv2;
+                o.uv2 = v.uv2;//float2(o.pos.x,o.pos.z);
                 o.uv3 = v.uv3;
                 o.viewDir = mul(_InvProjectionMatrix, float4(o.uv * 2.0 - 1.0, 1.0, 1.0)); // View 공간 값이 나옴
 
@@ -126,13 +117,13 @@ Shader "KSC/TestImageEffect"
                
                 
                 half4 col = tex2D(_MainTex, i.uv);
-
+/*
                 i.uv2.y += _Time.y * -0.2;
                 float4 PatternTex2 = _PatternTex2.Sample(sampler_PatternTex, i.uv2 * _PatternTex2_ST.xy + _PatternTex2_ST.zw);
-                i.uv2.y += _Time.y * -0.1;
+                i.uv2.y += _Time.y * -0.5;
                 float4 PatternTex = _PatternTex.Sample(sampler_PatternTex, i.uv2 * _PatternTex_ST.xy + _PatternTex_ST.zw);
                 
-
+*/
                 float depth = Linear01Depth (DecodeFloatRG(tex2D (_CameraDepthTexture, i.uv)));
 
                 
@@ -179,17 +170,18 @@ Shader "KSC/TestImageEffect"
 
                     float v = ((_ScanArc * 0.5 ) + (angle * side))/ _ScanArc;
                   
-                    i.uv3 = float2(dist, v);
-                    i.uv3 += _Time * -10; 
-                      float4 Mainnoise = tex2D(_MainNoiseTex, i.uv3 * _MainNoiseTex_ST.xy + _MainNoiseTex_ST.zw); 
+                   // i.uv3 = float2(dist, v);
+                   // i.uv3 += _Time * -10; 
+                    
+                    float4 Mainnoise = tex2D(_NoiseTex, i.uv2 * _NoiseTex_ST.xy + _NoiseTex_ST.zw); 
                    
                     if (dist < _Distance && dist > _Distance - _ScanWidth && depth < 1)
 				    {
 				    	float diff = 1 - (_Distance - dist) / (_ScanWidth);
                        
 
-                        half4 mid = lerp(_MidColor, PatternTex, PatternTex);
-                        mid = (saturate(mid + PatternTex2));
+                        half4 mid = _MidColor;
+                       
 
 				    	half4 edge = lerp(mid, _LeadColor, pow(diff, _LeadSharp));
 				    	scannerCol = lerp(_TrailColor, edge, diff);// horizBars(i.uv);

@@ -49,6 +49,7 @@ public class FunctionGraph : BaseGraph
     public event Action onFunctionListChanged;
 
     public FunctionInfo FindFunction(int id) {return functions.Find((x)=>{return x.uniqueID == id;});}
+    public FunctionInfo FindFunction(string name) {return functions.Find((x)=>{return x.name == name;});}
 
     public void AddFunction(FunctionInfo info)
     {

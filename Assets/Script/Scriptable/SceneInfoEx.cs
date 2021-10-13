@@ -81,6 +81,9 @@ public class SceneInfoExEditor : Editor
     {
         for(int i = 0; i < infoEx.targetScenes.Count; ++i)
         {
+            if(!infoEx.targetScenes[i].canLoad)
+                continue;
+                
             var path = AssetDatabase.GetAssetPath(infoEx.targetScenes[i].target);
             var scene = EditorSceneManager.OpenScene(path,mode == OpenSceneMode.Single ? 
                                                     (i == 0 ? mode : OpenSceneMode.Additive) : OpenSceneMode.Additive);

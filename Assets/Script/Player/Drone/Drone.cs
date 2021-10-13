@@ -26,7 +26,11 @@ public class Drone : UnTransfromObjectBase
         }
     }
 
+    [SerializeField] public LayerMask droneCollisionLayer;
     [SerializeField] private Transform target;
+    [SerializeField] private Transform scanPosition;
+    [SerializeField] public List<Transform> dronePoints = new List<Transform>();
+    [SerializeField] public Transform droneAimPoint;
     [SerializeField] private DroneState state;
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Vector3 defaultFollowOffset;
@@ -58,8 +62,23 @@ public class Drone : UnTransfromObjectBase
     private FloatingMove _floatingMoveComponent;
     private bool _respawn = false;
 
+
+    [Header("DroneEffects")]
+    public List<GameObject> disapearTargets = new List<GameObject>();
+    public Material cooltimeMat;
+    public Material dissolveMat;
+    public Material jetMat;
+    public Transform backEffectPos;
+    public float dissolveTime = 1f;
+    public float dissolveStartTime = 0.2f;
+    private bool _dissolve = false;
+
+
+
     private float collectStartTime;
     
+    private int _droneSide = 0;
+
     private Transform approachTarget;
     private Stack<Transform> orderList = new Stack<Transform>();
     private Transform mainCam;
@@ -68,7 +87,13 @@ public class Drone : UnTransfromObjectBase
     private PlayerUnit player;
 
     private DroneHelperRoot droneHelperRoot;
-    
+
+    private TimeCounterEx _timeCounter = new TimeCounterEx();
+
+    private Vector3 _droneMovePosition;
+    private bool _frontHit = false;
+    private bool _scanning = false;
+
     //스캔
     private Quaternion _scanTargetRotation;
     private float _rotationSpeed = 800.0f;
@@ -93,9 +118,21 @@ public class Drone : UnTransfromObjectBase
 
         AddAction(MessageTitles.scan_registerScanObject, (msg) =>
         {
-            Debug.Log("What");
             _droneScaner.AddScanMessageObject((MessageReceiver)msg.data);
         });
+
+        _timeCounter.CreateSequencer("ScanProcess");
+        _timeCounter.AddSequence("ScanProcess",0.3f,null,Scan);
+        _timeCounter.AddSequence("ScanProcess",0.4f,null,null);
+
+        _timeCounter.CreateSequencer("DissolvProcess");
+        _timeCounter.AddSequence("DissolvProcess",dissolveStartTime,null,(x)=>{
+            foreach(var item in disapearTargets)
+            {
+                item.SetActive(true);
+            }
+        });
+        _timeCounter.AddSequence("DissolvProcess",dissolveTime,UpdateDissolve,null);
     }
 
     public override void Initialize()
@@ -142,6 +179,11 @@ public class Drone : UnTransfromObjectBase
         camRight.y = 0;
         _targetPosition = (camForward * defaultFollowOffset.z + camRight * defaultFollowOffset.x + Vector3.up * defaultFollowOffset.y) + target.position;
         _finalTargetPosition = _targetPosition;
+
+        _droneMovePosition = transform.position;
+
+        _timeCounter.InitSequencer("ScanProcess");
+        _timeCounter.InitSequencer("DissolvProcess");
     }
 
     // Update is called once per frame
@@ -156,10 +198,99 @@ public class Drone : UnTransfromObjectBase
         {
             scanLeftCoolTime.Value -= deltaTime;
             scanLeftCoolTime.Value = Mathf.Clamp(scanLeftCoolTime.Value, 0.0f, 10.0f);
+            if(scanLeftCoolTime.Value <= 0f)
+            {
+                EffectActiveData effectData = MessageDataPooling.GetMessageData<EffectActiveData>();
+                effectData.key = "BirdyScanReady";
+                effectData.position = backEffectPos.position;
+                effectData.rotation = transform.rotation;
+                effectData.parent = transform;
+                SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,GetSavedNumber("EffectManager"),effectData);
+            }
         }
 
-        transform.position = Vector3.Lerp(transform.position,target.position,deltaTime * 12f);
-        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, deltaTime * 12f);
+        var coolGague = (scanCoolTime - scanLeftCoolTime.Value) / scanCoolTime;
+        cooltimeMat.SetFloat("Cooltime_gauge",coolGague);
+
+        if(_scanning)
+        {
+            _scanning = !_timeCounter.ProcessSequencer("ScanProcess",deltaTime);
+        }
+
+        UpdateDroneSide();
+
+        if(player.IsMoving() || player.IsJump)
+        {
+            _droneMovePosition = GetDronePoint();
+        }
+        
+        if(player.IsClimbing())
+        {
+            _droneMovePosition = dronePoints[_droneSide * 2 + 1].position;
+        }
+
+        if(player.IsAiming())
+        {
+            _droneMovePosition = droneAimPoint.position;
+        }
+
+        if(_scanning)
+        {
+            _droneMovePosition = scanPosition.position;
+        }
+
+        if(_dissolve)
+        {
+            _dissolve = !_timeCounter.ProcessSequencer("DissolvProcess",deltaTime);
+        }
+
+        var dist = Vector3.Distance(transform.position,_droneMovePosition);
+        jetMat.SetFloat("Power",Mathf.Clamp(dist * 0.7f,0.3f,1f));
+
+        transform.position = Vector3.Lerp(transform.position,_droneMovePosition,deltaTime * 13f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, deltaTime * 13f);
+
+    }
+
+    public void UpdateDissolve(float t)
+    {
+        dissolveMat.SetFloat("Dissvole", 1f - (t / dissolveTime));
+    }
+
+    public void UpdateDroneSide()
+    {
+        var left = Physics.Raycast(transform.position,-transform.right,out var leftHit,1f,droneCollisionLayer);
+        var right = Physics.Raycast(transform.position,transform.right,out var rightHit,1f,droneCollisionLayer);
+
+        if(left || right)
+        {
+            _droneSide = left && right ? (leftHit.distance < rightHit.distance ? 0 : 1) : (left ? 1 : 0);
+
+            dissolveMat.SetFloat("Dissvole",1f);
+            _timeCounter.InitSequencer("DissolvProcess");
+            _dissolve = true;
+
+            foreach(var item in disapearTargets)
+            {
+                item.SetActive(false);
+            }
+        }
+    }
+
+    public Vector3 GetDronePoint()
+    {
+        var cam = MathEx.DeleteYPos(Camera.main.transform.forward).normalized;
+        var targetDir = MathEx.DeleteYPos(target.forward).normalized;
+        float angle = Vector3.Angle(cam,targetDir);
+        float factor = Mathf.Clamp01(angle / 90f);
+
+        var forward = Physics.Raycast(transform.position,transform.forward,out var hit,_frontHit ? 4f : 2f,droneCollisionLayer);
+        _frontHit = forward;
+        factor = forward ? 0f : factor;
+        var position = Vector3.Lerp(dronePoints[_droneSide * 2 + (forward ? 1 : 0)].position,
+                                dronePoints[_droneSide * 2 + (forward ? 0 : 1)].position,factor);
+
+        return position;
     }
 
     private void LateUpdate()
@@ -421,7 +552,7 @@ public class Drone : UnTransfromObjectBase
         // }
     }
 
-    public void Scan()
+    public void Scan(float t = 0f)
     {
         scanLeftCoolTime.Value = scanCoolTime;
         Vector3 targetDir = Camera.main.transform.forward;
@@ -587,6 +718,9 @@ public class Drone : UnTransfromObjectBase
             return;
 
         if (scanLeftCoolTime.Value <= 0.0f)
-            Scan();
+        {
+            _timeCounter.InitSequencer("ScanProcess");
+            _scanning = true;
+        }
     }
 }

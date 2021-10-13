@@ -22,19 +22,20 @@ public class Core : Hitable
 
         AddAction(MessageTitles.player_NormalHit, (x) => {
 
-            Hit();
+            Destroy();
         });
 
         AddAction(MessageTitles.player_EMPHit, (x) => {
-            var damage = MessageDataPooling.CastData<MD.FloatData>(x.data).value;
-            Hit(damage);
+            Destroy();
         });
     }
 
     public override void Initialize()
     {
         base.Initialize();
-        RegisterRequest(GetSavedNumber("ObjectManager"));
+        RegisterRequest(GetSavedNumber("StageManager"));
+        SendMessageEx(MessageTitles.scan_registerScanObject,UniqueNumberBase.GetSavedNumberStatic("Drone"),this);
+        SendMessageEx(MessageTitles.set_gunTargetMessageObject, UniqueNumberBase.GetSavedNumberStatic("FollowTargetCtrl"), this.transform);
     }
 
     public override void Destroy()

@@ -270,6 +270,25 @@ public class GraphObjectBase : UnTransfromObjectBase
         return _entryNodes.ContainsKey(key) ? _entryNodes[key] : null;
     }
 
+    public void CallFunction(string function)
+    {
+        var func = _graph.FindFunction(function);
+        if(func == null)
+        {
+            Debug.LogError("function not exists : " + function);
+            return;
+        }
+
+        RunFunction(func.entryNode);
+    }
+
+    void RunFunction(FunctionStartNode node)
+    {
+        _nodeToExecute.Clear();
+        _nodeToExecute.Push(node);
+        RunTheGraph(_nodeToExecute);
+    }
+
     void RunGraph(EntryNode node)
     {
         _nodeToExecute.Clear();
