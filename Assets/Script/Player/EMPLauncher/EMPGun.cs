@@ -330,6 +330,7 @@ public class EMPGun : UnTransfromObjectBase
                 empData.value = damage;
 
                 SendMessageEx(receiver, MessageTitles.player_EMPHit, empData);
+                SendMessageEx(receiver, MessageTitles.player_NormalHit, null);
             }
             else
             {

@@ -31,7 +31,7 @@ public class PlayerState_ClimbingUpperLine : PlayerState
         //Debug.Log(_startPosition);
         _endPosition.SetParent(playerUnit.CurrentFollowLine.transform);
         _endPosition.position = playerUnit.LineTracker.position + (planInfo.up * playerUnit.DetectionOffset.y) - (planInfo.forward * playerUnit.DetectionOffset.z);
-        playerUnit.Transform.SetParent(playerUnit.LineTracker);
+        //playerUnit.Transform.SetParent(playerUnit.LineTracker);
         animator.SetTrigger("ClimbingUpper");
     }
 
