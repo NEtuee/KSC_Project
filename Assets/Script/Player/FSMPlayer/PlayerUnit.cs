@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
@@ -29,6 +30,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_DashEnd dashEndState;
     public static PlayerState_Dead deadState;
     public static PlayerState_Kick kickState;
+    public static PlayerState_DashRebound dashReboundState;
     #endregion
 
     #region Move Property
@@ -265,7 +267,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (kickState == null) kickState = gameObject.AddComponent<PlayerState_Kick>();
         if (dashEndState == null) dashEndState = gameObject.AddComponent<PlayerState_DashEnd>();
         if(climbingUpperLineState == null) climbingUpperLineState = gameObject.AddComponent<PlayerState_ClimbingUpperLine>();
-
+        if (dashReboundState == null) dashReboundState = gameObject.AddComponent<PlayerState_DashRebound>();
         pelvisGunObject = _empGun.PelvisGunObject;
 
         if (pelvisGunObject != null)
@@ -477,7 +479,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
             _currentState == ragdollState ||
             _currentState == respawnState ||
             _currentState == hangLedgeState||
-            _currentState == climbingJumpState)
+            _currentState == climbingJumpState ||
+            _currentState == dashReboundState)
         {
             currentSpeed = 0.0f;
             return;
@@ -1152,10 +1155,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
         bCanQuickStanding = true;
     }
 
-    public void TryGrab()
+    public bool TryGrab()
     {
         if (ClimbingLineManager == null)
-            return;
+            return false;
 
         bool detect = false;
         Vector3 nearPosition = new Vector3();
@@ -1218,6 +1221,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
                             finalNearPosition = nearPosition;
                         }
                     }
+                    transform.SetParent(detectLine.transform.parent);
                 }
             }
         }
@@ -1232,13 +1236,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
             float s = u.x != 0.0f ? v.x / u.x : (u.y != 0.0f ? v.y / u.y : v.z / u.z);
 
             if (s > 1.0f || s < 0f)
-                return;
+                return false;
 
             prevFollowLine = currentFollowLine;
             CurrentFollowLine = detectLine;
-            lineTracker.position = finalNearPosition;
             lineTracker.SetParent(detectLine.transform);
-            StartLineClimbing(finalNearPosition);         
+            lineTracker.position = finalNearPosition;
+            ChangeState(readyGrabState);
 
             if (CurrentFollowLine.directionType == DirectionType.LeftMin)
             {
@@ -1251,6 +1255,14 @@ public partial class PlayerUnit : UnTransfromObjectBase
                 rightPointNum = Mathf.Min(detectLineElement.p1, detectLineElement.p2);
             }
         }
+
+        return detect;
+    }
+
+    IEnumerator WaitOneFrame(Action action)
+    {
+        yield return new WaitForSeconds(2f);
+        action();
     }
 
     public bool CheckUpClimbingLine()
@@ -1319,6 +1331,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
                             finalNearPosition = nearPosition;
                         }
                     }
+                    transform.SetParent(detectLine.transform.parent);
                 }
             }
         }
@@ -1327,7 +1340,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             prevFollowLine = currentFollowLine;
             CurrentFollowLine = detectLine;
-            transform.SetParent(null);
             lineTracker.position = finalNearPosition;
             lineTracker.SetParent(detectLine.transform);
 
@@ -1472,6 +1484,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Detect")]
     [SerializeField] private LedgeChecker ledgeChecker;
     [SerializeField] private SpaceChecker spaceChecker;
+    [SerializeField] private FrontChecker frontChecker;
     [SerializeField] private Vector3 wallUnderCheckOffset;
     [SerializeField] private Vector3 detectionOffset;
     private bool _ledUpAdjust = false;
@@ -1586,6 +1599,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
                 Message msg = new Message();
                 msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, this, this);
                 receiver.ReceiveMessage(msg);
+                if(frontChecker.Overlap)
+                {
+                    ChangeState(dashReboundState);
+                }
             }
         }
     }

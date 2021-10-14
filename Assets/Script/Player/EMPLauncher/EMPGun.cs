@@ -218,8 +218,8 @@ public class EMPGun : UnTransfromObjectBase
         SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
 
         EffectActiveData data = MessageDataPooling.GetMessageData<EffectActiveData>();
-        data.position = laserEffectPos.position;
-        data.rotation = laserEffectPos.rotation;
+        data.position = launchPos.position;
+        data.rotation = launchPos.rotation;
         data.parent = null;
         data.key = "Laser02";
         SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation, GetSavedNumber("EffectManager"), data);
@@ -305,8 +305,8 @@ public class EMPGun : UnTransfromObjectBase
         SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
   
         EffectActiveData data = MessageDataPooling.GetMessageData<EffectActiveData>();
-        data.position = laserEffectPos.position;
-        data.rotation = laserEffectPos.rotation;
+        data.position = launchPos.position;
+        data.rotation = launchPos.rotation;
         data.parent = null;
 
         data.key = "Laser_Level3";
@@ -330,6 +330,7 @@ public class EMPGun : UnTransfromObjectBase
                 empData.value = damage;
 
                 SendMessageEx(receiver, MessageTitles.player_EMPHit, empData);
+                SendMessageEx(receiver, MessageTitles.player_NormalHit, null);
             }
             else
             {

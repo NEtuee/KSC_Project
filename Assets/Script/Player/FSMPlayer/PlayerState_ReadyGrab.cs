@@ -32,17 +32,17 @@ public class PlayerState_ReadyGrab : PlayerState
         playerUnit.CapsuleCollider.center = new Vector3(0.0f, 0.5f, 0.0f);
         playerUnit.AirTime = 0.0f;
 
-        Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
-        Vector3 finalPosition;
+        //Transform planInfo = playerUnit.CurrentFollowLine.GetPlaneInfo(playerUnit.leftPointNum, playerUnit.rightPointNum);
+        //Vector3 finalPosition;
 
-        if (planInfo != null)
-        {
-            finalPosition = playerUnit.LineTracker.position + (planInfo.up * playerUnit.DetectionOffset.y);
-            finalPosition -= planInfo.forward * playerUnit.DetectionOffset.z;
+        //if (planInfo != null)
+        //{
+        //    finalPosition = playerUnit.LineTracker.position + (planInfo.up * playerUnit.DetectionOffset.y);
+        //    finalPosition -= planInfo.forward * playerUnit.DetectionOffset.z;
 
-            playerUnit.Transform.rotation = Quaternion.LookRotation(-planInfo.forward);
-            playerUnit.Transform.position = finalPosition;
-        }
+        //    playerUnit.Transform.rotation = Quaternion.LookRotation(-planInfo.forward);
+        //    playerUnit.Transform.position = finalPosition;
+        //}
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -65,7 +65,7 @@ public class PlayerState_ReadyGrab : PlayerState
             finalPosition -= planInfo.forward * playerUnit.DetectionOffset.z;
 
             playerUnit.Transform.rotation = Quaternion.LookRotation(-planInfo.forward);
-            playerUnit.Transform.position = finalPosition;
+            playerUnit.Transform.position = Vector3.Lerp(playerUnit.Transform.position, finalPosition, 20f * Time.deltaTime);
         }
     }
 }
