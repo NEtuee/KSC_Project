@@ -41,7 +41,7 @@ public class StateEndChagneStateBehavior : StateMachineBehaviour
                 _playerUnit.ChangeState(PlayerUnit.defaultState);
                 break;
             case PlayerStateEnum.Jump:
-                _playerUnit.ChangeState(PlayerUnit.defaultState);
+                _playerUnit.ChangeState(PlayerUnit.jumpState);
                 break;
             case PlayerStateEnum.RunToStop:
                 _playerUnit.ChangeState(PlayerUnit.runToStopState);

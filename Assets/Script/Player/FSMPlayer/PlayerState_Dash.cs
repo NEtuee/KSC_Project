@@ -40,7 +40,7 @@ public class PlayerState_Dash : PlayerState
 
         if (_lateTime >= playerUnit.DashTime)
         {
-            if(playerUnit.IsGround && playerUnit.InputVertical == 0.0f && playerUnit.InputHorizontal == 0.0f)
+            if(playerUnit.IsGround)
             {
                 playerUnit.ChangeState(PlayerUnit.dashEndState);
             }
