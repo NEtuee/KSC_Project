@@ -109,6 +109,9 @@ public class B1_LoopBackground : MonoBehaviour
     public float maxLength = 150f;
     public float scrollSpeed = 10f;
 
+    public Transform respawnArea;
+    public Transform respawnPoint;
+
     public List<LoopBackgroundItem> backgroundItems = new List<LoopBackgroundItem>();
     public List<ObstacleItem> obstacleItmes = new List<ObstacleItem>();
     public List<PlatformItem> platformItmes = new List<PlatformItem>();
@@ -120,28 +123,47 @@ public class B1_LoopBackground : MonoBehaviour
     private LoopItem _front;
     private float _backgroundLength;
 
+    private Vector3 _respawnAreaPos;
+    private Vector3 _respawnPointPos;
+
     public void Start()
     {
         CreateBackground();
+
+        _respawnAreaPos = respawnArea.localPosition;
+        _respawnPointPos = respawnPoint.localPosition;
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
-        Scroll(Time.deltaTime);
+        Scroll(Time.fixedDeltaTime);
     }
 
-    public void SpawnPlatformFront(int id, int direction, B1_Platform target)
+    public void SwitchMainPlatform(B1_Platform old, B1_Platform curr)
     {
-        SpawnPlatform(id,direction,_front.transform.position,target);
+        respawnPoint.SetParent(curr.platform);
+        respawnArea.SetParent(curr.platform);
+
+        respawnPoint.localPosition = _respawnPointPos;
+        respawnArea.localPosition = _respawnAreaPos;
+
+        old.OutBack(_backgroundLength * .5f);
     }
 
-    public void SpawnPlatform(int id, int direction, Vector3 position, B1_Platform target)
+    public B1_Platform SpawnPlatformFront(int id, int direction, B1_Platform target)
+    {
+        return SpawnPlatform(id,direction,_front.transform.position,target);
+    }
+
+    public B1_Platform SpawnPlatform(int id, int direction, Vector3 position, B1_Platform target)
     {
         var cache = FindPlatformItem(id);
         var platform = cache.GetCachedObject();
 
         platform.platform.transform.position = position + target.GetConnection(direction).GetPosition(direction);
         platform.platform.ApproachToTarget(direction,target);
+
+        return platform.platform;
     }
 
     public void SpawnObstacle(int id)

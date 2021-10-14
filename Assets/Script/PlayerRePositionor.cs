@@ -22,7 +22,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
     protected override void Awake()
     {
         base.Awake();
-        RegisterRequest(GetSavedNumber("ObjectManager"));
+        RegisterRequest(GetSavedNumber("StageManager"));
 
         collider = GetComponent<Collider>();
         //collider.enabled = false;
@@ -80,6 +80,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
         if(playerLayer == (playerLayer | (1<<coll.gameObject.layer)))
         {
+            SendBroadcastMessage(MessageTitles.stage_playerRespawn,this,true);
             beforeFall?.Invoke();
         }
         //if(coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
@@ -95,7 +96,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
         //    GameManager.Instance.player.transform.position = respawn.position;
         //    bip.position = respawn.position;
         //}
-        Debug.Log("RespawnColl");
+
         StartCoroutine(Defferd(coll));
 
         // else if(coll.gameObject.layer == LayerMask.NameToLayer("Player"))

@@ -17,12 +17,16 @@ public class IKFootPointRotator : MonoBehaviour
 
     public bool rotation = true;
     public bool setParentToGround = false;
+    public bool sphereRay = false;
 
     private RayEx ray;
 
     private void Start()
     {
-        ray = new RayEx(new Ray(Vector3.zero,Vector3.zero),rayDistance,layerMask);
+        if(sphereRay)
+            ray = new SphereRayEx(new Ray(Vector3.zero,Vector3.zero),rayDistance,0.3f,layerMask);
+        else
+            ray = new RayEx(new Ray(Vector3.zero,Vector3.zero),rayDistance,layerMask);
     }
 
     void FixedUpdate()

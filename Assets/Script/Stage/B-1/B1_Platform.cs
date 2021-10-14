@@ -140,6 +140,11 @@ public class B1_Platform : ObjectBase
 
     }
 
+    public bool IsDisconnected()
+    {
+        return _leftConnect == null && _rightConnect == null && _frontConnect == null && _backConnect == null;
+    }
+
     public void UpdownProcess(float t)
     {
         var curr = GetCurrentSide();
@@ -209,6 +214,13 @@ public class B1_Platform : ObjectBase
         platform.localPosition = pos;
     }
 
+    public void OutBack(float distance)
+    {
+        var pos = transform.position - transform.forward * distance;
+        Debug.Log(pos);
+        Out(pos);
+    }
+
     public void Out(Vector3 position)
     {
         _startPosition = transform.position;
@@ -257,7 +269,6 @@ public class B1_Platform : ObjectBase
             var connection = GetConnection(i);
             if(connection != this)
             {
-                Debug.Log("Check");
                 connection.Disconnect(GetOpositeDirection(i));
             }
 

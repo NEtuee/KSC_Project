@@ -5,6 +5,7 @@ using UnityEngine;
 public class B1_MonsterPlatform : B1_Platform
 {
     public List<CommonDrone> drones = new List<CommonDrone>();
+    public List<B1_Spider> spiders = new List<B1_Spider>();
     public MedusaInFallPoint_AI medusa;
     
     private bool _active = false; 
@@ -19,6 +20,14 @@ public class B1_MonsterPlatform : B1_Platform
             
         }
 
+        for(int i = 0; i < spiders.Count; ++i)
+        {
+            spiders[i].transform.SetParent(this.transform);
+            spiders[i].Respawn();
+            spiders[i].launch = false;
+            
+        }
+
         _active = true;
     }
 
@@ -28,6 +37,12 @@ public class B1_MonsterPlatform : B1_Platform
         for(int i = 0; i < drones.Count; ++i)
         {
             drones[i].LaunchUp(3f);
+        }
+
+        for(int i = 0; i < spiders.Count; ++i)
+        {
+            spiders[i].launch = true;
+            
         }
     }
 
@@ -44,6 +59,15 @@ public class B1_MonsterPlatform : B1_Platform
         for(int i = 0; i < drones.Count; ++i)
         {
             if(drones[i].gameObject.activeInHierarchy)
+            {
+                active = true;
+                break;
+            }
+        }
+
+        for(int i = 0; i < spiders.Count; ++i)
+        {
+            if(spiders[i].gameObject.activeInHierarchy)
             {
                 active = true;
                 break;

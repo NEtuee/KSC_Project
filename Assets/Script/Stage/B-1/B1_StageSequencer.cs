@@ -8,12 +8,12 @@ public class B1_StageSequencer : ObjectBase
     public enum SequenceType
     {
         SpawnObstacle,
-        SpawnMonsterSet,
-        SpawnMedusa,
+        SpawnPlatformSet,
         SpawnBoss,
         WaitSeconds,
         LoadNextScene,
-        Fence
+        SwitchPlayerPlatform,
+        DisconnectFence
     };
 
     [System.Serializable]
@@ -30,6 +30,8 @@ public class B1_StageSequencer : ObjectBase
     public B1_LoopBackground background;
 
     private TimeCounterEx _timeCounter = new TimeCounterEx();
+
+    private B1_Platform _recentlyPlatform;
     private bool _process = false;
 
     public override void Assign()
@@ -67,6 +69,18 @@ public class B1_StageSequencer : ObjectBase
         }
     }
 
+    public void SwitchMainPlatform()
+    {
+        if(_recentlyPlatform == null || !_recentlyPlatform.gameObject.activeInHierarchy)
+        {
+            Debug.Log("target is missing");
+            return;
+        }
+        
+        background.SwitchMainPlatform(playerPlatform,_recentlyPlatform);
+        playerPlatform = _recentlyPlatform;
+    }
+
     public void CreateSequencer()
     {
         _timeCounter.CreateSequencer("Main");
@@ -79,17 +93,13 @@ public class B1_StageSequencer : ObjectBase
                     background.SpawnObstacle(item.code);
                 });
             }
-            else if(item.type == SequenceType.SpawnMonsterSet)
+            else if(item.type == SequenceType.SpawnPlatformSet)
             {
                 _timeCounter.AddSequence("Main",0f,null,(x)=>{
-                    background.SpawnPlatformFront(item.code,(int)item.factor,playerPlatform);
+                    _recentlyPlatform = background.SpawnPlatformFront(item.code,(int)item.factor,playerPlatform);
                 });
             }
             else if(item.type == SequenceType.SpawnBoss)
-            {
-                _timeCounter.AddSequence("Main",item.factor,null,null);
-            }
-            else if(item.type == SequenceType.SpawnMedusa)
             {
                 _timeCounter.AddSequence("Main",item.factor,null,null);
             }
@@ -97,9 +107,15 @@ public class B1_StageSequencer : ObjectBase
             {
                 _timeCounter.AddSequence("Main",item.factor,null,null);
             }
-            else if(item.type == SequenceType.Fence)
+            else if(item.type == SequenceType.SwitchPlayerPlatform)
             {
-
+                _timeCounter.AddSequence("Main",item.factor,null,(x)=>{
+                    SwitchMainPlatform();
+                });
+            }
+            else if(item.type == SequenceType.DisconnectFence)
+            {
+                _timeCounter.AddFence("Main",()=>{return playerPlatform.IsDisconnected();});
             }
         }
     }
