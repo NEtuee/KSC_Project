@@ -30,6 +30,8 @@ public class EMPGun : UnTransfromObjectBase
     [SerializeField] private CrossHair crossHair;
     [SerializeField] private float layserRadius = 1.0f;
     [SerializeField] private LayerMask hitLayer;
+    [SerializeField] private Vector3 launchPosition;
+    private Quaternion launchRotation;
 
     private Transform mainCam;
     private Vector3 targetPos;
@@ -75,7 +77,7 @@ public class EMPGun : UnTransfromObjectBase
         RegisterRequest(GetSavedNumber("PlayerManager"));
     }
 
-    void LateUpdate()
+    void Update()
     {
         //Debug.Log("PlayerUnit LateUpdate");
 
@@ -112,6 +114,8 @@ public class EMPGun : UnTransfromObjectBase
         }
 
         launchPos.rotation = Quaternion.LookRotation(targetPos - launchPos.position);
+        launchPosition = launchPos.position;
+        launchRotation = launchPos.rotation;
     }
 
     public void LaunchLaser(float damage)
@@ -218,8 +222,8 @@ public class EMPGun : UnTransfromObjectBase
         SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
 
         EffectActiveData data = MessageDataPooling.GetMessageData<EffectActiveData>();
-        data.position = launchPos.position;
-        data.rotation = launchPos.rotation;
+        data.position = launchPosition;
+        data.rotation = launchRotation;
         data.parent = null;
         data.key = "Laser02";
         SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation, GetSavedNumber("EffectManager"), data);
@@ -305,8 +309,8 @@ public class EMPGun : UnTransfromObjectBase
         SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
   
         EffectActiveData data = MessageDataPooling.GetMessageData<EffectActiveData>();
-        data.position = launchPos.position;
-        data.rotation = launchPos.rotation;
+        data.position = launchPosition;
+        data.rotation = launchRotation;
         data.parent = null;
 
         data.key = "Laser_Level3";
