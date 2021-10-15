@@ -17,7 +17,9 @@ public class PlayerState_HighLanding : PlayerState
         AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
         soundData.id = 1004; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
         playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
-        playerUnit.SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), null);
+        FloatData forceData = MessageDataPooling.GetMessageData<FloatData>();
+        forceData.value = 2.0f;
+        playerUnit.SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluseSetForce, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), forceData);
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
