@@ -13,7 +13,8 @@ public class B1_StageSequencer : ObjectBase
         WaitSeconds,
         LoadNextScene,
         SwitchPlayerPlatform,
-        DisconnectFence
+        DisconnectFence,
+        TriggerFence,
     };
 
     [System.Serializable]
@@ -30,6 +31,7 @@ public class B1_StageSequencer : ObjectBase
     public B1_LoopBackground background;
 
     private TimeCounterEx _timeCounter = new TimeCounterEx();
+    private Dictionary<int, bool> _triggerSet = new Dictionary<int, bool>();
 
     private B1_Platform _recentlyPlatform;
     private bool _process = false;
@@ -38,12 +40,18 @@ public class B1_StageSequencer : ObjectBase
     {
         base.Assign();
         CreateSequencer();
+
+        AddAction(MessageTitles.customTitle_start,(x)=>{
+            var item = MessageDataPooling.CastData<MD.IntData>(x.data);
+            SetTrigger(item.value);
+        });
     }
 
     public override void Initialize()
     {
         base.Initialize();
 
+        SaveMyNumber("StageSequencer",true);
         RegisterRequest(GetSavedNumber("StageManager"));
 
         _process = true;
@@ -81,6 +89,17 @@ public class B1_StageSequencer : ObjectBase
         playerPlatform = _recentlyPlatform;
     }
 
+    public void SetTrigger(int code)
+    {
+        if(!_triggerSet.ContainsKey(code))
+        {
+            Debug.LogError("Key does not exists");
+            return;
+        }
+
+        _triggerSet[code] = true;
+    }
+
     public void CreateSequencer()
     {
         _timeCounter.CreateSequencer("Main");
@@ -116,6 +135,17 @@ public class B1_StageSequencer : ObjectBase
             else if(item.type == SequenceType.DisconnectFence)
             {
                 _timeCounter.AddFence("Main",()=>{return playerPlatform.IsDisconnected();});
+            }
+            else if(item.type == SequenceType.TriggerFence)
+            {
+                if(_triggerSet.ContainsKey(item.code))
+                {
+                    Debug.LogError("Trigger Already Exists");
+                    return;
+                }
+                _triggerSet.Add(item.code,false);
+                //_triggerEx.SetTrigger(item.code,false);
+                _timeCounter.AddFence("Main",()=>{return _triggerSet[item.code];});
             }
         }
     }

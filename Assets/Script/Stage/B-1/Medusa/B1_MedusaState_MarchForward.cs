@@ -8,8 +8,6 @@ public class B1_MedusaState_MarchForward : B1_MedusaStateBase
 
     public Transform forwardRayPoint;
 
-    public List<IKLegMovement> legMovements = new List<IKLegMovement>();
-
     public Transform leftRayPosition;
     public Transform rightRayPosition;
 
@@ -54,7 +52,7 @@ public class B1_MedusaState_MarchForward : B1_MedusaStateBase
             StateChange("Idle");
         }
 
-        foreach(var leg in legMovements)
+        foreach(var leg in target.legMovements)
         {
             leg.legSpeed = Mathf.Clamp(4f * _pointDistance * 0.9f,4f,8f);
         }

@@ -1,6 +1,9 @@
 
 public static partial class MessageTitles
 {
+
+    public const ushort customTitle_start = 0xff00;
+
     public const ushort system_registerRequest = 0x0100;
     public const ushort system_withdrawRequest = 0x0101;
     public const ushort testuimanager_activeimage = 0x2201;
@@ -426,6 +429,10 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort climbingLineManager_getClimbingLineManager = 0x1101;
+
+    public const ushort climbingLineManager_registerDynamicLine = 0x1102;
+    public const ushort climbingLineManager_withdrawDynamicLine = 0x1103;
+
     #endregion
 
     #region GamePadVibrationManager

@@ -55,6 +55,9 @@ public class B1_Spider : PathfollowObjectBase
 
     public void Respawn()
     {
+        if(shell == null)
+            shell = shellCollider.GetComponent<Rigidbody>();
+
         shell.isKinematic = true;
         shell.transform.SetParent(transform);
         shell.transform.localPosition = _shellPosition;
@@ -64,6 +67,7 @@ public class B1_Spider : PathfollowObjectBase
 
         shellCollider.enabled = false;
 
+        this.gameObject.SetActive(true);
         stateProcessor.StateChange("Idle");
     }
 

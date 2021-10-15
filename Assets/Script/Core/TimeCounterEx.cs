@@ -138,7 +138,7 @@ public class TimeCounterEx
             return;
         }
 
-        _sequenceSet[name].AddFence(_sequenceSet[name].sequences.Count - 1,del);
+        _sequenceSet[name].AddFence(_sequenceSet[name].sequences.Count,del);
     }
 
     public void AddSequence(string name, float limitTime, System.Action<float> processEvent, System.Action<float> triggerEvent)

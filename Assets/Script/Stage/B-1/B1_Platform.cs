@@ -19,6 +19,8 @@ public class B1_Platform : ObjectBase
     public AnimationCurve approachCurve;
     public AnimationCurve outCurve;
 
+    public GameObject horizontalWalls; 
+
     public GameObject leftWall;
     public GameObject rightWall;
     public GameObject frontWall;
@@ -138,6 +140,15 @@ public class B1_Platform : ObjectBase
     public virtual void ApproachInitialize()
     {
 
+    }
+
+    public void SetTrigger(int code)
+    {
+        var item = MessageDataPooling.GetMessageData<MD.IntData>();
+        item.value = code;
+
+        var msg = MessagePack(MessageTitles.customTitle_start,GetSavedNumber("StageSequencer"),item);
+        SendMessageEx(msg);
     }
 
     public bool IsDisconnected()

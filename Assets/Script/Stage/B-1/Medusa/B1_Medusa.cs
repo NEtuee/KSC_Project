@@ -13,6 +13,8 @@ public class B1_Medusa : PathfollowObjectBase
     public float pushDist = 4f;
     public bool launch = false;
 
+    public List<IKLegMovement> legMovements = new List<IKLegMovement>();
+
     private PlayerUnit _player;
 
     private Vector3 _localPosition;
@@ -56,9 +58,18 @@ public class B1_Medusa : PathfollowObjectBase
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
         Respawn();
+        
 
         _timeCounter.InitSequencer("armWeight");
         _timeCounter.SkipSequencer("armWeight",2f);
+    }
+
+    public void SetIK(bool value)
+    {
+        foreach(var leg in legMovements)
+        {
+            leg.iKFabric.enabled = value;
+        }
     }
 
     public void Respawn()
@@ -67,6 +78,16 @@ public class B1_Medusa : PathfollowObjectBase
         transform.localRotation = _localRotation;
 
         stateProcessor.StateChange("Idle");
+
+        SetIK(false);
+    }
+
+    public void Dead()
+    {
+        if(stateProcessor.currentState != "Dead")
+        {
+            stateProcessor.StateChange("Dead");
+        }
     }
 
     public override void FixedProgress(float deltaTime)

@@ -23,6 +23,7 @@ public class B1_MedusaState_Transformation : B1_MedusaStateBase
         if(limit)
         {
             StateChange("Turn");
+            target.SetIK(true);
         }
 
     }

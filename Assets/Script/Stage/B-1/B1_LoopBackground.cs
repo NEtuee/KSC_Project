@@ -147,6 +147,9 @@ public class B1_LoopBackground : MonoBehaviour
         respawnPoint.localPosition = _respawnPointPos;
         respawnArea.localPosition = _respawnAreaPos;
 
+        old.horizontalWalls.SetActive(true);
+        curr.horizontalWalls.SetActive(false);
+
         old.OutBack(_backgroundLength * .5f);
     }
 
