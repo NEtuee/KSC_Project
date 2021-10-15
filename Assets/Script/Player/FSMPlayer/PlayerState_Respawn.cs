@@ -22,8 +22,9 @@ public class PlayerState_Respawn : PlayerState
         ActionData action = MessageDataPooling.GetMessageData<ActionData>();
         action.value = () =>
         {
-            animator.SetBool("Respawn", true);
-            playerUnit.Drone.Respawn(transform);
+            //animator.SetBool("Respawn", true);
+            //playerUnit.Drone.Respawn(transform);
+            playerUnit.ChangeState(PlayerUnit.defaultState);
         };
         playerUnit.SendMessageEx(MessageTitles.uimanager_fadeinout, UniqueNumberBase.GetSavedNumberStatic("UIManager"), action);
     }

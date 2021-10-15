@@ -346,30 +346,30 @@ public partial class PlayerUnit
 
     public void StartLineClimbing(Vector3 nearPoint)
     {
-        Transform planInfo = CurrentFollowLine.GetPlaneInfo(leftPointNum, rightPointNum);
-        Vector3 finalPosition;
+        //Transform planInfo = CurrentFollowLine.GetPlaneInfo(leftPointNum, rightPointNum);
+        //Vector3 finalPosition;
 
-        if (planInfo != null)
-        {
-            finalPosition = nearPoint + (planInfo.up * DetectionOffset.y);
-            finalPosition -= planInfo.forward * DetectionOffset.z;
+        //if (planInfo != null)
+        //{
+        //    finalPosition = nearPoint + (planInfo.up * DetectionOffset.y);
+        //    finalPosition -= planInfo.forward * DetectionOffset.z;
 
-            transform.rotation = Quaternion.LookRotation(-planInfo.forward);
-        }
-        else
-        {
-            finalPosition = nearPoint + (transform.up * detectionOffset.y);
-            finalPosition += transform.forward * detectionOffset.z;
-            transform.position = finalPosition;
+        //    transform.rotation = Quaternion.LookRotation(-planInfo.forward);
+        //}
+        //else
+        //{
+        //    finalPosition = nearPoint + (transform.up * detectionOffset.y);
+        //    finalPosition += transform.forward * detectionOffset.z;
+        //    transform.position = finalPosition;
 
-            Vector3 lookVec = nearPoint - transform.position;
-            lookVec.y = 0.0f;
-            lookVec.Normalize();
-            transform.rotation = Quaternion.LookRotation(lookVec);
-        }
+        //    Vector3 lookVec = nearPoint - transform.position;
+        //    lookVec.y = 0.0f;
+        //    lookVec.Normalize();
+        //    transform.rotation = Quaternion.LookRotation(lookVec);
+        //}
 
-        transform.SetParent(LineTracker);
-        transform.position = finalPosition;
+        //transform.SetParent(LineTracker);
+        //transform.position = finalPosition;
         //Debug.Log(transform.position);
 
         //ChangeState(grabState);
