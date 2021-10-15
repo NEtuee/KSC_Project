@@ -4520,6 +4520,8 @@ PlayableDirector:
     value: {fileID: 1788991072}
   - key: {fileID: 3659606190588781062, guid: c4505b22533d12e41a34d1eb9f538c09, type: 2}
     value: {fileID: 1788991072}
+  - key: {fileID: 6966432829192754844, guid: c4505b22533d12e41a34d1eb9f538c09, type: 2}
+    value: {fileID: 1788991077}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &680037654
@@ -13836,6 +13838,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5264668697266451794, guid: fb5750f3390a4a34c8b211715711a22e,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5264668697266451794, guid: fb5750f3390a4a34c8b211715711a22e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5264668697266451794, guid: fb5750f3390a4a34c8b211715711a22e,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 957087b82b46a0541a076b13a283ae38, type: 2}
@@ -14118,6 +14130,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0.8526243
+      objectReference: {fileID: 0}
+    - target: {fileID: -2531080981814695563, guid: fb5750f3390a4a34c8b211715711a22e,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2531080981814695563, guid: fb5750f3390a4a34c8b211715711a22e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2531080981814695563, guid: fb5750f3390a4a34c8b211715711a22e,
         type: 3}
@@ -14438,6 +14460,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0.36574864
+      objectReference: {fileID: 0}
+    - target: {fileID: 265016217798267708, guid: fb5750f3390a4a34c8b211715711a22e,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 265016217798267708, guid: fb5750f3390a4a34c8b211715711a22e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 265016217798267708, guid: fb5750f3390a4a34c8b211715711a22e,
         type: 3}
@@ -15537,6 +15569,85 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1788991070}
   m_PrefabAsset: {fileID: 0}
+--- !u!137 &1788991074 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 265016217798267708, guid: fb5750f3390a4a34c8b211715711a22e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1788991070}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1788991075 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -2531080981814695563, guid: fb5750f3390a4a34c8b211715711a22e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1788991070}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1788991076 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -5264668697266451794, guid: fb5750f3390a4a34c8b211715711a22e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1788991070}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1788991077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788991071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 980b10bb5bc85cf4d912ab65fa0c1d1c, type: 2}
+    - {fileID: 11400000, guid: f8922cba0c0ac7146bfb74bcb6b3f0d4, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1788991078}
+          m_TargetAssemblyTypeName: MatrialFade, Assembly-CSharp
+          m_MethodName: FadeIn
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1788991078}
+          m_TargetAssemblyTypeName: MatrialFade, Assembly-CSharp
+          m_MethodName: FadeOut
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1788991078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788991071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a1ff9797e17e3b4ebe50433a3cc037b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 1788991076}
+  - {fileID: 1788991075}
+  - {fileID: 1788991074}
 --- !u!1 &1797885864
 GameObject:
   m_ObjectHideFlags: 0
