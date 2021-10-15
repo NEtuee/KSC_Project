@@ -105,11 +105,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float ClimbingJumpRestoreEnrgyValue => climbingJumpEnergyRestoreValue;
     #endregion
 
-    #region Stamina Property
-    public float MaxStamina => maxStamina;
-    public float ClimbingJumpConsumeValue => climbingJumpConsumeValue;
-    #endregion
-
     #region Input Property
     public float InputVertical { get => _inputVertical; }
     public float InputHorizontal { get => _inputHorizontal; }
@@ -215,6 +210,24 @@ public partial class PlayerUnit : UnTransfromObjectBase
             _climbingLineManager = (ClimbingLineManager)msg.data;
         });
 
+        AddAction(MessageTitles.player_blockChargeShot, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            _chargeShotBlock = data.value;
+        });
+
+        AddAction(MessageTitles.player_blockDash, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            _dashBlock = data.value;
+        });
+
+        AddAction(MessageTitles.player_blockQuickStand, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            _quickStandingBlock = data.value;
+        });
+
         InputUser.onChange +=
             (user, change, device) =>
             {
@@ -279,9 +292,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
             }
         }
 
-        _staminaTimer = new TimeCounterEx();
-        _staminaTimer.InitTimer("Stamina", 0.0f, staminaRestoreDelayTime);
-
         _timer = new TimeCounterEx();
         _timer.InitTimer("Dash", 0.0f, DashCoolTime);
         _timer.InitTimer("QuickStand", 0.0f, quickStandingCoolTime);
@@ -332,8 +342,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _prevDir = _lookDir;
 
         UpdateCoolTime();
-
-        UpdateStamina(Time.fixedDeltaTime);
 
         if (canGroundCheck)
             CheckGround();
@@ -541,38 +549,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
             else
             {
                 currentSpeed = Mathf.MoveTowards(currentSpeed, 0.0f, Time.deltaTime * accelerateSpeed*2);
-            }
-        }
-    }
-
-    private void UpdateStamina(float deltaTime)
-    {
-        if (_currentState == grabState ||
-            _currentState == readyGrabState ||
-            _currentState == hangLedgeState ||
-            _currentState == readyClimbingJumpState ||
-            _currentState == climbingJumpState ||
-            _currentState == ledgeUpState)
-        {
-            _staminaTimer.InitTimer("Stamina", 0.0f, staminaRestoreDelayTime);
-
-            if (isClimbingMove == false)
-            {
-                stamina.Value -= idleConsumeValue * deltaTime;
-            }
-            else
-            {
-                stamina.Value -= climbingMoveConsumeValue * deltaTime;
-            }
-            stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
-        }
-        else
-        {
-            _staminaTimer.IncreaseTimerSelf("Stamina", out bool limit, deltaTime);
-            if (limit && stamina.Value < maxStamina)
-            {
-                stamina.Value += staminaRestoreValue * deltaTime;
-                stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
             }
         }
     }
@@ -953,7 +929,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void InitStatus()
     {
-        stamina.Value = 100.0f;
         hp.Value = 100.0f;
         energy.Value = 0.0f;
         _ragdoll.ResetRagdoll();
@@ -1363,7 +1338,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private PlayerState _prevState;
 
     #region Status
-    public FloatReactiveProperty stamina = new FloatReactiveProperty(100);
     public FloatReactiveProperty hp = new FloatReactiveProperty(100f);
     public FloatReactiveProperty charge = new FloatReactiveProperty(0.0f);
     public FloatReactiveProperty energy = new FloatReactiveProperty(0.0f);
@@ -1453,17 +1427,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
     [SerializeField] private float climbingJumpEnergyRestoreValue;
 
-
-    [Header("Stamina")]
-    [SerializeField] private float maxStamina = 100.0f;
-    [SerializeField] private float idleConsumeValue = 1f;
-    [SerializeField] private float climbingMoveConsumeValue = 2f;
-    [SerializeField] private float climbingJumpConsumeValue = 5f;
-    [SerializeField] private float wallJumpConsumeValue = 5f;
-    [SerializeField] private float staminaRestoreValue = 2f;
-    [SerializeField] private float staminaRestoreDelayTime = 2f;
-    private TimeCounterEx _staminaTimer;
-
     [Header("Input")]
     [SerializeField] private float _inputVertical;
     [SerializeField] private float _inputHorizontal;
@@ -1474,6 +1437,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField]private bool _gamepadMode = false;
 
     public bool GamepadMode => _gamepadMode;
+
+    [Header("ControlBlock")]
+    [SerializeField] private bool _chargeShotBlock = false;
+    [SerializeField] private bool _dashBlock = false;
+    [SerializeField] private bool _quickStandingBlock = false;
+
+    public bool ChargeShotBlock => _chargeShotBlock;
 
     [Header("Spine")]
     [SerializeField] private Transform lookAtAim;
@@ -1681,22 +1651,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _currentState.OnGrabRelease(value, this, _animator);
     }
 
-    public void OnUseHpPack(InputAction.CallbackContext value)
-    {
-        if (value.performed == false || Time.timeScale == 0f)
-            return;
-
-        if (hp.Value < 100.0f && hpPackCount.Value > 0 && isHpRestore == false)
-        {
-            hpPackCount.Value--;
-            restoreHpPackCoroutine = HpRestore();
-            StartCoroutine(restoreHpPackCoroutine);
-        }
-    }
-
     public void OnDash(InputAction.CallbackContext value)
     {
-        if (value.performed == false || Time.timeScale == 0f)
+        if (value.performed == false || Time.timeScale == 0f || _dashBlock == true)
             return;
 
         _currentState.OnDash(value, this, _animator);
@@ -1704,7 +1661,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void OnQuickStand(InputAction.CallbackContext value)
     {
-        if (value.performed == false || Time.timeScale == 0f)
+        if (value.performed == false || Time.timeScale == 0f || _quickStandingBlock == true)
             return;
 
         _currentState.OnQuickStand(value, this, _animator);

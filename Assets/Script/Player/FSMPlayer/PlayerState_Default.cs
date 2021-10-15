@@ -266,7 +266,7 @@ public class PlayerState_Default : PlayerState
 
     public override void OnDash(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.CurrentSpeed < playerUnit.WalkSpeed || playerUnit.CanDash == false)
+        if (playerUnit.CurrentSpeed <= playerUnit.WalkSpeed || playerUnit.CanDash == false)
             return;
 
         playerUnit.ChangeState(PlayerUnit.dashState);
