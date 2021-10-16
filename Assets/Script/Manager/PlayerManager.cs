@@ -174,26 +174,6 @@ public class PlayerManager : ManagerBase
             }
         });
 
-        _player.stamina.Subscribe(value =>
-        {
-            StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
-            data.type = UIManager.StateBarType.Stamina;
-            data.value = value;
-            if (_player.GetState == PlayerUnit.aimingState)
-            {
-                data.visible = false;
-                SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
-            }
-            else
-            {
-                data.visible = true;
-                SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
-                BoolData setVisible = MessageDataPooling.GetMessageData<BoolData>();
-                setVisible.value = true;
-                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), setVisible);
-            }
-        });
-
         _player.energy.Subscribe(value =>
         {
             StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
