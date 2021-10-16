@@ -183,12 +183,25 @@ public class PlayerState_Aiming : PlayerState
             playerUnit.CurrentJumpPower -= playerUnit.Gravity * Time.fixedDeltaTime;
             playerUnit.CurrentJumpPower = Mathf.Clamp(playerUnit.CurrentJumpPower, playerUnit.MinJumpPower, 50.0f);
 
-            playerUnit.MoveDir = playerUnit.Transform.forward * playerUnit.CurrentSpeed;
+            if (playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
+            {
+                playerUnit.MoveDir = (camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal);
+                playerUnit.MoveDir.Normalize();
+            }
+            else
+            {
+                playerUnit.MoveDir = playerUnit.PrevDir;
+                playerUnit.MoveDir.Normalize();
+            }
+
+            playerUnit.MoveDir *= playerUnit.CurrentSpeed;
 
             Vector3 plusDir = ((camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal));
             playerUnit.Move(plusDir * _fallingControlSenstive,Time.fixedDeltaTime);
 
-            playerUnit.LookDir = ((camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal)).normalized;
+            //playerUnit.LookDir = ((camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal)).normalized;
+            playerUnit.LookDir = camForward;
+
             if (playerUnit.LookDir != Vector3.zero)
             {
                 playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation,

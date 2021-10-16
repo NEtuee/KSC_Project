@@ -284,8 +284,10 @@ public class FollowTargetCtrl : UnTransfromObjectBase
             var target = targetRot;
             target.x = target.y;
             target.y = -targetRot.x;
+            Vector2 prevAnchoredPosition = aimTransform.anchoredPosition;
             aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition, target * crosshairMovingSpeed,
                                                             ref currentAimVelocity, rotSmooth);
+            Vector2 moveDir = (aimTransform.anchoredPosition - prevAnchoredPosition).normalized;
 
             if (_player.GamepadMode == true)
             {
@@ -324,8 +326,15 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                 supportTransform.position = nearestGunTarget;
                 if (detect == true && (aimTransformPos - nearestGunTarget).magnitude <= 500.0f)
                 {
-                    //aimTransform.transform.position = Vector2.SmoothDamp(aimTransform.transform.position, nearestGunTarget, ref supportVelocity, 1f);
-                    aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, 300.0f * Time.fixedDeltaTime);
+                    if(_mouseX == 0.0f && _mouseY == 0.0f)
+                    {
+                        aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, 300.0f * Time.fixedDeltaTime);
+                    }
+                    else
+                    {
+                        if (Vector2.Dot(moveDir, (nearestGunTarget - aimTransformPos).normalized) > 0.0f)
+                            aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, 300.0f * Time.fixedDeltaTime);
+                    }
                 }
             }
 
