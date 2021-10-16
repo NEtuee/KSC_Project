@@ -20,14 +20,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FX_Laser_02
+  m_Name: FX_Laser_Black
   m_Shader: {fileID: -6465566751694194690, guid: 1ef5508905906184183fb71fbba44df3,
     type: 3}
-  m_ShaderKeywords: _EMISSION _FADING_ON _SOFTPARTICLES_ON
-  m_LightmapFlags: 2
+  m_ShaderKeywords: _FADING_ON _RECEIVE_SHADOWS_OFF _SOFTPARTICLES_ON
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses:
   - SHADOWCASTER
@@ -43,7 +43,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - NoiseTex1:
-        m_Texture: {fileID: 2800000, guid: a4e46349d2e2ef34c9f61dc36cdeb108, type: 3}
+        m_Texture: {fileID: 2800000, guid: c73a76113df1373458dd802c51e965d3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - NoiseTex2:
@@ -51,7 +51,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 8aec754ecc499fe40a06f688f8e91a5b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7956d268ef0e4674a92c42f28fa7c4b9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -71,7 +71,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 8aec754ecc499fe40a06f688f8e91a5b, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -115,13 +115,13 @@ Material:
     - Distortion1: 0.2
     - Distortion2: 0.2
     - FinalDistortion: 0.2
-    - N2_Disortion: 0
-    - Noise1_X_Speed: 5
+    - N2_Disortion: 0.16
+    - Noise1_X_Speed: 1
     - Noise1_Y_Speed: 0
     - Noise2_X_Speed: 0
-    - Noise2_Y_Speed: 0.11
+    - Noise2_Y_Speed: 0
     - _AlphaClip: 0
-    - _Blend: 2
+    - _Blend: 0
     - _BlendOp: 0
     - _BumpScale: 1
     - _CameraFadingEnabled: 0
@@ -130,7 +130,7 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _ColorMode: 0
-    - _Cull: 2
+    - _Cull: 0
     - _Cutoff: 0.08
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
@@ -138,7 +138,7 @@ Material:
     - _DistortionEnabled: 0
     - _DistortionStrength: 1
     - _DistortionStrengthScaled: 0.1
-    - _DstBlend: 1
+    - _DstBlend: 10
     - _EnvironmentReflections: 1
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
@@ -163,10 +163,10 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - Color1: {r: 128, g: 0, b: 0, a: 1}
-    - Color2: {r: 32, g: 0, b: 0, a: 1}
-    - Noise1_TilingOffset: {r: 0.79, g: 3, b: 0, a: 0}
-    - Noise2_TilingOffset: {r: 0, g: 0, b: 0, a: 0}
+    - Color1: {r: 1, g: 0.09555617, b: 0, a: 0.2627451}
+    - Color2: {r: 1, g: 0.48490566, b: 0.48490566, a: 0.2}
+    - Noise1_TilingOffset: {r: 1, g: 5, b: 0, a: 0}
+    - Noise2_TilingOffset: {r: 4, g: 0.5, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
