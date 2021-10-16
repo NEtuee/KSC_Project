@@ -29,8 +29,6 @@ public class PlayerState_ClimbingJump : PlayerState
 
         playerUnit.ClimbingJump();
 
-        playerUnit.stamina.Value -= playerUnit.ClimbingJumpConsumeValue;
-        playerUnit.stamina.Value = Mathf.Clamp(playerUnit.stamina.Value, 0.0f, playerUnit.MaxStamina);
         playerUnit.AddEnergy(playerUnit.ClimbingJumpRestoreEnrgyValue);
 
         playerUnit.HandIK.DisableHandIK();

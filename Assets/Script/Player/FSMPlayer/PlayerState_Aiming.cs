@@ -63,6 +63,7 @@ public class PlayerState_Aiming : PlayerState
         playerUnit.SendMessageEx(MessageTitles.cameramanager_setAim,UniqueNumberBase.GetSavedNumberStatic("CameraManager"),aimData);
 
         playerUnit.addibleSpineVector = Vector3.zero;
+        animator.ResetTrigger("ShotReset");
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -131,6 +132,8 @@ public class PlayerState_Aiming : PlayerState
         playerUnit.SendMessageEx(MessageTitles.cameramanager_setAim,UniqueNumberBase.GetSavedNumberStatic("CameraManager"),aimData);
 
         playerUnit.addibleSpineVector = Vector3.zero;
+
+        animator.SetTrigger("ShotReset");
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
@@ -285,7 +288,7 @@ public class PlayerState_Aiming : PlayerState
 
     public override void OnShot(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.CanCharge == true && playerUnit.Energy >= playerUnit.NoramlGunCost)
+        if (playerUnit.CanCharge == true && playerUnit.Energy >= playerUnit.NoramlGunCost && playerUnit.EmpGun.CanLaunch == true)
         {
             if (playerUnit._chargeSoundEmitter != null)
             {
@@ -293,10 +296,12 @@ public class PlayerState_Aiming : PlayerState
                 playerUnit._chargeSoundEmitter = null;
             }
 
-            if (playerUnit.chargeTime.Value >= 3 && playerUnit.Energy >= playerUnit.ChargeGunCost)
+            if (playerUnit.chargeTime.Value >= playerUnit.ChargeConsumeTime && 
+                playerUnit.Energy >= playerUnit.ChargeGunCost && 
+                playerUnit.ChargeShotBlock == false)
             {
-                playerUnit.EmpGun.LaunchCharge(40.0f);
-                playerUnit.AddEnergy(-playerUnit.ChargeGunCost);
+                    playerUnit.EmpGun.LaunchCharge(40.0f);
+                    playerUnit.AddEnergy(-playerUnit.ChargeGunCost);
             }
             else
             {
@@ -318,12 +323,6 @@ public class PlayerState_Aiming : PlayerState
             playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundPlayData);
 
             playerUnit.chargeTime.Value = 0.0f;
-
-            SetRadialBlurData blurData = MessageDataPooling.GetMessageData<SetRadialBlurData>();
-            blurData.factor = 1.0f;
-            blurData.radius = 0.2f;
-            blurData.time = 0.8f;
-            playerUnit.SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
 
             if (playerUnit.chargeTime.Value >= 3)
             {
