@@ -53,6 +53,8 @@ public class B1_Platform : ObjectBase
     public B1_Platform _frontConnect;
     public B1_Platform _backConnect;
 
+    public List<B1_Platform> _centerConnect = new List<B1_Platform>();
+
     private TimeCounterEx _timeCounter = new TimeCounterEx();
     private bool _updownProcessing = false;
 
@@ -153,7 +155,7 @@ public class B1_Platform : ObjectBase
 
     public bool IsDisconnected()
     {
-        return _leftConnect == null && _rightConnect == null && _frontConnect == null && _backConnect == null;
+        return _leftConnect == null && _rightConnect == null && _frontConnect == null && _backConnect == null && _centerConnect.Count == 0;
     }
 
     public void UpdownProcess(float t)
@@ -273,6 +275,14 @@ public class B1_Platform : ObjectBase
         SetWallActive(direction,true);
     }
 
+    public void DisconnectCenter(B1_Platform platform)
+    {
+        if(_centerConnect.Contains(platform))
+        {
+            _centerConnect.Remove(platform);
+        }
+    }
+
     public void DisconnectAll()
     {
         for(int i = 0; i < 4; ++i)
@@ -285,6 +295,13 @@ public class B1_Platform : ObjectBase
 
             Disconnect(i);
         }
+
+        foreach(var item in _centerConnect)
+        {
+            item.DisconnectCenter(this);
+        }
+
+        _centerConnect.Clear();
     }
 
     public void Connect(B1_Platform target, int direction)
@@ -305,6 +322,8 @@ public class B1_Platform : ObjectBase
             return 3;
         else if(direction == 3)
             return 2;
+        else if(direction == 4)
+            return 4;
         
         return -1;
     }
@@ -331,6 +350,8 @@ public class B1_Platform : ObjectBase
             _frontConnect = target;
         else if(direction == 3)
             _backConnect = target;
+        else if(direction == 4)
+            _centerConnect.Add(target);
     }
 
     public B1_Platform GetConnection(int direction)
@@ -343,6 +364,8 @@ public class B1_Platform : ObjectBase
             return GetFrontConnection();
         else if(direction == 3)
             return GetBackConnection();
+        else if(direction == 4)
+            return this;
 
         return null;
     }
@@ -393,6 +416,8 @@ public class B1_Platform : ObjectBase
             return GetFrontPosition();
         else if(direction == 3)
             return GetBackPosition();
+        else if(direction == 4)
+            return transform.position;
 
         return Vector3.zero;
     }

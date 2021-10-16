@@ -31,6 +31,24 @@ public class B1_Spider : PathfollowObjectBase
 
         AddAction(MessageTitles.object_kick,(x)=>{
             stateProcessor.StateChange("HitBack");
+
+            var data = MessageDataPooling.GetMessageData<MD.Vector3Data>();
+            data.value = transform.position;
+            SendBroadcastMessage(MessageTitles.customTitle_start + 2,data,true);
+        });
+
+        AddAction(MessageTitles.customTitle_start + 2,(x)=>{
+            if(!gameObject.activeInHierarchy)
+                return;
+
+            var data = MessageDataPooling.CastData<MD.Vector3Data>(x.data);
+            var dist = Vector3.Distance(transform.position,data.value);
+
+            if(dist <= 5f)
+            {
+                stateProcessor.StateChange("HitBack");
+            }
+            
         });
 
         AddAction(MessageTitles.set_setplayer,(x)=>{

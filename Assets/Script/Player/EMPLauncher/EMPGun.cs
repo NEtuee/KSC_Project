@@ -248,7 +248,7 @@ public class EMPGun : UnTransfromObjectBase
         Vector3 rayPosition = aimTransform.position;
         var ray = Camera.main.ScreenPointToRay(rayPosition);
 
-        if (Physics.Raycast(ray, out hit, 100.0f))
+        if (Physics.Raycast(ray, out hit, 100.0f,hitLayer))
         {
             EffectActiveData hitData = MessageDataPooling.GetMessageData<EffectActiveData>();
             hitData.key = "LaserHit";
@@ -306,7 +306,7 @@ public class EMPGun : UnTransfromObjectBase
         Vector3 rayPosition = aimTransform.position;
         var ray = Camera.main.ScreenPointToRay(rayPosition);
 
-        if (Physics.Raycast(ray, out hit, 100.0f))
+        if (Physics.Raycast(ray, out hit, 100.0f,hitLayer))
         {
             EffectActiveData hitData = MessageDataPooling.GetMessageData<EffectActiveData>();
             hitData.key = "LaserHit";
