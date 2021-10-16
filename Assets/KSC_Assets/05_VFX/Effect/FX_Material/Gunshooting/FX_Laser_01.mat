@@ -20,20 +20,36 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FX_Flare_01
-  m_Shader: {fileID: 4800000, guid: 0406db5a14f94604a8c57ccfbc9f3b46, type: 3}
+  m_Name: FX_Laser_01
+  m_Shader: {fileID: -6465566751694194690, guid: 1ef5508905906184183fb71fbba44df3,
+    type: 3}
   m_ShaderKeywords: _EMISSION _FADING_ON _SOFTPARTICLES_ON
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 1
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
-  stringTagMap:
-    RenderType: Transparent
+  stringTagMap: {}
   disabledShaderPasses:
   - SHADOWCASTER
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - GradientAlpha:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - MainTex:
+        m_Texture: {fileID: 2800000, guid: 7282fcde129796d4fb629bcaa28ed3aa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - NoiseTex1:
+        m_Texture: {fileID: 2800000, guid: c73a76113df1373458dd802c51e965d3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - NoiseTex2:
+        m_Texture: {fileID: 2800000, guid: 0d2b2dbd831f5ba4c874cd2db8b78f73, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 8aec754ecc499fe40a06f688f8e91a5b, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -74,6 +90,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_1c149c6c906d43a5abaddd8fecb0de62_Texture_1:
+        m_Texture: {fileID: 2800000, guid: ef153458e18344c4ca9912ee7358be9c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -92,6 +112,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Distortion1: 0.2
+    - Distortion2: 0.2
+    - FinalDistortion: 0.2
+    - N2_Disortion: 0
+    - Noise1_X_Speed: 0
+    - Noise1_Y_Speed: 0
+    - Noise2_X_Speed: 1.5
+    - Noise2_Y_Speed: 0
     - _AlphaClip: 0
     - _Blend: 2
     - _BlendOp: 0
@@ -102,7 +130,7 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _ColorMode: 0
-    - _Cull: 0
+    - _Cull: 2
     - _Cutoff: 0.08
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
@@ -135,6 +163,10 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
+    - Color1: {r: 95.87451, g: 20.632763, b: 0, a: 0}
+    - Color2: {r: 0, g: 7.999999, b: 0.16897772, a: 1}
+    - Noise1_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
+    - Noise2_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
