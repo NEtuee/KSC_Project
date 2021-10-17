@@ -18,6 +18,7 @@ public class IKFootPointRotator : MonoBehaviour
     public bool rotation = true;
     public bool setParentToGround = false;
     public bool sphereRay = false;
+    public bool rotateToRay = false;
 
     private RayEx ray;
 
@@ -69,6 +70,11 @@ public class IKFootPointRotator : MonoBehaviour
                 Debug.DrawLine(transform.position,hit.point,Color.red);
                 var point = hit.point + (-down * baseHeight);
                 transform.position = point;
+
+                if(rotation && rotateToRay)
+                {
+                    transform.rotation = Quaternion.Lerp(transform.rotation, (Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation),rotateFactor);
+                }
             }
         }
         else
@@ -79,7 +85,7 @@ public class IKFootPointRotator : MonoBehaviour
 
         var avg = (normals).normalized;
 
-        if(rotation)
+        if(rotation && !rotateToRay)
             transform.rotation = Quaternion.Lerp(transform.rotation,(Quaternion.FromToRotation(transform.up,avg) * transform.rotation),rotateFactor);
 
         

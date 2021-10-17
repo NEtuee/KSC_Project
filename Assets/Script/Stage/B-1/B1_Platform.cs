@@ -220,6 +220,16 @@ public class B1_Platform : ObjectBase
         return state == PlatformState.UP ? downPosition : upPosition;
     }
 
+    public void SetUpdownState(PlatformState _state)
+    {
+        if(state == _state)
+            return;
+        
+        state = _state;
+        _updownProcessing = true;
+        _timeCounter.InitSequencer("Updown");
+    }
+
     public void SetupSide()
     {
         var pos = platform.localPosition;

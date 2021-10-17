@@ -8,6 +8,10 @@ public class B1_WallDrone : MonoBehaviour
     public float moveFactor;
 
     public bool sinGraph = false;
+
+    public bool x = false;
+    public bool y = false;
+    public bool z = false;
     
     private Vector3 _localOrigin;
     private float _time = 0f;
@@ -25,7 +29,13 @@ public class B1_WallDrone : MonoBehaviour
         var tri = sinGraph ? Mathf.Sin(_time) : Mathf.Sin(_time + Mathf.PI);
 
         var pos = _localOrigin;
-        pos.z = tri * moveFactor;
+
+        if(x)
+            pos.x += tri * moveFactor;
+        if(y)
+            pos.y += tri * moveFactor;
+        if(z)
+            pos.z += tri * moveFactor;
 
         transform.localPosition = pos;
     }

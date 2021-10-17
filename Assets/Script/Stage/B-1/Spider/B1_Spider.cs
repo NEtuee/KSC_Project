@@ -124,6 +124,13 @@ public class B1_Spider : PathfollowObjectBase
         {
             _player.Ragdoll.ExplosionRagdoll(force,dir);
         }
+
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+        data.key = "CannonExplosion";
+        data.position = transform.position;
+        data.rotation = Quaternion.identity;
+        data.parent = null;
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
         
     }
 

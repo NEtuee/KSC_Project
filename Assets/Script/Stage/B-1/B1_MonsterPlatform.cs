@@ -7,6 +7,7 @@ public class B1_MonsterPlatform : B1_Platform
     public List<CommonDrone> drones = new List<CommonDrone>();
     public List<B1_Spider> spiders = new List<B1_Spider>();
     public MedusaInFallPoint_AI medusa;
+    public B1_Medusa realMedusa;
 
     public bool canOut = true;
     
@@ -78,6 +79,9 @@ public class B1_MonsterPlatform : B1_Platform
 
         if(medusa != null)
             active = medusa.enabled;
+        
+        if(realMedusa != null)
+            active = realMedusa.enabled;
 
         if(!active && canOut)
         {

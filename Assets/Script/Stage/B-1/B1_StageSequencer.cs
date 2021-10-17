@@ -116,6 +116,10 @@ public class B1_StageSequencer : ObjectBase
             {
                 _timeCounter.AddSequence("Main",0f,null,(x)=>{
                     _recentlyPlatform = background.SpawnPlatformFront(item.code,(int)item.factor,playerPlatform);
+                    if(_recentlyPlatform.canAffectDrone)
+                    {
+                        _recentlyPlatform.SetUpdownState(playerPlatform.state);
+                    }
                 });
             }
             else if(item.type == SequenceType.SpawnBoss)

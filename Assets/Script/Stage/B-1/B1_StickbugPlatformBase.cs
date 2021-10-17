@@ -12,6 +12,8 @@ public class B1_StickbugPlatformBase : B1_Platform
     public float spawnTerm = 4f;
     public int spawnLimit = 5;
 
+    public List<B1_FlySpider> flySpiders = new List<B1_FlySpider>();
+
     private List<CommonDrone> _droneList = new List<CommonDrone>();
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 
@@ -60,6 +62,11 @@ public class B1_StickbugPlatformBase : B1_Platform
         _launch = false;
 
         stickbug.Respawn();
+
+        foreach(var item in flySpiders)
+        {
+            item.Respawn();
+        }
     }
 
     public override void WhenConnect()
@@ -67,6 +74,11 @@ public class B1_StickbugPlatformBase : B1_Platform
         base.WhenConnect();
 
         _launch = true;
+
+        foreach(var item in flySpiders)
+        {
+            item.launch = true;
+        }
     }
 
     public override void WhenDisconnect()
@@ -83,6 +95,12 @@ public class B1_StickbugPlatformBase : B1_Platform
         {
             if(item.gameObject.activeInHierarchy)
                 item.shield.Hit();
+        }
+
+        foreach(var item in flySpiders)
+        {
+            if(item.gameObject.activeInHierarchy)
+                item.Explosion();
         }
     }
 

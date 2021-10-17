@@ -7,6 +7,7 @@ public class B1_MedusaState_MarchForward : B1_MedusaStateBase
     public override string stateIdentifier => "March";
 
     public Transform forwardRayPoint;
+    public Transform backRayPoint;
 
     public Transform leftRayPosition;
     public Transform rightRayPosition;
@@ -20,6 +21,7 @@ public class B1_MedusaState_MarchForward : B1_MedusaStateBase
 
     private float _pointDistance;
     private float _direction;//1 = right, -1 = left
+    private bool _targetIsBack = false;
 
     private RayEx _ray;
 
@@ -36,20 +38,49 @@ public class B1_MedusaState_MarchForward : B1_MedusaStateBase
     {
         base.StateInitialize(prevState);
         UpdateMoveLine();
+
+        _targetIsBack = false;
+
+        _timeCounter.InitTimer("check");
     }
 
     public override void StateProgress(float deltaTime)
     {
         base.StateProgress(deltaTime);
-        target.Move(target.transform.forward,target.moveSpeed,deltaTime);
+
+        _timeCounter.IncreaseTimerSelf("check",out var limit, deltaTime);
+        if(!limit)
+            return;
+
+        _targetIsBack = Vector3.Dot(target.transform.forward,(target.target.position - target.transform.position).normalized) < 0;
+        Debug.Log(_targetIsBack);
 
         UpdatePerpendicularPoint();
         UpdateDirection();
-        LineMove(deltaTime);
 
-        if(!_ray.Cast(forwardRayPoint.position,out var hit))
+        if(_targetIsBack)
         {
-            StateChange("Idle");
+            if(!_ray.Cast(backRayPoint.position,out var hit))
+            {
+                //StateChange("Idle");
+            }
+            else
+            {
+                target.Move(-target.transform.forward,target.moveSpeed * 3f,deltaTime);
+                LineMove(deltaTime);
+            }
+        }
+        else
+        {
+            if(!_ray.Cast(forwardRayPoint.position,out var hit))
+            {
+                //StateChange("Idle");
+            }
+            else
+            {
+                target.Move(target.transform.forward,target.moveSpeed,deltaTime);
+                LineMove(deltaTime);
+            }
         }
 
         foreach(var leg in target.legMovements)
@@ -74,7 +105,6 @@ public class B1_MedusaState_MarchForward : B1_MedusaStateBase
             }
 
             var dist = Mathf.Clamp(target.GetTargetDistance() * .25f,1f,6f);
-            Debug.Log(dist);
 
             target.transform.position += (_moveLine * (_pointDistance * 4f) * _direction * deltaTime) / dist;
 

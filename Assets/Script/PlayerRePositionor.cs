@@ -44,6 +44,8 @@ public class PlayerRePositionor : UnTransfromObjectBase
                 collider.enabled = true;
         
         });
+
+        whenFall.AddListener(()=>{SendBroadcastMessage(MessageTitles.stage_playerRespawn,this,true);});
     }
 
     //protected override void Start()
@@ -80,7 +82,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
         if(playerLayer == (playerLayer | (1<<coll.gameObject.layer)))
         {
-            SendBroadcastMessage(MessageTitles.stage_playerRespawn,this,true);
+            
             beforeFall?.Invoke();
         }
         //if(coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))

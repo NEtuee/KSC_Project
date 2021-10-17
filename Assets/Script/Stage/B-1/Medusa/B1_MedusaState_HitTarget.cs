@@ -22,7 +22,7 @@ public class B1_MedusaState_HitTarget : B1_MedusaStateBase
 
         _prev = prevState.stateIdentifier;
 
-        StateChange(_prev);
+        StateChange("March");
     }
 
     public override void StateProgress(float deltaTime)
