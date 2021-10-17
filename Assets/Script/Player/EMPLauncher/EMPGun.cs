@@ -31,6 +31,7 @@ public class EMPGun : UnTransfromObjectBase
     [SerializeField] private float layserRadius = 1.0f;
     [SerializeField] private LayerMask hitLayer;
     [SerializeField] private Vector3 launchPosition;
+    [SerializeField] private float launchCoolTime = 1.0f;
     private Quaternion launchRotation;
 
     private Transform mainCam;
@@ -43,6 +44,10 @@ public class EMPGun : UnTransfromObjectBase
     private Transform mainCamera;
     private RaycastHit hit;
 
+    private TimeCounterEx _timer;
+    private bool _canLaunch = true;
+    public bool CanLaunch => _canLaunch;
+
     protected override void Start()
     {
         base.Start();
@@ -51,6 +56,9 @@ public class EMPGun : UnTransfromObjectBase
            _gunObject.SetActive(false);
         playerAnim = GetComponent<Animator>();
         mainCam = Camera.main.transform;
+
+        _timer = new TimeCounterEx();
+        _timer.InitTimer("CoolTime", launchCoolTime, launchCoolTime);
         //GetComponent<PlayerCtrl_Ver2>().chargeTime.Subscribe(value => { 
         //    if(value >= 3f)
         //    {
@@ -98,6 +106,12 @@ public class EMPGun : UnTransfromObjectBase
         //{
         //    GameManager.Instance.cameraManager.GenerateRecoilImpulse();
         //}
+
+        _timer.IncreaseTimerSelf("CoolTime", out bool limit, Time.deltaTime);
+        if(limit)
+        {
+            _canLaunch = true;
+        }
     }
 
     public void UpdateLaunchPos()
@@ -214,6 +228,9 @@ public class EMPGun : UnTransfromObjectBase
 
     public void LaunchNormal()
     {
+        if (_canLaunch == false)
+            return;
+
         if (playerAnim != null)
         {
             playerAnim.SetTrigger("Shot");
@@ -231,48 +248,6 @@ public class EMPGun : UnTransfromObjectBase
         Vector3 rayPosition = aimTransform.position;
         var ray = Camera.main.ScreenPointToRay(rayPosition);
 
-        //if (Physics.Raycast(ray, out hit, 100.0f))
-        ////if (Physics.SphereCast(mainCamera.position,layserRadius, mainCamera.forward, out hit, 1000.0f,hitLayer))
-        //{
-        //    //GameManager.Instance.effectManager.Active("LaserHit",hit.point);
-        //    EffectActiveData hitData = MessageDataPooling.GetMessageData<EffectActiveData>();
-        //    hitData.key = "LaserHit";
-        //    hitData.position = hit.point;
-        //    hitData.rotation = Quaternion.identity;
-        //    hitData.parent = null;
-        //    SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), hitData);
-
-        //    if (hit.collider.TryGetComponent<MessageReceiver>(out var receiver))
-        //    {
-        //        var empData = MessageDataPooling.GetMessageData<FloatData>();
-        //        empData.value = damage;
-
-        //        SendMessageEx(receiver, MessageTitles.player_EMPHit, empData);
-        //    }
-        //    if (hit.collider.TryGetComponent<MessageEmpTarget>(out var empTarget))
-        //    {
-        //        var empData = MessageDataPooling.GetMessageData<FloatData>();
-        //        empData.value = damage;
-
-        //        SendMessageEx(empTarget.parent, MessageTitles.player_EMPHit, empData);
-        //    }
-        //    if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
-        //    {
-        //        hitable.Hit(damage);
-        //        crossHair.ActiveHitMark();
-        //        //GameManager.Instance.soundManager.Play(1022, hit.point);
-        //        SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
-        //        soundData.id = 1022; soundData.position = hit.point; soundData.returnValue = false; soundData.dontStop = false;
-        //        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
-        //    }
-        //    else
-        //    {
-        //        //GameManager.Instance.soundManager.Play(1023, hit.point);
-        //        SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
-        //        soundData.id = 1023; soundData.position = hit.point; soundData.returnValue = false; soundData.dontStop = false;
-        //        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
-        //    }
-        //}
         if (Physics.Raycast(ray, out hit, 100.0f))
         {
             EffectActiveData hitData = MessageDataPooling.GetMessageData<EffectActiveData>();
@@ -290,6 +265,12 @@ public class EMPGun : UnTransfromObjectBase
 
         crossHair.Launch();
 
+        SetRadialBlurData blurData = MessageDataPooling.GetMessageData<SetRadialBlurData>();
+        blurData.factor = 1.0f;
+        blurData.radius = 0.2f;
+        blurData.time = 0.8f;
+        SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
+
         SendMessageEx(MessageTitles.gamepadVibrationManager_vibrationByKey, GetSavedNumber("GamepadVibrationManager"),"NormalShot");
 
         if (gunAnim != null)
@@ -297,10 +278,16 @@ public class EMPGun : UnTransfromObjectBase
             //gunAnim.SetTrigger("ToZero");
             gunAnim.SetTrigger("Normal");
         }
+
+        _canLaunch = false;
+        _timer.InitTimer("CoolTime", 0.0f, launchCoolTime);
     }
 
     public void LaunchCharge(float damage)
     {
+        if (_canLaunch == false)
+            return;
+
         if (playerAnim != null)
         {
             playerAnim.SetTrigger("Shot");
@@ -346,6 +333,11 @@ public class EMPGun : UnTransfromObjectBase
         }
 
         crossHair.Launch();
+        SetRadialBlurData blurData = MessageDataPooling.GetMessageData<SetRadialBlurData>();
+        blurData.factor = 1.0f;
+        blurData.radius = 0.2f;
+        blurData.time = 0.8f;
+        SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
         SendMessageEx(MessageTitles.gamepadVibrationManager_vibrationByKey, GetSavedNumber("GamepadVibrationManager"), "ChargeShot");
 
         if (gunAnim != null)
@@ -353,39 +345,10 @@ public class EMPGun : UnTransfromObjectBase
             //gunAnim.SetTrigger("ToZero");
             gunAnim.SetTrigger("Charge");
         }
+
+        _canLaunch = false;
+        _timer.InitTimer("CoolTime", 0.0f, launchCoolTime);
     }
-
-    //public void LaunchLaser(float damage, out bool destroyed)
-    //{
-    //    if (playerAnim != null)
-    //    {
-    //        playerAnim.SetTrigger("Shot");
-    //    }
-        
-    //    GameManager.Instance.cameraManager.GenerateRecoilImpulse();
-    //    GameManager.Instance.effectManager.Active("Laser", laserEffectPos.position, laserEffectPos.rotation);
-
-    //    if(Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, 100.0f))
-    //    {
-    //        GameManager.Instance.effectManager.Active("LaserHit",hit.point);
-
-    //        if (hit.collider.TryGetComponent<Hitable>(out Hitable hitable))
-    //        {
-    //            hitable.Hit(damage);
-    //            GameManager.Instance.soundManager.Play(1022, hit.point);
-    //        }
-    //        else
-    //        {
-    //            GameManager.Instance.soundManager.Play(1023, hit.point);
-    //        }
-
-    //        destroyed = true;
-    //    }
-    //    else
-    //    {
-    //        destroyed = false;
-    //    }
-    //}
 
     public void LaunchImpact()
     {

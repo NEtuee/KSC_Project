@@ -130,6 +130,14 @@ public class CameraManager : ManagerBase
         });
         AddAction(MessageTitles.cameramanager_generaterecoilimpluse, (msg) => GenerateRecoilImpulse());
 
+        AddAction(MessageTitles.cameramanager_generaterecoilimpluseSetForce, (msg) =>
+         {
+             var data = MessageDataPooling.CastData<FloatData>(msg.data);
+             if (_recoilImpulseSource == null)
+                 return;
+             _recoilImpulseSource.GenerateImpulse(data.value);
+         });
+
         AddAction(MessageTitles.set_setplayer, (msg) => 
         {
             _player = (PlayerUnit)msg.data;

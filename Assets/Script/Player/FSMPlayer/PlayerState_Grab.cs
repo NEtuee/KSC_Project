@@ -76,31 +76,13 @@ public class PlayerState_Grab : PlayerState
     {
         playerUnit.InitVelocity();
 
-        if(playerUnit.IsCanClimbingCancel == true)
+        if (playerUnit.IsCanClimbingCancel == true)
         {
-            if(playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f )
+            if (playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
             {
                 animator.SetTrigger("ClimbingCancel");
                 playerUnit.IsCanClimbingCancel = false;
             }
-        }
-
-        if(playerUnit.stamina.Value <= 0.0f)
-        {
-            playerUnit.IsClimbingMove = false;
-            playerUnit.IsLedge = false;
-
-            Vector3 currentRot = transform.rotation.eulerAngles;
-            currentRot.x = 0.0f;
-            currentRot.z = 0.0f;
-            playerUnit.Transform.rotation = Quaternion.Euler(currentRot);
-
-            playerUnit.ClimbingJumpDirection = ClimbingJumpDirection.Falling;
-
-            playerUnit.Detach();
-
-            playerUnit.ChangeState(PlayerUnit.defaultState);
-            return;
         }
 
         playerUnit.CheckLedge();
