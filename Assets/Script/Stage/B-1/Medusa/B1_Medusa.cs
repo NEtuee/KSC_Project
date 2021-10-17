@@ -38,7 +38,7 @@ public class B1_Medusa : PathfollowObjectBase
             target = _player.transform;
         });
 
-        AddAction(MessageTitles.stage_playerRespawn,(x)=>{
+        AddAction(MessageTitles.stage_beforePlayerRespawn,(x)=>{
             TargetFall();
         });
 

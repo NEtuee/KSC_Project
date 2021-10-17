@@ -45,6 +45,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
         
         });
 
+        beforeFall.AddListener(()=>{SendBroadcastMessage(MessageTitles.stage_beforePlayerRespawn,this,true);});
         whenFall.AddListener(()=>{SendBroadcastMessage(MessageTitles.stage_playerRespawn,this,true);});
     }
 
