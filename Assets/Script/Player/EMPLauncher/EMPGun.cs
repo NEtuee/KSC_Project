@@ -290,7 +290,7 @@ public class EMPGun : UnTransfromObjectBase
 
         if (playerAnim != null)
         {
-            playerAnim.SetTrigger("Shot");
+            playerAnim.SetTrigger("ChargeShot");
         }
 
         SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);

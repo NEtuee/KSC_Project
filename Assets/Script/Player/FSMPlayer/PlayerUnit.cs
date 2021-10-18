@@ -372,10 +372,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _animator.SetBool("IsNearGround", isNearGround);
 
 
-        if(Keyboard.current.fKey.wasPressedThisFrame)
-        {
-            SendMessageEx(MessageTitles.stage_droneSpecial,GetSavedNumber("StageManager"),null);
-        }
+        //if(Keyboard.current.fKey.wasPressedThisFrame)
+        //{
+        //    SendMessageEx(MessageTitles.stage_droneSpecial,GetSavedNumber("StageManager"),null);
+        //}
     }
 
     private void LateUpdate()
@@ -574,7 +574,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (groundDistance <= groundMinDistance)
         {
-            if (groundAngle < invalidityAngle)
+            //bool detectGroundSphere = Physics.OverlapSphereNonAlloc(transform.TransformPoint(groundCheckOffset), groundCheckRadius, _colliderBuffer) != 0;
+
+            if (groundAngle < invalidityAngle &&
+                Physics.OverlapSphereNonAlloc(transform.TransformPoint(groundCheckOffset), groundCheckRadius, _colliderBuffer,groundLayer) != 0)
             {
                 //isGrounded = true;
                 isGrounded = true;
@@ -1457,7 +1460,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private FrontChecker frontChecker;
     [SerializeField] private Vector3 wallUnderCheckOffset;
     [SerializeField] private Vector3 detectionOffset;
+    [SerializeField] private Vector3 groundCheckOffset;
+    [SerializeField] private float groundCheckRadius = 1.8f;
     private bool _ledUpAdjust = false;
+    private Collider[] _colliderBuffer = new Collider[10];
 
     [Header("Gun")]
     [SerializeField] private Animator gunAnim;
@@ -1556,6 +1562,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
         Gizmos.DrawWireSphere(UpperCheckCapsuleStart, upCheckCapsuleRadius);
         Gizmos.DrawWireSphere(UpperCheckCapsuleEnd, upCheckCapsuleRadius);
         Gizmos.DrawLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd);
+
+        Gizmos.DrawWireSphere(transform.TransformPoint(groundCheckOffset),groundCheckRadius);
     }
 #endif
 
@@ -1667,12 +1675,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _currentState.OnQuickStand(value, this, _animator);
     }
 
-    public void OnKick(InputAction.CallbackContext value)
+    public void OnDroneSpacial(InputAction.CallbackContext value)
     {
         if (value.performed == false || Time.timeScale == 0f)
             return;
 
-        //_currentState.OnKick(value, this, _animator);
+        SendMessageEx(MessageTitles.stage_droneSpecial, GetSavedNumber("StageManager"), null);
     }
 
     #endregion
