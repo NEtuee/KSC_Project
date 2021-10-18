@@ -50,23 +50,25 @@ public class MedusaState_CenterMove : MedusaFallPointStateBase
 
         var look = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
 
-        if(_back)
-        {
-            _direction = MathEx.DeleteYPos(target.transform.position - target.target.position).normalized;
-        }
-        else
-        {
-            _direction = MathEx.DeleteYPos(centerPosition.position - target.transform.position).normalized;
-        }
-        
-        _velocity += _direction * accelSpeed;
-        if(MathEx.abs(_velocity.magnitude) >= maxSpeed)
-        {
-            _velocity = _velocity.normalized * maxSpeed;
-        }
-        
-        if(!Physics.SphereCast(rayPoint.position,3f,_direction,out var hit,rayDist,wallLayer))
-            target.Move(_velocity,1f,deltaTime);
         target.Turn(look,deltaTime);
+
+        // if(_back)
+        // {
+        //     _direction = MathEx.DeleteYPos(target.transform.position - target.target.position).normalized;
+        // }
+        // else
+        // {
+        //     _direction = MathEx.DeleteYPos(centerPosition.position - target.transform.position).normalized;
+        // }
+        
+        // _velocity += _direction * accelSpeed;
+        // if(MathEx.abs(_velocity.magnitude) >= maxSpeed)
+        // {
+        //     _velocity = _velocity.normalized * maxSpeed;
+        // }
+        
+        // if(!Physics.SphereCast(rayPoint.position,3f,_direction,out var hit,rayDist,wallLayer))
+        //     target.Move(_velocity,1f,deltaTime);
+        // target.Turn(look,deltaTime);
     }
 }

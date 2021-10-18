@@ -32,8 +32,8 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
-        stateProcessor.StateChange("CenterMove");
-        AnimationChange(0);
+        stateProcessor.StateChange("Active");
+        AnimationChange(8);
 
         SetIKMovement(false);
     }
@@ -50,8 +50,7 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
     public void Launch()
     {
         launch = true;
-        SetIKMovement(true);
-        AnimationChange(4);
+        AnimationChange(7);
     }
 
     public void ChangeStateToDead()

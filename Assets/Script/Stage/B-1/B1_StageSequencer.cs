@@ -151,6 +151,14 @@ public class B1_StageSequencer : ObjectBase
                 //_triggerEx.SetTrigger(item.code,false);
                 _timeCounter.AddFence("Main",()=>{return _triggerSet[item.code];});
             }
+            else if(item.type == SequenceType.LoadNextScene)
+            {
+                _timeCounter.AddSequence("Main",0f,null,(x)=>{
+                    MD.StringData data = MessageDataPooling.GetMessageData<MD.StringData>();
+                    data.value = "MainHub";
+                    SendMessageEx(MessageTitles.scene_loadSpecificLevel, GetSavedNumber("SceneManager"), data);
+                });
+            }
         }
     }
 }

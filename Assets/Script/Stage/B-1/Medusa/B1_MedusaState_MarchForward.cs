@@ -53,7 +53,6 @@ public class B1_MedusaState_MarchForward : B1_MedusaStateBase
             return;
 
         _targetIsBack = Vector3.Dot(target.transform.forward,(target.target.position - target.transform.position).normalized) < 0;
-        Debug.Log(_targetIsBack);
 
         UpdatePerpendicularPoint();
         UpdateDirection();
