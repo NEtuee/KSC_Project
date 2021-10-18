@@ -43,14 +43,17 @@ public class MedusaState_CenterMove : MedusaFallPointStateBase
         base.StateProgress(deltaTime);
 
         _timeCounter.IncreaseTimerSelf("WaitTime",out var limit, deltaTime);
-        if(limit)
-        {
-            StateChange("RushToTarget");
-        }
+        // if(limit)
+        // {
+        //     StateChange("RushToTarget");
+        // }
 
         var look = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
 
-        target.Turn(look,deltaTime);
+        if(target.Turn(look,deltaTime) && limit)
+        {
+            StateChange("RushToTarget");
+        }
 
         // if(_back)
         // {

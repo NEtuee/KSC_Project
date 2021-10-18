@@ -113,6 +113,10 @@ public class PlayerRePositionor : UnTransfromObjectBase
         if (coll.TryGetComponent<PlayerUnit>(out var ctrl))
         {
             ctrl.TakeDamage(5.0f, false);
+            ctrl.transform.SetParent(null);
+
+            if(!ctrl.gameObject.activeInHierarchy)
+                ctrl.gameObject.SetActive(true);
 
             if (ctrl.GetState == PlayerUnit.deadState || ctrl.GetState == PlayerUnit.respawnState)
                 yield break;

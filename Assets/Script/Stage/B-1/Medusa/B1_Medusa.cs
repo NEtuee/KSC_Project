@@ -99,7 +99,7 @@ public class B1_Medusa : PathfollowObjectBase
 
         stateProcessor.StateProcess(deltaTime);
 
-        if(stateProcessor.currentState != "HitTarget")
+        if(stateProcessor.currentState != "HitTarget" && stateProcessor.currentState != "MoveBack")
         {
             if(pushDist >= GetTargetDistance())
             {
