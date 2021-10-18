@@ -52,6 +52,11 @@ public class StageManagerEx : ManagerBase
         AddAction(MessageTitles.boolTrigger_setTrigger,SetStageTrigger);
 
         AddAction(MessageTitles.stage_getPath,GetPath);
+
+        AddAction(MessageTitles.stage_droneSpecial,(msg)=>{
+            var broad = MessagePack(msg.title, boradcastWithoutSenderNumber, msg.data);
+            HandleBroadcastMessage(broad);
+        });
     }
     
     public override void HandleMessage(Message msg)
