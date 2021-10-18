@@ -236,7 +236,12 @@ public class GraphObjectBase : UnTransfromObjectBase
         while(msg != null)
         {
             MessagePool.ReturnMessage(msg);
-            msg = _receivedMessaged.Dequeue();
+            if(_receivedMessaged.Count == 0)
+            {
+                msg = null;
+            }
+            else
+                msg = _receivedMessaged.Dequeue();
         }
     }
 
