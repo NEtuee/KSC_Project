@@ -262,6 +262,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort cameramanager_setAim = 0x0416;
 
+    /// <summary>
+    /// data = vector3
+    /// </summary>
+    public const ushort cameramanager_generaterecoilimpluseSetForce = 0x0417;
+
     #region EffectManager
 
     /// <summary>
@@ -353,6 +358,21 @@ public static partial class MessageTitles
     public const ushort player_EMPHit = 0x0906;
 
     public const ushort player_NormalHit = 0x0907;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort player_blockChargeShot = 0x0914;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort player_blockDash = 0x0915;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort player_blockQuickStand = 0x0916;
 
     #endregion
 
