@@ -73,7 +73,10 @@ public class GamePadVibrationManager : ManagerBase
         _timeCounter.IncreaseTimerSelf("Vibration", out bool limit, deltaTime);
         if(limit == true && _vibrating == true)
         {
-            Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+            for(int i = 0; i< Gamepad.all.Count;i++)
+            {
+                Gamepad.all[i].SetMotorSpeeds(0.0f, 0.0f);
+            }
             _vibrating = false;
         }
     }

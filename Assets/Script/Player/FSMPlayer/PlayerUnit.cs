@@ -576,8 +576,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             //bool detectGroundSphere = Physics.OverlapSphereNonAlloc(transform.TransformPoint(groundCheckOffset), groundCheckRadius, _colliderBuffer) != 0;
 
-            if (groundAngle < invalidityAngle &&
-                Physics.OverlapSphereNonAlloc(transform.TransformPoint(groundCheckOffset), groundCheckRadius, _colliderBuffer,groundLayer) != 0)
+            if (groundAngle < invalidityAngle)
             {
                 //isGrounded = true;
                 isGrounded = true;

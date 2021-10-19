@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Consolation
 {
@@ -147,7 +148,7 @@ namespace Consolation
 
             float curTime = Time.realtimeSinceStartup;
 
-            if (Input.GetKeyDown(toggleKey))
+            if (Keyboard.current.backquoteKey.wasPressedThisFrame)
             {
                 isVisible = !isVisible;
             }
