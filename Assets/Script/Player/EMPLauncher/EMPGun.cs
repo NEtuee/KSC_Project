@@ -32,6 +32,7 @@ public class EMPGun : UnTransfromObjectBase
     [SerializeField] private LayerMask hitLayer;
     [SerializeField] private Vector3 launchPosition;
     [SerializeField] private float launchCoolTime = 1.0f;
+    [SerializeField] private ParticleSystem chargingEffect;
     private Quaternion launchRotation;
 
     private Transform mainCam;
@@ -248,7 +249,7 @@ public class EMPGun : UnTransfromObjectBase
         Vector3 rayPosition = aimTransform.position;
         var ray = Camera.main.ScreenPointToRay(rayPosition);
 
-        if (Physics.Raycast(ray, out hit, 100.0f,hitLayer))
+        if (Physics.Raycast(ray, out hit, 1000.0f,hitLayer))
         {
             EffectActiveData hitData = MessageDataPooling.GetMessageData<EffectActiveData>();
             hitData.key = "LaserHit";
@@ -306,10 +307,10 @@ public class EMPGun : UnTransfromObjectBase
         Vector3 rayPosition = aimTransform.position;
         var ray = Camera.main.ScreenPointToRay(rayPosition);
 
-        if (Physics.Raycast(ray, out hit, 100.0f,hitLayer))
+        if (Physics.Raycast(ray, out hit, 1000.0f,hitLayer))
         {
             EffectActiveData hitData = MessageDataPooling.GetMessageData<EffectActiveData>();
-            hitData.key = "LaserHit";
+            hitData.key = "ChargeHit";
             hitData.position = hit.point;
             hitData.rotation = Quaternion.identity;
             hitData.parent = null;
@@ -367,6 +368,20 @@ public class EMPGun : UnTransfromObjectBase
         if(_pelvisGunObject != null)
         {
             _pelvisGunObject.SetActive(!active);
+        }
+
+        if (chargingEffect != null)
+        {
+            if (active == true)
+            {
+                chargingEffect.gameObject.SetActive(true);
+                chargingEffect.Play();
+            }
+            else
+            {
+                chargingEffect.gameObject.SetActive(false);
+                chargingEffect.Stop();
+            }
         }
 
         //if(crossHair != null)

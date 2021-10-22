@@ -421,6 +421,11 @@ public static partial class MessageTitles
     /// </summarys
     public const ushort playermanager_setDroneVolume = 0x0910;
 
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort playermanager_LightOnOffRadio = 0x0917;
+
     #endregion
 
     #region ClimbingLineManager
@@ -451,12 +456,12 @@ public static partial class MessageTitles
     #region Setter
     /// data = null
     /// </summary>
-    public const ushort playermanager_initPlayerStatus = 0x0913;
+    public const ushort playermanager_initPlayerStatus = 0x0915;
 
     /// <summary>
     /// data = vector3
     /// </summary>
-    public const ushort playermanager_setSpineRotation = 0x0914;
+    public const ushort playermanager_setSpineRotation = 0x0916;
 
     #endregion
 
