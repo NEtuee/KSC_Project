@@ -22,7 +22,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
     protected override void Awake()
     {
         base.Awake();
-        RegisterRequest(GetSavedNumber("ObjectManager"));
+        RegisterRequest(GetSavedNumber("StageManager"));
 
         collider = GetComponent<Collider>();
         //collider.enabled = false;
@@ -44,6 +44,9 @@ public class PlayerRePositionor : UnTransfromObjectBase
                 collider.enabled = true;
         
         });
+
+        beforeFall.AddListener(()=>{SendBroadcastMessage(MessageTitles.stage_beforePlayerRespawn,this,true);});
+        whenFall.AddListener(()=>{SendBroadcastMessage(MessageTitles.stage_playerRespawn,this,true);});
     }
 
     //protected override void Start()
@@ -80,6 +83,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
         if(playerLayer == (playerLayer | (1<<coll.gameObject.layer)))
         {
+            
             beforeFall?.Invoke();
         }
         //if(coll.TryGetComponent<PlayerCtrl_Ver2>(out var ctrl))
@@ -95,7 +99,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
         //    GameManager.Instance.player.transform.position = respawn.position;
         //    bip.position = respawn.position;
         //}
-        Debug.Log("RespawnColl");
+
         StartCoroutine(Defferd(coll));
 
         // else if(coll.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -109,6 +113,10 @@ public class PlayerRePositionor : UnTransfromObjectBase
         if (coll.TryGetComponent<PlayerUnit>(out var ctrl))
         {
             ctrl.TakeDamage(5.0f, false);
+            ctrl.transform.SetParent(null);
+
+            if(!ctrl.gameObject.activeInHierarchy)
+                ctrl.gameObject.SetActive(true);
 
             if (ctrl.GetState == PlayerUnit.deadState || ctrl.GetState == PlayerUnit.respawnState)
                 yield break;

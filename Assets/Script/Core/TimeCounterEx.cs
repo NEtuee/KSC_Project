@@ -6,6 +6,7 @@ public class TimeCounterEx
 {
     public class SequenceProcessor
     {
+        public delegate bool FenceDelegate();
         public class SequenceItem
         {
             public float time;
@@ -14,6 +15,7 @@ public class TimeCounterEx
         };
 
         public List<SequenceItem> sequences = new List<SequenceItem>();
+        public Dictionary<int, FenceDelegate> fences = new Dictionary<int, FenceDelegate>();
         public float currentTime = 0f;
         public float processTime = 0f;
         public int current = 0;
@@ -45,16 +47,21 @@ public class TimeCounterEx
                 sq.triggerd?.Invoke(sq.time);
 
                 if(++current >= sequences.Count)
+                {
+                    isEnd = true;
                     break;
-                
+                }
                 sq = sequences[current];
             }
         }
 
         public bool Process(float deltaTime)
         {
-            if(isEnd)
+            if(isEnd || sequences.Count == 0)
                 return true;
+
+            if(fences.ContainsKey(current) && !fences[current]())
+                return false;
 
             currentTime += deltaTime;
             processTime += deltaTime;
@@ -98,6 +105,11 @@ public class TimeCounterEx
 
             sequences.Add(sq);
         }
+
+        public void AddFence(int point, FenceDelegate del)
+        {
+            fences.Add(point,del);
+        }
     };
 
     private Dictionary<string, SequenceProcessor> _sequenceSet = new Dictionary<string, SequenceProcessor>();
@@ -116,6 +128,17 @@ public class TimeCounterEx
         }
 
         _sequenceSet.Add(name, new SequenceProcessor());
+    }
+
+    public void AddFence(string name, SequenceProcessor.FenceDelegate del)
+    {
+        if(!_sequenceSet.ContainsKey(name))
+        {
+            Debug.LogError("key Does not exists");
+            return;
+        }
+
+        _sequenceSet[name].AddFence(_sequenceSet[name].sequences.Count,del);
     }
 
     public void AddSequence(string name, float limitTime, System.Action<float> processEvent, System.Action<float> triggerEvent)
