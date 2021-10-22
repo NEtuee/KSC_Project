@@ -923,6 +923,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         ChangeState(defaultState);
 
         bCanDash = true;
+        var booldata = MessageDataPooling.GetMessageData<BoolData>();
+        booldata.value = true;
+        SendMessageEx(MessageTitles.playermanager_LightOnOffRadio, GetSavedNumber("PlayerManager"), booldata);
         bCanQuickStanding = true;
 
         currentDashCoolTime.Value = dashCoolTime;
@@ -1099,8 +1102,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         currentDashCoolTime.Value = _timer.IncreaseTimerSelf("Dash", out bool limit, Time.fixedDeltaTime);
 
-        if(limit)
+        if (limit)
+        {
             bCanDash = true;
+            var booldata = MessageDataPooling.GetMessageData<BoolData>();
+            booldata.value = true;
+            SendMessageEx(MessageTitles.playermanager_LightOnOffRadio, GetSavedNumber("PlayerManager"), booldata);
+        }
 
         currentQuickStandingCoolTime.Value += _timer.IncreaseTimerSelf("QuickStand", out limit, Time.fixedDeltaTime);
 
@@ -1111,6 +1119,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void UseDash()
     {
         bCanDash = false;
+        var booldata = MessageDataPooling.GetMessageData<BoolData>();
+        booldata.value = false;
+        SendMessageEx(MessageTitles.playermanager_LightOnOffRadio, GetSavedNumber("PlayerManager"), booldata);
         _timer.InitTimer("Dash", 0.0f, DashCoolTime);
     }
 
