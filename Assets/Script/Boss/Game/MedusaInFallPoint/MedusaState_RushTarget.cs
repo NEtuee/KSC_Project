@@ -32,25 +32,25 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
 
         target.AnimationChange(2);
 
-        var dist = Vector3.Distance(target.target.transform.position,centerPosition.position);
-        if(dist >= 12f)
-        {
-            _direction = MathEx.DeleteYPos(centerPosition.position - target.transform.position).normalized;
-        }
+        // var dist = Vector3.Distance(target.target.transform.position,centerPosition.position);
+        // if(dist >= 12f)
+        // {
+        //     _direction = MathEx.DeleteYPos(centerPosition.position - target.transform.position).normalized;
+        // }
     }
 
     public override void StateProgress(float deltaTime)
     {
         base.StateProgress(deltaTime);
 
-        var look = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
+        // var look = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
 
-        _timeCounter.IncreaseTimerSelf("UpdateDirection",out var limit, deltaTime);
-        if(limit)
-        {
-            _direction = look;
-            _timeCounter.InitTimer("UpdateDirection",0f,1f);
-        }
+        // _timeCounter.IncreaseTimerSelf("UpdateDirection",out var limit, deltaTime);
+        // if(limit)
+        // {
+        //     _direction = look;
+        //     _timeCounter.InitTimer("UpdateDirection",0f,1f);
+        // }
         
         _velocity += _direction * accelSpeed;
         if(MathEx.abs(_velocity.magnitude) >= maxSpeed)
@@ -60,7 +60,7 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
         
 
         target.Move(_velocity,1f,deltaTime);
-        target.Turn(look,deltaTime);
+        //target.Turn(look,deltaTime);
 
         RayCheck();
     }

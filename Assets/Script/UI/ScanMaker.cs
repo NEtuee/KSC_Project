@@ -26,7 +26,7 @@ public class ScanMaker : MonoBehaviour
         Vector3 screenPos = Vector3.zero;
         while (curTime < time)
         {
-            if(collider == null)
+            if(collider == null || !collider.gameObject.activeInHierarchy)
             {
                 break;
             }

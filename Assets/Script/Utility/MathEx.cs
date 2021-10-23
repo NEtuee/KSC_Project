@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MathEx : MonoBehaviour {
-
 	public static Vector3 PerpendicularPoint(Vector3 start, Vector3 end, Vector3 point)
 	{
 		return Vector3.Project(point - start, end - start) + start;
