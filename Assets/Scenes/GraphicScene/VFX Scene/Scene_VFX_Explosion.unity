@@ -6862,77 +6862,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 550248094}
   m_PrefabAsset: {fileID: 0}
---- !u!21 &589566525
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_KSC_SciFi-Shield (Instance) (Instance) (Instance)
-  m_Shader: {fileID: 4800000, guid: 518153c14cf91414e91bcc60ee2b3fc6, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - NoiseTex:
-        m_Texture: {fileID: 2800000, guid: 45e5669665086754095d1d6efa58d37b, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - PattenTex:
-        m_Texture: {fileID: 2800000, guid: 8186892c3af9a9f4ebbb30797d27991c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_8eb873781d39473d93c401656e49b1a8_Texture_1:
-        m_Texture: {fileID: 2800000, guid: e383efc7eb18aa446a071193e999f9d7, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Texture2DAsset_e086df3f2b8c41d4913cb50354400132_Out_0:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - MeshMoveAmount: 1
-    - MeshMoveSpeed: 1
-    - RimRange: 1.51
-    - Speed: 0.3
-    - TexScrollSpeedX: 1
-    - TexScrollSpeedY: 0
-    - _Float: 5
-    - _GradientSize: 2.16
-    m_Colors:
-    - EdgeColor: {r: 0, g: 71.01447, b: 205.51157, a: 1}
-    - EdgeColor_2: {r: 1024, g: 0, b: 0, a: 1}
-    - FaceColor: {r: 0, g: 0.09803922, b: 0.7490196, a: 0.9882353}
-    - InnerColor: {r: 1, g: 1, b: 1, a: 0}
-    - NoiseTex_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
-    - PattenColor: {r: 2.670157, g: 1.4927833, b: 0, a: 0}
-    - PattenColor_1: {r: 0, g: 2.1960785, b: 8, a: 1}
-    - PattenColor_2: {r: 0, g: 0, b: 0, a: 1}
-    - Patten_TilingOffset: {r: 1, g: 0.5, b: 0, a: 0}
-    - RimColor: {r: 1.754717, g: 0.35350895, b: 0.20692414, a: 1}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Hitpos: {r: 0, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1001 &694300220
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9247,6 +9176,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 8186892c3af9a9f4ebbb30797d27991c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainShidTex:
+        m_Texture: {fileID: 2800000, guid: e383efc7eb18aa446a071193e999f9d7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_8eb873781d39473d93c401656e49b1a8_Texture_1:
         m_Texture: {fileID: 2800000, guid: e383efc7eb18aa446a071193e999f9d7, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -9288,7 +9221,7 @@ Material:
     - PattenColor_2: {r: 0, g: 0, b: 0, a: 1}
     - Patten_TilingOffset: {r: 1, g: 0.5, b: 0, a: 0}
     - RimColor: {r: 1.754717, g: 0.35350895, b: 0.20692414, a: 1}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 0.2867924, b: 0.2867924, a: 1}
     - _Hitpos: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
 --- !u!4 &950508204 stripped
@@ -9943,7 +9876,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.9858261, b: 0.94716984, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -10122,8 +10055,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1071346049}
-  m_LocalRotation: {x: -0.11055886, y: -0.8777919, z: 0.25002033, w: -0.3933803}
-  m_LocalPosition: {x: 0.26967335, y: 7.1350665, z: 4.433608}
+  m_LocalRotation: {x: 0.03241017, y: -0.9153199, z: 0.07512348, w: 0.39432913}
+  m_LocalPosition: {x: 7.7663326, y: 5.8178496, z: 4.0447464}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -12662,7 +12595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3960e19c20d987d439b8c16489bdbcbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fxMaterial: {fileID: 589566525}
+  fxMaterial: {fileID: 1916055318}
 --- !u!1 &1651392033
 GameObject:
   m_ObjectHideFlags: 0
@@ -13274,6 +13207,81 @@ Transform:
   m_Father: {fileID: 1661016785}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &1916055318
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs_KSC_SciFi-Shield (Instance) (Instance) (Instance)
+  m_Shader: {fileID: 4800000, guid: 518153c14cf91414e91bcc60ee2b3fc6, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 45e5669665086754095d1d6efa58d37b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - PattenTex:
+        m_Texture: {fileID: 2800000, guid: 8186892c3af9a9f4ebbb30797d27991c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainShidTex:
+        m_Texture: {fileID: 2800000, guid: a4e46349d2e2ef34c9f61dc36cdeb108, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_8eb873781d39473d93c401656e49b1a8_Texture_1:
+        m_Texture: {fileID: 2800000, guid: e383efc7eb18aa446a071193e999f9d7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_e086df3f2b8c41d4913cb50354400132_Out_0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - MeshMoveAmount: 1
+    - MeshMoveSpeed: 1
+    - RimRange: 1.51
+    - Speed: 0.3
+    - TexScrollSpeedX: 1
+    - TexScrollSpeedY: 0
+    - _Float: 5
+    - _GradientSize: 2.16
+    m_Colors:
+    - EdgeColor: {r: 0, g: 71.01447, b: 205.51157, a: 1}
+    - EdgeColor_2: {r: 1024, g: 0, b: 0, a: 1}
+    - FaceColor: {r: 0, g: 0.09803922, b: 0.7490196, a: 0.9882353}
+    - InnerColor: {r: 1, g: 1, b: 1, a: 0}
+    - NoiseTex_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
+    - PattenColor: {r: 2.670157, g: 1.4927833, b: 0, a: 0}
+    - PattenColor_1: {r: 0, g: 2.1960785, b: 8, a: 1}
+    - PattenColor_2: {r: 0, g: 0, b: 0, a: 1}
+    - Patten_TilingOffset: {r: 1, g: 0.5, b: 0, a: 0}
+    - RimColor: {r: 1.754717, g: 0.35350895, b: 0.20692414, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Hitpos: {r: 0, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &1923727082
 PrefabInstance:
   m_ObjectHideFlags: 0
