@@ -32,6 +32,8 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
     public float hitForce = 10f;
     public float collisionDistance = 1f;
 
+    public bool collisionEvent = false;
+
     public bool deleteY = false;
 
     private Collider _myCollider;
@@ -110,28 +112,28 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
         
     }
 
-    // public void OnCollisionEnter(Collision coll)
-    // {
-    //     if(eventType != EventType.Collision)
-    //         return;
-    //     if(_ragdoll.state == PlayerRagdoll.RagdollState.Ragdoll)
-    //         return;
+    public void OnCollisionEnter(Collision coll)
+    {
+        if(!collisionEvent)
+            return;
+        if(_ragdoll.state == PlayerRagdoll.RagdollState.Ragdoll)
+            return;
 
-    //     if (((1 << coll.gameObject.layer) & targetLayer.value) != 0)
-    //     {
-    //         var dir = Vector3.zero;
-    //         if(hitForcePointType == HitForcePointType.CollisionPoint)
-    //         {
-    //             dir = -coll.GetContact(0).normal;//(GameManager.Instance.player.transform.position - coll.GetContact(0).point).normalized;
-    //         }
-    //         else if(hitForcePointType == HitForcePointType.CenterPosition)
-    //         {
-    //             dir = GetTargetDirection();
-    //         }
+        if (targetLayer == (targetLayer | (1 << coll.gameObject.layer)))
+        {
+            var dir = Vector3.zero;
+            if(hitForcePointType == HitForcePointType.CollisionPoint)
+            {
+                dir = coll.GetContact(0).normal;//(GameManager.Instance.player.transform.position - coll.GetContact(0).point).normalized;
+            }
+            else if(hitForcePointType == HitForcePointType.CenterPosition)
+            {
+                dir = GetTargetDirection();
+            }
 
-    //         ExplosionRagdoll(dir);
-    //     }
-    // }
+            ExplosionRagdoll(dir);
+        }
+    }
 
     public Vector3 GetCollisionPointDirection()
     {

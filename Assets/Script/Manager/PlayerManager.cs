@@ -12,6 +12,9 @@ public class PlayerManager : ManagerBase
     private IKCtrl _playerFootIK;
     [SerializeField] private EMPGun _emp;
     [SerializeField] private Renderer bagRenderer;
+    [SerializeField] private Renderer playerWeaponRenderer;
+    [SerializeField] private Color radioColor;
+    private Material _playerWeaponMat;
     private Material _bagMatrial;
     [SerializeField] private Drone _drone;
 
@@ -124,6 +127,19 @@ public class PlayerManager : ManagerBase
              var data = MessageDataPooling.CastData<Vector3Data>(msg.data);
              _player.addibleSpineVector = data.value;
          });
+
+        AddAction(MessageTitles.playermanager_LightOnOffRadio, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            if(data.value)
+            {
+                _playerWeaponMat.SetVector("_EmissionColor", radioColor * 10f);
+            }
+            else
+            {
+                _playerWeaponMat.SetVector("_EmissionColor", radioColor * 0f);
+            }
+        });
     }
 
     public override void Initialize()
@@ -144,6 +160,15 @@ public class PlayerManager : ManagerBase
         else
         {
             _bagMatrial = bagRenderer.material;
+        }
+
+        if(playerWeaponRenderer == null)
+        {
+            Debug.Log("Not Set PlayerWeaponRender");
+        }
+        else
+        {
+            _playerWeaponMat = playerWeaponRenderer.material;
         }
 
         Cursor.lockState = CursorLockMode.Locked;
