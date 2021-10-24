@@ -61,6 +61,7 @@ public class Drone : UnTransfromObjectBase
     private Animator _droneAnim;
     private FloatingMove _floatingMoveComponent;
     private bool _respawn = false;
+    public bool canMove = true;
 
 
     [Header("DroneEffects")]
@@ -126,7 +127,7 @@ public class Drone : UnTransfromObjectBase
         _timeCounter.AddSequence("ScanProcess",0.4f,null,null);
 
         _timeCounter.CreateSequencer("DissolvProcess");
-        _timeCounter.AddSequence("DissolvProcess",dissolveStartTime,null,(x)=>{
+        _timeCounter.AddSequence("DissolvProcess",dissolveStartTime + 0.3f,null,(x)=>{
             foreach(var item in disapearTargets)
             {
                 item.SetActive(true);
@@ -217,6 +218,13 @@ public class Drone : UnTransfromObjectBase
             _scanning = !_timeCounter.ProcessSequencer("ScanProcess",deltaTime);
         }
 
+        if(canMove)
+            DroneMovement(deltaTime);
+
+    }
+
+    public void DroneMovement(float deltaTime)
+    {
         UpdateDroneSide();
 
         if(player.IsMoving() || player.IsJump)
@@ -247,9 +255,19 @@ public class Drone : UnTransfromObjectBase
         var dist = Vector3.Distance(transform.position,_droneMovePosition);
         jetMat.SetFloat("Power",Mathf.Clamp(dist * 0.7f,0.3f,1f));
 
+        if(dist >= 10f)
+        {
+            _droneMovePosition = GetDronePoint();
+            StartDissolveEffect();
+        }
+
         transform.position = Vector3.Lerp(transform.position,_droneMovePosition,deltaTime * 13f);
         transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, deltaTime * 13f);
+    }
 
+    public void SetCanMove(bool value)
+    {
+        canMove = value;
     }
 
     public void UpdateDissolve(float t)
@@ -266,14 +284,19 @@ public class Drone : UnTransfromObjectBase
         {
             _droneSide = left && right ? (leftHit.distance < rightHit.distance ? 0 : 1) : (left ? 1 : 0);
 
-            dissolveMat.SetFloat("Dissvole",1f);
-            _timeCounter.InitSequencer("DissolvProcess");
-            _dissolve = true;
+            StartDissolveEffect();
+        }
+    }
 
-            foreach(var item in disapearTargets)
-            {
-                item.SetActive(false);
-            }
+    public void StartDissolveEffect()
+    {
+        dissolveMat.SetFloat("Dissvole",1f);
+        _timeCounter.InitSequencer("DissolvProcess");
+        _dissolve = true;
+
+        foreach(var item in disapearTargets)
+        {
+            item.SetActive(false);
         }
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class DroneAIBase : ObjectBase
 {
     public bool directionRotation = false;
+    public bool setTargetToPlayer = true;
     public float speed;
     public float maxSpeed;
 
@@ -27,7 +28,8 @@ public class DroneAIBase : ObjectBase
         
         AddAction(MessageTitles.set_setplayer,(x)=>{
             _player = (PlayerUnit)x.data;
-            _target = _player.transform;
+            if(setTargetToPlayer)
+                _target = _player.transform;
         });
     }
 
@@ -84,11 +86,15 @@ public class DroneAIBase : ObjectBase
 
     public void UpdateTargetDirection()
     {
+        if(_target == null)
+            return;
+
         _targetDirection = (GetTargetPosition() - transform.position).normalized;
         _targetDistance = Vector3.Distance(GetTargetPosition(),transform.position);
         var dir = Quaternion.Euler(MathEx.RandomVector3(_randomRotateDirectionFactor)) * _targetDirection;
         ChangeDirection((dir).normalized);
     }
+
 
     public Vector3 GetTargetPosition()
     {

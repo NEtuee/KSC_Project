@@ -21,6 +21,7 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
     private Vector3 _direction;
 
 
+
     public override void StateInitialize(StateBase prevState)
     {
         base.StateInitialize(prevState);
@@ -30,7 +31,15 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
 
         _direction = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
 
-        target.AnimationChange(2);
+        //target.AnimationChange(2);
+
+        if(Physics.Raycast(transform.position + Vector3.up,target.transform.forward,5f,wallLayer))
+        {
+            var dir = (target.target.position - target.transform.position).normalized;
+            var side = -MathEx.normalize(Vector3.Dot(target.transform.right,dir));
+
+            _velocity = target.transform.right * side * maxSpeed;
+        }
 
         // var dist = Vector3.Distance(target.target.transform.position,centerPosition.position);
         // if(dist >= 12f)
