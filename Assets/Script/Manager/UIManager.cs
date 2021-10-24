@@ -86,6 +86,11 @@ public class UIManager : ManagerBase
     [SerializeField] private HorizontalGageCtrl quickStandingGage;
     [SerializeField] private HorizontalGageCtrl dashGage;
 
+    [Header("KeyGuide Sprite")]
+    [SerializeField] private Image keyGuideImage;
+    [SerializeField] private Sprite keyboardSprite;
+    [SerializeField] private Sprite gamepadSprite;
+
     private EventSystem _eventSystem;
 
     private void Start()
@@ -347,11 +352,16 @@ public class UIManager : ManagerBase
 
         if(_currentPauseState == PauseMenuState.Game)
         {
+            if (PlayerUnit.GamepadMode == true)
+                keyGuideImage.sprite = gamepadSprite;
+            else
+                keyGuideImage.sprite = keyboardSprite;
+
             BoolData setTimeStop = MessageDataPooling.GetMessageData<BoolData>();
             setTimeStop.value = true;
             SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), setTimeStop);
             ActivePage((int)PauseMenuState.Pause);
-
+            
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             return;

@@ -1447,9 +1447,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float _inputSum;
     private float climbingVertical = 0.0f;
     private float climbingHorizon = 0.0f;
-    [SerializeField]private bool _gamepadMode = false;
+    [SerializeField]private static bool _gamepadMode = false;
 
-    public bool GamepadMode => _gamepadMode;
+    public static bool GamepadMode => _gamepadMode;
 
     [Header("ControlBlock")]
     [SerializeField] private bool _chargeShotBlock = false;

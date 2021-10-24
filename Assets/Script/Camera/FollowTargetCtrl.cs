@@ -289,7 +289,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                                                             ref currentAimVelocity, rotSmooth);
             Vector2 moveDir = (aimTransform.anchoredPosition - prevAnchoredPosition).normalized;
 
-            if (_player.GamepadMode == true)
+            if (PlayerUnit.GamepadMode == true)
             {
                 bool detect = false;
                 Vector2 nearestGunTarget = new Vector2();

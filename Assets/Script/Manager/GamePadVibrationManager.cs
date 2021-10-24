@@ -19,7 +19,7 @@ public class GamePadVibrationManager : ManagerBase
 
         AddAction(MessageTitles.gamepadVibrationManager_vibration, (msg) =>
         {
-            if (_playerUnit.GamepadMode == false)
+            if (PlayerUnit.GamepadMode == false)
                 return;
 
             _vibrating = true;
@@ -30,7 +30,7 @@ public class GamePadVibrationManager : ManagerBase
 
         AddAction(MessageTitles.gamepadVibrationManager_vibrationByKey, (msg) =>
         {
-            if (_playerUnit.GamepadMode == false)
+            if (PlayerUnit.GamepadMode == false)
                 return;
 
             _vibrating = true;
@@ -83,7 +83,7 @@ public class GamePadVibrationManager : ManagerBase
 
     private void OnDisable()
     {
-        if (_playerUnit.GamepadMode == false)
+        if (PlayerUnit.GamepadMode == false)
             return;
         Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
     }

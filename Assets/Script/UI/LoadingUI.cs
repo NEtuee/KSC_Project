@@ -10,10 +10,17 @@ public class LoadingUI : MonoBehaviour
     [SerializeField] private Image loadingGageImage;
     [SerializeField] private TextMeshProUGUI loadingTipText;
     [SerializeField] private LoadingTextImageCtrl loadingText;
-
+    [SerializeField] private Image keyGuideImage;
+    [SerializeField] private Sprite keyboardSprite;
+    [SerializeField] private Sprite gamepadSprite;
 
     public void Active(bool active)
     {
+        if (PlayerUnit.GamepadMode == true)
+            keyGuideImage.sprite = gamepadSprite;
+        else
+            keyGuideImage.sprite = keyboardSprite;
+
         loadingTipText.text = "";
         loadingGageImage.fillAmount = 0.0f;
         rootCanvas.enabled = active;
