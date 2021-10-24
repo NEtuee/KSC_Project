@@ -28,6 +28,29 @@ public class PathfollowObjectBase : ObjectBase
         AddAction(MessageTitles.stage_getPath,SetPath);
     }
 
+    public bool FollowPathStraight(float deltaTime)
+    {
+        if(pathArrived || targetTransform == null)
+            return true;
+
+        targetDirection = (targetTransform.position - transform.position).normalized;
+        Move(transform.forward,moveSpeed, deltaTime);
+        if(IsArrivedTarget(distanceAccuracy))
+        {
+            var target = GetNextPoint(out bool isEnd).transform;
+
+            targetTransform = target;
+            if(isEnd && !pathLoop)
+            {
+                pathArrived = true;
+            }
+            
+            return isEnd;
+        }
+
+        return false;
+    }
+
     public bool FollowPath(float deltaTime)
     {
         if(pathArrived || targetTransform == null)

@@ -10,6 +10,7 @@ public class TimeCounterEx
         public class SequenceItem
         {
             public float time;
+            public float totalTime;
             public System.Action<float> process;
             public System.Action<float> triggerd;
         };
@@ -94,10 +95,20 @@ public class TimeCounterEx
             processTime = 0f;
         }
 
+        public void JumpToTarget(int target)
+        {
+            isEnd = false;
+            current = target;
+            currentTime = sequences[current].totalTime;
+            processTime = 0f;
+        }
+
         public void AddSequence(float time, System.Action<float> processEvent = null, System.Action<float> triggerEvent = null)
         {
             SequenceItem sq = new SequenceItem();
             sq.time = time;
+            if(sequences.Count > 0)
+                sq.totalTime = sequences[sequences.Count - 1].totalTime + sequences[sequences.Count - 1].time;
             sq.process = processEvent;
             sq.triggerd = triggerEvent;
 
@@ -150,6 +161,17 @@ public class TimeCounterEx
         }
 
         _sequenceSet[name].AddSequence(limitTime, processEvent, triggerEvent);
+    }
+
+    public void JumpSequencer(string name, int target)
+    {
+        if(!_sequenceSet.ContainsKey(name))
+        {
+            Debug.LogError("key Does not exists");
+            return;
+        }
+
+        _sequenceSet[name].JumpToTarget(target);
     }
 
     public void InitSequencer(string name)

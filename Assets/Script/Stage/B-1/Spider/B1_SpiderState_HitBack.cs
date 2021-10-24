@@ -29,7 +29,7 @@ public class B1_SpiderState_HitBack : B1_SpiderStateBase
         base.StateInitialize(prevState);
 
         _timeCounter.InitTimer("timer",0f,backTime);
-        _direction = Vector3.ProjectOnPlane((target.transform.position - target.target.position),Vector3.up).normalized;
+        _direction = target.backDirection;//Vector3.ProjectOnPlane((target.transform.position - target.target.position),Vector3.up).normalized;
 
         var pos = target.transform.position + _direction * 5f;
         pos.y = _up;

@@ -5,15 +5,19 @@ using UnityEngine;
 public class B1_Spider : PathfollowObjectBase
 {
     public LayerMask groundLayer;
+    public LayerMask wallLayer;
     public StateProcessor stateProcessor;
     public GraphAnimator graphAnimator;
     public Transform body;
     public Transform target;
 
+    public Core core;
+
     public float explosionCheckRadius = 3f;
     public float explosionRadius = 5f;
 
     public bool launch = false;
+    public bool setTargetToPlayer = true;
 
     public Rigidbody shell;
     public Collider shellCollider;
@@ -24,12 +28,15 @@ public class B1_Spider : PathfollowObjectBase
     private Vector3 _localPosition;
     private Quaternion _localRotation;
 
+    [HideInInspector]public Vector3 backDirection;
+
     public override void Assign()
     {
         base.Assign();
         stateProcessor.InitializeProcessor(this);
 
         AddAction(MessageTitles.object_kick,(x)=>{
+            backDirection = Vector3.ProjectOnPlane(transform.position - ((PlayerUnit)x.data).transform.position,Vector3.up).normalized;
             stateProcessor.StateChange("HitBack");
 
             var data = MessageDataPooling.GetMessageData<MD.Vector3Data>();
@@ -53,7 +60,8 @@ public class B1_Spider : PathfollowObjectBase
 
         AddAction(MessageTitles.set_setplayer,(x)=>{
             _player = (PlayerUnit)x.data;
-            target = _player.transform;
+            if(setTargetToPlayer)
+                target = _player.transform;
         });
 
         _shellPosition = shell.transform.localPosition;
@@ -67,8 +75,8 @@ public class B1_Spider : PathfollowObjectBase
 
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
-
-        Respawn();
+        
+        //Respawn();
     }
 
     public void Respawn()
@@ -84,6 +92,7 @@ public class B1_Spider : PathfollowObjectBase
         transform.localRotation = _localRotation;
 
         shellCollider.enabled = false;
+        core.Reactive();
 
         this.gameObject.SetActive(true);
         stateProcessor.StateChange("Idle");
@@ -120,7 +129,8 @@ public class B1_Spider : PathfollowObjectBase
 
     public void Explosion(Vector3 dir,float force)
     {
-        if(GetTargetDistance() <= explosionRadius)
+        var playerDist = Vector3.Distance(_player.transform.position,transform.position);
+        if(playerDist <= explosionRadius)
         {
             _player.Ragdoll.ExplosionRagdoll(force,dir);
         }
@@ -130,8 +140,13 @@ public class B1_Spider : PathfollowObjectBase
         data.position = transform.position;
         data.rotation = Quaternion.identity;
         data.parent = null;
-        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
-        
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);        
+    }
+
+    public void Launch()
+    {
+        launch = true;
+        stateProcessor.StateChange("Turn");
     }
 
     public void ChangeAnimation(string key)

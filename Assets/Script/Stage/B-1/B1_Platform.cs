@@ -10,7 +10,7 @@ public class B1_Platform : ObjectBase
         DOWN
     };
 
-    public System.Action whenDeactive = ()=>{};
+    public new System.Action whenDeactive = ()=>{};
 
     public PlatformState state;
     public Transform platform;

@@ -426,6 +426,9 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort playermanager_LightOnOffRadio = 0x0917;
 
+    public const ushort playermanager_setDroneTransform = 0x0918;
+    public const ushort playermanager_setDroneCanMove = 0x0919;
+
     #endregion
 
     #region ClimbingLineManager

@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 8790946201117423373}
   - component: {fileID: 6781085921379648455}
   - component: {fileID: 5321799102485110597}
-  m_Layer: 0
+  - component: {fileID: 8396729773465153075}
+  m_Layer: 7
   m_Name: Mesh_ConcreteWall_10x10x1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5643130639745251496
 Transform:
@@ -40,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4979782477692477970}
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: -745987163413566686, guid: 69fd0f3bb18f2514b9f73afb03676479, type: 3}
 --- !u!23 &6781085921379648455
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -68,7 +69,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.3
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -833,4 +834,17 @@ MonoBehaviour:
   m_SkinMeshRef: {fileID: 0}
   m_OriginalMeshObject: {fileID: -745987163413566686, guid: 69fd0f3bb18f2514b9f73afb03676479,
     type: 3}
-  m_Mode: 0
+  m_Mode: 1
+--- !u!65 &8396729773465153075
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4979782477692477970}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 10.000002, z: 10.000002}
+  m_Center: {x: 0, y: 0, z: 5.000001}

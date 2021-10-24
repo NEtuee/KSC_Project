@@ -56,6 +56,10 @@ public class Core : Hitable
 
     public void Reactive()
     {
+        if(renderer == null)
+            renderer = GetComponent<Renderer>();
+        if(collider == null)
+            collider = GetComponent<Collider>();
         collider.enabled = true;
         renderer.enabled = true;
         isOver = false;
