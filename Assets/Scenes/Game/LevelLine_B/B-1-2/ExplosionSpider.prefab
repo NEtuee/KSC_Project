@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 4337455491926781602}
   - component: {fileID: 4337455491926781601}
   - component: {fileID: 4337455491926781611}
+  - component: {fileID: 7012762625644445726}
   m_Layer: 15
   m_Name: ExplosionSpider
   m_TagString: Untagged
@@ -142,6 +143,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 128
+  rayOffset: {x: 0, y: 0, z: 0}
   rayPointCast: 0
   rayDistance: 10
   baseHeight: 1
@@ -149,6 +151,7 @@ MonoBehaviour:
   rotation: 1
   setParentToGround: 1
   sphereRay: 0
+  rotateToRay: 0
 --- !u!54 &4337455491926781600
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -198,15 +201,21 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
   stateProcessor: {fileID: 4337455491926781605}
   graphAnimator: {fileID: 4337455491926781604}
   body: {fileID: 4337455491972001722}
   target: {fileID: 0}
+  core: {fileID: 4337455493569157902}
   explosionCheckRadius: 3
   explosionRadius: 5
   launch: 0
+  setTargetToPlayer: 1
   shell: {fileID: 4337455493114624040}
   shellCollider: {fileID: 4337455493114624037}
+  backDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &4337455491926781605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +234,7 @@ MonoBehaviour:
   - {fileID: 4337455491926781603}
   - {fileID: 4337455491926781602}
   - {fileID: 4337455491926781601}
+  - {fileID: 7012762625644445726}
   currentState: 
 --- !u!114 &4337455491926781604
 MonoBehaviour:
@@ -556,6 +566,20 @@ MonoBehaviour:
   targets: []
   force: 100
   torque: 100
+--- !u!114 &7012762625644445726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4337455491926781663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d465c272f4738f48a07e90237de080a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 0}
+  processor: {fileID: 0}
 --- !u!1 &4337455491966575167
 GameObject:
   m_ObjectHideFlags: 0
@@ -1047,6 +1071,7 @@ MonoBehaviour:
   ikHeight: 0
   firstMove: 0
   ikDetach: 1
+  attatchToTarget: 0
   moving: 0
   ik: {fileID: 4337455492276291591}
   ikHolder: {fileID: 0}
@@ -1200,6 +1225,7 @@ MonoBehaviour:
   ikHeight: 0
   firstMove: 0
   ikDetach: 1
+  attatchToTarget: 0
   moving: 0
   ik: {fileID: 4337455492253838305}
   ikHolder: {fileID: 0}
@@ -1507,6 +1533,7 @@ MonoBehaviour:
   ikHeight: 0
   firstMove: 0
   ikDetach: 1
+  attatchToTarget: 0
   moving: 0
   ik: {fileID: 4337455493617462538}
   ikHolder: {fileID: 0}
@@ -2872,6 +2899,7 @@ MonoBehaviour:
   ikHeight: 0
   firstMove: 0
   ikDetach: 1
+  attatchToTarget: 0
   moving: 0
   ik: {fileID: 4337455493096217912}
   ikHolder: {fileID: 0}
@@ -2978,15 +3006,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdbcc5ec9b4740b489aec5a1e3545463, type: 3}
---- !u!4 &4304040152922914016 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cdbcc5ec9b4740b489aec5a1e3545463,
-    type: 3}
-  m_PrefabInstance: {fileID: 4337455493569157899}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3526552822441879130 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cdbcc5ec9b4740b489aec5a1e3545463,
+    type: 3}
+  m_PrefabInstance: {fileID: 4337455493569157899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4304040152922914016 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cdbcc5ec9b4740b489aec5a1e3545463,
     type: 3}
   m_PrefabInstance: {fileID: 4337455493569157899}
   m_PrefabAsset: {fileID: 0}

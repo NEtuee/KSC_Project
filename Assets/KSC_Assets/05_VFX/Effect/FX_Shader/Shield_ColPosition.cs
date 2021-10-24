@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[ExecuteInEditMode]
+
 public class Shield_ColPosition : MonoBehaviour
 {
     private GameObject fxObject;

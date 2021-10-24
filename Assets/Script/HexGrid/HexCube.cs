@@ -32,6 +32,8 @@ public class HexCube : MonoBehaviour
 
     private Collider _collider;
     private MeshRenderer _renderer;
+    private System.Action _whenDisable;
+    private System.Action _whenEnable;
 
     public void Start()
     {
@@ -83,6 +85,10 @@ public class HexCube : MonoBehaviour
                 if(_inoutMoveTime >= 1f)
                 {
                     _isActive = _inMove;
+                    if(!_isActive)
+                        _whenDisable?.Invoke();
+                    else
+                        _whenEnable?.Invoke();
 
                     if(_inverseMoveTime == 0f)
                     {
@@ -146,7 +152,7 @@ public class HexCube : MonoBehaviour
         transform.localPosition = pos;
     }
 
-    public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f)
+    public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f, System.Action disable = null, System.Action enable = null)
     {
         _inMove = active;
         _outMove = !active;
@@ -157,6 +163,9 @@ public class HexCube : MonoBehaviour
         _moveStartTime = startTime;
         _inoutMoveTime = 0f;
         _moveSpeed = speed;
+
+        _whenDisable = disable;
+        _whenEnable = enable;
     }
 
     public void SetActive(bool active, bool timer, float disapearTime = 1f)
