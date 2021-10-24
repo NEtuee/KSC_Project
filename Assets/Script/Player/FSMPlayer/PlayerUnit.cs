@@ -370,6 +370,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
             isNearGround = true;
 
         _animator.SetBool("IsNearGround", isNearGround);
+
+
+        //if(Keyboard.current.fKey.wasPressedThisFrame)
+        //{
+        //    SendMessageEx(MessageTitles.stage_droneSpecial,GetSavedNumber("StageManager"),null);
+        //}
     }
 
     private void LateUpdate()
@@ -568,6 +574,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (groundDistance <= groundMinDistance)
         {
+            //bool detectGroundSphere = Physics.OverlapSphereNonAlloc(transform.TransformPoint(groundCheckOffset), groundCheckRadius, _colliderBuffer) != 0;
+
             if (groundAngle < invalidityAngle)
             {
                 //isGrounded = true;
@@ -915,6 +923,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         ChangeState(defaultState);
 
         bCanDash = true;
+        var booldata = MessageDataPooling.GetMessageData<BoolData>();
+        booldata.value = true;
+        SendMessageEx(MessageTitles.playermanager_LightOnOffRadio, GetSavedNumber("PlayerManager"), booldata);
         bCanQuickStanding = true;
 
         currentDashCoolTime.Value = dashCoolTime;
@@ -1091,8 +1102,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         currentDashCoolTime.Value = _timer.IncreaseTimerSelf("Dash", out bool limit, Time.fixedDeltaTime);
 
-        if(limit)
+        if (limit)
+        {
             bCanDash = true;
+            var booldata = MessageDataPooling.GetMessageData<BoolData>();
+            booldata.value = true;
+            SendMessageEx(MessageTitles.playermanager_LightOnOffRadio, GetSavedNumber("PlayerManager"), booldata);
+        }
 
         currentQuickStandingCoolTime.Value += _timer.IncreaseTimerSelf("QuickStand", out limit, Time.fixedDeltaTime);
 
@@ -1103,6 +1119,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void UseDash()
     {
         bCanDash = false;
+        var booldata = MessageDataPooling.GetMessageData<BoolData>();
+        booldata.value = false;
+        SendMessageEx(MessageTitles.playermanager_LightOnOffRadio, GetSavedNumber("PlayerManager"), booldata);
         _timer.InitTimer("Dash", 0.0f, DashCoolTime);
     }
 
@@ -1451,7 +1470,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private FrontChecker frontChecker;
     [SerializeField] private Vector3 wallUnderCheckOffset;
     [SerializeField] private Vector3 detectionOffset;
+    [SerializeField] private Vector3 groundCheckOffset;
+    [SerializeField] private float groundCheckRadius = 1.8f;
     private bool _ledUpAdjust = false;
+    private Collider[] _colliderBuffer = new Collider[10];
 
     [Header("Gun")]
     [SerializeField] private Animator gunAnim;
@@ -1550,6 +1572,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
         Gizmos.DrawWireSphere(UpperCheckCapsuleStart, upCheckCapsuleRadius);
         Gizmos.DrawWireSphere(UpperCheckCapsuleEnd, upCheckCapsuleRadius);
         Gizmos.DrawLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd);
+
+        Gizmos.DrawWireSphere(transform.TransformPoint(groundCheckOffset),groundCheckRadius);
     }
 #endif
 
@@ -1661,12 +1685,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _currentState.OnQuickStand(value, this, _animator);
     }
 
-    public void OnKick(InputAction.CallbackContext value)
+    public void OnDroneSpacial(InputAction.CallbackContext value)
     {
         if (value.performed == false || Time.timeScale == 0f)
             return;
 
-        //_currentState.OnKick(value, this, _animator);
+        SendMessageEx(MessageTitles.stage_droneSpecial, GetSavedNumber("StageManager"), null);
     }
 
     #endregion
