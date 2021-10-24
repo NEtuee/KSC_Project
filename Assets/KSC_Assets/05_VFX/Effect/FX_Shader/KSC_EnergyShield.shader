@@ -25,6 +25,7 @@ Shader "KSC/KSC_EnergyShield"
         [HDR]_HitColor ("Base Color", Color ) = (1,1,1,1)
         _Hitpos ("Collision Point", Vector) = (0.0,0.0,0.0,0.0)
         _GradientSize ("Gradient Size", float ) = 1.0
+        _GradPower ("Gradient Power", float) = 1.0
 
 
     }
@@ -86,6 +87,7 @@ Shader "KSC/KSC_EnergyShield"
             float4 _HitColor;
             float4 _Hitpos;
 
+            float _GradPower;
             float _GradientSize;
             float _RimRange;
             float _MeshMoveSpeed;
@@ -108,6 +110,7 @@ Shader "KSC/KSC_EnergyShield"
                 o.ObjPos = v.vertex;
                 o.uv = v.uv;
                 o.uv2 = v.uv2;
+                o.uv3 = v.uv3;
                 return o;
             }
 
@@ -143,8 +146,8 @@ Shader "KSC/KSC_EnergyShield"
 
                 float Dist = distance(_Hitpos.xyz , i.ObjPos.xyz);
                 Gradient += saturate( (1- Dist * _GradientSize) * _Hitpos.w);
-
-                float3 col = Gradient * _HitColor.rgb;
+                Gradient = saturate(pow(Gradient,_GradPower));
+                float3 col = ( Gradient * HitTex ) + (Gradient * _HitColor.rgb);
                 //----=------------------
 
 
