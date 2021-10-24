@@ -9,6 +9,7 @@ public class IKFootPointRotator : MonoBehaviour
     public List<IKLegMovement> legs;
 
     public LayerMask layerMask;
+    public Vector3 rayOffset = Vector3.zero;
     public bool rayPointCast = false;
 
     public float rayDistance = 10f;
@@ -57,7 +58,7 @@ public class IKFootPointRotator : MonoBehaviour
 
         if(setParentToGround)
         {
-            if(ray.Cast(transform.position,out hit))
+            if(ray.Cast(transform.position + rayOffset,out hit))
             {
                 transform.SetParent(hit.transform);
             }
@@ -65,7 +66,7 @@ public class IKFootPointRotator : MonoBehaviour
 
         if(!rayPointCast)
         {
-            if(ray.Cast(transform.position,out hit))
+            if(ray.Cast(transform.position + rayOffset,out hit))
             {
                 Debug.DrawLine(transform.position,hit.point,Color.red);
                 var point = hit.point + (-down * baseHeight);

@@ -11,6 +11,8 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     }
     protected ObjectTransform _objTransform = new ObjectTransform();
 
+
+    public System.Action whenDeactive = ()=>{};
     protected int _currentManagerNumber;
 
     protected override void Awake()
@@ -87,5 +89,10 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     protected virtual void OnDestroy()
     {
         Dispose();
+    }
+
+    protected virtual void OnDisable()
+    {
+        whenDeactive?.Invoke();
     }
 }

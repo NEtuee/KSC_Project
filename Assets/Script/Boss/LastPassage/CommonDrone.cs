@@ -26,6 +26,17 @@ public class CommonDrone : DroneAIBase
     private Vector3 _spawnPos;
     private Quaternion _spawnRot;
 
+    public override void Assign()
+    {
+        base.Assign();
+        _spawnPos = transform.localPosition;
+        _spawnRot = transform.rotation;
+
+        this.gameObject.SetActive(startActive);
+
+        shield.whenDestroy.AddListener(()=>{SendBroadcastMessage(MessageTitles.customTitle_start + 10,this,true);});
+    }
+
     public override void Initialize()
     {
         base.Initialize();
@@ -40,11 +51,6 @@ public class CommonDrone : DroneAIBase
 
         _timeCounterEx.InitTimer("launch",0f,launchTime);
         UpdateTargetDirection();
-
-        this.gameObject.SetActive(startActive);
-
-        _spawnPos = transform.localPosition;
-        _spawnRot = transform.rotation;
     }
 
     public override void FixedProgress(float deltaTime)

@@ -39,6 +39,18 @@ public class PlayerManager : ManagerBase
             _player.FootIK.InitPelvisHeight();
         });
 
+        AddAction(MessageTitles.playermanager_setDroneTransform, (msg) =>
+        {
+            PositionRotation data = MessageDataPooling.CastData<PositionRotation>(msg.data);
+            _drone.transform.SetPositionAndRotation(data.position, data.rotation);
+        });
+
+        AddAction(MessageTitles.playermanager_setDroneCanMove, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            _drone.SetCanMove(data.value);
+        });
+
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
          {
              _player.transform.SetParent(null);

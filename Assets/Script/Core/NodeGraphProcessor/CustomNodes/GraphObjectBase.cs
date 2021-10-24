@@ -27,6 +27,8 @@ public class GraphObjectBase : UnTransfromObjectBase
 
     protected override void Awake()
     {
+        if(graphOrigin == null)
+            Debug.LogError("Graph is null");
         InitGraph();
         base.Awake();
 
