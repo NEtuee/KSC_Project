@@ -1577,7 +1577,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     }
 #endif
 
-    protected void OnCollisionEnter(Collision collision)
+    protected void OnCollisionStay(Collision collision)
     {
         if(_currentState == dashState)
         {

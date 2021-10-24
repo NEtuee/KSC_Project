@@ -28,6 +28,8 @@ public class PlayerState_Jump : PlayerState
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.InitVelocity();
+
         playerUnit.CurrentJumpPower -= playerUnit.Gravity * Time.fixedDeltaTime;
         playerUnit.CurrentJumpPower = Mathf.Clamp(playerUnit.CurrentJumpPower, playerUnit.MinJumpPower, 50.0f);
 

@@ -322,17 +322,17 @@ public class PlayerState_Aiming : PlayerState
             soundPlayData.returnValue = false;
             playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundPlayData);
 
-            playerUnit.chargeTime.Value = 0.0f;
-
-            if (playerUnit.chargeTime.Value >= 3)
+            if (playerUnit.chargeTime.Value >= playerUnit.ChargeConsumeTime)
             {
                 SetTimeScaleMsg data = MessageDataPooling.GetMessageData<SetTimeScaleMsg>();
                 data.timeScale = 0.0f;
                 data.lerpTime = 0.4f;
                 data.stopTime = 0.2f;
                 data.startTime = 0.02f;
-                playerUnit.SendMessageEx(MessageTitles.timemanager_settimescale, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), data);
+                playerUnit.SendMessageEx(MessageTitles.timemanager_settimescale, UniqueNumberBase.GetSavedNumberStatic("TimeManager"), data);
             }
+
+            playerUnit.chargeTime.Value = 0.0f;
 
             playerUnit.CanCharge = false;
         }

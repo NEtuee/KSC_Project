@@ -199,6 +199,7 @@ public class UIManager : ManagerBase
         {
             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
             resolutionDropdown.value = data.value;
+            Debug.Log("Set Resolution");
         });
         AddAction(MessageTitles.uimanager_setvaluescreenmodedropdown, (msg) =>
         {
@@ -209,6 +210,7 @@ public class UIManager : ManagerBase
         {
             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
             vsyncDropdown.value = data.value;
+            Debug.Log("Set Vsync");
         });
 
         AddAction(MessageTitles.uimanager_fadeinout, (msg) =>
@@ -577,7 +579,7 @@ public class UIManager : ManagerBase
 
     IEnumerator DeferredCallFadeOutAction(float duration, Action fadeOutAction)
     {
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSecondsRealtime(duration);
         fadeOutAction?.Invoke();
     }
     #endregion
