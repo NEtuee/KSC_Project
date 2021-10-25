@@ -11,7 +11,7 @@ public class DroneStatusUI : MonoBehaviour
     private void Awake()
     {
         _canvas = GetComponent<Canvas>();
-        //_canvas.enabled = false;
+        _canvas.enabled = false;
     }
 
     public void SetHpCount(int count)

@@ -52,9 +52,6 @@ public class DroneHelperRoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (UnityEngine.InputSystem.Keyboard.current.nKey.wasPressedThisFrame)
-            ShowText("안녕하세요. 이건 테스트 입니다. 알맞은 대사를 어쩌구 저쩌구 으으으응애애애");
-
         if(ReferenceEquals(currentHelper, null) == false)
         {
             currentHelper.HelperUpdate();
