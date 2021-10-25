@@ -360,7 +360,7 @@ public static partial class MessageTitles
     public const ushort player_initalizemove = 0x0903;
 
     /// <summary>
-    /// data = bool
+    /// data = BoolData
     /// </summary>
     public const ushort player_visibledrone = 0x0904;
 

@@ -196,8 +196,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         AddAction(MessageTitles.player_visibledrone, (msg) =>
         {
-            bool visible = (bool)msg.data;
-            drone.Visible = visible;
+            var visible = MessageDataPooling.CastData<BoolData>(msg.data);
+            drone.Visible = visible.value;
         });
 
         AddAction(MessageTitles.fmod_soundEmitter, (msg) =>
