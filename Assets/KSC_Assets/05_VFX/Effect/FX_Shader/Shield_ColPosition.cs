@@ -3,18 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[ExecuteInEditMode]
+
 public class Shield_ColPosition : MonoBehaviour
 {
     private GameObject fxObject;
     public Material fxMaterial;
 
-    private Vector4 HitPosition;
+    private Vector4[] HitPosition;
+
+
+    [SerializeField]
+    int CurrentPos = 0;
+    float CurrentTime = 0;
+
+
+    [Header("VFX Setting")]
+   //public string FXpostion = "FXXPos";
+    public float DecreaseTime = 1.0f;
+    public float ActionSpeed = 0.1f;
+
 
         private void OnEnable()
     {
         fxObject = this.gameObject;
         fxMaterial = fxObject.GetComponent<Renderer>().material;
+
+
     }
 
     void OnCollisionEnter (Collision coll)
@@ -31,9 +45,34 @@ public class Shield_ColPosition : MonoBehaviour
     
     void ColHit (Vector3 hitpos)
     {
-        HitPosition = hitpos;
-        HitPosition.w = 1.0f;
-        fxMaterial.SetVector("_Hitpos",HitPosition);
+        if ( CurrentTime >= ActionSpeed)
+        {
+            HitPosition[CurrentPos] = hitpos;
+            HitPosition[CurrentPos].w = 1.0f;
+
+            fxMaterial.SetVector("_Hitpos", HitPosition[CurrentPos]);
+
+            CurrentTime = 0.0f;
+
+
+        }
+
+
+    }
+    void FXmask()
+    {
+        if (HitPosition[0].w > 0.0f)
+        {
+            HitPosition[0].w = Mathf.Lerp(HitPosition[CurrentPos].w, 0.0f, Time.deltaTime * DecreaseTime);
+
+            fxMaterial.SetVector("_Hitpos", HitPosition[CurrentPos]);
+        }
+    }
+
+    void Update()
+    {
+        CurrentTime += Time.deltaTime;
+        FXmask();
     }
 
 }
