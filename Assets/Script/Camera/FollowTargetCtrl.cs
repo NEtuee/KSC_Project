@@ -291,17 +291,20 @@ public class FollowTargetCtrl : UnTransfromObjectBase
             target.x = target.y;
             target.y = -targetRot.x;
             Vector2 prevAnchoredPosition = aimTransform.anchoredPosition;
-            if (_mouseX != 0.0f && _mouseY != 0.0f)
-            {
-                aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition, target * crosshairMovingSpeed,
-                                                                ref currentAimVelocity, rotSmooth);
-            }
+
             Vector2 moveDir = (aimTransform.anchoredPosition - prevAnchoredPosition).normalized;
             //Vector2 temp = new Vector2();
             //Vector2 prev = new Vector2();
 
             if (PlayerUnit.GamepadMode == true)
             {
+                if (_mouseX != 0.0f && _mouseY != 0.0f)
+                {
+                    aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition, target * crosshairMovingSpeed,
+                                                                    ref currentAimVelocity, rotSmooth);
+                }
+
+
                 bool detect = false;
                 Vector2 nearestGunTarget = new Vector2();
                 Vector2 aimTransformPos = aimTransform.transform.position;
@@ -325,7 +328,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                         {
                             nearestGunTarget = screenPos;
                         }
-                        else 
+                        else
                         {
                             if ((aimTransformPos - nearestGunTarget).sqrMagnitude > (aimTransformPos - screenPos).sqrMagnitude)
                                 nearestGunTarget = screenPos;
@@ -339,7 +342,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                 //prev = aimTransform.anchoredPosition;
                 if (detect == true && (aimTransformPos - nearestGunTarget).magnitude <= supportRange)
                 {
-                    if(_mouseX == 0.0f && _mouseY == 0.0f)
+                    if (_mouseX == 0.0f && _mouseY == 0.0f)
                     {
                         supporting = true;
                         aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, supportSpeed * Time.fixedDeltaTime);
@@ -357,6 +360,12 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                         }
                     }
                 }
+            }
+            else
+            {
+                supportTransform.position = new Vector2(-1f, -1f);
+                aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition, target * crosshairMovingSpeed,
+                                                                    ref currentAimVelocity, rotSmooth);
             }
 
 
