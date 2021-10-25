@@ -72,17 +72,6 @@ public class DroneHelper_Arachne : DroneHelper
             }
         }
 
-        if (root.helping == true)
-        {
-            bool limit;
-            root.timer.IncreaseTimer("Help", root.hintTime, out limit);
-            if (limit == true)
-            {
-                root.helping = false;
-                root.ActiveDescriptCanvas(false);
-                root.drone.OrderDefault();
-            }
-        }
     }
 
     public void ScanFlag()

@@ -91,6 +91,9 @@ public class UIManager : ManagerBase
     [SerializeField] private Sprite keyboardSprite;
     [SerializeField] private Sprite gamepadSprite;
 
+    [Header("Drone Status UI")]
+    [SerializeField] private DroneStatusUI droneStatusUI;
+
     private EventSystem _eventSystem;
 
     private void Start()
@@ -333,6 +336,18 @@ public class UIManager : ManagerBase
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
             if (dashGage != null)
                 dashGage.SetFactor(data.value);
+        });
+
+        AddAction(MessageTitles.uimanager_enableDroneStatusUi, (msg) =>
+        {
+            BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
+            droneStatusUI.Enable(data.value);
+        });
+
+        AddAction(MessageTitles.uimanager_setDroneHpValue, (msg) =>
+        {
+            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
+            droneStatusUI.SetHpCount(data.value);
         });
     }
 

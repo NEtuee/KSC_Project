@@ -183,6 +183,17 @@ public static partial class MessageTitles
     /// data = FloatData
     /// </summary>
     public const ushort uimanager_setFactorDashCoolTime = 0x0332;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort uimanager_enableDroneStatusUi = 0x0333;
+
+    /// <summary>
+    /// data = IntData
+    /// </summary>
+    public const ushort uimanager_setDroneHpValue = 0x0334;
+
     #endregion
 
     /// <summary>
