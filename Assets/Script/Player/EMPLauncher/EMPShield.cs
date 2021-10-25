@@ -315,7 +315,8 @@ public class EMPShield : Hitable
         data.rotation = Quaternion.identity;
         data.parent = null;
         SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
-        collider.enabled = false;
+        if (collider != null)
+            collider.enabled = false;
         if(renderer != null)
             renderer.enabled = false;
         isOver = true;

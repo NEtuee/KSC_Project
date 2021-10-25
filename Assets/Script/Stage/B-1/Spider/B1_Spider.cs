@@ -88,7 +88,9 @@ public class B1_Spider : PathfollowObjectBase
         shell.isKinematic = true;
         shell.transform.SetParent(transform);
         shell.transform.localPosition = _shellPosition;
-        
+        shell.rotation = Quaternion.identity;
+
+
         transform.localPosition = _localPosition;
         transform.localRotation = _localRotation;
 

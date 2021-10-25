@@ -31,10 +31,12 @@ public class B1_FlySpiderState_RushReady : B1_FlySpiderStateBase
     {
         base.StateInitialize(prevState);
 
-        _targetPosition = transform.position;
+        _targetPosition = target.transform.position;
         lineRenderer.enabled = true;
 
         _lineEnableTime = 0f;
+
+        _timeCounter.InitSequencer("main");
     }
 
     public override void StateProgress(float deltaTime)
