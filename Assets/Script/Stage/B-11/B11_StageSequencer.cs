@@ -19,6 +19,8 @@ public class B11_StageSequencer : ObjectBase
             CutsceneFence,
             InvokeEvent,
             DroneAnnihilationFence,
+            ActiveHPUI,
+            DeactiveHPUI,
         };
         
         public string identifier;
@@ -324,6 +326,25 @@ public class B11_StageSequencer : ObjectBase
             {
                 _timeCounter.AddFence(name, () => {
                     return database.droneCache.updateCount == 0;
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.ActiveHPUI)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x)=>
+                {
+                    var data = MessageDataPooling.GetMessageData<MD.BoolData>();
+                    data.value = true;
+                    SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
+                    
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.DeactiveHPUI)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    var data = MessageDataPooling.GetMessageData<MD.BoolData>();
+                    data.value = false;
+                    SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
                 });
             }
         }

@@ -81,6 +81,8 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
             target.player.Ragdoll.ExplosionRagdoll(hitForce, _direction);
             wallHit.moveDirection = -_direction;
             StateChange("WallHit");
+
+            HitEffect();
         }
     }
 
@@ -95,7 +97,22 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
             {
                 wallHit.moveDirection = hit.normal;
                 StateChange("WallHit");
+
+                HitEffect();
             }
         }
+    }
+
+    public void HitEffect()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+        data.key = "MedusaHit";
+        //data.parent = target.hitPosition;
+        data.position = target.hitPosition.position;
+        data.rotation = Quaternion.LookRotation(-target.transform.up, Vector3.up);
+
+        target.SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation,
+                    UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
     }
 }
