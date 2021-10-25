@@ -20,7 +20,7 @@ public class B11_StageSequencer : ObjectBase
             InvokeEvent,
             DroneAnnihilationFence,
         };
-
+        
         public string identifier;
         public EventEnum type;
         public int code;

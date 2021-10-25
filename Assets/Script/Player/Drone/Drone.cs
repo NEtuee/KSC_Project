@@ -57,8 +57,9 @@ public class Drone : UnTransfromObjectBase
     [Header("DroneVisual")]
     [SerializeField] private Transform droneVisual;
     [SerializeField] private Transform droneBody;
+    public Animator mainAnimator;
     private Vector3 droneBodyOriginPos;
-    private Animator _droneAnim;
+    //private Animator _droneAnim;
     private FloatingMove _floatingMoveComponent;
     private bool _respawn = false;
     public bool canMove = true;
@@ -132,8 +133,16 @@ public class Drone : UnTransfromObjectBase
             {
                 item.SetActive(true);
             }
+
+            ChangeAnimation(1);
         });
         _timeCounter.AddSequence("DissolvProcess",dissolveTime,UpdateDissolve,null);
+
+        _timeCounter.CreateSequencer("RandomMove");
+        _timeCounter.AddSequence("RandomMove", 15f, null, (x) =>
+        {
+            //ChangeAnimation(Random.Range(1, 3));
+        });
     }
 
     public override void Initialize()
@@ -165,7 +174,7 @@ public class Drone : UnTransfromObjectBase
             return;
         }
 
-        _droneAnim = droneVisual.GetComponent<Animator>();
+        //_droneAnim = droneVisual.GetComponent<Animator>();
         _floatingMoveComponent = droneVisual.GetComponent<FloatingMove>();
         droneBodyOriginPos = droneBody.localPosition;
 
@@ -185,6 +194,7 @@ public class Drone : UnTransfromObjectBase
 
         _timeCounter.InitSequencer("ScanProcess");
         _timeCounter.InitSequencer("DissolvProcess");
+        _timeCounter.InitSequencer("RandomMove");
     }
 
     // Update is called once per frame
@@ -230,6 +240,11 @@ public class Drone : UnTransfromObjectBase
         if(player.IsMoving() || player.IsJump)
         {
             _droneMovePosition = GetDronePoint();
+            if (_timeCounter.ProcessSequencer("RandomMove", deltaTime))
+            {
+                _timeCounter.InitSequencer("RandomMove");
+            }
+
         }
         
         if(player.IsClimbing())
@@ -263,6 +278,14 @@ public class Drone : UnTransfromObjectBase
 
         transform.position = Vector3.Lerp(transform.position,_droneMovePosition,deltaTime * 13f);
         transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, deltaTime * 13f);
+    }
+
+    public void ChangeAnimation(int code)
+    {
+        mainAnimator.SetTrigger("Change");
+        mainAnimator.SetInteger("Target",code);
+
+        _timeCounter.InitSequencer("RandomMove");
     }
 
     public void SetCanMove(bool value)
@@ -588,6 +611,7 @@ public class Drone : UnTransfromObjectBase
 
         _scanTargetRotation = Quaternion.LookRotation(targetDir,Vector3.up);
         _droneScaner.Scanning();
+        ChangeAnimation(3);
     }
 
     public void OrderApproch(Transform target)
@@ -695,10 +719,10 @@ public class Drone : UnTransfromObjectBase
         droneVisual.localPosition = Vector3.zero;
         droneVisual.localRotation = Quaternion.identity;
 
-        _droneAnim.enabled = true;
+        //_droneAnim.enabled = true;
         _floatingMoveComponent.enabled = false;
         
-        _droneAnim.SetTrigger("Respawn");
+        //_droneAnim.SetTrigger("Respawn");
     }
 
     public void Gesture(Transform playerTransform, int num)
@@ -710,18 +734,18 @@ public class Drone : UnTransfromObjectBase
         droneVisual.localPosition = Vector3.zero;
         droneVisual.localRotation = Quaternion.identity;
 
-        _droneAnim.enabled = true;
-        _floatingMoveComponent.enabled = false;
+        //_droneAnim.enabled = true;
+        //_floatingMoveComponent.enabled = false;
 
-        if(num == 1)
-           _droneAnim.SetTrigger("Gesture1");
-        else
-           _droneAnim.SetTrigger("Gesture2");
+        //if(num == 1)
+        //   _droneAnim.SetTrigger("Gesture1");
+        //else
+        //   _droneAnim.SetTrigger("Gesture2");
     }
 
     public void CompleteRespawn()
     {
-        _droneAnim.SetTrigger("Init");
+        //_droneAnim.SetTrigger("Init");
 
         transform.SetParent(null);
         droneBody.localPosition = droneBodyOriginPos;

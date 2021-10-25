@@ -18,6 +18,7 @@ public class PlayerState_Dash : PlayerState
         animator.SetBool("Dash", true);
         animator.ResetTrigger("Jump");
 
+        playerUnit.Drone.ChangeAnimation(4);
         //StartCoroutine(playerUnit.StartDashCoolTime());
         playerUnit.UseDash();
     }
