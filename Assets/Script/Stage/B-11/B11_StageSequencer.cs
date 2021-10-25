@@ -45,14 +45,14 @@ public class B11_StageSequencer : ObjectBase
 
     public UnityEngine.UI.Image hpImage;
 
-    public float genieHP = 100f;
+    public int genieHP = 10;
 
     List<HexCube> _spawnCubeList = new List<HexCube>();
     List<HexCube> _medusaSpawnList = new List<HexCube>();
     List<HexCube> _medusaSpawnNear = new List<HexCube>();
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 
-    private float _hp;
+    private int _hp;
     private float _fillAmountTarget = 1f;
 
     private bool _loopProcess = false;
@@ -74,7 +74,7 @@ public class B11_StageSequencer : ObjectBase
             var dist = Vector3.Distance(drone.transform.position, centerTransform.position);
             if(drone.explosionDistance > dist)
             {
-                DecreaseHP(10f);
+                DecreaseHP(1);
             }
         });
 
@@ -329,13 +329,16 @@ public class B11_StageSequencer : ObjectBase
         }
     }
 
-    public void DecreaseHP(float factor)
+    public void DecreaseHP(int factor)
     {
         _hp -= factor;
         _hp = _hp < 0 ? 0 : _hp;
+        var data = MessageDataPooling.GetMessageData<MD.IntData>();
+        data.value = _hp;
+        SendMessageEx(MessageTitles.uimanager_setDroneHpValue, GetSavedNumber("UIManager"), data);
 
         UpdateImageAmount();
-        if(_hp <= 0f)
+        if(_hp <= 0)
         {
             _player.PlayerDead();
         }
