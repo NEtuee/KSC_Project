@@ -499,4 +499,6 @@ public static partial class MessageTitles
     /// data 
     /// </summary>
     public const ushort set_gunTargetMessageObject = 0x1006;
+
+    public const ushort dash_trigger = 0x1007;
 }

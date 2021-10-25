@@ -18,6 +18,7 @@ public class B11_StageSequencer : ObjectBase
             AnnihilationFence,
             CutsceneFence,
             InvokeEvent,
+            DroneAnnihilationFence,
         };
 
         public string identifier;
@@ -317,6 +318,12 @@ public class B11_StageSequencer : ObjectBase
             {
                 _timeCounter.AddFence(name,()=>{
                     return !LevelEdit_TimelinePlayer.CUTSCENEPLAY;
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.DroneAnnihilationFence)
+            {
+                _timeCounter.AddFence(name, () => {
+                    return database.droneCache.updateCount == 0;
                 });
             }
         }

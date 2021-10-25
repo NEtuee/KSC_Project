@@ -1582,6 +1582,17 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if(_currentState == dashState)
         {
             MessageReceiver receiver;
+            if(collision.gameObject.TryGetComponent<MessageEmpTarget>(out var dashTarget))
+            {
+                Message msg = new Message();
+                msg.Set(MessageTitles.object_kick, dashTarget.parent.uniqueNumber, this, this);
+                dashTarget.parent.ReceiveMessage(msg);
+                if (frontChecker.Overlap)
+                {
+                    ChangeState(dashReboundState);
+                }
+            }
+
             if (collision.gameObject.TryGetComponent<MessageReceiver>(out receiver))
             {
                 Message msg = new Message();

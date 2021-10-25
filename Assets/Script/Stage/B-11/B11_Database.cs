@@ -87,7 +87,7 @@ public class B11_Database : MonoBehaviour
                     return -1;
                 medusaCount += item.enabled ? 1 : 0;
             }
-            return spiderCache.updateCount + flySpiderCache.updateCount + droneCache.updateCount + medusaCount;
+            return spiderCache.updateCount + flySpiderCache.updateCount + medusaCount;
         }}
 
     private List<MedusaInFallPoint_AI> _medusaList = new List<MedusaInFallPoint_AI>();
