@@ -6,8 +6,8 @@ Shader "KSC/KSC_EnergyShield"
     {   
         _MainShidTex ("Main Tex", 2D) = "White" {}
         _EdgeNoiseTex ("Edge Noise", 2D) = "White" {}
-        _NoiseXspeed ("Noise X Speed", Range(-10,10)) = 1
-        _NoiseYspeed ("Noise Y Speed", Range(-10,10)) = 1
+        _NoiseXspeed ("Noise X Speed", Range(-30,30)) = 1
+        _NoiseYspeed ("Noise Y Speed", Range(-30,30)) = 1
 
         _RimRange ("Rim Range", Range (0,20)) = 1
 
@@ -21,9 +21,11 @@ Shader "KSC/KSC_EnergyShield"
 
 
         //Shield Trim
-        _BaseColor ("Base Color", Color ) = (1,1,1,1)
+        _HitTex ("Hit Noise Tex", 2D) = "white" {}
+        [HDR]_HitColor ("Base Color", Color ) = (1,1,1,1)
         _Hitpos ("Collision Point", Vector) = (0.0,0.0,0.0,0.0)
         _GradientSize ("Gradient Size", float ) = 1.0
+        _GradPower ("Gradient Power", float) = 1.0
 
 
     }
@@ -66,23 +68,26 @@ Shader "KSC/KSC_EnergyShield"
 
                 float4 uv : TEXCOORD2;
                 float4 uv2 : TEXCOORD3;
-                float4 uv3 : TEXCOORD4;
+                float4 uv3 : TEXCOORD4; // 반응형용 
                 float3 viewDir : TEXCOORD5;
             };            
 
             sampler2D _MainShidTex;
             sampler2D _EdgeNoiseTex;
+            sampler2D _HitTex;
 
             float4 _EdgeNoiseTex_ST;
             float4 _MainShidTex_ST;
+            float4 _HitTex_ST;
             
             float4 _RimColor;
             float4 _EdgeColor;
             float4 _FaceColor;
 
-            float4 _BaseColor;
+            float4 _HitColor;
             float4 _Hitpos;
 
+            float _GradPower;
             float _GradientSize;
             float _RimRange;
             float _MeshMoveSpeed;
@@ -96,8 +101,8 @@ Shader "KSC/KSC_EnergyShield"
             {
    
                 Varyings o;
-               // float3 vertexAnim = ((v.normal) * ((sin(_Time * _MeshMoveSpeed) * 0.5 + 0.5) * _MeshMoveAmount));
-                v.vertex.xyz = (v.vertex.xyz + v.normal.xyz * ((sin(_Time.y * _MeshMoveSpeed) * 0.5 + 0.5) * _MeshMoveAmount)); //vertexAnim ,v.vertex.w);
+               
+                v.vertex.xyz = (v.vertex.xyz + v.normal.xyz * ((sin(_Time.y * _MeshMoveSpeed) * 0.5 + 0.5) * _MeshMoveAmount));
 
                 o.vertex = TransformObjectToHClip(v.vertex.xyz);
                 o.NormalDir = v.normal;
@@ -105,6 +110,7 @@ Shader "KSC/KSC_EnergyShield"
                 o.ObjPos = v.vertex;
                 o.uv = v.uv;
                 o.uv2 = v.uv2;
+                o.uv3 = v.uv3;
                 return o;
             }
 
@@ -136,10 +142,12 @@ Shader "KSC/KSC_EnergyShield"
                 //----=------------------
                 float Gradient =  0;
 
+                float4 HitTex = tex2D(_HitTex, i.uv3 * _HitTex_ST.xy + _HitTex_ST.zw);
+
                 float Dist = distance(_Hitpos.xyz , i.ObjPos.xyz);
                 Gradient += saturate( (1- Dist * _GradientSize) * _Hitpos.w);
-
-                float3 col = Gradient * _BaseColor.rgb;
+                Gradient = saturate(pow(Gradient,_GradPower));
+                float3 col = ( Gradient * HitTex ) + (Gradient * _HitColor.rgb);
                 //----=------------------
 
 

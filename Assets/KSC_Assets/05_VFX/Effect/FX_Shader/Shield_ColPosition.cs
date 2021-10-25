@@ -9,7 +9,19 @@ public class Shield_ColPosition : MonoBehaviour
     private GameObject fxObject;
     public Material fxMaterial;
 
-    private Vector4 HitPosition;
+    private Vector4 HitPosition= new Vector4 ();
+
+
+    [SerializeField]
+    int CurrentPos = 0;
+    float CurrentTime = 0;
+
+
+    [Header("VFX Setting")]
+   //public string FXpostion = "FXXPos";
+    public float DecreaseTime = 1.0f;
+    public float ActionSpeed = 0.1f;
+
 
         private void OnEnable()
     {
@@ -31,9 +43,34 @@ public class Shield_ColPosition : MonoBehaviour
     
     void ColHit (Vector3 hitpos)
     {
-        HitPosition = hitpos;
-        HitPosition.w = 1.0f;
-        fxMaterial.SetVector("_Hitpos",HitPosition);
+        if ( CurrentTime >= ActionSpeed)
+        {
+            HitPosition = hitpos;
+            HitPosition.w = 1.0f;
+
+            fxMaterial.SetVector("_Hitpos", HitPosition);
+
+            CurrentTime = 0.0f;
+
+
+        }
+
+
+    }
+    void FXmask()
+    {
+        if (HitPosition.w > 0.0f)
+        {
+            HitPosition.w = Mathf.Lerp(HitPosition.w, 0.0f, Time.deltaTime * DecreaseTime);
+
+            fxMaterial.SetVector("_Hitpos", HitPosition);
+        }
+    }
+
+    void Update()
+    {
+        CurrentTime += Time.deltaTime;
+        FXmask();
     }
 
 }
