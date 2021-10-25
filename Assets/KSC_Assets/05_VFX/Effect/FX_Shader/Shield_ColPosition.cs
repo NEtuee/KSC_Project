@@ -9,7 +9,7 @@ public class Shield_ColPosition : MonoBehaviour
     private GameObject fxObject;
     public Material fxMaterial;
 
-    private Vector4[] HitPosition;
+    private Vector4 HitPosition= new Vector4 ();
 
 
     [SerializeField]
@@ -27,8 +27,6 @@ public class Shield_ColPosition : MonoBehaviour
     {
         fxObject = this.gameObject;
         fxMaterial = fxObject.GetComponent<Renderer>().material;
-
-
     }
 
     void OnCollisionEnter (Collision coll)
@@ -47,10 +45,10 @@ public class Shield_ColPosition : MonoBehaviour
     {
         if ( CurrentTime >= ActionSpeed)
         {
-            HitPosition[CurrentPos] = hitpos;
-            HitPosition[CurrentPos].w = 1.0f;
+            HitPosition = hitpos;
+            HitPosition.w = 1.0f;
 
-            fxMaterial.SetVector("_Hitpos", HitPosition[CurrentPos]);
+            fxMaterial.SetVector("_Hitpos", HitPosition);
 
             CurrentTime = 0.0f;
 
@@ -61,11 +59,11 @@ public class Shield_ColPosition : MonoBehaviour
     }
     void FXmask()
     {
-        if (HitPosition[0].w > 0.0f)
+        if (HitPosition.w > 0.0f)
         {
-            HitPosition[0].w = Mathf.Lerp(HitPosition[CurrentPos].w, 0.0f, Time.deltaTime * DecreaseTime);
+            HitPosition.w = Mathf.Lerp(HitPosition.w, 0.0f, Time.deltaTime * DecreaseTime);
 
-            fxMaterial.SetVector("_Hitpos", HitPosition[CurrentPos]);
+            fxMaterial.SetVector("_Hitpos", HitPosition);
         }
     }
 
