@@ -28,6 +28,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     [SerializeField] private bool isPause;
 
     [SerializeField]private PlayerUnit _player;
+    [SerializeField] private bool supporting = false;
 
     public float RevisionSpeed { get => revisionSpeed; set => revisionSpeed = value; }
     public float RevisionStartTime { get => revisionStartTime; set => revisionStartTime = value; }
@@ -323,17 +324,24 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                     }
                 }
 
+                supporting = false;
                 supportTransform.position = nearestGunTarget;
                 if (detect == true && (aimTransformPos - nearestGunTarget).magnitude <= 500.0f)
                 {
                     if(_mouseX == 0.0f && _mouseY == 0.0f)
                     {
+                        supporting = true;
                         aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, 300.0f * Time.fixedDeltaTime);
+                        //aimTransform.anchoredPosition = Vector2.MoveTowards(aimTransform.anchoredPosition, supportTransform.anchoredPosition, 300.0f * Time.fixedDeltaTime);
                     }
                     else
                     {
                         if (Vector2.Dot(moveDir, (nearestGunTarget - aimTransformPos).normalized) > 0.0f)
+                        {
+                            supporting = true;
                             aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, 300.0f * Time.fixedDeltaTime);
+                            //aimTransform.anchoredPosition = Vector2.MoveTowards(aimTransform.anchoredPosition, supportTransform.anchoredPosition, 300.0f * Time.fixedDeltaTime);
+                        }
                     }
                 }
             }
