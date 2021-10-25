@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class B1_FlySpider : ObjectBase
+public class B1_FlySpider : PathfollowObjectBase
 {
     public StateProcessor stateProcessor;
     public IKFootPointRotator footPointRotator;
@@ -11,8 +11,13 @@ public class B1_FlySpider : ObjectBase
     public float explosionPower = 150f;
     public bool launch = false;
 
+    public string path = "";
+    public bool pathFollow = false;
+
     [HideInInspector] public Transform target;
     [HideInInspector] public Vector3 direction;
+
+    public Core core;
 
     private PlayerUnit _player;
 
@@ -41,6 +46,11 @@ public class B1_FlySpider : ObjectBase
 
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
+
+        if(pathFollow)
+        {
+            SetPath(path,false,false);
+        }
     }
 
     public override void FixedProgress(float deltaTime)
@@ -49,6 +59,12 @@ public class B1_FlySpider : ObjectBase
 
         if(!launch)
             return;
+
+        if(pathFollow)
+        {
+            if(!FollowPath(deltaTime))
+                return;
+        }
 
         stateProcessor.StateProcess(deltaTime);
     }
@@ -63,7 +79,14 @@ public class B1_FlySpider : ObjectBase
         this.gameObject.SetActive(true);
         stateProcessor.StateChange("Idle");
 
+        core.Reactive();
+
         launch = false;
+
+        if(pathFollow)
+        {
+            SetPath(path,false,false);
+        }
     }
 
     public void Explosion()

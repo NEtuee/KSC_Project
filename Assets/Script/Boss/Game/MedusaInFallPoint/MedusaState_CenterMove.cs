@@ -20,6 +20,16 @@ public class MedusaState_CenterMove : MedusaFallPointStateBase
     private Vector3 _direction;
 
     private bool _back = false;
+    private bool _lock = false;
+
+    public override void Assign()
+    {
+        base.Assign();
+
+        _timeCounter.CreateSequencer("ready");
+        _timeCounter.AddSequence("ready",waitTime - 1f,null,(x)=>{target.AnimationChange(2);});
+        _timeCounter.AddSequence("ready",1f,null,(x)=>{StateChange("RushToTarget");});
+    }
 
     public override void StateInitialize(StateBase prevState)
     {
@@ -30,30 +40,38 @@ public class MedusaState_CenterMove : MedusaFallPointStateBase
         _velocity = Vector3.zero;
         _direction = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
 
-        if(Vector3.Distance(centerPosition.position,target.target.position) < centerDist)
-        {
-            _back = true;
-        }
+        // if(Vector3.Distance(centerPosition.position,target.target.position) < centerDist)
+        // {
+        //     _back = true;
+        // }
 
         target.AnimationChange(4);
+        _timeCounter.InitSequencer("ready");
+
+        _lock = false;
     }
 
     public override void StateProgress(float deltaTime)
     {
         base.StateProgress(deltaTime);
 
-        _timeCounter.IncreaseTimerSelf("WaitTime",out var limit, deltaTime);
-        // if(limit)
-        // {
-        //     StateChange("RushToTarget");
-        // }
-
         var look = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
 
-        if(target.Turn(look,deltaTime) && limit)
+        if(target.Turn(look,deltaTime))
         {
-            StateChange("RushToTarget");
+            if(!_lock)
+            {
+                _lock= true;
+            }
+            
         }
+
+        if(_lock)
+        {
+            _timeCounter.ProcessSequencer("ready",deltaTime);
+        }
+
+        
 
         // if(_back)
         // {
