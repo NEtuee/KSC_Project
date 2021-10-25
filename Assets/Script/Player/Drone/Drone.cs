@@ -95,7 +95,7 @@ public class Drone : UnTransfromObjectBase
     private bool _frontHit = false;
     private bool _scanning = false;
 
-    //스캔
+    //?�캔
     private Quaternion _scanTargetRotation;
     private float _rotationSpeed = 800.0f;
     private DroneScaner _droneScaner;
@@ -679,6 +679,11 @@ public class Drone : UnTransfromObjectBase
         {
             droneHelperRoot.ShowText(text);
         }
+    }
+
+    public void ResetEffect()
+    {
+        _droneScaner.ResetEffect();
     }
 
     public void Respawn(Transform playerTransform)

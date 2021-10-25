@@ -192,6 +192,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public void StartTrigger()
     {
         SendMessageEx(MessageTitles.cutscene_play, GetSavedNumber("CutsceneManager"), this);
+        SendMessageEx(MessageTitles.playermanager_resetScreenEffects, GetSavedNumber("PlayerManager"), null);
 
         if (playerDisable)
         {
@@ -211,8 +212,13 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         }
         CUTSCENEPLAY = false;
 
+        SetBirdyCanMove(birdyCanMove);
+    }
+
+    public void SetBirdyCanMove(bool value)
+    {
         var data = MessageDataPooling.GetMessageData<MD.BoolData>();
-        data.value = birdyCanMove;
-        SendMessageEx(MessageTitles.playermanager_setDroneCanMove,GetSavedNumber("PlayerManager"),data);
+        data.value = value;
+        SendMessageEx(MessageTitles.playermanager_setDroneCanMove, GetSavedNumber("PlayerManager"), data);
     }
 }

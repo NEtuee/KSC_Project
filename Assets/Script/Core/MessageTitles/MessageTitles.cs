@@ -416,6 +416,8 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort playermanager_droneText = 0x0909;
 
+    public const ushort playermanager_resetScreenEffects = 0x090A;
+
     /// <summary>
     /// data = FloatData
     /// </summarys
@@ -497,4 +499,6 @@ public static partial class MessageTitles
     /// data 
     /// </summary>
     public const ushort set_gunTargetMessageObject = 0x1006;
+
+    public const ushort dash_trigger = 0x1007;
 }
