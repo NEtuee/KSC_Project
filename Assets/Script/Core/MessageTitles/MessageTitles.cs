@@ -416,6 +416,8 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort playermanager_droneText = 0x0909;
 
+    public const ushort playermanager_resetScreenEffects = 0x090A;
+
     /// <summary>
     /// data = FloatData
     /// </summarys

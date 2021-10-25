@@ -192,6 +192,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public void StartTrigger()
     {
         SendMessageEx(MessageTitles.cutscene_play, GetSavedNumber("CutsceneManager"), this);
+        SendMessageEx(MessageTitles.playermanager_resetScreenEffects, GetSavedNumber("PlayerManager"), null);
 
         if (playerDisable)
         {
