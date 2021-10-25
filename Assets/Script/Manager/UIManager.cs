@@ -86,6 +86,11 @@ public class UIManager : ManagerBase
     [SerializeField] private HorizontalGageCtrl quickStandingGage;
     [SerializeField] private HorizontalGageCtrl dashGage;
 
+    [Header("KeyGuide Sprite")]
+    [SerializeField] private Image keyGuideImage;
+    [SerializeField] private Sprite keyboardSprite;
+    [SerializeField] private Sprite gamepadSprite;
+
     private EventSystem _eventSystem;
 
     private void Start()
@@ -199,6 +204,7 @@ public class UIManager : ManagerBase
         {
             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
             resolutionDropdown.value = data.value;
+            Debug.Log("Set Resolution");
         });
         AddAction(MessageTitles.uimanager_setvaluescreenmodedropdown, (msg) =>
         {
@@ -209,6 +215,7 @@ public class UIManager : ManagerBase
         {
             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
             vsyncDropdown.value = data.value;
+            Debug.Log("Set Vsync");
         });
 
         AddAction(MessageTitles.uimanager_fadeinout, (msg) =>
@@ -345,11 +352,16 @@ public class UIManager : ManagerBase
 
         if(_currentPauseState == PauseMenuState.Game)
         {
+            if (PlayerUnit.GamepadMode == true)
+                keyGuideImage.sprite = gamepadSprite;
+            else
+                keyGuideImage.sprite = keyboardSprite;
+
             BoolData setTimeStop = MessageDataPooling.GetMessageData<BoolData>();
             setTimeStop.value = true;
             SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), setTimeStop);
             ActivePage((int)PauseMenuState.Pause);
-
+            
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             return;
@@ -577,7 +589,7 @@ public class UIManager : ManagerBase
 
     IEnumerator DeferredCallFadeOutAction(float duration, Action fadeOutAction)
     {
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSecondsRealtime(duration);
         fadeOutAction?.Invoke();
     }
     #endregion
