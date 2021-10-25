@@ -21,6 +21,8 @@ MonoBehaviour:
   - id: 5
   - id: 6
   - id: 7
+  - id: 8
+  - id: 9
   references:
     version: 1
     00000000:
@@ -40,7 +42,7 @@ MonoBehaviour:
       data:
         name: 2
         description: 'trigger : 2'
-        trigger: 0
+        trigger: 1
     00000003:
       type: {class: BooleanTuple, ns: , asm: EveryAssembly}
       data:
@@ -70,4 +72,16 @@ MonoBehaviour:
       data:
         name: LastLevel
         description: 'trigger : LastLevel'
+        trigger: 0
+    00000008:
+      type: {class: BooleanTuple, ns: , asm: EveryAssembly}
+      data:
+        name: AClear
+        description: 'trigger : AClear'
+        trigger: 0
+    00000009:
+      type: {class: BooleanTuple, ns: , asm: EveryAssembly}
+      data:
+        name: BClear
+        description: 'trigger : BClear'
         trigger: 0

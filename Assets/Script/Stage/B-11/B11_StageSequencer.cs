@@ -45,8 +45,6 @@ public class B11_StageSequencer : ObjectBase
     public Transform centerTransform;
     public Transform ceilingSpawnPosition;
 
-    public UnityEngine.UI.Image hpImage;
-
     public int genieHP = 10;
 
     List<HexCube> _spawnCubeList = new List<HexCube>();
@@ -68,6 +66,16 @@ public class B11_StageSequencer : ObjectBase
         FindGrids(4,7);
         CreateSequencer("process",ref sequences);
         CreateSequencer("loop",ref loopSequences);
+
+
+        _timeCounter.AddSequence("process", 0f, null, (x) =>
+        {
+            var data = MessageDataPooling.GetMessageData<MD.TriggerData>();
+            data.name = "BClear";
+            data.trigger = true;
+
+            SendMessageEx(MessageTitles.boolTrigger_setTrigger, UniqueNumberBase.GetSavedNumberStatic("GlobalTriggerManager"), data);
+        });
 
         _hp = genieHP;
 
@@ -106,8 +114,6 @@ public class B11_StageSequencer : ObjectBase
                 _timeCounter.InitSequencer("loop");
             }
         }
-
-        hpImage.fillAmount = MathEx.easeOutCubic(hpImage.fillAmount,_fillAmountTarget,deltaTime * 15f);
     }
 
     public void LoopStart()
