@@ -27,6 +27,8 @@ Shader "KSC/KSC_EnergyShield"
         _GradientSize ("Gradient Size", float ) = 1.0
         _GradPower ("Gradient Power", float) = 1.0
 
+        _Fade ("Alpha Fade", Range(0,1)) = 1.0
+
 
     }
 
@@ -96,6 +98,8 @@ Shader "KSC/KSC_EnergyShield"
             float _NoiseXspeed;
             float _NoiseYspeed;
 
+            float _Fade;
+
 
             Varyings vert(Attributes v)
             {
@@ -153,7 +157,7 @@ Shader "KSC/KSC_EnergyShield"
 
                 float4 final = MainShield + float4(col,1);
 
-                final.a = VdotN * MainShield.a + col;
+                final.a = (VdotN * MainShield.a + col) * _Fade;
 
                 return final;
             }
