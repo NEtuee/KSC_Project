@@ -64,6 +64,15 @@ public class StageManagerEx : ManagerBase
         base.HandleMessage(msg);
     }
 
+    public void SetTrigger(string target)
+    {
+        var trigger = MessageDataPooling.GetMessageData<MD.TriggerData>();
+        trigger.name = target;
+        trigger.trigger = true;
+
+        SendMessageEx(MessageTitles.boolTrigger_setTrigger, UniqueNumberBase.GetSavedNumberStatic("GlobalTriggerManager"), trigger);
+    }
+
 
 #region StageTrigger
     public void GetStageTriggerAsset(Message msg)

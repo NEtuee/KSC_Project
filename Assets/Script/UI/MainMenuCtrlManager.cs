@@ -73,6 +73,7 @@ public class MainMenuCtrlManager : ManagerBase
         {
             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
             vsyncDropdown.value = data.value;
+            Debug.Log("Set Vsync");
         });
 
         AddAction(MessageTitles.uimanager_setvaluevolumeslider, (msg) =>
@@ -86,19 +87,11 @@ public class MainMenuCtrlManager : ManagerBase
 
         AddAction(MessageTitles.uimanager_setvalueresolutiondropdown, (msg) =>
         {
+            Debug.Log("set resolution");
             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
             resolutionDropdown.value = data.value;
         });
-        AddAction(MessageTitles.uimanager_setvaluescreenmodedropdown, (msg) =>
-        {
-            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
-            screenModeDropdown.value = data.value;
-        });
-        AddAction(MessageTitles.uimanager_setvaluevsyncdropdown, (msg) =>
-        {
-            IntData data = MessageDataPooling.CastData<IntData>(msg.data);
-            vsyncDropdown.value = data.value;
-        });
+
     }
 
     private void Start()

@@ -8,7 +8,7 @@ public class SettingManager : ManagerBase
     [SerializeField] private FollowTargetCtrl followTarget;
 
     public Vector2[] respondResolutionsVectors;
-    private List<Resolution> _respondResolutions = new List<Resolution>();
+    [SerializeField]private List<Resolution> _respondResolutions = new List<Resolution>();
 
     private const float MaxRotateSpeed = 1000f;
     private int currentWidth;
@@ -67,15 +67,14 @@ public class SettingManager : ManagerBase
 
         SendMessageEx(MessageTitles.uimanager_setvaluecamerarotatespeedslider, GetSavedNumber("UIManager"), cameraRotateSpeedData);
 
+        Resolution[] resolutions = Screen.resolutions;
+
         DisplaySettingData displaySettingData = SaveDataHelper.LoadSetting<DisplaySettingData>();
         QualitySettings.vSyncCount = displaySettingData.activeVsync == true ? 1 : 0;
-        currentWidth = displaySettingData.screenWidth; currentHeight = displaySettingData.screenHeight;
-        //Debug.Log("Start : "+currentWidth + " x " + currentHeight);
-        Screen.SetResolution(displaySettingData.screenWidth, displaySettingData.screenHeight, Screen.fullScreen);
 
-        Resolution[] resolutions = Screen.resolutions;
         ResolutionData resolutionData = MessageDataPooling.GetMessageData<ResolutionData>();
         resolutionData.resolutionStrings.Clear();
+        
         foreach (var res in resolutions)
         {
             foreach (var respondRes in respondResolutionsVectors)
@@ -91,10 +90,32 @@ public class SettingManager : ManagerBase
                 }
             }
         }
-        SendMessageEx(MessageTitles.uimanager_setresolutiondropdown, GetSavedNumber("UIManager"), resolutionData);
 
+        bool saveResolutionIsRespond = false;
         for (int i = 0; i < _respondResolutions.Count; i++)
         {
+            if(_respondResolutions[i].width == displaySettingData.screenWidth && _respondResolutions[i].height == displaySettingData.screenHeight)
+            {
+                saveResolutionIsRespond = true;
+            }
+        }
+
+        if (saveResolutionIsRespond == true)
+        {
+            currentWidth = displaySettingData.screenWidth; currentHeight = displaySettingData.screenHeight;
+        }
+        else
+        {
+            currentWidth = Screen.width; currentHeight = Screen.height;
+        }
+
+        Screen.SetResolution(displaySettingData.screenWidth, displaySettingData.screenHeight, Screen.fullScreen);
+
+        SendMessageEx(MessageTitles.uimanager_setresolutiondropdown, GetSavedNumber("UIManager"), resolutionData);
+        for (int i = 0; i < _respondResolutions.Count; i++)
+        {
+            //Debug.Log(currentWidth + " " + _respondResolutions[i].width + " " + currentHeight + " " + _respondResolutions[i].height);
+
             if (currentHeight == _respondResolutions[i].height &&
                 currentWidth == _respondResolutions[i].width)
             {
@@ -109,7 +130,7 @@ public class SettingManager : ManagerBase
         fullScreen.value = Screen.fullScreen ? 0 : 1;
         SendMessageEx(MessageTitles.uimanager_setvaluescreenmodedropdown, GetSavedNumber("UIManager"), fullScreen);
         IntData vsync = MessageDataPooling.GetMessageData<IntData>();
-        vsync.value = QualitySettings.vSyncCount == 0 ? 0 : 1;
+        vsync.value = displaySettingData.activeVsync == true ? 1 : 0;
         SendMessageEx(MessageTitles.uimanager_setvaluevsyncdropdown, GetSavedNumber("UIManager"), vsync);
 
         SoundSettingData soundSettingData = SaveDataHelper.LoadSetting<SoundSettingData>();
@@ -132,6 +153,8 @@ public class SettingManager : ManagerBase
         volumeData.ambient = soundSettingData.ambientVolume / 100f;
         volumeData.bgm = soundSettingData.bgmVolume / 100f;
         SendMessageEx(MessageTitles.uimanager_setvaluevolumeslider, GetSavedNumber("UIManager"), volumeData);
+
+        SaveDisplaySetting();
     }
 
     public void SaveCameraRotateSpeed(float pitch, float yaw)

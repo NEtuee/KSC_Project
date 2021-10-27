@@ -46,6 +46,12 @@ public class DroneScaner : UnTransfromObjectBase
         scanMat.SetFloat("_Distance", 0f);
     }
 
+    public void ResetEffect()
+    {
+        scaning = false;
+        scanMat.SetFloat("_Distance", 0f);
+    }
+
     public void Scanning()
     {
         scaning = true;

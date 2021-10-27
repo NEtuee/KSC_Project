@@ -12,6 +12,9 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
     public PlayerUnit player;
     public Animator animator;
 
+    public Transform eyeLightPosition;
+    public Transform hitPosition;
+
     public bool launch = false;
 
     public override void Assign()

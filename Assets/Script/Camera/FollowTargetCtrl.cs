@@ -28,6 +28,9 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     [SerializeField] private bool isPause;
 
     [SerializeField]private PlayerUnit _player;
+    [SerializeField] private float supportRange = 500.0f;
+    [SerializeField] private float supportSpeed = 300.0f;
+    [SerializeField] private bool supporting = false;
 
     public float RevisionSpeed { get => revisionSpeed; set => revisionSpeed = value; }
     public float RevisionStartTime { get => revisionStartTime; set => revisionStartTime = value; }
@@ -63,6 +66,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     private Vector2 supportVelocity;
 
     private Vector3 smoothVelocity;
+    private float fovCos = 0.0f;
 
     [SerializeField]private bool updateMode = false;
 
@@ -82,6 +86,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
         {
             _gunTargetObjects.Add((Transform)msg.data);
         });
+
+        fovCos = Mathf.Cos(45f);
     }
 
     public override void Initialize()
@@ -285,12 +291,20 @@ public class FollowTargetCtrl : UnTransfromObjectBase
             target.x = target.y;
             target.y = -targetRot.x;
             Vector2 prevAnchoredPosition = aimTransform.anchoredPosition;
-            aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition, target * crosshairMovingSpeed,
-                                                            ref currentAimVelocity, rotSmooth);
-            Vector2 moveDir = (aimTransform.anchoredPosition - prevAnchoredPosition).normalized;
 
-            if (_player.GamepadMode == true)
+            Vector2 moveDir = (aimTransform.anchoredPosition - prevAnchoredPosition).normalized;
+            //Vector2 temp = new Vector2();
+            //Vector2 prev = new Vector2();
+
+            if (PlayerUnit.GamepadMode == true)
             {
+                if (_mouseX != 0.0f && _mouseY != 0.0f)
+                {
+                    aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition, target * crosshairMovingSpeed,
+                                                                    ref currentAimVelocity, rotSmooth);
+                }
+
+
                 bool detect = false;
                 Vector2 nearestGunTarget = new Vector2();
                 Vector2 aimTransformPos = aimTransform.transform.position;
@@ -304,38 +318,54 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
                     if (_gunTargetObjects[i].gameObject.activeInHierarchy == false)
                     {
-                        ++i;
                         continue;
                     }
 
-                    if (Vector3.Dot((_gunTargetObjects[i].position - Camera.main.transform.position).normalized, Camera.main.transform.forward) > 0.0f)
+                    if (Vector3.Dot((_gunTargetObjects[i].position - Camera.main.transform.position).normalized, Camera.main.transform.forward) > fovCos)
                     {
                         Vector2 screenPos = Camera.main.WorldToScreenPoint(_gunTargetObjects[i].position);
                         if (detect == false)
                         {
                             nearestGunTarget = screenPos;
                         }
-                        else if ((aimTransformPos - nearestGunTarget).sqrMagnitude > (aimTransformPos - screenPos).sqrMagnitude)
+                        else
                         {
-                            nearestGunTarget = screenPos;
+                            if ((aimTransformPos - nearestGunTarget).sqrMagnitude > (aimTransformPos - screenPos).sqrMagnitude)
+                                nearestGunTarget = screenPos;
                         }
                         detect = true;
                     }
                 }
 
+                supporting = false;
                 supportTransform.position = nearestGunTarget;
-                if (detect == true && (aimTransformPos - nearestGunTarget).magnitude <= 500.0f)
+                //prev = aimTransform.anchoredPosition;
+                if (detect == true && (aimTransformPos - nearestGunTarget).magnitude <= supportRange)
                 {
-                    if(_mouseX == 0.0f && _mouseY == 0.0f)
+                    if (_mouseX == 0.0f && _mouseY == 0.0f)
                     {
-                        aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, 300.0f * Time.fixedDeltaTime);
+                        supporting = true;
+                        aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, supportSpeed * Time.fixedDeltaTime);
+                        //temp = aimTransform.anchoredPosition;
+                        //aimTransform.anchoredPosition = Vector2.MoveTowards(aimTransform.anchoredPosition, supportTransform.anchoredPosition, 300.0f * Time.fixedDeltaTime);
                     }
                     else
                     {
                         if (Vector2.Dot(moveDir, (nearestGunTarget - aimTransformPos).normalized) > 0.0f)
-                            aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, 300.0f * Time.fixedDeltaTime);
+                        {
+                            supporting = true;
+                            aimTransform.transform.position = Vector2.MoveTowards(aimTransform.transform.position, nearestGunTarget, supportSpeed * Time.fixedDeltaTime);
+                            //temp = aimTransform.anchoredPosition;
+                            //aimTransform.anchoredPosition = Vector2.MoveTowards(aimTransform.anchoredPosition, supportTransform.anchoredPosition, 300.0f * Time.fixedDeltaTime);
+                        }
                     }
                 }
+            }
+            else
+            {
+                supportTransform.position = new Vector2(-1f, -1f);
+                aimTransform.anchoredPosition = Vector2.SmoothDamp(aimTransform.anchoredPosition, target * crosshairMovingSpeed,
+                                                                    ref currentAimVelocity, rotSmooth);
             }
 
 
@@ -362,9 +392,18 @@ public class FollowTargetCtrl : UnTransfromObjectBase
                 transform.rotation = rotation;
             }
 
+            if(supporting == true)
+            {
+                targetRot.x = -aimTransform.anchoredPosition.y;
+                targetRot.y = aimTransform.anchoredPosition.x;
+                targetRot /= crosshairMovingSpeed;
+            }
+
             var spineRot = aimTransform.anchoredPosition / spineRotateDivide;
             spineRot.y *= -1f;
             MathEx.Swap<float>(ref spineRot.x, ref spineRot.y);
+
+            //Debug.Log(prevAnchoredPosition + " " +prev + " " + temp + " " + aimTransform.anchoredPosition);
 
             var data = MessageDataPooling.GetMessageData<MD.Vector3Data>();
             data.value = spineRot;

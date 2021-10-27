@@ -152,6 +152,17 @@ public class PlayerManager : ManagerBase
                 _playerWeaponMat.SetVector("_EmissionColor", radioColor * 0f);
             }
         });
+
+        AddAction(MessageTitles.playermanager_resetScreenEffects, (msg) =>
+        {
+            _drone.ResetEffect();
+
+            SetRadialBlurData blurData = MessageDataPooling.GetMessageData<SetRadialBlurData>();
+            blurData.factor = .0f;
+            blurData.radius = .0f;
+            blurData.time = .0f;
+            SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
+        });
     }
 
     public override void Initialize()

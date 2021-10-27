@@ -27,7 +27,18 @@ public class MedusaState_CenterMove : MedusaFallPointStateBase
         base.Assign();
 
         _timeCounter.CreateSequencer("ready");
-        _timeCounter.AddSequence("ready",waitTime - 1f,null,(x)=>{target.AnimationChange(2);});
+        _timeCounter.AddSequence("ready",waitTime - 1f,null,(x)=>{
+            target.AnimationChange(2);
+
+            MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+            data.key = "MedusaEyeLight";
+            data.parent = target.eyeLightPosition;
+            data.position = target.eyeLightPosition.position;
+            data.rotation = Quaternion.LookRotation(target.transform.forward, Vector3.up);
+
+            target.SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,
+                        UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+        });
         _timeCounter.AddSequence("ready",1f,null,(x)=>{StateChange("RushToTarget");});
     }
 
@@ -61,7 +72,9 @@ public class MedusaState_CenterMove : MedusaFallPointStateBase
         {
             if(!_lock)
             {
-                _lock= true;
+                
+
+                _lock = true;
             }
             
         }

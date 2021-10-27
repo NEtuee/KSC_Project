@@ -18,8 +18,11 @@ public class B11_StageSequencer : ObjectBase
             AnnihilationFence,
             CutsceneFence,
             InvokeEvent,
+            DroneAnnihilationFence,
+            ActiveHPUI,
+            DeactiveHPUI,
         };
-
+        
         public string identifier;
         public EventEnum type;
         public int code;
@@ -29,7 +32,11 @@ public class B11_StageSequencer : ObjectBase
         public UnityEngine.Events.UnityEvent eventSet;
     }
 
+    [Header("Sequence Lists")]
     public List<SequenceItem> sequences = new List<SequenceItem>();
+    public List<SequenceItem> loopSequences = new List<SequenceItem>();
+
+    [Header("etc.")]
     public List<Transform> spawnPositions = new List<Transform>();
     public List<Transform> ceilingSpawnPositions = new List<Transform>();
     public B11_Database database;
@@ -38,17 +45,17 @@ public class B11_StageSequencer : ObjectBase
     public Transform centerTransform;
     public Transform ceilingSpawnPosition;
 
-    public UnityEngine.UI.Image hpImage;
-
-    public float genieHP = 100f;
+    public int genieHP = 10;
 
     List<HexCube> _spawnCubeList = new List<HexCube>();
     List<HexCube> _medusaSpawnList = new List<HexCube>();
     List<HexCube> _medusaSpawnNear = new List<HexCube>();
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 
-    private float _hp;
+    private int _hp;
     private float _fillAmountTarget = 1f;
+
+    private bool _loopProcess = false;
 
     private PlayerUnit _player;
 
@@ -57,7 +64,18 @@ public class B11_StageSequencer : ObjectBase
         base.Assign();
 
         FindGrids(4,7);
-        CreateSequencer();
+        CreateSequencer("process",ref sequences);
+        CreateSequencer("loop",ref loopSequences);
+
+
+        _timeCounter.AddSequence("process", 0f, null, (x) =>
+        {
+            var data = MessageDataPooling.GetMessageData<MD.TriggerData>();
+            data.name = "BClear";
+            data.trigger = true;
+
+            SendMessageEx(MessageTitles.boolTrigger_setTrigger, UniqueNumberBase.GetSavedNumberStatic("GlobalTriggerManager"), data);
+        });
 
         _hp = genieHP;
 
@@ -66,7 +84,7 @@ public class B11_StageSequencer : ObjectBase
             var dist = Vector3.Distance(drone.transform.position, centerTransform.position);
             if(drone.explosionDistance > dist)
             {
-                DecreaseHP(10f);
+                DecreaseHP(1);
             }
         });
 
@@ -89,9 +107,24 @@ public class B11_StageSequencer : ObjectBase
 
         _timeCounter.ProcessSequencer("process",deltaTime);
 
-        hpImage.fillAmount = MathEx.easeOutCubic(hpImage.fillAmount,_fillAmountTarget,deltaTime * 15f);
+        if(_loopProcess)
+        {
+            if(_timeCounter.ProcessSequencer("loop",deltaTime))
+            {
+                _timeCounter.InitSequencer("loop");
+            }
+        }
     }
 
+    public void LoopStart()
+    {
+        _loopProcess = true;
+    }
+
+    public void LoopStop()
+    {
+        _loopProcess = false;
+    }
 
     public void FindGrids(int min, int max)
     {
@@ -103,11 +136,11 @@ public class B11_StageSequencer : ObjectBase
         cubeGrid.GetCubeRing(ref _medusaSpawnList,Vector3Int.zero,5);
     }
 
-    public void CreateSequencer()
+    public void CreateSequencer(string name, ref List<SequenceItem> targetList)
     {
-        _timeCounter.CreateSequencer("process");
+        _timeCounter.CreateSequencer(name);
 
-        foreach(var item in sequences)
+        foreach(var item in targetList)
         {
             if(item.type == SequenceItem.EventEnum.SpawnDrone)
             {
@@ -115,7 +148,7 @@ public class B11_StageSequencer : ObjectBase
                 {
                     for(int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence("process",0f,null,(x)=>{
+                        _timeCounter.AddSequence(name,0f,null,(x)=>{
                             var target = database.SpawnCommonDrone();
                             target.SetTarget(centerTransform);
                             target.transform.position = GetDroneSpawnPosition(item.point).position;
@@ -127,7 +160,7 @@ public class B11_StageSequencer : ObjectBase
                     float loopTime = item.value / (float)item.code;
                     for(int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence("process",loopTime,null,(x)=>{
+                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
                             var target = database.SpawnCommonDrone();
                             target.SetTarget(centerTransform);
                             target.transform.position = GetDroneSpawnPosition(item.point).position;
@@ -143,7 +176,7 @@ public class B11_StageSequencer : ObjectBase
                 {
                     for(int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence("process",0f,null,(x)=>{
+                        _timeCounter.AddSequence(name,0f,null,(x)=>{
                             var target = database.SpawnFlySpider();
                             target.transform.position = ceilingSpawnPosition.position;
                             target.transform.rotation = ceilingSpawnPosition.rotation;
@@ -155,7 +188,7 @@ public class B11_StageSequencer : ObjectBase
                     float loopTime = item.value / (float)item.code;
                     for(int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence("process",loopTime,null,(x)=>{
+                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
                             var target = database.SpawnFlySpider();
                             target.transform.position = ceilingSpawnPosition.position;
                             target.transform.rotation = ceilingSpawnPosition.rotation;
@@ -169,7 +202,7 @@ public class B11_StageSequencer : ObjectBase
                 {
                     for(int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence("process",0f,null,(x)=>{
+                        _timeCounter.AddSequence(name,0f,null,(x)=>{
                             var target = database.SpawnSpider();
                             //target.target = centerTransform;
                             target.transform.position = GetSpawnPosition(item.point).position;
@@ -181,7 +214,7 @@ public class B11_StageSequencer : ObjectBase
                     float loopTime = item.value / (float)item.code;
                     for(int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence("process",loopTime,null,(x)=>{
+                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
                             var target = database.SpawnSpider();
                             //target.target = centerTransform;
                             target.transform.position = GetSpawnPosition(item.point).position;
@@ -196,7 +229,7 @@ public class B11_StageSequencer : ObjectBase
                     for(int i = 0; i < item.code; ++i)
                     {
                         var cube = GetRandomCube();
-                        _timeCounter.AddSequence("process",0f,null,(x)=>{
+                        _timeCounter.AddSequence(name,0f,null,(x)=>{
                             cube.SetMove(false,0f,1f,0.1f,()=>{
                                 var target = database.SpawnSpider();
                                 //target.target = centerTransform;
@@ -213,7 +246,7 @@ public class B11_StageSequencer : ObjectBase
                     for(int i = 0; i < item.code; ++i)
                     {
                         var cube = GetRandomCube();
-                        _timeCounter.AddSequence("process",loopTime,null,(x)=>{
+                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
                             cube.SetMove(false,0f,1f,0.1f,()=>{
                                 var target = database.SpawnSpider();
                                 //target.target = centerTransform;
@@ -232,7 +265,7 @@ public class B11_StageSequencer : ObjectBase
                     {
                         var cube = GetRandomMedusaCube();
         
-                        _timeCounter.AddSequence("process",0f,null,(x)=>{
+                        _timeCounter.AddSequence(name,0f,null,(x)=>{
                             _medusaSpawnNear.Clear();
                             cubeGrid.GetCubeRing(ref _medusaSpawnNear,cube.cubePoint,1);
                             foreach(var item in _medusaSpawnNear)
@@ -256,7 +289,7 @@ public class B11_StageSequencer : ObjectBase
                     {
                         var cube = GetRandomMedusaCube();
 
-                        _timeCounter.AddSequence("process",loopTime,null,(x)=>{
+                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
                             _medusaSpawnNear.Clear();
                             cubeGrid.GetCubeRing(ref _medusaSpawnNear,cube.cubePoint,1);
                             foreach(var item in _medusaSpawnNear)
@@ -275,36 +308,64 @@ public class B11_StageSequencer : ObjectBase
             }
             else if(item.type == SequenceItem.EventEnum.WaitSeconds)
             {
-                _timeCounter.AddSequence("process",item.value,null,null);
+                _timeCounter.AddSequence(name,item.value,null,null);
             }
             else if(item.type == SequenceItem.EventEnum.AnnihilationFence)
             {
-                _timeCounter.AddFence("process",()=>{
+                _timeCounter.AddFence(name,()=>{
                     return database.updateCount == 0;
                 });
             }
             else if(item.type == SequenceItem.EventEnum.InvokeEvent)
             {
-                _timeCounter.AddSequence("process",item.value,null,(x)=>{
+                _timeCounter.AddSequence(name,item.value,null,(x)=>{
                     item.eventSet?.Invoke();
                 });
             }
             else if(item.type == SequenceItem.EventEnum.CutsceneFence)
             {
-                _timeCounter.AddFence("process",()=>{
+                _timeCounter.AddFence(name,()=>{
                     return !LevelEdit_TimelinePlayer.CUTSCENEPLAY;
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.DroneAnnihilationFence)
+            {
+                _timeCounter.AddFence(name, () => {
+                    return database.droneCache.updateCount == 0;
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.ActiveHPUI)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x)=>
+                {
+                    var data = MessageDataPooling.GetMessageData<MD.BoolData>();
+                    data.value = true;
+                    SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
+                    
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.DeactiveHPUI)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    var data = MessageDataPooling.GetMessageData<MD.BoolData>();
+                    data.value = false;
+                    SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
                 });
             }
         }
     }
 
-    public void DecreaseHP(float factor)
+    public void DecreaseHP(int factor)
     {
         _hp -= factor;
         _hp = _hp < 0 ? 0 : _hp;
+        var data = MessageDataPooling.GetMessageData<MD.IntData>();
+        data.value = _hp;
+        SendMessageEx(MessageTitles.uimanager_setDroneHpValue, GetSavedNumber("UIManager"), data);
 
         UpdateImageAmount();
-        if(_hp <= 0f)
+        if(_hp <= 0)
         {
             _player.PlayerDead();
         }

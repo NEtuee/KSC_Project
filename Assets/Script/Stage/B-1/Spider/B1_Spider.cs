@@ -36,12 +36,13 @@ public class B1_Spider : PathfollowObjectBase
         stateProcessor.InitializeProcessor(this);
 
         AddAction(MessageTitles.object_kick,(x)=>{
-            backDirection = Vector3.ProjectOnPlane(transform.position - ((PlayerUnit)x.data).transform.position,Vector3.up).normalized;
-            stateProcessor.StateChange("HitBack");
+            var dir = Vector3.ProjectOnPlane(transform.position - ((PlayerUnit)x.data).transform.position,Vector3.up).normalized;
+            HitBack(dir);
+        });
 
-            var data = MessageDataPooling.GetMessageData<MD.Vector3Data>();
-            data.value = transform.position;
-            SendBroadcastMessage(MessageTitles.customTitle_start + 2,data,true);
+        AddAction(MessageTitles.dash_trigger, (x) => {
+            var dir = Vector3.ProjectOnPlane(transform.position - ((Transform)x.data).position, Vector3.up).normalized;
+            HitBack(dir);
         });
 
         AddAction(MessageTitles.customTitle_start + 2,(x)=>{
@@ -87,7 +88,9 @@ public class B1_Spider : PathfollowObjectBase
         shell.isKinematic = true;
         shell.transform.SetParent(transform);
         shell.transform.localPosition = _shellPosition;
-        
+        shell.rotation = Quaternion.identity;
+
+
         transform.localPosition = _localPosition;
         transform.localRotation = _localRotation;
 
@@ -115,6 +118,16 @@ public class B1_Spider : PathfollowObjectBase
         {
             stateProcessor.StateChange("ExplosionWait");
         }
+    }
+
+    public void HitBack(Vector3 direction)
+    {
+        backDirection = direction;
+        stateProcessor.StateChange("HitBack");
+
+        var data = MessageDataPooling.GetMessageData<MD.Vector3Data>();
+        data.value = transform.position;
+        SendBroadcastMessage(MessageTitles.customTitle_start + 2, data, true);
     }
 
     public float GetTargetDistance()

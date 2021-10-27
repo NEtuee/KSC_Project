@@ -196,8 +196,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         AddAction(MessageTitles.player_visibledrone, (msg) =>
         {
-            bool visible = (bool)msg.data;
-            drone.Visible = visible;
+            var visible = MessageDataPooling.CastData<BoolData>(msg.data);
+            drone.Visible = visible.value;
         });
 
         AddAction(MessageTitles.fmod_soundEmitter, (msg) =>
@@ -1447,9 +1447,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float _inputSum;
     private float climbingVertical = 0.0f;
     private float climbingHorizon = 0.0f;
-    [SerializeField]private bool _gamepadMode = false;
+    [SerializeField]private static bool _gamepadMode = false;
 
-    public bool GamepadMode => _gamepadMode;
+    public static bool GamepadMode => _gamepadMode;
 
     [Header("ControlBlock")]
     [SerializeField] private bool _chargeShotBlock = false;
@@ -1577,11 +1577,22 @@ public partial class PlayerUnit : UnTransfromObjectBase
     }
 #endif
 
-    protected void OnCollisionEnter(Collision collision)
+    protected void OnCollisionStay(Collision collision)
     {
         if(_currentState == dashState)
         {
             MessageReceiver receiver;
+            if(collision.gameObject.TryGetComponent<MessageEmpTarget>(out var dashTarget))
+            {
+                Message msg = new Message();
+                msg.Set(MessageTitles.object_kick, dashTarget.parent.uniqueNumber, this, this);
+                dashTarget.parent.ReceiveMessage(msg);
+                if (frontChecker.Overlap)
+                {
+                    ChangeState(dashReboundState);
+                }
+            }
+
             if (collision.gameObject.TryGetComponent<MessageReceiver>(out receiver))
             {
                 Message msg = new Message();

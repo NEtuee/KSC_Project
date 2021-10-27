@@ -183,6 +183,17 @@ public static partial class MessageTitles
     /// data = FloatData
     /// </summary>
     public const ushort uimanager_setFactorDashCoolTime = 0x0332;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort uimanager_enableDroneStatusUi = 0x0333;
+
+    /// <summary>
+    /// data = IntData
+    /// </summary>
+    public const ushort uimanager_setDroneHpValue = 0x0334;
+
     #endregion
 
     /// <summary>
@@ -349,7 +360,7 @@ public static partial class MessageTitles
     public const ushort player_initalizemove = 0x0903;
 
     /// <summary>
-    /// data = bool
+    /// data = BoolData
     /// </summary>
     public const ushort player_visibledrone = 0x0904;
 
@@ -415,6 +426,8 @@ public static partial class MessageTitles
     /// data = string
     /// </summary>
     public const ushort playermanager_droneText = 0x0909;
+
+    public const ushort playermanager_resetScreenEffects = 0x090A;
 
     /// <summary>
     /// data = FloatData
@@ -497,4 +510,6 @@ public static partial class MessageTitles
     /// data 
     /// </summary>
     public const ushort set_gunTargetMessageObject = 0x1006;
+
+    public const ushort dash_trigger = 0x1007;
 }
