@@ -52,11 +52,25 @@ public class StageManagerEx : ManagerBase
         AddAction(MessageTitles.boolTrigger_setTrigger,SetStageTrigger);
 
         AddAction(MessageTitles.stage_getPath,GetPath);
+
+        AddAction(MessageTitles.stage_droneSpecial,(msg)=>{
+            var broad = MessagePack(msg.title, boradcastWithoutSenderNumber, msg.data);
+            HandleBroadcastMessage(broad);
+        });
     }
     
     public override void HandleMessage(Message msg)
     {
         base.HandleMessage(msg);
+    }
+
+    public void SetTrigger(string target)
+    {
+        var trigger = MessageDataPooling.GetMessageData<MD.TriggerData>();
+        trigger.name = target;
+        trigger.trigger = true;
+
+        SendMessageEx(MessageTitles.boolTrigger_setTrigger, UniqueNumberBase.GetSavedNumberStatic("GlobalTriggerManager"), trigger);
     }
 
 

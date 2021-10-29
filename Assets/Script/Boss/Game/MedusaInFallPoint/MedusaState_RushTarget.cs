@@ -21,6 +21,7 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
     private Vector3 _direction;
 
 
+
     public override void StateInitialize(StateBase prevState)
     {
         base.StateInitialize(prevState);
@@ -30,27 +31,35 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
 
         _direction = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
 
-        target.AnimationChange(2);
+        //target.AnimationChange(2);
 
-        var dist = Vector3.Distance(target.target.transform.position,centerPosition.position);
-        if(dist >= 12f)
+        if(Physics.Raycast(transform.position + Vector3.up,target.transform.forward,5f,wallLayer))
         {
-            _direction = MathEx.DeleteYPos(centerPosition.position - target.transform.position).normalized;
+            var dir = (target.target.position - target.transform.position).normalized;
+            var side = -MathEx.normalize(Vector3.Dot(target.transform.right,dir));
+
+            _velocity = target.transform.right * side * maxSpeed;
         }
+
+        // var dist = Vector3.Distance(target.target.transform.position,centerPosition.position);
+        // if(dist >= 12f)
+        // {
+        //     _direction = MathEx.DeleteYPos(centerPosition.position - target.transform.position).normalized;
+        // }
     }
 
     public override void StateProgress(float deltaTime)
     {
         base.StateProgress(deltaTime);
 
-        var look = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
+        // var look = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
 
-        _timeCounter.IncreaseTimerSelf("UpdateDirection",out var limit, deltaTime);
-        if(limit)
-        {
-            _direction = look;
-            _timeCounter.InitTimer("UpdateDirection",0f,1f);
-        }
+        // _timeCounter.IncreaseTimerSelf("UpdateDirection",out var limit, deltaTime);
+        // if(limit)
+        // {
+        //     _direction = look;
+        //     _timeCounter.InitTimer("UpdateDirection",0f,1f);
+        // }
         
         _velocity += _direction * accelSpeed;
         if(MathEx.abs(_velocity.magnitude) >= maxSpeed)
@@ -60,7 +69,7 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
         
 
         target.Move(_velocity,1f,deltaTime);
-        target.Turn(look,deltaTime);
+        //target.Turn(look,deltaTime);
 
         RayCheck();
     }
@@ -72,6 +81,8 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
             target.player.Ragdoll.ExplosionRagdoll(hitForce, _direction);
             wallHit.moveDirection = -_direction;
             StateChange("WallHit");
+
+            HitEffect();
         }
     }
 
@@ -86,7 +97,22 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
             {
                 wallHit.moveDirection = hit.normal;
                 StateChange("WallHit");
+
+                HitEffect();
             }
         }
+    }
+
+    public void HitEffect()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+        data.key = "MedusaHit";
+        //data.parent = target.hitPosition;
+        data.position = target.hitPosition.position;
+        data.rotation = Quaternion.LookRotation(-target.transform.up, Vector3.up);
+
+        target.SendMessageEx(MessageTitles.effectmanager_activeeffectwithrotation,
+                    UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
     }
 }

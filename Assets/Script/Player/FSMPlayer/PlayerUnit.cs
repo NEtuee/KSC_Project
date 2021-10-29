@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
@@ -29,6 +30,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public static PlayerState_DashEnd dashEndState;
     public static PlayerState_Dead deadState;
     public static PlayerState_Kick kickState;
+    public static PlayerState_DashRebound dashReboundState;
     #endregion
 
     #region Move Property
@@ -101,11 +103,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public float HitEnergyRestoreEnergyValue => HitEnergyRestoreEnergyValue;
     public float JumpEnergyRestoreEnergyValue => jumpEnergyRestoreValue;
     public float ClimbingJumpRestoreEnrgyValue => climbingJumpEnergyRestoreValue;
-    #endregion
-
-    #region Stamina Property
-    public float MaxStamina => maxStamina;
-    public float ClimbingJumpConsumeValue => climbingJumpConsumeValue;
     #endregion
 
     #region Input Property
@@ -199,8 +196,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         AddAction(MessageTitles.player_visibledrone, (msg) =>
         {
-            bool visible = (bool)msg.data;
-            drone.Visible = visible;
+            var visible = MessageDataPooling.CastData<BoolData>(msg.data);
+            drone.Visible = visible.value;
         });
 
         AddAction(MessageTitles.fmod_soundEmitter, (msg) =>
@@ -211,6 +208,24 @@ public partial class PlayerUnit : UnTransfromObjectBase
         AddAction(MessageTitles.set_climbingLineManager, (msg) =>
         {
             _climbingLineManager = (ClimbingLineManager)msg.data;
+        });
+
+        AddAction(MessageTitles.player_blockChargeShot, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            _chargeShotBlock = data.value;
+        });
+
+        AddAction(MessageTitles.player_blockDash, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            _dashBlock = data.value;
+        });
+
+        AddAction(MessageTitles.player_blockQuickStand, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            _quickStandingBlock = data.value;
         });
 
         InputUser.onChange +=
@@ -265,7 +280,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
         if (kickState == null) kickState = gameObject.AddComponent<PlayerState_Kick>();
         if (dashEndState == null) dashEndState = gameObject.AddComponent<PlayerState_DashEnd>();
         if(climbingUpperLineState == null) climbingUpperLineState = gameObject.AddComponent<PlayerState_ClimbingUpperLine>();
-
+        if (dashReboundState == null) dashReboundState = gameObject.AddComponent<PlayerState_DashRebound>();
         pelvisGunObject = _empGun.PelvisGunObject;
 
         if (pelvisGunObject != null)
@@ -276,9 +291,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
                 _originalEmissionColor = renderer.material.GetColor("_EmissionColor");
             }
         }
-
-        _staminaTimer = new TimeCounterEx();
-        _staminaTimer.InitTimer("Stamina", 0.0f, staminaRestoreDelayTime);
 
         _timer = new TimeCounterEx();
         _timer.InitTimer("Dash", 0.0f, DashCoolTime);
@@ -331,8 +343,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         UpdateCoolTime();
 
-        UpdateStamina(Time.fixedDeltaTime);
-
         if (canGroundCheck)
             CheckGround();
 
@@ -360,6 +370,12 @@ public partial class PlayerUnit : UnTransfromObjectBase
             isNearGround = true;
 
         _animator.SetBool("IsNearGround", isNearGround);
+
+
+        //if(Keyboard.current.fKey.wasPressedThisFrame)
+        //{
+        //    SendMessageEx(MessageTitles.stage_droneSpecial,GetSavedNumber("StageManager"),null);
+        //}
     }
 
     private void LateUpdate()
@@ -471,7 +487,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
             _currentState == ragdollState ||
             _currentState == respawnState ||
             _currentState == hangLedgeState||
-            _currentState == climbingJumpState)
+            _currentState == climbingJumpState ||
+            _currentState == dashReboundState)
         {
             currentSpeed = 0.0f;
             return;
@@ -536,38 +553,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
         }
     }
 
-    private void UpdateStamina(float deltaTime)
-    {
-        if (_currentState == grabState ||
-            _currentState == readyGrabState ||
-            _currentState == hangLedgeState ||
-            _currentState == readyClimbingJumpState ||
-            _currentState == climbingJumpState ||
-            _currentState == ledgeUpState)
-        {
-            _staminaTimer.InitTimer("Stamina", 0.0f, staminaRestoreDelayTime);
-
-            if (isClimbingMove == false)
-            {
-                stamina.Value -= idleConsumeValue * deltaTime;
-            }
-            else
-            {
-                stamina.Value -= climbingMoveConsumeValue * deltaTime;
-            }
-            stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
-        }
-        else
-        {
-            _staminaTimer.IncreaseTimerSelf("Stamina", out bool limit, deltaTime);
-            if (limit && stamina.Value < maxStamina)
-            {
-                stamina.Value += staminaRestoreValue * deltaTime;
-                stamina.Value = Mathf.Clamp(stamina.Value, 0.0f, maxStamina);
-            }
-        }
-    }
-
     private void CheckGround()
     {
         if (_currentState == grabState ||
@@ -589,6 +574,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         if (groundDistance <= groundMinDistance)
         {
+            //bool detectGroundSphere = Physics.OverlapSphereNonAlloc(transform.TransformPoint(groundCheckOffset), groundCheckRadius, _colliderBuffer) != 0;
+
             if (groundAngle < invalidityAngle)
             {
                 //isGrounded = true;
@@ -936,6 +923,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         ChangeState(defaultState);
 
         bCanDash = true;
+        var booldata = MessageDataPooling.GetMessageData<BoolData>();
+        booldata.value = true;
+        SendMessageEx(MessageTitles.playermanager_LightOnOffRadio, GetSavedNumber("PlayerManager"), booldata);
         bCanQuickStanding = true;
 
         currentDashCoolTime.Value = dashCoolTime;
@@ -944,7 +934,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void InitStatus()
     {
-        stamina.Value = 100.0f;
         hp.Value = 100.0f;
         energy.Value = 0.0f;
         _ragdoll.ResetRagdoll();
@@ -1113,8 +1102,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         currentDashCoolTime.Value = _timer.IncreaseTimerSelf("Dash", out bool limit, Time.fixedDeltaTime);
 
-        if(limit)
+        if (limit)
+        {
             bCanDash = true;
+            var booldata = MessageDataPooling.GetMessageData<BoolData>();
+            booldata.value = true;
+            SendMessageEx(MessageTitles.playermanager_LightOnOffRadio, GetSavedNumber("PlayerManager"), booldata);
+        }
 
         currentQuickStandingCoolTime.Value += _timer.IncreaseTimerSelf("QuickStand", out limit, Time.fixedDeltaTime);
 
@@ -1125,6 +1119,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     public void UseDash()
     {
         bCanDash = false;
+        var booldata = MessageDataPooling.GetMessageData<BoolData>();
+        booldata.value = false;
+        SendMessageEx(MessageTitles.playermanager_LightOnOffRadio, GetSavedNumber("PlayerManager"), booldata);
         _timer.InitTimer("Dash", 0.0f, DashCoolTime);
     }
 
@@ -1146,10 +1143,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
         bCanQuickStanding = true;
     }
 
-    public void TryGrab()
+    public bool TryGrab()
     {
         if (ClimbingLineManager == null)
-            return;
+            return false;
 
         bool detect = false;
         Vector3 nearPosition = new Vector3();
@@ -1212,6 +1209,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
                             finalNearPosition = nearPosition;
                         }
                     }
+                    transform.SetParent(detectLine.transform.parent);
                 }
             }
         }
@@ -1226,13 +1224,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
             float s = u.x != 0.0f ? v.x / u.x : (u.y != 0.0f ? v.y / u.y : v.z / u.z);
 
             if (s > 1.0f || s < 0f)
-                return;
+                return false;
 
             prevFollowLine = currentFollowLine;
             CurrentFollowLine = detectLine;
-            lineTracker.position = finalNearPosition;
             lineTracker.SetParent(detectLine.transform);
-            StartLineClimbing(finalNearPosition);         
+            lineTracker.position = finalNearPosition;
+            ChangeState(readyGrabState);
 
             if (CurrentFollowLine.directionType == DirectionType.LeftMin)
             {
@@ -1245,6 +1243,14 @@ public partial class PlayerUnit : UnTransfromObjectBase
                 rightPointNum = Mathf.Min(detectLineElement.p1, detectLineElement.p2);
             }
         }
+
+        return detect;
+    }
+
+    IEnumerator WaitOneFrame(Action action)
+    {
+        yield return new WaitForSeconds(2f);
+        action();
     }
 
     public bool CheckUpClimbingLine()
@@ -1313,6 +1319,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
                             finalNearPosition = nearPosition;
                         }
                     }
+                    transform.SetParent(detectLine.transform.parent);
                 }
             }
         }
@@ -1321,7 +1328,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
         {
             prevFollowLine = currentFollowLine;
             CurrentFollowLine = detectLine;
-            transform.SetParent(null);
             lineTracker.position = finalNearPosition;
             lineTracker.SetParent(detectLine.transform);
 
@@ -1345,7 +1351,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
     private PlayerState _prevState;
 
     #region Status
-    public FloatReactiveProperty stamina = new FloatReactiveProperty(100);
     public FloatReactiveProperty hp = new FloatReactiveProperty(100f);
     public FloatReactiveProperty charge = new FloatReactiveProperty(0.0f);
     public FloatReactiveProperty energy = new FloatReactiveProperty(0.0f);
@@ -1435,17 +1440,6 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float jumpEnergyRestoreValue = 5.0f;
     [SerializeField] private float climbingJumpEnergyRestoreValue;
 
-
-    [Header("Stamina")]
-    [SerializeField] private float maxStamina = 100.0f;
-    [SerializeField] private float idleConsumeValue = 1f;
-    [SerializeField] private float climbingMoveConsumeValue = 2f;
-    [SerializeField] private float climbingJumpConsumeValue = 5f;
-    [SerializeField] private float wallJumpConsumeValue = 5f;
-    [SerializeField] private float staminaRestoreValue = 2f;
-    [SerializeField] private float staminaRestoreDelayTime = 2f;
-    private TimeCounterEx _staminaTimer;
-
     [Header("Input")]
     [SerializeField] private float _inputVertical;
     [SerializeField] private float _inputHorizontal;
@@ -1453,9 +1447,16 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private float _inputSum;
     private float climbingVertical = 0.0f;
     private float climbingHorizon = 0.0f;
-    [SerializeField]private bool _gamepadMode = false;
+    [SerializeField]private static bool _gamepadMode = false;
 
-    public bool GamepadMode => _gamepadMode;
+    public static bool GamepadMode => _gamepadMode;
+
+    [Header("ControlBlock")]
+    [SerializeField] private bool _chargeShotBlock = false;
+    [SerializeField] private bool _dashBlock = false;
+    [SerializeField] private bool _quickStandingBlock = false;
+
+    public bool ChargeShotBlock => _chargeShotBlock;
 
     [Header("Spine")]
     [SerializeField] private Transform lookAtAim;
@@ -1466,9 +1467,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [Header("Detect")]
     [SerializeField] private LedgeChecker ledgeChecker;
     [SerializeField] private SpaceChecker spaceChecker;
+    [SerializeField] private FrontChecker frontChecker;
     [SerializeField] private Vector3 wallUnderCheckOffset;
     [SerializeField] private Vector3 detectionOffset;
+    [SerializeField] private Vector3 groundCheckOffset;
+    [SerializeField] private float groundCheckRadius = 1.8f;
     private bool _ledUpAdjust = false;
+    private Collider[] _colliderBuffer = new Collider[10];
 
     [Header("Gun")]
     [SerializeField] private Animator gunAnim;
@@ -1567,19 +1572,36 @@ public partial class PlayerUnit : UnTransfromObjectBase
         Gizmos.DrawWireSphere(UpperCheckCapsuleStart, upCheckCapsuleRadius);
         Gizmos.DrawWireSphere(UpperCheckCapsuleEnd, upCheckCapsuleRadius);
         Gizmos.DrawLine(UpperCheckCapsuleStart, UpperCheckCapsuleEnd);
+
+        Gizmos.DrawWireSphere(transform.TransformPoint(groundCheckOffset),groundCheckRadius);
     }
 #endif
 
-    protected void OnCollisionEnter(Collision collision)
+    protected void OnCollisionStay(Collision collision)
     {
         if(_currentState == dashState)
         {
             MessageReceiver receiver;
+            if(collision.gameObject.TryGetComponent<MessageEmpTarget>(out var dashTarget))
+            {
+                Message msg = new Message();
+                msg.Set(MessageTitles.object_kick, dashTarget.parent.uniqueNumber, this, this);
+                dashTarget.parent.ReceiveMessage(msg);
+                if (frontChecker.Overlap)
+                {
+                    ChangeState(dashReboundState);
+                }
+            }
+
             if (collision.gameObject.TryGetComponent<MessageReceiver>(out receiver))
             {
                 Message msg = new Message();
                 msg.Set(MessageTitles.object_kick, receiver.uniqueNumber, this, this);
                 receiver.ReceiveMessage(msg);
+                if(frontChecker.Overlap)
+                {
+                    ChangeState(dashReboundState);
+                }
             }
         }
     }
@@ -1658,22 +1680,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
         _currentState.OnGrabRelease(value, this, _animator);
     }
 
-    public void OnUseHpPack(InputAction.CallbackContext value)
-    {
-        if (value.performed == false || Time.timeScale == 0f)
-            return;
-
-        if (hp.Value < 100.0f && hpPackCount.Value > 0 && isHpRestore == false)
-        {
-            hpPackCount.Value--;
-            restoreHpPackCoroutine = HpRestore();
-            StartCoroutine(restoreHpPackCoroutine);
-        }
-    }
-
     public void OnDash(InputAction.CallbackContext value)
     {
-        if (value.performed == false || Time.timeScale == 0f)
+        if (value.performed == false || Time.timeScale == 0f || _dashBlock == true)
             return;
 
         _currentState.OnDash(value, this, _animator);
@@ -1681,18 +1690,18 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void OnQuickStand(InputAction.CallbackContext value)
     {
-        if (value.performed == false || Time.timeScale == 0f)
+        if (value.performed == false || Time.timeScale == 0f || _quickStandingBlock == true)
             return;
 
         _currentState.OnQuickStand(value, this, _animator);
     }
 
-    public void OnKick(InputAction.CallbackContext value)
+    public void OnDroneSpacial(InputAction.CallbackContext value)
     {
         if (value.performed == false || Time.timeScale == 0f)
             return;
 
-        //_currentState.OnKick(value, this, _animator);
+        SendMessageEx(MessageTitles.stage_droneSpecial, GetSavedNumber("StageManager"), null);
     }
 
     #endregion

@@ -18,6 +18,7 @@ public class PlayerState_Dash : PlayerState
         animator.SetBool("Dash", true);
         animator.ResetTrigger("Jump");
 
+        playerUnit.Drone.ChangeAnimation(4);
         //StartCoroutine(playerUnit.StartDashCoolTime());
         playerUnit.UseDash();
     }
@@ -40,7 +41,7 @@ public class PlayerState_Dash : PlayerState
 
         if (_lateTime >= playerUnit.DashTime)
         {
-            if(playerUnit.IsGround && playerUnit.InputVertical == 0.0f && playerUnit.InputHorizontal == 0.0f)
+            if(playerUnit.IsGround)
             {
                 playerUnit.ChangeState(PlayerUnit.dashEndState);
             }

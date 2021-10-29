@@ -26,6 +26,17 @@ public class CommonDrone : DroneAIBase
     private Vector3 _spawnPos;
     private Quaternion _spawnRot;
 
+    public override void Assign()
+    {
+        base.Assign();
+        _spawnPos = transform.localPosition;
+        _spawnRot = transform.rotation;
+
+        this.gameObject.SetActive(startActive);
+
+        shield.whenDestroy.AddListener(()=>{SendBroadcastMessage(MessageTitles.customTitle_start + 10,this,true);});
+    }
+
     public override void Initialize()
     {
         base.Initialize();
@@ -40,11 +51,6 @@ public class CommonDrone : DroneAIBase
 
         _timeCounterEx.InitTimer("launch",0f,launchTime);
         UpdateTargetDirection();
-
-        this.gameObject.SetActive(startActive);
-
-        _spawnPos = transform.position;
-        _spawnRot = transform.rotation;
     }
 
     public override void FixedProgress(float deltaTime)
@@ -137,7 +143,7 @@ public class CommonDrone : DroneAIBase
         UpdateTargetDirection();
         shield.Reactive();
 
-        transform.position = spawnPosition;
+        transform.localPosition = spawnPosition;
         _timeCounterEx.InitTimer("launch",0f,launchTime);
         var rand = Quaternion.Euler(0f,Random.Range(0f,360f),Random.Range(0f,360f)) * Vector3.forward;
         _direction = rand.normalized;
@@ -145,7 +151,7 @@ public class CommonDrone : DroneAIBase
         shield.gameObject.SetActive(true);
         this.gameObject.SetActive(true);
 
-        rig.position = spawnPosition;
+        rig.position = transform.position;
         rig.velocity = Vector3.zero;
 
         launch = true;

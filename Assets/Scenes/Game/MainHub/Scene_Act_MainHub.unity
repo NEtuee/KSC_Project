@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17418528, g: 0.21782467, b: 0.3000271, a: 1}
+  m_IndirectSpecularColor: {r: 0.17619842, g: 0.22051935, b: 0.30284497, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,6 +123,100 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &20466201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 20466204}
+  - component: {fileID: 20466203}
+  - component: {fileID: 20466202}
+  m_Layer: 0
+  m_Name: Cube (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &20466202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20466201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8565ab475c4f7674b963f2ed061a2f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  keep: 0
+  triggerType: 0
+  triggerEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 65846969}
+        m_TargetAssemblyTypeName: GateAnimationControl, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerStayEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  triggerExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  afterTriggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  isTriggered: 0
+  collisionTrigger: 1
+  reloadTime: 0
+  afterTriggerTime: 0
+--- !u!65 &20466203
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20466201}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &20466204
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20466201}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.07, y: 4.25, z: 29.83}
+  m_LocalScale: {x: 7.5488, y: 6.2065015, z: 3.2406}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &43799246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,6 +534,87 @@ MonoBehaviour:
         isHidden: 0
         expanded: 0
         guid: 3a8de6e4-df0e-4ad7-8c16-1d28aea629ec
+--- !u!1001 &65846968
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2599199068197913954, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_Name
+      value: Gate_animation (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.743
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 34.563
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f4c43b028d1fe1544ae135fdeb64a8c1, type: 3}
+--- !u!114 &65846969 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2941796248014534658, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 65846968}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d306c32c1b28e8e488eb5ff6a0eee40e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &83110472
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,7 +707,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 325343831}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.67, y: 3.4655566, z: -34.63}
+  m_LocalPosition: {x: 0.67, y: 3.4655566, z: -36.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -989,6 +1164,100 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 354740222}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &390446782
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 390446786}
+  - component: {fileID: 390446783}
+  - component: {fileID: 390446784}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &390446783
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390446782}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &390446784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390446782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8565ab475c4f7674b963f2ed061a2f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  keep: 0
+  triggerType: 0
+  triggerEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1337059369}
+        m_TargetAssemblyTypeName: GateAnimationControl, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerStayEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  triggerExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  afterTriggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  isTriggered: 0
+  collisionTrigger: 1
+  reloadTime: 0
+  afterTriggerTime: 0
+--- !u!4 &390446786
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390446782}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.07, y: 4.25, z: -29.83}
+  m_LocalScale: {x: 7.5488, y: 6.2065015, z: 3.2406}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &403729329
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2016,6 +2285,14 @@ MonoBehaviour:
   - id: 0
   - id: 1
   - id: 2
+  - id: 3
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  - id: 9
+  - id: 10
   edges:
   - GUID: 5328bc14-690f-4a86-b76c-74dd8e0b3fed
     owner: {fileID: 1025208030}
@@ -2033,6 +2310,62 @@ MonoBehaviour:
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: output
+  - GUID: 5b017576-7ca5-4afd-a1dc-1dd293689fa2
+    owner: {fileID: 1025208030}
+    inputNodeGUID: e694947f-dd8d-41ff-9c5a-6f0d8fe29d15
+    outputNodeGUID: 5915b6e5-90a9-47a4-a8aa-9a190d1bf608
+    inputFieldName: obj
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: 4b42cf57-b4ee-4a2b-8cd3-db6223486086
+    owner: {fileID: 1025208030}
+    inputNodeGUID: b013ee3b-486e-4c5e-8eb2-efab8a813bb7
+    outputNodeGUID: 9954d5aa-4575-4e11-9866-f3a7d33f6326
+    inputFieldName: obj
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: e3988430-47af-4efc-86dc-a7b0f49ecd84
+    owner: {fileID: 1025208030}
+    inputNodeGUID: 9b5a7694-1e6f-4cb7-8012-99be1ecfdd13
+    outputNodeGUID: 9ba85f17-6803-4f46-8565-96c29ec5fff9
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: ab1e1994-962c-48b0-a6f9-09614cd603ad
+    owner: {fileID: 1025208030}
+    inputNodeGUID: 9b5a7694-1e6f-4cb7-8012-99be1ecfdd13
+    outputNodeGUID: e694947f-dd8d-41ff-9c5a-6f0d8fe29d15
+    inputFieldName: condition
+    outputFieldName: trigger
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 0193adbb-c17f-4184-bc75-831af76bb151
+    owner: {fileID: 1025208030}
+    inputNodeGUID: b80f33d0-7956-4546-ac09-2687573f95b6
+    outputNodeGUID: 9b5a7694-1e6f-4cb7-8012-99be1ecfdd13
+    inputFieldName: executed
+    outputFieldName: true
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 978fb42e-d8a6-4d39-a33b-a2e70a881b30
+    owner: {fileID: 1025208030}
+    inputNodeGUID: b80f33d0-7956-4546-ac09-2687573f95b6
+    outputNodeGUID: b013ee3b-486e-4c5e-8eb2-efab8a813bb7
+    inputFieldName: condition
+    outputFieldName: trigger
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: dd9a5d54-67a6-46f3-990c-1b58010b98e4
+    owner: {fileID: 1025208030}
+    inputNodeGUID: 298fb698-9ac0-4204-928e-1dfd6fcbeb09
+    outputNodeGUID: b80f33d0-7956-4546-ac09-2687573f95b6
+    inputFieldName: executed
+    outputFieldName: true
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements:
@@ -2047,14 +2380,14 @@ MonoBehaviour:
       serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
   exposedParameters:
-  - id: 3
-  - id: 4
-  - id: 5
+  - id: 11
+  - id: 12
+  - id: 13
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -361, y: -178, z: 0}
-  scale: {x: 1.520875, y: 1.520875, z: 1}
+  position: {x: -515, y: 238, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
   functions: []
   functionID: 0
   states: []
@@ -2118,6 +2451,142 @@ MonoBehaviour:
         parameterGUID: ae47890d-a02c-470c-a5aa-46f555c4d849
         accessor: 0
     00000003:
+      type: {class: ObjectInitializeEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 9ba85f17-6803-4f46-8565-96c29ec5fff9
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 419.75003
+          y: -157.55
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    00000004:
+      type: {class: GetGlobalTrigger, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: e694947f-dd8d-41ff-9c5a-6f0d8fe29d15
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 398
+          y: -83.00001
+          width: 184
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        triggerName: AClear
+        obj: {fileID: 0}
+        trigger: 0
+        find: 0
+    00000005:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 5915b6e5-90a9-47a4-a8aa-9a190d1bf608
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 262
+          y: 4.999981
+          width: 100
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: ae47890d-a02c-470c-a5aa-46f555c4d849
+        accessor: 0
+    00000006:
+      type: {class: GetGlobalTrigger, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: b013ee3b-486e-4c5e-8eb2-efab8a813bb7
+        computeOrder: 7
+        position:
+          serializedVersion: 2
+          x: 398
+          y: 27.999977
+          width: 184
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        triggerName: BClear
+        obj: {fileID: 0}
+        trigger: 0
+        find: 0
+    00000007:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 9954d5aa-4575-4e11-9866-f3a7d33f6326
+        computeOrder: 6
+        position:
+          serializedVersion: 2
+          x: 262
+          y: 115.99999
+          width: 100
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: ae47890d-a02c-470c-a5aa-46f555c4d849
+        accessor: 0
+    00000008:
+      type: {class: IfNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 9b5a7694-1e6f-4cb7-8012-99be1ecfdd13
+        computeOrder: 8
+        position:
+          serializedVersion: 2
+          x: 615.26086
+          y: -158
+          width: 153
+          height: 114
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        condition: 0
+        compareOperator: 0
+    00000009:
+      type: {class: IfNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: b80f33d0-7956-4546-ac09-2687573f95b6
+        computeOrder: 9
+        position:
+          serializedVersion: 2
+          x: 802.8261
+          y: -100.99999
+          width: 153
+          height: 114
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        condition: 0
+        compareOperator: 0
+    0000000A:
+      type: {class: LoadOutroNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 298fb698-9ac0-4204-928e-1dfd6fcbeb09
+        computeOrder: 10
+        position:
+          serializedVersion: 2
+          x: 1045.1304
+          y: -33.49999
+          width: 171
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    0000000B:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: 42b2d5c3-c704-483a-a969-fdf350b8db14
@@ -2130,9 +2599,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 6
+          id: 14
         val: {fileID: 0}
-    00000004:
+    0000000C:
       type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: b78da181-cb8d-46ff-abd7-4cf946750d13
@@ -2145,9 +2614,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 7
+          id: 15
         val: {fileID: 0}
-    00000005:
+    0000000D:
       type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: ae47890d-a02c-470c-a5aa-46f555c4d849
@@ -2160,21 +2629,21 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 8
+          id: 16
         val: {fileID: 0}
-    00000006:
+    0000000E:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: 42b2d5c3-c704-483a-a969-fdf350b8db14
-    00000007:
+    0000000F:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: b78da181-cb8d-46ff-abd7-4cf946750d13
-    00000008:
+    00000010:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
@@ -2421,6 +2890,7 @@ GameObject:
   - component: {fileID: 1269364724}
   - component: {fileID: 1269364723}
   - component: {fileID: 1269364722}
+  - component: {fileID: 1269364725}
   m_Layer: 0
   m_Name: LastPassage
   m_TagString: Untagged
@@ -2472,6 +2942,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1269364725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269364721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6526cfd28204d5a4da114c1196667951, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  playableDirector: {fileID: 0}
+  endSignalTime: 0
+  activeLists: []
+  endTransform: {fileID: 0}
+  birdyEndPosition: {fileID: 0}
+  loadNextLevel: 0
+  startFade: 1
+  playerDisable: 0
+  birdyCanMove: 1
+  ragdoll: 0
 --- !u!114 &1322270121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2789,6 +3285,87 @@ MonoBehaviour:
         isHidden: 0
         expanded: 0
         guid: 3a8de6e4-df0e-4ad7-8c16-1d28aea629ec
+--- !u!1001 &1337059368
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2599199068197913954, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_Name
+      value: Gate_animation
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.743
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -34.563
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f4c43b028d1fe1544ae135fdeb64a8c1, type: 3}
+--- !u!114 &1337059369 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2941796248014534658, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1337059368}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d306c32c1b28e8e488eb5ff6a0eee40e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1588125525
 GameObject:
   m_ObjectHideFlags: 0
@@ -3187,7 +3764,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1734015433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.67, y: 3.4655566, z: 34.7}
+  m_LocalPosition: {x: 0.67, y: 3.4655566, z: 36.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3485,7 +4062,7 @@ MonoBehaviour:
         canDelete: 1
         settings:
           id: 14
-        val: LevelLineB1
+        val: LevelLineB11
     0000000B:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
@@ -3774,6 +4351,7 @@ GameObject:
   - component: {fileID: 2140062102}
   - component: {fileID: 2140062104}
   - component: {fileID: 2140062103}
+  - component: {fileID: 2140062105}
   m_Layer: 0
   m_Name: StageManager
   m_TagString: Untagged
@@ -3831,6 +4409,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movePaths: []
   currentPath: 
+--- !u!114 &2140062105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140062101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a40ff3925ba69ab4da9e3e947db570b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
 --- !u!1001 &5308605168093720592
 PrefabInstance:
   m_ObjectHideFlags: 0

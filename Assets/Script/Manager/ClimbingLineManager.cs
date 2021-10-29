@@ -10,17 +10,7 @@ public class ClimbingLineManager : ManagerBase
 
     private bool _drawNode = false;
     public bool DrawNode { get => _drawNode; set => _drawNode = value; }
-    //public override void Assign()
-    //{
-    //    base.Assign();
-    //    SaveMyNumber("ClimbingLineManager");
 
-    //    AddAction(MessageTitles.climbingLineManager_getClimbingLineManager, (msg) =>
-    //     {
-    //         var target = (MessageReceiver)msg.sender;
-    //         SendMessageQuick(target, MessageTitles.set_climbingLineManager,this);
-    //     });
-    //}
     public void ClearNode()
     {
         DestoyNode(_rootNode);
@@ -234,13 +224,37 @@ public class ClimbingLineManager : ManagerBase
     protected override void Awake()
     {
         base.Awake();
-        SaveMyNumber("ClimbingLineManager");
+        SaveMyNumber("ClimbingLineManager",true);
         RegisterRequest();
 
         AddAction(MessageTitles.climbingLineManager_getClimbingLineManager, (msg) =>
         {
             var target = (MessageReceiver)msg.sender;
             SendMessageQuick(target, MessageTitles.set_climbingLineManager, this);
+        });
+
+
+        AddAction(MessageTitles.climbingLineManager_registerDynamicLine, (msg) =>
+        {
+            var item = (ClimbingLine)msg.data;
+            if(!dynamicClimbingLines.Contains(item))
+            {
+                dynamicClimbingLines.Add(item);
+            }
+            else
+            {
+                Debug.Log("target already Exists");
+            }
+        });
+
+        AddAction(MessageTitles.climbingLineManager_withdrawDynamicLine, (msg) =>
+        {
+            var item = (ClimbingLine)msg.data;
+            if(!dynamicClimbingLines.Remove(item))
+            {
+                Debug.Log("target not found");
+            }
+            
         });
 
         SendMessageQuick(MessageTitles.set_climbingLineManager, GetSavedNumber("Player"), this);

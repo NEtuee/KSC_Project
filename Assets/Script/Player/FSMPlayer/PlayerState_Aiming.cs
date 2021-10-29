@@ -63,6 +63,7 @@ public class PlayerState_Aiming : PlayerState
         playerUnit.SendMessageEx(MessageTitles.cameramanager_setAim,UniqueNumberBase.GetSavedNumberStatic("CameraManager"),aimData);
 
         playerUnit.addibleSpineVector = Vector3.zero;
+        animator.ResetTrigger("ShotReset");
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
@@ -131,6 +132,8 @@ public class PlayerState_Aiming : PlayerState
         playerUnit.SendMessageEx(MessageTitles.cameramanager_setAim,UniqueNumberBase.GetSavedNumberStatic("CameraManager"),aimData);
 
         playerUnit.addibleSpineVector = Vector3.zero;
+
+        animator.SetTrigger("ShotReset");
     }
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
@@ -183,12 +186,25 @@ public class PlayerState_Aiming : PlayerState
             playerUnit.CurrentJumpPower -= playerUnit.Gravity * Time.fixedDeltaTime;
             playerUnit.CurrentJumpPower = Mathf.Clamp(playerUnit.CurrentJumpPower, playerUnit.MinJumpPower, 50.0f);
 
-            playerUnit.MoveDir = playerUnit.Transform.forward * playerUnit.CurrentSpeed;
+            if (playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
+            {
+                playerUnit.MoveDir = (camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal);
+                playerUnit.MoveDir.Normalize();
+            }
+            else
+            {
+                playerUnit.MoveDir = playerUnit.PrevDir;
+                playerUnit.MoveDir.Normalize();
+            }
+
+            playerUnit.MoveDir *= playerUnit.CurrentSpeed;
 
             Vector3 plusDir = ((camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal));
             playerUnit.Move(plusDir * _fallingControlSenstive,Time.fixedDeltaTime);
 
-            playerUnit.LookDir = ((camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal)).normalized;
+            //playerUnit.LookDir = ((camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal)).normalized;
+            playerUnit.LookDir = camForward;
+
             if (playerUnit.LookDir != Vector3.zero)
             {
                 playerUnit.Transform.rotation = Quaternion.Lerp(playerUnit.Transform.rotation,
@@ -272,7 +288,7 @@ public class PlayerState_Aiming : PlayerState
 
     public override void OnShot(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if (playerUnit.CanCharge == true && playerUnit.Energy >= playerUnit.NoramlGunCost)
+        if (playerUnit.CanCharge == true && playerUnit.Energy >= playerUnit.NoramlGunCost && playerUnit.EmpGun.CanLaunch == true)
         {
             if (playerUnit._chargeSoundEmitter != null)
             {
@@ -280,10 +296,12 @@ public class PlayerState_Aiming : PlayerState
                 playerUnit._chargeSoundEmitter = null;
             }
 
-            if (playerUnit.chargeTime.Value >= 3 && playerUnit.Energy >= playerUnit.ChargeGunCost)
+            if (playerUnit.chargeTime.Value >= playerUnit.ChargeConsumeTime && 
+                playerUnit.Energy >= playerUnit.ChargeGunCost && 
+                playerUnit.ChargeShotBlock == false)
             {
-                playerUnit.EmpGun.LaunchCharge(40.0f);
-                playerUnit.AddEnergy(-playerUnit.ChargeGunCost);
+                    playerUnit.EmpGun.LaunchCharge(40.0f);
+                    playerUnit.AddEnergy(-playerUnit.ChargeGunCost);
             }
             else
             {
@@ -304,23 +322,17 @@ public class PlayerState_Aiming : PlayerState
             soundPlayData.returnValue = false;
             playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundPlayData);
 
-            playerUnit.chargeTime.Value = 0.0f;
-
-            SetRadialBlurData blurData = MessageDataPooling.GetMessageData<SetRadialBlurData>();
-            blurData.factor = 1.0f;
-            blurData.radius = 0.2f;
-            blurData.time = 0.8f;
-            playerUnit.SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
-
-            if (playerUnit.chargeTime.Value >= 3)
+            if (playerUnit.chargeTime.Value >= playerUnit.ChargeConsumeTime)
             {
                 SetTimeScaleMsg data = MessageDataPooling.GetMessageData<SetTimeScaleMsg>();
                 data.timeScale = 0.0f;
                 data.lerpTime = 0.4f;
                 data.stopTime = 0.2f;
                 data.startTime = 0.02f;
-                playerUnit.SendMessageEx(MessageTitles.timemanager_settimescale, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), data);
+                playerUnit.SendMessageEx(MessageTitles.timemanager_settimescale, UniqueNumberBase.GetSavedNumberStatic("TimeManager"), data);
             }
+
+            playerUnit.chargeTime.Value = 0.0f;
 
             playerUnit.CanCharge = false;
         }

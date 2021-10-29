@@ -15,10 +15,12 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
     public List<GameObject> activeLists = new List<GameObject>();
     public Transform endTransform;
+    public Transform birdyEndPosition;
 
     public bool loadNextLevel = false;
     public bool startFade = true;
     public bool playerDisable = false;
+    public bool birdyCanMove = true;
     public bool ragdoll = false;
 
     private CinemachineBrain _mainCamBrain;
@@ -148,6 +150,14 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
         }
 
+        if(birdyEndPosition != null)
+        {
+            var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
+            data.position = birdyEndPosition.position;
+            data.rotation = birdyEndPosition.rotation;
+            SendMessageEx(MessageTitles.playermanager_setDroneTransform, GetSavedNumber("PlayerManager"), data);
+        }
+
         if (ragdoll)
         {
             SendMessageEx(MessageTitles.playermanager_ragdoll, GetSavedNumber("PlayerManager"), null);
@@ -182,6 +192,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public void StartTrigger()
     {
         SendMessageEx(MessageTitles.cutscene_play, GetSavedNumber("CutsceneManager"), this);
+        SendMessageEx(MessageTitles.playermanager_resetScreenEffects, GetSavedNumber("PlayerManager"), null);
 
         if (playerDisable)
         {
@@ -200,5 +211,14 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
         }
         CUTSCENEPLAY = false;
+
+        SetBirdyCanMove(birdyCanMove);
+    }
+
+    public void SetBirdyCanMove(bool value)
+    {
+        var data = MessageDataPooling.GetMessageData<MD.BoolData>();
+        data.value = value;
+        SendMessageEx(MessageTitles.playermanager_setDroneCanMove, GetSavedNumber("PlayerManager"), data);
     }
 }

@@ -1,6 +1,9 @@
 
 public static partial class MessageTitles
 {
+
+    public const ushort customTitle_start = 0xff00;
+
     public const ushort system_registerRequest = 0x0100;
     public const ushort system_withdrawRequest = 0x0101;
     public const ushort testuimanager_activeimage = 0x2201;
@@ -180,6 +183,17 @@ public static partial class MessageTitles
     /// data = FloatData
     /// </summary>
     public const ushort uimanager_setFactorDashCoolTime = 0x0332;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort uimanager_enableDroneStatusUi = 0x0333;
+
+    /// <summary>
+    /// data = IntData
+    /// </summary>
+    public const ushort uimanager_setDroneHpValue = 0x0334;
+
     #endregion
 
     /// <summary>
@@ -262,6 +276,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort cameramanager_setAim = 0x0416;
 
+    /// <summary>
+    /// data = vector3
+    /// </summary>
+    public const ushort cameramanager_generaterecoilimpluseSetForce = 0x0417;
+
     #region EffectManager
 
     /// <summary>
@@ -341,7 +360,7 @@ public static partial class MessageTitles
     public const ushort player_initalizemove = 0x0903;
 
     /// <summary>
-    /// data = bool
+    /// data = BoolData
     /// </summary>
     public const ushort player_visibledrone = 0x0904;
 
@@ -353,6 +372,21 @@ public static partial class MessageTitles
     public const ushort player_EMPHit = 0x0906;
 
     public const ushort player_NormalHit = 0x0907;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort player_blockChargeShot = 0x0914;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort player_blockDash = 0x0915;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort player_blockQuickStand = 0x0916;
 
     #endregion
 
@@ -393,10 +427,20 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort playermanager_droneText = 0x0909;
 
+    public const ushort playermanager_resetScreenEffects = 0x090A;
+
     /// <summary>
     /// data = FloatData
     /// </summarys
     public const ushort playermanager_setDroneVolume = 0x0910;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort playermanager_LightOnOffRadio = 0x0917;
+
+    public const ushort playermanager_setDroneTransform = 0x0918;
+    public const ushort playermanager_setDroneCanMove = 0x0919;
 
     #endregion
 
@@ -406,6 +450,10 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort climbingLineManager_getClimbingLineManager = 0x1101;
+
+    public const ushort climbingLineManager_registerDynamicLine = 0x1102;
+    public const ushort climbingLineManager_withdrawDynamicLine = 0x1103;
+
     #endregion
 
     #region GamePadVibrationManager
@@ -424,12 +472,12 @@ public static partial class MessageTitles
     #region Setter
     /// data = null
     /// </summary>
-    public const ushort playermanager_initPlayerStatus = 0x0913;
+    public const ushort playermanager_initPlayerStatus = 0x0915;
 
     /// <summary>
     /// data = vector3
     /// </summary>
-    public const ushort playermanager_setSpineRotation = 0x0914;
+    public const ushort playermanager_setSpineRotation = 0x0916;
 
     #endregion
 
@@ -462,4 +510,6 @@ public static partial class MessageTitles
     /// data 
     /// </summary>
     public const ushort set_gunTargetMessageObject = 0x1006;
+
+    public const ushort dash_trigger = 0x1007;
 }

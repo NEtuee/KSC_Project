@@ -43,7 +43,7 @@
                     "id": "2670cc27-12cd-4ac9-9b21-264dbaa01835",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": "Press(pressPoint=0.1)"
                 },
                 {
                     "name": "EmpAim",
@@ -113,6 +113,14 @@
                     "name": "RunConvert",
                     "type": "Button",
                     "id": "5899864d-300c-4cde-967d-26623f910748",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "DroneSpacial",
+                    "type": "Button",
+                    "id": "64ef7cb0-e221-47aa-a57a-2e88081d96a8",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
@@ -468,6 +476,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "RunConvert",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "71c2fb57-0fe9-4f09-be3e-a5a01f7e28df",
+                    "path": "<Keyboard>/f",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DroneSpacial",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "90276367-1f74-455c-b9af-e578196c0c22",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DroneSpacial",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

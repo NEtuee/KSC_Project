@@ -27,7 +27,7 @@ public class EffectManager : ManagerBase
         AddAction(MessageTitles.effectmanager_activeeffectwithrotation, (msg) =>
         {
             EffectActiveData data = MessageDataPooling.CastData<EffectActiveData>(msg.data);
-            Active(data.key, data.position,data.rotation);
+            Active(data.key, data.position, data.rotation);
         });
 
         AddAction(MessageTitles.effectmanager_activeeffectsetparent, (msg) =>

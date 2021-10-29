@@ -57,3 +57,14 @@ public class LoadSpecificLevelNode : LinearConditionalNode
                 UniqueNumberBase.GetSavedNumberStatic("SceneManager"),data);
 	}
 }
+
+[System.Serializable, NodeMenuItem("Game/Load Out Scene")]
+public class LoadOutroNode : LinearConditionalNode
+{
+    public override string name => "Load Out Scene";
+
+    protected override void Process()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("OutScene");
+    }
+}

@@ -28,6 +28,8 @@ public class PlayerState_Jump : PlayerState
 
     public override void FixedUpdateState(PlayerUnit playerUnit, Animator animator)
     {
+        playerUnit.InitVelocity();
+
         playerUnit.CurrentJumpPower -= playerUnit.Gravity * Time.fixedDeltaTime;
         playerUnit.CurrentJumpPower = Mathf.Clamp(playerUnit.CurrentJumpPower, playerUnit.MinJumpPower, 50.0f);
 
@@ -58,13 +60,13 @@ public class PlayerState_Jump : PlayerState
         if (playerUnit.InputVertical != 0.0f || playerUnit.InputHorizontal != 0.0f)
         {
             playerUnit.MoveDir = (camForward * playerUnit.InputVertical) + (camRight * playerUnit.InputHorizontal);
-            playerUnit.MoveDir.Normalize();
+            playerUnit.MoveDir = playerUnit.MoveDir.normalized;
             playerUnit.LookDir = playerUnit.MoveDir;
         }
         else
         {
             playerUnit.MoveDir = playerUnit.PrevDir;
-            playerUnit.MoveDir.Normalize();
+            playerUnit.MoveDir = playerUnit.MoveDir.normalized;
             playerUnit.LookDir = playerUnit.MoveDir;
         }
 
@@ -99,6 +101,7 @@ public class PlayerState_Jump : PlayerState
         {
             playerUnit.Move(playerUnit.MoveDir + (Vector3.up * playerUnit.CurrentJumpPower), Time.fixedDeltaTime);        
         }
+
 
         playerUnit.PrevDir = playerUnit.LookDir;
     }

@@ -34,6 +34,7 @@ public class Core : Hitable
     {
         base.Initialize();
         RegisterRequest(GetSavedNumber("StageManager"));
+
         SendMessageEx(MessageTitles.scan_registerScanObject,UniqueNumberBase.GetSavedNumberStatic("Drone"),this);
         SendMessageEx(MessageTitles.set_gunTargetMessageObject, UniqueNumberBase.GetSavedNumberStatic("FollowTargetCtrl"), this.transform);
     }
@@ -56,6 +57,10 @@ public class Core : Hitable
 
     public void Reactive()
     {
+        if(renderer == null)
+            renderer = GetComponent<Renderer>();
+        if(collider == null)
+            collider = GetComponent<Collider>();
         collider.enabled = true;
         renderer.enabled = true;
         isOver = false;

@@ -33,11 +33,12 @@ public class MedusaState_WallHit : MedusaFallPointStateBase
         _timeCounter.IncreaseTimerSelf("WaitTime",out limit, deltaTime);
         if(limit)
         {
-            var look = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
-            if(target.Turn(look,deltaTime))
-            {
-                StateChange("RushToTarget");
-            }
+            StateChange("CenterMove");
+            // var look = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
+            // if(target.Turn(look,deltaTime))
+            // {
+            //     StateChange("RushToTarget");
+            // }
         }
     }
 }

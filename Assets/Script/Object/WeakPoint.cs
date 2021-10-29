@@ -32,6 +32,7 @@ public class WeakPoint : Hitable
         RegisterRequest(GetSavedNumber("ObjectManager"));
 
         SendMessageQuick(MessageTitles.scan_registerScanObject, UniqueNumberBase.GetSavedNumberStatic("Drone"), this);
+        SendMessageEx(MessageTitles.set_gunTargetMessageObject, UniqueNumberBase.GetSavedNumberStatic("FollowTargetCtrl"), this.transform);
     }
 
     public override void Destroy()

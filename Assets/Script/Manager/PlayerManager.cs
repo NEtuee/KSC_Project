@@ -12,6 +12,9 @@ public class PlayerManager : ManagerBase
     private IKCtrl _playerFootIK;
     [SerializeField] private EMPGun _emp;
     [SerializeField] private Renderer bagRenderer;
+    [SerializeField] private Renderer playerWeaponRenderer;
+    [SerializeField] private Color radioColor;
+    private Material _playerWeaponMat;
     private Material _bagMatrial;
     [SerializeField] private Drone _drone;
 
@@ -34,6 +37,18 @@ public class PlayerManager : ManagerBase
             _player.transform.SetPositionAndRotation(data.position, data.rotation);
             //_player.GetPlayerRagdoll().transform.position = data.position;
             _player.FootIK.InitPelvisHeight();
+        });
+
+        AddAction(MessageTitles.playermanager_setDroneTransform, (msg) =>
+        {
+            PositionRotation data = MessageDataPooling.CastData<PositionRotation>(msg.data);
+            _drone.transform.SetPositionAndRotation(data.position, data.rotation);
+        });
+
+        AddAction(MessageTitles.playermanager_setDroneCanMove, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            _drone.SetCanMove(data.value);
         });
 
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
@@ -124,6 +139,30 @@ public class PlayerManager : ManagerBase
              var data = MessageDataPooling.CastData<Vector3Data>(msg.data);
              _player.addibleSpineVector = data.value;
          });
+
+        AddAction(MessageTitles.playermanager_LightOnOffRadio, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            if(data.value)
+            {
+                _playerWeaponMat.SetVector("_EmissionColor", radioColor * 10f);
+            }
+            else
+            {
+                _playerWeaponMat.SetVector("_EmissionColor", radioColor * 0f);
+            }
+        });
+
+        AddAction(MessageTitles.playermanager_resetScreenEffects, (msg) =>
+        {
+            _drone.ResetEffect();
+
+            SetRadialBlurData blurData = MessageDataPooling.GetMessageData<SetRadialBlurData>();
+            blurData.factor = .0f;
+            blurData.radius = .0f;
+            blurData.time = .0f;
+            SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
+        });
     }
 
     public override void Initialize()
@@ -146,6 +185,15 @@ public class PlayerManager : ManagerBase
             _bagMatrial = bagRenderer.material;
         }
 
+        if(playerWeaponRenderer == null)
+        {
+            Debug.Log("Not Set PlayerWeaponRender");
+        }
+        else
+        {
+            _playerWeaponMat = playerWeaponRenderer.material;
+        }
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -158,26 +206,6 @@ public class PlayerManager : ManagerBase
 
             StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
             data.type = UIManager.StateBarType.HP;
-            data.value = value;
-            if (_player.GetState == PlayerUnit.aimingState)
-            {
-                data.visible = false;
-                SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
-            }
-            else
-            {
-                data.visible = true;
-                SendMessageEx(MessageTitles.uimanager_setvaluestatebar, GetSavedNumber("UIManager"), data);
-                BoolData setVisible = MessageDataPooling.GetMessageData<BoolData>();
-                setVisible.value = true;
-                SendMessageEx(MessageTitles.uimanager_setvisibleallstatebar, GetSavedNumber("UIManager"), setVisible);
-            }
-        });
-
-        _player.stamina.Subscribe(value =>
-        {
-            StateBarSetValueType data = MessageDataPooling.GetMessageData<StateBarSetValueType>();
-            data.type = UIManager.StateBarType.Stamina;
             data.value = value;
             if (_player.GetState == PlayerUnit.aimingState)
             {

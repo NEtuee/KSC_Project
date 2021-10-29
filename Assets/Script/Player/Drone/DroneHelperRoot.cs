@@ -52,23 +52,21 @@ public class DroneHelperRoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
-
-        //if (Input.GetKeyDown(KeyCode.N))
-        //{
-        //    HelpEvent("Test");
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.B))
-        //{
-        //    //HelpEvent("Test2");
-        //    HelpEvent("ArachneBombHint");
-        //}
-
         if(ReferenceEquals(currentHelper, null) == false)
         {
             currentHelper.HelperUpdate();
+        }
+
+        if (helping == true)
+        {
+            bool limit;
+            timer.IncreaseTimer("Help", hintTime, out limit);
+            if (limit == true)
+            {
+                helping = false;
+                ActiveDescriptCanvas(false);
+                drone.OrderDefault();
+            }
         }
     }
 

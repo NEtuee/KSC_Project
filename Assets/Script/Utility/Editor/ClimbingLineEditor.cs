@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class ClimbingLineEditor : EditorWindow
 {
@@ -25,7 +26,7 @@ public class ClimbingLineEditor : EditorWindow
 
         GUILayout.BeginVertical("box", GUILayout.Width(150.0f));
 
-        _currentMode = GUILayout.SelectionGrid(_currentMode, _modeItem, 1);
+        _currentMode = GUILayout.SelectionGrid(_currentMode, _modeItem, 1); 
 
         GUILayout.Label("Current Line");
         _currentLine = (ClimbingLine)EditorGUILayout.ObjectField(_currentLine, typeof(ClimbingLine), true);
@@ -183,27 +184,31 @@ public class ClimbingLineEditor : EditorWindow
             }
         }
 
-        CheckClimbingManager();
-
-        if(_climbingLineManager._rootNode == null)
+        Debug.Log(SceneManager.GetActiveScene().name);
+        if (SceneManager.GetActiveScene().name != "Scene_Act_Player_Main")
         {
-            GameObject rootNode = new GameObject("RootNode");
-            rootNode.transform.SetParent(_climbingLineManager.transform);
-            _climbingLineManager._rootNode = rootNode.AddComponent<CL_Node>();
-        }
+            CheckClimbingManager();
 
-        if (_nodeMinObject == null)
-        {
-            GameObject minObj = new GameObject("MinObject");
-            _nodeMinObject = minObj.transform;
-            _nodeMinObject.position = _climbingLineManager._rootNode.min;
-        }
+            if (_climbingLineManager._rootNode == null)
+            {
+                GameObject rootNode = new GameObject("RootNode");
+                rootNode.transform.SetParent(_climbingLineManager.transform);
+                _climbingLineManager._rootNode = rootNode.AddComponent<CL_Node>();
+            }
 
-        if (_nodeMaxObject == null)
-        {
-            GameObject maxObj = new GameObject("MaxObject");
-            _nodeMaxObject = maxObj.transform;
-            _nodeMaxObject.position = _climbingLineManager._rootNode.max;
+            if (_nodeMinObject == null)
+            {
+                GameObject minObj = new GameObject("MinObject");
+                _nodeMinObject = minObj.transform;
+                _nodeMinObject.position = _climbingLineManager._rootNode.min;
+            }
+
+            if (_nodeMaxObject == null)
+            {
+                GameObject maxObj = new GameObject("MaxObject");
+                _nodeMaxObject = maxObj.transform;
+                _nodeMaxObject.position = _climbingLineManager._rootNode.max;
+            }
         }
     }
 
@@ -270,6 +275,9 @@ public class ClimbingLineEditor : EditorWindow
 
     private void OnSceneGUI(SceneView view)
     {
+        if (SceneManager.GetActiveScene().name == "Scene_Act_Player_Main")
+            return;
+
         if (_nodeMinObject != null)
         {
             Handles.Label(_nodeMinObject.position, "MIN");

@@ -36,7 +36,7 @@ public class StateProcessor : MonoBehaviour
 
         if(state == null)
         {
-            Debug.Log("State does not exists");
+            Debug.Log("State does not exists : " + key);
             return;
         }
 

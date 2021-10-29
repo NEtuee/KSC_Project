@@ -29,8 +29,6 @@ public class PlayerState_ClimbingJump : PlayerState
 
         playerUnit.ClimbingJump();
 
-        playerUnit.stamina.Value -= playerUnit.ClimbingJumpConsumeValue;
-        playerUnit.stamina.Value = Mathf.Clamp(playerUnit.stamina.Value, 0.0f, playerUnit.MaxStamina);
         playerUnit.AddEnergy(playerUnit.ClimbingJumpRestoreEnrgyValue);
 
         playerUnit.HandIK.DisableHandIK();
@@ -140,6 +138,15 @@ public class PlayerState_ClimbingJump : PlayerState
 
         if (Time.time - playerUnit.ClimbingJumpStartTime >= keepJumpTime)
         {
+            if (playerUnit.ClimbingJumpDirection != ClimbingJumpDirection.Up)
+            {
+                InputAction.CallbackContext dummy = new InputAction.CallbackContext();
+                if(OnGrabClimbingJump(dummy,playerUnit,animator))
+                {
+                    return;
+                }
+            }
+
             playerUnit.MoveDir = playerUnit.MoveDir.normalized * finalDir.magnitude;
 
             playerUnit.IsGround = false;
@@ -148,9 +155,9 @@ public class PlayerState_ClimbingJump : PlayerState
             if (playerUnit.ClimbingJumpDirection != ClimbingJumpDirection.Left &&
                 playerUnit.ClimbingJumpDirection != ClimbingJumpDirection.Right)
                 playerUnit.CurrentJumpPower = playerUnit.CurrentClimbingJumpPower;
-
-            InputAction.CallbackContext dummy = new InputAction.CallbackContext();
-            OnGrab(dummy , playerUnit, animator);
+            
+            //InputAction.CallbackContext dummy = new InputAction.CallbackContext();
+            //OnGrab(dummy, playerUnit, animator);
         }
     }
     
@@ -164,5 +171,12 @@ public class PlayerState_ClimbingJump : PlayerState
         if (Time.time - playerUnit.ClimbingJumpStartTime < _minKeepJumpTime)
             return;
         playerUnit.TryGrab();
+    }
+
+    public bool OnGrabClimbingJump(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
+    {
+        if (Time.time - playerUnit.ClimbingJumpStartTime < _minKeepJumpTime)
+            return false;
+        return playerUnit.TryGrab();
     }
 }
