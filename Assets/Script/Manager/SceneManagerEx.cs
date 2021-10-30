@@ -288,7 +288,10 @@ public class SceneManagerEx : ManagerBase
         var scene = SceneManager.GetSceneByName(target);
 
         if(sceneActive)
+        {
             SceneManager.SetActiveScene(scene);
+            LightProbes.Tetrahedralize();
+        }
         _unloadScenes.Add(scene);
 
         //var stage = GameObject.FindObjectOfType<StageManager>();
