@@ -258,6 +258,8 @@ public class EMPGun : UnTransfromObjectBase
             hitData.parent = null;
             SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), hitData);
 
+            crossHair.ActiveHitMark();
+
             if (hit.collider.TryGetComponent<MessageReceiver>(out var receiver))
             {
                 SendMessageEx(receiver, MessageTitles.player_NormalHit, null);
@@ -315,6 +317,8 @@ public class EMPGun : UnTransfromObjectBase
             hitData.rotation = Quaternion.identity;
             hitData.parent = null;
             SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), hitData);
+
+            crossHair.ActiveHitMark();
 
             if (hit.collider.TryGetComponent<MessageReceiver>(out var receiver))
             {

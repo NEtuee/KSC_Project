@@ -34,6 +34,7 @@ public class Core : Hitable
     {
         base.Initialize();
         RegisterRequest(GetSavedNumber("StageManager"));
+
         SendMessageEx(MessageTitles.scan_registerScanObject,UniqueNumberBase.GetSavedNumberStatic("Drone"),this);
         SendMessageEx(MessageTitles.set_gunTargetMessageObject, UniqueNumberBase.GetSavedNumberStatic("FollowTargetCtrl"), this.transform);
     }
