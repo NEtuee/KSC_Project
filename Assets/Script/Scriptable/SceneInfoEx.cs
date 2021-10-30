@@ -22,7 +22,7 @@ public class SceneInfoEx : ScriptableObject
         public string targetName;
 
         [SerializeField]
-        public bool canLoad = true;
+        [HideInInspector]public bool canLoad = true;
     }
 
     [SerializeField]
@@ -87,6 +87,7 @@ public class SceneInfoExEditor : Editor
             var path = AssetDatabase.GetAssetPath(infoEx.targetScenes[i].target);
             var scene = EditorSceneManager.OpenScene(path,mode == OpenSceneMode.Single ? 
                                                     (i == 0 ? mode : OpenSceneMode.Additive) : OpenSceneMode.Additive);
+
             if(i == 0)
             {
                 EditorSceneManager.SetActiveScene(scene);
