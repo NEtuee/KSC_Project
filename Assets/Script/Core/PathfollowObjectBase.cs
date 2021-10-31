@@ -20,6 +20,8 @@ public class PathfollowObjectBase : ObjectBase
     [HideInInspector]public bool pathLoop = false;
 
     private bool _arc = false;
+    private bool _startZero = false;
+    private bool _moveOneToOne = false;
 
     protected override void Awake()
     {
@@ -72,6 +74,46 @@ public class PathfollowObjectBase : ObjectBase
         }
 
         return false;
+    }
+
+    public bool FollowPathPerPoint(float deltaTime)
+    {
+        if(pathArrived || targetTransform == null || !_moveOneToOne)
+            return true;
+
+        SetTarget(targetTransform.position);
+        Move(transform.forward,moveSpeed,rotationSpeed, deltaTime);
+        if(IsArrivedTarget(distanceAccuracy))
+        {
+            _moveOneToOne = false;
+            return true;
+            // var target = GetNextPoint(out bool isEnd).transform;
+
+            // targetTransform = target;
+            // if(isEnd && !pathLoop)
+            // {
+            //     pathArrived = true;
+            // }
+            
+            // return isEnd;
+        }
+
+        return false;
+    }
+
+    public bool SetNextPoint()
+    {
+        var target = GetNextPoint(out bool isEnd).transform;
+
+        targetTransform = target;
+        if(isEnd && !pathLoop)
+        {
+            pathArrived = true;
+        }
+
+        _moveOneToOne = true;
+        
+        return isEnd;
     }
 
     public bool Move(Vector3 direction, float speed, float rotationSpeed, float deltaTime)
@@ -173,7 +215,7 @@ public class PathfollowObjectBase : ObjectBase
         }
     }
 
-    public void SetPath(string target, bool loop = false, bool arc = false)
+    public void SetPath(string target, bool loop = false, bool arc = false, bool startZero = false)
     {
         var data = MessageDataPooling.GetMessageData<MD.StringData>();
         data.value = target;
@@ -181,6 +223,7 @@ public class PathfollowObjectBase : ObjectBase
 
         pathLoop = loop;
         _arc = arc;
+        _startZero = startZero;
     }
 
     public void SetPath(Message msg)
@@ -188,7 +231,10 @@ public class PathfollowObjectBase : ObjectBase
         pathArrived = false;
         currentPath = (PathManagerEx.PathClass)msg.data;
 
-        SetPathTargetNear(_arc);
+        if(_startZero)
+            SetPathTargetZero();
+        else
+            SetPathTargetNear(_arc);
     }
 
     public void SetPathTargetZero()

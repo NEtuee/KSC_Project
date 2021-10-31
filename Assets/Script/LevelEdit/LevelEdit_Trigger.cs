@@ -84,7 +84,6 @@ public class LevelEdit_Trigger : UnTransfromObjectBase
        
         if (targetLayer == (targetLayer | (1<<coll.gameObject.layer)))
         {
-            Debug.Log(gameObject.name);
             gameObject.name = "triggered";
             TriggerEnable();
         }

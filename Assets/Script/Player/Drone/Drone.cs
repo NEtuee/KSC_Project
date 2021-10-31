@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using UniRx;
 using MD;
 
-public class Drone : UnTransfromObjectBase
+public class Drone : PathfollowObjectBase
 {
     public enum DroneState { Default, Approach, Collect, Return , AimHelp ,Help,Scan}
     public enum DroneFollowState{Left,Right,Forward,Backward}
@@ -32,17 +32,17 @@ public class Drone : UnTransfromObjectBase
     [SerializeField] public List<Transform> dronePoints = new List<Transform>();
     [SerializeField] public Transform droneAimPoint;
     [SerializeField] private DroneState state;
-    [SerializeField] private float moveSpeed = 10f;
+    //[SerializeField] private float moveSpeed = 10f;
     [SerializeField] private Vector3 defaultFollowOffset;
-    [SerializeField] private float defaultFollowSpeed = 10.0f;
-    [SerializeField] private float finalTargetLerpSpeed = 5.0f;
-    private Vector3 _currentVelocity;
-    [SerializeField] private Vector3 aimHelpOffset;
-    [SerializeField] private Vector3 helpOffset;
-    [SerializeField] private Vector3 helpGrabStateOffset;
+    // [SerializeField] private float defaultFollowSpeed = 10.0f;
+    // [SerializeField] private float finalTargetLerpSpeed = 5.0f;
+    // private Vector3 _currentVelocity;
+    // [SerializeField] private Vector3 aimHelpOffset;
+    // [SerializeField] private Vector3 helpOffset;
+    // [SerializeField] private Vector3 helpGrabStateOffset;
     [SerializeField] private Vector3 respawnOffset;
-    [SerializeField] private float collectRequiredTime = 1f;
-    [SerializeField] private FloatingMove floatingMove;
+    // [SerializeField] private float collectRequiredTime = 1f;
+    // [SerializeField] private FloatingMove floatingMove;
     [SerializeField] private bool help = false;
     [SerializeField] private float scanCoolTime = 3f;
     public float ScanCoolTime => scanCoolTime;
@@ -96,7 +96,7 @@ public class Drone : UnTransfromObjectBase
     private bool _frontHit = false;
     private bool _scanning = false;
 
-    //?�캔
+    //?�캔
     private Quaternion _scanTargetRotation;
     private float _rotationSpeed = 800.0f;
     private DroneScaner _droneScaner;
