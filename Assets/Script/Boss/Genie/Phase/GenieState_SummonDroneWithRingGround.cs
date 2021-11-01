@@ -171,12 +171,14 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
     {
         _areaList.Clear();
         target.ChangeAnimation(4);
+        target.CreateEyeLight();
         //SetGroundAreaMaterial(target.gridControll.curr);
     }
 
     public void SpawnReady(float t)
     {
         target.ChangeAnimation(3);
+        target.CreateEyeLight();
     }
 
     public void SpawnCheck(float t)

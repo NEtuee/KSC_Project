@@ -199,6 +199,7 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
     {
         _areaList.Clear();
         target.ChangeAnimation(4);
+        target.CreateEyeLight();
         SetSafeZone();
         GetGroundArea();
         SetGroundAreaMaterial(target.gridControll.curr);
@@ -207,6 +208,7 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
     public void SpawnReady(float t)
     {
         target.ChangeAnimation(3);
+        target.CreateEyeLight();
     }
 
     public void SpawnCheck(float t)

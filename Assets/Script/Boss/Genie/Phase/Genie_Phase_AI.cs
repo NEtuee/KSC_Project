@@ -8,6 +8,7 @@ public class Genie_Phase_AI : PathfollowObjectBase
     public Transform respawnPoint;
     public Transform respawnTarget;
     public Transform body;
+    public Transform eyelightPosition;
     public Boogie_GridControll gridControll;
     public Animator animatorController;
     public float bodyRotateSpeed = 5f;
@@ -76,5 +77,18 @@ public class Genie_Phase_AI : PathfollowObjectBase
         _respawnCube.special = true;
 
         respawnPoint.position = _respawnCube.transform.position + Vector3.up;
+    }
+
+    public void CreateEyeLight()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+        data.key = "EyelightBig";
+        data.position = eyelightPosition.position;
+        data.rotation = eyelightPosition.rotation;
+        data.parent = eyelightPosition;
+
+        SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,
+                    UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
     }
 }

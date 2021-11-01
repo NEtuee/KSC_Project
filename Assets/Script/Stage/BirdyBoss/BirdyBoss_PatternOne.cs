@@ -270,8 +270,9 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     for(int i = 0; i < item.code; ++i)
                     {
-                        var cube = GetRandomCube();
+                        
                         _timeCounter.AddSequence(name,0f,null,(x)=>{
+                            var cube = GetRandomCube();
                             cube.SetMove(false,0f,1f,0.1f,()=>{
                                 var target = database.SpawnSpider();
                                 //target.target = centerTransform;
@@ -287,8 +288,9 @@ public class BirdyBoss_PatternOne : ObjectBase
                     float loopTime = item.value / (float)item.code;
                     for(int i = 0; i < item.code; ++i)
                     {
-                        var cube = GetRandomCube();
+                        
                         _timeCounter.AddSequence(name,loopTime,null,(x)=>{
+                            var cube = GetRandomCube();
                             cube.SetMove(false,0f,1f,0.1f,()=>{
                                 var target = database.SpawnSpider();
                                 //target.target = centerTransform;
@@ -305,9 +307,8 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     for(int i = 0; i < item.code; ++i)
                     {
-                        var cube = GetRandomMedusaCube();
-        
                         _timeCounter.AddSequence(name,0f,null,(x)=>{
+                            var cube = GetRandomMedusaCube();
                             var target = database.SpawnMedusa();
                             target.transform.position = cube.transform.position + Vector3.up * .9f;
 
@@ -321,9 +322,8 @@ public class BirdyBoss_PatternOne : ObjectBase
                     float loopTime = item.value / (float)item.code;
                     for(int i = 0; i < item.code; ++i)
                     {
-                        var cube = GetRandomMedusaCube();
-
                         _timeCounter.AddSequence(name,loopTime,null,(x)=>{
+                            var cube = GetRandomMedusaCube();
                             var target = database.SpawnMedusa();
                             target.transform.position = cube.transform.position + Vector3.up * .9f;
 
@@ -434,6 +434,9 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     public HexCube GetRandomMedusaCube()
     {
+        if(_medusaSpawnList.Count == 0)
+            return null;
+
         var cube = _medusaSpawnList[Random.Range(0,_medusaSpawnList.Count)];
         while(!cube.IsActive())
         {
