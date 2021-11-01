@@ -39,7 +39,8 @@ Shader "KSC/KSC_EnergyShield"
         Tags { "RenderType" = "transparent" "RenderPipeline" = "UniversalRenderPipeline" "Queue" = "transparent"}
 
         Blend SrcAlpha OneMinusSrcAlpha
-
+        
+        
         Pass
         {
            
