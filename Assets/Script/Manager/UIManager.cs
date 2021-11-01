@@ -94,6 +94,14 @@ public class UIManager : ManagerBase
     [Header("Drone Status UI")]
     [SerializeField] private DroneStatusUI droneStatusUI;
 
+    [Header("Stack Camera Canvas")]
+    [SerializeField] private Transform stackCameraCanvasTransform;
+    private bool _stackCameraCanvasShake = false;
+    private float _stackCameraCanvasShakeTime = 0.0f;
+    private float _stackCameraCanvasShakePower = 0.0f;
+    private float _stackCameraCanvasShakeCurrentPower = 0.0f;
+    private Vector3 _stackCameraCanvasInitPosition = new Vector3();
+
     private EventSystem _eventSystem;
 
     private void Start()
@@ -143,6 +151,11 @@ public class UIManager : ManagerBase
         if (damageEffect == null)
         {
             Debug.LogError("Not Set DamageEffect");
+        }
+
+        if (stackCameraCanvasTransform != null)
+        {
+            _stackCameraCanvasInitPosition = stackCameraCanvasTransform.localPosition;
         }
     }
 
@@ -349,6 +362,19 @@ public class UIManager : ManagerBase
             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
             droneStatusUI.SetHpCount(data.value);
         });
+
+        AddAction(MessageTitles.uimanager_shakeStackCameraCanvas, (msg) =>
+        {
+            ShakeStackCameraData data = MessageDataPooling.CastData<ShakeStackCameraData>(msg.data);
+            StartCoroutine(ShakeStackCameraCanvas(data.time, data.power));
+        });
+
+        AddAction(MessageTitles.uimanager_shakeAmountStackCameraCanvas, (msg) =>
+        {
+            ShakeStackCameraData data = MessageDataPooling.CastData<ShakeStackCameraData>(msg.data);
+            StartCoroutine(ShakeAmountStackCameraCanvas(data.time, data.power));
+        });
+
     }
 
     public override void Initialize()
@@ -749,6 +775,42 @@ public class UIManager : ManagerBase
         SendMessageEx(MessageTitles.scene_loadSceneNotAsync, GetSavedNumber("SceneManager"), data);
     }
 
+    private IEnumerator ShakeStackCameraCanvas(float time, float power)
+    {
+        float curTime = time;
+        float curPower = power;
+
+        while(curTime > 0.0f)
+        {
+            Vector3 shakeFactor = UnityEngine.Random.insideUnitCircle* power;
+            stackCameraCanvasTransform.localPosition =  shakeFactor + _stackCameraCanvasInitPosition;
+
+            curTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        stackCameraCanvasTransform.localPosition =  _stackCameraCanvasInitPosition;
+    }
+
+    private IEnumerator ShakeAmountStackCameraCanvas(float time, float power)
+    {
+        float curTime = time;
+        float curPower = power;
+        float amount = 1f;
+
+        while (curTime > 0.0f)
+        {
+            Vector3 shakeFactor = UnityEngine.Random.insideUnitCircle * power * amount;
+            stackCameraCanvasTransform.localPosition = shakeFactor + _stackCameraCanvasInitPosition;
+            amount = Mathf.Lerp(amount, 0f, curTime / time);
+
+            curTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        stackCameraCanvasTransform.localPosition = _stackCameraCanvasInitPosition;
+    }
+
     public enum PauseMenuState
     {
         Game = 0, Pause,Option, Sound, Display, Control, KeyBinding, Loading, Tutorial, InGameTutorial, GameOver
@@ -792,6 +854,12 @@ namespace MD
         // public Vector3 center;
         // public Vector3 min;
         // public Vector3 max;
+    }
+
+    public class ShakeStackCameraData : MessageData
+    {
+        public float time;
+        public float power;
     }
 }
 //public class HpPackValueType : MessageData

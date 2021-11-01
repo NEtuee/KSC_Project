@@ -194,6 +194,16 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort uimanager_setDroneHpValue = 0x0334;
 
+    /// <summary>
+    /// data = ShakeStackCameraData
+    /// </summary>
+    public const ushort uimanager_shakeStackCameraCanvas = 0x0335;
+
+    /// <summary>
+    /// data = ShakeStackCameraData
+    /// </summary>
+    public const ushort uimanager_shakeAmountStackCameraCanvas = 0x0336;
+
     #endregion
 
     /// <summary>

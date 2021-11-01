@@ -350,6 +350,11 @@ public class PlayerManager : ManagerBase
             SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
         }
 
+
+        if (Keyboard.current.zKey.wasPressedThisFrame)
+        {
+            _player.TakeDamage(0f);
+        }
     }
 
     public void GameQuit()
