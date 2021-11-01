@@ -22,6 +22,7 @@ public class BirdyBoss_PatternOne : ObjectBase
             ActiveHPUI,
             DeactiveHPUI,
             HeadStemp,
+            BirdyApear,
         };
         
         public string identifier;
@@ -44,6 +45,7 @@ public class BirdyBoss_PatternOne : ObjectBase
     public HexCubeGrid cubeGrid;
 
     public Transform ceilingSpawnPosition;
+    public NewEmpShield empShield;
 
     public PlayerRePositionor respawn;
 
@@ -61,17 +63,18 @@ public class BirdyBoss_PatternOne : ObjectBase
     private int _hp;
     private float _fillAmountTarget = 1f;
 
+    private bool _droneActive = false;
     private bool _loopProcess = false;
     private bool _respawn = false;
 
     private PlayerUnit _player;
+    private Drone _drone;
     private HexCube _respawnCube;
 
     public override void Assign()
     {
         base.Assign();
 
-        FindGrids(4,10);
         CreateSequencer("process",ref sequences);
         CreateSequencer("loop",ref loopSequences);
 
@@ -84,12 +87,16 @@ public class BirdyBoss_PatternOne : ObjectBase
 
         AddAction(MessageTitles.set_setplayer,(x)=>{
             _player = (PlayerUnit)x.data;
+            _drone = _player.Drone;
+
+            SetActive(active);
         });
     }
 
     public override void Initialize()
     {
         base.Initialize();
+        FindGrids(4, 10);
 
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
@@ -121,11 +128,36 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.InitSequencer("loop");
             }
         }
+
+        if(_droneActive)
+        {
+            _drone.FollowPathStraight(deltaTime);
+            _drone.transform.LookAt(_drone.targetTransform);
+            empShield.transform.position = _drone.transform.position;
+        }
+    }
+
+    public void ActiveDrone()
+    {
+        _droneActive = true;
+        _drone.StartDissolveEffect();
+        _drone.SetPath("PatternOne_Head",true);
+        _drone.moveSpeed = 3;
+        empShield.gameObject.SetActive(true);
+        empShield.Reactive();
     }
 
     public void SetActive(bool value)
     {
         active = value;
+
+        if (active)
+        {
+            _drone.canMove = false;
+            _drone.gameObject.SetActive(value);
+            _drone.transform.SetParent(headPattern.transform);
+            _drone.transform.localPosition = Vector3.zero;
+        }
     }
 
     public void LoopStart()
@@ -356,6 +388,13 @@ public class BirdyBoss_PatternOne : ObjectBase
 
                     if(cube != null)
                         headPattern.StempTarget(cube);
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.BirdyApear)
+            {
+                _timeCounter.AddSequence(name, item.value, null, (x) =>
+                {
+                    ActiveDrone();
                 });
             }
         }
