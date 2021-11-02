@@ -11,6 +11,7 @@ public class Genie_Phase_AI : PathfollowObjectBase
     public Transform eyelightPosition;
     public Boogie_GridControll gridControll;
     public Animator animatorController;
+    public ParticleSystem leftHandEffect;
     public float bodyRotateSpeed = 5f;
 
     private PlayerUnit _player;
@@ -90,5 +91,15 @@ public class Genie_Phase_AI : PathfollowObjectBase
 
         SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,
                     UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+    }
+
+    public void PlayLeftHandEffect()
+    {
+        leftHandEffect.Play();
+    }
+
+    public void PauseLeftHandEffect()
+    {
+        leftHandEffect.Stop(false);
     }
 }
