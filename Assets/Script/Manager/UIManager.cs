@@ -102,7 +102,16 @@ public class UIManager : ManagerBase
     private float _stackCameraCanvasShakeCurrentPower = 0.0f;
     private Vector3 _stackCameraCanvasInitPosition = new Vector3();
 
+    [Header("CrossHair")]
+    [SerializeField] private Image centerGage;
+    private const int MAX_LOAD_COUNT = 4;
+    [SerializeField] private Image[] loadCountUi = new Image[MAX_LOAD_COUNT];
+    [SerializeField] private Color highlightColor = Color.white;
+    private int prevLoadCount;
+    
+
     private EventSystem _eventSystem;
+    private PlayerUnit _player;
 
     private void Start()
     {
@@ -258,13 +267,36 @@ public class UIManager : ManagerBase
             {
                 aimEnergyBarImage.color = Color.white;
             }
+
+            centerGage.fillAmount = data.value;
         });
+
         AddAction(MessageTitles.uimanager_setgunenergyvalue, (msg) =>
         {
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
             aimEnergyBar.SetBackValue(data.value);
             aimEnergyBar2.fillAmount = data.value / 100.0f;
+
+            int loadCount = (int)(data.value / _player.NoramlGunCost);
+
+            if (prevLoadCount == loadCount)
+                return;
+
+            for(int i = 0; i<MAX_LOAD_COUNT; i++)
+            {
+                if(i < loadCount)
+                {
+                    loadCountUi[i].color = highlightColor;
+                }
+                else
+                {
+                    loadCountUi[i].color = Color.white;
+                }
+            }
+
+            prevLoadCount = loadCount;
         });
+
         AddAction(MessageTitles.uimanager_activegunui, (msg) =>
         {
             BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
@@ -375,6 +407,11 @@ public class UIManager : ManagerBase
             StartCoroutine(ShakeAmountStackCameraCanvas(data.time, data.power));
         });
 
+
+        AddAction(MessageTitles.set_setplayer, (msg) =>
+        {
+            _player = (PlayerUnit)msg.data;
+        });
     }
 
     public override void Initialize()
@@ -382,6 +419,7 @@ public class UIManager : ManagerBase
         base.Initialize();
 
         SendMessageEx(MessageTitles.videomanager_settargetimage, GetSavedNumber("VideoManager"), videoRawImage);
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
         fadeCanvas.enabled = false;
     }
