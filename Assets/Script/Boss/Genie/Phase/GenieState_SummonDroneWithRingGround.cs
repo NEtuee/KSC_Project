@@ -29,6 +29,7 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
 
     private bool _pattern = false;
     private bool _hitGround = false;
+    private bool _drag = false;
     private float _deltaTime;
 
     private List<HexCube> _areaList = new List<HexCube>();
@@ -51,6 +52,14 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
         _timeCounter.CreateSequencer("SpawnDrones");
         _timeCounter.AddSequence("SpawnDrones", droneSpawnStartTime, null,SpawnReady);
         _timeCounter.AddSequence("SpawnDrones", droneSpawnTiming, null,SpawnProgress);
+
+        _timeCounter.CreateSequencer("Drag");
+        _timeCounter.AddSequence("Drag", .8f, null, (x) => {
+            target.PlayLeftHandEffect();
+        });
+        _timeCounter.AddSequence("Drag", 1.2f, null, (x)=> {
+            target.PauseLeftHandEffect();
+        });
     }
 
     public override void StateInitialize(StateBase prevState)
@@ -60,22 +69,28 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
         _timeCounter.InitSequencer("GroundHit");
         _timeCounter.InitSequencer("SpawnDrones");
         _timeCounter.InitSequencer("PatternWait");
+        _timeCounter.InitSequencer("Drag");
 
         UpdateDroneCount();
         _droneSpawnLimit = _currentDroneCount;
         _droneSpawnCount = 0;
 
         _pattern = false;
+        _drag = false;
 
         ((Genie_CoreDroneAI)droneAIs[droneAIs.Count - 1]).mirror = true;
     }
+
 
     public override void StateProgress(float deltaTime)
     {
         base.StateProgress(deltaTime);
         _deltaTime = deltaTime;
 
-        if(!_pattern)
+        if(_drag)
+            _drag = !_timeCounter.ProcessSequencer("Drag",deltaTime);
+
+        if (!_pattern)
         {
             LookTarget(target.body,target.targetTransform.position, deltaTime);
             _pattern = _timeCounter.ProcessSequencer("PatternWait",deltaTime);
@@ -132,6 +147,8 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
             cube.special = false;
         }
 
+        target.PauseLeftHandEffect();
+
         DeleteAllDrone();
     }
 
@@ -171,12 +188,17 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
     {
         _areaList.Clear();
         target.ChangeAnimation(4);
+        target.CreateEyeLight();
+
+        _drag = true;
+        _timeCounter.InitSequencer("Drag");
         //SetGroundAreaMaterial(target.gridControll.curr);
     }
 
     public void SpawnReady(float t)
     {
         target.ChangeAnimation(3);
+        target.CreateEyeLight();
     }
 
     public void SpawnCheck(float t)

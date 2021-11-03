@@ -891,6 +891,11 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         SendMessageEx(MessageTitles.uimanager_damageEffect, GetSavedNumber("UIManager"), null);
         SendMessageEx(MessageTitles.gamepadVibrationManager_vibrationByKey, GetSavedNumber("GamepadVibrationManager"), "TakeDamage");
+
+        var shakeData = MessageDataPooling.GetMessageData<ShakeStackCameraData>();
+        shakeData.time = 0.5f;
+        shakeData.power = 1;
+        SendMessageEx(MessageTitles.uimanager_shakeStackCameraCanvas, GetSavedNumber("UIManager"), shakeData);
     }
 
     public void TakeDamage(float damage, float ragdollPower, Vector3 ragdollDir)
@@ -1575,6 +1580,8 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         Gizmos.DrawWireSphere(transform.TransformPoint(groundCheckOffset),groundCheckRadius);
     }
+
+
 #endif
 
     protected void OnCollisionStay(Collision collision)

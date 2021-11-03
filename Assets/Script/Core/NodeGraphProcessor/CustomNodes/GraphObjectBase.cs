@@ -42,6 +42,7 @@ public class GraphObjectBase : UnTransfromObjectBase
     public override void Assign()
     {
         base.Assign();
+        AddAction(MessageTitles.player_NormalHit,EMPHitMessage);
         AddAction(MessageTitles.player_EMPHit,EMPHitMessage);
         AddAction(MessageTitles.scan_scanned,ScannedMessage);
 
@@ -196,9 +197,9 @@ public class GraphObjectBase : UnTransfromObjectBase
 
     public void EMPHitMessage(Message msg)
     {
-        var data = MessageDataPooling.CastData<MD.FloatData>(msg.data);
+        //var data = MessageDataPooling.CastData<MD.FloatData>(msg.data);
 
-        WhenEMPHit(data.value);
+        WhenEMPHit(0f);
     }
 
     public override bool CanHandleMessage(Message msg)
@@ -213,7 +214,7 @@ public class GraphObjectBase : UnTransfromObjectBase
 
     public override void MessageProcessing(Message msg)
     {
-        if(msg.title == MessageTitles.player_EMPHit || msg.title == MessageTitles.scan_scanned)
+        if(msg.title == MessageTitles.player_EMPHit || msg.title == MessageTitles.scan_scanned || msg.title == MessageTitles.player_NormalHit)
         {
             base.MessageProcessing(msg);
         }

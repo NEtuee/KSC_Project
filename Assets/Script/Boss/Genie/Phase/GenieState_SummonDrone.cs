@@ -68,6 +68,7 @@ public class GenieState_SummonDrone : GenieStateBase
             {
                 _timeCounter.InitTimer("droneSpawnTiming",0f,droneSpawnTiming);
                 target.ChangeAnimation(3);
+                target.CreateEyeLight();
 
                 _droneSpawnLimit = _currentDroneCount;
             }

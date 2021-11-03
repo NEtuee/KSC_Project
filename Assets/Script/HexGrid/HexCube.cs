@@ -152,6 +152,17 @@ public class HexCube : MonoBehaviour
         transform.localPosition = pos;
     }
 
+    public void MoveToDown()
+    {
+        _inMove = false;
+        _outMove = false;
+        _isActive = false;
+        _inverseMoveTime = 0f;
+        var pos = transform.localPosition;
+        pos.y = outCurve.Evaluate(1f);
+        transform.localPosition = pos;
+    }
+
     public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f, System.Action disable = null, System.Action enable = null)
     {
         _inMove = active;
@@ -194,6 +205,5 @@ public class HexCube : MonoBehaviour
     public void SetKeyFromAxial(int mapSize)
     {
         key = HexGridHelperEx.GetKeyFromAxial(axialPoint.x,axialPoint.y,mapSize);
-        Debug.Log(key);
     }
 }

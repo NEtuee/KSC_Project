@@ -461,7 +461,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
                 Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
                 //transform.rotation = localRotation;
-                transform.rotation = Quaternion.RotateTowards(transform.rotation,localRotation,250.0f*Time.fixedDeltaTime);
+                //transform.rotation = Quaternion.RotateTowards(transform.rotation,localRotation,250.0f*Time.fixedDeltaTime);
+                transform.rotation = localRotation;
                 Vector3 targetEuler = transform.rotation.eulerAngles;
                 if (targetRot.x < 0.0f)
                     targetRot = new Vector3(targetEuler.x > pitchLimitMax ? targetEuler.x - 360.0f : targetEuler.x, targetEuler.y, targetEuler.z);
