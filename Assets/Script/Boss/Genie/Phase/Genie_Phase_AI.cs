@@ -100,6 +100,6 @@ public class Genie_Phase_AI : PathfollowObjectBase
 
     public void PauseLeftHandEffect()
     {
-        leftHandEffect.Stop(false);
+        leftHandEffect.Stop(true);
     }
 }

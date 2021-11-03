@@ -54,10 +54,10 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
         _timeCounter.AddSequence("SpawnDrones", droneSpawnTiming, null,SpawnProgress);
 
         _timeCounter.CreateSequencer("Drag");
-        _timeCounter.AddSequence("Drag", 0.3f, null, (x) => {
+        _timeCounter.AddSequence("Drag", .8f, null, (x) => {
             target.PlayLeftHandEffect();
         });
-        _timeCounter.AddSequence("Drag", 0.4f, null, (x)=> {
+        _timeCounter.AddSequence("Drag", 1.2f, null, (x)=> {
             target.PauseLeftHandEffect();
         });
     }
