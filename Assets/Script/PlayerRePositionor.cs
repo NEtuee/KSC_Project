@@ -164,6 +164,11 @@ public class PlayerRePositionor : UnTransfromObjectBase
         }
     }
 
+    public void SetRespawnPoint(Transform tp)
+    {
+        respawn = tp;
+    }
+
     protected override void OnDestroy()
     {
         StopAllCoroutines();

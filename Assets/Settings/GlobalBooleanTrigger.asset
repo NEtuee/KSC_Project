@@ -23,6 +23,8 @@ MonoBehaviour:
   - id: 7
   - id: 8
   - id: 9
+  - id: 10
+  - id: 11
   references:
     version: 1
     00000000:
@@ -78,10 +80,22 @@ MonoBehaviour:
       data:
         name: AClear
         description: 'trigger : AClear'
-        trigger: 0
+        trigger: 1
     00000009:
       type: {class: BooleanTuple, ns: , asm: EveryAssembly}
       data:
         name: BClear
         description: 'trigger : BClear'
+        trigger: 0
+    0000000A:
+      type: {class: BooleanTuple, ns: , asm: EveryAssembly}
+      data:
+        name: HubCutscene
+        description: 'trigger : HubCutscene'
+        trigger: 0
+    0000000B:
+      type: {class: BooleanTuple, ns: , asm: EveryAssembly}
+      data:
+        name: HubEntrance
+        description: 'trigger : HubEntrance'
         trigger: 0

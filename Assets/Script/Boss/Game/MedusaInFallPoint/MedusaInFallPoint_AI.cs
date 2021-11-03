@@ -16,6 +16,7 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
     public Transform hitPosition;
 
     public bool launch = false;
+    public bool startActive = true;
 
     public override void Assign()
     {
@@ -35,10 +36,13 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
-        stateProcessor.StateChange("Active");
-        AnimationChange(8);
-
-        SetIKMovement(false);
+        if(startActive)
+        {
+            stateProcessor.StateChange("Active");
+            AnimationChange(8);
+            SetIKMovement(false);
+        }
+        
     }
 
     public override void FixedProgress(float deltaTime)

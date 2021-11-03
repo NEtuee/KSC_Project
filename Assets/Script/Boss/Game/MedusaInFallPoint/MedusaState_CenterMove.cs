@@ -49,7 +49,7 @@ public class MedusaState_CenterMove : MedusaFallPointStateBase
         _timeCounter.InitTimer("WaitTime",0f,waitTime);
 
         _velocity = Vector3.zero;
-        _direction = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
+        //_direction = MathEx.DeleteYPos(target.target.position - target.transform.position).normalized;
 
         // if(Vector3.Distance(centerPosition.position,target.target.position) < centerDist)
         // {

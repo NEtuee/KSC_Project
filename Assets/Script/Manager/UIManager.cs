@@ -94,7 +94,24 @@ public class UIManager : ManagerBase
     [Header("Drone Status UI")]
     [SerializeField] private DroneStatusUI droneStatusUI;
 
+    [Header("Stack Camera Canvas")]
+    [SerializeField] private Transform stackCameraCanvasTransform;
+    private bool _stackCameraCanvasShake = false;
+    private float _stackCameraCanvasShakeTime = 0.0f;
+    private float _stackCameraCanvasShakePower = 0.0f;
+    private float _stackCameraCanvasShakeCurrentPower = 0.0f;
+    private Vector3 _stackCameraCanvasInitPosition = new Vector3();
+
+    [Header("CrossHair")]
+    [SerializeField] private Image centerGage;
+    private const int MAX_LOAD_COUNT = 4;
+    [SerializeField] private Image[] loadCountUi = new Image[MAX_LOAD_COUNT];
+    [SerializeField] private Color highlightColor = Color.white;
+    private int prevLoadCount;
+    
+
     private EventSystem _eventSystem;
+    private PlayerUnit _player;
 
     private void Start()
     {
@@ -143,6 +160,11 @@ public class UIManager : ManagerBase
         if (damageEffect == null)
         {
             Debug.LogError("Not Set DamageEffect");
+        }
+
+        if (stackCameraCanvasTransform != null)
+        {
+            _stackCameraCanvasInitPosition = stackCameraCanvasTransform.localPosition;
         }
     }
 
@@ -245,13 +267,36 @@ public class UIManager : ManagerBase
             {
                 aimEnergyBarImage.color = Color.white;
             }
+
+            centerGage.fillAmount = data.value;
         });
+
         AddAction(MessageTitles.uimanager_setgunenergyvalue, (msg) =>
         {
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
             aimEnergyBar.SetBackValue(data.value);
             aimEnergyBar2.fillAmount = data.value / 100.0f;
+
+            int loadCount = (int)(data.value / _player.NoramlGunCost);
+
+            if (prevLoadCount == loadCount)
+                return;
+
+            for(int i = 0; i<MAX_LOAD_COUNT; i++)
+            {
+                if(i < loadCount)
+                {
+                    loadCountUi[i].color = highlightColor;
+                }
+                else
+                {
+                    loadCountUi[i].color = Color.white;
+                }
+            }
+
+            prevLoadCount = loadCount;
         });
+
         AddAction(MessageTitles.uimanager_activegunui, (msg) =>
         {
             BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
@@ -349,6 +394,24 @@ public class UIManager : ManagerBase
             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
             droneStatusUI.SetHpCount(data.value);
         });
+
+        AddAction(MessageTitles.uimanager_shakeStackCameraCanvas, (msg) =>
+        {
+            ShakeStackCameraData data = MessageDataPooling.CastData<ShakeStackCameraData>(msg.data);
+            StartCoroutine(ShakeStackCameraCanvas(data.time, data.power));
+        });
+
+        AddAction(MessageTitles.uimanager_shakeAmountStackCameraCanvas, (msg) =>
+        {
+            ShakeStackCameraData data = MessageDataPooling.CastData<ShakeStackCameraData>(msg.data);
+            StartCoroutine(ShakeAmountStackCameraCanvas(data.time, data.power));
+        });
+
+
+        AddAction(MessageTitles.set_setplayer, (msg) =>
+        {
+            _player = (PlayerUnit)msg.data;
+        });
     }
 
     public override void Initialize()
@@ -356,6 +419,7 @@ public class UIManager : ManagerBase
         base.Initialize();
 
         SendMessageEx(MessageTitles.videomanager_settargetimage, GetSavedNumber("VideoManager"), videoRawImage);
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
         fadeCanvas.enabled = false;
     }
@@ -749,6 +813,42 @@ public class UIManager : ManagerBase
         SendMessageEx(MessageTitles.scene_loadSceneNotAsync, GetSavedNumber("SceneManager"), data);
     }
 
+    private IEnumerator ShakeStackCameraCanvas(float time, float power)
+    {
+        float curTime = time;
+        float curPower = power;
+
+        while(curTime > 0.0f)
+        {
+            Vector3 shakeFactor = UnityEngine.Random.insideUnitCircle* power;
+            stackCameraCanvasTransform.localPosition =  shakeFactor + _stackCameraCanvasInitPosition;
+
+            curTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        stackCameraCanvasTransform.localPosition =  _stackCameraCanvasInitPosition;
+    }
+
+    private IEnumerator ShakeAmountStackCameraCanvas(float time, float power)
+    {
+        float curTime = time;
+        float curPower = power;
+        float amount = 1f;
+
+        while (curTime > 0.0f)
+        {
+            Vector3 shakeFactor = UnityEngine.Random.insideUnitCircle * power * amount;
+            stackCameraCanvasTransform.localPosition = shakeFactor + _stackCameraCanvasInitPosition;
+            amount = Mathf.Lerp(amount, 0f, curTime / time);
+
+            curTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        stackCameraCanvasTransform.localPosition = _stackCameraCanvasInitPosition;
+    }
+
     public enum PauseMenuState
     {
         Game = 0, Pause,Option, Sound, Display, Control, KeyBinding, Loading, Tutorial, InGameTutorial, GameOver
@@ -792,6 +892,12 @@ namespace MD
         // public Vector3 center;
         // public Vector3 min;
         // public Vector3 max;
+    }
+
+    public class ShakeStackCameraData : MessageData
+    {
+        public float time;
+        public float power;
     }
 }
 //public class HpPackValueType : MessageData

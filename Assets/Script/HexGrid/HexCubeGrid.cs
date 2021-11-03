@@ -15,6 +15,8 @@ public class HexCubeGrid : MonoBehaviour
     public int mapSize;
     public float cubeSize;
 
+    public bool moveCubeToUp = true;
+
     [SerializeField] private List<HexCube> _serializedCubeMap;
     private Dictionary<int,HexCube> _cubeMap;
     [SerializeField] private float _cubeWidth;
@@ -256,7 +258,7 @@ public class HexCubeGrid : MonoBehaviour
         return GetCube(HexGridHelperEx.GetCubeReflectZ(point),false);
     }
 
-    public void CreateCubeMap()
+    public void CreateCubeMap(bool moveToUp = true)
     {
         if(_serializedCubeMap == null)
             _serializedCubeMap = new List<HexCube>();
@@ -272,8 +274,16 @@ public class HexCubeGrid : MonoBehaviour
             int size = mapSize + Mathf.Min(0,max);
             for(; j < size; ++j)
             {
-                AddCubeToList(j,i);
+                AddCubeToList(j,i,moveToUp);
             }
+        }
+    }
+
+    public void MoveToDownAll()
+    {
+        foreach(var item in _cubeMap.Values)
+        {
+            item.MoveToDown();
         }
     }
 
@@ -289,9 +299,9 @@ public class HexCubeGrid : MonoBehaviour
         _serializedCubeMap.Add(cube);
     }
 
-    public void AddCubeToList(int q, int r)
+    public void AddCubeToList(int q, int r, bool moveToUp = true)
     {
-        var cube = CreateCube(q,r);
+        var cube = CreateCube(q,r,moveToUp);
         _serializedCubeMap.Add(cube);
     }
     
@@ -400,13 +410,18 @@ public class HexCubeGrid : MonoBehaviour
         }
     }
 
-    public HexCube CreateCube(int q,int r)
+    public HexCube CreateCube(int q,int r, bool moveToUp = true)
     {
         var cube = CreateCube();
         int half = (mapSize - 1) / 2;
 
         cube.Init(q - half,r - half,mapSize,cubeSize);
         cube.transform.position = HexGridHelperEx.AxialToWorld(_cubeWidth,_cubeHeight,cube.axialPoint) + transform.position;
+
+        if(moveToUp)
+            cube.MoveToUp();
+        else
+            cube.MoveToDown();
 
         return cube;
     }
@@ -440,7 +455,7 @@ public class HexCubeGridEdit : Editor
         }
         if (GUILayout.Button("Create"))
         {
-            changer.CreateCubeMap();
+            changer.CreateCubeMap(changer.moveCubeToUp);
         }
         if (GUILayout.Button("Delete"))
         {

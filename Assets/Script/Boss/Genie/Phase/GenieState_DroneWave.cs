@@ -75,7 +75,7 @@ public class GenieState_DroneWave : GenieStateBase
         _droneLinePool.AddCreateDelegate(target, droneSpinTime,droneApearTime,droneStartWaitTime,droneEndWaitTime);
 
         _timeCounter.CreateSequencer("Start");
-        _timeCounter.AddSequence("Start",beforeGroundHitTime,LookTarget,(x)=>{target.ChangeAnimation(10);});
+        _timeCounter.AddSequence("Start",beforeGroundHitTime,LookTarget,(x)=>{target.ChangeAnimation(10);target.CreateEyeLight();});
         _timeCounter.AddSequence("Start",groundHitStartTime,BeforeGroundCut,GroundDisapear);
         _timeCounter.AddSequence("Start",patternStartTime,null,null);
         

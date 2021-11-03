@@ -62,6 +62,7 @@ public class B1_SpiderState_HitBack : B1_SpiderStateBase
         else
         {
             target.Move(_direction,_speed,deltaTime);
+            target.Turn(_direction,deltaTime);
             _speed = backSpeed * (backTime - (time / backTime));
 
             if(!_downRay.Cast(rayPosition.position,out var hit))

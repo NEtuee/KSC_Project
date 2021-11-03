@@ -5,6 +5,7 @@ using UnityEngine;
 public class StateProcessor : MonoBehaviour
 {
     public List<StateBase> states = new List<StateBase>();
+    public System.Action<StateBase> whenStateChanged;
 
     public string currentState;
 
@@ -47,6 +48,8 @@ public class StateProcessor : MonoBehaviour
         _currentState.StateInitialize(_prevState);
 
         currentState = _currentState.stateIdentifier;
+
+        whenStateChanged?.Invoke(state);
     }
 
     public StateBase GetState(string key)
