@@ -14,6 +14,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public float endSignalTime;
 
     public List<GameObject> activeLists = new List<GameObject>();
+    public List<GameObject> endActiveLists = new List<GameObject>();
     public Transform endTransform;
     public Transform birdyEndPosition;
 
@@ -135,6 +136,10 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     {
         EndTrigger();
         SetActiveObjects(false);
+        foreach(var item in endActiveLists)
+        {
+            item.SetActive(true);
+        }
 
         if (endTransform != null)
         {
