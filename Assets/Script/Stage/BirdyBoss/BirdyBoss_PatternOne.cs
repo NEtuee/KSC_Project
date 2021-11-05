@@ -27,6 +27,7 @@ public class BirdyBoss_PatternOne : ObjectBase
             StartFog,
             EndFog,
             GenieHitGround,
+            Giro
         };
         
         public string identifier;
@@ -76,6 +77,9 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     [Header("Genie")]
     public BridyBoss_GeniePlatform geniePlatform;
+
+    [Header("GiroPattern")]
+    public GiroPattern giroPattern;
 
     List<HexCube> _spawnCubeList = new List<HexCube>();
     List<HexCube> _medusaSpawnList = new List<HexCube>();
@@ -516,6 +520,29 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     geniePlatform.Active();
                 });
+            }
+            else if(item.type == SequenceItem.EventEnum.Giro)
+            {
+                _timeCounter.AddSequence(name, 0.0f, null, (x) =>
+                 {
+                     giroPattern.Appear();
+                 });
+
+                _timeCounter.AddSequence(name, 3.0f, null, (x) =>
+                {
+                    //Debug.Log("wait");
+                });
+
+                for (int i = 0; i < giroPattern.ObjectCount; i++)
+                {
+                    int count = i;
+                    _timeCounter.AddSequence(name, 1f, null, (value) =>
+                     {
+                         giroPattern.Launch(count, _player.Transform.position, 5000f);
+                     });
+                }
+
+                _timeCounter.AddSequence(name, 4.0f, null, null);
             }
         }
     }
