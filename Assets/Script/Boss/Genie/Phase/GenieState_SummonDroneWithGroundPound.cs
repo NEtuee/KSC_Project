@@ -154,6 +154,7 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
                 droneAIs[i].ToMainTarget();
             }
         }
+        target.PauseLeftHandEffect();
     }
 
     public void SetGroundAreaMaterial(Material mat)

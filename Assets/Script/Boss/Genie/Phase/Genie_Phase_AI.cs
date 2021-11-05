@@ -14,6 +14,9 @@ public class Genie_Phase_AI : PathfollowObjectBase
     public ParticleSystem leftHandEffect;
     public float bodyRotateSpeed = 5f;
 
+    public Transform leftHandHitEffect;
+    public Transform rightHandHitEffect;
+
     private PlayerUnit _player;
     private TimeCounterEx _timeCounter = new TimeCounterEx();
     private bool _respawn = false;
@@ -90,6 +93,28 @@ public class Genie_Phase_AI : PathfollowObjectBase
         data.parent = eyelightPosition;
 
         SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,
+                    UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+    }
+
+    public void CreateLeftHit()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+        data.key = "HeavyHit";
+        data.position = leftHandHitEffect.position;
+
+        SendMessageEx(MessageTitles.effectmanager_activeeffect,
+                    UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+    }
+
+    public void CreateRightHit()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+        data.key = "HeavyHit";
+        data.position = rightHandHitEffect.position;
+
+        SendMessageEx(MessageTitles.effectmanager_activeeffect,
                     UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
     }
 
