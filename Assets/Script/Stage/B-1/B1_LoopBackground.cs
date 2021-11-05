@@ -2,9 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class B1_LoopBackground : MonoBehaviour
 {
+    public enum LoopDirection
+    {
+        X,
+        Y,
+        Z
+    }
+
     [System.Serializable]
     public class LoopBackgroundItem
     {
@@ -52,6 +62,7 @@ public class B1_LoopBackground : MonoBehaviour
         public int cacheId;
     }
 
+    [System.Serializable]
     public class LoopItem
     {
         public Transform transform;
@@ -105,7 +116,7 @@ public class B1_LoopBackground : MonoBehaviour
 
 
 
-
+    public LoopDirection loopDirection = LoopDirection.Z;
     public float maxLength = 150f;
     public float scrollSpeed = 10f;
 
@@ -118,17 +129,18 @@ public class B1_LoopBackground : MonoBehaviour
 
     public List<int> backgroundPattern = new List<int>();
 
-    private List<LoopItem> _backgrounds = new List<LoopItem>();
-
-    private LoopItem _front;
-    private float _backgroundLength;
+    [SerializeField]private List<LoopItem> _backgrounds = new List<LoopItem>();
+    [SerializeField]private LoopItem _front;
+    [SerializeField]private float _backgroundLength;
 
     private Vector3 _respawnAreaPos;
     private Vector3 _respawnPointPos;
 
     public void Start()
     {
-        CreateBackground();
+        if(_backgrounds.Count == 0)
+            CreateBackground();
+        //DeleteBackground();
 
         _respawnAreaPos = respawnArea.localPosition;
         _respawnPointPos = respawnPoint.localPosition;
@@ -204,20 +216,42 @@ public class B1_LoopBackground : MonoBehaviour
 
     public void Scroll(float deltaTime)
     {
+        var dir = (loopDirection == LoopDirection.X ? transform.right : (loopDirection == LoopDirection.Y ? transform.up : transform.forward));
         foreach(var item in _backgrounds)
         {
-            item.transform.position += -Vector3.forward * scrollSpeed * deltaTime;
+            item.transform.position += -dir * scrollSpeed * deltaTime;
         }
 
         foreach(var item in _backgrounds)
         {
-            if(item.transform.position.z < -(maxLength * 0.5f))
+            var pos = (loopDirection == LoopDirection.X ? item.transform.localPosition.x : (loopDirection == LoopDirection.Y ? item.transform.localPosition.y : item.transform.localPosition.z));
+            if(pos < -(maxLength * 0.5f))
             {
-                item.transform.position = _front.transform.position + Vector3.forward * (item.length * 0.5f + _front.length * 0.5f);
+                item.transform.position = _front.transform.position + dir * (item.length * 0.5f + _front.length * 0.5f);
                 _front = item;
 
                 ReturnObstacles(ref _front.obstacles);
             }
+        }
+    }
+
+    public void DeleteBackground()
+    {
+        if(_backgrounds.Count > 0)
+        {
+            foreach(var item in _backgrounds)
+            {
+                #if UNITY_EDITOR
+                if(EditorApplication.isPlaying)
+                    Destroy(item.transform.gameObject);
+                else
+                    DestroyImmediate(item.transform.gameObject);
+                #else
+                Destroy(item.transform.gameObject);
+                #endif
+            }
+
+            _backgrounds.Clear();
         }
     }
 
@@ -260,11 +294,46 @@ public class B1_LoopBackground : MonoBehaviour
                 currLen -= _backgrounds[i-1].length * 0.5f;
             }
 
-            var pos = _backgrounds[i].transform.position;
-            pos.z = currLen;
+            var pos = _backgrounds[i].transform.localPosition;
+            if(loopDirection == LoopDirection.X)
+                pos.x = currLen;
+            else if(loopDirection == LoopDirection.Y)
+                pos.y = currLen;
+            else if(loopDirection == LoopDirection.Z)
+                pos.z = currLen;
             
-            _backgrounds[i].transform.position = pos;
+            _backgrounds[i].transform.localPosition = pos;
         }
     }
 
 }
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(B1_LoopBackground))]
+public class LoopBackgroundEditor : Editor
+{
+    private B1_LoopBackground back;
+    public void OnEnable()
+    {
+        back = (B1_LoopBackground)target;
+    }
+ 
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        if(GUILayout.Button("Create"))
+        {
+            back.DeleteBackground();
+            back.CreateBackground();
+        }
+
+        if(GUILayout.Button("Destroy"))
+        {
+            back.DeleteBackground();
+        }
+    }
+}
+
+#endif
