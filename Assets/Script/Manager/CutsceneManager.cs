@@ -26,6 +26,7 @@ public class CutsceneManager : ManagerBase
 
         AddAction(MessageTitles.cutscene_skip, (x) =>
         {
+            Debug.Log("?");
             SkipCutscene();
         });
     }
@@ -38,7 +39,12 @@ public class CutsceneManager : ManagerBase
             if(_currentTimeline?.playableDirector.state == UnityEngine.Playables.PlayState.Playing)
             {
                 SkipCutscene();
+                Debug.Log("?");
             }
+        }
+        else
+        {
+
         }
     }
 

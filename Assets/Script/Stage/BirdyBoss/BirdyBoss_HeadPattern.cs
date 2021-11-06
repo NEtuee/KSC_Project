@@ -7,9 +7,12 @@ public class BirdyBoss_HeadPattern : ObjectBase
     public List<MeshRenderer> dissolveTargets = new List<MeshRenderer>();
     public HexCubeGrid grid;
 
+    public Transform shieldObj;
+
     [Header("Stemp")]
     public float dissolveTime = 1f;
     public float stempHeight = 10f;
+    public float stempYOffset = 3f;
     public AnimationCurve stempCurve;
 
     public float stempStartTime = 1f;
@@ -36,6 +39,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
     PlayerUnit _player;
 
     private bool _stemp = false;
+    private bool _lookDown = false;
 
     public override void Assign()
     {
@@ -48,15 +52,19 @@ public class BirdyBoss_HeadPattern : ObjectBase
         _localPosition = transform.localPosition;
         
         _timeCounterEx.CreateSequencer("Stemp");
-        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveOut,(x)=>{
+        _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => { DissolveOut(x); ShieldLookPlayer(); }, (x)=>{
             var pos = stempCube.transform.position;
             pos.y = stempHeight;
             transform.position = pos;
         });
-        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveIn,(x)=>{
+        _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => { DissolveIn(x); ShieldLookPlayer(); }, (x)=>{
             
         });
-        _timeCounterEx.AddSequence("Stemp",stempStartTime,null,null);
+        _timeCounterEx.AddSequence("Stemp",stempStartTime,(x)=> {
+            ShieldLookPlayer();
+        },(x)=> {
+            _lookDown = true;
+        });
         _timeCounterEx.AddSequence("Stemp",stempTime,Stemp,(x)=>{
             Ring();
             Explosion();
@@ -64,10 +72,11 @@ public class BirdyBoss_HeadPattern : ObjectBase
             SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
         });
         _timeCounterEx.AddSequence("Stemp",stempWaitTime,null,null);
-        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveOut,(x)=>{
+        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveOut, (x)=>{
             transform.localPosition = _localPosition;
         });
-        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveIn,(x)=>{
+        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveIn, (x)=>{
+            _lookDown = false;
             _stemp = false;
         });
 
@@ -85,15 +94,23 @@ public class BirdyBoss_HeadPattern : ObjectBase
     {
         base.FixedProgress(deltaTime);
 
-        if(!_stemp)
+        if (!_stemp)
+        {
+            ShieldLookPlayer();
             return;
+        }
         
+        if(_lookDown)
+        {
+            ShieldLookDown();
+        }
         _timeCounterEx.ProcessSequencer("Stemp",deltaTime);
     }
 
     public void StempTarget(HexCube target)
     {
         _stemp = true;
+        _lookDown = false;
         stempCube = target;
         _timeCounterEx.InitSequencer("Stemp");
     }
@@ -119,11 +136,23 @@ public class BirdyBoss_HeadPattern : ObjectBase
         }
     }
 
+    public void ShieldLookPlayer()
+    {
+        var dir = (_player.transform.position - shieldObj.position).normalized;
+        shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.2f);
+    }
+
+    public void ShieldLookDown()
+    {
+        var dir = Vector3.down;
+        shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.2f);
+    }
+
     public void Stemp(float x)
     {
         var time = x / stempTime;
         var factor = stempCurve.Evaluate(time);
-        var y = Mathf.Lerp(stempHeight,stempCube.transform.position.y + 1f,factor);
+        var y = Mathf.Lerp(stempHeight,stempCube.transform.position.y + stempYOffset, factor);
 
         var pos = transform.position;
         pos.y = y;
