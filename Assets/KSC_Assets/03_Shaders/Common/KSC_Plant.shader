@@ -1,4 +1,4 @@
-Shader "KSC_Plant"
+Shader "KSC/KSC_Plant"
 {
     Properties
     {
