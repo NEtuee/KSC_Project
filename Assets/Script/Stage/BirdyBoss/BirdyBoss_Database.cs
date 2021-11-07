@@ -76,6 +76,7 @@ public class BirdyBoss_Database : MonoBehaviour
     public ItemClass<B1_FlySpider> flySpiderCache = new ItemClass<B1_FlySpider>();
     public ItemClass<CommonDrone> droneCache = new ItemClass<CommonDrone>();
     public ItemClass<MedusaInFallPoint_AI> medusaCache = new ItemClass<MedusaInFallPoint_AI>();
+    public ItemClass<BirdyBoss_FlySpiderBall> flyballCache = new ItemClass<BirdyBoss_FlySpiderBall>();
 
     public int updateCount{
         get
@@ -99,6 +100,7 @@ public class BirdyBoss_Database : MonoBehaviour
         flySpiderCache.CreateStartCache();
         droneCache.CreateStartCache();
         medusaCache.CreateStartCache();
+        flyballCache.CreateStartCache();
     }
 
     public B1_Spider SpawnSpider()
@@ -136,6 +138,14 @@ public class BirdyBoss_Database : MonoBehaviour
         obj.item.launch = true;//.Launch();
 
         _medusaList.Add(obj.item);
+
+        return obj.item;
+    }
+
+    public BirdyBoss_FlySpiderBall SpawnFlySpiderBall()
+    {
+        var obj = flyballCache.GetCachedObject();
+        obj.item.Respawn();
 
         return obj.item;
     }

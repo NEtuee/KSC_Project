@@ -9,6 +9,7 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
     public bool centerMove = true;
 
     public Transform coreTarget;
+    public HexCubeGrid grid;
 
     private Vector3 _spawnPos;
 
@@ -81,15 +82,24 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
 
     public void SetMirrorSideTarget()
     {
-        var player = gridControll.cubeGrid.GetCubeFromWorld(_player.transform.position);
-        if(player == null)
+        HexCube player;
+        if (gridControll != null)
+            player = gridControll.cubeGrid.GetCubeFromWorld(_player.transform.position);
+        else
+            player = grid.GetCubeFromWorld(_player.transform.position);
+
+        if (player == null)
         {
             _direction = (transform.position - _player.transform.position).normalized;
             return;
         }
 
-        var mirror = gridControll.cubeGrid.GetCubeReflectMirror(player.cubePoint);
-        if(mirror != null)
+        HexCube mirror;
+        if (gridControll != null)
+            mirror = gridControll.cubeGrid.GetCubeReflectMirror(player.cubePoint);
+        else
+            mirror = grid.GetCubeReflectMirror(player.cubePoint);
+        if (mirror != null)
         {
             _target = mirror.transform;
         }

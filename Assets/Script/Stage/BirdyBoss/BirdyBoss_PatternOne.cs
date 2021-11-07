@@ -23,6 +23,11 @@ public class BirdyBoss_PatternOne : ObjectBase
             DeactiveHPUI,
             HeadStemp,
             BirdyApear,
+            SpawnFlySpiderBall,
+            StartFog,
+            EndFog,
+            GenieHitGround,
+            Giro
         };
         
         public string identifier;
@@ -34,9 +39,18 @@ public class BirdyBoss_PatternOne : ObjectBase
         public UnityEngine.Events.UnityEvent eventSet;
     }
 
+    [System.Serializable]
+    public class LoopSequence
+    {
+        public string title;
+        public List<SequenceItem> loopSequences = new List<SequenceItem>();
+        public bool active = false;
+    }
+
+
     [Header("Sequence Lists")]
     public List<SequenceItem> sequences = new List<SequenceItem>();
-    public List<SequenceItem> loopSequences = new List<SequenceItem>();
+    public List<LoopSequence> loopSequences = new List<LoopSequence>();
 
     [Header("etc.")]
     public List<Transform> spawnPositions = new List<Transform>();
@@ -55,6 +69,18 @@ public class BirdyBoss_PatternOne : ObjectBase
     [Header("Birdy Parts")]
     public BirdyBoss_HeadPattern headPattern;
 
+
+    [Header("Fog")]
+    public Genie_CoreDroneAI fogDrone;
+    public float fogDensity = 0.09f;
+    public float fogOutDensity = 0.01f;
+
+    [Header("Genie")]
+    public BridyBoss_GeniePlatform geniePlatform;
+
+    [Header("GiroPattern")]
+    public GiroPattern giroPattern;
+
     List<HexCube> _spawnCubeList = new List<HexCube>();
     List<HexCube> _medusaSpawnList = new List<HexCube>();
     List<HexCube> _medusaSpawnNear = new List<HexCube>();
@@ -64,8 +90,11 @@ public class BirdyBoss_PatternOne : ObjectBase
     private float _fillAmountTarget = 1f;
 
     private bool _droneActive = false;
-    private bool _loopProcess = false;
     private bool _respawn = false;
+    private bool _fogIn = false;
+
+    private bool _fogOutProcess = false;
+
 
     private PlayerUnit _player;
     private Drone _drone;
@@ -76,7 +105,12 @@ public class BirdyBoss_PatternOne : ObjectBase
         base.Assign();
 
         CreateSequencer("process",ref sequences);
-        CreateSequencer("loop",ref loopSequences);
+
+        for(int i = 0; i < loopSequences.Count; ++i)
+        {
+            CreateSequencer(loopSequences[i].title, ref loopSequences[i].loopSequences);
+        }
+        
 
         _timeCounter.CreateSequencer("Respawn");
         _timeCounter.AddSequence("Respawn",5f,null,(x)=>{
@@ -91,6 +125,16 @@ public class BirdyBoss_PatternOne : ObjectBase
 
             SetActive(active);
         });
+
+        _timeCounter.CreateSequencer("FogOut");
+        _timeCounter.AddSequence("FogOut", 3f, (x) =>
+        {
+            if (!_fogIn)
+                return;
+
+            var factor = x / 3f;
+            RenderSettings.fogDensity = Mathf.Lerp(fogDensity, fogOutDensity, factor);
+        }, (x) => { _fogIn = false; });
     }
 
     public override void Initialize()
@@ -110,6 +154,11 @@ public class BirdyBoss_PatternOne : ObjectBase
         {
             _respawn = !_timeCounter.ProcessSequencer("Respawn",deltaTime);
         }
+
+        if(_fogOutProcess)
+        {
+            _respawn = !_timeCounter.ProcessSequencer("FogOut", deltaTime);
+        }
     }
 
     public override void FixedProgress(float deltaTime)
@@ -121,11 +170,14 @@ public class BirdyBoss_PatternOne : ObjectBase
 
         _timeCounter.ProcessSequencer("process",deltaTime);
 
-        if(_loopProcess)
+        for (int i = 0; i < loopSequences.Count; ++i)
         {
-            if(_timeCounter.ProcessSequencer("loop",deltaTime))
+            if (!loopSequences[i].active)
+                continue;
+
+            if(_timeCounter.ProcessSequencer(loopSequences[i].title, deltaTime))
             {
-                _timeCounter.InitSequencer("loop");
+                _timeCounter.InitSequencer(loopSequences[i].title);
             }
         }
 
@@ -135,6 +187,13 @@ public class BirdyBoss_PatternOne : ObjectBase
             _drone.transform.LookAt(_drone.targetTransform);
             empShield.transform.position = _drone.transform.position;
         }
+    }
+
+    public void FogOut()
+    {
+        _fogOutProcess = true;
+        fogDrone.gameObject.SetActive(false);
+        _timeCounter.InitSequencer("FogOut");
     }
 
     public void ActiveDrone()
@@ -160,14 +219,18 @@ public class BirdyBoss_PatternOne : ObjectBase
         }
     }
 
-    public void LoopStart()
+    public void LoopStart(int target)
     {
-        _loopProcess = true;
+        if (loopSequences[target].active)
+            Debug.LogError("target is already activated");
+        loopSequences[target].active = true;
     }
 
-    public void LoopStop()
+    public void LoopStop(int target)
     {
-        _loopProcess = false;
+        if (!loopSequences[target].active)
+            Debug.LogError("target is already deactivated");
+        loopSequences[target].active = false;
     }
 
     public void FindGrids(int min, int max)
@@ -384,10 +447,21 @@ public class BirdyBoss_PatternOne : ObjectBase
             {
                 _timeCounter.AddSequence(name, item.value, null, (x) =>
                 {
-                    var cube = cubeGrid.GetCubeFromWorld(_player.Position,false);
+                    if(item.code == 0)
+                    {
+                        var cube = cubeGrid.GetCubeFromWorld(_player.Position, false);
 
-                    if(cube != null)
-                        headPattern.StempTarget(cube);
+                        if (cube != null)
+                            headPattern.StempTarget(cube);
+                    }
+                    else
+                    {
+                        var cube = cubeGrid.GetCube(Vector3Int.zero, false);
+
+                        if (cube != null)
+                            headPattern.StempTarget(cube);
+                    }
+                    
                 });
             }
             else if (item.type == SequenceItem.EventEnum.BirdyApear)
@@ -396,6 +470,79 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     ActiveDrone();
                 });
+            }
+            else if (item.type == SequenceItem.EventEnum.SpawnFlySpiderBall)
+            {
+                _timeCounter.AddSequence(name, item.value, null, (x) =>
+                {
+                    var cube = GetRandomMedusaCube();
+
+                    if(cube != null)
+                    {
+                        var fly = database.SpawnFlySpiderBall();
+                        fly.StempTarget(cube);
+                    }
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.StartFog)
+            {
+                _timeCounter.AddSequence(name, item.value, null, (x) =>
+                {
+                    if (_fogIn)
+                        return;
+
+                    var factor = x / item.value;
+                    RenderSettings.fogDensity = Mathf.Lerp(fogOutDensity,fogDensity,factor);
+
+                    fogDrone.Respawn(headPattern.transform.position);
+
+                    _fogIn = true;
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.EndFog)
+            {
+                _timeCounter.AddSequence(name, item.value, null, (x) =>
+                {
+                    if (!_fogIn)
+                        return;
+                    
+                    var factor = x / item.value;
+                    RenderSettings.fogDensity = Mathf.Lerp(fogDensity, fogOutDensity, factor);
+
+                    fogDrone.gameObject.SetActive(false);
+
+                    _fogIn = false;
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.GenieHitGround)
+            {
+                _timeCounter.AddSequence(name, item.value, null, (x) =>
+                {
+                    geniePlatform.Active();
+                });
+            }
+            else if(item.type == SequenceItem.EventEnum.Giro)
+            {
+                _timeCounter.AddSequence(name, 0.0f, null, (x) =>
+                 {
+                     giroPattern.Appear();
+                 });
+
+                _timeCounter.AddSequence(name, 3.0f, null, (x) =>
+                {
+                    //Debug.Log("wait");
+                });
+
+                for (int i = 0; i < giroPattern.ObjectCount; i++)
+                {
+                    int count = i;
+                    _timeCounter.AddSequence(name, 1f, null, (value) =>
+                     {
+                         giroPattern.Launch(count, _player.Transform.position, 5000f);
+                     });
+                }
+
+                _timeCounter.AddSequence(name, 4.0f, null, null);
             }
         }
     }

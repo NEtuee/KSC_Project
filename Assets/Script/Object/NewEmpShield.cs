@@ -116,7 +116,6 @@ public class NewEmpShield : Scanable
         while(alpha < 1.0f)
         {
             alpha = Mathf.MoveTowards(alpha, 1.0f, 1.0f * Time.deltaTime);
-            Debug.Log(alpha);
             _mat.SetFloat("_Fade",alpha);
             yield return null;
         }

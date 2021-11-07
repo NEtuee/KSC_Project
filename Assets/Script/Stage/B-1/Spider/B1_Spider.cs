@@ -41,8 +41,10 @@ public class B1_Spider : PathfollowObjectBase
         });
 
         AddAction(MessageTitles.dash_trigger, (x) => {
-            var dir = Vector3.ProjectOnPlane(transform.position - ((Transform)x.data).position, Vector3.up).normalized;
-            HitBack(dir);
+            Explosion(GetTargetDirection(), 150f);
+            gameObject.SetActive(false);
+            //var dir = Vector3.ProjectOnPlane(transform.position - ((Transform)x.data).position, Vector3.up).normalized;
+            //HitBack(dir);
         });
 
         AddAction(MessageTitles.customTitle_start + 2,(x)=>{
