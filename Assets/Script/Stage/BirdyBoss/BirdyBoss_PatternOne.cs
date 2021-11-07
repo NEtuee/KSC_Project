@@ -27,7 +27,9 @@ public class BirdyBoss_PatternOne : ObjectBase
             StartFog,
             EndFog,
             GenieHitGround,
-            Giro
+            Giro,
+            FallPillar,
+            HorizonPillar
         };
         
         public string identifier;
@@ -78,8 +80,11 @@ public class BirdyBoss_PatternOne : ObjectBase
     [Header("Genie")]
     public BridyBoss_GeniePlatform geniePlatform;
 
-    [Header("GiroPattern")]
-    public GiroPattern giroPattern;
+    [Header("HoriznoPillar Point")]
+    public List<Transform> horizonPillarPoints = new List<Transform>();
+
+    //[Header("GiroPattern")]
+    //public GiroPattern giroPattern;
 
     List<HexCube> _spawnCubeList = new List<HexCube>();
     List<HexCube> _medusaSpawnList = new List<HexCube>();
@@ -523,26 +528,30 @@ public class BirdyBoss_PatternOne : ObjectBase
             }
             else if(item.type == SequenceItem.EventEnum.Giro)
             {
-                _timeCounter.AddSequence(name, 0.0f, null, (x) =>
-                 {
-                     giroPattern.Appear();
-                 });
-
-                _timeCounter.AddSequence(name, 3.0f, null, (x) =>
-                {
-                    //Debug.Log("wait");
+                _timeCounter.AddSequence(name, 0f, null, (x) => {
+                    var target = database.SpawnGiroPattern();
+                    target.transform.position = headPattern.transform.position;
                 });
-
-                for (int i = 0; i < giroPattern.ObjectCount; i++)
+            }
+            else if(item.type == SequenceItem.EventEnum.FallPillar)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
-                    int count = i;
-                    _timeCounter.AddSequence(name, 1f, null, (value) =>
-                     {
-                         giroPattern.Launch(count, _player.Transform.position, 5000f);
-                     });
-                }
-
-                _timeCounter.AddSequence(name, 4.0f, null, null);
+                    var target = database.SpawnFallPillarPattern();
+                    for(int i = 0; i < item.value; i++)
+                    {
+                        var cube = cubeGrid.GetRandomActiveCube(false);
+                        target.AddFallPosition(cubeGrid.CubePointToWorld(cube.cubePoint) + Vector3.up*20.0f);
+                    }
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.HorizonPillar)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    var target = database.SpawnHorizonPillarPattern();
+                    target.SetPoint(ref horizonPillarPoints);
+                });
             }
         }
     }
