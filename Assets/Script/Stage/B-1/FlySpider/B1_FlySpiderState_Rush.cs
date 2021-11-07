@@ -12,11 +12,14 @@ public class B1_FlySpiderState_Rush : B1_FlySpiderStateBase
     public float detectRadius = 1f;
     public float rotateFactor = 10f;
 
+    private float _lifeTime;
+
     public override void StateInitialize(StateBase prevState)
     {
         base.StateInitialize(prevState);
 
         target.footPointRotator.enabled = false;
+        _lifeTime = 5f;
     }
 
     public override void StateProgress(float deltaTime)
@@ -30,6 +33,14 @@ public class B1_FlySpiderState_Rush : B1_FlySpiderStateBase
         if(coll != null && coll.Length != 0)
         {
             target.Explosion();
+        }
+        else
+        {
+            _lifeTime -= deltaTime;
+            if(_lifeTime <= 0f)
+            {
+                target.Explosion();
+            }
         }
 
         target.transform.position += target.direction * rushSpeed * deltaTime;
