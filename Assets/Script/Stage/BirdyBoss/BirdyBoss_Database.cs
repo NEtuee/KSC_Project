@@ -80,6 +80,7 @@ public class BirdyBoss_Database : MonoBehaviour
     public ItemClass<GiroPattern> giroCache = new ItemClass<GiroPattern>();
     public ItemClass<FallPillarPattern> fallPillarCache = new ItemClass<FallPillarPattern>();
     public ItemClass<HorizontalPillarPattern> horizonPillarCache = new ItemClass<HorizontalPillarPattern>();
+    public ItemClass<SpiderPillarPattern> spiderPillarCache = new ItemClass<SpiderPillarPattern>();
 
     public int updateCount{
         get
@@ -172,6 +173,14 @@ public class BirdyBoss_Database : MonoBehaviour
     public HorizontalPillarPattern SpawnHorizonPillarPattern()
     {
         var obj = horizonPillarCache.GetCachedObject();
+        obj.item.Respawn();
+
+        return obj.item;
+    }
+
+    public SpiderPillarPattern SpawnSpiderPillarPattern()
+    {
+        var obj = spiderPillarCache.GetCachedObject();
         obj.item.Respawn();
 
         return obj.item;

@@ -29,7 +29,8 @@ public class BirdyBoss_PatternOne : ObjectBase
             GenieHitGround,
             Giro,
             FallPillar,
-            HorizonPillar
+            HorizonPillar,
+            SpiderPillar
         };
         
         public string identifier;
@@ -551,6 +552,14 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     var target = database.SpawnHorizonPillarPattern();
                     target.SetPoint(ref horizonPillarPoints);
+                });
+            }
+            else if(item.type == SequenceItem.EventEnum.SpiderPillar)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    var target = database.SpawnSpiderPillarPattern();
+                    target.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
                 });
             }
         }
