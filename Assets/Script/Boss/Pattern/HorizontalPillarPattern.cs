@@ -35,6 +35,7 @@ public class HorizontalPillarPattern : ObjectBase
             for(int i = 0; i < HORIZONTAL_PILLAR_PATTERN_POINT_COUNT; i++)
             {
                 _horizonPillars.Add(_pillarObjectPool.Active(_pillarStartPoint[i], Quaternion.identity));
+                _horizonPillars[i].SetLookAtTarget(_target);
             }
         });
 
