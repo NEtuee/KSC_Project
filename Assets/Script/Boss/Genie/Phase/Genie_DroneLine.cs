@@ -9,6 +9,7 @@ public class Genie_DroneLine : ObjectBase
 
     public GameObject positionDrone;
     public Genie_CoreDroneAI coreDrone;
+    public NewEmpShield empShield;
 
     private Quaternion _targetQuaternion;
     private float _targetHeight;
@@ -54,6 +55,7 @@ public class Genie_DroneLine : ObjectBase
 
         CoreSet(isCore);
         coreDrone.shield.Reactive();
+        empShield?.Reactive();
 
         _timeCounter.InitSequencer("Process");
         _timeCounter.ProcessSequencer("Process",0f);

@@ -30,6 +30,8 @@ public class Genie_DroneLinePool : ObjectPoolBase<Genie_DroneLine>
             var shiled = t.coreDrone.shield;
             shiled.whenDestroy .AddListener(()=>{genie.ChangeAnimation(1);});
             shiled.whenDestroy .AddListener(()=>{genie.stateProcessor.StateChange("Angry");});
+            t.empShield.whenDestroy.AddListener(() => { genie.ChangeAnimation(1); });
+            t.empShield.whenDestroy.AddListener(() => { genie.stateProcessor.StateChange("Angry"); });
             t.Create(spin,apear,startWait,endWait);
         };
     }
