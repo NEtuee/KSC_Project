@@ -163,6 +163,17 @@ public class PlayerManager : ManagerBase
             blurData.time = .0f;
             SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
         });
+
+        AddAction(MessageTitles.playermanager_droneTextByKey, (msg) =>
+         {
+             _drone.DroneHelpCall((string)msg.data);
+         });
+
+        AddAction(MessageTitles.playermanager_droneTextAndDurationByKey, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<DroneTextKeyAndDurationData>(msg.data);
+            _drone.DroneHelpCall(data.key,data.duration);
+        });
     }
 
     public override void Initialize()
@@ -383,5 +394,11 @@ namespace MD
             position = pos;
             rotation = rot;
         }
+    }
+
+    public class DroneTextKeyAndDurationData :MessageData
+    {
+        public string key;
+        public float duration;
     }
 }

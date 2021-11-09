@@ -108,6 +108,9 @@ public class UIManager : ManagerBase
     [SerializeField] private Image[] loadCountUi = new Image[MAX_LOAD_COUNT];
     [SerializeField] private Color highlightColor = Color.white;
     private int prevLoadCount;
+
+    [Header("TargetMaker")]
+    [SerializeField] private TargetMakerUI targetMakerUi;
     
 
     private EventSystem _eventSystem;
@@ -411,6 +414,17 @@ public class UIManager : ManagerBase
         AddAction(MessageTitles.set_setplayer, (msg) =>
         {
             _player = (PlayerUnit)msg.data;
+        });
+
+        AddAction(MessageTitles.uimanager_activeTargetMakerUiAndSetTarget, (msg) =>
+         {
+             targetMakerUi.gameObject.SetActive(true);
+             targetMakerUi.Target = (Transform)msg.data;
+         });
+
+        AddAction(MessageTitles.uimanager_DisableTargetMakerUi, (msg) =>
+        {
+            targetMakerUi.gameObject.SetActive(false);
         });
     }
 

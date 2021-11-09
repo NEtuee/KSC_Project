@@ -697,6 +697,14 @@ public class Drone : PathfollowObjectBase
         }
     }
 
+    public void DroneHelpCall(string key, float duration)
+    {
+        if (ReferenceEquals(droneHelperRoot, null) == false)
+        {
+            droneHelperRoot.HelpEvent(key,duration);
+        }
+    }
+
     public void DroneTextCall(string text)
     {
         if(ReferenceEquals(droneHelperRoot,null) == false)

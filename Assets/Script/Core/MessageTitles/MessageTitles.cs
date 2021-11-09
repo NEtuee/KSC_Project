@@ -204,6 +204,17 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort uimanager_shakeAmountStackCameraCanvas = 0x0336;
 
+    /// <summary>
+    /// data = Transform
+    /// </summary>
+    public const ushort uimanager_activeTargetMakerUiAndSetTarget = 0x0337;
+
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_DisableTargetMakerUi = 0x0338;
+
     #endregion
 
     /// <summary>
@@ -451,6 +462,16 @@ public static partial class MessageTitles
 
     public const ushort playermanager_setDroneTransform = 0x0918;
     public const ushort playermanager_setDroneCanMove = 0x0919;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort playermanager_droneTextByKey = 0x0920;
+
+    /// <summary>
+    /// data = DroneTextKeyAndDurationData
+    /// </summary>
+    public const ushort playermanager_droneTextAndDurationByKey = 0x0921;
 
     #endregion
 

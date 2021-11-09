@@ -96,6 +96,34 @@ public class DroneHelperRoot : MonoBehaviour
         return true;
     }
 
+    public bool HelpEvent(string key, float durationTime)
+    {
+        if (descriptDictionary.ContainsKey(key) == false)
+        {
+            Debug.Log(key + " Not Exits Key");
+            return false;
+        }
+
+        active = true;
+        helping = true;
+        descriptText.SetTargetString(descriptDictionary[key].desc);
+        droneDiscriptCanvas.enabled = true;
+        drone.OrderHelp();
+        timer.InitTimer("Help");
+        hintTime = durationTime;
+
+        var audio = descriptDictionary[key].audio;
+        if (audio != null)
+        {
+            audioPlay.Stop();
+            audioPlay.clip = audio;
+            audioPlay.Play();
+        }
+
+        return true;
+    }
+
+
     public bool ShowText(string text)
     {
         active = true;
