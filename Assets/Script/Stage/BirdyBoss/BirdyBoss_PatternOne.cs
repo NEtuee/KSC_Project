@@ -30,7 +30,9 @@ public class BirdyBoss_PatternOne : ObjectBase
             Giro,
             FallPillar,
             HorizonPillar,
-            SpiderPillar
+            SpiderPillar,
+            GroundCutStart,
+            GroundCutEnd,
         };
         
         public string identifier;
@@ -83,6 +85,9 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     [Header("HoriznoPillar Point")]
     public List<Transform> horizonPillarPoints = new List<Transform>();
+
+    [Header("Platform")]
+    public BirdyBoss_PlatformCut platformCut;
 
     //[Header("GiroPattern")]
     //public GiroPattern giroPattern;
@@ -560,6 +565,20 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     var target = database.SpawnSpiderPillarPattern();
                     target.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.GroundCutStart)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    platformCut.PatternStart(_player.transform);
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.GroundCutEnd)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    platformCut.PatternEnd();
                 });
             }
         }

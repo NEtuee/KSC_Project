@@ -699,6 +699,7 @@ MonoBehaviour:
   activeLists:
   - {fileID: 2074775833}
   - {fileID: 2044979102}
+  endActiveLists: []
   endTransform: {fileID: 0}
   birdyEndPosition: {fileID: 0}
   loadNextLevel: 1
@@ -1045,6 +1046,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1515497641}
     m_Modifications:
+    - target: {fileID: 3151191004121756431, guid: c94fcbcea4f5a3c49b0e854f1459b929,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4156359338925300306, guid: c94fcbcea4f5a3c49b0e854f1459b929,
         type: 3}
       propertyPath: m_RootOrder
@@ -1723,6 +1729,7 @@ MonoBehaviour:
   activeLists:
   - {fileID: 1195431620}
   - {fileID: 140643222}
+  endActiveLists: []
   endTransform: {fileID: 317125698}
   birdyEndPosition: {fileID: 0}
   loadNextLevel: 0
@@ -7512,6 +7519,7 @@ GameObject:
   - component: {fileID: 1395621138}
   - component: {fileID: 1395621140}
   - component: {fileID: 1395621139}
+  - component: {fileID: 1395621141}
   m_Layer: 0
   m_Name: BrokenMedusa_RealFinal
   m_TagString: Untagged
@@ -7743,6 +7751,23 @@ MonoBehaviour:
   targetObject: {fileID: 0}
   processor: {fileID: 0}
   activeTime: 5
+--- !u!114 &1395621141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395621129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf1fff29ba737b44bbeef755d576a157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateTarget: {fileID: 543450653252629539}
+  tiltFactor: 0.1
+  lerpFactor: 2
+  inverseX: 1
+  inverseZ: 0
 --- !u!1 &1441225316
 GameObject:
   m_ObjectHideFlags: 0
@@ -8253,6 +8278,7 @@ MonoBehaviour:
   endSignalTime: 478
   activeLists:
   - {fileID: 1216343271}
+  endActiveLists: []
   endTransform: {fileID: 834259267}
   birdyEndPosition: {fileID: 0}
   loadNextLevel: 0
@@ -8366,7 +8392,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1520118973
 MonoBehaviour:
   m_ObjectHideFlags: 0
