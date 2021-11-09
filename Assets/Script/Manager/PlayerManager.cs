@@ -112,7 +112,9 @@ public class PlayerManager : ManagerBase
             _drone.gameObject.SetActive(visible);
             _player.gameObject.SetActive(visible);
 
-            if(visible)
+            Debug.Log("Tlqkf :" + visible + "," + ((MessageReceiver)msg.sender).name);
+
+            if (visible)
             {
                 _player.ChangeState(PlayerUnit.defaultState);
             }
@@ -348,6 +350,22 @@ public class PlayerManager : ManagerBase
     {
         base.Progress(deltaTime);
 
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        {
+            var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+            data.key = "Test_1";
+            data.duration = 10f;
+            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+        }
+
+        if (Keyboard.current.digit2Key.wasPressedThisFrame)
+        {
+            var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+            data.key = "Test_2";
+            data.duration = 10f;
+            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+        }
+
         if (LevelEdit_TimelinePlayer.CUTSCENEPLAY == true)
             return;
 
@@ -361,6 +379,7 @@ public class PlayerManager : ManagerBase
             SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
         }
 
+        
 
         if (Keyboard.current.zKey.wasPressedThisFrame)
         {

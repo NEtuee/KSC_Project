@@ -350,6 +350,8 @@ public class Drone : PathfollowObjectBase
         //    return;
 
         //UpdateDrone(Time.deltaTime);
+
+      
     }
 
     private void UpdateDrone(float deltaTime)
