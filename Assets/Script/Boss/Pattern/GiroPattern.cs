@@ -18,6 +18,11 @@ public class GiroPattern : ObjectBase
     private bool _rotate = false;
     //[SerializeField]private bool _done = true;
 
+    private TimeCounterEx _timeCounter = new TimeCounterEx();
+
+    private HexCubeGrid _hex;
+    private List<HexCube> _hexList = new List<HexCube>();
+
     public int ObjectCount => giroObjects.Count;
 
     public override void Assign()
@@ -35,29 +40,47 @@ public class GiroPattern : ObjectBase
             _initPosition.Add(giroObjects[i].transform.position);
         }
 
-        //_timeCounter.CreateSequencer("Launch");
+        _timeCounter.CreateSequencer("Launch");
 
-        //_timeCounter.AddSequence("Launch", 0.0f, null, (value) =>
-        //{
-        //    for (int i = 0; i < giroObjects.Count; i++)
-        //    {
-        //        giroObjects[i].Appear(2f);
-        //    }
-        //    _rotate = true;
-        //});
+        _timeCounter.AddSequence("Launch", 0.0f, null, (value) =>
+        {
+            for (int i = 0; i < giroObjects.Count; i++)
+            {
+                giroObjects[i].Appear(2f);
+            }
+            _rotate = true;
+        });
 
-        //_timeCounter.AddSequence("Launch", 3.0f, null, null);
+        _timeCounter.AddSequence("Launch", 3.0f, null, null);
 
-        //for (int i = 0; i < giroObjects.Count; i++)
-        //{
-        //    int count = i;
-        //    _timeCounter.AddSequence("Launch", 1f, null, (value) =>
-        //     {
-        //         giroObjects[count].LaunchObject(_target.position, 5000f);
-        //     });
-        //}
+        for (int i = 0; i < giroObjects.Count; i++)
+        {
+            int count = i;
+            _timeCounter.AddSequence("Launch", 1f, null, (value) =>
+             {
+                 giroObjects[count].LaunchObject(_target.position, 5000f);
+             });
+        }
 
-        //_timeCounter.InitSequencer("Launch");
+        _timeCounter.AddSequence("Launch", 3.0f, null, (value) =>
+        {
+            for (int i = 0; i < giroObjects.Count; i++)
+            {
+                giroObjects[i].transform.SetParent(pivot);
+                giroObjects[i].transform.position = _initPosition[i];
+            }
+
+            _rotate = false;
+            gameObject.SetActive(false);
+        });
+
+        _timeCounter.InitSequencer("Launch");
+    }
+
+    public void Respawn()
+    {
+        _timeCounter.InitSequencer("Launch");
+        _rotationSpeed = 0.0f;
     }
 
     public override void Initialize()
@@ -65,7 +88,7 @@ public class GiroPattern : ObjectBase
         base.Initialize();
 
         RegisterRequest(GetSavedNumber("StageManager"));
-        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);        
     }
 
     public override void Progress(float deltaTime)
@@ -82,6 +105,8 @@ public class GiroPattern : ObjectBase
             pivot.Rotate(Vector3.up * _rotationSpeed * deltaTime);
             _rotationSpeed += _rotationAccelerationSpeed * deltaTime;
         }
+
+        _timeCounter.ProcessSequencer("Launch", deltaTime);
     }
 
     public override void FixedProgress(float deltaTime)
