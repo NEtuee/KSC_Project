@@ -269,10 +269,10 @@ public class BirdyBossPatternEditor : EditorWindow
         targetEvent.identifier = EditorGUILayout.TextField("Name", targetEvent.identifier);
 
         var item = targetEvent.type;
-        targetEvent.type = (BirdyBoss_PatternOne.EventEnum)EditorGUILayout.IntPopup((int)item, _sequenceEventTitles, null);
+        item = (BirdyBoss_PatternOne.EventEnum)EditorGUILayout.IntPopup((int)item, _sequenceEventTitles, null);
         if(item != targetEvent.type)
         {
-            targetEvent.type = (BirdyBoss_PatternOne.EventEnum)_currentEventCreate;
+            targetEvent.type = item;
         }
 
         string desc = "";
@@ -647,12 +647,19 @@ public class BirdyBossPatternEditor : EditorWindow
             var time = GetEventTime(item);
 
 
-            if (time >= 0f)
+            if (time > 0f)
             {
+                var color = GUI.color;
+                GUI.color = Color.green;
                 GUILayout.Label(time + " sec", GUILayout.Width(50f));
                 total += time;
+                GUI.color = color;
             }
-            else
+            else if(time == 0f)
+            {
+                GUILayout.Label(time + " sec", GUILayout.Width(50f));
+            }
+            else if (time < 0f)
             {
                 var color = GUI.color;
                 GUI.color = Color.red;
@@ -686,7 +693,9 @@ public class BirdyBossPatternEditor : EditorWindow
         var seq = new BirdyBoss_PatternOne.SequenceItem();
         seq.identifier = "New Event";//_sequenceEventTitles[_currentEventCreate];
         seq.type = 0;
-        GetTargetSequence(menu, target).loopSequences.Add(seq);
+        var t = GetTargetSequence(menu, target).loopSequences;
+        _currentEvent = t.Count;
+        t.Add(seq);
 
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
