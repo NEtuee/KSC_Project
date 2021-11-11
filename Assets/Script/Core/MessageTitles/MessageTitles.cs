@@ -30,9 +30,9 @@ public static partial class MessageTitles
     public const ushort uimanager_activecrosshair = 0x0301;
 
     /// <summary>
-    /// data = int(1, 2, 3)
+    /// data = null
     /// </summary>
-    public const ushort uimanager_setcrosshairphase = 0x0302;
+    public const ushort uimanager_setChargeComplete = 0x0302;
 
     /// <summary>
     /// data = StateBarSetValueType
@@ -214,6 +214,11 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort uimanager_DisableTargetMakerUi = 0x0338;
+
+    /// <summary>
+    /// data = String
+    /// </summary>
+    public const ushort uimanager_ActiveLeveLineUIAndSetBossName = 0x0339;
 
     #endregion
 

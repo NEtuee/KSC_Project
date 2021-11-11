@@ -276,27 +276,25 @@ public class PlayerManager : ManagerBase
         });
 
         _player.chargeTime.Subscribe(value => {
-            if (value >= 3f)
+            if (value >= _player.ChargeConsumeTime && _player.Energy >= _player.ChargeGunCost)
             {
                 //crossHair.Third();
-                IntData phase = MessageDataPooling.GetMessageData<IntData>();
-                phase.value = 3;
-                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
+                SendMessageEx(MessageTitles.uimanager_setChargeComplete, GetSavedNumber("UIManager"), null);
             }
-            else if (value >= 2f)
-            {
-                //crossHair.Second();
-                IntData phase = MessageDataPooling.GetMessageData<IntData>();
-                phase.value = 2;
-                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
-            }
-            else if (value >= 1f)
-            {
-                //crossHair.First();
-                IntData phase = MessageDataPooling.GetMessageData<IntData>();
-                phase.value = 1;
-                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
-            }
+            //else if (value >= 2f)
+            //{
+            //    //crossHair.Second();
+            //    IntData phase = MessageDataPooling.GetMessageData<IntData>();
+            //    phase.value = 2;
+            //    SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
+            //}
+            //else if (value >= 1f)
+            //{
+            //    //crossHair.First();
+            //    IntData phase = MessageDataPooling.GetMessageData<IntData>();
+            //    phase.value = 1;
+            //    SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
+            //}
         });
 
         _player.loadCount.Subscribe(value =>
