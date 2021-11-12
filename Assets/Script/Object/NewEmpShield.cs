@@ -10,6 +10,7 @@ public class NewEmpShield : Scanable
     [SerializeField] private int destroyCount = 1;
     private int curCount = 0;
     [SerializeField] private bool isActive = false;
+    [SerializeField] private bool immortal = false;
     private bool isVisible = false;
 
     public bool IsActive => isActive;
@@ -87,6 +88,9 @@ public class NewEmpShield : Scanable
 
     public void Hit()
     {
+        if(immortal)
+            return;
+            
         if (gameObject.activeInHierarchy == false)
             return;
 
