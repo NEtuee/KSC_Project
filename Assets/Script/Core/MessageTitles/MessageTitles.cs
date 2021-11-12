@@ -220,6 +220,20 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort uimanager_ActiveLeveLineUIAndSetBossName = 0x0339;
 
+    /// <summary>
+    /// data = String
+    /// </summary>
+    public const ushort uimanager_AppearMissionUiAndSetKey = 0x0340;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_DisappearMissionUi = 0x0341;
+
+    /// <summary>
+    /// data = LevelLineAlphabetData
+    /// </summary>
+    public const ushort uimanager_SetLevelLineAlphabet = 0x0342;
     #endregion
 
     /// <summary>
