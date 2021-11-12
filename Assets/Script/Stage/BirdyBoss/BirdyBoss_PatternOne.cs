@@ -525,32 +525,37 @@ public class BirdyBoss_PatternOne : ObjectBase
             }
             else if (item.type == EventEnum.StartFog)
             {
-                _timeCounter.AddSequence(name, item.value, null, (x) =>
-                {
+                _timeCounter.AddSequence(name, item.value, (x)=>{
                     if (_fogIn)
                         return;
 
                     var factor = x / item.value;
                     RenderSettings.fogDensity = Mathf.Lerp(fogOutDensity,fogDensity,factor);
+                }, (x) =>
+                {
+                    if (_fogIn)
+                        return;
 
                     fogDrone.Respawn(headPattern.transform.position);
-
                     _fogIn = true;
                 });
             }
             else if (item.type == EventEnum.EndFog)
             {
-                _timeCounter.AddSequence(name, item.value, null, (x) =>
-                {
+                _timeCounter.AddSequence(name, item.value, (x)=>{
                     if (!_fogIn)
                         return;
                     
+                    if(fogDrone.gameObject.activeInHierarchy)
+                    {
+                        fogDrone.gameObject.SetActive(false);
+                    }
+                    
                     var factor = x / item.value;
                     RenderSettings.fogDensity = Mathf.Lerp(fogDensity, fogOutDensity, factor);
-
-                    fogDrone.gameObject.SetActive(false);
-
-                    _fogIn = false;
+                }, (x) =>
+                {
+                     _fogIn = false;
                 });
             }
             else if (item.type == EventEnum.GenieHitGround)
@@ -628,7 +633,7 @@ public class BirdyBoss_PatternOne : ObjectBase
             {
                 _timeCounter.AddFence(name,()=>
                 {
-                    return !loopSequences[item.point].active;
+                    return !loopSequences[recentlyLoop].active;
                 });
             }
         }

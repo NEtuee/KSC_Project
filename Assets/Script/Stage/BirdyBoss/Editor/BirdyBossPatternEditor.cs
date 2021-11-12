@@ -510,7 +510,7 @@ public class BirdyBossPatternEditor : EditorWindow
         }
         else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.LoopPatternEndFence)
         {
-            desc = "지정한 번호 루프 패턴이 \n끝날 때 까지 대기함";
+            desc = "가장 최근 실행한 루프 패턴이 \n끝날 때 까지 대기함";
             GUI.enabled = false;
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;
