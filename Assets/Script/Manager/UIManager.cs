@@ -108,6 +108,12 @@ public class UIManager : ManagerBase
     [SerializeField] private Image[] loadCountUi = new Image[MAX_LOAD_COUNT];
     [SerializeField] private Color highlightColor = Color.white;
     private int prevLoadCount;
+
+    [Header("TargetMaker")]
+    [SerializeField] private TargetMakerUI targetMakerUi;
+
+    [Header("LevelLineUI")]
+    [SerializeField] private LevelLineUI levelLineUi;
     
 
     private EventSystem _eventSystem;
@@ -177,7 +183,10 @@ public class UIManager : ManagerBase
         MessageDataPooling.RegisterMessageData<HpPackValueType>();
 
         AddAction(MessageTitles.uimanager_activecrosshair, ActiveCrossHair);
-        AddAction(MessageTitles.uimanager_setcrosshairphase, SetCrossHairPhase);
+        AddAction(MessageTitles.uimanager_setChargeComplete, (msg)=>
+        {
+            _crossHair.ChargeComplete();
+        });
 
         AddAction(MessageTitles.uimanager_setvaluestatebar, SetValueStateBar);
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
@@ -412,6 +421,24 @@ public class UIManager : ManagerBase
         {
             _player = (PlayerUnit)msg.data;
         });
+
+        AddAction(MessageTitles.uimanager_activeTargetMakerUiAndSetTarget, (msg) =>
+         {
+             targetMakerUi.gameObject.SetActive(true);
+             targetMakerUi.Target = (Transform)msg.data;
+         });
+
+        AddAction(MessageTitles.uimanager_DisableTargetMakerUi, (msg) =>
+        {
+            targetMakerUi.gameObject.SetActive(false);
+        });
+
+        AddAction(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, (msg) =>
+        {
+            var data = (string)msg.data;
+            levelLineUi.SetBossName(data);
+            levelLineUi.Appear();
+        });
     }
 
     public override void Initialize()
@@ -509,10 +536,10 @@ public class UIManager : ManagerBase
     {
         base.Progress(deltaTime);
 
-        //if(Keyboard.current.nKey.wasPressedThisFrame)
-        //{
-        //    SendMessageEx(MessageTitles.uimanager_activeInGameTutorial, GetSavedNumber("UIManager"), InGameTutorialCtrl.InGameTutorialType.Climbing);
-        //}
+        if (Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"), "이우민");
+        }
     }
 
     public void ActivePage(int pageNum)
@@ -608,6 +635,13 @@ public class UIManager : ManagerBase
                 break;
         }
     }
+
+    public void SetChargeComplete()
+    {
+        
+    }
+
+
     #endregion
 
     #region StateBar
