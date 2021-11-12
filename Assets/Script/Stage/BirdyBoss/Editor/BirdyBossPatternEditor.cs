@@ -104,7 +104,7 @@ public class BirdyBossPatternEditor : EditorWindow
 
             GUILayout.BeginVertical("box");
             {
-                GUILayout.Label("name");
+                GUILayout.Label("Name");
                 if(_sequenceTitles.Length == 0 || _sequenceTitles.Length <= _currentSequencer)
                 {
                     GUILayout.Label("Missing");
@@ -116,8 +116,16 @@ public class BirdyBossPatternEditor : EditorWindow
 
                     if (sequenecName != _sequenceTitles[_currentSequencer])
                     {
-                        _sequenceTitles[_currentSequencer] = sequenecName;
-                        GetTargetSequence(_currentTargetMenu, _currentSequencer).title = sequenecName;
+                        if (GetMenuSequence(_currentTargetMenu).Find((x) => { return x.title == sequenecName; }) != null)
+                        {
+                            Debug.Log("Name already Exists");
+                        }
+                        else
+                        {
+                            _sequenceTitles[_currentSequencer] = sequenecName;
+                            GetTargetSequence(_currentTargetMenu, _currentSequencer).title = sequenecName;
+                        }
+                        
                     }
                 }
                 
@@ -482,6 +490,31 @@ public class BirdyBossPatternEditor : EditorWindow
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;
         }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.LoopPatternStart)
+        {
+            desc = "루프 패턴 시작\n지정한 번호 루프 패턴이 나옴";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+
+            targetEvent.code = EditorGUILayout.IntField("번호", targetEvent.code);
+        }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.LoopPatternEnd)
+        {
+            desc = "루프 패턴 종료\n지정한 번호 루프 패턴이 종료됨";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+
+            targetEvent.code = EditorGUILayout.IntField("번호", targetEvent.code);
+        }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.LoopPatternEndFence)
+        {
+            desc = "지정한 번호 루프 패턴이 \n끝날 때 까지 대기함";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+        }
         else
         {
             desc = "몰루??";
@@ -604,6 +637,10 @@ public class BirdyBossPatternEditor : EditorWindow
         {
             return 0f;
         }
+        else if (item.type == BirdyBoss_PatternOne.EventEnum.LoopPatternEndFence)
+        {
+            return -1f;
+        }
 
         return 0f;
     }
@@ -672,7 +709,7 @@ public class BirdyBossPatternEditor : EditorWindow
                 GUI.enabled = false;
             }
 
-            if(GUILayout.Button(item.identifier))
+            if(GUILayout.Button(i + ". " + item.identifier))
             {
                 GUI.FocusControl("");
                 _currentEvent = i;
@@ -720,7 +757,7 @@ public class BirdyBossPatternEditor : EditorWindow
 
         var item = new BirdyBoss_PatternOne.LoopSequence();
         item.title = "New Sequencer " + targetSeq.Count;
-        item.active = true;
+        item.active = false;
 
         _currentSequencer = targetSeq.Count;
         targetSeq.Add(item);
@@ -760,7 +797,7 @@ public class BirdyBossPatternEditor : EditorWindow
 
         for(int i = 0; i < targetList.Count; ++i)
         {
-            _sequenceTitles[i] = targetList[i].title;
+            _sequenceTitles[i] = i.ToString() + ". " + targetList[i].title;
         }
     }
 

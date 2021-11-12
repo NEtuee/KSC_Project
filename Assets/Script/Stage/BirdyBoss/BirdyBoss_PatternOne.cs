@@ -30,6 +30,10 @@ public class BirdyBoss_PatternOne : ObjectBase
         SpiderPillar,
         GroundCutStart,
         GroundCutEnd,
+        LoopPatternStart,
+        LoopPatternEnd,
+        LoopPatternEndFence,
+
 
         PatternEND,
     };
@@ -90,6 +94,8 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     [Header("Platform")]
     public BirdyBoss_PlatformCut platformCut;
+
+    public int recentlyLoop;
 
     //[Header("GiroPattern")]
     //public GiroPattern giroPattern;
@@ -249,6 +255,8 @@ public class BirdyBoss_PatternOne : ObjectBase
     {
         if (loopSequences[target].active)
             Debug.LogError("target is already activated");
+
+        _timeCounter.InitSequencer(loopSequences[target].title);
         loopSequences[target].active = true;
     }
 
@@ -257,6 +265,11 @@ public class BirdyBoss_PatternOne : ObjectBase
         if (!loopSequences[target].active)
             Debug.LogError("target is already deactivated");
         loopSequences[target].active = false;
+    }
+
+    public void LoopStopRecently()
+    {
+        loopSequences[recentlyLoop].active = false;
     }
 
     public void FindGrids(int min, int max)
@@ -594,6 +607,28 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     platformCut.PatternEnd();
+                });
+            }
+            else if (item.type == EventEnum.LoopPatternStart)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    LoopStart(item.code);
+                    recentlyLoop = item.code;
+                });
+            }
+            else if (item.type == EventEnum.LoopPatternEnd)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    LoopStop(item.code);
+                });
+            }
+            else if (item.type == EventEnum.LoopPatternEndFence)
+            {
+                _timeCounter.AddFence(name,()=>
+                {
+                    return !loopSequences[item.point].active;
                 });
             }
         }

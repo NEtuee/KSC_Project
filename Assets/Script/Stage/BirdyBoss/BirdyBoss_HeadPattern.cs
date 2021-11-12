@@ -40,6 +40,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
 
     private bool _stemp = false;
     private bool _lookDown = false;
+    private bool _inout = false;
 
     public override void Assign()
     {
@@ -70,14 +71,20 @@ public class BirdyBoss_HeadPattern : ObjectBase
             Explosion();
 
             SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
+
+            _inout = true;
         });
-        _timeCounterEx.AddSequence("Stemp",stempWaitTime,null,null);
-        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveOut, (x)=>{
+
+        _timeCounterEx.CreateSequencer("InOut");
+        _timeCounterEx.AddSequence("InOut", stempWaitTime,null,null);
+        _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveOut, (x)=>{
             transform.localPosition = _localPosition;
-        });
-        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveIn, (x)=>{
             _lookDown = false;
             _stemp = false;
+        });
+        _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveIn, (x)=>{
+            //_lookDown = false;
+            //_stemp = false;
         });
 
         _timeCounterEx.CreateSequencer("RingPattern");
@@ -104,15 +111,33 @@ public class BirdyBoss_HeadPattern : ObjectBase
         {
             ShieldLookDown();
         }
-        _timeCounterEx.ProcessSequencer("Stemp",deltaTime);
+
+        if(_inout)
+        {
+            _inout = !_timeCounterEx.ProcessSequencer("InOut", deltaTime);
+        }
+        else
+        {
+            _timeCounterEx.ProcessSequencer("Stemp", deltaTime);
+        }
+        
+    }
+
+    public void QuickOut()
+    {
+        _inout = true;
+        _timeCounterEx.InitSequencer("InOut");
+        _timeCounterEx.SkipSequencer("InOut", stempWaitTime);
     }
 
     public void StempTarget(HexCube target)
     {
         _stemp = true;
         _lookDown = false;
+        _inout = false;
         stempCube = target;
         _timeCounterEx.InitSequencer("Stemp");
+        _timeCounterEx.InitSequencer("InOut");
     }
 
     public void Explosion()
