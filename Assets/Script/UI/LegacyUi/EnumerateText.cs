@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class EnumerateText : MonoBehaviour
 {
@@ -15,9 +16,13 @@ public class EnumerateText : MonoBehaviour
 
     private int currentTextIndex = 0;
 
-    void Start()
+    private void Awake()
     {
         text = GetComponent<TextMeshProUGUI>();
+    }
+
+    void Start()
+    {
         StartCoroutine(TextLoop());
     }
 
@@ -49,5 +54,21 @@ public class EnumerateText : MonoBehaviour
         currentString = "";
         currentTextIndex = 0;
         text.text = currentString;
+    }
+
+    public void SetEmpty()
+    {
+        text.text = "";
+    }
+
+    public void TextFade(float duration)
+    {
+        text.DOFade(0f, duration);
+    }
+
+    public void Init()
+    {
+        SetEmpty();
+        text.DOFade(1f, 0f);
     }
 }

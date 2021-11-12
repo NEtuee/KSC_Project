@@ -60,7 +60,7 @@ public class DroneHelperRoot : MonoBehaviour
         if (helping == true)
         {
             bool limit;
-            timer.IncreaseTimer("Help", hintTime, out limit);
+            timer.IncreaseTimerSelf("Help", hintTime, out limit,Time.deltaTime);
             if (limit == true)
             {
                 helping = false;
@@ -83,7 +83,7 @@ public class DroneHelperRoot : MonoBehaviour
         descriptText.SetTargetString(descriptDictionary[key].desc);
         droneDiscriptCanvas.enabled = true;
         drone.OrderHelp();
-        timer.InitTimer("Help");
+        timer.InitTimer("Help", 0.0f, hintTime);
 
         var audio = descriptDictionary[key].audio;
         if(audio != null)
@@ -95,6 +95,34 @@ public class DroneHelperRoot : MonoBehaviour
 
         return true;
     }
+
+    public bool HelpEvent(string key, float durationTime)
+    {
+        if (descriptDictionary.ContainsKey(key) == false)
+        {
+            Debug.Log(key + " Not Exits Key");
+            return false;
+        }
+
+        active = true;
+        helping = true;
+        descriptText.SetTargetString(descriptDictionary[key].desc);
+        droneDiscriptCanvas.enabled = true;
+        drone.OrderHelp();
+        hintTime = durationTime;
+        timer.InitTimer("Help",0.0f,hintTime);
+
+        var audio = descriptDictionary[key].audio;
+        if (audio != null)
+        {
+            audioPlay.Stop();
+            audioPlay.clip = audio;
+            audioPlay.Play();
+        }
+
+        return true;
+    }
+
 
     public bool ShowText(string text)
     {

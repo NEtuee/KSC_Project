@@ -350,6 +350,8 @@ public class Drone : PathfollowObjectBase
         //    return;
 
         //UpdateDrone(Time.deltaTime);
+
+      
     }
 
     private void UpdateDrone(float deltaTime)
@@ -694,6 +696,14 @@ public class Drone : PathfollowObjectBase
         if(ReferenceEquals(droneHelperRoot,null) == false)
         {
             droneHelperRoot.HelpEvent(key);
+        }
+    }
+
+    public void DroneHelpCall(string key, float duration)
+    {
+        if (ReferenceEquals(droneHelperRoot, null) == false)
+        {
+            droneHelperRoot.HelpEvent(key,duration);
         }
     }
 
