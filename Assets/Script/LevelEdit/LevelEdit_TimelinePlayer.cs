@@ -108,6 +108,14 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             actionData.value = () => {
                 SendMessageEx(MessageTitles.cutscene_stop, GetSavedNumber("CutsceneManager"), null);
                 playableDirector.Stop();
+                CUTSCENEPLAY = false;
+
+                //SendMessageQuick(MessageTitles.cameramanager_setBrainUpdateMethod, GetSavedNumber("CameraManager"), null);
+                //SendMessageQuick(MessageTitles.cutscene_stop, GetSavedNumber("CutsceneManager"), null);
+                //playableDirector.Stop();
+                //SendMessageQuick(MessageTitles.playermanager_hidePlayer, GetSavedNumber("PlayerManager"), true);
+
+                SetBirdyCanMove(birdyCanMove);
                 LoadNextLevel();
             };
 
@@ -202,6 +210,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         if (playerDisable)
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),false);
+            Debug.Log("Tlqkf");
         }
         CUTSCENEPLAY = true;
     }

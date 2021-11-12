@@ -6,10 +6,13 @@ public class SpiderPillarPattern : ObjectBase
 {
     private TimeCounterEx _timeCounter = new TimeCounterEx();
     public BirdyBoss_Database.ItemClass<B1_FlySpider> flySpiderCache = new BirdyBoss_Database.ItemClass<B1_FlySpider>();
-    public List<GameObject> pillars = new List<GameObject>();
+    public List<SpiderPillar> pillars = new List<SpiderPillar>();
     public List<Transform> spawPoints = new List<Transform>();
     public int spawnCount = 3;
-    
+
+    [SerializeField] private float pillarAppearDuration = 2.0f;
+    [SerializeField] private float pillarDisapperDuration = 2.0f;
+
     public override void Assign()
     {
         base.Assign();
@@ -19,8 +22,14 @@ public class SpiderPillarPattern : ObjectBase
         _timeCounter.AddSequence("Spider", 0.0f, null, (value) =>
         {
             for (int i = 0; i < pillars.Count; i++)
-                pillars[i].SetActive(true);
+            {
+                pillars[i].gameObject.SetActive(true);
+                pillars[i].Appear(pillarAppearDuration);
+            }
         });
+
+        _timeCounter.AddSequence("Spider", pillarAppearDuration, null, null);
+
 
         for (int i = 0; i < spawnCount; i++)
         {
@@ -37,8 +46,19 @@ public class SpiderPillarPattern : ObjectBase
 
         _timeCounter.AddSequence("Spider", 15.0f, null, (value) =>
          {
-             this.gameObject.SetActive(false);
+             for (int i = 0; i < pillars.Count; i++)
+             {
+                 pillars[i].Disappear(pillarDisapperDuration);
+             }
          });
+
+        _timeCounter.AddSequence("Spider", pillarDisapperDuration, null, (value) =>
+        {
+            for (int i = 0; i < pillars.Count; i++)
+            {
+                pillars[i].gameObject.SetActive(false);
+            }
+        });
 
          _timeCounter.InitSequencer("Spider");
     }

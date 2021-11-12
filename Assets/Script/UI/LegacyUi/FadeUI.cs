@@ -11,12 +11,12 @@ using TMPro;
 
 public class FadeUI : MonoBehaviour
 {
-    [SerializeField] private Image fillTargetImage;
-    [SerializeField] private Image[] images;
+    [SerializeField] protected Image fillTargetImage;
+    [SerializeField] protected Image[] images;
     [SerializeField] protected bool visible = false;
     [SerializeField] protected float updateSpeed = 0.3f;
     [SerializeField] protected float remainingVisibleTime = 5.0f;
-    private float _updateValue;
+    protected float _updateValue;
     [SerializeField] protected float _currentVisibleTime = 0.0f;
     protected bool _isFade = false;
     
@@ -31,6 +31,7 @@ public class FadeUI : MonoBehaviour
         this.UpdateAsObservable()
             .Subscribe(_ => 
             {
+                if(fillTargetImage != null)
                 fillTargetImage.fillAmount = Mathf.MoveTowards(fillTargetImage.fillAmount, _updateValue, updateSpeed * Time.deltaTime);
 
                 if (visible == false)
@@ -69,7 +70,7 @@ public class FadeUI : MonoBehaviour
         }
     }
 
-    public void SetValue(float value, bool setVisible = true)
+    public virtual void SetValue(float value, bool setVisible = true)
     {
         _updateValue = value / 100;
 

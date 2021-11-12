@@ -74,6 +74,8 @@ public class NewEmpShield : Scanable
 
         SendMessageQuick(MessageTitles.scan_registerScanObject, UniqueNumberBase.GetSavedNumberStatic("Drone"), this);
         SendMessageEx(MessageTitles.set_gunTargetMessageObject, UniqueNumberBase.GetSavedNumberStatic("FollowTargetCtrl"), this.transform);
+
+        //SendMessageEx(MessageTitles.uimanager_activeTargetMakerUiAndSetTarget, UniqueNumberBase.GetSavedNumberStatic("UIManager"), this.transform);
     }
 
     public void Reactive()

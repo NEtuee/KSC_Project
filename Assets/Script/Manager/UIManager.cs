@@ -32,7 +32,9 @@ public class UIManager : ManagerBase
     [SerializeField] private CrossHair _crossHair;
 
     [Header("StateUI")]
+    [SerializeField] private FadeUI statusUi;
     [SerializeField] private FadeUI _hpBar;
+    [SerializeField] private EnergyUI _energyIcon;
     [SerializeField] private FadeUI _staminaBar;
     [SerializeField] private FadeUI _energyBar;
     [SerializeField] private HpPackUI _hpPackUI;
@@ -108,6 +110,15 @@ public class UIManager : ManagerBase
     [SerializeField] private Image[] loadCountUi = new Image[MAX_LOAD_COUNT];
     [SerializeField] private Color highlightColor = Color.white;
     private int prevLoadCount;
+
+    [Header("TargetMaker")]
+    [SerializeField] private TargetMakerUI targetMakerUi;
+
+    [Header("LevelLineUI")]
+    [SerializeField] private LevelLineUI levelLineUi;
+
+    [Header("MissionUI")]
+    [SerializeField] private MissionUI missionUi;
     
 
     private EventSystem _eventSystem;
@@ -177,7 +188,10 @@ public class UIManager : ManagerBase
         MessageDataPooling.RegisterMessageData<HpPackValueType>();
 
         AddAction(MessageTitles.uimanager_activecrosshair, ActiveCrossHair);
-        AddAction(MessageTitles.uimanager_setcrosshairphase, SetCrossHairPhase);
+        AddAction(MessageTitles.uimanager_setChargeComplete, (msg)=>
+        {
+            _crossHair.ChargeComplete();
+        });
 
         AddAction(MessageTitles.uimanager_setvaluestatebar, SetValueStateBar);
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
@@ -412,6 +426,42 @@ public class UIManager : ManagerBase
         {
             _player = (PlayerUnit)msg.data;
         });
+
+        AddAction(MessageTitles.uimanager_activeTargetMakerUiAndSetTarget, (msg) =>
+         {
+             targetMakerUi.gameObject.SetActive(true);
+             targetMakerUi.Target = (Transform)msg.data;
+         });
+
+        AddAction(MessageTitles.uimanager_DisableTargetMakerUi, (msg) =>
+        {
+            targetMakerUi.gameObject.SetActive(false);
+        });
+
+        AddAction(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, (msg) =>
+        {
+            var data = (string)msg.data;
+            levelLineUi.SetBossName(data);
+            levelLineUi.Appear();
+        });
+
+        AddAction(MessageTitles.uimanager_AppearMissionUiAndSetKey, (msg) =>
+        {
+            var data = (string)msg.data;
+            missionUi.SetText(data);
+            missionUi.Appear();
+        });
+
+        AddAction(MessageTitles.uimanager_DisappearMissionUi, (msg) =>
+        {
+            missionUi.Dissapear();
+        });
+
+        AddAction(MessageTitles.uimanager_SetLevelLineAlphabet, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<LevelLineAlphabetData>(msg.data);
+            levelLineUi.SetAlphabet(data.value);
+        });
     }
 
     public override void Initialize()
@@ -509,10 +559,19 @@ public class UIManager : ManagerBase
     {
         base.Progress(deltaTime);
 
-        //if(Keyboard.current.nKey.wasPressedThisFrame)
-        //{
-        //    SendMessageEx(MessageTitles.uimanager_activeInGameTutorial, GetSavedNumber("UIManager"), InGameTutorialCtrl.InGameTutorialType.Climbing);
-        //}
+        if (Keyboard.current.digit3Key.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"), "이우민");
+        }
+
+        if (Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.uimanager_AppearMissionUiAndSetKey, GetSavedNumber("UIManager"), "Test");
+        }
+        if (Keyboard.current.mKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.uimanager_DisappearMissionUi, GetSavedNumber("UIManager"), null);
+        }
     }
 
     public void ActivePage(int pageNum)
@@ -608,6 +667,13 @@ public class UIManager : ManagerBase
                 break;
         }
     }
+
+    public void SetChargeComplete()
+    {
+        
+    }
+
+
     #endregion
 
     #region StateBar
@@ -618,15 +684,16 @@ public class UIManager : ManagerBase
         switch(recv.type)
         {
             case StateBarType.HP:
-                _hpBar.SetValue(recv.value,recv.visible);
+                _hpBar.SetValue(recv.value, false);
                 break;
             case StateBarType.Stamina:
                 _staminaBar.SetValue(recv.value,recv.visible);
                 break;
             case StateBarType.Energy:
-                _energyBar.SetValue(recv.value, recv.visible);
+                _energyIcon.SetValue(recv.value, false);
                 break;
         }
+        statusUi.SetVisible(recv.visible);
     }
 
     public void SetValueHpPackUI(Message msg)
@@ -639,10 +706,13 @@ public class UIManager : ManagerBase
     public void SetVisibleAllStateBar(Message msg)
     {
         BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
-        _hpBar.SetVisible(data.value);
-        _staminaBar.SetVisible(data.value);
-        _energyBar.SetVisible(data.value);
-        _hpPackUI.SetVisible(data.value);
+
+        statusUi.SetVisible(data.value);
+
+        //_hpBar.SetVisible(data.value);
+        //_staminaBar.SetVisible(data.value);
+        //_energyBar.SetVisible(data.value);
+        //_hpPackUI.SetVisible(data.value);
     }
     #endregion
 
