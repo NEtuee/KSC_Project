@@ -559,6 +559,11 @@ public class UIManager : ManagerBase
     {
         base.Progress(deltaTime);
 
+        if (Keyboard.current.digit3Key.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"), "이우민");
+        }
+
         if (Keyboard.current.nKey.wasPressedThisFrame)
         {
             SendMessageEx(MessageTitles.uimanager_AppearMissionUiAndSetKey, GetSavedNumber("UIManager"), "Test");
