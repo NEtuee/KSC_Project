@@ -9,6 +9,11 @@ public class LevelLineUI : MonoBehaviour
 {
     private Canvas _canvas;
 
+    public enum Alphabet
+    {
+        A,B,C
+    }
+
     public enum State
     {
         Appear, Disappear, Done
@@ -113,5 +118,29 @@ public class LevelLineUI : MonoBehaviour
     public void SetBossName(string name)
     {
         bossNameTargetText = name;
+    }
+
+    public void SetAlphabet(Alphabet alphabet)
+    {
+        switch(alphabet)
+        {
+            case Alphabet.A:
+                this.alphabet.Image.sprite = aLineSprite;
+                break;
+            case Alphabet.B:
+                this.alphabet.Image.sprite = bLineSprite;
+                break;
+            case Alphabet.C:
+                this.alphabet.Image.sprite = cLineSprite;
+                break;
+        }
+    }
+}
+
+namespace MD
+{
+    public class LevelLineAlphabetData : MessageData
+    {
+        public LevelLineUI.Alphabet value;
     }
 }

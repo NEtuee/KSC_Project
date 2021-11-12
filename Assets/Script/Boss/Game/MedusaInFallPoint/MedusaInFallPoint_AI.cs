@@ -56,6 +56,7 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
 
     public void Launch()
     {
+        Debug.Log("aunch");
         launch = true;
         AnimationChange(7);
     }

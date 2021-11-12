@@ -8,6 +8,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
     public HexCubeGrid grid;
 
     public Transform shieldObj;
+    public NewEmpShield shieldTarget;
 
     [Header("Stemp")]
     public float dissolveTime = 1f;
@@ -40,6 +41,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
 
     private bool _stemp = false;
     private bool _lookDown = false;
+    private bool _inout = false;
 
     public override void Assign()
     {
@@ -61,23 +63,38 @@ public class BirdyBoss_HeadPattern : ObjectBase
             
         });
         _timeCounterEx.AddSequence("Stemp",stempStartTime,(x)=> {
-            ShieldLookPlayer();
+            var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
+            shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.2f);
         },(x)=> {
-            _lookDown = true;
+            //_lookDown = true;
         });
         _timeCounterEx.AddSequence("Stemp",stempTime,Stemp,(x)=>{
             Ring();
             Explosion();
 
             SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
+
+            shieldTarget.gameObject.SetActive(true);
+            shieldTarget.VisibleVisual();
+            _inout = true;
         });
-        _timeCounterEx.AddSequence("Stemp",stempWaitTime,null,null);
-        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveOut, (x)=>{
+
+        _timeCounterEx.CreateSequencer("InOut");
+        _timeCounterEx.AddSequence("InOut", stempWaitTime,null,null);
+        _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveOut, (x)=>{
             transform.localPosition = _localPosition;
-        });
-        _timeCounterEx.AddSequence("Stemp",dissolveTime,DissolveIn, (x)=>{
+
             _lookDown = false;
             _stemp = false;
+        });
+        _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveIn, (x)=>{
+            if(!shieldTarget.IsActive)
+            {
+                shieldTarget.gameObject.SetActive(false);
+                shieldTarget.Reactive();
+            }
+
+            
         });
 
         _timeCounterEx.CreateSequencer("RingPattern");
@@ -94,6 +111,11 @@ public class BirdyBoss_HeadPattern : ObjectBase
     {
         base.FixedProgress(deltaTime);
 
+        if(_inout)
+        {
+            _inout = !_timeCounterEx.ProcessSequencer("InOut", deltaTime);
+        }
+
         if (!_stemp)
         {
             ShieldLookPlayer();
@@ -104,15 +126,32 @@ public class BirdyBoss_HeadPattern : ObjectBase
         {
             ShieldLookDown();
         }
-        _timeCounterEx.ProcessSequencer("Stemp",deltaTime);
+
+        
+        if(!_inout)
+        {
+            _timeCounterEx.ProcessSequencer("Stemp", deltaTime);
+        }
+        
+    }
+
+    public void QuickOut()
+    {
+        _stemp = true;
+        _lookDown = false;
+        _inout = true;
+        _timeCounterEx.InitSequencer("InOut");
+        _timeCounterEx.SkipSequencer("InOut", stempWaitTime);
     }
 
     public void StempTarget(HexCube target)
     {
         _stemp = true;
         _lookDown = false;
+        _inout = false;
         stempCube = target;
         _timeCounterEx.InitSequencer("Stemp");
+        _timeCounterEx.InitSequencer("InOut");
     }
 
     public void Explosion()

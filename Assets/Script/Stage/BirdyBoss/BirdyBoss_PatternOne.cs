@@ -4,35 +4,43 @@ using UnityEngine;
 
 public class BirdyBoss_PatternOne : ObjectBase
 {
+    public enum EventEnum
+    {
+        SpawnSpider = 0,
+        SpawnSpiderRandomGrid,
+        SpawnFlySpider,
+        SpawnDrone,
+        SpawnMedusa,
+        WaitSeconds,
+        AnnihilationFence,
+        CutsceneFence,
+        InvokeEvent,
+        DroneAnnihilationFence,
+        ActiveHPUI,
+        DeactiveHPUI,
+        HeadStemp,
+        BirdyApear,
+        SpawnFlySpiderBall,
+        StartFog,
+        EndFog,
+        GenieHitGround,
+        Giro,
+        FallPillar,
+        HorizonPillar,
+        SpiderPillar,
+        GroundCutStart,
+        GroundCutEnd,
+        LoopPatternStart,
+        LoopPatternEnd,
+        LoopPatternEndFence,
+
+
+        PatternEND,
+    };
+
     [System.Serializable]
     public class SequenceItem
     {
-        public enum EventEnum
-        {
-            SpawnSpider,
-            SpawnSpiderRandomGrid,
-            SpawnFlySpider,
-            SpawnDrone,
-            SpawnMedusa,
-            WaitSeconds,
-            AnnihilationFence,
-            CutsceneFence,
-            InvokeEvent,
-            DroneAnnihilationFence,
-            ActiveHPUI,
-            DeactiveHPUI,
-            HeadStemp,
-            BirdyApear,
-            SpawnFlySpiderBall,
-            StartFog,
-            EndFog,
-            GenieHitGround,
-            Giro,
-            FallPillar,
-            HorizonPillar,
-            SpiderPillar
-        };
-        
         public string identifier;
         public EventEnum type;
         public int code;
@@ -52,7 +60,7 @@ public class BirdyBoss_PatternOne : ObjectBase
 
 
     [Header("Sequence Lists")]
-    public List<SequenceItem> sequences = new List<SequenceItem>();
+    public List<LoopSequence> sequences = new List<LoopSequence>();
     public List<LoopSequence> loopSequences = new List<LoopSequence>();
 
     [Header("etc.")]
@@ -84,6 +92,11 @@ public class BirdyBoss_PatternOne : ObjectBase
     [Header("HoriznoPillar Point")]
     public List<Transform> horizonPillarPoints = new List<Transform>();
 
+    [Header("Platform")]
+    public BirdyBoss_PlatformCut platformCut;
+
+    public int recentlyLoop;
+
     //[Header("GiroPattern")]
     //public GiroPattern giroPattern;
 
@@ -106,11 +119,19 @@ public class BirdyBoss_PatternOne : ObjectBase
     private Drone _drone;
     private HexCube _respawnCube;
 
+    private string[] _mainSequances;
+
     public override void Assign()
     {
         base.Assign();
-
-        CreateSequencer("process",ref sequences);
+        _mainSequances = new string[sequences.Count];
+        for (int i = 0; i < sequences.Count; ++i)
+        {
+            var target = sequences[i].loopSequences;
+            _mainSequances[i] = "process" + i;
+            CreateSequencer(_mainSequances[i], ref target);
+        }
+            
 
         for(int i = 0; i < loopSequences.Count; ++i)
         {
@@ -174,7 +195,12 @@ public class BirdyBoss_PatternOne : ObjectBase
         if(!active)
             return;
 
-        _timeCounter.ProcessSequencer("process",deltaTime);
+        for(int i = 0; i < _mainSequances.Length; ++i)
+        {
+            _timeCounter.ProcessSequencer(_mainSequances[i], deltaTime);
+        }
+
+        //_timeCounter.ProcessSequencer("process",deltaTime);
 
         for (int i = 0; i < loopSequences.Count; ++i)
         {
@@ -229,6 +255,8 @@ public class BirdyBoss_PatternOne : ObjectBase
     {
         if (loopSequences[target].active)
             Debug.LogError("target is already activated");
+
+        _timeCounter.InitSequencer(loopSequences[target].title);
         loopSequences[target].active = true;
     }
 
@@ -237,6 +265,11 @@ public class BirdyBoss_PatternOne : ObjectBase
         if (!loopSequences[target].active)
             Debug.LogError("target is already deactivated");
         loopSequences[target].active = false;
+    }
+
+    public void LoopStopRecently()
+    {
+        loopSequences[recentlyLoop].active = false;
     }
 
     public void FindGrids(int min, int max)
@@ -255,7 +288,7 @@ public class BirdyBoss_PatternOne : ObjectBase
 
         foreach(var item in targetList)
         {
-            if(item.type == SequenceItem.EventEnum.SpawnDrone)
+            if(item.type == EventEnum.SpawnDrone)
             {
                 if(item.value == 0)
                 {
@@ -281,7 +314,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                 
                 
             }
-            else if(item.type == SequenceItem.EventEnum.SpawnFlySpider)
+            else if(item.type == EventEnum.SpawnFlySpider)
             {
                 if(item.value == 0)
                 {
@@ -307,7 +340,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                     }
                 }
             }
-            else if(item.type == SequenceItem.EventEnum.SpawnSpider)
+            else if(item.type == EventEnum.SpawnSpider)
             {
                 if(item.value == 0)
                 {
@@ -333,7 +366,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                     }
                 }
             }
-            else if(item.type == SequenceItem.EventEnum.SpawnSpiderRandomGrid)
+            else if(item.type == EventEnum.SpawnSpiderRandomGrid)
             {
                 if(item.value == 0)
                 {
@@ -370,7 +403,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                     }
                 }
             }
-            else if(item.type == SequenceItem.EventEnum.SpawnMedusa)
+            else if(item.type == EventEnum.SpawnMedusa)
             {
                 if(item.value == 0)
                 {
@@ -402,35 +435,35 @@ public class BirdyBoss_PatternOne : ObjectBase
                     }
                 }
             }
-            else if(item.type == SequenceItem.EventEnum.WaitSeconds)
+            else if(item.type == EventEnum.WaitSeconds)
             {
                 _timeCounter.AddSequence(name,item.value,null,null);
             }
-            else if(item.type == SequenceItem.EventEnum.AnnihilationFence)
+            else if(item.type == EventEnum.AnnihilationFence)
             {
                 _timeCounter.AddFence(name,()=>{
                     return database.updateCount == 0;
                 });
             }
-            else if(item.type == SequenceItem.EventEnum.InvokeEvent)
+            else if(item.type == EventEnum.InvokeEvent)
             {
                 _timeCounter.AddSequence(name,item.value,null,(x)=>{
                     item.eventSet?.Invoke();
                 });
             }
-            else if(item.type == SequenceItem.EventEnum.CutsceneFence)
+            else if(item.type == EventEnum.CutsceneFence)
             {
                 _timeCounter.AddFence(name,()=>{
                     return !LevelEdit_TimelinePlayer.CUTSCENEPLAY;
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.DroneAnnihilationFence)
+            else if (item.type == EventEnum.DroneAnnihilationFence)
             {
                 _timeCounter.AddFence(name, () => {
                     return database.droneCache.updateCount == 0;
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.ActiveHPUI)
+            else if (item.type == EventEnum.ActiveHPUI)
             {
                 _timeCounter.AddSequence(name, 0f, null, (x)=>
                 {
@@ -440,7 +473,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                     
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.DeactiveHPUI)
+            else if (item.type == EventEnum.DeactiveHPUI)
             {
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
@@ -449,7 +482,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                     SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.HeadStemp)
+            else if (item.type == EventEnum.HeadStemp)
             {
                 _timeCounter.AddSequence(name, item.value, null, (x) =>
                 {
@@ -470,14 +503,14 @@ public class BirdyBoss_PatternOne : ObjectBase
                     
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.BirdyApear)
+            else if (item.type == EventEnum.BirdyApear)
             {
                 _timeCounter.AddSequence(name, item.value, null, (x) =>
                 {
                     ActiveDrone();
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.SpawnFlySpiderBall)
+            else if (item.type == EventEnum.SpawnFlySpiderBall)
             {
                 _timeCounter.AddSequence(name, item.value, null, (x) =>
                 {
@@ -490,7 +523,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                     }
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.StartFog)
+            else if (item.type == EventEnum.StartFog)
             {
                 _timeCounter.AddSequence(name, item.value, null, (x) =>
                 {
@@ -505,7 +538,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                     _fogIn = true;
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.EndFog)
+            else if (item.type == EventEnum.EndFog)
             {
                 _timeCounter.AddSequence(name, item.value, null, (x) =>
                 {
@@ -520,21 +553,21 @@ public class BirdyBoss_PatternOne : ObjectBase
                     _fogIn = false;
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.GenieHitGround)
+            else if (item.type == EventEnum.GenieHitGround)
             {
                 _timeCounter.AddSequence(name, item.value, null, (x) =>
                 {
                     geniePlatform.Active();
                 });
             }
-            else if(item.type == SequenceItem.EventEnum.Giro)
+            else if(item.type == EventEnum.Giro)
             {
                 _timeCounter.AddSequence(name, 0f, null, (x) => {
                     var target = database.SpawnGiroPattern();
                     target.transform.position = headPattern.transform.position;
                 });
             }
-            else if(item.type == SequenceItem.EventEnum.FallPillar)
+            else if(item.type == EventEnum.FallPillar)
             {
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
@@ -546,7 +579,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                     }
                 });
             }
-            else if (item.type == SequenceItem.EventEnum.HorizonPillar)
+            else if (item.type == EventEnum.HorizonPillar)
             {
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
@@ -554,12 +587,48 @@ public class BirdyBoss_PatternOne : ObjectBase
                     target.SetPoint(ref horizonPillarPoints);
                 });
             }
-            else if(item.type == SequenceItem.EventEnum.SpiderPillar)
+            else if(item.type == EventEnum.SpiderPillar)
             {
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var target = database.SpawnSpiderPillarPattern();
                     target.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                });
+            }
+            else if (item.type == EventEnum.GroundCutStart)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    platformCut.PatternStart(_player.transform);
+                });
+            }
+            else if (item.type == EventEnum.GroundCutEnd)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    platformCut.PatternEnd();
+                });
+            }
+            else if (item.type == EventEnum.LoopPatternStart)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    LoopStart(item.code);
+                    recentlyLoop = item.code;
+                });
+            }
+            else if (item.type == EventEnum.LoopPatternEnd)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    LoopStop(item.code);
+                });
+            }
+            else if (item.type == EventEnum.LoopPatternEndFence)
+            {
+                _timeCounter.AddFence(name,()=>
+                {
+                    return !loopSequences[item.point].active;
                 });
             }
         }

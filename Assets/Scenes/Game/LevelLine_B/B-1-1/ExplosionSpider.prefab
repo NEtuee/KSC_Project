@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 4337455491926781611}
   - component: {fileID: 122978149002345461}
   - component: {fileID: 4865532406974853991}
+  - component: {fileID: 3542139589399207937}
   m_Layer: 15
   m_Name: ExplosionSpider
   m_TagString: Untagged
@@ -119,7 +120,7 @@ Transform:
   - {fileID: 4337455491972001722}
   - {fileID: 4337455492542419367}
   - {fileID: 4337455492822927706}
-  - {fileID: 1927736577088526109}
+  - {fileID: 5382434815708672614}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -594,6 +595,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3542139589399207937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4337455491926781663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf1fff29ba737b44bbeef755d576a157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateTarget: {fileID: 5382434815708672614}
+  tiltFactor: 0.3
+  lerpFactor: 5
+  inverseX: 1
+  inverseZ: 0
 --- !u!1 &4337455491966575167
 GameObject:
   m_ObjectHideFlags: 0
@@ -3048,12 +3066,43 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8474497462749985414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5382434815708672614}
+  m_Layer: 15
+  m_Name: Body
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5382434815708672614
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8474497462749985414}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1927736577088526109}
+  m_Father: {fileID: 4337455491926781660}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1486242809607934430
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4337455491926781660}
+    m_TransformParent: {fileID: 5382434815708672614}
     m_Modifications:
     - target: {fileID: 372483123683466361, guid: afe828b51942b42499c53b16102ee6c3,
         type: 3}
@@ -3063,7 +3112,7 @@ PrefabInstance:
     - target: {fileID: 1035972783362492099, guid: afe828b51942b42499c53b16102ee6c3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1035972783362492099, guid: afe828b51942b42499c53b16102ee6c3,
         type: 3}
@@ -3119,6 +3168,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682465201774889485, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
+      propertyPath: limitDistance
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5774501298449531927, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
+      propertyPath: limitDistance
+      value: 0.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afe828b51942b42499c53b16102ee6c3, type: 3}

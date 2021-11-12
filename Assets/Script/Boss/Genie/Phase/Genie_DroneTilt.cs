@@ -7,6 +7,7 @@ public class Genie_DroneTilt : MonoBehaviour
     public float tiltDirection = 1f;
     public float floatingSpeed = 5f;
     public float floatingFactor = 0.5f;
+    public Vector3 direction = Vector3.right;
 
     public Transform target;
     private Vector3 _prevPosition;
@@ -24,7 +25,7 @@ public class Genie_DroneTilt : MonoBehaviour
     public void FixedUpdate()
     {
         var factor = _prevPosition - transform.position;
-        transform.localEulerAngles = _eulerAngles + Vector3.right * factor.magnitude * 1000f;
+        transform.localEulerAngles = _eulerAngles + direction * factor.magnitude * 1000f;
 
         if(target.parent != null)
         {

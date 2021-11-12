@@ -15,18 +15,22 @@ public class MissionUI : MonoBehaviour
     [SerializeField] private State state = State.Done;
     [SerializeField] private FadeAppearImage mark;
     [SerializeField] private FadeAppearImage exclamation;
-    [SerializeField] private RectTransform panel;
+    [SerializeField] private FadeAppearImage panel;
     [SerializeField] private EnumerateText titleText;
     [SerializeField] private EnumerateText descriptionText;
 
+    [SerializeField] private float panelOriginHeight;
     [SerializeField] private float panelTargetHeight = 153f;
     [SerializeField] private float panelAppearDuration = 0.5f;
     private Vector2 panelOriginalSize;
+
+    [SerializeField] private MissionTextScriptable missionTextScriptable;
 
     [Header("Text")]
     [TextArea] [SerializeField] private string titleTargetText;
     [TextArea] [SerializeField] private string descriptionTargetText;
 
+    private Dictionary<string, MissionText> missionDescriptionDic = new Dictionary<string, MissionText>();
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 
     private void Awake()
@@ -34,11 +38,16 @@ public class MissionUI : MonoBehaviour
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = false;
 
+        for(int i = 0; i < missionTextScriptable.descriptions.Count; i++)
+        {
+            missionDescriptionDic.Add(missionTextScriptable.descriptions[i].key, missionTextScriptable.descriptions[i]);
+        }
+
         titleText.Init();
         descriptionText.Init();
 
-        panelOriginalSize = panel.sizeDelta;
-        panel.sizeDelta = new Vector2(panelOriginalSize.x, 0.0f);
+        panelOriginalSize = panel.RectTransform.sizeDelta;
+        panel.RectTransform.sizeDelta = new Vector2(panelOriginalSize.x, 0.0f);
 
         _timeCounter.CreateSequencer("Appear");
         _timeCounter.AddSequence("Appear", 0.0f, null, (value) =>
@@ -46,10 +55,11 @@ public class MissionUI : MonoBehaviour
             _canvas.enabled = true;
             mark.Appear();
             exclamation.Appear();
+            panel.Appear();
         });
         _timeCounter.AddSequence("Appear", mark.AppearDuration, null, (value) =>
         {
-            panel.DOSizeDelta(new Vector2(panelOriginalSize.x, panelTargetHeight), panelAppearDuration);
+            panel.RectTransform.DOSizeDelta(new Vector2(panelOriginalSize.x, panelTargetHeight), panelAppearDuration).SetEase(Ease.OutBack);
         });
         _timeCounter.AddSequence("Appear", panelAppearDuration, null, (value) =>
         {
@@ -69,12 +79,13 @@ public class MissionUI : MonoBehaviour
         });
         _timeCounter.AddSequence("Dissapear", panelAppearDuration, null, (value) =>
         {
-            panel.DOSizeDelta(new Vector2(panelOriginalSize.x, 0f), panelAppearDuration);
+            panel.RectTransform.DOSizeDelta(new Vector2(panelOriginalSize.x, panelOriginHeight), panelAppearDuration).SetEase(Ease.OutBack); ;
         });
         _timeCounter.AddSequence("Dissapear", panelAppearDuration, null, (value) =>
         {
             mark.Disappear();
             exclamation.Disappear();
+            panel.Disappear();
         });
         _timeCounter.AddSequence("Dissapear", mark.DisappearDuration, null, (value) =>
         {
@@ -107,14 +118,30 @@ public class MissionUI : MonoBehaviour
             _timeCounter.ProcessSequencer("Dissapear", Time.deltaTime);
         }
 
-        if (Keyboard.current.digit3Key.wasPressedThisFrame)
-        {
-            Appear();
-        }
+        //if (Keyboard.current.digit3Key.wasPressedThisFrame)
+        //{
+        //    Appear();
+        //}
 
-        if (Keyboard.current.digit4Key.wasPressedThisFrame)
-        {
-            Dissapear();
-        }
+        //if (Keyboard.current.digit4Key.wasPressedThisFrame)
+        //{
+        //    Dissapear();
+        //}
+    }
+
+    public void SetText(string title, string description)
+    {
+        titleTargetText = title;
+        descriptionTargetText = description;
+    }
+
+    public void SetText(string key)
+    {
+        if (missionDescriptionDic.ContainsKey(key) == false)
+            return;
+
+        var description = missionDescriptionDic[key];
+        titleTargetText = description.title;
+        descriptionTargetText = description.description;
     }
 }
