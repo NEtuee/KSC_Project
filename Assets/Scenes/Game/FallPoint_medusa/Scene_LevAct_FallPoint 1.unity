@@ -699,6 +699,7 @@ MonoBehaviour:
   activeLists:
   - {fileID: 2074775833}
   - {fileID: 2044979102}
+  endActiveLists: []
   endTransform: {fileID: 0}
   birdyEndPosition: {fileID: 0}
   loadNextLevel: 1
@@ -1723,6 +1724,7 @@ MonoBehaviour:
   activeLists:
   - {fileID: 1195431620}
   - {fileID: 140643222}
+  endActiveLists: []
   endTransform: {fileID: 317125698}
   birdyEndPosition: {fileID: 0}
   loadNextLevel: 0
@@ -2777,7 +2779,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1366736570}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &543570357
 GameObject:
@@ -3160,15 +3162,8 @@ MonoBehaviour:
   - id: 9
   - id: 10
   - id: 11
+  - id: 12
   edges:
-  - GUID: df54acc5-5961-4c33-b820-c70dea669159
-    owner: {fileID: 677258354}
-    inputNodeGUID: 6d540b6b-521b-4243-85aa-90a8233cfec2
-    outputNodeGUID: b739cf65-7046-4482-adae-1a56ef49c4a8
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: 4f185cd1-18f6-46bb-aed1-71979c6fd940
     owner: {fileID: 677258354}
     inputNodeGUID: 7e0a3c58-e6fa-4876-a726-5a8b370b9553
@@ -3241,6 +3236,22 @@ MonoBehaviour:
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: 2519723a-c5a5-47c1-aa51-49741efc9dfc
+    owner: {fileID: 677258354}
+    inputNodeGUID: afa428b7-b7e1-4e75-9d64-df01a46b16dc
+    outputNodeGUID: b739cf65-7046-4482-adae-1a56ef49c4a8
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 8f88117f-0094-4401-80e0-05fdaa4d9acf
+    owner: {fileID: 677258354}
+    inputNodeGUID: 6d540b6b-521b-4243-85aa-90a8233cfec2
+    outputNodeGUID: afa428b7-b7e1-4e75-9d64-df01a46b16dc
+    inputFieldName: executed
+    outputFieldName: true
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements:
@@ -3255,15 +3266,15 @@ MonoBehaviour:
       serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
   exposedParameters:
-  - id: 12
   - id: 13
   - id: 14
   - id: 15
+  - id: 16
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 692, y: 223, z: 0}
-  scale: {x: 0.65751624, y: 0.65751624, z: 1}
+  position: {x: 119, y: 191, z: 0}
+  scale: {x: 0.7561437, y: 0.7561437, z: 1}
   functions: []
   functionID: 0
   states: []
@@ -3296,7 +3307,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 6d540b6b-521b-4243-85aa-90a8233cfec2
-        computeOrder: 3
+        computeOrder: 4
         position:
           serializedVersion: 2
           x: 990.5217
@@ -3350,7 +3361,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 24c6c1f6-3aa2-479b-9266-24f64a1c7135
-        computeOrder: 6
+        computeOrder: 7
         position:
           serializedVersion: 2
           x: 788
@@ -3367,7 +3378,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 38062153-aee1-4dfb-bf6a-3ca8635928b6
-        computeOrder: 5
+        computeOrder: 6
         position:
           serializedVersion: 2
           x: 559
@@ -3384,7 +3395,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 15ca8694-67ad-4ea0-80bd-55797924632f
-        computeOrder: 4
+        computeOrder: 5
         position:
           serializedVersion: 2
           x: 563
@@ -3401,7 +3412,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 409f5ce7-c521-417e-bbb6-bd05f85a5e86
-        computeOrder: 8
+        computeOrder: 9
         position:
           serializedVersion: 2
           x: 1466.3716
@@ -3417,7 +3428,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: e05c007f-496c-4269-bf34-5f44095eb7c2
-        computeOrder: 7
+        computeOrder: 8
         position:
           serializedVersion: 2
           x: 1021.364
@@ -3433,7 +3444,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 91460cae-8cfa-40a0-a471-df8697b64a99
-        computeOrder: 9
+        computeOrder: 10
         position:
           serializedVersion: 2
           x: 317.00003
@@ -3448,7 +3459,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 82e0e071-7252-435a-9232-cdda4796e219
-        computeOrder: 11
+        computeOrder: 12
         position:
           serializedVersion: 2
           x: 687.5001
@@ -3464,7 +3475,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 2a552ee0-3375-4815-92d5-b89c81ba299a
-        computeOrder: 10
+        computeOrder: 11
         position:
           serializedVersion: 2
           x: 177.41377
@@ -3476,6 +3487,21 @@ MonoBehaviour:
         nodeLock: 0
         output: {fileID: 340748389}
     0000000C:
+      type: {class: OneshotTriggerNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: afa428b7-b7e1-4e75-9d64-df01a46b16dc
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 653.2001
+          y: 209.30002
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    0000000D:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: b5b840ea-6cdc-4350-a54b-c3e1786855d8
@@ -3488,9 +3514,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 16
+          id: 17
         val: {fileID: 0}
-    0000000D:
+    0000000E:
       type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: fe3f90b7-9199-4872-8815-ccc1e351a625
@@ -3503,9 +3529,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 17
+          id: 18
         val: {fileID: 0}
-    0000000E:
+    0000000F:
       type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: 38a8735b-beca-4d8d-b93c-81473969011f
@@ -3518,9 +3544,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 18
+          id: 19
         val: {fileID: 0}
-    0000000F:
+    00000010:
       type: {class: StringParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: 1d4158e4-2e36-4597-ab0d-2e7bad69b903
@@ -3533,27 +3559,27 @@ MonoBehaviour:
         input: 1
         canDelete: 1
         settings:
-          id: 19
+          id: 20
         val: MainHub
-    00000010:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
-      data:
-        isHidden: 1
-        expanded: 0
-        guid: b5b840ea-6cdc-4350-a54b-c3e1786855d8
     00000011:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
-        guid: fe3f90b7-9199-4872-8815-ccc1e351a625
+        guid: b5b840ea-6cdc-4350-a54b-c3e1786855d8
     00000012:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
-        guid: 38a8735b-beca-4d8d-b93c-81473969011f
+        guid: fe3f90b7-9199-4872-8815-ccc1e351a625
     00000013:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 1
+        expanded: 0
+        guid: 38a8735b-beca-4d8d-b93c-81473969011f
+    00000014:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 0
@@ -7396,7 +7422,6 @@ Transform:
   - {fileID: 1635892781}
   - {fileID: 772506234}
   - {fileID: 729078119}
-  - {fileID: 1520118975}
   - {fileID: 529214467}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -8253,6 +8278,7 @@ MonoBehaviour:
   endSignalTime: 478
   activeLists:
   - {fileID: 1216343271}
+  endActiveLists: []
   endTransform: {fileID: 834259267}
   birdyEndPosition: {fileID: 0}
   loadNextLevel: 0
@@ -8348,100 +8374,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 677396480}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1520118972
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1520118975}
-  - component: {fileID: 1520118974}
-  - component: {fileID: 1520118973}
-  m_Layer: 0
-  m_Name: MedusaStart
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1520118973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1520118972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8565ab475c4f7674b963f2ed061a2f1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allowDebugMode: 0
-  debugExceptionTitles: []
-  sendedCount: 0
-  receivedCount: 0
-  keep: 0
-  triggerType: 0
-  triggerEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1395621133}
-        m_TargetAssemblyTypeName: MedusaInFallPoint_AI, Assembly-CSharp
-        m_MethodName: Launch
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  triggerStayEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  triggerExitEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  afterTriggerEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  isTriggered: 0
-  collisionTrigger: 1
-  reloadTime: 0
-  afterTriggerTime: 0
---- !u!65 &1520118974
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1520118972}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 32.693726, y: 1, z: 27.817802}
-  m_Center: {x: 0.12038422, y: 0, z: -1.8712807}
---- !u!4 &1520118975
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1520118972}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 117.20025, y: -55.16, z: 73.83}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1366736570}
-  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1520547515
 GameObject:

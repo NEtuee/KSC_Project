@@ -14,7 +14,6 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
     private PlayerUnit _player;
     private Collider collider;
-
     private bool _active;
 
     private TimeCounterEx _timeCounter = new TimeCounterEx();

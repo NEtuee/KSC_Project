@@ -30,9 +30,9 @@ public static partial class MessageTitles
     public const ushort uimanager_activecrosshair = 0x0301;
 
     /// <summary>
-    /// data = int(1, 2, 3)
+    /// data = null
     /// </summary>
-    public const ushort uimanager_setcrosshairphase = 0x0302;
+    public const ushort uimanager_setChargeComplete = 0x0302;
 
     /// <summary>
     /// data = StateBarSetValueType
@@ -204,6 +204,36 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort uimanager_shakeAmountStackCameraCanvas = 0x0336;
 
+    /// <summary>
+    /// data = Transform
+    /// </summary>
+    public const ushort uimanager_activeTargetMakerUiAndSetTarget = 0x0337;
+
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_DisableTargetMakerUi = 0x0338;
+
+    /// <summary>
+    /// data = String
+    /// </summary>
+    public const ushort uimanager_ActiveLeveLineUIAndSetBossName = 0x0339;
+
+    /// <summary>
+    /// data = String
+    /// </summary>
+    public const ushort uimanager_AppearMissionUiAndSetKey = 0x0340;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_DisappearMissionUi = 0x0341;
+
+    /// <summary>
+    /// data = LevelLineAlphabetData
+    /// </summary>
+    public const ushort uimanager_SetLevelLineAlphabet = 0x0342;
     #endregion
 
     /// <summary>
@@ -451,6 +481,16 @@ public static partial class MessageTitles
 
     public const ushort playermanager_setDroneTransform = 0x0918;
     public const ushort playermanager_setDroneCanMove = 0x0919;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort playermanager_droneTextByKey = 0x0920;
+
+    /// <summary>
+    /// data = DroneTextKeyAndDurationData
+    /// </summary>
+    public const ushort playermanager_droneTextAndDurationByKey = 0x0921;
 
     #endregion
 

@@ -38,7 +38,6 @@ public class BridyBoss_GeniePlatform : MonoBehaviour
                    for(int j = 0; j < edge.Length; ++j)
                    {
                        _ringList.Clear();
-                       Debug.Log(target);
                        grid.GetCubeRing(ref _ringList, edge[j].cubePoint, target);
                        foreach(var item in _ringList)
                        {

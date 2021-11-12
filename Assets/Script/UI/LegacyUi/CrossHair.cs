@@ -34,12 +34,27 @@ public class CrossHair : MonoBehaviour
 
     private int stage = 0;
 
+    private Vector2 aimBackGrounOriginSize;
+    [SerializeField] private RectTransform aimBackGround;
+    [SerializeField] private RectTransform leftGrid;
+    [SerializeField] private RectTransform rightGrid;
+
+    [SerializeField] private float backGroundOriginalWidth;
+    [SerializeField] private float backGroundEffectWidth;
+    [SerializeField] private float leftGridOriginPosX;
+    [SerializeField] private float leftGridEffectPosX;
+    [SerializeField] private float rightGridOriginPosX;
+    [SerializeField] private float rightGridEffectPosX;
+
+    private bool _chargeComplete = false;
+
     private void Awake()
     {
         _canvas = GetComponent<Canvas>();
         SetActive(false);
         hitMarkColor = hitMark.color;
         hitMark.color = new Color(hitMarkColor.r, hitMarkColor.g, hitMarkColor.b, 0.0f);
+        aimBackGrounOriginSize = aimBackGround.sizeDelta;
     }
 
     public void SetActive(bool active)
@@ -47,6 +62,10 @@ public class CrossHair : MonoBehaviour
         if (active)
         {
             ActiveAnimation();
+        }
+        else
+        {
+            _chargeComplete = false;
         }
 
         _canvas.enabled = active;
@@ -60,7 +79,7 @@ public class CrossHair : MonoBehaviour
         //right.DOAnchorPosX(sidePosX, 0.5f);
         //left.DOScale(sideScale, 0.5f);
         //right.DOScale(sideScale, 0.5f);
-        
+
         // leftCross.DOAnchorPosX(-firstStageOffset, 0.5f);
         // rightCross.DOAnchorPosX(firstStageOffset, 0.5f);
         // upCross.DOAnchorPosY(firstStageOffset, 0.5f);
@@ -70,6 +89,10 @@ public class CrossHair : MonoBehaviour
         // leftDownLine.DOAnchorPos(new Vector2(-firstStageOffset, -firstStageOffset), 0.5f);
         // RightUpLine.DOAnchorPos(new Vector2(firstStageOffset, firstStageOffset), 0.5f);
         // RightDownLine.DOAnchorPos(new Vector2(firstStageOffset, -firstStageOffset), 0.5f);
+
+        aimBackGround.DOSizeDelta(new Vector2(backGroundOriginalWidth, aimBackGrounOriginSize.y), 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
+        leftGrid.DOAnchorPosX(leftGridOriginPosX, 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
+        rightGrid.DOAnchorPosX(rightGridOriginPosX, 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
 
         float speed = 0.15f;
         
@@ -88,6 +111,12 @@ public class CrossHair : MonoBehaviour
     {
         //left.anchoredPosition = new Vector2(-centerPosX, left.anchoredPosition.y);
         //right.anchoredPosition = new Vector2(-centerPosX, right.anchoredPosition.y);
+
+        //aimBackGround.DOSizeDelta(new Vector2(backGroundEffectWidth, aimBackGrounOriginSize.y), 0.5f).SetUpdate(true).SetEase(Ease.OutBack);
+        aimBackGround.sizeDelta = new Vector2(backGroundEffectWidth, aimBackGrounOriginSize.y);
+        leftGrid.DOAnchorPosX(leftGridEffectPosX, 0.0f).SetUpdate(true);
+        rightGrid.DOAnchorPosX(rightGridEffectPosX, 0.0f).SetUpdate(true);
+
 
         leftCross.anchoredPosition = new Vector2(-centerOffset,0.0f);
         rightCross.anchoredPosition = new Vector2(centerOffset, 0.0f);
@@ -114,6 +143,13 @@ public class CrossHair : MonoBehaviour
         //RightUpLine.DOAnchorPos(new Vector2(thirdStageOffset, thirdStageOffset), 0.15f).SetEase(Ease.OutQuart);
         //RightDownLine.DOAnchorPos(new Vector2(thirdStageOffset, -thirdStageOffset), 0.15f).SetEase(Ease.OutQuart);
 
+        aimBackGround.DOSizeDelta(new Vector2(backGroundOriginalWidth, aimBackGrounOriginSize.y), 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
+        leftGrid.DOAnchorPosX(leftGridOriginPosX, 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
+        rightGrid.DOAnchorPosX(rightGridOriginPosX, 0.15f).SetUpdate(true).SetEase(Ease.OutBack).OnComplete(()=>
+        {
+            _chargeComplete = false;
+        });
+
         float speed = 0.15f;
 
         leftCross.DOAnchorPosX(-firstStageOffset, speed).SetUpdate(true).SetEase(Ease.OutBack);
@@ -127,6 +163,17 @@ public class CrossHair : MonoBehaviour
         RightDownLine.DOAnchorPos(new Vector2(firstStageOffset, -firstStageOffset), speed).SetUpdate(true).OnComplete(() => stage = 0);
 
  
+    }
+
+    public void ChargeComplete()
+    {
+        if(_chargeComplete == false)
+        {
+            _chargeComplete = true;
+            aimBackGround.DOSizeDelta(new Vector2(backGroundEffectWidth, aimBackGrounOriginSize.y), 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
+            leftGrid.DOAnchorPosX(leftGridEffectPosX, 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
+            rightGrid.DOAnchorPosX(rightGridEffectPosX, 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
+        }
     }
 
     public void First()

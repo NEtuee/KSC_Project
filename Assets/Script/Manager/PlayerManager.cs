@@ -112,7 +112,9 @@ public class PlayerManager : ManagerBase
             _drone.gameObject.SetActive(visible);
             _player.gameObject.SetActive(visible);
 
-            if(visible)
+            Debug.Log("Tlqkf :" + visible + "," + ((MessageReceiver)msg.sender).name);
+
+            if (visible)
             {
                 _player.ChangeState(PlayerUnit.defaultState);
             }
@@ -162,6 +164,17 @@ public class PlayerManager : ManagerBase
             blurData.radius = .0f;
             blurData.time = .0f;
             SendMessageEx(MessageTitles.cameramanager_setradialblur, UniqueNumberBase.GetSavedNumberStatic("CameraManager"), blurData);
+        });
+
+        AddAction(MessageTitles.playermanager_droneTextByKey, (msg) =>
+         {
+             _drone.DroneHelpCall((string)msg.data);
+         });
+
+        AddAction(MessageTitles.playermanager_droneTextAndDurationByKey, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<DroneTextKeyAndDurationData>(msg.data);
+            _drone.DroneHelpCall(data.key,data.duration);
         });
     }
 
@@ -263,27 +276,25 @@ public class PlayerManager : ManagerBase
         });
 
         _player.chargeTime.Subscribe(value => {
-            if (value >= 3f)
+            if (value >= _player.ChargeConsumeTime && _player.Energy >= _player.ChargeGunCost)
             {
                 //crossHair.Third();
-                IntData phase = MessageDataPooling.GetMessageData<IntData>();
-                phase.value = 3;
-                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
+                SendMessageEx(MessageTitles.uimanager_setChargeComplete, GetSavedNumber("UIManager"), null);
             }
-            else if (value >= 2f)
-            {
-                //crossHair.Second();
-                IntData phase = MessageDataPooling.GetMessageData<IntData>();
-                phase.value = 2;
-                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
-            }
-            else if (value >= 1f)
-            {
-                //crossHair.First();
-                IntData phase = MessageDataPooling.GetMessageData<IntData>();
-                phase.value = 1;
-                SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
-            }
+            //else if (value >= 2f)
+            //{
+            //    //crossHair.Second();
+            //    IntData phase = MessageDataPooling.GetMessageData<IntData>();
+            //    phase.value = 2;
+            //    SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
+            //}
+            //else if (value >= 1f)
+            //{
+            //    //crossHair.First();
+            //    IntData phase = MessageDataPooling.GetMessageData<IntData>();
+            //    phase.value = 1;
+            //    SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
+            //}
         });
 
         _player.loadCount.Subscribe(value =>
@@ -337,6 +348,22 @@ public class PlayerManager : ManagerBase
     {
         base.Progress(deltaTime);
 
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        {
+            var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+            data.key = "Test_1";
+            data.duration = 10f;
+            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+        }
+
+        if (Keyboard.current.digit2Key.wasPressedThisFrame)
+        {
+            var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+            data.key = "Test_2";
+            data.duration = 10f;
+            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+        }
+
         if (LevelEdit_TimelinePlayer.CUTSCENEPLAY == true)
             return;
 
@@ -350,6 +377,7 @@ public class PlayerManager : ManagerBase
             SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
         }
 
+        
 
         if (Keyboard.current.zKey.wasPressedThisFrame)
         {
@@ -383,5 +411,11 @@ namespace MD
             position = pos;
             rotation = rot;
         }
+    }
+
+    public class DroneTextKeyAndDurationData :MessageData
+    {
+        public string key;
+        public float duration;
     }
 }
