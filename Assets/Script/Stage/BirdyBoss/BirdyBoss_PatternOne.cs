@@ -532,6 +532,8 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) => {
                     var target = database.SpawnGiroPattern();
                     target.transform.position = headPattern.transform.position;
+                    target.transform.SetParent(headPattern.transform);
+                    target.Launch((float)item.code,(float)item.point);
                 });
             }
             else if(item.type == SequenceItem.EventEnum.FallPillar)
@@ -551,7 +553,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var target = database.SpawnHorizonPillarPattern();
-                    target.SetPoint(ref horizonPillarPoints);
+                    target.Launch(ref horizonPillarPoints, _player.Transform, (float)item.code, (float)item.point, item.value);
                 });
             }
             else if(item.type == SequenceItem.EventEnum.SpiderPillar)
@@ -560,6 +562,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     var target = database.SpawnSpiderPillarPattern();
                     target.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                    target.Launch(item.code, (float)item.point, item.value);
                 });
             }
         }
