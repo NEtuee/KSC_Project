@@ -104,17 +104,25 @@ public class BirdyBossPatternEditor : EditorWindow
 
             GUILayout.BeginVertical("box");
             {
+                GUILayout.BeginHorizontal();
                 GUILayout.Label("Name");
+
+                if(GUILayout.Button("SAVE"))
+                {
+                    EditorUtility.SetDirty(targetPattern);
+                    EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+                }
+                GUILayout.EndHorizontal();
                 if(_sequenceTitles.Length == 0 || _sequenceTitles.Length <= _currentSequencer)
                 {
                     GUILayout.Label("Missing");
                 }
                 else
                 {
-                    string sequenecName = _sequenceTitles[_currentSequencer];
+                    string sequenecName = GetTargetSequence(_currentTargetMenu, _currentSequencer).title;
                     sequenecName = GUILayout.TextField(sequenecName);
 
-                    if (sequenecName != _sequenceTitles[_currentSequencer])
+                    if (sequenecName != GetTargetSequence(_currentTargetMenu, _currentSequencer).title)
                     {
                         if (GetMenuSequence(_currentTargetMenu).Find((x) => { return x.title == sequenecName; }) != null)
                         {
@@ -122,8 +130,9 @@ public class BirdyBossPatternEditor : EditorWindow
                         }
                         else
                         {
-                            _sequenceTitles[_currentSequencer] = sequenecName;
+                            //_sequenceTitles[_currentSequencer] = sequenecName;
                             GetTargetSequence(_currentTargetMenu, _currentSequencer).title = sequenecName;
+                            CreateSequenceTitleMenu(_currentTargetMenu);
                         }
                         
                     }
@@ -448,37 +457,48 @@ public class BirdyBossPatternEditor : EditorWindow
         }
         else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.Giro)
         {
-            desc = "자이로\n자세한 패턴은 예민이";
-            GUI.enabled = false;
-            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
-            GUI.enabled = true;
-        }
-        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.FallPillar)
-        {
-            desc = "기둥 떨구기\n자세한 패턴은 예민이";
+            desc = "자이로\n날아가기 시작하는 시간, \n날아갈 텀 설정 가능";
             GUI.enabled = false;
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;
 
-            targetEvent.value = EditorGUILayout.FloatField("갯수?", targetEvent.value);
+            targetEvent.value = EditorGUILayout.FloatField("시작", targetEvent.value);
+            targetEvent.value2 = EditorGUILayout.FloatField("텀", targetEvent.value2);
+        }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.FallPillar)
+        {
+            desc = "기둥 떨구기\n정해진 갯수만큼 떨굼";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+
+            targetEvent.value = EditorGUILayout.FloatField("갯수", targetEvent.code);
         }
         else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.HorizonPillar)
         {
-            desc = "기둥 밀치기\n자세한 패턴은 예민이";
+            desc = "기둥 밀치기\n날아가기 시작하는 시간, \n날아갈 텀,\n날아갈 속도 설정 가능\n속도 대충 1500이 적절";
             GUI.enabled = false;
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;
+
+            targetEvent.value = EditorGUILayout.FloatField("시작", targetEvent.value);
+            targetEvent.value2 = EditorGUILayout.FloatField("텀", targetEvent.value2);
+            targetEvent.value3 = EditorGUILayout.FloatField("힘", targetEvent.value3);
         }
         else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.SpiderPillar)
         {
-            desc = "거머 기둥\n자세한 패턴은 예민이";
+            desc = "거머 기둥에서 거미 소환\nn초동안 m마리 소환함\n예) 10, 5이면 \n10 / 5 = 2초동안 5마리 소환\n기둥 사라지는 시간 설정 가능";
             GUI.enabled = false;
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;
+
+            targetEvent.value = EditorGUILayout.FloatField("초", targetEvent.value);
+            targetEvent.code = EditorGUILayout.IntField("마리", targetEvent.code);
+            targetEvent.value2 = EditorGUILayout.FloatField("끝", targetEvent.value2);
         }
         else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.GroundCutStart)
         {
-            desc = "발판 제한\n자세한 패턴은 PatternOne 맨 밑에";
+            desc = "발판 제한\n자세한 패턴은 \nPatternOne 스크립트 맨 밑에";
             GUI.enabled = false;
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;

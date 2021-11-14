@@ -129,6 +129,7 @@ public class SpiderPillarPattern : ObjectBase
 
                         if(currentSpawnCount >= spawnCount)
                         {
+                            currentSpawnCount = 0;
                             ChangeState(State.waitDisappear);
                             return;
                         }

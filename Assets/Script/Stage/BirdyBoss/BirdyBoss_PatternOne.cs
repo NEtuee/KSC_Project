@@ -46,6 +46,8 @@ public class BirdyBoss_PatternOne : ObjectBase
         public int code;
         public int point;
         public float value;
+        public float value2;
+        public float value3;
 
         public UnityEngine.Events.UnityEvent eventSet;
     }
@@ -570,6 +572,8 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) => {
                     var target = database.SpawnGiroPattern();
                     target.transform.position = headPattern.transform.position;
+                    target.transform.SetParent(headPattern.transform);
+                    target.Launch(item.value,item.value2);
                 });
             }
             else if(item.type == EventEnum.FallPillar)
@@ -577,7 +581,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var target = database.SpawnFallPillarPattern();
-                    for(int i = 0; i < item.value; i++)
+                    for(int i = 0; i < item.code; i++)
                     {
                         var cube = cubeGrid.GetRandomActiveCube(false);
                         target.AddFallPosition(cubeGrid.CubePointToWorld(cube.cubePoint) + Vector3.up*20.0f);
@@ -589,7 +593,8 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var target = database.SpawnHorizonPillarPattern();
-                    target.SetPoint(ref horizonPillarPoints);
+                    target.Launch(ref horizonPillarPoints,_player.transform,item.value,item.value2,item.value3);
+                    //target.SetPoint(ref horizonPillarPoints);
                 });
             }
             else if(item.type == EventEnum.SpiderPillar)
@@ -598,6 +603,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     var target = database.SpawnSpiderPillarPattern();
                     target.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                    target.Launch(item.code,item.value,item.value2);
                 });
             }
             else if (item.type == EventEnum.GroundCutStart)
