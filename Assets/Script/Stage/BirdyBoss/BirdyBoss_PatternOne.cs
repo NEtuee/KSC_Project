@@ -143,7 +143,8 @@ public class BirdyBoss_PatternOne : ObjectBase
 
         _timeCounter.CreateSequencer("Respawn");
         _timeCounter.AddSequence("Respawn",5f,null,(x)=>{
-            _respawnCube.special = false;
+            if(_respawnCube != null)
+                _respawnCube.special = false;
         });
 
         _hp = birdyHP;
@@ -702,9 +703,15 @@ public class BirdyBoss_PatternOne : ObjectBase
     public HexCube GetRandomCube()
     {
         var cube = _spawnCubeList[Random.Range(0,_spawnCubeList.Count)];
+        int count = 10;
         while(!cube.IsActive())
         {
             cube = _spawnCubeList[Random.Range(0,_spawnCubeList.Count)];
+
+            if(--count <= 0)
+            {
+                break;
+            }
         }
 
         return cube;
@@ -716,9 +723,16 @@ public class BirdyBoss_PatternOne : ObjectBase
             return null;
 
         var cube = _medusaSpawnList[Random.Range(0,_medusaSpawnList.Count)];
-        while(!cube.IsActive())
+        int count = 10;
+
+        while (!cube.IsActive())
         {
             cube = _medusaSpawnList[Random.Range(0,_medusaSpawnList.Count)];
+
+            if (--count <= 0)
+            {
+                break;
+            }
         }
 
         return cube;
