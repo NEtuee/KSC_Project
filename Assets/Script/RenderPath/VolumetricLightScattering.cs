@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -10,91 +11,133 @@ public class VolumetricLightScatteringSettings
     public float resolutionScale = 0.5f;
 
     [Range(0.0f, 1.0f)]
-    public float intensity = 0.25f;
+    public float intensity = 1.0f;
 
     [Range(0.0f, 1.0f)]
     public float blurWidth = 0.85f;
-
 }
+
 public class VolumetricLightScattering : ScriptableRendererFeature
 {
     class LightScatteringPass : ScriptableRenderPass
     {
-
+        private RenderTargetIdentifier cameraColorTargetIdent;
+        private FilteringSettings filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
+        private readonly List<ShaderTagId> shaderTagIdList = new List<ShaderTagId>();
         private readonly RenderTargetHandle occluders = RenderTargetHandle.CameraTarget;
-
         private readonly float resolutionScale;
         private readonly float intensity;
         private readonly float blurWidth;
         private readonly Material occludersMaterial;
-
+        private readonly Material radialBlurMaterial;
         public LightScatteringPass(VolumetricLightScatteringSettings settings)
         {
-            occludersMaterial = new Material(Shader.Find("Hidden/KSC/UnlitColor"));
-
             occluders.Init("_OccludersMap");
             resolutionScale = settings.resolutionScale;
             intensity = settings.intensity;
             blurWidth = settings.blurWidth;
+
+            occludersMaterial = new Material(Shader.Find("Hidden/KSC/UnlitColor"));
+            radialBlurMaterial = new Material(Shader.Find("Hidden/VolumetricRadialBlur"));
+
+            shaderTagIdList.Add(new ShaderTagId("UniversalForward"));
+            shaderTagIdList.Add(new ShaderTagId("UniversalForwardOnly"));
+            shaderTagIdList.Add(new ShaderTagId("LightweightForward"));
+            shaderTagIdList.Add(new ShaderTagId("SRPDefaultUnlit"));
         }
 
+        public void SetCameraColorTarget(RenderTargetIdentifier cameraColorTargetIdent)
+        {
+            this.cameraColorTargetIdent = cameraColorTargetIdent;
+        }
 
+        // This method is called before executing the render pass.
+        // It can be used to configure render targets and their clear state. Also to create temporary render target textures.
+        // When empty this render pass will render to the active camera render target.
+        // You should never call CommandBuffer.SetRenderTarget. Instead call <c>ConfigureTarget</c> and <c>ConfigureClear</c>.
+        // The render pipeline will ensure target setup and clearing happens in a performant manner.
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
-            // 1
-            RenderTextureDescriptor cameraTextureDescriptor =
-                renderingData.cameraData.cameraTargetDescriptor;
+            RenderTextureDescriptor cameraTextureDescriptor = renderingData.cameraData.cameraTargetDescriptor;
 
-            // 2
             cameraTextureDescriptor.depthBufferBits = 0;
 
-            // 3
-            cameraTextureDescriptor.width = Mathf.RoundToInt(
-                cameraTextureDescriptor.width * resolutionScale);
-            cameraTextureDescriptor.height = Mathf.RoundToInt(
-                cameraTextureDescriptor.height * resolutionScale);
+            cameraTextureDescriptor.width = Mathf.RoundToInt(cameraTextureDescriptor.width * resolutionScale);
+            cameraTextureDescriptor.height = Mathf.RoundToInt(cameraTextureDescriptor.height * resolutionScale);
 
-            // 4
-            cmd.GetTemporaryRT(occluders.id, cameraTextureDescriptor,
-                FilterMode.Bilinear);
+            cmd.GetTemporaryRT(occluders.id, cameraTextureDescriptor, FilterMode.Bilinear);
 
-            // 5
             ConfigureTarget(occluders.Identifier());
         }
 
-
-        //https://docs.unity3d.com/ScriptReference/Rendering.ScriptableRenderContext.html
+        // Here you can implement the rendering logic.
+        // Use <c>ScriptableRenderContext</c> to issue drawing commands or execute command buffers
+        // https://docs.unity3d.com/ScriptReference/Rendering.ScriptableRenderContext.html
+        // You don't have to call ScriptableRenderContext.submit, the render pipeline will call it at specific points in the pipeline.
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
+            if (!occludersMaterial || !radialBlurMaterial)
+            {
+                return;
+            }
 
+            CommandBuffer cmd = CommandBufferPool.Get();
+
+            using (new ProfilingScope(cmd, new ProfilingSampler("VolumetricLightScattering")))
+            {
+                context.ExecuteCommandBuffer(cmd);
+                cmd.Clear();
+
+                Camera camera = renderingData.cameraData.camera;
+                context.DrawSkybox(camera);
+
+                DrawingSettings drawSettings = CreateDrawingSettings(shaderTagIdList, ref renderingData, SortingCriteria.CommonOpaque);
+                drawSettings.overrideMaterial = occludersMaterial;
+
+                context.DrawRenderers(renderingData.cullResults, ref drawSettings, ref filteringSettings);
+                
+
+                Vector3 sunDirectionWorldSpace = RenderSettings.sun.transform.position;
+                Vector3 cameraPositionWorldSpace = camera.transform.position;
+                Vector3 sunPositionWorldSpace = cameraPositionWorldSpace + sunDirectionWorldSpace;
+                Vector3 sunPositionViewportSpace = camera.WorldToViewportPoint(sunPositionWorldSpace);
+
+                radialBlurMaterial.SetVector("_Center", new Vector4(sunPositionViewportSpace.x, sunPositionViewportSpace.y, 0, 0));
+                radialBlurMaterial.SetFloat("_Intensity", intensity);
+                radialBlurMaterial.SetFloat("BlurWidth", blurWidth);
+
+                Blit(cmd, occluders.Identifier(), cameraColorTargetIdent, radialBlurMaterial);
+
+            }
+
+            context.ExecuteCommandBuffer(cmd);
+            CommandBufferPool.Release(cmd);
         }
 
-    
+        // Cleanup any allocated resources that were created during the execution of this render pass.
         public override void OnCameraCleanup(CommandBuffer cmd)
         {
-
-
+            cmd.ReleaseTemporaryRT(occluders.id);
         }
     }
 
-    LightScatteringPass m_ScriptablePass;
-
-
     public VolumetricLightScatteringSettings settings = new VolumetricLightScatteringSettings();
+
+    private LightScatteringPass m_ScriptablePass;
+
     /// <inheritdoc/>
-    public override void Create() // 기능이 처음 로드되면 호출, 모든 인스턴스를 만들고 구성하는데 사용합니다.
+    public override void Create()
     {
-
-
         m_ScriptablePass = new LightScatteringPass(settings);
-        m_ScriptablePass.renderPassEvent =
-        RenderPassEvent.BeforeRenderingPostProcessing;
+        m_ScriptablePass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
     }
 
+    // Here you can inject one or multiple render passes in the renderer.
+    // This method is called when setting up the renderer once per-camera.
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
-        // 카메라 한 대당 한 번씩 모든 프레임을 호출합니다. 이 도구를 사용해서 SRP 인스턴스를 Render에게 주입합니다.
     {
         renderer.EnqueuePass(m_ScriptablePass);
+        m_ScriptablePass.SetCameraColorTarget(renderer.cameraColorTarget);
     }
 }
 
