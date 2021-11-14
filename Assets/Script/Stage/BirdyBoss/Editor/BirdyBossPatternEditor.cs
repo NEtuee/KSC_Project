@@ -25,6 +25,8 @@ public class BirdyBossPatternEditor : EditorWindow
     private int _currentEvent = 0;
     private int _currentEventCreate = 0;
 
+    private List<string> _currentProcessingSequences = new List<string>();
+
     public void Initialize()
     {
         CreateSequenceEventMenu();
@@ -33,12 +35,7 @@ public class BirdyBossPatternEditor : EditorWindow
 
     void OnGUI()
     {
-        if(EditorApplication.isPlaying)
-        {
-            GUILayout.Label("Now Playing");
-            return;
-        }
-        else if(targetPattern == null || targetPatternEditor == null)
+        if(targetPattern == null || targetPatternEditor == null)
         {
             var item = GameObject.FindObjectOfType(typeof(BirdyBoss_PatternOne)) as BirdyBoss_PatternOne;
             if(item == null)
@@ -56,6 +53,32 @@ public class BirdyBossPatternEditor : EditorWindow
 
             targetPattern = item;
             targetPatternEditor = editors[0];
+        }
+
+        if(EditorApplication.isPlaying && targetPattern != null)
+        {
+            GUILayout.Label("Now Playing");
+
+            GUILayout.Space(10f);
+
+            GUILayout.Label("Main");
+            targetPattern.GetMainProcessingSequences(ref _currentProcessingSequences);
+            foreach(var item in _currentProcessingSequences)
+            {
+                GUILayout.Label(item);
+            }
+
+            GUILayout.Space(10f);
+
+            GUILayout.Label("Loop");
+            targetPattern.GetLoopProcessingSequences(ref _currentProcessingSequences);
+            foreach(var item in _currentProcessingSequences)
+            {
+                GUILayout.Label(item);
+            }
+
+            Repaint();
+            return;
         }
 
         if(_sequenceEventTitles == null)

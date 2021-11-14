@@ -223,6 +223,39 @@ public class BirdyBoss_PatternOne : ObjectBase
         }
     }
 
+    public void GetMainProcessingSequences(ref List<string> targets)
+    {
+        targets.Clear();
+
+        for(int i = 0; i < sequences.Count; ++i)
+        {
+            var seq = _timeCounter.GetSequencer(_mainSequances[i]);
+            if(!seq.isEnd)
+            {
+                string currEvent = sequences[i].loopSequences[seq.current].identifier;
+                targets.Add(sequences[i].title + ", " + currEvent);
+            }
+        }
+    }
+
+    public void GetLoopProcessingSequences(ref List<string> targets)
+    {
+        targets.Clear();
+
+        for (int i = 0; i < loopSequences.Count; ++i)
+        {
+            if (!loopSequences[i].active)
+                continue;
+
+            var seq = _timeCounter.GetSequencer(loopSequences[i].title);
+            if(!seq.isEnd)
+            {
+                string currEvent = loopSequences[i].loopSequences[seq.current].identifier;
+                targets.Add(loopSequences[i].title + ", " + currEvent);
+            }
+        }
+    }
+
     public void FogOut()
     {
         _fogOutProcess = true;
