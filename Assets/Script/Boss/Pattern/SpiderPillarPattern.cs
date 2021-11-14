@@ -99,7 +99,7 @@ public class SpiderPillarPattern : ObjectBase
         this.spawnCount = spawnCount;
         this.spawnDuration = duration;
         this._disappearWaitTime = waitTime;
-        _spawnTerm = (int)(duration / spawnCount);
+        _spawnTerm = (duration / (float)spawnCount);
 
         ChangeState(State.Appear);
     }

@@ -495,7 +495,7 @@ public class BirdyBossPatternEditor : EditorWindow
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;
 
-            targetEvent.value = EditorGUILayout.FloatField("°¹¼ö", targetEvent.code);
+            targetEvent.code = EditorGUILayout.IntField("°¹¼ö", targetEvent.code);
         }
         else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.HorizonPillar)
         {
