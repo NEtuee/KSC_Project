@@ -18,6 +18,7 @@ public class DroneHelperRoot : MonoBehaviour
     [SerializeField] public Drone drone;
     [SerializeField] private Canvas droneDiscriptCanvas;
     [SerializeField] private EnumerateText descriptText;
+    [SerializeField] private TextMeshProUGUI nameText;
 
     [SerializeField] private Vector3 helpStateScale;
     [SerializeField] private Vector3 aimHelpStateScale;
@@ -32,6 +33,9 @@ public class DroneHelperRoot : MonoBehaviour
     public TimeCounterEx timer = new TimeCounterEx();
 
     [SerializeField] private DroneHelper currentHelper;
+
+
+    public string NameText { set => nameText.text = value; }
 
     void Start()
     {

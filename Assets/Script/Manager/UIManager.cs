@@ -119,6 +119,9 @@ public class UIManager : ManagerBase
 
     [Header("MissionUI")]
     [SerializeField] private MissionUI missionUi;
+
+    [Header("InformationUI")]
+    [SerializeField] private InformationUI informationUi;
     
 
     private EventSystem _eventSystem;
@@ -462,6 +465,17 @@ public class UIManager : ManagerBase
             var data = MessageDataPooling.CastData<LevelLineAlphabetData>(msg.data);
             levelLineUi.SetAlphabet(data.value);
         });
+
+        AddAction(MessageTitles.uimanager_AppearInformationUi, (msg) =>
+        {
+            informationUi.Appear((string)msg.data);
+        });
+
+        AddAction(MessageTitles.uimanager_SetShowTimeInformationUi, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<FloatData>(msg.data);
+            informationUi.ShowTime = data.value;
+        });
     }
 
     public override void Initialize()
@@ -571,6 +585,13 @@ public class UIManager : ManagerBase
         if (Keyboard.current.mKey.wasPressedThisFrame)
         {
             SendMessageEx(MessageTitles.uimanager_DisappearMissionUi, GetSavedNumber("UIManager"), null);
+        }
+        if (Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = 6f;
+            SendMessageEx(MessageTitles.uimanager_SetShowTimeInformationUi, GetSavedNumber("UIManager"), data);
+            SendMessageEx(MessageTitles.uimanager_AppearInformationUi, GetSavedNumber("UIManager"), "Test");
         }
     }
 
