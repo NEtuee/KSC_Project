@@ -9,7 +9,8 @@ public class FadeAppearImage : BaseAppearImage
     {
         ColorFade,
         ScaleFade,
-        FillFade
+        FillFade,
+        PosXFade
     }
 
     public List<FadeType> types = new List<FadeType>();
@@ -29,6 +30,11 @@ public class FadeAppearImage : BaseAppearImage
     [Header("Fill")]
     [SerializeField] private float appearFillAmount = 1f;
     [SerializeField] private float disappearFillAmount = 0f;
+
+    [Header("PosX")]
+    [SerializeField] private Ease ease;
+    [SerializeField] private float appearPosX;
+    [SerializeField] private float disappearPosX;
 
     public float AppearDuration => appearDuration;
     public float DisappearDuration => disappearDuration;
@@ -138,6 +144,37 @@ public class FadeAppearImage : BaseAppearImage
                     };
                 }
             }
+            else if(types[i] == FadeType.PosXFade)
+            {
+                if (i == types.Count - 1)
+                {
+                    appearDelegate += () =>
+                    {
+                        rectTransform.DOAnchorPosX(appearPosX, appearDuration).SetEase(ease).OnComplete(() =>
+                        {
+                            whenEndAppear.Invoke();
+                        });
+                    };
+                    disappearDelegate += () =>
+                    {
+                        rectTransform.DOAnchorPosX(disappearPosX, disappearDuration).SetEase(ease).OnComplete(() =>
+                        {
+                            whenEndDisappear.Invoke();
+                        });
+                    };
+                }
+                else
+                {
+                    appearDelegate += () =>
+                    {
+                        rectTransform.DOAnchorPosX(appearPosX, appearDuration).SetEase(ease);
+                    };
+                    disappearDelegate += () =>
+                    {
+                        rectTransform.DOAnchorPosX(disappearPosX, disappearDuration).SetEase(ease);
+                    };
+                }
+            }
         }
     }
 
@@ -183,6 +220,17 @@ public class FadeAppearImage : BaseAppearImage
                 else
                 {
                     targetImage.fillAmount = disappearFillAmount;
+                }
+            }
+            else if(types[i] == FadeType.PosXFade)
+            {
+                if (awakeVisble == true)
+                {
+                    rectTransform.DOAnchorPosX(appearPosX, 0f);
+                }
+                else
+                {
+                    rectTransform.DOAnchorPosX(disappearPosX, 0f);
                 }
             }
         }

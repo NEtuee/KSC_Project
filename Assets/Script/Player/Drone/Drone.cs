@@ -707,6 +707,11 @@ public class Drone : PathfollowObjectBase
         }
     }
 
+    public void SetDialogName(string name)
+    {
+        droneHelperRoot.NameText = name;
+    }
+
     public void DroneTextCall(string text)
     {
         if(ReferenceEquals(droneHelperRoot,null) == false)
