@@ -10,6 +10,7 @@ public class Genie_BombDroneAI : DroneAIBase
     public Vector2 randomMaxSpeed;
     public Vector2 randomOffset;
     public EMPShield shield;
+    public NewEmpShield newShield;
 
     public bool destroyGround = true;
     public bool DeactiveStart = true;
@@ -157,6 +158,7 @@ public class Genie_BombDroneAI : DroneAIBase
         InitVelocity();
         UpdateTargetDirection();
         shield.Reactive();
+        newShield?.Reactive();
 
         transform.position = spawnPosition;
         _timeCounterEx.InitTimer("launch",0f,launchTime);

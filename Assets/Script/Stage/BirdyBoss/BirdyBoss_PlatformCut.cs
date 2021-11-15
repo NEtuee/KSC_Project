@@ -17,7 +17,7 @@ public class BirdyBoss_PlatformCut : MonoBehaviour
     public void PatternStart(Transform player)
     {
         var cube = grid.GetCubePointFromWorld(player.position);
-        _downCubes.Clear();
+        //_downCubes.Clear();
 
         int count = 0;
 
@@ -26,7 +26,11 @@ public class BirdyBoss_PlatformCut : MonoBehaviour
             _ring.Clear();
             grid.GetCubeRing(ref _ring,cube,i);
 
-            if(_downCubes[count] == null)
+            if(!_downCubes.ContainsKey(count))
+            {
+                _downCubes.Add(count, new List<HexCube>());
+            }
+            else if(_downCubes[count] == null)
             {
                 _downCubes[count] = new List<HexCube>();
             }
