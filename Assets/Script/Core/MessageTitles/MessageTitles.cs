@@ -234,6 +234,18 @@ public static partial class MessageTitles
     /// data = LevelLineAlphabetData
     /// </summary>
     public const ushort uimanager_SetLevelLineAlphabet = 0x0342;
+
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort uimanager_AppearInformationUi = 0x0343;
+
+    /// <summary>
+    /// data = FloatData
+    /// </summary>
+    public const ushort uimanager_SetShowTimeInformationUi = 0x0344;
+
     #endregion
 
     /// <summary>
@@ -491,6 +503,11 @@ public static partial class MessageTitles
     /// data = DroneTextKeyAndDurationData
     /// </summary>
     public const ushort playermanager_droneTextAndDurationByKey = 0x0921;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort playermanager_SetDialogName = 0x0922;
 
     #endregion
 

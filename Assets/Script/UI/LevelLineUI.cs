@@ -31,6 +31,8 @@ public class LevelLineUI : MonoBehaviour
     [SerializeField] private string bossNameTargetText;
     [SerializeField] private float waitDisappearTime = 4f;
 
+    public float WaitDisappearTime { get => waitDisappearTime; set => waitDisappearTime = value; }
+
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 
     private void Awake()

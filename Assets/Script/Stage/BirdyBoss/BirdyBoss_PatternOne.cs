@@ -46,6 +46,8 @@ public class BirdyBoss_PatternOne : ObjectBase
         public int code;
         public int point;
         public float value;
+        public float value2;
+        public float value3;
 
         public UnityEngine.Events.UnityEvent eventSet;
     }
@@ -141,7 +143,8 @@ public class BirdyBoss_PatternOne : ObjectBase
 
         _timeCounter.CreateSequencer("Respawn");
         _timeCounter.AddSequence("Respawn",5f,null,(x)=>{
-            _respawnCube.special = false;
+            if(_respawnCube != null)
+                _respawnCube.special = false;
         });
 
         _hp = birdyHP;
@@ -218,6 +221,39 @@ public class BirdyBoss_PatternOne : ObjectBase
             _drone.FollowPathStraight(deltaTime);
             _drone.transform.LookAt(_drone.targetTransform);
             empShield.transform.position = _drone.transform.position;
+        }
+    }
+
+    public void GetMainProcessingSequences(ref List<string> targets)
+    {
+        targets.Clear();
+
+        for(int i = 0; i < sequences.Count; ++i)
+        {
+            var seq = _timeCounter.GetSequencer(_mainSequances[i]);
+            if(!seq.isEnd)
+            {
+                string currEvent = sequences[i].loopSequences[seq.current].identifier;
+                targets.Add(sequences[i].title + ", " + currEvent);
+            }
+        }
+    }
+
+    public void GetLoopProcessingSequences(ref List<string> targets)
+    {
+        targets.Clear();
+
+        for (int i = 0; i < loopSequences.Count; ++i)
+        {
+            if (!loopSequences[i].active)
+                continue;
+
+            var seq = _timeCounter.GetSequencer(loopSequences[i].title);
+            if(!seq.isEnd)
+            {
+                string currEvent = loopSequences[i].loopSequences[seq.current].identifier;
+                targets.Add(loopSequences[i].title + ", " + currEvent);
+            }
         }
     }
 
@@ -525,32 +561,37 @@ public class BirdyBoss_PatternOne : ObjectBase
             }
             else if (item.type == EventEnum.StartFog)
             {
-                _timeCounter.AddSequence(name, item.value, null, (x) =>
-                {
+                _timeCounter.AddSequence(name, item.value, (x)=>{
                     if (_fogIn)
                         return;
 
                     var factor = x / item.value;
                     RenderSettings.fogDensity = Mathf.Lerp(fogOutDensity,fogDensity,factor);
+                }, (x) =>
+                {
+                    if (_fogIn)
+                        return;
 
                     fogDrone.Respawn(headPattern.transform.position);
-
                     _fogIn = true;
                 });
             }
             else if (item.type == EventEnum.EndFog)
             {
-                _timeCounter.AddSequence(name, item.value, null, (x) =>
-                {
+                _timeCounter.AddSequence(name, item.value, (x)=>{
                     if (!_fogIn)
                         return;
                     
+                    if(fogDrone.gameObject.activeInHierarchy)
+                    {
+                        fogDrone.gameObject.SetActive(false);
+                    }
+                    
                     var factor = x / item.value;
                     RenderSettings.fogDensity = Mathf.Lerp(fogDensity, fogOutDensity, factor);
-
-                    fogDrone.gameObject.SetActive(false);
-
-                    _fogIn = false;
+                }, (x) =>
+                {
+                     _fogIn = false;
                 });
             }
             else if (item.type == EventEnum.GenieHitGround)
@@ -565,6 +606,8 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) => {
                     var target = database.SpawnGiroPattern();
                     target.transform.position = headPattern.transform.position;
+                    target.transform.SetParent(headPattern.transform);
+                    target.Launch(item.value,item.value2);
                 });
             }
             else if(item.type == EventEnum.FallPillar)
@@ -572,7 +615,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var target = database.SpawnFallPillarPattern();
-                    for(int i = 0; i < item.value; i++)
+                    for(int i = 0; i < item.code; i++)
                     {
                         var cube = cubeGrid.GetRandomActiveCube(false);
                         target.AddFallPosition(cubeGrid.CubePointToWorld(cube.cubePoint) + Vector3.up*20.0f);
@@ -584,7 +627,8 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var target = database.SpawnHorizonPillarPattern();
-                    target.SetPoint(ref horizonPillarPoints);
+                    target.Launch(ref horizonPillarPoints,_player.transform,item.value,item.value2,item.value3);
+                    //target.SetPoint(ref horizonPillarPoints);
                 });
             }
             else if(item.type == EventEnum.SpiderPillar)
@@ -593,6 +637,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     var target = database.SpawnSpiderPillarPattern();
                     target.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                    target.Launch(item.code,item.value,item.value2);
                 });
             }
             else if (item.type == EventEnum.GroundCutStart)
@@ -628,7 +673,7 @@ public class BirdyBoss_PatternOne : ObjectBase
             {
                 _timeCounter.AddFence(name,()=>
                 {
-                    return !loopSequences[item.point].active;
+                    return !loopSequences[recentlyLoop].active;
                 });
             }
         }
@@ -658,9 +703,15 @@ public class BirdyBoss_PatternOne : ObjectBase
     public HexCube GetRandomCube()
     {
         var cube = _spawnCubeList[Random.Range(0,_spawnCubeList.Count)];
+        int count = 10;
         while(!cube.IsActive())
         {
             cube = _spawnCubeList[Random.Range(0,_spawnCubeList.Count)];
+
+            if(--count <= 0)
+            {
+                break;
+            }
         }
 
         return cube;
@@ -672,9 +723,16 @@ public class BirdyBoss_PatternOne : ObjectBase
             return null;
 
         var cube = _medusaSpawnList[Random.Range(0,_medusaSpawnList.Count)];
-        while(!cube.IsActive())
+        int count = 10;
+
+        while (!cube.IsActive())
         {
             cube = _medusaSpawnList[Random.Range(0,_medusaSpawnList.Count)];
+
+            if (--count <= 0)
+            {
+                break;
+            }
         }
 
         return cube;

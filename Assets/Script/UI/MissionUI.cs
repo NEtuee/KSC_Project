@@ -16,6 +16,7 @@ public class MissionUI : MonoBehaviour
     [SerializeField] private FadeAppearImage mark;
     [SerializeField] private FadeAppearImage exclamation;
     [SerializeField] private FadeAppearImage panel;
+    [SerializeField] private FadeAppearImage panelLine;
     [SerializeField] private EnumerateText titleText;
     [SerializeField] private EnumerateText descriptionText;
 
@@ -56,6 +57,7 @@ public class MissionUI : MonoBehaviour
             mark.Appear();
             exclamation.Appear();
             panel.Appear();
+            panelLine.Appear();
         });
         _timeCounter.AddSequence("Appear", mark.AppearDuration, null, (value) =>
         {
@@ -86,6 +88,7 @@ public class MissionUI : MonoBehaviour
             mark.Disappear();
             exclamation.Disappear();
             panel.Disappear();
+            panelLine.Disappear();
         });
         _timeCounter.AddSequence("Dissapear", mark.DisappearDuration, null, (value) =>
         {

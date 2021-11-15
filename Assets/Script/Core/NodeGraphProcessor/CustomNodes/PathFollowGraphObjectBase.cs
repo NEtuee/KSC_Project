@@ -37,7 +37,7 @@ public class PathFollowGraphObjectBase : GraphObjectBase
         else
             SetTarget(targetTransform.position);
 
-        Turn(targetTransform.forward,rotationSpeed,deltaTime);
+        Turn(targetDirection, rotationSpeed,deltaTime);
         if(IsArrivedTarget(distanceAccuracy))
         {
             var target = GetNextPoint(out bool isEnd).transform;

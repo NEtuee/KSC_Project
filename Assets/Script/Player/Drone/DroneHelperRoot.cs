@@ -9,6 +9,7 @@ public class DroneHelperRoot : MonoBehaviour
     public class DescData
     {
         public string desc;
+        public float duration;
         public AudioClip audio;
     }
 
@@ -17,6 +18,7 @@ public class DroneHelperRoot : MonoBehaviour
     [SerializeField] public Drone drone;
     [SerializeField] private Canvas droneDiscriptCanvas;
     [SerializeField] private EnumerateText descriptText;
+    [SerializeField] private TextMeshProUGUI nameText;
 
     [SerializeField] private Vector3 helpStateScale;
     [SerializeField] private Vector3 aimHelpStateScale;
@@ -32,6 +34,9 @@ public class DroneHelperRoot : MonoBehaviour
 
     [SerializeField] private DroneHelper currentHelper;
 
+
+    public string NameText { set => nameText.text = value; }
+
     void Start()
     {
         droneDiscriptCanvas.enabled = false;
@@ -40,6 +45,7 @@ public class DroneHelperRoot : MonoBehaviour
         {
             var item = new DescData();
             item.desc = droneDescript.descripts[i].descript;
+            item.duration = droneDescript.descripts[i].duration;
             item.audio = droneDescript.descripts[i].audioData;
 
             descriptDictionary.Add(droneDescript.descripts[i].key, item);
@@ -109,7 +115,7 @@ public class DroneHelperRoot : MonoBehaviour
         descriptText.SetTargetString(descriptDictionary[key].desc);
         droneDiscriptCanvas.enabled = true;
         drone.OrderHelp();
-        hintTime = durationTime;
+        hintTime = descriptDictionary[key].duration;
         timer.InitTimer("Help",0.0f,hintTime);
 
         var audio = descriptDictionary[key].audio;
