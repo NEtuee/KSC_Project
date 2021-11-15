@@ -84,16 +84,13 @@ public class BirdyBoss_HeadPattern : ObjectBase
         _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveOut, (x)=>{
             transform.localPosition = _localPosition;
 
+            shieldTarget.Reactive();
+            shieldTarget.gameObject.SetActive(false);
+
             _lookDown = false;
             _stemp = false;
         });
         _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveIn, (x)=>{
-            if(!shieldTarget.IsActive)
-            {
-                shieldTarget.gameObject.SetActive(false);
-                shieldTarget.Reactive();
-            }
-
             
         });
 

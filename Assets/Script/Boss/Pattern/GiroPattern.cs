@@ -5,6 +5,12 @@ using UnityEngine.InputSystem;
 
 public class GiroPattern : ObjectBase
 {
+    public enum State
+    {
+        Appear, Wait, Launch, WaitStop, Stop
+    }
+
+    [SerializeField] private State state = State.Stop;
     [SerializeField] private List<GiroObject> giroObjects = new List<GiroObject>();
     private List<Vector3> _initPosition = new List<Vector3>();
     [SerializeField] private Transform pivot;
@@ -23,6 +29,9 @@ public class GiroPattern : ObjectBase
     private HexCubeGrid _hex;
     private List<HexCube> _hexList = new List<HexCube>();
 
+    private float _launchWaitTime = 0;
+    private float _launchTermTime = 0;
+    private int _launchCount = 0;
     public int ObjectCount => giroObjects.Count;
 
     public override void Assign()
@@ -40,46 +49,45 @@ public class GiroPattern : ObjectBase
             _initPosition.Add(giroObjects[i].transform.position);
         }
 
-        _timeCounter.CreateSequencer("Launch");
+        //_timeCounter.CreateSequencer("Launch");
 
-        _timeCounter.AddSequence("Launch", 0.0f, null, (value) =>
-        {
-            for (int i = 0; i < giroObjects.Count; i++)
-            {
-                giroObjects[i].Appear(2f);
-            }
-            _rotate = true;
-        });
+        //_timeCounter.AddSequence("Launch", 0.0f, null, (value) =>
+        //{
+        //    for (int i = 0; i < giroObjects.Count; i++)
+        //    {
+        //        giroObjects[i].Appear(2f);
+        //    }
+        //    _rotate = true;
+        //});
 
-        _timeCounter.AddSequence("Launch", 3.0f, null, null);
+        //_timeCounter.AddSequence("Launch", 3.0f, null, null);
 
-        for (int i = 0; i < giroObjects.Count; i++)
-        {
-            int count = i;
-            _timeCounter.AddSequence("Launch", 1f, null, (value) =>
-             {
-                 giroObjects[count].LaunchObject(_target.position, 5000f);
-             });
-        }
+        //for (int i = 0; i < giroObjects.Count; i++)
+        //{
+        //    int count = i;
+        //    _timeCounter.AddSequence("Launch", 1f, null, (value) =>
+        //     {
+        //         giroObjects[count].LaunchObject(_target.position, 5000f);
+        //     });
+        //}
 
-        _timeCounter.AddSequence("Launch", 3.0f, null, (value) =>
-        {
-            for (int i = 0; i < giroObjects.Count; i++)
-            {
-                giroObjects[i].transform.SetParent(pivot);
-                giroObjects[i].transform.position = _initPosition[i];
-            }
+        //_timeCounter.AddSequence("Launch", 3.0f, null, (value) =>
+        //{
+        //    for (int i = 0; i < giroObjects.Count; i++)
+        //    {
+        //        giroObjects[i].transform.SetParent(pivot);
+        //        giroObjects[i].transform.position = _initPosition[i];
+        //    }
 
-            _rotate = false;
-            gameObject.SetActive(false);
-        });
+        //    _rotate = false;
+        //    gameObject.SetActive(false);
+        //});
 
-        _timeCounter.InitSequencer("Launch");
+        //_timeCounter.InitSequencer("Launch");
     }
 
     public void Respawn()
     {
-        _timeCounter.InitSequencer("Launch");
         _rotationSpeed = 0.0f;
     }
 
@@ -105,67 +113,140 @@ public class GiroPattern : ObjectBase
             pivot.Rotate(Vector3.up * _rotationSpeed * deltaTime);
             _rotationSpeed += _rotationAccelerationSpeed * deltaTime;
         }
-
-        _timeCounter.ProcessSequencer("Launch", deltaTime);
     }
 
     public override void FixedProgress(float deltaTime)
     {
         base.FixedProgress(deltaTime);
 
-        //if(_done == false)
-        //{
-        //    bool allStop = true;
-        //    for(int i = 0; i< giroObjects.Count; i++)
-        //    {
-        //        if (giroObjects[i].IsStop == false)
-        //        {
-        //            allStop = false;
-        //            break;
-        //        }   
-        //    }
-
-        //    if (allStop)
-        //    {
-        //        Debug.Log("allstop");
-        //        pivot.gameObject.SetActive(false);
-        //        for (int i = 0; i < giroObjects.Count; i++)
-        //        {
-        //            giroObjects[i].transform.SetParent(pivot);
-        //            giroObjects[i].transform.position = _initPosition[i];
-        //        }
-        //        _rotationSpeed = 0.0f;
-        //        _rotate = false;
-        //        _done = true;
-        //    }
-        //}
+        UpdatePattern(deltaTime);
     }
 
-    public void Appear()
+    private void UpdatePattern(float deltaTime)
     {
-        for (int i = 0; i < giroObjects.Count; i++)
+        switch (state)
         {
-            giroObjects[i].transform.SetParent(pivot);
-            giroObjects[i].transform.position = _initPosition[i];
-        }
-        _rotationSpeed = 0.0f;
-        _rotate = false;
+            case State.Appear:
+                {
+                    _timeCounter.IncreaseTimerSelf("timer", out bool limit, deltaTime);
+                    if (limit == true)
+                    {
+                        ChangeState(State.Wait);
+                    }
+                }
+                break;
+            case State.Wait:
+                {
+                    _timeCounter.IncreaseTimerSelf("timer", out bool limit, deltaTime);
+                    if (limit == true)
+                    {
+                        ChangeState(State.Launch);
+                    }
+                }
+                break;
+            case State.Launch:
+                {
+                    _timeCounter.IncreaseTimerSelf("timer", out bool limit, deltaTime);
+                    if (limit == true)
+                    {
+                        giroObjects[_launchCount].LaunchObject(_target.position, 5000f);
 
-        pivot.gameObject.SetActive(true);
+                        _launchCount++;
+                        if(_launchCount >= giroObjects.Count)
+                        {
+                            _launchCount = 0;
+                            ChangeState(State.WaitStop);
+                            return;
+                        }
 
-        for (int i = 0; i < giroObjects.Count; i++)
-        {
-            giroObjects[i].Appear(2f);
+                        _timeCounter.InitTimer("timer", 0f, _launchTermTime);
+                    }
+                }
+                break;
+            case State.WaitStop:
+                {
+                    _timeCounter.IncreaseTimerSelf("timer", out bool limit, deltaTime);
+                    if (limit == true)
+                    {
+                        for (int i = 0; i < giroObjects.Count; i++)
+                        {
+                            giroObjects[i].transform.SetParent(pivot);
+                            giroObjects[i].transform.position = _initPosition[i];
+                        }
+
+                        _rotate = false;
+                        ChangeState(State.Stop);
+                    }
+                }
+                break;
+            case State.Stop:
+                break;
         }
-        _rotate = true;
-        //_done = false;
     }
 
-    public void Launch(int index, Vector3 targetPosition, float power)
+    private void ChangeState(State state)
     {
-        if (index < 0 || index >= giroObjects.Count)
-            return;
+        this.state = state;
+        switch (state)
+        {
+            case State.Appear:
+                {
+                    for (int i = 0; i < giroObjects.Count; i++)
+                    {
+                        giroObjects[i].Appear(2f);
+                    }
+                    _rotate = true;
+                    _timeCounter.InitTimer("timer", 0f, 2f);
+                }
+                break;
+            case State.Wait:
+                {
+                    _timeCounter.InitTimer("timer", 0f, _launchWaitTime);
+                }
+                break;
+            case State.Launch:
+                {
+                    _timeCounter.InitTimer("timer", 0f, _launchTermTime);
+                }
+                break;
+            case State.WaitStop:
+                {
+                    _timeCounter.InitTimer("timer", 0f, 3f);
+                }
+                break;
+            case State.Stop:
+                {
+                    this.gameObject.SetActive(false);
+                }
+                break;
+        }
+    }
 
-        giroObjects[index].LaunchObject(targetPosition, power);
+    //public void Appear()
+    //{
+    //    for (int i = 0; i < giroObjects.Count; i++)
+    //    {
+    //        giroObjects[i].transform.SetParent(pivot);
+    //        giroObjects[i].transform.position = _initPosition[i];
+    //    }
+    //    _rotationSpeed = 0.0f;
+    //    _rotate = false;
+
+    //    pivot.gameObject.SetActive(true);
+
+    //    for (int i = 0; i < giroObjects.Count; i++)
+    //    {
+    //        giroObjects[i].Appear(2f);
+    //    }
+    //    _rotate = true;
+    //    //_done = false;
+    //}
+
+    public void Launch(float launchWaitTime, float launchTermTime)
+    {
+        this._launchWaitTime = launchWaitTime;
+        this._launchTermTime = launchTermTime;
+
+        ChangeState(State.Appear);
     }
 }
