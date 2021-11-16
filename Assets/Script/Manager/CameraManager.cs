@@ -45,6 +45,7 @@ public class CameraManager : ManagerBase
     [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private AnimationCurve blurCurve;
     [SerializeField] private FollowTargetCtrl followTarget;
+    [SerializeField] private Vector3 cameraInitOffset;
     
     private bool isBlendCameraDistance;
     private float targetDistance;
@@ -200,6 +201,13 @@ public class CameraManager : ManagerBase
         {
             var data = MessageDataPooling.CastData<BoolData>(msg.data).value;
             followTarget.SetAim(data);
+        });
+
+        AddAction(MessageTitles.cameramanager_initCameraPositionAndRotation, (msg) =>
+        {
+            brainCameraTransfrom.position = _playerTransfrom.TransformPoint(cameraInitOffset);
+            Vector3 rotation = _playerTransfrom.rotation.eulerAngles;
+            followTarget.SetPitchYaw(rotation.x,rotation.y);
         });
     }
 

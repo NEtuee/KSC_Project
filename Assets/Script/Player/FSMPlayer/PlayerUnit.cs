@@ -1003,6 +1003,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     }
     public void AddEnergy(float value)
     {
+        if (value > 0f && energy.Value >= 100f)
+            return;
+
         energy.Value += value;
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }
