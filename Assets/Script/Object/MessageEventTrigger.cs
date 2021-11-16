@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MD;
+using MessageSender;
 
 public class MessageEventTrigger : ObjectBase
 {
     [SerializeField] private bool onDisable = true;
     [SerializeField] private LayerMask triggerLayer;
-    [HideInInspector] public Message message;
+    [HideInInspector] public MessageTitleEnum message;
 
     [HideInInspector] public MissionUiPack missionUiPack;
     [HideInInspector] public LevelLineActiveBossNamePack levelLineActiveBossNamePack;
@@ -24,7 +25,7 @@ public class MessageEventTrigger : ObjectBase
 
         switch (message)
         {
-            case Message.MissionUi:
+            case MessageTitleEnum.MissionUi:
                 {
                     _triggerEvent = () =>
                     {
@@ -33,7 +34,7 @@ public class MessageEventTrigger : ObjectBase
                     };
                 }
                 break;
-            case Message.LevelLineActiveBossName:
+            case MessageTitleEnum.LevelLineActiveBossName:
                 {
                     _triggerEvent = () =>
                     {
@@ -42,7 +43,7 @@ public class MessageEventTrigger : ObjectBase
                     };
                 }
                 break;
-            case Message.LevelLineSetAlphabet:
+            case MessageTitleEnum.LevelLineSetAlphabet:
                 {
                     _triggerEvent = () =>
                     {
@@ -52,7 +53,7 @@ public class MessageEventTrigger : ObjectBase
                     };
                 }
                 break;
-            case Message.ActiveInformationUi:
+            case MessageTitleEnum.ActiveInformationUi:
                 {
                     _triggerEvent = () =>
                     {
@@ -61,7 +62,7 @@ public class MessageEventTrigger : ObjectBase
                     };
                 }
                 break;
-            case Message.SetTimeInformationUi:
+            case MessageTitleEnum.SetTimeInformationUi:
                 {
                     _triggerEvent = () =>
                     {
@@ -71,7 +72,7 @@ public class MessageEventTrigger : ObjectBase
                     };
                 }
                 break;
-            case Message.DisappearMissionUi:
+            case MessageTitleEnum.DisappearMissionUi:
                 {
                     _triggerEvent = () =>
                     {
@@ -103,8 +104,11 @@ public class MessageEventTrigger : ObjectBase
                 gameObject.SetActive(false);
         }
     }
+}
 
 
+namespace MessageSender
+{
     [System.Serializable]
     public class MissionUiPack
     {
@@ -141,7 +145,7 @@ public class MessageEventTrigger : ObjectBase
         public float time;
     }
 
-    public enum Message
+    public enum MessageTitleEnum
     {
         MissionUi = MessageTitles.uimanager_AppearMissionUiAndSetKey,
         LevelLineActiveBossName = MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName,

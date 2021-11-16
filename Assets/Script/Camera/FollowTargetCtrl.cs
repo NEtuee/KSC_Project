@@ -37,8 +37,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     public List<Transform> _gunTargetObjects = new List<Transform>();
 
-    private float _mouseX;
-    private float _mouseY;
+    [SerializeField] private float _mouseX;
+    [SerializeField] private float _mouseY;
 
     private bool _isAim = false;
 
@@ -537,8 +537,11 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     public void OnCamera(InputAction.CallbackContext value)
     {
-        if (Time.timeScale == 0f)
+        if (value.performed == false || Time.timeScale == 0f)
+        {
+            _mouseX = _mouseY = 0.0f;
             return;
+        }
 
         Vector2 inputVector = value.ReadValue<Vector2>();
         _mouseY = inputVector.y;

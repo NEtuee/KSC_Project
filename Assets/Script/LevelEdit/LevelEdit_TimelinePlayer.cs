@@ -210,7 +210,6 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         if (playerDisable)
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),false);
-            Debug.Log("Tlqkf");
         }
         CUTSCENEPLAY = true;
     }
@@ -223,6 +222,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         if (playerDisable)
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
+            SendMessageEx(MessageTitles.cameramanager_initCameraPositionAndRotation, GetSavedNumber("CameraManager"), null);
         }
         CUTSCENEPLAY = false;
 

@@ -333,6 +333,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort cameramanager_generaterecoilimpluseSetForce = 0x0417;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort cameramanager_initCameraPositionAndRotation = 0x0418;
+
     #region EffectManager
 
     /// <summary>
@@ -349,6 +354,7 @@ public static partial class MessageTitles
     /// data = EffectActiveData
     /// </summary>
     public const ushort effectmanager_activeeffectsetparent = 0x0703;
+
 
     #endregion
 

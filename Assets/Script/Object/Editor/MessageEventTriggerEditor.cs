@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using MessageSender;
 
 [CustomEditor(typeof(MessageEventTrigger))]
 [CanEditMultipleObjects]
@@ -15,33 +16,33 @@ public class MessageEventTriggerEditor : Editor
 
         MessageEventTrigger eventTrigger = (MessageEventTrigger)target;
 
-        MessageEventTrigger.Message title = eventTrigger.message;
+        MessageTitleEnum title = eventTrigger.message;
 
-        eventTrigger.message = (MessageEventTrigger.Message)EditorGUILayout.EnumPopup("Message", title);
+        eventTrigger.message = (MessageTitleEnum)EditorGUILayout.EnumPopup("Message", title);
 
 
-        if (eventTrigger.message == MessageEventTrigger.Message.MissionUi)
+        if (eventTrigger.message == MessageTitleEnum.MissionUi)
         {
             eventTrigger.missionUiPack.key = EditorGUILayout.TextField("Key",eventTrigger.missionUiPack.key);
         }
-        else if(eventTrigger.message == MessageEventTrigger.Message.LevelLineActiveBossName)
+        else if(eventTrigger.message == MessageTitleEnum.LevelLineActiveBossName)
         {
             eventTrigger.levelLineActiveBossNamePack.name = EditorGUILayout.TextField("BossName",eventTrigger.levelLineActiveBossNamePack.name);
         }
-        else if (eventTrigger.message == MessageEventTrigger.Message.LevelLineSetAlphabet)
+        else if (eventTrigger.message == MessageTitleEnum.LevelLineSetAlphabet)
         {
             alphabet = eventTrigger.levelLineSetAlphabetPack.alphabet;
             eventTrigger.levelLineSetAlphabetPack.alphabet = (LevelLineUI.Alphabet)EditorGUILayout.EnumPopup("Alphabet",alphabet);
         }
-        else if (eventTrigger.message == MessageEventTrigger.Message.ActiveInformationUi)
+        else if (eventTrigger.message == MessageTitleEnum.ActiveInformationUi)
         {
             eventTrigger.activeInformationUiPack.key = EditorGUILayout.TextField("Key", eventTrigger.activeInformationUiPack.key);
         }
-        else if (eventTrigger.message == MessageEventTrigger.Message.SetTimeInformationUi)
+        else if (eventTrigger.message == MessageTitleEnum.SetTimeInformationUi)
         {
             eventTrigger.setTimeInformationUiPack.time = EditorGUILayout.FloatField("Time", eventTrigger.setTimeInformationUiPack.time);
         }
-        else if (eventTrigger.message == MessageEventTrigger.Message.DisappearMissionUi)
+        else if (eventTrigger.message == MessageTitleEnum.DisappearMissionUi)
         {
             eventTrigger.missionUiDisspearPack.time = EditorGUILayout.FloatField("DisappearTime", eventTrigger.missionUiDisspearPack.time);
         }
