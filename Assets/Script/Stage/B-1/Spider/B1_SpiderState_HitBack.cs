@@ -65,6 +65,11 @@ public class B1_SpiderState_HitBack : B1_SpiderStateBase
             target.Turn(_direction,deltaTime);
             _speed = backSpeed * (backTime - (time / backTime));
 
+            // if(Physics.Raycast(transform.position,_direction,3f,LayerMask.NameToLayer("Floor") | LayerMask.NameToLayer("Wall")))
+            // {
+            //     _direction *
+            // }
+
             if(!_downRay.Cast(rayPosition.position,out var hit))
             {
                 StateChange("Idle");
