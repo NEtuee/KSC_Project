@@ -13,7 +13,8 @@ public class B1_SpiderState_ExplosionWait : B1_SpiderStateBase
     {
         base.StateInitialize(prevState);
 
-        target.ChangeAnimation("Explosion");
+        //target.ChangeAnimation("Explosion");
+        target.SetIdle(false);
         _timeCounter.InitTimer("Explosion",0f,explosionTime);
     }
 

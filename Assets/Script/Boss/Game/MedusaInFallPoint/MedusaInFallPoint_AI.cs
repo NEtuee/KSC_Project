@@ -8,6 +8,8 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
 
     public List<IKLegMovement> legs = new List<IKLegMovement>();
 
+    public float damage = 10f;
+
     public Transform target;
     public PlayerUnit player;
     public Animator animator;
