@@ -139,6 +139,8 @@ public class GenieState_DroneWave : GenieStateBase
         var type = info.type == WavePatternEvent.DroneType.CoreDrone;
 
         var droneLine = _droneLinePool.Active(transform.position,Quaternion.identity);
+
+        droneLine.Turn((info.direction == WavePatternEvent.Direction.Left ? 0f : 180f),(info.direction == WavePatternEvent.Direction.Left ? 0.8f : -0.8f));
         droneLine.Active(info.heightGraph,transform.position,startDir,endDir,droneStartHeight,height,type);
 
         _currentPattern = _currentPattern + 1 >= patternEvents.Count ? 0 : _currentPattern + 1;

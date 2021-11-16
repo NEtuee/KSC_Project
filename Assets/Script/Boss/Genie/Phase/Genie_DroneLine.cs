@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Genie_DroneLine : ObjectBase
 {
+    public List<Genie_DroneTilt> drones;
     public AnimationCurve apearCurve;
     public AnimationCurve spinCurve;
 
@@ -35,6 +36,25 @@ public class Genie_DroneLine : ObjectBase
         _timeCounter.AddSequence("Process",apear,Disapear,(x)=>{gameObject.SetActive(false);});
 
         RegisterRequest(GetSavedNumber("StageManager"));
+    }
+
+    public void Turn(float angle, float dir)
+    {
+        foreach(var item in drones)
+        {
+            item.direction = Vector3.right * dir * 0.1f;
+            var euler = item.transform.localEulerAngles;
+            if(item.gameObject == coreDrone.gameObject)
+            {
+                euler.y = angle + 90f;
+            }
+            else
+            {
+                euler.z = angle;
+            }
+            
+            item.transform.localEulerAngles = euler;
+        }
     }
 
     public void Active(AnimationCurve heightCurve, Vector3 basePosition, Quaternion startQuat, Quaternion endQuat, float startHeight, float endHeight, bool isCore)
