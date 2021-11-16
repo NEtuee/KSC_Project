@@ -446,6 +446,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort player_blockQuickStand = 0x0916;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort player_animatiorStateChangeDefault = 0x0917;
+
     #endregion
 
     #region PlayerManager

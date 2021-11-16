@@ -223,6 +223,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
             SendMessageEx(MessageTitles.cameramanager_initCameraPositionAndRotation, GetSavedNumber("CameraManager"), null);
+            SendMessageEx(MessageTitles.player_animatiorStateChangeDefault, GetSavedNumber("Player"), null);
         }
         CUTSCENEPLAY = false;
 
