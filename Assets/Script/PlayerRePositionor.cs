@@ -121,7 +121,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
                 yield break;
 
             ctrl.ChangeState(PlayerUnit.respawnState);
-            yield return new WaitForSecondsRealtime(1.0f);
+            yield return new WaitForSecondsRealtime(0.4f);
 
             var rot = Quaternion.LookRotation(respawn.forward);
 
@@ -146,7 +146,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
                 yield break;
 
             _player.ChangeState(PlayerUnit.respawnState);
-            yield return new WaitForSecondsRealtime(1.0f);
+            yield return new WaitForSecondsRealtime(0.4f);
             var rot = Quaternion.LookRotation(respawn.forward);
 
             var respawnData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
