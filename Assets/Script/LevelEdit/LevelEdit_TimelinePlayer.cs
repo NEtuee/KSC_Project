@@ -97,12 +97,12 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             var data = MessageDataPooling.GetMessageData<MD.BrainUpdateMethodData>();
             data.update = CinemachineBrain.UpdateMethod.SmartUpdate;
             data.blend = CinemachineBrain.BrainUpdateMethod.LateUpdate;
-            SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod,GetSavedNumber("CameraManager"),data);
-    
+            SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod, GetSavedNumber("CameraManager"), data);
+
             TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
-            TrackAsset track = timelineAsset.GetOutputTrack(1) ;
+            TrackAsset track = timelineAsset.GetOutputTrack(1);
             playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
-            playableDirector.SetGenericBinding (track, _mainCamBrain);
+            playableDirector.SetGenericBinding(track, _mainCamBrain);
             playableDirector.Play();
         }
 
