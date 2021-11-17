@@ -89,7 +89,7 @@ public class BirdyBoss_Platform : ObjectBase
     {
         base.FixedProgress(deltaTime);
 
-        if(!active)
+        if(!active || LevelEdit_TimelinePlayer.CUTSCENEPLAY)
         {
             return;
         }

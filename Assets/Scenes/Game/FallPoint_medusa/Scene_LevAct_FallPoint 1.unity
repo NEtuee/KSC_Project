@@ -1531,13 +1531,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 228311955}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 116.37, y: -19.31, z: 70.72}
+  m_LocalRotation: {x: 0, y: 0.53819716, z: 0, w: 0.842819}
+  m_LocalPosition: {x: 113.467, y: -61.275, z: 69.988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1366736570}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 65.122, z: 0}
 --- !u!1 &247401728
 GameObject:
   m_ObjectHideFlags: 3
@@ -1964,7 +1964,7 @@ MonoBehaviour:
   endTransform: {fileID: 317125698}
   birdyEndPosition: {fileID: 0}
   loadNextLevel: 0
-  startFade: 1
+  startFade: 0
   playerDisable: 1
   birdyCanMove: 1
   ragdoll: 0
@@ -5169,14 +5169,6 @@ MonoBehaviour:
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 06b09c41-3d32-4ac5-92cf-c9b5fadbab1d
-    owner: {fileID: 677258354}
-    inputNodeGUID: 82e0e071-7252-435a-9232-cdda4796e219
-    outputNodeGUID: 91460cae-8cfa-40a0-a471-df8697b64a99
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: 237eee33-d07b-40e8-a84b-0f5efbaafd5c
     owner: {fileID: 677258354}
     inputNodeGUID: 82e0e071-7252-435a-9232-cdda4796e219
@@ -5201,6 +5193,14 @@ MonoBehaviour:
     outputFieldName: true
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: 46deb425-a10d-41fe-a0cf-daa55fc75333
+    owner: {fileID: 677258354}
+    inputNodeGUID: 82e0e071-7252-435a-9232-cdda4796e219
+    outputNodeGUID: 08e2aa32-13f6-4c36-8733-e90639884f5d
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements:
@@ -5222,8 +5222,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 119, y: 191, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
+  position: {x: 26, y: 222, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   functions: []
   functionID: 0
   states: []
@@ -5389,21 +5389,6 @@ MonoBehaviour:
         nodeLock: 0
         output: {fileID: 89895632}
     00000009:
-      type: {class: ObjectInitializeEntryNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: 91460cae-8cfa-40a0-a471-df8697b64a99
-        computeOrder: 10
-        position:
-          serializedVersion: 2
-          x: 317.00003
-          y: -105.417496
-          width: 162
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-    0000000A:
       type: {class: TimelinePlayNode, ns: , asm: Assembly-CSharp}
       data:
         nodeCustomName: 
@@ -5419,12 +5404,12 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         obj: {fileID: 0}
-    0000000B:
+    0000000A:
       type: {class: TimelinePlayerNode, ns: , asm: Assembly-CSharp}
       data:
         nodeCustomName: 
         GUID: 2a552ee0-3375-4815-92d5-b89c81ba299a
-        computeOrder: 11
+        computeOrder: 10
         position:
           serializedVersion: 2
           x: 177.41377
@@ -5435,7 +5420,7 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         output: {fileID: 340748389}
-    0000000C:
+    0000000B:
       type: {class: OneshotTriggerNode, ns: , asm: EveryAssembly}
       data:
         nodeCustomName: 
@@ -5445,6 +5430,21 @@ MonoBehaviour:
           serializedVersion: 2
           x: 653.2001
           y: 209.30002
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    0000000C:
+      type: {class: SceneChangedEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 08e2aa32-13f6-4c36-8733-e90639884f5d
+        computeOrder: 11
+        position:
+          serializedVersion: 2
+          x: 394
+          y: -112
           width: 100
           height: 100
         expanded: 0

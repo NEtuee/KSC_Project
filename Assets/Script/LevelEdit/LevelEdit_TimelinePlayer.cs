@@ -68,6 +68,24 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
                 playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
                 playableDirector.SetGenericBinding (track, _mainCamBrain);
                 playableDirector.Play();
+
+                if (endTransform != null)
+                {
+                    var positionData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
+                    positionData.position = endTransform.position;
+                    positionData.rotation = endTransform.rotation;
+                    SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), positionData);
+
+                    MD.PitchYawPositionData camData = MessageDataPooling.GetMessageData<MD.PitchYawPositionData>();
+                    camData.position = endTransform.position;
+                    camData.pitch = endTransform.eulerAngles.x;
+                    camData.yaw = endTransform.eulerAngles.y;
+                    SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
+                }
+
+                var canvasEnable = MessageDataPooling.GetMessageData<MD.BoolData>();
+                canvasEnable.value = false;
+                SendMessageEx(MessageTitles.uimanager_activePlayUi, GetSavedNumber("UIManager"), canvasEnable);
             };
 
             SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);
@@ -79,12 +97,12 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             var data = MessageDataPooling.GetMessageData<MD.BrainUpdateMethodData>();
             data.update = CinemachineBrain.UpdateMethod.SmartUpdate;
             data.blend = CinemachineBrain.BrainUpdateMethod.LateUpdate;
-            SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod,GetSavedNumber("CameraManager"),data);
-    
+            SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod, GetSavedNumber("CameraManager"), data);
+
             TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
-            TrackAsset track = timelineAsset.GetOutputTrack(1) ;
+            TrackAsset track = timelineAsset.GetOutputTrack(1);
             playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
-            playableDirector.SetGenericBinding (track, _mainCamBrain);
+            playableDirector.SetGenericBinding(track, _mainCamBrain);
             playableDirector.Play();
         }
 
@@ -149,20 +167,6 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             item.SetActive(true);
         }
 
-        if (endTransform != null)
-        {
-            var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
-            data.position = endTransform.position;
-            data.rotation = endTransform.rotation;
-            SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
-
-            MD.PitchYawPositionData camData = MessageDataPooling.GetMessageData<MD.PitchYawPositionData>();
-            camData.position = endTransform.position;
-            camData.pitch = endTransform.eulerAngles.x;
-            camData.yaw = endTransform.eulerAngles.y;
-            SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
-        }
-
         if(birdyEndPosition != null)
         {
             var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
@@ -209,11 +213,12 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
         if (playerDisable)
         {
+
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),false);
             var sideLock = MessageDataPooling.GetMessageData<MD.BoolData>();
             sideLock.value = true;
             SendMessageEx(MessageTitles.cameramanager_cameraSideLock, GetSavedNumber("CameraManager"), sideLock);
-            var rotateLock = MessageDataPooling.GetMessageData<MD.BoolData>();
+            //var rotateLock = MessageDataPooling.GetMessageData<MD.BoolData>();
             //rotateLock.value = true;
             //SendMessageEx(MessageTitles.cameramanager_cameraRotateLock, GetSavedNumber("CameraManager"), rotateLock);
             SendMessageEx(MessageTitles.playermanager_DeactivateInput, GetSavedNumber("PlayerManager"), null);
@@ -238,6 +243,10 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             //rotateLock.value = false;
             //SendMessageEx(MessageTitles.cameramanager_cameraRotateLock, GetSavedNumber("CameraManager"), rotateLock);
             SendMessageEx(MessageTitles.playermanager_ActiveInput, GetSavedNumber("PlayerManager"), null);
+
+            var canvasEnable = MessageDataPooling.GetMessageData<MD.BoolData>();
+            canvasEnable.value = true;
+            SendMessageEx(MessageTitles.uimanager_activePlayUi, GetSavedNumber("UIManager"), canvasEnable);
         }
         CUTSCENEPLAY = false;
 
