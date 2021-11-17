@@ -112,7 +112,7 @@ public class PlayerManager : ManagerBase
             _drone.gameObject.SetActive(visible);
             _player.gameObject.SetActive(visible);
 
-            Debug.Log("Tlqkf :" + visible + "," + ((MessageReceiver)msg.sender).name);
+            //Debug.Log("Tlqkf :" + visible + "," + ((MessageReceiver)msg.sender).name);
 
             if (visible)
             {

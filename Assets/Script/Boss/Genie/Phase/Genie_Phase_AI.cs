@@ -7,6 +7,7 @@ public class Genie_Phase_AI : PathfollowObjectBase
     public StateProcessor stateProcessor;
     public Transform respawnPoint;
     public Transform respawnTarget;
+    public Transform explosionTarget;
     public Transform body;
     public Transform eyelightPosition;
     public Boogie_GridControll gridControll;
@@ -64,6 +65,17 @@ public class Genie_Phase_AI : PathfollowObjectBase
 
     public void ChangeAnimation(int code)
     {
+        if(code == 1)
+        {
+            MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+            data.key = "CannonExplosion";
+            data.position = explosionTarget.position;
+            data.rotation = explosionTarget.rotation;
+
+            SendMessageEx(MessageTitles.effectmanager_activeeffect,
+                        UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+        }
         animatorController.SetTrigger("Change");
         animatorController.SetInteger("Code",code);
     }
