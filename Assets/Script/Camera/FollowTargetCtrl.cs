@@ -27,7 +27,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     [SerializeField] private float _lateTime = 0.0f;
     [SerializeField] private bool isPause;
 
-    [SerializeField]private PlayerUnit _player;
+    [SerializeField] private PlayerUnit _player;
     [SerializeField] private float supportRange = 500.0f;
     [SerializeField] private float supportSpeed = 300.0f;
     [SerializeField] private bool supporting = false;
@@ -41,6 +41,10 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     [SerializeField] private float _mouseY;
 
     private bool _isAim = false;
+
+    private bool _rotateLock = false;
+
+    public bool RotateLock { get => _rotateLock; set => _rotateLock = value; }
 
     public float YawRotateSpeed
     {
@@ -537,7 +541,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     public void OnCamera(InputAction.CallbackContext value)
     {
-        if (value.performed == false || Time.timeScale == 0f)
+        if (_rotateLock == true || value.performed == false || Time.timeScale == 0f)
         {
             _mouseX = _mouseY = 0.0f;
             return;
