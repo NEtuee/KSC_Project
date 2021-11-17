@@ -210,6 +210,13 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         if (playerDisable)
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),false);
+            var sideLock = MessageDataPooling.GetMessageData<MD.BoolData>();
+            sideLock.value = true;
+            SendMessageEx(MessageTitles.cameramanager_cameraSideLock, GetSavedNumber("CameraManager"), sideLock);
+            var rotateLock = MessageDataPooling.GetMessageData<MD.BoolData>();
+            //rotateLock.value = true;
+            //SendMessageEx(MessageTitles.cameramanager_cameraRotateLock, GetSavedNumber("CameraManager"), rotateLock);
+            SendMessageEx(MessageTitles.playermanager_DeactivateInput, GetSavedNumber("PlayerManager"), null);
         }
         CUTSCENEPLAY = true;
     }
@@ -223,6 +230,14 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
             SendMessageEx(MessageTitles.cameramanager_initCameraPositionAndRotation, GetSavedNumber("CameraManager"), null);
+            SendMessageEx(MessageTitles.player_animatiorStateChangeDefault, GetSavedNumber("Player"), null);
+            var sideLock = MessageDataPooling.GetMessageData<MD.BoolData>();
+            sideLock.value = false;
+            SendMessageEx(MessageTitles.cameramanager_cameraSideLock, GetSavedNumber("CameraManager"), sideLock);
+            //var rotateLock = MessageDataPooling.GetMessageData<MD.BoolData>();
+            //rotateLock.value = false;
+            //SendMessageEx(MessageTitles.cameramanager_cameraRotateLock, GetSavedNumber("CameraManager"), rotateLock);
+            SendMessageEx(MessageTitles.playermanager_ActiveInput, GetSavedNumber("PlayerManager"), null);
         }
         CUTSCENEPLAY = false;
 

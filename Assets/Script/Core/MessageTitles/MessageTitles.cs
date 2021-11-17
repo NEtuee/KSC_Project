@@ -338,6 +338,16 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort cameramanager_initCameraPositionAndRotation = 0x0418;
 
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort cameramanager_cameraSideLock = 0x0419;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort cameramanager_cameraRotateLock = 0x0420;
+
     #region EffectManager
 
     /// <summary>
@@ -446,6 +456,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort player_blockQuickStand = 0x0916;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort player_animatiorStateChangeDefault = 0x0917;
+
     #endregion
 
     #region PlayerManager
@@ -514,6 +529,16 @@ public static partial class MessageTitles
     /// data = string
     /// </summary>
     public const ushort playermanager_SetDialogName = 0x0922;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort playermanager_ActiveInput = 0x0923;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort playermanager_DeactivateInput = 0x0924;
 
     #endregion
 

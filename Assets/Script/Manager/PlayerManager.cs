@@ -9,6 +9,7 @@ using MD;
 public class PlayerManager : ManagerBase
 {
     [SerializeField] private PlayerUnit _player;
+    [SerializeField] private PlayerInput playerInput;
     private IKCtrl _playerFootIK;
     [SerializeField] private EMPGun _emp;
     [SerializeField] private Renderer bagRenderer;
@@ -180,6 +181,16 @@ public class PlayerManager : ManagerBase
         AddAction(MessageTitles.playermanager_SetDialogName, (msg) =>
         {
             _drone.SetDialogName((string)msg.data);
+        });
+
+        AddAction(MessageTitles.playermanager_ActiveInput, (msg) =>
+         {
+             playerInput.ActivateInput();
+         });
+
+        AddAction(MessageTitles.playermanager_DeactivateInput, (msg) =>
+        {
+            playerInput.DeactivateInput();
         });
     }
 

@@ -200,6 +200,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
             drone.Visible = visible.value;
         });
 
+        AddAction(MessageTitles.player_animatiorStateChangeDefault, (msg) =>
+        {
+            //_animator.Play("Default", 0, 0);
+            _animator.SetBool("IsGround", true);
+            _animator.SetTrigger("Reset");
+        });
+
         AddAction(MessageTitles.fmod_soundEmitter, (msg) =>
         {
             _chargeSoundEmitter = (FMODUnity.StudioEventEmitter)msg.data;
