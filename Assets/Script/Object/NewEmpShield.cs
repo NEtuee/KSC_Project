@@ -92,7 +92,7 @@ public class NewEmpShield : Scanable
     {
         if(immortal)
             return;
-            
+
         if (gameObject.activeInHierarchy == false)
             return;
 
@@ -113,6 +113,12 @@ public class NewEmpShield : Scanable
     {
         isVisible = true;
         StartCoroutine(FadeIn());
+    }
+
+    public void Hide()
+    {
+        _mat.SetFloat("_Fade",0f);
+        gameObject.SetActive(false);
     }
 
     private IEnumerator FadeIn()

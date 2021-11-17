@@ -176,6 +176,11 @@ public class PlayerManager : ManagerBase
             var data = MessageDataPooling.CastData<DroneTextKeyAndDurationData>(msg.data);
             _drone.DroneHelpCall(data.key,data.duration);
         });
+
+        AddAction(MessageTitles.playermanager_SetDialogName, (msg) =>
+        {
+            _drone.SetDialogName((string)msg.data);
+        });
     }
 
     public override void Initialize()
@@ -350,6 +355,7 @@ public class PlayerManager : ManagerBase
 
         if (Keyboard.current.digit1Key.wasPressedThisFrame)
         {
+            SendMessageEx(MessageTitles.playermanager_SetDialogName, GetSavedNumber("PlayerManager"), "테스트");
             var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
             data.key = "Test_1";
             data.duration = 10f;
@@ -358,6 +364,7 @@ public class PlayerManager : ManagerBase
 
         if (Keyboard.current.digit2Key.wasPressedThisFrame)
         {
+            SendMessageEx(MessageTitles.playermanager_SetDialogName, GetSavedNumber("PlayerManager"), "테스트");
             var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
             data.key = "Test_2";
             data.duration = 10f;
