@@ -50,9 +50,10 @@ public class StageManagerEx : ManagerBase
             SendMessageEx(MessageTitles.cameramanager_initCameraPositionAndRotation, GetSavedNumber("CameraManager"), null);
         });
 
-        AddAction(MessageTitles.scene_sceneChanged, (x) =>
+        AddAction(MessageTitles.scene_sceneChanged, (msg) =>
         {
-            HandleBroadcastMessage(x);
+            var broad = MessagePack(msg.title, boradcastWithoutSenderNumber, msg.data);
+            HandleBroadcastMessage(broad);
         });
         AddAction(MessageTitles.boolTrigger_getTriggerAsset,GetStageTriggerAsset);
         AddAction(MessageTitles.boolTrigger_getTrigger,GetStageTrigger);
