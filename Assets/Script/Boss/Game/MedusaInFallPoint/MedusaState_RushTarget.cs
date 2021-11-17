@@ -79,6 +79,7 @@ public class MedusaState_RushTarget : MedusaFallPointStateBase
         if(target.stateProcessor.currentState == stateIdentifier)
         {
             target.player.Ragdoll.ExplosionRagdoll(hitForce, _direction);
+            target.player.TakeDamage(target.damage);
             wallHit.moveDirection = -_direction;
             StateChange("WallHit");
 

@@ -6,7 +6,8 @@ public class B1_FlySpider : PathfollowObjectBase
 {
     public StateProcessor stateProcessor;
     public IKFootPointRotator footPointRotator;
-    
+
+    public float damage = 10f;
     public float explosionRadius = 3f;
     public float explosionPower = 150f;
     public bool launch = false;
@@ -95,6 +96,7 @@ public class B1_FlySpider : PathfollowObjectBase
         {
             var dir = (target.position - transform.position).normalized;
             _player.Ragdoll.ExplosionRagdoll(explosionPower,dir);
+            _player.TakeDamage(damage);
         }
         
         MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
