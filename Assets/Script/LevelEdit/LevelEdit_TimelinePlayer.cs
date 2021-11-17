@@ -16,6 +16,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public List<GameObject> activeLists = new List<GameObject>();
     public List<GameObject> endActiveLists = new List<GameObject>();
     public Transform endTransform;
+    public Transform endCamTransform;
     public Transform birdyEndPosition;
 
     public bool loadNextLevel = false;
@@ -26,6 +27,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
     private CinemachineBrain _mainCamBrain;
     private CameraManager _camManager;
+
 
     public override void Assign()
     {
@@ -125,6 +127,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
             actionData.value = () => {
                 SendMessageEx(MessageTitles.cutscene_stop, GetSavedNumber("CutsceneManager"), null);
+
                 playableDirector.Stop();
                 CUTSCENEPLAY = false;
 
@@ -179,6 +182,15 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         {
             SendMessageEx(MessageTitles.playermanager_ragdoll, GetSavedNumber("PlayerManager"), null);
         }
+
+        if(endCamTransform != null)
+        {
+            MD.PitchYawPositionData camData = MessageDataPooling.GetMessageData<MD.PitchYawPositionData>();
+            camData.position = endCamTransform.position;
+            camData.pitch = endCamTransform.rotation.eulerAngles.x;
+            camData.yaw = endCamTransform.rotation.eulerAngles.y;
+            SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
+        }
     }
 
     public void LoadSceneFromManager(string target)
@@ -230,7 +242,9 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     {
         SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod,GetSavedNumber("CameraManager"),null);
         SendMessageEx(MessageTitles.cutscene_stop, GetSavedNumber("CutsceneManager"), null);
+                
         playableDirector.Stop();
+
         if (playerDisable)
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
