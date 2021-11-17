@@ -8,11 +8,13 @@ public class B1_Spider : PathfollowObjectBase
     public LayerMask wallLayer;
     public StateProcessor stateProcessor;
     public GraphAnimator graphAnimator;
+    public Animator animator;
     public Transform body;
     public Transform target;
 
     public Core core;
 
+    public float damage = 10f;
     public float explosionCheckRadius = 3f;
     public float explosionRadius = 5f;
 
@@ -78,7 +80,9 @@ public class B1_Spider : PathfollowObjectBase
 
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
-        
+
+
+        SetIdle(true);
         //Respawn();
     }
 
@@ -88,19 +92,28 @@ public class B1_Spider : PathfollowObjectBase
             shell = shellCollider.GetComponent<Rigidbody>();
 
         shell.isKinematic = true;
-        shell.transform.SetParent(transform);
+        shell.transform.SetParent(body.transform);
         shell.transform.localPosition = _shellPosition;
         shell.rotation = Quaternion.identity;
+        shell.transform.rotation = Quaternion.identity;
 
 
         transform.localPosition = _localPosition;
         transform.localRotation = _localRotation;
 
-        shellCollider.enabled = false;
+        //shellCollider.enabled = false;
         core.Reactive();
 
         this.gameObject.SetActive(true);
         stateProcessor.StateChange("Idle");
+
+        SetIdle(true);
+    }
+
+    public void SetIdle(bool value)
+    {
+        animator.SetBool("Idle", value);
+        animator.SetTrigger("Change");
     }
 
     public override void FixedProgress(float deltaTime)
@@ -126,6 +139,7 @@ public class B1_Spider : PathfollowObjectBase
     {
         backDirection = direction;
         stateProcessor.StateChange("HitBack");
+        SetIdle(true);
 
         var data = MessageDataPooling.GetMessageData<MD.Vector3Data>();
         data.value = transform.position;
@@ -148,6 +162,7 @@ public class B1_Spider : PathfollowObjectBase
         if(playerDist <= explosionRadius)
         {
             _player.Ragdoll.ExplosionRagdoll(force,dir);
+            _player.TakeDamage(damage);
         }
 
         MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();

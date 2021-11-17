@@ -200,6 +200,13 @@ public partial class PlayerUnit : UnTransfromObjectBase
             drone.Visible = visible.value;
         });
 
+        AddAction(MessageTitles.player_animatiorStateChangeDefault, (msg) =>
+        {
+            //_animator.Play("Default", 0, 0);
+            _animator.SetBool("IsGround", true);
+            _animator.SetTrigger("Reset");
+        });
+
         AddAction(MessageTitles.fmod_soundEmitter, (msg) =>
         {
             _chargeSoundEmitter = (FMODUnity.StudioEventEmitter)msg.data;
@@ -1003,6 +1010,9 @@ public partial class PlayerUnit : UnTransfromObjectBase
     }
     public void AddEnergy(float value)
     {
+        if (value > 0f && energy.Value >= 100f)
+            return;
+
         energy.Value += value;
         energy.Value = Mathf.Clamp(energy.Value, 0.0f, 100.0f);
     }

@@ -68,6 +68,20 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
                 playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
                 playableDirector.SetGenericBinding (track, _mainCamBrain);
                 playableDirector.Play();
+
+                if (endTransform != null)
+                {
+                    var positionData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
+                    positionData.position = endTransform.position;
+                    positionData.rotation = endTransform.rotation;
+                    SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), positionData);
+
+                    MD.PitchYawPositionData camData = MessageDataPooling.GetMessageData<MD.PitchYawPositionData>();
+                    camData.position = endTransform.position;
+                    camData.pitch = endTransform.eulerAngles.x;
+                    camData.yaw = endTransform.eulerAngles.y;
+                    SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
+                }
             };
 
             SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);
@@ -149,20 +163,6 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             item.SetActive(true);
         }
 
-        if (endTransform != null)
-        {
-            var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
-            data.position = endTransform.position;
-            data.rotation = endTransform.rotation;
-            SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
-
-            MD.PitchYawPositionData camData = MessageDataPooling.GetMessageData<MD.PitchYawPositionData>();
-            camData.position = endTransform.position;
-            camData.pitch = endTransform.eulerAngles.x;
-            camData.yaw = endTransform.eulerAngles.y;
-            SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
-        }
-
         if(birdyEndPosition != null)
         {
             var data = MessageDataPooling.GetMessageData<MD.PositionRotation>();
@@ -209,8 +209,15 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
         if (playerDisable)
         {
+
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),false);
-            Debug.Log("Tlqkf");
+            var sideLock = MessageDataPooling.GetMessageData<MD.BoolData>();
+            sideLock.value = true;
+            SendMessageEx(MessageTitles.cameramanager_cameraSideLock, GetSavedNumber("CameraManager"), sideLock);
+            //var rotateLock = MessageDataPooling.GetMessageData<MD.BoolData>();
+            //rotateLock.value = true;
+            //SendMessageEx(MessageTitles.cameramanager_cameraRotateLock, GetSavedNumber("CameraManager"), rotateLock);
+            SendMessageEx(MessageTitles.playermanager_DeactivateInput, GetSavedNumber("PlayerManager"), null);
         }
         CUTSCENEPLAY = true;
     }
@@ -223,6 +230,15 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         if (playerDisable)
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
+            SendMessageEx(MessageTitles.cameramanager_initCameraPositionAndRotation, GetSavedNumber("CameraManager"), null);
+            SendMessageEx(MessageTitles.player_animatiorStateChangeDefault, GetSavedNumber("Player"), null);
+            var sideLock = MessageDataPooling.GetMessageData<MD.BoolData>();
+            sideLock.value = false;
+            SendMessageEx(MessageTitles.cameramanager_cameraSideLock, GetSavedNumber("CameraManager"), sideLock);
+            //var rotateLock = MessageDataPooling.GetMessageData<MD.BoolData>();
+            //rotateLock.value = false;
+            //SendMessageEx(MessageTitles.cameramanager_cameraRotateLock, GetSavedNumber("CameraManager"), rotateLock);
+            SendMessageEx(MessageTitles.playermanager_ActiveInput, GetSavedNumber("PlayerManager"), null);
         }
         CUTSCENEPLAY = false;
 
