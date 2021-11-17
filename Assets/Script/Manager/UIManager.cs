@@ -760,12 +760,12 @@ public class UIManager : ManagerBase
     public void FadeIn(Action action = null)
     {
         fadeCanvas.enabled = true;
-        fadeImage.DOFade(1.0f, 0.5f).SetUpdate(true).OnComplete(()=>action?.Invoke());
+        fadeImage.DOFade(1.0f, 0.3f).SetUpdate(true).OnComplete(()=>action?.Invoke());
     }
 
     public void FadeOut(Action action = null)
     {
-        fadeImage.DOFade(0.0f, 0.5f).SetUpdate(true).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
+        fadeImage.DOFade(0.0f, 0.3f).SetUpdate(true).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
     }
 
 
@@ -797,10 +797,10 @@ public class UIManager : ManagerBase
     public void FadeInOut(Action action)
     {
         fadeCanvas.enabled = true;
-        fadeImage.DOFade(1.0f, 1.0f).SetUpdate(true).OnComplete(() =>
+        fadeImage.DOFade(1.0f, 0.5f).SetUpdate(true).OnComplete(() =>
         {
-            StartCoroutine(DeferredCallFadeOutAction(1f*0.8f,action));
-            fadeImage.DOFade(0.0f, 1.0f).SetUpdate(true).SetDelay(1f).OnComplete(()=> fadeCanvas.enabled = false);
+            StartCoroutine(DeferredCallFadeOutAction(0.5f*0.8f,action));
+            fadeImage.DOFade(0.0f, 0.5f).SetUpdate(true).SetDelay(0.5f).OnComplete(()=> fadeCanvas.enabled = false);
         });
     }
     #endregion
