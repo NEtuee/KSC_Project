@@ -29,9 +29,11 @@ public class UIManager : ManagerBase
     [SerializeField] private Canvas backGroundCanvas;
 
     [Header("CrossHair")]
+    [SerializeField] private Canvas crossHairCanvas;
     [SerializeField] private CrossHair _crossHair;
 
     [Header("StateUI")]
+    [SerializeField] private Canvas stateUiCanvas;
     [SerializeField] private FadeUI statusUi;
     [SerializeField] private FadeUI _hpBar;
     [SerializeField] private EnergyUI _energyIcon;
@@ -476,6 +478,16 @@ public class UIManager : ManagerBase
             var data = MessageDataPooling.CastData<FloatData>(msg.data);
             informationUi.ShowTime = data.value;
         });
+
+        AddAction(MessageTitles.uimanager_activePlayUi, (msg) =>
+         {
+             var data = MessageDataPooling.CastData<BoolData>(msg.data);
+             if (data.value == false)
+             {
+                 crossHairCanvas.enabled = data.value;
+                 statusUi.SetVisible(false,0.1f);
+             }
+         });
     }
 
     public override void Initialize()

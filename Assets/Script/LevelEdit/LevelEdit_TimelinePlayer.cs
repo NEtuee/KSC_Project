@@ -82,6 +82,10 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
                     camData.yaw = endTransform.eulerAngles.y;
                     SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
                 }
+
+                var canvasEnable = MessageDataPooling.GetMessageData<MD.BoolData>();
+                canvasEnable.value = false;
+                SendMessageEx(MessageTitles.uimanager_activePlayUi, GetSavedNumber("UIManager"), canvasEnable);
             };
 
             SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);
@@ -239,6 +243,10 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             //rotateLock.value = false;
             //SendMessageEx(MessageTitles.cameramanager_cameraRotateLock, GetSavedNumber("CameraManager"), rotateLock);
             SendMessageEx(MessageTitles.playermanager_ActiveInput, GetSavedNumber("PlayerManager"), null);
+
+            var canvasEnable = MessageDataPooling.GetMessageData<MD.BoolData>();
+            canvasEnable.value = true;
+            SendMessageEx(MessageTitles.uimanager_activePlayUi, GetSavedNumber("UIManager"), canvasEnable);
         }
         CUTSCENEPLAY = false;
 

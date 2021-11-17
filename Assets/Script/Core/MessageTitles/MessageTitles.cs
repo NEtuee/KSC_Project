@@ -246,6 +246,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort uimanager_SetShowTimeInformationUi = 0x0344;
 
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort uimanager_activePlayUi = 0x0345;
+
     #endregion
 
     /// <summary>
