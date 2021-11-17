@@ -2211,7 +2211,7 @@ GameObject:
   - component: {fileID: 123724413}
   - component: {fileID: 123724412}
   m_Layer: 0
-  m_Name: New Level Object
+  m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3936,20 +3936,20 @@ MonoBehaviour:
   - id: 1
   - id: 2
   edges:
-  - GUID: cd7bfb44-9b21-43a8-8258-39e11c20c2b4
-    owner: {fileID: 1408387427}
-    inputNodeGUID: 8451e376-d1a2-415a-a703-1b1d5e74256c
-    outputNodeGUID: 7bcf8aef-7c2b-4fc7-b707-ef3719838fbf
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: b6434e7e-f886-4628-bdd6-7732e89956f0
     owner: {fileID: 1408387427}
     inputNodeGUID: 8451e376-d1a2-415a-a703-1b1d5e74256c
     outputNodeGUID: d5a8f5b3-113a-4c77-8530-7a877e31f48a
     inputFieldName: obj
     outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 4ddec095-542c-4180-9127-1b5df5050253
+    owner: {fileID: 1408387427}
+    inputNodeGUID: 8451e376-d1a2-415a-a703-1b1d5e74256c
+    outputNodeGUID: 00ea1ea3-c7da-4d3a-aa2a-96c02888df8e
+    inputFieldName: executed
+    outputFieldName: executes
     inputPortIdentifier: 
     outputPortIdentifier: 
   groups: []
@@ -3976,26 +3976,11 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: ObjectInitializeEntryNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: 7bcf8aef-7c2b-4fc7-b707-ef3719838fbf
-        computeOrder: 0
-        position:
-          serializedVersion: 2
-          x: 504
-          y: 305
-          width: 100
-          height: 100
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-    00000001:
       type: {class: TimelinePlayerNode, ns: , asm: Assembly-CSharp}
       data:
         nodeCustomName: 
         GUID: d5a8f5b3-113a-4c77-8530-7a877e31f48a
-        computeOrder: 1
+        computeOrder: 0
         position:
           serializedVersion: 2
           x: 401
@@ -4006,7 +3991,7 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         output: {fileID: 1252179788}
-    00000002:
+    00000001:
       type: {class: TimelinePlayNode, ns: , asm: Assembly-CSharp}
       data:
         nodeCustomName: 
@@ -4022,6 +4007,21 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         obj: {fileID: 0}
+    00000002:
+      type: {class: SceneChangedEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 00ea1ea3-c7da-4d3a-aa2a-96c02888df8e
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 622
+          y: 316.5
+          width: 165
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
     00000003:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
