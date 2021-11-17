@@ -47,6 +47,10 @@ public class StageManagerEx : ManagerBase
             SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
         });
 
+        AddAction(MessageTitles.scene_sceneChanged, (x) =>
+        {
+            HandleBroadcastMessage(x);
+        });
         AddAction(MessageTitles.boolTrigger_getTriggerAsset,GetStageTriggerAsset);
         AddAction(MessageTitles.boolTrigger_getTrigger,GetStageTrigger);
         AddAction(MessageTitles.boolTrigger_setTrigger,SetStageTrigger);
