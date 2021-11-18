@@ -18,7 +18,7 @@ public class DissolveControl : MonoBehaviour
         if (!_progress)
             return;
 
-        _time += Time.deltaTime;
+        _time += _speed * Time.deltaTime;
         if(_time >= 1f)
         {
             _time = 1f;

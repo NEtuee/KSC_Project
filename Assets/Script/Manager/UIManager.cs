@@ -29,9 +29,11 @@ public class UIManager : ManagerBase
     [SerializeField] private Canvas backGroundCanvas;
 
     [Header("CrossHair")]
+    [SerializeField] private Canvas crossHairCanvas;
     [SerializeField] private CrossHair _crossHair;
 
     [Header("StateUI")]
+    [SerializeField] private Canvas stateUiCanvas;
     [SerializeField] private FadeUI statusUi;
     [SerializeField] private FadeUI _hpBar;
     [SerializeField] private EnergyUI _energyIcon;
@@ -80,13 +82,13 @@ public class UIManager : ManagerBase
     [SerializeField] private Canvas scanMakerCanvas;
     [SerializeField] private ScanMakerPool scanMakerPool;
 
-    [Header("DroneUI")]
-    [SerializeField] private Canvas droneUiCanvas;
-    [SerializeField] private Image droneCoolTimeCircle;
+    //[Header("DroneUI")]
+    //[SerializeField] private Canvas droneUiCanvas;
+    //[SerializeField] private Image droneCoolTimeCircle;
 
-    [Header("3D Ojbect UI")]
-    [SerializeField] private HorizontalGageCtrl quickStandingGage;
-    [SerializeField] private HorizontalGageCtrl dashGage;
+    //[Header("3D Ojbect UI")]
+    //[SerializeField] private HorizontalGageCtrl quickStandingGage;
+    //[SerializeField] private HorizontalGageCtrl dashGage;
 
     [Header("KeyGuide Sprite")]
     [SerializeField] private Image keyGuideImage;
@@ -368,37 +370,37 @@ public class UIManager : ManagerBase
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
          });
 
-        AddAction(MessageTitles.uimanager_visibleScanCoolTimeUi, (msg) =>
-         {
-             BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
-             droneUiCanvas.enabled = data.value;
-         });
+        //AddAction(MessageTitles.uimanager_visibleScanCoolTimeUi, (msg) =>
+        // {
+        //     BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
+        //     droneUiCanvas.enabled = data.value;
+        // });
 
-        AddAction(MessageTitles.uimanager_setScanCoolTimeValue, (msg) =>
-        {
-            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
-            droneCoolTimeCircle.fillAmount = data.value;
-        });
+        //AddAction(MessageTitles.uimanager_setScanCoolTimeValue, (msg) =>
+        //{
+        //    FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+        //    droneCoolTimeCircle.fillAmount = data.value;
+        //});
 
         AddAction(MessageTitles.uimanager_setChargingTextColor, (msg) =>
         {
-            ColorData data = MessageDataPooling.CastData<ColorData>(msg.data);
-            gunChargeValueText.color = data.value;
+            //ColorData data = MessageDataPooling.CastData<ColorData>(msg.data);
+            //gunChargeValueText.color = data.value;
         });
 
-        AddAction(MessageTitles.uimanager_setFactorQuickStandingCoolTime, (msg) =>
-         {
-             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
-             if(quickStandingGage != null)
-                 quickStandingGage.SetFactor(data.value);
-         });
+        //AddAction(MessageTitles.uimanager_setFactorQuickStandingCoolTime, (msg) =>
+        // {
+        //     FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+        //     if(quickStandingGage != null)
+        //         quickStandingGage.SetFactor(data.value);
+        // });
 
-        AddAction(MessageTitles.uimanager_setFactorDashCoolTime, (msg) =>
-        {
-            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
-            if (dashGage != null)
-                dashGage.SetFactor(data.value);
-        });
+        //AddAction(MessageTitles.uimanager_setFactorDashCoolTime, (msg) =>
+        //{
+        //    FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+        //    if (dashGage != null)
+        //        dashGage.SetFactor(data.value);
+        //});
 
         AddAction(MessageTitles.uimanager_enableDroneStatusUi, (msg) =>
         {
@@ -476,6 +478,16 @@ public class UIManager : ManagerBase
             var data = MessageDataPooling.CastData<FloatData>(msg.data);
             informationUi.ShowTime = data.value;
         });
+
+        AddAction(MessageTitles.uimanager_activePlayUi, (msg) =>
+         {
+             var data = MessageDataPooling.CastData<BoolData>(msg.data);
+             if (data.value == false)
+             {
+                 crossHairCanvas.enabled = data.value;
+                 statusUi.SetVisible(false,0.1f);
+             }
+         });
     }
 
     public override void Initialize()
@@ -748,12 +760,12 @@ public class UIManager : ManagerBase
     public void FadeIn(Action action = null)
     {
         fadeCanvas.enabled = true;
-        fadeImage.DOFade(1.0f, 0.5f).SetUpdate(true).OnComplete(()=>action?.Invoke());
+        fadeImage.DOFade(1.0f, 0.3f).SetUpdate(true).OnComplete(()=>action?.Invoke());
     }
 
     public void FadeOut(Action action = null)
     {
-        fadeImage.DOFade(0.0f, 0.5f).SetUpdate(true).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
+        fadeImage.DOFade(0.0f, 0.3f).SetUpdate(true).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
     }
 
 
@@ -785,10 +797,10 @@ public class UIManager : ManagerBase
     public void FadeInOut(Action action)
     {
         fadeCanvas.enabled = true;
-        fadeImage.DOFade(1.0f, 1.0f).SetUpdate(true).OnComplete(() =>
+        fadeImage.DOFade(1.0f, 0.5f).SetUpdate(true).OnComplete(() =>
         {
-            StartCoroutine(DeferredCallFadeOutAction(1f*0.8f,action));
-            fadeImage.DOFade(0.0f, 1.0f).SetUpdate(true).SetDelay(1f).OnComplete(()=> fadeCanvas.enabled = false);
+            StartCoroutine(DeferredCallFadeOutAction(0.5f*0.8f,action));
+            fadeImage.DOFade(0.0f, 0.5f).SetUpdate(true).SetDelay(0.5f).OnComplete(()=> fadeCanvas.enabled = false);
         });
     }
     #endregion

@@ -117,4 +117,22 @@ public class FadeUI : MonoBehaviour
             Fade(0f,1.0f);
         }
     }
+
+    public void SetVisible(bool active, float time)
+    {
+        if (active)
+        {
+            _currentVisibleTime = remainingVisibleTime;
+            if (visible == false)
+            {
+                visible = true;
+                Fade(1f, time);
+            }
+        }
+        else
+        {
+            visible = false;
+            Fade(0f, time);
+        }
+    }
 }

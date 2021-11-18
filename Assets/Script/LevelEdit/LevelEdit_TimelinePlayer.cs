@@ -16,6 +16,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public List<GameObject> activeLists = new List<GameObject>();
     public List<GameObject> endActiveLists = new List<GameObject>();
     public Transform endTransform;
+    public Transform endCamTransform;
     public Transform birdyEndPosition;
 
     public bool loadNextLevel = false;
@@ -26,6 +27,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
     private CinemachineBrain _mainCamBrain;
     private CameraManager _camManager;
+
 
     public override void Assign()
     {
@@ -82,6 +84,10 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
                     camData.yaw = endTransform.eulerAngles.y;
                     SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
                 }
+
+                var canvasEnable = MessageDataPooling.GetMessageData<MD.BoolData>();
+                canvasEnable.value = false;
+                SendMessageEx(MessageTitles.uimanager_activePlayUi, GetSavedNumber("UIManager"), canvasEnable);
             };
 
             SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);
@@ -93,12 +99,12 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             var data = MessageDataPooling.GetMessageData<MD.BrainUpdateMethodData>();
             data.update = CinemachineBrain.UpdateMethod.SmartUpdate;
             data.blend = CinemachineBrain.BrainUpdateMethod.LateUpdate;
-            SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod,GetSavedNumber("CameraManager"),data);
-    
+            SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod, GetSavedNumber("CameraManager"), data);
+
             TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
-            TrackAsset track = timelineAsset.GetOutputTrack(1) ;
+            TrackAsset track = timelineAsset.GetOutputTrack(1);
             playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
-            playableDirector.SetGenericBinding (track, _mainCamBrain);
+            playableDirector.SetGenericBinding(track, _mainCamBrain);
             playableDirector.Play();
         }
 
@@ -121,6 +127,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
             actionData.value = () => {
                 SendMessageEx(MessageTitles.cutscene_stop, GetSavedNumber("CutsceneManager"), null);
+
                 playableDirector.Stop();
                 CUTSCENEPLAY = false;
 
@@ -175,6 +182,15 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         {
             SendMessageEx(MessageTitles.playermanager_ragdoll, GetSavedNumber("PlayerManager"), null);
         }
+
+        if(endCamTransform != null)
+        {
+            MD.PitchYawPositionData camData = MessageDataPooling.GetMessageData<MD.PitchYawPositionData>();
+            camData.position = endCamTransform.position;
+            camData.pitch = endCamTransform.rotation.eulerAngles.x;
+            camData.yaw = endCamTransform.rotation.eulerAngles.y;
+            SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
+        }
     }
 
     public void LoadSceneFromManager(string target)
@@ -226,7 +242,9 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     {
         SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod,GetSavedNumber("CameraManager"),null);
         SendMessageEx(MessageTitles.cutscene_stop, GetSavedNumber("CutsceneManager"), null);
+                
         playableDirector.Stop();
+
         if (playerDisable)
         {
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
@@ -239,6 +257,10 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             //rotateLock.value = false;
             //SendMessageEx(MessageTitles.cameramanager_cameraRotateLock, GetSavedNumber("CameraManager"), rotateLock);
             SendMessageEx(MessageTitles.playermanager_ActiveInput, GetSavedNumber("PlayerManager"), null);
+
+            var canvasEnable = MessageDataPooling.GetMessageData<MD.BoolData>();
+            canvasEnable.value = true;
+            SendMessageEx(MessageTitles.uimanager_activePlayUi, GetSavedNumber("UIManager"), canvasEnable);
         }
         CUTSCENEPLAY = false;
 

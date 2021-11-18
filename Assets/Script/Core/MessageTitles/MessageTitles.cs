@@ -246,6 +246,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort uimanager_SetShowTimeInformationUi = 0x0344;
 
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort uimanager_activePlayUi = 0x0345;
+
     #endregion
 
     /// <summary>
@@ -491,7 +496,7 @@ public static partial class MessageTitles
     public const ushort playermanager_hidePlayer = 0x0907;
 
     /// <summary>
-    /// data = bool
+    /// data = null
     /// </summary>
     public const ushort playermanager_ragdoll = 0x0908;
 
