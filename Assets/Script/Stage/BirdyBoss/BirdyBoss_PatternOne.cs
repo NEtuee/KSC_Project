@@ -33,7 +33,8 @@ public class BirdyBoss_PatternOne : ObjectBase
         LoopPatternStart,
         LoopPatternEnd,
         LoopPatternEndFence,
-
+        ActiveRandomTentacle,
+        TentacleFence,
 
         PatternEND,
     };
@@ -96,6 +97,9 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     [Header("Platform")]
     public BirdyBoss_PlatformCut platformCut;
+
+    [Header("Tentacle")]
+    public BirdyBoss_TentacleControl tentacleControl;
 
     public int recentlyLoop;
 
@@ -674,6 +678,20 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddFence(name,()=>
                 {
                     return !loopSequences[recentlyLoop].active;
+                });
+            }
+            else if (item.type == EventEnum.ActiveRandomTentacle)
+            {
+                _timeCounter.AddSequence(name,0f, null, (x) =>
+                {
+                    tentacleControl.StartRandomTentacle();
+                });
+            }
+            else if (item.type == EventEnum.TentacleFence)
+            {
+                _timeCounter.AddFence(name, () =>
+                {
+                    return !tentacleControl.IsTentacleActivate();
                 });
             }
         }
