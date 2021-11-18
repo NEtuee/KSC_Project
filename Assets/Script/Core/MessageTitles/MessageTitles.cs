@@ -496,7 +496,7 @@ public static partial class MessageTitles
     public const ushort playermanager_hidePlayer = 0x0907;
 
     /// <summary>
-    /// data = bool
+    /// data = null
     /// </summary>
     public const ushort playermanager_ragdoll = 0x0908;
 
