@@ -36,6 +36,8 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
 
     public bool deleteY = false;
 
+    private float _timer = 1f;
+
     private Collider _myCollider;
     private PlayerUnit _player;
     private PlayerRagdoll _ragdoll;
@@ -64,9 +66,11 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
 
     public override void Progress(float deltaTime)
     {
-        if(_ragdoll.state == PlayerRagdoll.RagdollState.Ragdoll)
-                return;
-
+        if (_ragdoll.state == PlayerRagdoll.RagdollState.Ragdoll || _timer > 0f)
+        {
+            _timer -= deltaTime;
+            return;
+        }
         if(eventType == EventType.Grab)
         {
             var childCount = transform.childCount;
@@ -90,7 +94,7 @@ public class LevelEdit_RagdollCollider : UnTransfromObjectBase
         }
         else if(eventType == EventType.Collision)
         {
-            var playerPos = _ragdoll.transform.position;
+            var playerPos = _player.transform.position;
             var closest = _myCollider.ClosestPoint(playerPos);
             var dist = Vector3.Distance(playerPos,closest);
 

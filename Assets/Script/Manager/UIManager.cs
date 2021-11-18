@@ -82,13 +82,13 @@ public class UIManager : ManagerBase
     [SerializeField] private Canvas scanMakerCanvas;
     [SerializeField] private ScanMakerPool scanMakerPool;
 
-    [Header("DroneUI")]
-    [SerializeField] private Canvas droneUiCanvas;
-    [SerializeField] private Image droneCoolTimeCircle;
+    //[Header("DroneUI")]
+    //[SerializeField] private Canvas droneUiCanvas;
+    //[SerializeField] private Image droneCoolTimeCircle;
 
-    [Header("3D Ojbect UI")]
-    [SerializeField] private HorizontalGageCtrl quickStandingGage;
-    [SerializeField] private HorizontalGageCtrl dashGage;
+    //[Header("3D Ojbect UI")]
+    //[SerializeField] private HorizontalGageCtrl quickStandingGage;
+    //[SerializeField] private HorizontalGageCtrl dashGage;
 
     [Header("KeyGuide Sprite")]
     [SerializeField] private Image keyGuideImage;
@@ -370,37 +370,37 @@ public class UIManager : ManagerBase
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
          });
 
-        AddAction(MessageTitles.uimanager_visibleScanCoolTimeUi, (msg) =>
-         {
-             BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
-             droneUiCanvas.enabled = data.value;
-         });
+        //AddAction(MessageTitles.uimanager_visibleScanCoolTimeUi, (msg) =>
+        // {
+        //     BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
+        //     droneUiCanvas.enabled = data.value;
+        // });
 
-        AddAction(MessageTitles.uimanager_setScanCoolTimeValue, (msg) =>
-        {
-            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
-            droneCoolTimeCircle.fillAmount = data.value;
-        });
+        //AddAction(MessageTitles.uimanager_setScanCoolTimeValue, (msg) =>
+        //{
+        //    FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+        //    droneCoolTimeCircle.fillAmount = data.value;
+        //});
 
         AddAction(MessageTitles.uimanager_setChargingTextColor, (msg) =>
         {
-            ColorData data = MessageDataPooling.CastData<ColorData>(msg.data);
-            gunChargeValueText.color = data.value;
+            //ColorData data = MessageDataPooling.CastData<ColorData>(msg.data);
+            //gunChargeValueText.color = data.value;
         });
 
-        AddAction(MessageTitles.uimanager_setFactorQuickStandingCoolTime, (msg) =>
-         {
-             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
-             if(quickStandingGage != null)
-                 quickStandingGage.SetFactor(data.value);
-         });
+        //AddAction(MessageTitles.uimanager_setFactorQuickStandingCoolTime, (msg) =>
+        // {
+        //     FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+        //     if(quickStandingGage != null)
+        //         quickStandingGage.SetFactor(data.value);
+        // });
 
-        AddAction(MessageTitles.uimanager_setFactorDashCoolTime, (msg) =>
-        {
-            FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
-            if (dashGage != null)
-                dashGage.SetFactor(data.value);
-        });
+        //AddAction(MessageTitles.uimanager_setFactorDashCoolTime, (msg) =>
+        //{
+        //    FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
+        //    if (dashGage != null)
+        //        dashGage.SetFactor(data.value);
+        //});
 
         AddAction(MessageTitles.uimanager_enableDroneStatusUi, (msg) =>
         {

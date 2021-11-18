@@ -349,7 +349,7 @@ public class PlayerRagdoll : MonoBehaviour
         isFlyRagdoll = true;
         ActiveRagdoll(true);
         SetRagdollContainer(true);
-        anim.GetBoneTransform(HumanBodyBones.Head).GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+        //anim.GetBoneTransform(HumanBodyBones.Head).GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
         _player.ChangeState(PlayerUnit.ragdollState);
         ragdollTime = Time.time;
     }
