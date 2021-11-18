@@ -1117,7 +1117,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     {
         currentDashCoolTime.Value = _timer.IncreaseTimerSelf("Dash", out bool limit, Time.fixedDeltaTime);
 
-        if (limit)
+        if (limit && bCanDash == false)
         {
             bCanDash = true;
             var booldata = MessageDataPooling.GetMessageData<BoolData>();

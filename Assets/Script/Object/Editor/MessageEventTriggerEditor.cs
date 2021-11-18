@@ -46,5 +46,9 @@ public class MessageEventTriggerEditor : Editor
         {
             eventTrigger.missionUiDisspearPack.time = EditorGUILayout.FloatField("DisappearTime", eventTrigger.missionUiDisspearPack.time);
         }
+        else if (eventTrigger.message == MessageTitleEnum.PlayerRagdoll)
+        {
+
+        }
     }
 }

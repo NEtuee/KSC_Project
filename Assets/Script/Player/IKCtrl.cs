@@ -202,7 +202,10 @@ public class IKCtrl : MonoBehaviour
 
     private void AdjustFeetTarget(ref Vector3 feetPositions, HumanBodyBones foot)
     {
-        feetPositions = animator.GetBoneTransform(foot).position;
-        feetPositions.y = transform.position.y + heightFromGroundRaycast;
+        if (animator != null)
+        {
+            feetPositions = animator.GetBoneTransform(foot).position;
+            feetPositions.y = transform.position.y + heightFromGroundRaycast;
+        }
     }
 }
