@@ -152,6 +152,7 @@ namespace MessageSender
         LevelLineSetAlphabet = MessageTitles.uimanager_SetLevelLineAlphabet,
         ActiveInformationUi = MessageTitles.uimanager_AppearInformationUi,
         SetTimeInformationUi = MessageTitles.uimanager_SetShowTimeInformationUi,
-        DisappearMissionUi = MessageTitles.uimanager_DisappearMissionUi
+        DisappearMissionUi = MessageTitles.uimanager_DisappearMissionUi,
+        PlayerRagdoll = MessageTitles.playermanager_ragdoll
     }
 }
