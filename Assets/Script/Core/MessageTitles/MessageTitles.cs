@@ -30,9 +30,9 @@ public static partial class MessageTitles
     public const ushort uimanager_activecrosshair = 0x0301;
 
     /// <summary>
-    /// data = int(1, 2, 3)
+    /// data = null
     /// </summary>
-    public const ushort uimanager_setcrosshairphase = 0x0302;
+    public const ushort uimanager_setChargeComplete = 0x0302;
 
     /// <summary>
     /// data = StateBarSetValueType
@@ -194,6 +194,63 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort uimanager_setDroneHpValue = 0x0334;
 
+    /// <summary>
+    /// data = ShakeStackCameraData
+    /// </summary>
+    public const ushort uimanager_shakeStackCameraCanvas = 0x0335;
+
+    /// <summary>
+    /// data = ShakeStackCameraData
+    /// </summary>
+    public const ushort uimanager_shakeAmountStackCameraCanvas = 0x0336;
+
+    /// <summary>
+    /// data = Transform
+    /// </summary>
+    public const ushort uimanager_activeTargetMakerUiAndSetTarget = 0x0337;
+
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_DisableTargetMakerUi = 0x0338;
+
+    /// <summary>
+    /// data = String
+    /// </summary>
+    public const ushort uimanager_ActiveLeveLineUIAndSetBossName = 0x0339;
+
+    /// <summary>
+    /// data = String
+    /// </summary>
+    public const ushort uimanager_AppearMissionUiAndSetKey = 0x0340;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_DisappearMissionUi = 0x0341;
+
+    /// <summary>
+    /// data = LevelLineAlphabetData
+    /// </summary>
+    public const ushort uimanager_SetLevelLineAlphabet = 0x0342;
+
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort uimanager_AppearInformationUi = 0x0343;
+
+    /// <summary>
+    /// data = FloatData
+    /// </summary>
+    public const ushort uimanager_SetShowTimeInformationUi = 0x0344;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort uimanager_activePlayUi = 0x0345;
+
     #endregion
 
     /// <summary>
@@ -281,6 +338,21 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort cameramanager_generaterecoilimpluseSetForce = 0x0417;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort cameramanager_initCameraPositionAndRotation = 0x0418;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort cameramanager_cameraSideLock = 0x0419;
+
+    /// <summary>
+    /// data = BoolData
+    /// </summary>
+    public const ushort cameramanager_cameraRotateLock = 0x0420;
+
     #region EffectManager
 
     /// <summary>
@@ -297,6 +369,7 @@ public static partial class MessageTitles
     /// data = EffectActiveData
     /// </summary>
     public const ushort effectmanager_activeeffectsetparent = 0x0703;
+
 
     #endregion
 
@@ -388,6 +461,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort player_blockQuickStand = 0x0916;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort player_animatiorStateChangeDefault = 0x0917;
+
     #endregion
 
     #region PlayerManager
@@ -441,6 +519,31 @@ public static partial class MessageTitles
 
     public const ushort playermanager_setDroneTransform = 0x0918;
     public const ushort playermanager_setDroneCanMove = 0x0919;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort playermanager_droneTextByKey = 0x0920;
+
+    /// <summary>
+    /// data = DroneTextKeyAndDurationData
+    /// </summary>
+    public const ushort playermanager_droneTextAndDurationByKey = 0x0921;
+
+    /// <summary>
+    /// data = string
+    /// </summary>
+    public const ushort playermanager_SetDialogName = 0x0922;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort playermanager_ActiveInput = 0x0923;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort playermanager_DeactivateInput = 0x0924;
 
     #endregion
 

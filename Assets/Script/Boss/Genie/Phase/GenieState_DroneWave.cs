@@ -75,7 +75,7 @@ public class GenieState_DroneWave : GenieStateBase
         _droneLinePool.AddCreateDelegate(target, droneSpinTime,droneApearTime,droneStartWaitTime,droneEndWaitTime);
 
         _timeCounter.CreateSequencer("Start");
-        _timeCounter.AddSequence("Start",beforeGroundHitTime,LookTarget,(x)=>{target.ChangeAnimation(10);});
+        _timeCounter.AddSequence("Start",beforeGroundHitTime,LookTarget,(x)=>{target.ChangeAnimation(10);target.CreateEyeLight();});
         _timeCounter.AddSequence("Start",groundHitStartTime,BeforeGroundCut,GroundDisapear);
         _timeCounter.AddSequence("Start",patternStartTime,null,null);
         
@@ -139,6 +139,8 @@ public class GenieState_DroneWave : GenieStateBase
         var type = info.type == WavePatternEvent.DroneType.CoreDrone;
 
         var droneLine = _droneLinePool.Active(transform.position,Quaternion.identity);
+
+        droneLine.Turn((info.direction == WavePatternEvent.Direction.Left ? 0f : 180f),(info.direction == WavePatternEvent.Direction.Left ? 0.8f : -0.8f));
         droneLine.Active(info.heightGraph,transform.position,startDir,endDir,droneStartHeight,height,type);
 
         _currentPattern = _currentPattern + 1 >= patternEvents.Count ? 0 : _currentPattern + 1;

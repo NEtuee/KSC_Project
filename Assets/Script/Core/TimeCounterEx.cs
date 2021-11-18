@@ -103,6 +103,14 @@ public class TimeCounterEx
             processTime = 0f;
         }
 
+        public SequenceItem GetCurrentSequence()
+        {
+            if(isEnd && current >= sequences.Count)
+                return null;
+            
+            return sequences[current];
+        }
+
         public void AddSequence(float time, System.Action<float> processEvent = null, System.Action<float> triggerEvent = null)
         {
             SequenceItem sq = new SequenceItem();

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class A1_Sector4_floor : MonoBehaviour
 {
+    public UnityEngine.Events.UnityEvent endEvent;
     public Material originMat;
     public Material targetMat;
 
@@ -132,6 +133,7 @@ public class A1_Sector4_floor : MonoBehaviour
 
     public void EntranceDownMove()
     {
+        //endEvent?.Invoke();
         foreach(var item in entranceGrid)
         {
             item.SetMove(false,0f,entranceMoveSpeed);
@@ -140,13 +142,14 @@ public class A1_Sector4_floor : MonoBehaviour
 
     public void GroundDownMove(float t)
     {
-        respawnTrigger.transform.SetParent(respawnTile.transform);
-        respawnPoint.transform.SetParent(respawnTile.transform);
+        endEvent?.Invoke();
+        // respawnTrigger.transform.SetParent(respawnTile.transform);
+        // respawnPoint.transform.SetParent(respawnTile.transform);
         
-        foreach(var item in groundGrid)
-        {
-            item.SetMove(false,0f,groundMoveSpeed);
-        }
+        // foreach(var item in groundGrid)
+        // {
+        //     item.SetMove(false,0f,groundMoveSpeed);
+        // }
     }
 
     public void GroundDownMove()

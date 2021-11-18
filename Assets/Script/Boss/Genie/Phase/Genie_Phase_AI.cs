@@ -7,10 +7,16 @@ public class Genie_Phase_AI : PathfollowObjectBase
     public StateProcessor stateProcessor;
     public Transform respawnPoint;
     public Transform respawnTarget;
+    public Transform explosionTarget;
     public Transform body;
+    public Transform eyelightPosition;
     public Boogie_GridControll gridControll;
     public Animator animatorController;
+    public ParticleSystem leftHandEffect;
     public float bodyRotateSpeed = 5f;
+
+    public Transform leftHandHitEffect;
+    public Transform rightHandHitEffect;
 
     private PlayerUnit _player;
     private TimeCounterEx _timeCounter = new TimeCounterEx();
@@ -59,6 +65,17 @@ public class Genie_Phase_AI : PathfollowObjectBase
 
     public void ChangeAnimation(int code)
     {
+        if(code == 1)
+        {
+            MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+            data.key = "CannonExplosion";
+            data.position = explosionTarget.position;
+            data.rotation = explosionTarget.rotation;
+
+            SendMessageEx(MessageTitles.effectmanager_activeeffect,
+                        UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+        }
         animatorController.SetTrigger("Change");
         animatorController.SetInteger("Code",code);
     }
@@ -76,5 +93,50 @@ public class Genie_Phase_AI : PathfollowObjectBase
         _respawnCube.special = true;
 
         respawnPoint.position = _respawnCube.transform.position + Vector3.up;
+    }
+
+    public void CreateEyeLight()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+        data.key = "EyelightBig";
+        data.position = eyelightPosition.position;
+        data.rotation = eyelightPosition.rotation;
+        data.parent = eyelightPosition;
+
+        SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,
+                    UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+    }
+
+    public void CreateLeftHit()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+        data.key = "HeavyHit";
+        data.position = leftHandHitEffect.position;
+
+        SendMessageEx(MessageTitles.effectmanager_activeeffect,
+                    UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+    }
+
+    public void CreateRightHit()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+        data.key = "HeavyHit";
+        data.position = rightHandHitEffect.position;
+
+        SendMessageEx(MessageTitles.effectmanager_activeeffect,
+                    UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+    }
+
+    public void PlayLeftHandEffect()
+    {
+        leftHandEffect.Play();
+    }
+
+    public void PauseLeftHandEffect()
+    {
+        leftHandEffect.Stop(true);
     }
 }

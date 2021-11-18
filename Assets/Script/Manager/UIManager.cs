@@ -29,10 +29,14 @@ public class UIManager : ManagerBase
     [SerializeField] private Canvas backGroundCanvas;
 
     [Header("CrossHair")]
+    [SerializeField] private Canvas crossHairCanvas;
     [SerializeField] private CrossHair _crossHair;
 
     [Header("StateUI")]
+    [SerializeField] private Canvas stateUiCanvas;
+    [SerializeField] private FadeUI statusUi;
     [SerializeField] private FadeUI _hpBar;
+    [SerializeField] private EnergyUI _energyIcon;
     [SerializeField] private FadeUI _staminaBar;
     [SerializeField] private FadeUI _energyBar;
     [SerializeField] private HpPackUI _hpPackUI;
@@ -94,7 +98,36 @@ public class UIManager : ManagerBase
     [Header("Drone Status UI")]
     [SerializeField] private DroneStatusUI droneStatusUI;
 
+    [Header("Stack Camera Canvas")]
+    [SerializeField] private Transform stackCameraCanvasTransform;
+    private bool _stackCameraCanvasShake = false;
+    private float _stackCameraCanvasShakeTime = 0.0f;
+    private float _stackCameraCanvasShakePower = 0.0f;
+    private float _stackCameraCanvasShakeCurrentPower = 0.0f;
+    private Vector3 _stackCameraCanvasInitPosition = new Vector3();
+
+    [Header("CrossHair")]
+    [SerializeField] private Image centerGage;
+    private const int MAX_LOAD_COUNT = 4;
+    [SerializeField] private Image[] loadCountUi = new Image[MAX_LOAD_COUNT];
+    [SerializeField] private Color highlightColor = Color.white;
+    private int prevLoadCount;
+
+    [Header("TargetMaker")]
+    [SerializeField] private TargetMakerUI targetMakerUi;
+
+    [Header("LevelLineUI")]
+    [SerializeField] private LevelLineUI levelLineUi;
+
+    [Header("MissionUI")]
+    [SerializeField] private MissionUI missionUi;
+
+    [Header("InformationUI")]
+    [SerializeField] private InformationUI informationUi;
+    
+
     private EventSystem _eventSystem;
+    private PlayerUnit _player;
 
     private void Start()
     {
@@ -144,6 +177,11 @@ public class UIManager : ManagerBase
         {
             Debug.LogError("Not Set DamageEffect");
         }
+
+        if (stackCameraCanvasTransform != null)
+        {
+            _stackCameraCanvasInitPosition = stackCameraCanvasTransform.localPosition;
+        }
     }
 
     public override void Assign()
@@ -155,7 +193,10 @@ public class UIManager : ManagerBase
         MessageDataPooling.RegisterMessageData<HpPackValueType>();
 
         AddAction(MessageTitles.uimanager_activecrosshair, ActiveCrossHair);
-        AddAction(MessageTitles.uimanager_setcrosshairphase, SetCrossHairPhase);
+        AddAction(MessageTitles.uimanager_setChargeComplete, (msg)=>
+        {
+            _crossHair.ChargeComplete();
+        });
 
         AddAction(MessageTitles.uimanager_setvaluestatebar, SetValueStateBar);
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
@@ -245,13 +286,36 @@ public class UIManager : ManagerBase
             {
                 aimEnergyBarImage.color = Color.white;
             }
+
+            centerGage.fillAmount = data.value;
         });
+
         AddAction(MessageTitles.uimanager_setgunenergyvalue, (msg) =>
         {
             FloatData data = MessageDataPooling.CastData<FloatData>(msg.data);
             aimEnergyBar.SetBackValue(data.value);
             aimEnergyBar2.fillAmount = data.value / 100.0f;
+
+            int loadCount = (int)(data.value / _player.NoramlGunCost);
+
+            if (prevLoadCount == loadCount)
+                return;
+
+            for(int i = 0; i<MAX_LOAD_COUNT; i++)
+            {
+                if(i < loadCount)
+                {
+                    loadCountUi[i].color = highlightColor;
+                }
+                else
+                {
+                    loadCountUi[i].color = Color.white;
+                }
+            }
+
+            prevLoadCount = loadCount;
         });
+
         AddAction(MessageTitles.uimanager_activegunui, (msg) =>
         {
             BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
@@ -349,6 +413,81 @@ public class UIManager : ManagerBase
             IntData data = MessageDataPooling.CastData<IntData>(msg.data);
             droneStatusUI.SetHpCount(data.value);
         });
+
+        AddAction(MessageTitles.uimanager_shakeStackCameraCanvas, (msg) =>
+        {
+            ShakeStackCameraData data = MessageDataPooling.CastData<ShakeStackCameraData>(msg.data);
+            StartCoroutine(ShakeStackCameraCanvas(data.time, data.power));
+        });
+
+        AddAction(MessageTitles.uimanager_shakeAmountStackCameraCanvas, (msg) =>
+        {
+            ShakeStackCameraData data = MessageDataPooling.CastData<ShakeStackCameraData>(msg.data);
+            StartCoroutine(ShakeAmountStackCameraCanvas(data.time, data.power));
+        });
+
+
+        AddAction(MessageTitles.set_setplayer, (msg) =>
+        {
+            _player = (PlayerUnit)msg.data;
+        });
+
+        AddAction(MessageTitles.uimanager_activeTargetMakerUiAndSetTarget, (msg) =>
+         {
+             targetMakerUi.gameObject.SetActive(true);
+             targetMakerUi.Target = (Transform)msg.data;
+         });
+
+        AddAction(MessageTitles.uimanager_DisableTargetMakerUi, (msg) =>
+        {
+            targetMakerUi.gameObject.SetActive(false);
+        });
+
+        AddAction(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, (msg) =>
+        {
+            var data = (string)msg.data;
+            levelLineUi.SetBossName(data);
+            levelLineUi.Appear();
+        });
+
+        AddAction(MessageTitles.uimanager_AppearMissionUiAndSetKey, (msg) =>
+        {
+            var data = (string)msg.data;
+            missionUi.SetText(data);
+            missionUi.Appear();
+        });
+
+        AddAction(MessageTitles.uimanager_DisappearMissionUi, (msg) =>
+        {
+            missionUi.Dissapear();
+        });
+
+        AddAction(MessageTitles.uimanager_SetLevelLineAlphabet, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<LevelLineAlphabetData>(msg.data);
+            levelLineUi.SetAlphabet(data.value);
+        });
+
+        AddAction(MessageTitles.uimanager_AppearInformationUi, (msg) =>
+        {
+            informationUi.Appear((string)msg.data);
+        });
+
+        AddAction(MessageTitles.uimanager_SetShowTimeInformationUi, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<FloatData>(msg.data);
+            informationUi.ShowTime = data.value;
+        });
+
+        AddAction(MessageTitles.uimanager_activePlayUi, (msg) =>
+         {
+             var data = MessageDataPooling.CastData<BoolData>(msg.data);
+             if (data.value == false)
+             {
+                 crossHairCanvas.enabled = data.value;
+                 statusUi.SetVisible(false,0.1f);
+             }
+         });
     }
 
     public override void Initialize()
@@ -356,6 +495,7 @@ public class UIManager : ManagerBase
         base.Initialize();
 
         SendMessageEx(MessageTitles.videomanager_settargetimage, GetSavedNumber("VideoManager"), videoRawImage);
+        SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
         fadeCanvas.enabled = false;
     }
@@ -445,10 +585,26 @@ public class UIManager : ManagerBase
     {
         base.Progress(deltaTime);
 
-        //if(Keyboard.current.nKey.wasPressedThisFrame)
-        //{
-        //    SendMessageEx(MessageTitles.uimanager_activeInGameTutorial, GetSavedNumber("UIManager"), InGameTutorialCtrl.InGameTutorialType.Climbing);
-        //}
+        if (Keyboard.current.digit3Key.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"), "이우민");
+        }
+
+        if (Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.uimanager_AppearMissionUiAndSetKey, GetSavedNumber("UIManager"), "Test");
+        }
+        if (Keyboard.current.mKey.wasPressedThisFrame)
+        {
+            SendMessageEx(MessageTitles.uimanager_DisappearMissionUi, GetSavedNumber("UIManager"), null);
+        }
+        if (Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+            data.value = 6f;
+            SendMessageEx(MessageTitles.uimanager_SetShowTimeInformationUi, GetSavedNumber("UIManager"), data);
+            SendMessageEx(MessageTitles.uimanager_AppearInformationUi, GetSavedNumber("UIManager"), "Test");
+        }
     }
 
     public void ActivePage(int pageNum)
@@ -544,6 +700,13 @@ public class UIManager : ManagerBase
                 break;
         }
     }
+
+    public void SetChargeComplete()
+    {
+        
+    }
+
+
     #endregion
 
     #region StateBar
@@ -554,15 +717,16 @@ public class UIManager : ManagerBase
         switch(recv.type)
         {
             case StateBarType.HP:
-                _hpBar.SetValue(recv.value,recv.visible);
+                _hpBar.SetValue(recv.value, false);
                 break;
             case StateBarType.Stamina:
                 _staminaBar.SetValue(recv.value,recv.visible);
                 break;
             case StateBarType.Energy:
-                _energyBar.SetValue(recv.value, recv.visible);
+                _energyIcon.SetValue(recv.value, false);
                 break;
         }
+        statusUi.SetVisible(recv.visible);
     }
 
     public void SetValueHpPackUI(Message msg)
@@ -575,10 +739,13 @@ public class UIManager : ManagerBase
     public void SetVisibleAllStateBar(Message msg)
     {
         BoolData data = MessageDataPooling.CastData<BoolData>(msg.data);
-        _hpBar.SetVisible(data.value);
-        _staminaBar.SetVisible(data.value);
-        _energyBar.SetVisible(data.value);
-        _hpPackUI.SetVisible(data.value);
+
+        statusUi.SetVisible(data.value);
+
+        //_hpBar.SetVisible(data.value);
+        //_staminaBar.SetVisible(data.value);
+        //_energyBar.SetVisible(data.value);
+        //_hpPackUI.SetVisible(data.value);
     }
     #endregion
 
@@ -593,12 +760,12 @@ public class UIManager : ManagerBase
     public void FadeIn(Action action = null)
     {
         fadeCanvas.enabled = true;
-        fadeImage.DOFade(1.0f, 0.5f).SetUpdate(true).OnComplete(()=>action?.Invoke());
+        fadeImage.DOFade(1.0f, 0.3f).SetUpdate(true).OnComplete(()=>action?.Invoke());
     }
 
     public void FadeOut(Action action = null)
     {
-        fadeImage.DOFade(0.0f, 0.5f).SetUpdate(true).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
+        fadeImage.DOFade(0.0f, 0.3f).SetUpdate(true).OnComplete(() => { fadeCanvas.enabled = false; action?.Invoke(); });
     }
 
 
@@ -630,10 +797,10 @@ public class UIManager : ManagerBase
     public void FadeInOut(Action action)
     {
         fadeCanvas.enabled = true;
-        fadeImage.DOFade(1.0f, 1.0f).SetUpdate(true).OnComplete(() =>
+        fadeImage.DOFade(1.0f, 0.5f).SetUpdate(true).OnComplete(() =>
         {
-            StartCoroutine(DeferredCallFadeOutAction(1f*0.8f,action));
-            fadeImage.DOFade(0.0f, 1.0f).SetUpdate(true).SetDelay(1f).OnComplete(()=> fadeCanvas.enabled = false);
+            StartCoroutine(DeferredCallFadeOutAction(0.5f*0.8f,action));
+            fadeImage.DOFade(0.0f, 0.5f).SetUpdate(true).SetDelay(0.5f).OnComplete(()=> fadeCanvas.enabled = false);
         });
     }
     #endregion
@@ -749,6 +916,42 @@ public class UIManager : ManagerBase
         SendMessageEx(MessageTitles.scene_loadSceneNotAsync, GetSavedNumber("SceneManager"), data);
     }
 
+    private IEnumerator ShakeStackCameraCanvas(float time, float power)
+    {
+        float curTime = time;
+        float curPower = power;
+
+        while(curTime > 0.0f)
+        {
+            Vector3 shakeFactor = UnityEngine.Random.insideUnitCircle* power;
+            stackCameraCanvasTransform.localPosition =  shakeFactor + _stackCameraCanvasInitPosition;
+
+            curTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        stackCameraCanvasTransform.localPosition =  _stackCameraCanvasInitPosition;
+    }
+
+    private IEnumerator ShakeAmountStackCameraCanvas(float time, float power)
+    {
+        float curTime = time;
+        float curPower = power;
+        float amount = 1f;
+
+        while (curTime > 0.0f)
+        {
+            Vector3 shakeFactor = UnityEngine.Random.insideUnitCircle * power * amount;
+            stackCameraCanvasTransform.localPosition = shakeFactor + _stackCameraCanvasInitPosition;
+            amount = Mathf.Lerp(amount, 0f, curTime / time);
+
+            curTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        stackCameraCanvasTransform.localPosition = _stackCameraCanvasInitPosition;
+    }
+
     public enum PauseMenuState
     {
         Game = 0, Pause,Option, Sound, Display, Control, KeyBinding, Loading, Tutorial, InGameTutorial, GameOver
@@ -792,6 +995,12 @@ namespace MD
         // public Vector3 center;
         // public Vector3 min;
         // public Vector3 max;
+    }
+
+    public class ShakeStackCameraData : MessageData
+    {
+        public float time;
+        public float power;
     }
 }
 //public class HpPackValueType : MessageData

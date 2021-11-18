@@ -144,6 +144,12 @@ public class B11_StageSequencer : ObjectBase
         {
             if(item.type == SequenceItem.EventEnum.SpawnDrone)
             {
+                _timeCounter.AddSequence(name,0f,null,(x)=>{
+                    var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+                    data.key = "B1_5";
+                    SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+                });
+
                 if(item.value == 0)
                 {
                     for(int i = 0; i < item.code; ++i)
@@ -154,6 +160,7 @@ public class B11_StageSequencer : ObjectBase
                             target.transform.position = GetDroneSpawnPosition(item.point).position;
                         });
                     }
+
                 }
                 else
                 {
@@ -354,10 +361,23 @@ public class B11_StageSequencer : ObjectBase
                 });
             }
         }
+
+        _timeCounter.AddSequence(name, 0f, null, (x) =>
+        {
+            var desc = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+            desc.key = "B1_7";
+            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), desc);
+        });
+        
     }
 
     public void DecreaseHP(int factor)
     {
+
+        var desc = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+        desc.key = "B1_6";
+        SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), desc);
+
         _hp -= factor;
         _hp = _hp < 0 ? 0 : _hp;
         var data = MessageDataPooling.GetMessageData<MD.IntData>();

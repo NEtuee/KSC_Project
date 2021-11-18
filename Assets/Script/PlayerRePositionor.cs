@@ -14,7 +14,6 @@ public class PlayerRePositionor : UnTransfromObjectBase
 
     private PlayerUnit _player;
     private Collider collider;
-
     private bool _active;
 
     private TimeCounterEx _timeCounter = new TimeCounterEx();
@@ -122,7 +121,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
                 yield break;
 
             ctrl.ChangeState(PlayerUnit.respawnState);
-            yield return new WaitForSecondsRealtime(1.0f);
+            yield return new WaitForSecondsRealtime(0.4f);
 
             var rot = Quaternion.LookRotation(respawn.forward);
 
@@ -147,7 +146,7 @@ public class PlayerRePositionor : UnTransfromObjectBase
                 yield break;
 
             _player.ChangeState(PlayerUnit.respawnState);
-            yield return new WaitForSecondsRealtime(1.0f);
+            yield return new WaitForSecondsRealtime(0.4f);
             var rot = Quaternion.LookRotation(respawn.forward);
 
             var respawnData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
@@ -162,6 +161,11 @@ public class PlayerRePositionor : UnTransfromObjectBase
             SendMessageEx(MessageTitles.cameramanager_setYawPitch, GetSavedNumber("CameraManager"), data);
             whenFall?.Invoke();
         }
+    }
+
+    public void SetRespawnPoint(Transform tp)
+    {
+        respawn = tp;
     }
 
     protected override void OnDestroy()

@@ -45,8 +45,10 @@ public class CameraManager : ManagerBase
     [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private AnimationCurve blurCurve;
     [SerializeField] private FollowTargetCtrl followTarget;
+    [SerializeField] private Vector3 cameraInitOffset;
     
     private bool isBlendCameraDistance;
+    private bool cameraSideLock = false;
     private float targetDistance;
     private float distanceBlendStartTime;
     private float distanceBlendDuration;
@@ -201,6 +203,27 @@ public class CameraManager : ManagerBase
             var data = MessageDataPooling.CastData<BoolData>(msg.data).value;
             followTarget.SetAim(data);
         });
+
+        AddAction(MessageTitles.cameramanager_initCameraPositionAndRotation, (msg) =>
+        {
+            brainCameraTransfrom.position = _playerTransfrom.TransformPoint(cameraInitOffset);
+            Vector3 rotation = _playerTransfrom.rotation.eulerAngles;
+            followTarget.SetPitchYaw(rotation.x,rotation.y);
+            playerFollowCam.transform.position = _playerTransfrom.TransformPoint(cameraInitOffset);
+        });
+
+        AddAction(MessageTitles.cameramanager_cameraSideLock, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            cameraSideLock = data.value;
+            playerFollowCam3rdPersonComponent.CameraSide = 0.5f;
+        });
+
+        AddAction(MessageTitles.cameramanager_cameraRotateLock, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<BoolData>(msg.data);
+            followTarget.RotateLock = data.value;
+        });
     }
 
     public override void Initialize()
@@ -254,7 +277,8 @@ public class CameraManager : ManagerBase
         var side = Vector3.Dot(cross.normalized,_playerTransfrom.forward);
         var currSide = playerFollowCam3rdPersonComponent.CameraSide;
 
-        playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
+        if(cameraSideLock == false)
+           playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
 
         RadialBlurLerpZero(Time.deltaTime);
     }

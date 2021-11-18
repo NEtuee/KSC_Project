@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Genie_DroneLine : ObjectBase
 {
+    public List<Genie_DroneTilt> drones;
     public AnimationCurve apearCurve;
     public AnimationCurve spinCurve;
 
     public GameObject positionDrone;
     public Genie_CoreDroneAI coreDrone;
+    public NewEmpShield empShield;
 
     private Quaternion _targetQuaternion;
     private float _targetHeight;
@@ -36,6 +38,25 @@ public class Genie_DroneLine : ObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
     }
 
+    public void Turn(float angle, float dir)
+    {
+        foreach(var item in drones)
+        {
+            item.direction = Vector3.right * dir * 0.1f;
+            var euler = item.transform.localEulerAngles;
+            if(item.gameObject == coreDrone.gameObject)
+            {
+                euler.y = angle + 90f;
+            }
+            else
+            {
+                euler.z = angle;
+            }
+            
+            item.transform.localEulerAngles = euler;
+        }
+    }
+
     public void Active(AnimationCurve heightCurve, Vector3 basePosition, Quaternion startQuat, Quaternion endQuat, float startHeight, float endHeight, bool isCore)
     {
         _heightCurve = heightCurve;
@@ -54,6 +75,7 @@ public class Genie_DroneLine : ObjectBase
 
         CoreSet(isCore);
         coreDrone.shield.Reactive();
+        empShield?.Reactive();
 
         _timeCounter.InitSequencer("Process");
         _timeCounter.ProcessSequencer("Process",0f);

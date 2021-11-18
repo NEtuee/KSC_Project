@@ -40,13 +40,21 @@ public class StageManagerEx : ManagerBase
             data.rotation = rotation;
             SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
 
+            SendMessageEx(MessageTitles.player_animatiorStateChangeDefault, GetSavedNumber("Player"), null);
+
             PitchYawPositionData camData = MessageDataPooling.GetMessageData<PitchYawPositionData>();
             camData.position = loadTransform.position;
             camData.pitch = rotation.eulerAngles.x;
             camData.yaw = rotation.eulerAngles.y;
             SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
+            SendMessageEx(MessageTitles.cameramanager_initCameraPositionAndRotation, GetSavedNumber("CameraManager"), null);
         });
 
+        AddAction(MessageTitles.scene_sceneChanged, (msg) =>
+        {
+            var broad = MessagePack(msg.title, boradcastWithoutSenderNumber, msg.data);
+            HandleBroadcastMessage(broad);
+        });
         AddAction(MessageTitles.boolTrigger_getTriggerAsset,GetStageTriggerAsset);
         AddAction(MessageTitles.boolTrigger_getTrigger,GetStageTrigger);
         AddAction(MessageTitles.boolTrigger_setTrigger,SetStageTrigger);

@@ -318,6 +318,7 @@ public class GenieState_DroneSwingWave : GenieStateBase
     public void BeforeGroundHit(float t)
     {
         target.ChangeAnimation(6);
+        target.CreateEyeLight();
     }
 
     public void GroundDisapear(float processTime)

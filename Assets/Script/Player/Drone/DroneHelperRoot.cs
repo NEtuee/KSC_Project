@@ -9,6 +9,7 @@ public class DroneHelperRoot : MonoBehaviour
     public class DescData
     {
         public string desc;
+        public float duration;
         public AudioClip audio;
     }
 
@@ -17,6 +18,7 @@ public class DroneHelperRoot : MonoBehaviour
     [SerializeField] public Drone drone;
     [SerializeField] private Canvas droneDiscriptCanvas;
     [SerializeField] private EnumerateText descriptText;
+    [SerializeField] private TextMeshProUGUI nameText;
 
     [SerializeField] private Vector3 helpStateScale;
     [SerializeField] private Vector3 aimHelpStateScale;
@@ -32,6 +34,9 @@ public class DroneHelperRoot : MonoBehaviour
 
     [SerializeField] private DroneHelper currentHelper;
 
+
+    public string NameText { set => nameText.text = value; }
+
     void Start()
     {
         droneDiscriptCanvas.enabled = false;
@@ -40,6 +45,7 @@ public class DroneHelperRoot : MonoBehaviour
         {
             var item = new DescData();
             item.desc = droneDescript.descripts[i].descript;
+            item.duration = droneDescript.descripts[i].duration;
             item.audio = droneDescript.descripts[i].audioData;
 
             descriptDictionary.Add(droneDescript.descripts[i].key, item);
@@ -60,7 +66,7 @@ public class DroneHelperRoot : MonoBehaviour
         if (helping == true)
         {
             bool limit;
-            timer.IncreaseTimer("Help", hintTime, out limit);
+            timer.IncreaseTimerSelf("Help", hintTime, out limit,Time.deltaTime);
             if (limit == true)
             {
                 helping = false;
@@ -83,7 +89,7 @@ public class DroneHelperRoot : MonoBehaviour
         descriptText.SetTargetString(descriptDictionary[key].desc);
         droneDiscriptCanvas.enabled = true;
         drone.OrderHelp();
-        timer.InitTimer("Help");
+        timer.InitTimer("Help", 0.0f, hintTime);
 
         var audio = descriptDictionary[key].audio;
         if(audio != null)
@@ -95,6 +101,34 @@ public class DroneHelperRoot : MonoBehaviour
 
         return true;
     }
+
+    public bool HelpEvent(string key, float durationTime)
+    {
+        if (descriptDictionary.ContainsKey(key) == false)
+        {
+            Debug.Log(key + " Not Exits Key");
+            return false;
+        }
+
+        active = true;
+        helping = true;
+        descriptText.SetTargetString(descriptDictionary[key].desc);
+        droneDiscriptCanvas.enabled = true;
+        drone.OrderHelp();
+        hintTime = descriptDictionary[key].duration;
+        timer.InitTimer("Help",0.0f,hintTime);
+
+        var audio = descriptDictionary[key].audio;
+        if (audio != null)
+        {
+            audioPlay.Stop();
+            audioPlay.clip = audio;
+            audioPlay.Play();
+        }
+
+        return true;
+    }
+
 
     public bool ShowText(string text)
     {

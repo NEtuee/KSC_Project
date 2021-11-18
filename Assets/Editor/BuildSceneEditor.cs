@@ -159,22 +159,17 @@ public class BuildSceneEditor : EditorWindow
                             Selection.activeObject = item.target;
                         }
                         scene.enabled = GUILayout.Toggle(scene.enabled,item.target.name);
-                        item.canLoad = scene.enabled;
+
+                        if(item.canLoad != scene.enabled)
+                        {
+                            EditorUtility.SetDirty(data);
+                            item.canLoad = scene.enabled;
+                        }
+                        
                         GUILayout.EndHorizontal();
                     }
-                    
-
 
                     stateCount = scene.enabled ? stateCount + 1 : stateCount;
-
-                    // if(scene.enabled && !setTrigger)
-                    // {
-                    //     _setTriggers.SetTrigger(data.setName,true);
-                    // }
-                    // else if(!scene.enabled && setTrigger)
-                    // {
-                    //     _setTriggers.SetTrigger(data.setName,false);
-                    // }
 
                     break;
                 }

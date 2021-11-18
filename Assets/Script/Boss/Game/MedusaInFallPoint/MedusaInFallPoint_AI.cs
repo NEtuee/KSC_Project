@@ -8,6 +8,8 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
 
     public List<IKLegMovement> legs = new List<IKLegMovement>();
 
+    public float damage = 10f;
+
     public Transform target;
     public PlayerUnit player;
     public Animator animator;
@@ -16,6 +18,7 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
     public Transform hitPosition;
 
     public bool launch = false;
+    public bool startActive = true;
 
     public override void Assign()
     {
@@ -35,10 +38,13 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
-        stateProcessor.StateChange("Active");
-        AnimationChange(8);
-
-        SetIKMovement(false);
+        if(startActive)
+        {
+            stateProcessor.StateChange("Active");
+            AnimationChange(8);
+            SetIKMovement(false);
+        }
+        
     }
 
     public override void FixedProgress(float deltaTime)
@@ -52,6 +58,7 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
 
     public void Launch()
     {
+        Debug.Log("aunch");
         launch = true;
         AnimationChange(7);
     }

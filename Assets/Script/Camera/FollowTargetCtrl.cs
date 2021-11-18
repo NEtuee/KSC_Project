@@ -27,7 +27,7 @@ public class FollowTargetCtrl : UnTransfromObjectBase
     [SerializeField] private float _lateTime = 0.0f;
     [SerializeField] private bool isPause;
 
-    [SerializeField]private PlayerUnit _player;
+    [SerializeField] private PlayerUnit _player;
     [SerializeField] private float supportRange = 500.0f;
     [SerializeField] private float supportSpeed = 300.0f;
     [SerializeField] private bool supporting = false;
@@ -37,10 +37,14 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     public List<Transform> _gunTargetObjects = new List<Transform>();
 
-    private float _mouseX;
-    private float _mouseY;
+    [SerializeField] private float _mouseX;
+    [SerializeField] private float _mouseY;
 
     private bool _isAim = false;
+
+    private bool _rotateLock = false;
+
+    public bool RotateLock { get => _rotateLock; set => _rotateLock = value; }
 
     public float YawRotateSpeed
     {
@@ -461,7 +465,8 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
                 Quaternion localRotation = Quaternion.Euler(targetRot.x, targetRot.y, 0.0f);
                 //transform.rotation = localRotation;
-                transform.rotation = Quaternion.RotateTowards(transform.rotation,localRotation,250.0f*Time.fixedDeltaTime);
+                //transform.rotation = Quaternion.RotateTowards(transform.rotation,localRotation,250.0f*Time.fixedDeltaTime);
+                transform.rotation = localRotation;
                 Vector3 targetEuler = transform.rotation.eulerAngles;
                 if (targetRot.x < 0.0f)
                     targetRot = new Vector3(targetEuler.x > pitchLimitMax ? targetEuler.x - 360.0f : targetEuler.x, targetEuler.y, targetEuler.z);
@@ -536,8 +541,11 @@ public class FollowTargetCtrl : UnTransfromObjectBase
 
     public void OnCamera(InputAction.CallbackContext value)
     {
-        if (Time.timeScale == 0f)
+        if (_rotateLock == true || value.performed == false || Time.timeScale == 0f)
+        {
+            _mouseX = _mouseY = 0.0f;
             return;
+        }
 
         Vector2 inputVector = value.ReadValue<Vector2>();
         _mouseY = inputVector.y;

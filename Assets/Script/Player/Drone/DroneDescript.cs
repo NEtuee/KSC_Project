@@ -6,6 +6,7 @@ using UnityEngine;
 public class Descript
 {
     public string key;
+    public float duration;
     [TextArea]public string descript;
     public AudioClip audioData;
 }
