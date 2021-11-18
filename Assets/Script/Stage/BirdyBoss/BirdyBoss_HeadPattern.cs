@@ -42,6 +42,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
     private bool _stemp = false;
     private bool _lookDown = false;
     private bool _inout = false;
+    private bool _groggy = false;
 
     public override void Assign()
     {
@@ -74,8 +75,8 @@ public class BirdyBoss_HeadPattern : ObjectBase
 
             SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
 
-            shieldTarget.gameObject.SetActive(true);
-            shieldTarget.VisibleVisual();
+            //shieldTarget.gameObject.SetActive(true);
+            //shieldTarget.VisibleVisual();
             _inout = true;
         });
 
@@ -84,8 +85,8 @@ public class BirdyBoss_HeadPattern : ObjectBase
         _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveOut, (x)=>{
             transform.localPosition = _localPosition;
 
-            shieldTarget.Reactive();
-            shieldTarget.gameObject.SetActive(false);
+            //shieldTarget.Reactive();
+            //shieldTarget.gameObject.SetActive(false);
 
             _lookDown = false;
             _stemp = false;
@@ -96,6 +97,8 @@ public class BirdyBoss_HeadPattern : ObjectBase
 
         _timeCounterEx.CreateSequencer("RingPattern");
         _timeCounterEx.AddSequence("RingPattern",dissolveTime,null,null);
+
+        _timeCounterEx.InitTimer("groggy", 0f, 0f);
     }
 
     public override void Initialize()
@@ -111,6 +114,17 @@ public class BirdyBoss_HeadPattern : ObjectBase
         if(_inout)
         {
             _inout = !_timeCounterEx.ProcessSequencer("InOut", deltaTime);
+        }
+
+        if(_groggy)
+        {
+            _timeCounterEx.IncreaseTimerSelf("groggy", out var limit, deltaTime);
+            _groggy = !limit;
+            if(limit)
+            {
+                shieldTarget.Reactive();
+                shieldTarget.gameObject.SetActive(false);
+            }
         }
 
         if (!_stemp)
@@ -130,6 +144,21 @@ public class BirdyBoss_HeadPattern : ObjectBase
             _timeCounterEx.ProcessSequencer("Stemp", deltaTime);
         }
         
+    }
+
+    public void Groggy(float time)
+    {
+        _groggy = true;
+        shieldTarget.gameObject.SetActive(true);
+        shieldTarget.VisibleVisual();
+        _timeCounterEx.InitTimer("groggy", 0f, time);
+
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+        data.key = "CannonExplosion";
+        data.position = transform.position;
+        data.rotation = Quaternion.identity;
+        data.parent = null;
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
     }
 
     public void QuickOut()
