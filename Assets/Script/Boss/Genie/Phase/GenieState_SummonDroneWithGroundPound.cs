@@ -145,16 +145,18 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
             cube.special = false;
         }
 
-        _toPlayerDrone = null;
+        //_toPlayerDrone = null;
 
-        for(int i = 0; i < droneAIs.Count - 1; ++i)
-        {
-            if(droneAIs[i].gameObject.activeInHierarchy)
-            {
-                droneAIs[i].ToMainTarget();
-            }
-        }
+        //for (int i = 0; i < droneAIs.Count - 1; ++i)
+        //{
+        //    if (droneAIs[i].gameObject.activeInHierarchy)
+        //    {
+        //        droneAIs[i].ToMainTarget();
+        //    }
+        //}
         target.PauseLeftHandEffect();
+
+        DeleteAllDrone();
     }
 
     public void SetGroundAreaMaterial(Material mat)
