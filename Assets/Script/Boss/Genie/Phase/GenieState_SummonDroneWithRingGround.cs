@@ -147,9 +147,19 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
             cube.special = false;
         }
 
+        _toPlayerDrone = null;
+
+        for (int i = 0; i < droneAIs.Count - 1; ++i)
+        {
+            if (droneAIs[i].gameObject.activeInHierarchy)
+            {
+                droneAIs[i].ToMainTarget();
+            }
+        }
         target.PauseLeftHandEffect();
 
-        DeleteAllDrone();
+        //DeleteAllDrone();
+        //DeleteAllDrone();
     }
 
     public void SetGroundAreaMaterial(Material mat)

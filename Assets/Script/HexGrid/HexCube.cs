@@ -147,6 +147,7 @@ public class HexCube : MonoBehaviour
         _outMove = false;
         _isActive = true;
         _inverseMoveTime = 0f;
+        _moveTime = 1f;
         var pos = transform.localPosition;
         pos.y = inCurve.Evaluate(1f);
         transform.localPosition = pos;

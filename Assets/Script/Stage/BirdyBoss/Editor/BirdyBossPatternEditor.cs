@@ -558,6 +558,20 @@ public class BirdyBossPatternEditor : EditorWindow
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;
         }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.ActiveRandomTentacle)
+        {
+            desc = "·£´ý ÃË¼ö ½¯µå »ý¼º\n½Ã°£ ¼³Á¤Àº BirdyBoss·Î";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+        }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.TentacleFence)
+        {
+            desc = "ÃË¼ö ²¨Áú ¶§ ±îÁö ´ë±â";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+        }
         else
         {
             desc = "¸ô·ç??";
@@ -681,6 +695,10 @@ public class BirdyBossPatternEditor : EditorWindow
             return 0f;
         }
         else if (item.type == BirdyBoss_PatternOne.EventEnum.LoopPatternEndFence)
+        {
+            return -1f;
+        }
+        else if (item.type == BirdyBoss_PatternOne.EventEnum.TentacleFence)
         {
             return -1f;
         }

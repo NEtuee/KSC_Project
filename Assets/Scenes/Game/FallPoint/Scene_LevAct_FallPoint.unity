@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000002, guid: ca35e9da32007344790f3736de3740a2,
+  m_LightingDataAsset: {fileID: 112000004, guid: 0a22f6e00fcccda46abe7637aef43d0f,
     type: 2}
   m_LightingSettings: {fileID: 1669165335}
 --- !u!196 &4
@@ -12776,9 +12776,10 @@ MonoBehaviour:
   - {fileID: 1504418260}
   endActiveLists: []
   endTransform: {fileID: 552986147}
+  endCamTransform: {fileID: 0}
   birdyEndPosition: {fileID: 0}
   loadNextLevel: 0
-  startFade: 1
+  startFade: 0
   playerDisable: 1
   birdyCanMove: 1
   ragdoll: 0
@@ -13484,7 +13485,6 @@ GameObject:
   - component: {fileID: 1305561242}
   - component: {fileID: 1305561241}
   - component: {fileID: 1305561244}
-  - component: {fileID: 1305561245}
   m_Layer: 0
   m_Name: FakePlatform
   m_TagString: Untagged
@@ -13597,18 +13597,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1305561245}
-        m_TargetAssemblyTypeName: MessageEventSender, Assembly-CSharp
-        m_MethodName: Send
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   triggerStayEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -13685,35 +13673,6 @@ MonoBehaviour:
   - {fileID: 210510986}
   force: 70
   torque: 70
---- !u!114 &1305561245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1305561239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2f62da6d34d45d44972b9b443d0f39b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allowDebugMode: 0
-  debugExceptionTitles: []
-  sendedCount: 0
-  receivedCount: 0
-  message: 2312
-  missionUiPack:
-    key: 
-  levelLineActiveBossNamePack:
-    name: 
-  levelLineSetAlphabetPack:
-    alphabet: 0
-  activeInformationUiPack:
-    key: 
-  setTimeInformationUiPack:
-    time: 0
-  missionUiDisspearPack:
-    time: 0
 --- !u!1001 &1315179701
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17852,20 +17811,20 @@ MonoBehaviour:
   - id: 1
   - id: 2
   edges:
-  - GUID: cfee1e9f-857d-4725-87b6-67eeddd61169
-    owner: {fileID: 1932607797}
-    inputNodeGUID: 1bdb924c-7deb-40a5-8c4d-e3864be8e10d
-    outputNodeGUID: dc1ee74e-b45d-498a-8e25-211195168f3f
-    inputFieldName: executed
-    outputFieldName: executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: 49262438-f44e-43be-b3b8-43272f9fcece
     owner: {fileID: 1932607797}
     inputNodeGUID: 1bdb924c-7deb-40a5-8c4d-e3864be8e10d
     outputNodeGUID: d5b115e6-3e74-47e1-a2bf-7e4155d99560
     inputFieldName: obj
     outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 17b3eda2-b22f-4f39-825b-eb65dd4b0e8e
+    owner: {fileID: 1932607797}
+    inputNodeGUID: 1bdb924c-7deb-40a5-8c4d-e3864be8e10d
+    outputNodeGUID: fb48bd52-87c9-4ef2-857e-89cb6a22d00c
+    inputFieldName: executed
+    outputFieldName: executes
     inputPortIdentifier: 
     outputPortIdentifier: 
   groups: []
@@ -17888,7 +17847,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 0, y: 0, z: 0}
+  position: {x: 45, y: -53, z: 0}
   scale: {x: 1, y: 1, z: 1}
   functions: []
   functionID: 0
@@ -17902,21 +17861,6 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: ObjectInitializeEntryNode, ns: , asm: EveryAssembly}
-      data:
-        nodeCustomName: 
-        GUID: dc1ee74e-b45d-498a-8e25-211195168f3f
-        computeOrder: 0
-        position:
-          serializedVersion: 2
-          x: 509
-          y: 343
-          width: 100
-          height: 100
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-    00000001:
       type: {class: TimelinePlayNode, ns: , asm: Assembly-CSharp}
       data:
         nodeCustomName: 
@@ -17932,12 +17876,12 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         obj: {fileID: 0}
-    00000002:
+    00000001:
       type: {class: TimelinePlayerNode, ns: , asm: Assembly-CSharp}
       data:
         nodeCustomName: 
         GUID: d5b115e6-3e74-47e1-a2bf-7e4155d99560
-        computeOrder: 1
+        computeOrder: 0
         position:
           serializedVersion: 2
           x: 370
@@ -17948,6 +17892,21 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         output: {fileID: 1252179788}
+    00000002:
+      type: {class: SceneChangedEntryNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: fb48bd52-87c9-4ef2-857e-89cb6a22d00c
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 512
+          y: 268
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
     00000003:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
