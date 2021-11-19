@@ -679,6 +679,11 @@ public class BirdyBoss_PatternOne : ObjectBase
         }
     }
 
+    public void MoveUpAll()
+    {
+        cubeGrid.MoveUpALL();
+    }
+
     public void SetRandomRespawn()
     {
         if(!active)

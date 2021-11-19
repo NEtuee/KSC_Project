@@ -15,6 +15,7 @@ public class PlayerManager : ManagerBase
     [SerializeField] private Renderer bagRenderer;
     [SerializeField] private Renderer playerWeaponRenderer;
     [SerializeField] private Color radioColor;
+    [SerializeField] private Transform radioLightPosition;
     private Material _playerWeaponMat;
     private Material _bagMatrial;
     [SerializeField] private Drone _drone;
@@ -81,9 +82,12 @@ public class PlayerManager : ManagerBase
          {
              _player.InitializeMove();
              _player.InitVelocity();
+             if(_player.GetState == PlayerUnit.ragdollState)
+                _player.Ragdoll.ResetRagdoll();
              _player.CapsuleCollider.enabled = true;
 
              _drone.InitFollowPosition();
+             _player.hp.Value = 100f;
          });
 
         AddAction(MessageTitles.scene_restarted, (msg) =>
@@ -149,6 +153,14 @@ public class PlayerManager : ManagerBase
             if(data.value)
             {
                 _playerWeaponMat.SetVector("_EmissionColor", radioColor * 10f);
+                EffectActiveData effectData = MessageDataPooling.GetMessageData<EffectActiveData>();
+                effectData.key = "RadioLight";
+                effectData.parent = radioLightPosition;
+                effectData.position = radioLightPosition.position;
+                effectData.rotation = radioLightPosition.rotation;
+
+                SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,
+                            GetSavedNumber("EffectManager"), effectData);
             }
             else
             {
@@ -292,25 +304,11 @@ public class PlayerManager : ManagerBase
         });
 
         _player.chargeTime.Subscribe(value => {
-            if (value >= _player.ChargeConsumeTime && _player.Energy >= _player.ChargeGunCost)
+            if (value >= _player.ChargeConsumeTime && _player.Energy >= _player.ChargeGunCost && _player.ChargeShotBlock == false)
             {
                 //crossHair.Third();
                 SendMessageEx(MessageTitles.uimanager_setChargeComplete, GetSavedNumber("UIManager"), null);
             }
-            //else if (value >= 2f)
-            //{
-            //    //crossHair.Second();
-            //    IntData phase = MessageDataPooling.GetMessageData<IntData>();
-            //    phase.value = 2;
-            //    SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
-            //}
-            //else if (value >= 1f)
-            //{
-            //    //crossHair.First();
-            //    IntData phase = MessageDataPooling.GetMessageData<IntData>();
-            //    phase.value = 1;
-            //    SendMessageEx(MessageTitles.uimanager_setcrosshairphase, GetSavedNumber("UIManager"), phase);
-            //}
         });
 
         _player.loadCount.Subscribe(value =>
@@ -332,32 +330,32 @@ public class PlayerManager : ManagerBase
             SendMessageEx(MessageTitles.uimanager_setgunenergyvalue, GetSavedNumber("UIManager"), data);
         });
 
-        _drone.scanLeftCoolTime.Subscribe(value =>
-        {
-            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
-            data.value = 1f - value / _drone.ScanCoolTime;
-            SendMessageEx(MessageTitles.uimanager_setScanCoolTimeValue, GetSavedNumber("UIManager"), data);
-            if(data.value >= 1f)
-            {
-                BoolData activeData = MessageDataPooling.GetMessageData<BoolData>();
-                activeData.value = false;
-                SendMessageEx(MessageTitles.uimanager_visibleScanCoolTimeUi, GetSavedNumber("UIManager"), activeData);
-            }
-        });
+        //_drone.scanLeftCoolTime.Subscribe(value =>
+        //{
+        //    FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+        //    data.value = 1f - value / _drone.ScanCoolTime;
+        //    SendMessageEx(MessageTitles.uimanager_setScanCoolTimeValue, GetSavedNumber("UIManager"), data);
+        //    if(data.value >= 1f)
+        //    {
+        //        BoolData activeData = MessageDataPooling.GetMessageData<BoolData>();
+        //        activeData.value = false;
+        //        SendMessageEx(MessageTitles.uimanager_visibleScanCoolTimeUi, GetSavedNumber("UIManager"), activeData);
+        //    }
+        //});
 
-        _player.CurrentQuickStandCoolTime.Subscribe(value =>
-        {
-            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
-            data.value = Mathf.Clamp(value / _player.QuickStandCoolTime, 0.0f, 1.0f);
-            SendMessageEx(MessageTitles.uimanager_setFactorQuickStandingCoolTime, GetSavedNumber("UIManager"), data);
-        });
+        //_player.CurrentQuickStandCoolTime.Subscribe(value =>
+        //{
+        //    FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+        //    data.value = Mathf.Clamp(value / _player.QuickStandCoolTime, 0.0f, 1.0f);
+        //    SendMessageEx(MessageTitles.uimanager_setFactorQuickStandingCoolTime, GetSavedNumber("UIManager"), data);
+        //});
 
-        _player.CurrentDashCoolTime.Subscribe(value =>
-        {
-            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
-            data.value = Mathf.Clamp(value / _player.DashCoolTime, 0.0f, 1.0f);
-            SendMessageEx(MessageTitles.uimanager_setFactorDashCoolTime, GetSavedNumber("UIManager"), data);
-        });
+        //_player.CurrentDashCoolTime.Subscribe(value =>
+        //{
+        //    FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+        //    data.value = Mathf.Clamp(value / _player.DashCoolTime, 0.0f, 1.0f);
+        //    SendMessageEx(MessageTitles.uimanager_setFactorDashCoolTime, GetSavedNumber("UIManager"), data);
+        //});
     }
 
     public override void Progress(float deltaTime)

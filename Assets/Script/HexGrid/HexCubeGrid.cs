@@ -42,6 +42,14 @@ public class HexCubeGrid : MonoBehaviour
         }
     }
 
+    public void MoveUpALL()
+    {
+        foreach(var item in _cubeMap.Values)
+        {
+            item.MoveToUp();
+        }
+    }
+
     public void GetCubeLineHeavy(ref List<HexCube> list,Vector3Int start ,Vector3Int end, int loopStart, int loopCount, bool overlapListClear = true)
     {
         _hexCubeSaveList.Clear();

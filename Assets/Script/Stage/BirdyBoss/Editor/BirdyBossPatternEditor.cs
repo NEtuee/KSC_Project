@@ -715,7 +715,7 @@ public class BirdyBossPatternEditor : EditorWindow
         if (targetSeq == null)
             return;
 
-        GUILayout.BeginScrollView(_mainSeqScroll);
+        _mainSeqItemScroll = GUILayout.BeginScrollView(_mainSeqItemScroll);
         float total = 0f;
 
         for(int i = 0; i < targetSeq.loopSequences.Count; ++i)

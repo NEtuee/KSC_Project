@@ -168,7 +168,7 @@ public class PlayerState_ClimbingJump : PlayerState
 
     public override void OnGrab(InputAction.CallbackContext value, PlayerUnit playerUnit, Animator animator)
     {
-        if (Time.time - playerUnit.ClimbingJumpStartTime < _minKeepJumpTime)
+        if (Time.time - playerUnit.ClimbingJumpStartTime < _minKeepJumpTime || playerUnit.ClimbingJumpDirection != ClimbingJumpDirection.Up)
             return;
         playerUnit.TryGrab();
     }

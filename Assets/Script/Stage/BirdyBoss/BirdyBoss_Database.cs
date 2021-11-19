@@ -14,6 +14,7 @@ public class BirdyBoss_Database : MonoBehaviour
 
         public int updateCount{get{return _allCounter - _freeQueue.Count;}}
 
+        private Dictionary<int,T> _activeObjects = new Dictionary<int, T>();
         private Queue<CacheItem<T>> _freeQueue = new Queue<CacheItem<T>>();
         private int _allCounter = 0;
 
@@ -24,12 +25,23 @@ public class BirdyBoss_Database : MonoBehaviour
                 CacheItem<T> cache = new CacheItem<T>();
                 cache.cacheId = id;
                 cache.item = item;
-                cache.item.whenDeactive += ()=>{ReturnCache(cache);};
+                cache.item.whenDeactive += ()=>{
+                    ReturnCache(cache);
+                };
                 
                 if(!item.gameObject.activeSelf)
                     _freeQueue.Enqueue(cache);
 
                 ++_allCounter;
+            }
+        }
+
+        public void DisposeAll()
+        {
+            foreach(var item in _activeObjects.Values)
+            {
+                if(item.gameObject.activeSelf)
+                    item.gameObject.SetActive(false);
             }
         }
 
@@ -54,6 +66,12 @@ public class BirdyBoss_Database : MonoBehaviour
             }
 
             cache.item.gameObject.SetActive(true);
+
+            if(!_activeObjects.ContainsKey(cache.item.uniqueNumber))
+            {
+                _activeObjects.Add(cache.item.uniqueNumber,cache.item);
+            }
+            
 
             return cache;
         }
@@ -97,6 +115,13 @@ public class BirdyBoss_Database : MonoBehaviour
 
     private List<MedusaInFallPoint_AI> _medusaList = new List<MedusaInFallPoint_AI>();
 
+
+    public void DisposeAll()
+    {
+        spiderCache.DisposeAll();
+        flySpiderCache.DisposeAll();
+        droneCache.DisposeAll();
+    }
 
     public void Awake()
     {

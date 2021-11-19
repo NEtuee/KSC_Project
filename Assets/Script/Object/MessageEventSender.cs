@@ -78,6 +78,14 @@ public class MessageEventSender : ObjectBase
                     };
                 }
                 break;
+            case MessageTitleEnum.PlayerRagdoll:
+                {
+                    _event = () =>
+                    {
+                        SendMessageEx((ushort)message, GetSavedNumber("PlayerManager"), null);
+                    };
+                }
+                break;
         }
     }
 
