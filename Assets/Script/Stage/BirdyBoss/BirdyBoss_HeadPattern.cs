@@ -40,11 +40,20 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
     public float explosionRadius = 5f;
     public float explosionPower = 150f;
 
+    [Header("shot")]
+    public float distanceFactor = 0.3f;
+    public float distanceTerm = 0.3f;
+    public float shotTerm = 3f;
+    public float shotWait = 1f;
+    public float shotDownTime = 2f;
+    public int shotCount = 3;
+
     private Vector3 _localPosition;
 
     private TimeCounterEx _timeCounterEx = new TimeCounterEx();
     
     private List<HexCube> _ringList = new List<HexCube>();
+    private List<HexCube> _lineList = new List<HexCube>();
 
     PlayerUnit _player;
 
@@ -88,6 +97,24 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             //shieldTarget.VisibleVisual();
             _inout = true;
         });
+
+        _timeCounterEx.CreateSequencer("Shot");
+        _timeCounterEx.AddSequence("Shot",dissolveTime,null,null);
+        for(int i = 0; i < shotCount; ++i)
+        {
+            _timeCounterEx.AddSequence("Shot",shotTerm,(x)=>{
+                var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
+                shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.2f);
+            },null);
+            _timeCounterEx.AddSequence("Shot",shotWait,null,(x)=>{
+                Line(shieldObj.forward);
+            });
+        }
+
+        _timeCounterEx.AddSequence("Shot",1f,null,(x)=>{
+            currentState = State.PlayerLook;
+        });
+        
 
         _timeCounterEx.CreateSequencer("InOut");
         _timeCounterEx.AddSequence("InOut", stempWaitTime,null,null);
@@ -168,7 +195,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         }
         else if(currentState == State.GroundShot)
         {
-
+            _timeCounterEx.ProcessSequencer("Shot",deltaTime);
         }
         
         
@@ -188,6 +215,16 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         shieldTarget.Reactive();
 
         SetPath("FogBirdyPath", true);
+    }
+
+    public void Shot()
+    {
+        currentState = State.GroundShot;
+        _timeCounterEx.InitSequencer("Shot");
+
+        _inout = true;
+        _timeCounterEx.InitSequencer("InOut");
+        _timeCounterEx.SkipSequencer("InOut", stempWaitTime);
     }
 
     public void Groggy(float time)
@@ -231,6 +268,23 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         var dist = Vector3.Distance(_player.transform.position,explosionPosition.position);
         if(dist <= explosionRadius)
             _player.Ragdoll.ExplosionRagdoll(explosionPower,explosionPosition.position,explosionRadius);
+    }
+
+    public void Line(Vector3 direction)
+    {
+        _lineList.Clear();
+
+        var start = grid.GetCubeFromWorld(transform.position);
+        var end = transform.position + direction * 60f;
+        var endPoint = grid.GetCubePointFromWorld(end);
+
+        grid.GetCubeLineHeavy(ref _lineList,start.cubePoint,endPoint,0,6);
+        foreach(var item in _lineList)
+        {
+            var dist = Vector3.Distance(start.originWorldPosition.position,item.originWorldPosition.position);
+            item.SetMove(false,dist * distanceFactor * distanceTerm,1f,shotDownTime);
+            item.SetAlertTime(1f);
+        }
     }
 
     public void Ring()
