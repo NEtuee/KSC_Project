@@ -73,10 +73,16 @@ public class CommonDrone : DroneAIBase
             return;
         }
 
-        if(GetTargetPosition().y > transform.position.y)
+        if(GetTargetPosition().y + 1f > transform.position.y)
         {
-            var dist = MathEx.distance(GetTargetPosition().y, transform.position.y);
+            var dist = MathEx.distance(GetTargetPosition().y + 1f, transform.position.y);
             AddForce(dist * 2f * Vector3.up * deltaTime);
+        }
+        else if (MathEx.distance(GetTargetPosition().y, transform.position.y) >= 1f)
+        {
+            var dir = GetTargetPosition().y > transform.position.y ? 1f : -1f;
+            var dist = MathEx.distance(GetTargetPosition().y, transform.position.y);
+            AddForce(dist * dir * Vector3.up * deltaTime);
         }
 
         ExplosionCheck();

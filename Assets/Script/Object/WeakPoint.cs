@@ -17,6 +17,8 @@ public class WeakPoint : Hitable
          });
 
         AddAction(MessageTitles.scan_scanned, (x) => {
+            if (isOver)
+                return;
 
             MD.ScanMakerData data = MessageDataPooling.GetMessageData<MD.ScanMakerData>();
             data.collider = collider;
