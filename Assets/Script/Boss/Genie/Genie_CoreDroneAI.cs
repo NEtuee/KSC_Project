@@ -101,7 +101,7 @@ public class Genie_CoreDroneAI : Genie_BombDroneAI
             mirror = grid.GetCubeReflectMirror(player.cubePoint);
         if (mirror != null)
         {
-            _target = mirror.transform;
+            _target = mirror.originWorldPosition;
         }
         else
         {
