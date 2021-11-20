@@ -38,6 +38,8 @@ public class CrossHair : MonoBehaviour
     [SerializeField] private RectTransform aimBackGround;
     [SerializeField] private RectTransform leftGrid;
     [SerializeField] private RectTransform rightGrid;
+    [SerializeField] private Image leftGridGage;
+    [SerializeField] private Image rightGridGage;
 
     [SerializeField] private float backGroundOriginalWidth;
     [SerializeField] private float backGroundEffectWidth;
@@ -45,6 +47,7 @@ public class CrossHair : MonoBehaviour
     [SerializeField] private float leftGridEffectPosX;
     [SerializeField] private float rightGridOriginPosX;
     [SerializeField] private float rightGridEffectPosX;
+
 
     private bool _chargeComplete = false;
 
@@ -174,6 +177,12 @@ public class CrossHair : MonoBehaviour
             leftGrid.DOAnchorPosX(leftGridEffectPosX, 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
             rightGrid.DOAnchorPosX(rightGridEffectPosX, 0.15f).SetUpdate(true).SetEase(Ease.OutBack);
         }
+    }
+
+    public void SetChargeGageValue(float value)
+    {
+        leftGridGage.fillAmount = value;
+        rightGridGage.fillAmount = value;
     }
 
     public void First()
