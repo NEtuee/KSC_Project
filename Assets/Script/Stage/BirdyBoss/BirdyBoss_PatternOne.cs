@@ -35,6 +35,7 @@ public class BirdyBoss_PatternOne : ObjectBase
         LoopPatternEndFence,
         ActiveRandomTentacle,
         TentacleFence,
+        GroundShot,
 
 
         PatternEND,
@@ -699,6 +700,13 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddFence(name, () =>
                 {
                     return !tentacleControl.IsTentacleActivate();
+                });
+            }
+            else if (item.type == EventEnum.GroundShot)
+            {
+                _timeCounter.AddSequence(name, item.value, null, (x) =>
+                {
+                    headPattern.Shot();
                 });
             }
         }
