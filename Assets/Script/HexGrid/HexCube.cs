@@ -14,6 +14,7 @@ public class HexCube : MonoBehaviour
     public bool special = false;
     public float moveSpeed = 1f;
 
+    public Transform originWorldPosition;
     private Vector3 _targetLocalPosition;
     private Vector3 _originalLocalPosition;
     private float _disapearTime;
@@ -21,7 +22,7 @@ public class HexCube : MonoBehaviour
     private bool _timer = false;
     private bool _isActive = true;
 
-    
+    private bool _moveLock = false;
     private bool _inMove = false;
     private bool _outMove = false;
     private bool _inverseMove = false;
@@ -45,6 +46,9 @@ public class HexCube : MonoBehaviour
             _renderer = GetComponentInChildren<MeshRenderer>();
         }
 
+        originWorldPosition = (new GameObject("origin")).transform;
+        originWorldPosition.position = transform.position;
+
         _originalLocalPosition = transform.localPosition;
         _moveTime = 1f;
     }
@@ -56,6 +60,9 @@ public class HexCube : MonoBehaviour
 
     public void Progress(float deltaTime)
     {
+        if (_moveLock)
+            return;
+
         if(_moveTime < 1f)
         {
             _moveTime += deltaTime * moveSpeed;
@@ -164,8 +171,16 @@ public class HexCube : MonoBehaviour
         transform.localPosition = pos;
     }
 
+    public void MoveLock(bool value)
+    {
+        _moveLock = value;
+    }
+
     public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f, System.Action disable = null, System.Action enable = null)
     {
+        if (_moveLock)
+            return;
+
         _inMove = active;
         _outMove = !active;
         _isActive = false;

@@ -147,8 +147,11 @@ public class BirdyBoss_PatternOne : ObjectBase
 
         _timeCounter.CreateSequencer("Respawn");
         _timeCounter.AddSequence("Respawn",5f,null,(x)=>{
-            if(_respawnCube != null)
+            if (_respawnCube != null)
+            {
                 _respawnCube.special = false;
+                _respawnCube.MoveLock(false);
+            }
         });
 
         _hp = birdyHP;
@@ -707,10 +710,16 @@ public class BirdyBoss_PatternOne : ObjectBase
         if(!active)
             return;
 
-        
+        if(_respawnCube != null)
+        {
+            _respawnCube.MoveLock(false);
+            _respawnCube.special = false;
+        }
+
         _respawnCube = cubeGrid.GetRandomActiveCube(true);
         _respawnCube.MoveToUp();
         _respawnCube.special = true;
+        _respawnCube.MoveLock(true);
         respawn.SetRespawnPoint(_respawnCube.transform);
 
         _timeCounter.InitSequencer("Respawn");
