@@ -36,6 +36,7 @@ public class BirdyBoss_PatternOne : ObjectBase
         ActiveRandomTentacle,
         TentacleFence,
 
+
         PatternEND,
     };
 
@@ -267,7 +268,8 @@ public class BirdyBoss_PatternOne : ObjectBase
     public void FogOut()
     {
         _fogOutProcess = true;
-        fogDrone.gameObject.SetActive(false);
+        //fogDrone.gameObject.SetActive(false);
+        headPattern.DisableShield();
         _timeCounter.InitSequencer("FogOut");
     }
 
@@ -579,7 +581,8 @@ public class BirdyBoss_PatternOne : ObjectBase
                     if (_fogIn)
                         return;
 
-                    fogDrone.Respawn(headPattern.transform.position);
+                    //fogDrone.Respawn(headPattern.transform.position);
+                    headPattern.FogPathFollow();
                     _fogIn = true;
                 });
             }
@@ -588,12 +591,13 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, item.value, (x)=>{
                     if (!_fogIn)
                         return;
-                    
-                    if(fogDrone.gameObject.activeInHierarchy)
-                    {
-                        fogDrone.gameObject.SetActive(false);
-                    }
-                    
+
+                    //if(fogDrone.gameObject.activeInHierarchy)
+                    //{
+                    //    fogDrone.gameObject.SetActive(false);
+                    //}
+                    headPattern.DisableShield();
+
                     var factor = x / item.value;
                     RenderSettings.fogDensity = Mathf.Lerp(fogDensity, fogOutDensity, factor);
                 }, (x) =>

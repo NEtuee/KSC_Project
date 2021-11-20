@@ -2,8 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BirdyBoss_HeadPattern : ObjectBase
+public class BirdyBoss_HeadPattern : PathfollowObjectBase
 {
+    public enum State
+    {
+        PlayerLook,
+        HeadStemp,
+        FogMove,
+        GroundShot,
+    }
+
+    public State currentState = State.HeadStemp;
     public List<MeshRenderer> dissolveTargets = new List<MeshRenderer>();
     public HexCubeGrid grid;
 
@@ -125,25 +134,60 @@ public class BirdyBoss_HeadPattern : ObjectBase
                 shieldTarget.Reactive();
                 shieldTarget.gameObject.SetActive(false);
             }
-        }
 
-        if (!_stemp)
-        {
-            ShieldLookPlayer();
             return;
         }
-        
-        if(_lookDown)
-        {
-            ShieldLookDown();
-        }
 
-        
-        if(!_inout)
+        if(currentState == State.PlayerLook)
         {
-            _timeCounterEx.ProcessSequencer("Stemp", deltaTime);
+            ShieldLookPlayer();
+        }
+        if(currentState == State.HeadStemp)
+        {
+            if (!_stemp)
+            {
+                ShieldLookPlayer();
+                return;
+            }
+
+            if (_lookDown)
+            {
+                ShieldLookDown();
+            }
+
+
+            if (!_inout)
+            {
+                _timeCounterEx.ProcessSequencer("Stemp", deltaTime);
+            }
+        }
+        else if(currentState == State.FogMove)
+        {
+            ShieldLookPlayer();
+            FollowPathInDirection(deltaTime);
+        }
+        else if(currentState == State.GroundShot)
+        {
+
         }
         
+        
+    }
+
+    public void DisableShield()
+    {
+        shieldTarget.Reactive();
+        shieldTarget.gameObject.SetActive(false);
+    }
+
+    public void FogPathFollow()
+    {
+        currentState = State.FogMove;
+
+        shieldTarget.gameObject.SetActive(true);
+        shieldTarget.Reactive();
+
+        SetPath("FogBirdyPath", true);
     }
 
     public void Groggy(float time)
@@ -163,6 +207,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
 
     public void QuickOut()
     {
+        currentState = State.PlayerLook;
         _stemp = true;
         _lookDown = false;
         _inout = true;
@@ -172,6 +217,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
 
     public void StempTarget(HexCube target)
     {
+        currentState = State.HeadStemp;
         _stemp = true;
         _lookDown = false;
         _inout = false;
@@ -197,6 +243,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
             foreach(var item in _ringList)
             {
                 item.SetMove(false,(float)(i - 1) * ringTerm,ringSpeed,ringActiveTime);
+                item.SetAlertTime(1f);
             }
         }
     }
