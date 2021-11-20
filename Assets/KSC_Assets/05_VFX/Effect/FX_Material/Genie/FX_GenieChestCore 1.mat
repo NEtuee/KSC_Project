@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FX_Hologram_Fade
-  m_Shader: {fileID: -6465566751694194690, guid: be12b5d27ac8a1e409f620a3ffe341eb,
+  m_Name: FX_GenieChestCore 1
+  m_Shader: {fileID: -6465566751694194690, guid: 1ef5508905906184183fb71fbba44df3,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -21,15 +21,27 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Distortion:
-        m_Texture: {fileID: 2800000, guid: 1644344389e177c49ae380588876aa93, type: 3}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - GradientAlpha:
+        m_Texture: {fileID: 2800000, guid: 7d356e540af08fd4386fb114a2597ca3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - MainTex:
+        m_Texture: {fileID: 2800000, guid: e602350cdbf4c4741b1f99f0e7eced18, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - NoiseTex:
-        m_Texture: {fileID: 2800000, guid: c30889625c50bd745a8fce3ff150666b, type: 3}
+        m_Texture: {fileID: 2800000, guid: a4e46349d2e2ef34c9f61dc36cdeb108, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - NoiseTex1:
+        m_Texture: {fileID: 2800000, guid: e602350cdbf4c4741b1f99f0e7eced18, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - NoiseTex2:
-        m_Texture: {fileID: 2800000, guid: c30889625c50bd745a8fce3ff150666b, type: 3}
+        m_Texture: {fileID: 2800000, guid: a4e46349d2e2ef34c9f61dc36cdeb108, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -111,18 +123,26 @@ Material:
     m_Ints: []
     m_Floats:
     - Color2: 0
-    - Distortion_Intensity: 24.22
+    - Distortion_Intensity: 1.9
     - Fade: 0.6
-    - FadeAmount: 0.5
+    - FadeAmount: 0.503
+    - FinalDistortion: 0.2
+    - Main_X_Speed: -0.69
+    - Main_Y_Speed: 0
     - MeshMoveAmount: 1
     - MeshMoveSpeed: 5
-    - Pow: 2
+    - N2_Disortion: 0
+    - Noise1_X_Speed: 0
+    - Noise1_Y_Speed: 0
+    - Noise2_X_Speed: 0
+    - Noise2_Y_Speed: 0
+    - Pow: 4.22
     - RimRange: 2.29
     - ScrollSpeed_X: -0.1
     - ScrollSpeed_Y: 0.01
     - Sharpness: -2
-    - Speed_Tex1: 0.08
-    - Speed_Tex2: 1
+    - Speed_Tex1: -0.6
+    - Speed_Tex2: 0.3
     - Speed_x: -2.48
     - Speed_y: -5
     - TexScrollSpeedX: 1
@@ -165,19 +185,22 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color1: {r: 1, g: 0.54467595, b: 0, a: 1}
-    - Color2: {r: 8, g: 0.13580693, b: 0, a: 1}
+    - Color1: {r: 4, g: 2.3686275, b: 0.84705883, a: 0}
+    - Color2: {r: 10.680627, g: 0.22367805, b: 0, a: 0}
     - EdgeColor: {r: 1, g: 0, b: 0, a: 1}
     - FaceColor: {r: 1, g: 0.44850826, b: 0, a: 1}
     - InnerColor: {r: 1, g: 0, b: 0, a: 1}
-    - LineColor: {r: 1.9650277, g: 1.2018993, b: 0, a: 1}
+    - LineColor: {r: 15.87451, g: 5.3333335, b: 0, a: 1}
     - MainColor: {r: 0.032075405, g: 1, b: 0.9016926, a: 0}
-    - NoiseTex1_Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - Main_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
+    - Noise1_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
+    - Noise2_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
+    - NoiseTex1_Tiling: {r: 2, g: 2, b: 0, a: 0}
     - NoiseTex2_Tiling: {r: 1, g: 1, b: 1, a: 1}
     - NoiseTex_Tiling: {r: 1, g: 1, b: 1, a: 1}
     - NoiseTex_TilingOffset: {r: 1, g: 1, b: 0, a: 0}
     - RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - Rim_Color: {r: 1, g: 1, b: 1, a: 1}
+    - Rim_Color: {r: 95.87451, g: 10.541177, b: 0, a: 0.49803922}
     - Vector4: {r: 28.05, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 0.8225745, b: 0.1641509, a: 1}
