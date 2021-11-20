@@ -309,6 +309,10 @@ public class PlayerManager : ManagerBase
                 //crossHair.Third();
                 SendMessageEx(MessageTitles.uimanager_setChargeComplete, GetSavedNumber("UIManager"), null);
             }
+
+            var chargeData = MessageDataPooling.GetMessageData<FloatData>();
+            chargeData.value = value / _player.ChargeConsumeTime;
+            SendMessageEx(MessageTitles.uimanager_chargeGageValue, GetSavedNumber("UIManager"), chargeData);
         });
 
         _player.loadCount.Subscribe(value =>

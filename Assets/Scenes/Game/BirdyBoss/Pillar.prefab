@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3305812660773004636}
-  m_Layer: 10
+  m_Layer: 25
   m_Name: ImactPoint
   m_TagString: Untagged
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6669262183717939081}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.005, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5019, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5398643090128143943}
@@ -42,10 +42,10 @@ GameObject:
   - component: {fileID: 5723166907951271309}
   - component: {fileID: 9142601980639423274}
   - component: {fileID: 8908656198190204352}
-  - component: {fileID: 4702433514008545188}
   - component: {fileID: 4194686287006277111}
   - component: {fileID: 8292506810833743075}
-  m_Layer: 10
+  - component: {fileID: 688504371838521909}
+  m_Layer: 25
   m_Name: Pillar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ Transform:
   m_GameObject: {fileID: 7238548448849054950}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 8.510259, y: 21, z: -4.1461515}
-  m_LocalScale: {x: 2.5, y: 5, z: 2.5}
+  m_LocalScale: {x: 5, y: 15, z: 5}
   m_Children:
   - {fileID: 3305812660773004636}
   m_Father: {fileID: 0}
@@ -74,7 +74,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7238548448849054950}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &9142601980639423274
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -133,20 +133,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &4702433514008545188
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7238548448849054950}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!114 &4194686287006277111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,7 +148,7 @@ MonoBehaviour:
   damage: 10
   force: 300
   fallPower: 3000
-  impactRadius: 3
+  impactRadius: 8
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -222,8 +208,21 @@ MonoBehaviour:
       m_DecayTime: 0.4
       m_ScaleWithImpact: 1
       m_HoldForever: 0
-    m_ImpactRadius: 300
+    m_ImpactRadius: 100
     m_DirectionMode: 0
     m_DissipationMode: 2
     m_DissipationDistance: 1000
     m_PropagationSpeed: 343
+--- !u!65 &688504371838521909
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7238548448849054950}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
