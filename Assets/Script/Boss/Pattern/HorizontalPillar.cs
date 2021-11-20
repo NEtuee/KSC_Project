@@ -118,5 +118,14 @@ public class HorizontalPillar : MonoBehaviour
                 player.Ragdoll.ExplosionRagdoll(force, transform.forward);
             }
         }
+        else if(_rush == true)
+        {
+            _rush = false;
+            _rigidbody.isKinematic = true;
+            _rigidbody.velocity = Vector3.zero;
+            _collider.isTrigger = true;
+
+            Disappear(2f);
+        }
     }
 }

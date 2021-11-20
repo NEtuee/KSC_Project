@@ -53,6 +53,29 @@ public class PathfollowObjectBase : ObjectBase
         return false;
     }
 
+    public bool FollowPathInDirection(float deltaTime)
+    {
+        if (pathArrived || targetTransform == null)
+            return true;
+
+        SetTarget(targetTransform.position);
+        Move(targetDirection, moveSpeed, deltaTime);
+        if (IsArrivedTarget(distanceAccuracy))
+        {
+            var target = GetNextPoint(out bool isEnd).transform;
+
+            targetTransform = target;
+            if (isEnd && !pathLoop)
+            {
+                pathArrived = true;
+            }
+
+            return isEnd;
+        }
+
+        return false;
+    }
+
     public bool FollowPath(float deltaTime)
     {
         if(pathArrived || targetTransform == null)

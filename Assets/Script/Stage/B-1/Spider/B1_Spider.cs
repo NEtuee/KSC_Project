@@ -17,13 +17,16 @@ public class B1_Spider : PathfollowObjectBase
     public float damage = 10f;
     public float explosionCheckRadius = 3f;
     public float explosionRadius = 5f;
+    public float downExplosionY = -6f;
 
+    public bool downExplosion = false;
     public bool launch = false;
     public bool setTargetToPlayer = true;
 
     public Rigidbody shell;
     public Collider shellCollider;
 
+    private bool _spawn = false;
     private Vector3 _shellPosition;
     private PlayerUnit _player;
 
@@ -133,6 +136,19 @@ public class B1_Spider : PathfollowObjectBase
         {
             stateProcessor.StateChange("ExplosionWait");
         }
+
+        if(downExplosion)
+        {
+            if(transform.position.y >= 0f && !_spawn)
+            {
+                _spawn = true;
+            }
+            else if(_spawn && transform.position.y <= downExplosionY)
+            {
+                Explosion(Vector3.zero,0f);
+                gameObject.SetActive(false);
+            }
+        }
     }
 
     public void HitBack(Vector3 direction)
@@ -176,6 +192,7 @@ public class B1_Spider : PathfollowObjectBase
     public void Launch()
     {
         launch = true;
+        _spawn = false;
         stateProcessor.StateChange("Turn");
     }
 

@@ -40,6 +40,7 @@ public class BirdyBoss_PlatformCut : MonoBehaviour
             for (int j = 0; j < _ring.Count; ++j)
             {
                 _ring[j].SetMove(false, (float)count * cubeTerm, cubeSpeed);
+                _ring[j].SetAlertTime(1f);
                 _downCubes[count].Add(_ring[j]);
             }
 
