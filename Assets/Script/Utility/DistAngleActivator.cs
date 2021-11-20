@@ -70,7 +70,7 @@ public class DistAngleActivator : MonoBehaviour
 
         for (int i = 0; i < calculateTargets.Length; ++i)
         {
-            if(IsCanActive(calculateTargets[i]))
+            if(EnableCheck(calculateTargets[i]))
             {
                 Handles.color = Color.red;
             }
