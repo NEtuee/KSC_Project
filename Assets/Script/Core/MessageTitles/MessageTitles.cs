@@ -251,6 +251,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort uimanager_activePlayUi = 0x0345;
 
+    /// <summary>
+    /// data = FloatData
+    /// </summary>
+    public const ushort uimanager_chargeGageValue = 0x0346;
+
     #endregion
 
     /// <summary>

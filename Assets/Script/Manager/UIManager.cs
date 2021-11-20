@@ -197,6 +197,11 @@ public class UIManager : ManagerBase
         {
             _crossHair.ChargeComplete();
         });
+        AddAction(MessageTitles.uimanager_chargeGageValue, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<FloatData>(msg.data);
+            _crossHair.SetChargeGageValue(data.value);
+        });
 
         AddAction(MessageTitles.uimanager_setvaluestatebar, SetValueStateBar);
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);

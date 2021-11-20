@@ -146,6 +146,7 @@ public class B1_Spider : PathfollowObjectBase
             else if(_spawn && transform.position.y <= downExplosionY)
             {
                 Explosion(Vector3.zero,0f);
+                gameObject.SetActive(false);
             }
         }
     }
@@ -191,6 +192,7 @@ public class B1_Spider : PathfollowObjectBase
     public void Launch()
     {
         launch = true;
+        _spawn = false;
         stateProcessor.StateChange("Turn");
     }
 
