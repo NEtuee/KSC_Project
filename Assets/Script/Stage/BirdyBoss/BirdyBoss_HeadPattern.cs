@@ -2,8 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BirdyBoss_HeadPattern : ObjectBase
+public class BirdyBoss_HeadPattern : PathfollowObjectBase
 {
+    public enum State
+    {
+        PlayerLook,
+        HeadStemp,
+        FogMove,
+        GroundShot,
+    }
+
+    public State currentState = State.HeadStemp;
     public List<MeshRenderer> dissolveTargets = new List<MeshRenderer>();
     public HexCubeGrid grid;
 
@@ -31,11 +40,20 @@ public class BirdyBoss_HeadPattern : ObjectBase
     public float explosionRadius = 5f;
     public float explosionPower = 150f;
 
+    [Header("shot")]
+    public float distanceFactor = 0.3f;
+    public float distanceTerm = 0.3f;
+    public float shotTerm = 3f;
+    public float shotWait = 1f;
+    public float shotDownTime = 2f;
+    public int shotCount = 3;
+
     private Vector3 _localPosition;
 
     private TimeCounterEx _timeCounterEx = new TimeCounterEx();
     
     private List<HexCube> _ringList = new List<HexCube>();
+    private List<HexCube> _lineList = new List<HexCube>();
 
     PlayerUnit _player;
 
@@ -79,6 +97,24 @@ public class BirdyBoss_HeadPattern : ObjectBase
             //shieldTarget.VisibleVisual();
             _inout = true;
         });
+
+        _timeCounterEx.CreateSequencer("Shot");
+        _timeCounterEx.AddSequence("Shot",dissolveTime,null,null);
+        for(int i = 0; i < shotCount; ++i)
+        {
+            _timeCounterEx.AddSequence("Shot",shotTerm,(x)=>{
+                var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
+                shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.2f);
+            },null);
+            _timeCounterEx.AddSequence("Shot",shotWait,null,(x)=>{
+                Line(shieldObj.forward);
+            });
+        }
+
+        _timeCounterEx.AddSequence("Shot",1f,null,(x)=>{
+            currentState = State.PlayerLook;
+        });
+        
 
         _timeCounterEx.CreateSequencer("InOut");
         _timeCounterEx.AddSequence("InOut", stempWaitTime,null,null);
@@ -125,25 +161,70 @@ public class BirdyBoss_HeadPattern : ObjectBase
                 shieldTarget.Reactive();
                 shieldTarget.gameObject.SetActive(false);
             }
-        }
 
-        if (!_stemp)
-        {
-            ShieldLookPlayer();
             return;
         }
-        
-        if(_lookDown)
-        {
-            ShieldLookDown();
-        }
 
-        
-        if(!_inout)
+        if(currentState == State.PlayerLook)
         {
-            _timeCounterEx.ProcessSequencer("Stemp", deltaTime);
+            ShieldLookPlayer();
+        }
+        if(currentState == State.HeadStemp)
+        {
+            if (!_stemp)
+            {
+                ShieldLookPlayer();
+                return;
+            }
+
+            if (_lookDown)
+            {
+                ShieldLookDown();
+            }
+
+
+            if (!_inout)
+            {
+                _timeCounterEx.ProcessSequencer("Stemp", deltaTime);
+            }
+        }
+        else if(currentState == State.FogMove)
+        {
+            ShieldLookPlayer();
+            FollowPathInDirection(deltaTime);
+        }
+        else if(currentState == State.GroundShot)
+        {
+            _timeCounterEx.ProcessSequencer("Shot",deltaTime);
         }
         
+        
+    }
+
+    public void DisableShield()
+    {
+        shieldTarget.Reactive();
+        shieldTarget.gameObject.SetActive(false);
+    }
+
+    public void FogPathFollow()
+    {
+        currentState = State.FogMove;
+
+        shieldTarget.gameObject.SetActive(true);
+        shieldTarget.Reactive();
+
+        SetPath("FogBirdyPath", true);
+    }
+
+    public void Shot()
+    {
+        currentState = State.GroundShot;
+        _timeCounterEx.InitSequencer("Shot");
+
+        _inout = true;
+        _timeCounterEx.InitSequencer("InOut");
+        _timeCounterEx.SkipSequencer("InOut", stempWaitTime);
     }
 
     public void Groggy(float time)
@@ -163,6 +244,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
 
     public void QuickOut()
     {
+        currentState = State.PlayerLook;
         _stemp = true;
         _lookDown = false;
         _inout = true;
@@ -172,6 +254,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
 
     public void StempTarget(HexCube target)
     {
+        currentState = State.HeadStemp;
         _stemp = true;
         _lookDown = false;
         _inout = false;
@@ -187,6 +270,26 @@ public class BirdyBoss_HeadPattern : ObjectBase
             _player.Ragdoll.ExplosionRagdoll(explosionPower,explosionPosition.position,explosionRadius);
     }
 
+    public void Line(Vector3 direction)
+    {
+        _lineList.Clear();
+
+        var start = grid.GetCubeFromWorld(transform.position);
+        var end = transform.position + direction * 60f;
+        var endPoint = grid.GetCubePointFromWorld(end);
+
+        grid.GetCubeLineHeavy(ref _lineList,start.cubePoint,endPoint,0,6);
+        foreach(var item in _lineList)
+        {
+            if (!item.IsActive())
+                continue;
+
+            var dist = Vector3.Distance(start.originWorldPosition.position,item.originWorldPosition.position);
+            item.SetMove(false,dist * distanceFactor * distanceTerm,1f,shotDownTime);
+            item.SetAlertTime(1f);
+        }
+    }
+
     public void Ring()
     {
         stempCube.SetMove(false,0f,ringSpeed,ringActiveTime);
@@ -197,6 +300,7 @@ public class BirdyBoss_HeadPattern : ObjectBase
             foreach(var item in _ringList)
             {
                 item.SetMove(false,(float)(i - 1) * ringTerm,ringSpeed,ringActiveTime);
+                item.SetAlertTime(1f);
             }
         }
     }

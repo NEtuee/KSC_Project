@@ -35,6 +35,13 @@ public class BirdyBoss_PatternOne : ObjectBase
         LoopPatternEndFence,
         ActiveRandomTentacle,
         TentacleFence,
+        GroundShot,
+        ExplosionSpiderAll,
+        ExplosionDroneAll,
+        GroundCutV2Start,
+        GroundCutV2End,
+        InverseGroundPattern,
+
 
         PatternEND,
     };
@@ -97,6 +104,7 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     [Header("Platform")]
     public BirdyBoss_PlatformCut platformCut;
+    public BirdyBoss_PlatformCutV2 platformCutV2;
 
     [Header("Tentacle")]
     public BirdyBoss_TentacleControl tentacleControl;
@@ -105,6 +113,8 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     //[Header("GiroPattern")]
     //public GiroPattern giroPattern;
+
+    List<HexCube> _groundPatternList = new List<HexCube>();
 
     List<HexCube> _spawnCubeList = new List<HexCube>();
     List<HexCube> _medusaSpawnList = new List<HexCube>();
@@ -147,8 +157,11 @@ public class BirdyBoss_PatternOne : ObjectBase
 
         _timeCounter.CreateSequencer("Respawn");
         _timeCounter.AddSequence("Respawn",5f,null,(x)=>{
-            if(_respawnCube != null)
+            if (_respawnCube != null)
+            {
                 _respawnCube.special = false;
+                _respawnCube.MoveLock(false);
+            }
         });
 
         _hp = birdyHP;
@@ -264,7 +277,8 @@ public class BirdyBoss_PatternOne : ObjectBase
     public void FogOut()
     {
         _fogOutProcess = true;
-        fogDrone.gameObject.SetActive(false);
+        //fogDrone.gameObject.SetActive(false);
+        headPattern.DisableShield();
         _timeCounter.InitSequencer("FogOut");
     }
 
@@ -328,13 +342,14 @@ public class BirdyBoss_PatternOne : ObjectBase
 
         foreach(var item in targetList)
         {
-            if(item.type == EventEnum.SpawnDrone)
+            if (item.type == EventEnum.SpawnDrone)
             {
-                if(item.value == 0)
+                if (item.value == 0)
                 {
-                    for(int i = 0; i < item.code; ++i)
+                    for (int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence(name,0f,null,(x)=>{
+                        _timeCounter.AddSequence(name, 0f, null, (x) =>
+                        {
                             var target = database.SpawnCommonDrone();
                             target.transform.position = GetDroneSpawnPosition(item.point).position;
                         });
@@ -343,24 +358,26 @@ public class BirdyBoss_PatternOne : ObjectBase
                 else
                 {
                     float loopTime = item.value / (float)item.code;
-                    for(int i = 0; i < item.code; ++i)
+                    for (int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
+                        _timeCounter.AddSequence(name, loopTime, null, (x) =>
+                        {
                             var target = database.SpawnCommonDrone();
                             target.transform.position = GetDroneSpawnPosition(item.point).position;
                         });
                     }
                 }
-                
-                
+
+
             }
-            else if(item.type == EventEnum.SpawnFlySpider)
+            else if (item.type == EventEnum.SpawnFlySpider)
             {
-                if(item.value == 0)
+                if (item.value == 0)
                 {
-                    for(int i = 0; i < item.code; ++i)
+                    for (int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence(name,0f,null,(x)=>{
+                        _timeCounter.AddSequence(name, 0f, null, (x) =>
+                        {
                             var target = database.SpawnFlySpider();
                             target.transform.position = ceilingSpawnPosition.position;
                             target.transform.rotation = ceilingSpawnPosition.rotation;
@@ -370,9 +387,10 @@ public class BirdyBoss_PatternOne : ObjectBase
                 else
                 {
                     float loopTime = item.value / (float)item.code;
-                    for(int i = 0; i < item.code; ++i)
+                    for (int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
+                        _timeCounter.AddSequence(name, loopTime, null, (x) =>
+                        {
                             var target = database.SpawnFlySpider();
                             target.transform.position = ceilingSpawnPosition.position;
                             target.transform.rotation = ceilingSpawnPosition.rotation;
@@ -380,13 +398,14 @@ public class BirdyBoss_PatternOne : ObjectBase
                     }
                 }
             }
-            else if(item.type == EventEnum.SpawnSpider)
+            else if (item.type == EventEnum.SpawnSpider)
             {
-                if(item.value == 0)
+                if (item.value == 0)
                 {
-                    for(int i = 0; i < item.code; ++i)
+                    for (int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence(name,0f,null,(x)=>{
+                        _timeCounter.AddSequence(name, 0f, null, (x) =>
+                        {
                             var target = database.SpawnSpider();
                             //target.target = centerTransform;
                             target.transform.position = GetSpawnPosition(item.point).position;
@@ -396,9 +415,10 @@ public class BirdyBoss_PatternOne : ObjectBase
                 else
                 {
                     float loopTime = item.value / (float)item.code;
-                    for(int i = 0; i < item.code; ++i)
+                    for (int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
+                        _timeCounter.AddSequence(name, loopTime, null, (x) =>
+                        {
                             var target = database.SpawnSpider();
                             //target.target = centerTransform;
                             target.transform.position = GetSpawnPosition(item.point).position;
@@ -406,34 +426,38 @@ public class BirdyBoss_PatternOne : ObjectBase
                     }
                 }
             }
-            else if(item.type == EventEnum.SpawnSpiderRandomGrid)
+            else if (item.type == EventEnum.SpawnSpiderRandomGrid)
             {
-                if(item.value == 0)
+                if (item.value == 0)
                 {
-                    for(int i = 0; i < item.code; ++i)
+                    for (int i = 0; i < item.code; ++i)
                     {
-                        
-                        _timeCounter.AddSequence(name,0f,null,(x)=>{
+
+                        _timeCounter.AddSequence(name, 0f, null, (x) =>
+                        {
                             var cube = GetRandomCube();
-                            cube.SetMove(false,0f,1f,0.1f,()=>{
+                            cube.SetMove(false, 0f, 1f, 0.1f, () =>
+                            {
                                 var target = database.SpawnSpider();
                                 //target.target = centerTransform;
                                 target.transform.position = cube.transform.position + Vector3.up * 1.5f;
                                 target.transform.SetParent(cube.transform);
                             });
-                            
+
                         });
                     }
                 }
                 else
                 {
                     float loopTime = item.value / (float)item.code;
-                    for(int i = 0; i < item.code; ++i)
+                    for (int i = 0; i < item.code; ++i)
                     {
-                        
-                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
+
+                        _timeCounter.AddSequence(name, loopTime, null, (x) =>
+                        {
                             var cube = GetRandomCube();
-                            cube.SetMove(false,0f,1f,0.1f,()=>{
+                            cube.SetMove(false, 0f, 1f, 0.1f, () =>
+                            {
                                 var target = database.SpawnSpider();
                                 //target.target = centerTransform;
                                 target.transform.position = cube.transform.position + Vector3.up * 1.5f;
@@ -443,28 +467,14 @@ public class BirdyBoss_PatternOne : ObjectBase
                     }
                 }
             }
-            else if(item.type == EventEnum.SpawnMedusa)
+            else if (item.type == EventEnum.SpawnMedusa)
             {
-                if(item.value == 0)
+                if (item.value == 0)
                 {
-                    for(int i = 0; i < item.code; ++i)
+                    for (int i = 0; i < item.code; ++i)
                     {
-                        _timeCounter.AddSequence(name,0f,null,(x)=>{
-                            var cube = GetRandomMedusaCube();
-                            var target = database.SpawnMedusa();
-                            target.transform.position = cube.transform.position + Vector3.up * .9f;
-
-                            target.GetComponent<BirdyBoss_Medusa>().Launch();
-                            
-                        });
-                    }
-                }
-                else
-                {
-                    float loopTime = item.value / (float)item.code;
-                    for(int i = 0; i < item.code; ++i)
-                    {
-                        _timeCounter.AddSequence(name,loopTime,null,(x)=>{
+                        _timeCounter.AddSequence(name, 0f, null, (x) =>
+                        {
                             var cube = GetRandomMedusaCube();
                             var target = database.SpawnMedusa();
                             target.transform.position = cube.transform.position + Vector3.up * .9f;
@@ -474,43 +484,63 @@ public class BirdyBoss_PatternOne : ObjectBase
                         });
                     }
                 }
+                else
+                {
+                    float loopTime = item.value / (float)item.code;
+                    for (int i = 0; i < item.code; ++i)
+                    {
+                        _timeCounter.AddSequence(name, loopTime, null, (x) =>
+                        {
+                            var cube = GetRandomMedusaCube();
+                            var target = database.SpawnMedusa();
+                            target.transform.position = cube.transform.position + Vector3.up * .9f;
+
+                            target.GetComponent<BirdyBoss_Medusa>().Launch();
+
+                        });
+                    }
+                }
             }
-            else if(item.type == EventEnum.WaitSeconds)
+            else if (item.type == EventEnum.WaitSeconds)
             {
-                _timeCounter.AddSequence(name,item.value,null,null);
+                _timeCounter.AddSequence(name, item.value, null, null);
             }
-            else if(item.type == EventEnum.AnnihilationFence)
+            else if (item.type == EventEnum.AnnihilationFence)
             {
-                _timeCounter.AddFence(name,()=>{
+                _timeCounter.AddFence(name, () =>
+                {
                     return database.updateCount == 0;
                 });
             }
-            else if(item.type == EventEnum.InvokeEvent)
+            else if (item.type == EventEnum.InvokeEvent)
             {
-                _timeCounter.AddSequence(name,item.value,null,(x)=>{
+                _timeCounter.AddSequence(name, item.value, null, (x) =>
+                {
                     item.eventSet?.Invoke();
                 });
             }
-            else if(item.type == EventEnum.CutsceneFence)
+            else if (item.type == EventEnum.CutsceneFence)
             {
-                _timeCounter.AddFence(name,()=>{
+                _timeCounter.AddFence(name, () =>
+                {
                     return !LevelEdit_TimelinePlayer.CUTSCENEPLAY;
                 });
             }
             else if (item.type == EventEnum.DroneAnnihilationFence)
             {
-                _timeCounter.AddFence(name, () => {
+                _timeCounter.AddFence(name, () =>
+                {
                     return database.droneCache.updateCount == 0;
                 });
             }
             else if (item.type == EventEnum.ActiveHPUI)
             {
-                _timeCounter.AddSequence(name, 0f, null, (x)=>
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var data = MessageDataPooling.GetMessageData<MD.BoolData>();
                     data.value = true;
                     SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
-                    
+
                 });
             }
             else if (item.type == EventEnum.DeactiveHPUI)
@@ -526,7 +556,7 @@ public class BirdyBoss_PatternOne : ObjectBase
             {
                 _timeCounter.AddSequence(name, item.value, null, (x) =>
                 {
-                    if(item.code == 0)
+                    if (item.code == 0)
                     {
                         var cube = cubeGrid.GetCubeFromWorld(_player.Position, false);
 
@@ -540,7 +570,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                         if (cube != null)
                             headPattern.StempTarget(cube);
                     }
-                    
+
                 });
             }
             else if (item.type == EventEnum.BirdyApear)
@@ -556,7 +586,7 @@ public class BirdyBoss_PatternOne : ObjectBase
                 {
                     var cube = GetRandomMedusaCube();
 
-                    if(cube != null)
+                    if (cube != null)
                     {
                         var fly = database.SpawnFlySpiderBall();
                         fly.StempTarget(cube);
@@ -565,37 +595,41 @@ public class BirdyBoss_PatternOne : ObjectBase
             }
             else if (item.type == EventEnum.StartFog)
             {
-                _timeCounter.AddSequence(name, item.value, (x)=>{
+                _timeCounter.AddSequence(name, item.value, (x) =>
+                {
                     if (_fogIn)
                         return;
 
                     var factor = x / item.value;
-                    RenderSettings.fogDensity = Mathf.Lerp(fogOutDensity,fogDensity,factor);
+                    RenderSettings.fogDensity = Mathf.Lerp(fogOutDensity, fogDensity, factor);
                 }, (x) =>
                 {
                     if (_fogIn)
                         return;
 
-                    fogDrone.Respawn(headPattern.transform.position);
+                    //fogDrone.Respawn(headPattern.transform.position);
+                    headPattern.FogPathFollow();
                     _fogIn = true;
                 });
             }
             else if (item.type == EventEnum.EndFog)
             {
-                _timeCounter.AddSequence(name, item.value, (x)=>{
+                _timeCounter.AddSequence(name, item.value, (x) =>
+                {
                     if (!_fogIn)
                         return;
-                    
-                    if(fogDrone.gameObject.activeInHierarchy)
-                    {
-                        fogDrone.gameObject.SetActive(false);
-                    }
-                    
+
+                    //if(fogDrone.gameObject.activeInHierarchy)
+                    //{
+                    //    fogDrone.gameObject.SetActive(false);
+                    //}
+                    headPattern.DisableShield();
+
                     var factor = x / item.value;
                     RenderSettings.fogDensity = Mathf.Lerp(fogDensity, fogOutDensity, factor);
                 }, (x) =>
                 {
-                     _fogIn = false;
+                    _fogIn = false;
                 });
             }
             else if (item.type == EventEnum.GenieHitGround)
@@ -605,24 +639,25 @@ public class BirdyBoss_PatternOne : ObjectBase
                     geniePlatform.Active();
                 });
             }
-            else if(item.type == EventEnum.Giro)
+            else if (item.type == EventEnum.Giro)
             {
-                _timeCounter.AddSequence(name, 0f, null, (x) => {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
                     var target = database.SpawnGiroPattern();
                     target.transform.position = headPattern.transform.position;
                     target.transform.SetParent(headPattern.transform);
-                    target.Launch(item.value,item.value2);
+                    target.Launch(item.value, item.value2);
                 });
             }
-            else if(item.type == EventEnum.FallPillar)
+            else if (item.type == EventEnum.FallPillar)
             {
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var target = database.SpawnFallPillarPattern();
-                    for(int i = 0; i < item.code; i++)
+                    for (int i = 0; i < item.code; i++)
                     {
                         var cube = cubeGrid.GetRandomActiveCube(false);
-                        target.AddFallPosition(cubeGrid.CubePointToWorld(cube.cubePoint) + Vector3.up*20.0f);
+                        target.AddFallPosition(cubeGrid.CubePointToWorld(cube.cubePoint) + Vector3.up * 20.0f);
                     }
                 });
             }
@@ -631,17 +666,17 @@ public class BirdyBoss_PatternOne : ObjectBase
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var target = database.SpawnHorizonPillarPattern();
-                    target.Launch(ref horizonPillarPoints,_player.transform,item.value,item.value2,item.value3);
+                    target.Launch(ref horizonPillarPoints, _player.transform, item.value, item.value2, item.value3);
                     //target.SetPoint(ref horizonPillarPoints);
                 });
             }
-            else if(item.type == EventEnum.SpiderPillar)
+            else if (item.type == EventEnum.SpiderPillar)
             {
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
                     var target = database.SpawnSpiderPillarPattern();
                     target.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-                    target.Launch(item.code,item.value,item.value2);
+                    target.Launch(item.code, item.value, item.value2);
                 });
             }
             else if (item.type == EventEnum.GroundCutStart)
@@ -675,17 +710,17 @@ public class BirdyBoss_PatternOne : ObjectBase
             }
             else if (item.type == EventEnum.LoopPatternEndFence)
             {
-                _timeCounter.AddFence(name,()=>
-                {
-                    return !loopSequences[recentlyLoop].active;
-                });
+                _timeCounter.AddFence(name, () =>
+                 {
+                     return !loopSequences[recentlyLoop].active;
+                 });
             }
             else if (item.type == EventEnum.ActiveRandomTentacle)
             {
-                _timeCounter.AddSequence(name,0f, null, (x) =>
-                {
-                    tentacleControl.StartRandomTentacle();
-                });
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                 {
+                     tentacleControl.StartRandomTentacle();
+                 });
             }
             else if (item.type == EventEnum.TentacleFence)
             {
@@ -694,6 +729,67 @@ public class BirdyBoss_PatternOne : ObjectBase
                     return !tentacleControl.IsTentacleActivate();
                 });
             }
+            else if (item.type == EventEnum.GroundShot)
+            {
+                _timeCounter.AddSequence(name, item.value, null, (x) =>
+                {
+                    headPattern.Shot();
+                });
+            }
+            else if (item.type == EventEnum.ExplosionSpiderAll)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    database.ExplosionGroundSpiders();
+                });
+            }
+            else if (item.type == EventEnum.ExplosionDroneAll)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    database.ExplosionDrones();
+                });
+            }
+            else if (item.type == EventEnum.GroundCutV2Start)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    platformCutV2.PatternStart(_player.transform);
+                });
+            }
+            else if (item.type == EventEnum.GroundCutV2End)
+            {
+                _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    platformCutV2.PatternEnd();
+                });
+            }
+            else if (item.type == EventEnum.InverseGroundPattern)
+            {
+                _timeCounter.AddSequence(name, (0f), null, (x) =>
+                {
+                    for (int i = cubeGrid.mapSize / 2 + 1; i > 0; --i)
+                    {
+                        int mapsize = cubeGrid.mapSize / 2 + 1;
+                        float count = (float)(mapsize - i);
+                        int point = i;
+
+                        _groundPatternList.Clear();
+                        cubeGrid.GetCubeRing(ref _groundPatternList, Vector3Int.zero, point - 1);
+
+                        foreach (var hexCube in _groundPatternList)
+                        {
+                            hexCube.SetMove(false, count * item.value + item.value2, 1f, item.value3);
+                            hexCube.SetAlertTime(1f);
+                        }
+                    }
+
+                    var centerCube = cubeGrid.GetCube(Vector3Int.zero);
+                    centerCube.SetMove(false, (float)(cubeGrid.mapSize / 2 + 1) * item.value, 1f, item.value3);
+                    centerCube.SetAlertTime(1f);
+                });
+            }
+
         }
     }
 
@@ -707,10 +803,16 @@ public class BirdyBoss_PatternOne : ObjectBase
         if(!active)
             return;
 
-        
+        if(_respawnCube != null)
+        {
+            _respawnCube.MoveLock(false);
+            _respawnCube.special = false;
+        }
+
         _respawnCube = cubeGrid.GetRandomActiveCube(true);
         _respawnCube.MoveToUp();
         _respawnCube.special = true;
+        _respawnCube.MoveLock(true);
         respawn.SetRespawnPoint(_respawnCube.transform);
 
         _timeCounter.InitSequencer("Respawn");
