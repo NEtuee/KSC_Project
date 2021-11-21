@@ -5,6 +5,7 @@ using UnityEngine;
 public class DissolveControl : MonoBehaviour
 {
     public List<MeshRenderer> targets = new List<MeshRenderer>();
+    public List<Material> targetMaterials = new List<Material>();
     private float _speed = 1f;
 
     private float _time = 0f;
@@ -26,9 +27,19 @@ public class DissolveControl : MonoBehaviour
         }
 
         var factor = Mathf.Lerp(_start, _end, _time);
+        SetDissolve(factor);
+    }
+
+    public void SetDissolve(float factor)
+    {
         foreach (var item in targets)
         {
             item.material.SetFloat("Dissvole", factor);
+        }
+
+        foreach (var item in targetMaterials)
+        {
+            item.SetFloat("Dissvole", factor);
         }
     }
 

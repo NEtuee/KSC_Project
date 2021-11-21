@@ -813,7 +813,7 @@ public class BirdyBoss_PatternOne : ObjectBase
         _respawnCube.MoveToUp();
         _respawnCube.special = true;
         _respawnCube.MoveLock(true);
-        respawn.SetRespawnPoint(_respawnCube.transform);
+        respawn.SetRespawnPoint(_respawnCube.originWorldPosition);
 
         _timeCounter.InitSequencer("Respawn");
 

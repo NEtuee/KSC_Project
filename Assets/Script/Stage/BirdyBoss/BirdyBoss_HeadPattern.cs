@@ -13,11 +13,14 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
     }
 
     public State currentState = State.HeadStemp;
-    public List<MeshRenderer> dissolveTargets = new List<MeshRenderer>();
+    public DissolveControl dissolveControl;
+    //public List<MeshRenderer> dissolveTargets = new List<MeshRenderer>();
     public HexCubeGrid grid;
 
     public Transform shieldObj;
     public NewEmpShield shieldTarget;
+
+    public GameObject disapearTarget;
 
     [Header("Stemp")]
     public float dissolveTime = 1f;
@@ -141,6 +144,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
     {
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
+
+        dissolveControl.SetDissolve(1f);
     }
 
     public override void FixedProgress(float deltaTime)
@@ -330,18 +335,14 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
     public void DissolveIn(float t)
     {
-        foreach(var item in dissolveTargets)
-        {
-            item.material.SetFloat("Dissvole", 1f - (t / dissolveTime));
-        }
+        dissolveControl.SetDissolve(1f - (t / dissolveTime));
+        disapearTarget.SetActive(true);
     }
 
     public void DissolveOut(float t)
     {
-        foreach(var item in dissolveTargets)
-        {
-            item.material.SetFloat("Dissvole", (t / dissolveTime));
-        }
+        dissolveControl.SetDissolve(t / dissolveTime);
+        disapearTarget.SetActive(false);
     }
 
 }

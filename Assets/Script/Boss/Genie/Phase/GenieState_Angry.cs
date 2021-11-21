@@ -58,6 +58,14 @@ public class GenieState_Angry : GenieStateBase
         }
     }
 
+    public void End()
+    {
+        foreach (var item in _disapearList)
+        {
+            item.GetRenderer().material = target.gridControll.prev;
+        }
+    }
+
     public void RandomDisapear(float t)
     {
         foreach(var item in _disapearList)
