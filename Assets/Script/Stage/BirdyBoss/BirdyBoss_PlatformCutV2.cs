@@ -5,7 +5,7 @@ using UnityEngine;
 public class BirdyBoss_PlatformCutV2 : MonoBehaviour
 {
     public HexCubeGrid grid;
-    public float cubeTerm = 1f;
+    public float cubeTerm = 2f;
     public float cubeSpeed = 1f;
 
     public int safeZone = 7;
