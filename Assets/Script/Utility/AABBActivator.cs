@@ -16,6 +16,7 @@ public class AABBActivator : MonoBehaviour
     private void Start()
     {
         _bounds = new Bounds();
+        _mainCameraTransform = Camera.main.transform;
         UpdateBounds();
     }
 
