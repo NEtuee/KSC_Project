@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ScanMaker : MonoBehaviour
 {
+    public float reductionSize = 25f;
     private RectTransform _rectTransform;
     private bool _visible;
     public bool Visible { get => _visible; }
@@ -35,10 +36,19 @@ public class ScanMaker : MonoBehaviour
             Vector3 minPos = Camera.main.WorldToScreenPoint(collider.bounds.min);
             Vector3 maxPos = Camera.main.WorldToScreenPoint(collider.bounds.max);
 
-            float height = Mathf.Abs(maxPos.y - minPos.y);
-            float width = Mathf.Abs(maxPos.x - minPos.x);
-            float size = height > width ? height : width;
-            size = Mathf.Clamp(size, 50.0f, 150.0f);
+            float size = 0.0f;
+            if (screenPos.x <= 0.0f || screenPos.x >= Screen.currentResolution.width ||
+                screenPos.y <= 0.0f || screenPos.y >= Screen.currentResolution.height)
+            {
+                size = reductionSize;
+            }
+            else
+            {
+                float height = Mathf.Abs(maxPos.y - minPos.y);
+                float width = Mathf.Abs(maxPos.x - minPos.x);
+                size = height > width ? height : width;
+                size = Mathf.Clamp(size, 50.0f, 150.0f);
+            }
 
             screenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.currentResolution.width);
             screenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.currentResolution.height);
