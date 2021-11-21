@@ -211,8 +211,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
     {
         currentState = State.FogMove;
 
-        shieldTarget.gameObject.SetActive(true);
         shieldTarget.Reactive();
+        shieldTarget.gameObject.SetActive(true);
 
         SetPath("FogBirdyPath", true);
     }

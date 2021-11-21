@@ -156,7 +156,7 @@ public class BirdyBoss_PatternOne : ObjectBase
         
 
         _timeCounter.CreateSequencer("Respawn");
-        _timeCounter.AddSequence("Respawn",5f,null,(x)=>{
+        _timeCounter.AddSequence("Respawn",10f,null,(x)=>{
             if (_respawnCube != null)
             {
                 _respawnCube.special = false;

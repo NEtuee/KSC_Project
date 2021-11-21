@@ -105,7 +105,8 @@ public class PathfollowObjectBase : ObjectBase
             return true;
 
         SetTarget(targetTransform.position);
-        Move(transform.forward,moveSpeed,rotationSpeed, deltaTime);
+        var direction = (targetTransform.position - transform.position).normalized;
+        Move(direction, moveSpeed,rotationSpeed, deltaTime);
         if(IsArrivedTarget(distanceAccuracy))
         {
             _moveOneToOne = false;
