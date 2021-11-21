@@ -9,6 +9,10 @@ public class DroneStatusUI : MonoBehaviour
 {
     private Canvas _canvas;
 
+    [Header("BLine")]
+
+    [SerializeField] private GameObject blineUiRoot;
+
     [SerializeField] private Image droneCenterImage;
     [SerializeField] private Image droneEyeImage;
     [SerializeField] private Image droneLineImage;
@@ -20,6 +24,44 @@ public class DroneStatusUI : MonoBehaviour
     [SerializeField]private GameObject[] hpIcons = new GameObject[10];
 
     private int currentHp = 8;
+
+    [Header("Final")]
+
+    [SerializeField] private GameObject finalHpUiRoot;
+
+    private int damageCount = 0;
+
+    [SerializeField] private Image first_underLeft_front;
+    [SerializeField] private Image first_underLeft_back;
+
+    [SerializeField] private Image second_underRight_front;
+    [SerializeField] private Image second_underRight_back;
+
+    [SerializeField] private Image third_upLeft_front;
+    [SerializeField] private Image third_upLeft_back;
+
+    [SerializeField] private Image fourth_upRight_front;
+    [SerializeField] private Image fourth_upRight_back;
+
+    [SerializeField] private Image fifth_upLeft_front;
+    [SerializeField] private Image fifth_upLeft_back;
+
+    [SerializeField] private Image sixth_upRight_front;
+    [SerializeField] private Image sixth_upRight_back;
+
+    [SerializeField] private Image seventh_upLeft_front;
+    [SerializeField] private Image seventh_upLeft_back;
+
+    [SerializeField] private Image eighth_upRight_front;
+    [SerializeField] private Image eighth_upRight_back;
+
+    [SerializeField] private Image nineth_center_front;
+    [SerializeField] private Image nineth_center_back;
+
+    [SerializeField] private Image ten_center;
+
+    [SerializeField] private List<Image> frontElements = new List<Image>();
+    [SerializeField] private List<Image> backElements = new List<Image>();
 
     private void Awake()
     {
@@ -68,8 +110,13 @@ public class DroneStatusUI : MonoBehaviour
 
         if (enable)
         {
+            blineUiRoot.SetActive(true);
+            finalHpUiRoot.SetActive(false);
             InitDronHpUi();
             Appear();
+
+            nineth_center_front.rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.0f);
+            nineth_center_front.DOFade(1f, 0.0f);
         }
     }
 
@@ -94,19 +141,135 @@ public class DroneStatusUI : MonoBehaviour
         }
     }
 
-    //private void Update()
-    //{
-    //    if(Keyboard.current.bKey.wasPressedThisFrame)
-    //    {
-    //        Enable(true);
-    //    }
-    //    if (Keyboard.current.digit7Key.wasPressedThisFrame)
-    //    {
-    //        SetHpCount(7);
-    //    }
-    //    if (Keyboard.current.digit6Key.wasPressedThisFrame)
-    //    {
-    //        SetHpCount(6);
-    //    }
-    //}
+    public void InitFinalHpUi()
+    {
+        blineUiRoot.SetActive(false);
+        finalHpUiRoot.SetActive(true);
+
+        foreach(var front in frontElements)
+        {
+            front.DOFillAmount(0, 0f);
+            front.rectTransform.DOScale(new Vector3(1, 1, 1), 0f);
+        }
+
+        foreach (var back in backElements)
+        {
+            back.DOFade(0, 0f);
+            back.color = Color.white;
+        }
+
+        damageCount = 0;
+
+        AppearFinalUi();
+    }
+
+    public void AppearFinalUi()
+    {
+        first_underLeft_front.DOFillAmount(1f, 1f);
+        second_underRight_front.DOFillAmount(1f, 1f);
+
+        seventh_upLeft_front.DOFillAmount(1f, 0.6f);
+        eighth_upRight_front.DOFillAmount(1f, 0.6f).OnComplete(()=> 
+        {
+            fifth_upLeft_front.DOFillAmount(1f, 0.6f);
+            sixth_upRight_front.DOFillAmount(1f, 0.6f).OnComplete(()=>
+            {
+                third_upLeft_front.DOFillAmount(1f, 0.6f);
+                fourth_upRight_front.DOFillAmount(1f, 0.6f);
+            });
+        });
+    }
+
+    public void Damage()
+    {
+        if(damageCount == 0)
+        {
+            first_underLeft_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
+            first_underLeft_front.DOFade(0.0f, 0.5f);
+            first_underLeft_back.DOFade(1f, 0f);
+            first_underLeft_back.color = Color.red;
+        }
+        else if(damageCount == 1)
+        {
+            second_underRight_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
+            second_underRight_front.DOFade(0.0f, 0.5f);
+            second_underRight_back.DOFade(1f, 0f);
+            second_underRight_back.color = Color.red;
+        }
+        else if (damageCount == 2)
+        {
+            third_upLeft_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
+            third_upLeft_front.DOFade(0.0f, 0.5f);
+            third_upLeft_back.DOFade(1f, 0f);
+            third_upLeft_back.color = Color.red;
+        }
+        else if (damageCount == 3)
+        {
+            fourth_upRight_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
+            fourth_upRight_front.DOFade(0.0f, 0.5f);
+            fourth_upRight_back.DOFade(1f, 0f);
+            fourth_upRight_back.color = Color.red;
+        }
+        else if (damageCount == 4)
+        {
+            fifth_upLeft_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
+            fifth_upLeft_front.DOFade(0.0f, 0.5f);
+            fifth_upLeft_back.DOFade(1f, 0f);
+            fifth_upLeft_back.color = Color.red;
+        }
+        else if (damageCount == 5)
+        {
+            sixth_upRight_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
+            sixth_upRight_front.DOFade(0.0f, 0.5f);
+            sixth_upRight_back.DOFade(1f, 0f);
+            sixth_upRight_back.color = Color.red;
+        }
+        else if (damageCount == 6)
+        {
+            seventh_upLeft_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
+            seventh_upLeft_front.DOFade(0.0f, 0.5f);
+            seventh_upLeft_back.DOFade(1f, 0f);
+            seventh_upLeft_back.color = Color.red;
+        }
+        else if (damageCount == 7)
+        {
+            eighth_upRight_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
+            eighth_upRight_front.DOFade(0.0f, 0.5f);
+            eighth_upRight_back.DOFade(1f, 0f);
+            eighth_upRight_back.color = Color.red;
+        }
+        else if (damageCount == 8)
+        {
+            //nineth_center_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
+            nineth_center_front.DOFade(0.0f, 0.5f);
+            nineth_center_back.DOFade(1f, 0f);
+            nineth_center_back.color = Color.red;
+        }
+        else if (damageCount == 9)
+        {
+
+        }
+        else if (damageCount == 10)
+        {
+
+        }
+        damageCount++;
+    }
+
+
+    private void Update()
+    {
+        //if (Keyboard.current.digit6Key.wasPressedThisFrame)
+        //{
+        //    Enable(true);
+        //}
+        //if (Keyboard.current.digit7Key.wasPressedThisFrame)
+        //{
+        //    InitFinalHpUi();
+        //}
+        //if (Keyboard.current.digit8Key.wasPressedThisFrame)
+        //{
+        //    Damage();
+        //}
+    }
 }

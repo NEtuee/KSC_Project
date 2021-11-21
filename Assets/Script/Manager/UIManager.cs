@@ -493,6 +493,16 @@ public class UIManager : ManagerBase
                  statusUi.SetVisible(false,0.1f);
              }
          });
+
+        AddAction(MessageTitles.uimanager_ActiveFianlHp, (msg) =>
+        {
+            droneStatusUI.InitFinalHpUi();
+        });
+
+        AddAction(MessageTitles.uimanager_damageFianlBossUi, (msg) =>
+        {
+            droneStatusUI.Damage();
+        });
     }
 
     public override void Initialize()
