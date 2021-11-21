@@ -172,6 +172,24 @@ public class B1_Spider : PathfollowObjectBase
         return (target.position - transform.position).normalized;
     }
 
+    public void Explosion(float force = 150f)
+    {
+        var playerDist = Vector3.Distance(_player.transform.position, transform.position);
+        var dir = (_player.transform.position - transform.position).normalized;
+        if (playerDist <= explosionRadius)
+        {
+            _player.Ragdoll.ExplosionRagdoll(force, dir);
+            _player.TakeDamage(damage);
+        }
+
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+        data.key = "CannonExplosion";
+        data.position = transform.position;
+        data.rotation = Quaternion.identity;
+        data.parent = null;
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
+    }
+
     public void Explosion(Vector3 dir,float force)
     {
         var playerDist = Vector3.Distance(_player.transform.position,transform.position);

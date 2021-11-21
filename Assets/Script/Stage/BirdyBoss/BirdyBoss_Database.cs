@@ -36,6 +36,8 @@ public class BirdyBoss_Database : MonoBehaviour
             }
         }
 
+        public Dictionary<int, T> GetActiveTargets() { return _activeObjects; }
+
         public void DisposeAll()
         {
             foreach(var item in _activeObjects.Values)
@@ -121,6 +123,26 @@ public class BirdyBoss_Database : MonoBehaviour
         spiderCache.DisposeAll();
         flySpiderCache.DisposeAll();
         droneCache.DisposeAll();
+    }
+
+    public void ExplosionGroundSpiders()
+    {
+        var targets = spiderCache.GetActiveTargets();
+        foreach(var item in targets.Values)
+        {
+            item.Explosion();
+            item.gameObject.SetActive(false);
+        }
+    }
+
+    public void ExplosionDrones()
+    {
+        var targets = droneCache.GetActiveTargets();
+        foreach (var item in targets.Values)
+        {
+            item.shield.Hit();
+            //item.gameObject.SetActive(false);
+        }
     }
 
     public void Awake()
