@@ -281,6 +281,9 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         grid.GetCubeLineHeavy(ref _lineList,start.cubePoint,endPoint,0,6);
         foreach(var item in _lineList)
         {
+            if (!item.IsActive())
+                continue;
+
             var dist = Vector3.Distance(start.originWorldPosition.position,item.originWorldPosition.position);
             item.SetMove(false,dist * distanceFactor * distanceTerm,1f,shotDownTime);
             item.SetAlertTime(1f);
