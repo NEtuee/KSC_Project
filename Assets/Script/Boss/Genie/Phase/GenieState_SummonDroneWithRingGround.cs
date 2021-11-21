@@ -51,7 +51,18 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
         
         _timeCounter.CreateSequencer("SpawnDrones");
         _timeCounter.AddSequence("SpawnDrones", droneSpawnStartTime, null,SpawnReady);
-        _timeCounter.AddSequence("SpawnDrones", droneSpawnTiming, null,SpawnProgress);
+        _timeCounter.AddSequence("SpawnDrones", 1f, null, (x)=> {
+            MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+
+            data.key = "GenieChestBeam";
+            data.position = droneSpawnPoint.position;
+            data.rotation = droneSpawnPoint.rotation;
+            data.parent = droneSpawnPoint;
+
+            target.SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,
+                        UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+        });
+        _timeCounter.AddSequence("SpawnDrones", droneSpawnTiming - 1f, null,SpawnProgress);
 
         _timeCounter.CreateSequencer("Drag");
         _timeCounter.AddSequence("Drag", .8f, null, (x) => {
