@@ -413,7 +413,7 @@ public class BirdyBossPatternEditor : EditorWindow
         }
         else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.ActiveHPUI)
         {
-            desc = "여기서 안씀";
+            desc = "HP UI 켜기";
             GUI.enabled = false;
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;

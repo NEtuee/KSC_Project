@@ -305,7 +305,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             foreach(var item in _ringList)
             {
                 item.SetMove(false,(float)(i - 1) * ringTerm,ringSpeed,ringActiveTime);
-                item.SetAlertTime(1f);
+                //item.SetAlertTime(1f);
             }
         }
     }

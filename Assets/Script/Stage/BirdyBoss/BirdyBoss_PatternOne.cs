@@ -305,6 +305,11 @@ public class BirdyBoss_PatternOne : ObjectBase
         }
     }
 
+    public void SetDamage()
+    {
+        SendMessageEx(MessageTitles.uimanager_damageFianlBossUi, GetSavedNumber("UIManager"), null);
+    }
+
     public void LoopStart(int target)
     {
         if (loopSequences[target].active)
@@ -540,17 +545,17 @@ public class BirdyBoss_PatternOne : ObjectBase
                     var data = MessageDataPooling.GetMessageData<MD.BoolData>();
                     data.value = true;
                     SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
-
+                    SendMessageEx(MessageTitles.uimanager_ActiveFianlHp, GetSavedNumber("UIManager"), null);
                 });
             }
             else if (item.type == EventEnum.DeactiveHPUI)
             {
-                _timeCounter.AddSequence(name, 0f, null, (x) =>
-                {
-                    var data = MessageDataPooling.GetMessageData<MD.BoolData>();
-                    data.value = false;
-                    SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
-                });
+                //_timeCounter.AddSequence(name, 0f, null, (x) =>
+                //{
+                //    var data = MessageDataPooling.GetMessageData<MD.BoolData>();
+                //    data.value = false;
+                //    SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
+                //});
             }
             else if (item.type == EventEnum.HeadStemp)
             {
@@ -780,13 +785,13 @@ public class BirdyBoss_PatternOne : ObjectBase
                         foreach (var hexCube in _groundPatternList)
                         {
                             hexCube.SetMove(false, count * item.value + item.value2, 1f, item.value3);
-                            hexCube.SetAlertTime(1f);
+                            //hexCube.SetAlertTime(1f);
                         }
                     }
 
                     var centerCube = cubeGrid.GetCube(Vector3Int.zero);
                     centerCube.SetMove(false, (float)(cubeGrid.mapSize / 2 + 1) * item.value, 1f, item.value3);
-                    centerCube.SetAlertTime(1f);
+                   // centerCube.SetAlertTime(1f);
                 });
             }
 
