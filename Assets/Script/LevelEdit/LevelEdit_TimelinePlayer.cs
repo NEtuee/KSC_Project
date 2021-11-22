@@ -84,10 +84,6 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
                     camData.yaw = endTransform.eulerAngles.y;
                     SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
                 }
-
-                var canvasEnable = MessageDataPooling.GetMessageData<MD.BoolData>();
-                canvasEnable.value = false;
-                SendMessageEx(MessageTitles.uimanager_activePlayUi, GetSavedNumber("UIManager"), canvasEnable);
             };
 
             SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);
@@ -106,6 +102,20 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
             playableDirector.SetGenericBinding(track, _mainCamBrain);
             playableDirector.Play();
+
+            if (endTransform != null)
+            {
+                var positionData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
+                positionData.position = endTransform.position;
+                positionData.rotation = endTransform.rotation;
+                SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), positionData);
+
+                MD.PitchYawPositionData camData = MessageDataPooling.GetMessageData<MD.PitchYawPositionData>();
+                camData.position = endTransform.position;
+                camData.pitch = endTransform.eulerAngles.x;
+                camData.yaw = endTransform.eulerAngles.y;
+                SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
+            }
         }
 
         //GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
@@ -234,6 +244,10 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             //rotateLock.value = true;
             //SendMessageEx(MessageTitles.cameramanager_cameraRotateLock, GetSavedNumber("CameraManager"), rotateLock);
             SendMessageEx(MessageTitles.playermanager_DeactivateInput, GetSavedNumber("PlayerManager"), null);
+
+            var canvasEnable = MessageDataPooling.GetMessageData<MD.BoolData>();
+            canvasEnable.value = false;
+            SendMessageEx(MessageTitles.uimanager_activePlayUi, GetSavedNumber("UIManager"), canvasEnable);
         }
         CUTSCENEPLAY = true;
     }
