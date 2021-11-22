@@ -490,7 +490,7 @@ public class UIManager : ManagerBase
              if (data.value == false)
              {
                  crossHairCanvas.enabled = data.value;
-                 statusUi.SetVisible(false,0.1f);
+                 statusUi.SetVisible(false,0.0f);
              }
          });
 

@@ -13,7 +13,7 @@ public class InformationUI : MonoBehaviour
 
     [SerializeField] private State state = State.Hide;
     [SerializeField] private FadeAppearImage uiRoot;
-    [SerializeField] private DroneDescript descript;
+    [SerializeField] private InformationScriptable descript;
     [SerializeField] private TextMeshProUGUI text;
 
     [SerializeField] private float showTime = 4f;
@@ -22,15 +22,15 @@ public class InformationUI : MonoBehaviour
 
     private TimeCounterEx _timeCounter = new TimeCounterEx();
 
-    private Dictionary<string, string> informationDic = new Dictionary<string, string>();
+    private Dictionary<string, InfomationText> informationDic = new Dictionary<string, InfomationText>();
 
     private void Awake()
     {
         _canvas = GetComponent<Canvas>();
 
-        for(int i = 0; i < descript.descripts.Count; i++)
+        for(int i = 0; i < descript.data.Count; i++)
         {
-            informationDic.Add(descript.descripts[i].key, descript.descripts[i].descript);
+            informationDic.Add(descript.data[i].key, descript.data[i]);
         }
 
         _timeCounter.CreateSequencer("Appear");
@@ -62,7 +62,16 @@ public class InformationUI : MonoBehaviour
         _timeCounter.InitSequencer("Appear");
 
         if (informationDic.ContainsKey(key) == true)
-            text.text = informationDic[key];
+        {
+            if(PlayerUnit.GamepadMode == true)
+            {
+                text.text = informationDic[key].gamepad;
+            }
+            else
+            {
+                text.text = informationDic[key].keyboardMouse;
+            }
+        }
     }
 
     public void Update()
