@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &20466202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -650,6 +650,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2941796248014534658, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: autoProc
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
         type: 3}
       propertyPath: m_RootOrder
@@ -715,6 +720,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 4748930941247493527, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5233008597085723908, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
         type: 3}
       propertyPath: m_Layer
@@ -747,6 +757,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d306c32c1b28e8e488eb5ff6a0eee40e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &65846970 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5855732727055440423, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 65846968}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2b746a3c79dcbc408b8c62509086acc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &83110472
@@ -1233,6 +1255,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mesh_HubLantren_02 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2039636082820169851, guid: 31bb2b1ae5d247d4da2054c2a7808300,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31bb2b1ae5d247d4da2054c2a7808300, type: 3}
@@ -1796,7 +1823,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &390446783
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3263,7 +3290,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &801747547
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5868,6 +5895,10 @@ MonoBehaviour:
   - id: 13
   - id: 14
   - id: 15
+  - id: 16
+  - id: 17
+  - id: 18
+  - id: 19
   edges:
   - GUID: 0c68f8cc-b163-419c-a351-ce7052778c8e
     owner: {fileID: 1025208030}
@@ -5899,22 +5930,6 @@ MonoBehaviour:
     outputNodeGUID: 83ef978f-cdda-450b-8a59-52127093a16d
     inputFieldName: target
     outputFieldName: output
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 23d041ac-ab5e-4671-a833-2d2452c98149
-    owner: {fileID: 1025208030}
-    inputNodeGUID: a056a4fe-2a45-42ed-afda-225463628a53
-    outputNodeGUID: f27995e3-5b80-4006-b922-d2d5e0f82201
-    inputFieldName: executed
-    outputFieldName: true
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 730269c8-7047-4049-944d-23774103930e
-    owner: {fileID: 1025208030}
-    inputNodeGUID: 0bc5745a-8d7d-4fd7-9052-e7a003f6b800
-    outputNodeGUID: a056a4fe-2a45-42ed-afda-225463628a53
-    inputFieldName: executed
-    outputFieldName: executes
     inputPortIdentifier: 
     outputPortIdentifier: 
   - GUID: 21353830-b0bf-4ea3-b5f6-80eaf5f5b245
@@ -5957,14 +5972,6 @@ MonoBehaviour:
     outputFieldName: trigger
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 4dce67a5-4726-44a9-9280-0449842c575e
-    owner: {fileID: 1025208030}
-    inputNodeGUID: 7afd2bc2-1ca6-48fa-b15c-87aba5eb5bf7
-    outputNodeGUID: 8d3f7bd0-683c-4f73-a6b9-4456ee8e61aa
-    inputFieldName: executed
-    outputFieldName: true
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: dedb7874-96be-47ba-bc76-d7564581d9a1
     owner: {fileID: 1025208030}
     inputNodeGUID: 7afd2bc2-1ca6-48fa-b15c-87aba5eb5bf7
@@ -5989,12 +5996,52 @@ MonoBehaviour:
     outputFieldName: output
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: f8af57a4-fdf4-4b22-adf9-31ed73477064
+    owner: {fileID: 1025208030}
+    inputNodeGUID: 770b6b65-e5f5-4b87-9d32-78dd3e5e0011
+    outputNodeGUID: f27995e3-5b80-4006-b922-d2d5e0f82201
+    inputFieldName: executed
+    outputFieldName: true
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 3a863147-d270-407b-90f0-b5833ee1bb37
+    owner: {fileID: 1025208030}
+    inputNodeGUID: 0bc5745a-8d7d-4fd7-9052-e7a003f6b800
+    outputNodeGUID: 770b6b65-e5f5-4b87-9d32-78dd3e5e0011
+    inputFieldName: executed
+    outputFieldName: executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 750d3c3a-c31d-4f09-bff6-ab87c525dacd
+    owner: {fileID: 1025208030}
+    inputNodeGUID: 770b6b65-e5f5-4b87-9d32-78dd3e5e0011
+    outputNodeGUID: b79df846-d332-48e7-a668-80a4c15b8aaa
+    inputFieldName: unityEvent
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
+  - GUID: 85e3003f-4968-41de-a949-9f161379d44b
+    owner: {fileID: 1025208030}
+    inputNodeGUID: bc6778b6-91df-49c9-84df-8fe7b142e7b0
+    outputNodeGUID: 8d3f7bd0-683c-4f73-a6b9-4456ee8e61aa
+    inputFieldName: executed
+    outputFieldName: true
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: e6e16a5a-cb54-41e7-9706-5fd73088b3bd
+    owner: {fileID: 1025208030}
+    inputNodeGUID: bc6778b6-91df-49c9-84df-8fe7b142e7b0
+    outputNodeGUID: 9f0f273d-ffbd-448c-ba37-48a5488698a8
+    inputFieldName: unityEvent
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: output
   groups: []
   stackNodes: []
   pinnedElements:
   - position:
       serializedVersion: 2
-      x: 0
+      x: 2
       y: 0
       width: 150
       height: 200
@@ -6003,14 +6050,16 @@ MonoBehaviour:
       serializedType: GraphProcessor.ExposedParameterView, GraphEditorAssembly, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
   exposedParameters:
-  - id: 16
-  - id: 17
-  - id: 18
+  - id: 20
+  - id: 21
+  - id: 22
+  - id: 23
+  - id: 24
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 616, y: 352, z: 0}
-  scale: {x: 0.43232757, y: 0.43232757, z: 1}
+  position: {x: 423, y: 228, z: 0}
+  scale: {x: 0.375937, y: 0.375937, z: 1}
   functions: []
   functionID: 0
   states: []
@@ -6061,8 +6110,8 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 389.84497
-          y: -261.833
+          x: -15
+          y: -486.56
           width: 232
           height: 95
         expanded: 0
@@ -6077,8 +6126,8 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 1083.845
-          y: -245.83301
+          x: 1185
+          y: -373
           width: 248
           height: 95
         expanded: 0
@@ -6162,8 +6211,8 @@ MonoBehaviour:
         computeOrder: 8
         position:
           serializedVersion: 2
-          x: 651.8449
-          y: -261.833
+          x: 247
+          y: -486.56
           width: 170
           height: 123
         expanded: 0
@@ -6176,7 +6225,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 0bc5745a-8d7d-4fd7-9052-e7a003f6b800
-        computeOrder: 9
+        computeOrder: 11
         position:
           serializedVersion: 2
           x: 860.845
@@ -6193,7 +6242,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 8d3f7bd0-683c-4f73-a6b9-4456ee8e61aa
-        computeOrder: 12
+        computeOrder: 14
         position:
           serializedVersion: 2
           x: 1093.8451
@@ -6210,7 +6259,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 3d3bf18e-8b8a-4ff5-8fef-392a15618817
-        computeOrder: 10
+        computeOrder: 12
         position:
           serializedVersion: 2
           x: 747.845
@@ -6227,7 +6276,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: bd6db062-f7d5-4e33-a91f-d8bf66ae4b55
-        computeOrder: 11
+        computeOrder: 13
         position:
           serializedVersion: 2
           x: 860.845
@@ -6246,11 +6295,11 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 7afd2bc2-1ca6-48fa-b15c-87aba5eb5bf7
-        computeOrder: 13
+        computeOrder: 15
         position:
           serializedVersion: 2
-          x: 1366.8448
-          y: -121.833
+          x: 1508
+          y: -373
           width: 170
           height: 123
         expanded: 0
@@ -6263,7 +6312,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 7d2efca3-9837-43c2-be80-80164219226b
-        computeOrder: 14
+        computeOrder: 16
         position:
           serializedVersion: 2
           x: 238.21744
@@ -6279,7 +6328,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: dad2fd07-b9f5-47c8-9073-11c9e95f78d5
-        computeOrder: 15
+        computeOrder: 17
         position:
           serializedVersion: 2
           x: 781.73914
@@ -6291,6 +6340,76 @@ MonoBehaviour:
         nodeLock: 0
         obj: {fileID: 0}
     00000010:
+      type: {class: InvokeUnityEventNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 770b6b65-e5f5-4b87-9d32-78dd3e5e0011
+        computeOrder: 10
+        position:
+          serializedVersion: 2
+          x: 641
+          y: -250
+          width: 181
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+    00000011:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: b79df846-d332-48e7-a668-80a4c15b8aaa
+        computeOrder: 9
+        position:
+          serializedVersion: 2
+          x: 526
+          y: -183
+          width: 62
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: c36711ea-2745-46f8-9bf4-5a8265046579
+        accessor: 0
+    00000012:
+      type: {class: InvokeUnityEventNode, ns: , asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: bc6778b6-91df-49c9-84df-8fe7b142e7b0
+        computeOrder: 19
+        position:
+          serializedVersion: 2
+          x: 1372
+          y: -122
+          width: 181
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+    00000013:
+      type: {class: ParameterNode, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        nodeCustomName: 
+        GUID: 9f0f273d-ffbd-448c-ba37-48a5488698a8
+        computeOrder: 18
+        position:
+          serializedVersion: 2
+          x: 1271
+          y: -58
+          width: 62
+          height: 23
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: e889e9eb-54dd-4853-bb8a-486162eec57d
+        accessor: 0
+    00000014:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: 42b2d5c3-c704-483a-a969-fdf350b8db14
@@ -6303,9 +6422,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 19
+          id: 25
         val: {fileID: 0}
-    00000011:
+    00000015:
       type: {class: TransformParameter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: b78da181-cb8d-46ff-abd7-4cf946750d13
@@ -6318,9 +6437,9 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 20
+          id: 26
         val: {fileID: 0}
-    00000012:
+    00000016:
       type: {class: GraphObjectParamter, ns: GraphProcessor, asm: EveryAssembly}
       data:
         guid: ae47890d-a02c-470c-a5aa-46f555c4d849
@@ -6333,26 +6452,96 @@ MonoBehaviour:
         input: 1
         canDelete: 0
         settings:
-          id: 21
+          id: 27
         val: {fileID: 0}
-    00000013:
+    00000017:
+      type: {class: UnityEventParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: c36711ea-2745-46f8-9bf4-5a8265046579
+        name: AOff
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 1
+        settings:
+          id: 28
+        val:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1337059370}
+              m_TargetAssemblyTypeName: AABBActivator_Player, Assembly-CSharp
+              m_MethodName: SetActivator
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+    00000018:
+      type: {class: UnityEventParameter, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        guid: e889e9eb-54dd-4853-bb8a-486162eec57d
+        name: BOff
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        canDelete: 1
+        settings:
+          id: 29
+        val:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 65846970}
+              m_TargetAssemblyTypeName: AABBActivator_Player, Assembly-CSharp
+              m_MethodName: SetActivator
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+    00000019:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: 42b2d5c3-c704-483a-a969-fdf350b8db14
-    00000014:
+    0000001A:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: b78da181-cb8d-46ff-abd7-4cf946750d13
-    00000015:
+    0000001B:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
       data:
         isHidden: 1
         expanded: 0
         guid: ae47890d-a02c-470c-a5aa-46f555c4d849
+    0000001C:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: c36711ea-2745-46f8-9bf4-5a8265046579
+    0000001D:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: EveryAssembly}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: e889e9eb-54dd-4853-bb8a-486162eec57d
 --- !u!1001 &1051350557
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6434,6 +6623,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mesh_HubLantren_02 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2039636082820169851, guid: 31bb2b1ae5d247d4da2054c2a7808300,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31bb2b1ae5d247d4da2054c2a7808300, type: 3}
@@ -8493,6 +8687,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2941796248014534658, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: autoProc
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3412010412831858648, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
         type: 3}
       propertyPath: m_RootOrder
@@ -8558,6 +8757,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 4748930941247493527, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5233008597085723908, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
         type: 3}
       propertyPath: m_Layer
@@ -8578,6 +8782,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 8634613005364169889, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4c43b028d1fe1544ae135fdeb64a8c1, type: 3}
 --- !u!114 &1337059369 stripped
@@ -8590,6 +8799,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d306c32c1b28e8e488eb5ff6a0eee40e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1337059370 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5855732727055440423, guid: f4c43b028d1fe1544ae135fdeb64a8c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1337059368}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2b746a3c79dcbc408b8c62509086acc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1360744162
