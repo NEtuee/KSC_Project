@@ -86,7 +86,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         });
         _timeCounterEx.AddSequence("Stemp",stempStartTime,(x)=> {
             var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
-            shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.2f);
+            shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
         },(x)=> {
             //_lookDown = true;
         });
@@ -107,7 +107,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         {
             _timeCounterEx.AddSequence("Shot",shotTerm,(x)=>{
                 var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
-                shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.2f);
+                shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
             },null);
             _timeCounterEx.AddSequence("Shot",shotWait,null,(x)=>{
                 Line(shieldObj.forward);
@@ -313,13 +313,13 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
     public void ShieldLookPlayer()
     {
         var dir = (_player.transform.position - shieldObj.position).normalized;
-        shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.2f);
+        shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
     }
 
     public void ShieldLookDown()
     {
         var dir = Vector3.down;
-        shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.2f);
+        shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
     }
 
     public void Stemp(float x)
