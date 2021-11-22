@@ -131,6 +131,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     #endregion
 
     #region QuickStanding
+    public TrailPlayer TrailPlayer => trailPlayer;
     public float QuickStandCoolTime { get => quickStandingCoolTime; set => quickStandingCoolTime = value; }
     public FloatReactiveProperty CurrentQuickStandCoolTime => currentQuickStandingCoolTime;
     public bool CanQuickStanding => bCanQuickStanding;
@@ -1522,6 +1523,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
     [SerializeField] private bool bCanDash = true;
 
     [Header("QuickStanding")]
+    [SerializeField] private TrailPlayer trailPlayer;
     [SerializeField] private float quickStandingCoolTime = 5.0f;
     private FloatReactiveProperty currentQuickStandingCoolTime = new FloatReactiveProperty(0.0f);
     private bool bCanQuickStanding = true;
