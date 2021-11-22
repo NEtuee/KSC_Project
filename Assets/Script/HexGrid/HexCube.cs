@@ -40,6 +40,12 @@ public class HexCube : MonoBehaviour
     private System.Action _whenDisable;
     private System.Action _whenEnable;
 
+    public void Awake()
+    {
+        originWorldPosition = (new GameObject("origin")).transform;
+        originWorldPosition.position = transform.position;
+    }
+
     public void Start()
     {
         _collider = GetComponent<Collider>();
@@ -51,9 +57,6 @@ public class HexCube : MonoBehaviour
         }
 
         _originMaterial = _renderer.material;
-
-        originWorldPosition = (new GameObject("origin")).transform;
-        originWorldPosition.position = transform.position;
 
         _originalLocalPosition = transform.localPosition;
         _moveTime = 1f;
