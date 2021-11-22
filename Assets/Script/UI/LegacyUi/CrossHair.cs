@@ -39,7 +39,9 @@ public class CrossHair : MonoBehaviour
     [SerializeField] private RectTransform leftGrid;
     [SerializeField] private RectTransform rightGrid;
     [SerializeField] private Image leftGridGage;
+    [SerializeField] private Image leftGridGage2;
     [SerializeField] private Image rightGridGage;
+    [SerializeField] private Image rightGridGage2;
 
     [SerializeField] private float backGroundOriginalWidth;
     [SerializeField] private float backGroundEffectWidth;
@@ -182,7 +184,9 @@ public class CrossHair : MonoBehaviour
     public void SetChargeGageValue(float value)
     {
         leftGridGage.fillAmount = value;
+        leftGridGage2.fillAmount = value;
         rightGridGage.fillAmount = value;
+        rightGridGage2.fillAmount = value;
     }
 
     public void First()

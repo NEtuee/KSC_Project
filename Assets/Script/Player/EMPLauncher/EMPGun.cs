@@ -284,6 +284,9 @@ public class EMPGun : UnTransfromObjectBase
 
         _canLaunch = false;
         _timer.InitTimer("CoolTime", 0.0f, launchCoolTime);
+
+        chargingEffect.Simulate(0.0f, true, true);
+        chargingEffect.Play(true);
     }
 
     public void LaunchCharge(float damage)
@@ -353,6 +356,9 @@ public class EMPGun : UnTransfromObjectBase
 
         _canLaunch = false;
         _timer.InitTimer("CoolTime", 0.0f, launchCoolTime);
+
+        chargingEffect.Simulate(0.0f, true, true);
+        chargingEffect.Play(true);
     }
 
     public void LaunchImpact()
@@ -379,12 +385,12 @@ public class EMPGun : UnTransfromObjectBase
             if (active == true)
             {
                 chargingEffect.gameObject.SetActive(true);
-                chargingEffect.Play();
+                chargingEffect.Play(true);
             }
             else
             {
                 chargingEffect.gameObject.SetActive(false);
-                chargingEffect.Stop();
+                chargingEffect.Stop(true);
             }
         }
 
