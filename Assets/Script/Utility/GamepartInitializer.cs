@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GamepartInitializer : ManagerBase
 {
+    [System.Serializable]
     public class MaterialProperty
     {
         public Material[] targetMaterials;
@@ -19,9 +20,15 @@ public class GamepartInitializer : ManagerBase
 
     public MaterialProperty[] targetMaterials;
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     public override void Assign()
     {
         base.Assign();
+        SaveMyNumber("PartInit");
 
         AddAction(MessageTitles.scene_sceneChanged, (x) =>
         {
