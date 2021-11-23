@@ -9,6 +9,7 @@ public class CollisionSoundPlayer : UnTransfromObjectBase
     public float velocityFactor;
     public Rigidbody rig;
 
+    private bool _frameCheck = false;
 
     public override void Initialize()
     {
@@ -17,8 +18,17 @@ public class CollisionSoundPlayer : UnTransfromObjectBase
         RegisterRequest(GetSavedNumber("PlayerManager"));
     }
 
+    public override void FixedProgress(float deltaTime)
+    {
+        base.FixedProgress(deltaTime);
+        _frameCheck = false;
+    }
+
     public void OnCollisionEnter(Collision coll)
     {
+        if (_frameCheck)
+            return;
+        _frameCheck = true;
         MD.AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>(); ;
         soundData.id = code; 
         soundData.localPosition = Vector3.up; 

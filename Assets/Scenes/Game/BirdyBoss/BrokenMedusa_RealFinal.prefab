@@ -3025,6 +3025,7 @@ GameObject:
   - component: {fileID: 5277728902609089978}
   - component: {fileID: 3209791857397043038}
   - component: {fileID: 6570032966390237382}
+  - component: {fileID: 1196053778662926574}
   m_Layer: 0
   m_Name: BrokenMedusa_RealFinal
   m_TagString: Untagged
@@ -3116,6 +3117,7 @@ MonoBehaviour:
   - {fileID: 5548631545236442190}
   - {fileID: 7730972161806902919}
   - {fileID: 5866195152781302473}
+  damage: 10
   target: {fileID: 0}
   player: {fileID: 0}
   animator: {fileID: 2516505589089623741}
@@ -3328,6 +3330,19 @@ MonoBehaviour:
   lerpFactor: 5
   inverseX: 1
   inverseZ: 0
+--- !u!114 &1196053778662926574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3209791857397043036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62de72d696da5943ae02e7c936aac58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 1512
 --- !u!1 &3252466716528261639
 GameObject:
   m_ObjectHideFlags: 0
@@ -4921,6 +4936,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 5548631545236442190}
   iKFabric: {fileID: 7973736667104719536}
   particlePool: {fileID: 6065700839575350308}
+  legHitSoundPlayer: {fileID: 1196053778662926574}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -5139,6 +5155,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 7730972161806902919}
   iKFabric: {fileID: 7106128998277241380}
   particlePool: {fileID: 6065700839575350308}
+  legHitSoundPlayer: {fileID: 1196053778662926574}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -6402,6 +6419,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 5489247624348086622}
   iKFabric: {fileID: 8214138597035906063}
   particlePool: {fileID: 6065700839575350308}
+  legHitSoundPlayer: {fileID: 1196053778662926574}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -6775,6 +6793,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 5866195152781302473}
   iKFabric: {fileID: 3215144750850386969}
   particlePool: {fileID: 6065700839575350308}
+  legHitSoundPlayer: {fileID: 1196053778662926574}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128

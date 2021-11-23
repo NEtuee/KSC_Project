@@ -22,6 +22,10 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
     public GameObject disapearTarget;
 
+    public Transform birdyRoot;
+    public Transform birdyInside;
+    public Transform birdyOutside;
+
     [Header("Stemp")]
     public float dissolveTime = 1f;
     public float stempHeight = 10f;
@@ -57,6 +61,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
     
     private List<HexCube> _ringList = new List<HexCube>();
     private List<HexCube> _lineList = new List<HexCube>();
+
+    private Transform _birdyTarget;
 
     PlayerUnit _player;
 
@@ -146,6 +152,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
         dissolveControl.SetDissolve(1f);
+
+        _birdyTarget = birdyInside;
     }
 
     public override void FixedProgress(float deltaTime)
@@ -157,7 +165,9 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             _inout = !_timeCounterEx.ProcessSequencer("InOut", deltaTime);
         }
 
-        if(_groggy)
+        birdyRoot.position = Vector3.Lerp(birdyRoot.position, _birdyTarget.position, 0.1f);
+
+        if (_groggy)
         {
             _timeCounterEx.IncreaseTimerSelf("groggy", out var limit, deltaTime);
             _groggy = !limit;
@@ -165,6 +175,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             {
                 shieldTarget.Reactive();
                 shieldTarget.gameObject.SetActive(false);
+
+                _birdyTarget = birdyInside;
             }
 
             return;
@@ -210,6 +222,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
     {
         shieldTarget.Reactive();
         shieldTarget.gameObject.SetActive(false);
+        _birdyTarget = birdyInside;
     }
 
     public void FogPathFollow()
@@ -218,6 +231,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
         shieldTarget.Reactive();
         shieldTarget.gameObject.SetActive(true);
+        _birdyTarget = birdyOutside;
 
         SetPath("FogBirdyPath", true);
     }
@@ -239,6 +253,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         shieldTarget.VisibleVisual();
         _timeCounterEx.InitTimer("groggy", 0f, time);
 
+        _birdyTarget = birdyOutside;
+
         MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
         data.key = "CannonExplosion";
         data.position = transform.position;
@@ -249,6 +265,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
     public void QuickOut()
     {
+        _birdyTarget = birdyInside;
+
         currentState = State.PlayerLook;
         _stemp = true;
         _lookDown = false;

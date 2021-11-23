@@ -54,6 +54,7 @@ public class TextureBlendGUI : ShaderGUI
 
 
 
+
     public class Styles
     {
         
@@ -206,6 +207,9 @@ public class TextureBlendGUI : ShaderGUI
         /// Blend Noise 3 ///
         materialEditor.TexturePropertySingleLine(Styles.getTexGUI("Blend Texture 3 "), BlendNoise3, BlendNoise3TilingOffset);
         materialEditor.RangeProperty(BlendNoise3contrast, "BlendTexture3 Contrast");
+
+   
+
 
     }
 

@@ -10,6 +10,7 @@ public class IKLegMovement : MonoBehaviour
     public DitzelGames.FastIK.FastIKFabric iKFabric;
 
     public ParticlePool particlePool;
+    public SoundPlayer legHitSoundPlayer;
     public LegHitToGround legHitToGround = (v) => { };
 
     public LayerMask groundLayer;
@@ -136,6 +137,7 @@ public class IKLegMovement : MonoBehaviour
                     particlePool.Active(pos,Quaternion.LookRotation(new Vector3(0f,0f,1f),hit.normal));
 
                 legHitToGround(pos);
+                legHitSoundPlayer?.Play();
             }
         }
         
