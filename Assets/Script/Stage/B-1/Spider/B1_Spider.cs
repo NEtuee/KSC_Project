@@ -188,6 +188,13 @@ public class B1_Spider : PathfollowObjectBase
         data.rotation = Quaternion.identity;
         data.parent = null;
         SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
+
+        //MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        //soundData.id = 1532;
+        //soundData.position = transform.position;
+        //soundData.returnValue = false;
+        //soundData.dontStop = false;
+        //SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
 
     public void Explosion(Vector3 dir,float force)
@@ -204,7 +211,14 @@ public class B1_Spider : PathfollowObjectBase
         data.position = transform.position;
         data.rotation = Quaternion.identity;
         data.parent = null;
-        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);        
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
+
+        //MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        //soundData.id = 1532;
+        //soundData.position = transform.position;
+        //soundData.returnValue = false;
+        //soundData.dontStop = false;
+        //SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
 
     public void Launch()

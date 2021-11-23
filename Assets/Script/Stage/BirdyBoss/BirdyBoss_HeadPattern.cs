@@ -231,6 +231,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
         shieldTarget.Reactive();
         shieldTarget.gameObject.SetActive(true);
+        _birdyTarget = birdyOutside;
 
         SetPath("FogBirdyPath", true);
     }

@@ -67,6 +67,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 4337455491926781610}
+        m_TargetAssemblyTypeName: B1_Spider, Assembly-CSharp
+        m_MethodName: Explosion
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 150
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   whenHit:
     m_PersistentCalls:
       m_Calls: []
@@ -112,6 +124,7 @@ GameObject:
   - component: {fileID: 4865532406974853991}
   - component: {fileID: 3542139589399207937}
   - component: {fileID: 1485937410223242906}
+  - component: {fileID: 326671723888027426}
   m_Layer: 15
   m_Name: ExplosionSpider
   m_TagString: Untagged
@@ -228,6 +241,8 @@ MonoBehaviour:
   damage: 10
   explosionCheckRadius: 6
   explosionRadius: 6
+  downExplosionY: -6
+  downExplosion: 0
   launch: 0
   setTargetToPlayer: 1
   shell: {fileID: 4337455493114624040}
@@ -646,6 +661,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &326671723888027426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4337455491926781663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62de72d696da5943ae02e7c936aac58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 1530
 --- !u!1 &4337455491966575167
 GameObject:
   m_ObjectHideFlags: 0
@@ -1067,6 +1095,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 4337455493893643917}
   iKFabric: {fileID: 0}
   particlePool: {fileID: 0}
+  legHitSoundPlayer: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -1221,6 +1250,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 4337455492709440299}
   iKFabric: {fileID: 0}
   particlePool: {fileID: 0}
+  legHitSoundPlayer: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -1529,6 +1559,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 4337455492457693961}
   iKFabric: {fileID: 0}
   particlePool: {fileID: 0}
+  legHitSoundPlayer: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -1887,6 +1918,7 @@ GameObject:
   - component: {fileID: 4337455493114624037}
   - component: {fileID: 4337455493114624040}
   - component: {fileID: 5135819561888955326}
+  - component: {fileID: 5417758814295932255}
   m_Layer: 15
   m_Name: Sphere (1)
   m_TagString: Untagged
@@ -2001,6 +2033,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 4337455491926781610}
+--- !u!114 &5417758814295932255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4337455493114624039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 976137b554de38449a8cbbfb3151515c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  code: 1533
+  parameterCode: 15331
+  velocityFactor: 10
+  rig: {fileID: 4337455493114624040}
 --- !u!1 &4337455493129851041
 GameObject:
   m_ObjectHideFlags: 0
@@ -2910,6 +2962,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 4337455492335402073}
   iKFabric: {fileID: 0}
   particlePool: {fileID: 0}
+  legHitSoundPlayer: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -3203,27 +3256,47 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3348458174831158313, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
+      propertyPath: legHitSoundPlayer
+      value: 
+      objectReference: {fileID: 326671723888027426}
     - target: {fileID: 4682465201774889485, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
+      propertyPath: limitDistance
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4682465201774889485, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
+      propertyPath: legHitSoundPlayer
+      value: 
+      objectReference: {fileID: 326671723888027426}
+    - target: {fileID: 5579172306873230556, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
+      propertyPath: legHitSoundPlayer
+      value: 
+      objectReference: {fileID: 326671723888027426}
+    - target: {fileID: 5774501298449531927, guid: afe828b51942b42499c53b16102ee6c3,
         type: 3}
       propertyPath: limitDistance
       value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 5774501298449531927, guid: afe828b51942b42499c53b16102ee6c3,
         type: 3}
-      propertyPath: limitDistance
-      value: 0.4
-      objectReference: {fileID: 0}
+      propertyPath: legHitSoundPlayer
+      value: 
+      objectReference: {fileID: 326671723888027426}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afe828b51942b42499c53b16102ee6c3, type: 3}
---- !u!1 &3958808384663805025 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2472672688855944639, guid: afe828b51942b42499c53b16102ee6c3,
-    type: 3}
-  m_PrefabInstance: {fileID: 1486242809607934430}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1927736577088526109 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1035972783362492099, guid: afe828b51942b42499c53b16102ee6c3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1486242809607934430}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3958808384663805025 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2472672688855944639, guid: afe828b51942b42499c53b16102ee6c3,
     type: 3}
   m_PrefabInstance: {fileID: 1486242809607934430}
   m_PrefabAsset: {fileID: 0}
