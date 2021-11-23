@@ -27,7 +27,10 @@ public class UIManager : ManagerBase
     [SerializeField] private MenuPage tutorialPage;
     [SerializeField] private MenuPage gameoverPage;
     [SerializeField] private Canvas backGroundCanvas;
-
+    [SerializeField] private GameObject soundMenuButton;
+    [SerializeField] private GameObject displayMenuButton;
+    [SerializeField] private GameObject controlMenuButton;
+ 
     [Header("CrossHair")]
     [SerializeField] private Canvas crossHairCanvas;
     [SerializeField] private CrossHair _crossHair;
@@ -563,7 +566,7 @@ public class UIManager : ManagerBase
             return;
         }
 
-        if(_currentPauseState == PauseMenuState.Tutorial || _currentPauseState == PauseMenuState.Option)
+        if(_currentPauseState == PauseMenuState.Option)
         {
             ActivePage((int)PauseMenuState.Pause);
             return;
@@ -624,39 +627,54 @@ public class UIManager : ManagerBase
 
     public void ActivePage(int pageNum)
     {
-        if (_currentPage != null)
+        PauseMenuState prevState = _currentPauseState;
+        switch (_currentPauseState)
         {
-            switch (_currentPauseState)
-            {
-                case PauseMenuState.Control:
-                    {
-                        CameraRotateSpeedData data = MessageDataPooling.GetMessageData<CameraRotateSpeedData>();
-                        data.yaw = yawRotateSpeedSlider.value;
-                        data.pitch = pitchRotateSpeedSlider.value;
-                        SendMessageEx(MessageTitles.setting_savecamerarotatespeed, GetSavedNumber("SettingManager"), data);
-                    }
-                    break;
-                case PauseMenuState.Sound:
-                    {
-                        VolumeData data = MessageDataPooling.GetMessageData<VolumeData>();
-                        data.master = masterVolumeSlider.value;
-                        data.sfx = sfxVolumeSlider.value;
-                        data.ambient = ambientVolumeSlider.value;
-                        data.bgm = bgmVolumeSlider.value;
-                        SendMessageEx(MessageTitles.setting_saveVolume, GetSavedNumber("SettingManager"), data);
+            case PauseMenuState.Option:
+                {
+                    CameraRotateSpeedData data = MessageDataPooling.GetMessageData<CameraRotateSpeedData>();
+                    data.yaw = yawRotateSpeedSlider.value;
+                    data.pitch = pitchRotateSpeedSlider.value;
+                    SendMessageEx(MessageTitles.setting_savecamerarotatespeed, GetSavedNumber("SettingManager"), data);
 
-                        FloatData droneVolume = MessageDataPooling.GetMessageData<FloatData>();
-                        droneVolume.value = masterVolumeSlider.value * sfxVolumeSlider.value;
-                        SendMessageEx(MessageTitles.playermanager_setDroneVolume, GetSavedNumber("PlayerManager"), droneVolume);
-                    }
-                    break;
-                case PauseMenuState.Tutorial:
+                    VolumeData volumedata = MessageDataPooling.GetMessageData<VolumeData>();
+                    volumedata.master = masterVolumeSlider.value;
+                    volumedata.sfx = sfxVolumeSlider.value;
+                    volumedata.ambient = ambientVolumeSlider.value;
+                    volumedata.bgm = bgmVolumeSlider.value;
+                    SendMessageEx(MessageTitles.setting_saveVolume, GetSavedNumber("SettingManager"), volumedata);
+
+                    FloatData droneVolume = MessageDataPooling.GetMessageData<FloatData>();
+                    droneVolume.value = masterVolumeSlider.value * sfxVolumeSlider.value;
+                    SendMessageEx(MessageTitles.playermanager_setDroneVolume, GetSavedNumber("PlayerManager"), droneVolume);
+
                     backGroundCanvas.enabled = true;
                     SendMessageEx(MessageTitles.videomanager_stopvideo, GetSavedNumber("VideoManager"), null);
-                    break;
-            }
-            _currentPage.Active(false);
+
+                    if ((PauseMenuState)pageNum == PauseMenuState.Pause)
+                        _currentPage.Active(false);
+                }
+                break;
+            case PauseMenuState.Sound:
+                {
+                    _eventSystem.SetSelectedGameObject(soundMenuButton);
+                }
+                break;
+            case PauseMenuState.Display:
+                {
+                    _eventSystem.SetSelectedGameObject(displayMenuButton);
+                }
+                break;
+            case PauseMenuState.Control:
+                {
+                    _eventSystem.SetSelectedGameObject(controlMenuButton);
+                }
+                break;
         }
+           
+        if(_currentPauseState !=PauseMenuState.Option && _currentPage != null)
+               _currentPage.Active(false);
+        
 
         _currentPauseState = (PauseMenuState)pageNum;
         switch (_currentPauseState)
@@ -668,28 +686,24 @@ public class UIManager : ManagerBase
             case PauseMenuState.Pause:
                 _currentPage = pausePage;
                 backGroundCanvas.enabled = true;
+                _currentPage.Active(true);
                 break;
             case PauseMenuState.Option:
                 _currentPage = optionPage;
+                if(prevState == PauseMenuState.Pause)
+                    _eventSystem.SetSelectedGameObject(soundMenuButton);
+                _currentPage.Active(true);
                 break;
             case PauseMenuState.Sound:
-                _currentPage = soundPage;
+                _currentPage = null;
                 break;
             case PauseMenuState.Display:
-                _currentPage = displayPage;
+                _currentPage = null;
                 break;
             case PauseMenuState.Control:
-                _currentPage = controlPage;
-                break;
-            case PauseMenuState.KeyBinding:
-                _currentPage = keybindingPage;
-                break;
-            case PauseMenuState.Tutorial:
-                _currentPage = tutorialPage;
-                backGroundCanvas.enabled = false;
+                _currentPage = null;
                 break;
         }
-        _currentPage.Active(true);
     }
 
     #region CrossHair
