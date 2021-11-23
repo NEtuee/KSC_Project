@@ -302,6 +302,8 @@ public class BirdyBoss_PatternOne : ObjectBase
             _drone.gameObject.SetActive(value);
             _drone.transform.SetParent(headPattern.transform);
             _drone.transform.localPosition = Vector3.zero;
+
+            headPattern.dissolveControl.Active(0.1f);
         }
     }
 
