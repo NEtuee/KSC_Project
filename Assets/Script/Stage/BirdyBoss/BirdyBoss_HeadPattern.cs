@@ -176,7 +176,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
                 shieldTarget.Reactive();
                 shieldTarget.gameObject.SetActive(false);
 
-                _birdyTarget = birdyInside;
+
+                _birdyTarget = currentState == State.FogMove ? birdyOutside : birdyInside;
             }
 
             return;
@@ -207,8 +208,9 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         }
         else if(currentState == State.FogMove)
         {
-            ShieldLookPlayer();
+            //ShieldLookPlayer();
             FollowPathInDirection(deltaTime);
+            Turn(targetDirection, rotationSpeed);
         }
         else if(currentState == State.GroundShot)
         {
