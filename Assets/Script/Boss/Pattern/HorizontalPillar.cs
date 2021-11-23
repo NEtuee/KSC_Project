@@ -63,17 +63,17 @@ public class HorizontalPillar : MonoBehaviour
     {
         _visible = true;
         _collider.isTrigger = false;
-        StartCoroutine(Fade(time, 0.0f, null));
+        StartCoroutine(Fade(time, 1.0f, null));
     }
 
     public void Disappear(float time)
     {
-        StartCoroutine(Fade(time, 1.0f, () => { _visible = false; }));
+        StartCoroutine(Fade(time, 0.0f, () => { _visible = false; }));
     }
 
     public void Disappear(float time, Action whenEnd)
     {
-        StartCoroutine(Fade(time, 1.0f, whenEnd));
+        StartCoroutine(Fade(time, 0.0f, whenEnd));
     }
 
     private IEnumerator CheckTime(float time)
