@@ -47,6 +47,7 @@ public class PlayerState_Ragdoll : PlayerState
     {
         if(playerUnit.Ragdoll.GetRagdollState() == PlayerRagdoll.RagdollState.Ragdoll && playerUnit.Ragdoll.PelvisGrounded == true && playerUnit.CanQuickStanding == true)
         {
+            playerUnit.TrailPlayer.Active(playerUnit.Transform);
             playerUnit.Ragdoll.ReturnDefaultAnimation();
             playerUnit.ChangeState(PlayerUnit.defaultState);
             //StartCoroutine(playerUnit.StartQuickStandingTime());
