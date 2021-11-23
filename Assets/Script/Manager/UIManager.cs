@@ -928,6 +928,9 @@ public class UIManager : ManagerBase
         _currentPauseState = PauseMenuState.GameOver;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
+        timeStop.value = true;
+        SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
     }
 
     public void OnRestartButton()
@@ -935,11 +938,9 @@ public class UIManager : ManagerBase
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         gameoverPage.Active(false);
-        //PositionRotation data = MessageDataPooling.GetMessageData<PositionRotation>();
-        //data.position = Vector3.zero;
-        //data.rotation = Quaternion.identity;
-        //SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
-        //SendMessageEx(MessageTitles.playermanager_initPlayerStatus, GetSavedNumber("PlayerManager"), null);
+        BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
+        timeStop.value = false;
+        SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
         SendMessageEx(MessageTitles.scene_loadRestartLevel, GetSavedNumber("SceneManager"), null);
     }
 
