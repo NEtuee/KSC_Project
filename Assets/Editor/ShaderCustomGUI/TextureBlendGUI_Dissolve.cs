@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-public class TextureBlendGUI : ShaderGUI
+public class TextureBlendGUI_Dissolve : ShaderGUI
 {
     MaterialProperty MainTex = null;
     MaterialProperty MainColor = null;
@@ -51,6 +51,16 @@ public class TextureBlendGUI : ShaderGUI
     MaterialProperty BlendNoise3 = null;
     MaterialProperty BlendNoise3contrast = null;
     MaterialProperty BlendNoise3TilingOffset = null;
+
+    MaterialProperty Dissvole = null;
+
+    MaterialProperty DissvoleTilingOffset = null;
+
+    MaterialProperty DissvoleTex = null;
+
+    MaterialProperty Thickness = null;
+    MaterialProperty Emission_Color = null;
+    MaterialProperty Emission = null;
 
 
 
@@ -125,11 +135,21 @@ public class TextureBlendGUI : ShaderGUI
         BlendNoise3contrast = FindProperty("TEX3_Blend_Contrast", properties);
         BlendNoise3TilingOffset = FindProperty("TEX3_Blend_TilingOffset", properties);
 
+        Dissvole = FindProperty("Dissvole", properties);
+        DissvoleTilingOffset = FindProperty("DissvoleTilingOffset", properties);
+        DissvoleTex = FindProperty("DissvoleTex", properties);
+
+        Thickness = FindProperty("Thickness", properties);
+        Emission = FindProperty("_Emission", properties);
+        Emission_Color = FindProperty("Emission_Color", properties);
+
+
+
 
         //EditorGUILayout.LabelField("----------- Tex 2 -----------", EditorStyles.largeLabel, GUI.contentColor = Color.red);
 
-        
-        
+
+
         EditorGUILayout.LabelField(Styles.getTexGUI("----------- Main -----------"), EditorStyles.boldLabel);
         /// Main ///
         materialEditor.TexturePropertySingleLine(Styles.getTexGUI("MainTextrue"), MainTex, MainColor, MainTilingOffset);
@@ -207,8 +227,16 @@ public class TextureBlendGUI : ShaderGUI
         /// Blend Noise 3 ///
         materialEditor.TexturePropertySingleLine(Styles.getTexGUI("Blend Texture 3 "), BlendNoise3, BlendNoise3TilingOffset);
         materialEditor.RangeProperty(BlendNoise3contrast, "BlendTexture3 Contrast");
+        EditorGUILayout.Space(20);
 
-   
+        //Dissvole
+        materialEditor.TexturePropertySingleLine(Styles.getTexGUI("DissvoleTex"), DissvoleTex, DissvoleTilingOffset);
+        materialEditor.RangeProperty(Dissvole, "Dissvole");
+
+        //Emission Color
+        materialEditor.TexturePropertySingleLine(Styles.getTexGUI("Emission"), Emission, Emission_Color);
+        materialEditor.RangeProperty(Thickness, "Thickness");
+
 
 
     }
