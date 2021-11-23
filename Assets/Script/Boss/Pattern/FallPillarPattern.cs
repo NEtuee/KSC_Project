@@ -23,7 +23,7 @@ public class FallPillarPattern : ObjectBase
         {
             for (int i = 0; i < _fallPosition.Count; i++)
             {
-                _activePillarList.Add(_pillarObjectPool.Active(_fallPosition[i], Quaternion.identity));
+                _activePillarList.Add(_pillarObjectPool.Active(_fallPosition[i], Quaternion.Euler(0.0f,UnityEngine.Random.Range(0.0f,360.0f),0.0f)));
             }
         });
 

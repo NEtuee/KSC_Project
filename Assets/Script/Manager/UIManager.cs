@@ -342,6 +342,7 @@ public class UIManager : ManagerBase
         AddAction(MessageTitles.scene_beforeSceneChange, (msg) =>
          {
              ActiveLoadingUI(true);
+             droneStatusUI.Enable(false);
          });
 
         AddAction(MessageTitles.scene_sceneChanged, (msg) =>
