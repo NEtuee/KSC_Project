@@ -10,7 +10,7 @@ public class SpiderPillar : MonoBehaviour
     private void Awake()
     {
         _mat = GetComponent<Renderer>().material;
-        _mat.SetFloat("Dissvole", 1f);
+        _mat.SetFloat("Dissvole", 0f);
     }
 
     private IEnumerator Fade(float time, float target, Action whenEnd)
@@ -30,11 +30,11 @@ public class SpiderPillar : MonoBehaviour
 
     public void Appear(float time)
     {
-        StartCoroutine(Fade(time, 0.0f, null));
+        StartCoroutine(Fade(time, 1.0f, null));
     }
 
     public void Disappear(float time)
     {
-        StartCoroutine(Fade(time, 1.0f, null));
+        StartCoroutine(Fade(time, 0.0f, null));
     }
 }
