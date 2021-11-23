@@ -152,15 +152,7 @@ public class PlayerManager : ManagerBase
             var data = MessageDataPooling.CastData<BoolData>(msg.data);
             if(data.value)
             {
-                _playerWeaponMat.SetVector("_EmissionColor", radioColor * 10f);
-                EffectActiveData effectData = MessageDataPooling.GetMessageData<EffectActiveData>();
-                effectData.key = "RadioLight";
-                effectData.parent = radioLightPosition;
-                effectData.position = radioLightPosition.position;
-                effectData.rotation = radioLightPosition.rotation;
-
-                SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,
-                            GetSavedNumber("EffectManager"), effectData);
+                FlickRadio();
             }
             else
             {
@@ -366,23 +358,23 @@ public class PlayerManager : ManagerBase
     {
         base.Progress(deltaTime);
 
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
-        {
-            SendMessageEx(MessageTitles.playermanager_SetDialogName, GetSavedNumber("PlayerManager"), "테스트");
-            var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
-            data.key = "Test_1";
-            data.duration = 10f;
-            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
-        }
+        //if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        //{
+        //    SendMessageEx(MessageTitles.playermanager_SetDialogName, GetSavedNumber("PlayerManager"), "테스트");
+        //    var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+        //    data.key = "Test_1";
+        //    data.duration = 10f;
+        //    SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+        //}
 
-        if (Keyboard.current.digit2Key.wasPressedThisFrame)
-        {
-            SendMessageEx(MessageTitles.playermanager_SetDialogName, GetSavedNumber("PlayerManager"), "테스트");
-            var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
-            data.key = "Test_2";
-            data.duration = 10f;
-            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
-        }
+        //if (Keyboard.current.digit2Key.wasPressedThisFrame)
+        //{
+        //    SendMessageEx(MessageTitles.playermanager_SetDialogName, GetSavedNumber("PlayerManager"), "테스트");
+        //    var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+        //    data.key = "Test_2";
+        //    data.duration = 10f;
+        //    SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+        //}
 
         if (LevelEdit_TimelinePlayer.CUTSCENEPLAY == true)
             return;
@@ -397,11 +389,37 @@ public class PlayerManager : ManagerBase
             SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
         }
 
-        
+        //if (Keyboard.current.zKey.wasPressedThisFrame)
+        //{
+        //    _player.TakeDamage(0f);
+        //}
+    }
 
-        if (Keyboard.current.zKey.wasPressedThisFrame)
+    public void FlickRadio()
+    {
+        StartCoroutine(Filck());
+    }
+
+    private IEnumerator Filck()
+    {
+        float intencity = 1f;
+        float time = 0.0f;
+
+        while(time<= 0.5f)
         {
-            _player.TakeDamage(0f);
+            time += Time.deltaTime;
+            intencity = Mathf.Lerp(1f, 500f, time / 0.5f);
+            _playerWeaponMat.SetVector("_EmissionColor", radioColor * intencity);
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.5f);
+        time = 0.0f;
+        while (time <= 0.3f)
+        {
+            time += Time.deltaTime;
+            intencity = Mathf.Lerp(500f, 10f, time / 0.3f);
+            _playerWeaponMat.SetVector("_EmissionColor", radioColor * intencity);
+            yield return null;
         }
     }
 
