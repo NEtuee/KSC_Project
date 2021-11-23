@@ -86,6 +86,20 @@ public class HexCube : MonoBehaviour
             {
                 _moveStartTime -= deltaTime;
 
+                if(_moveStartTime <= 0f)
+                {
+                    var sound = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+                    sound.id = _inMove ? 1706 : 1707;
+                    sound.position = originWorldPosition.position;
+                    sound.dontStop = false;
+                    sound.returnValue = false;
+
+                    var msg = MessagePool.GetMessage();
+                    msg.Set(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
+
+                    MasterManager.instance.HandleMessage(msg);
+                }
+
                 if(_moveStartTime <= 0f && alertMaterial != null && _outMove)
                 {
                     _renderer.material = _originMaterial;
@@ -218,6 +232,20 @@ public class HexCube : MonoBehaviour
         _whenEnable = enable;
 
         _alertTimer = 0f;
+
+        if(startTime == 0f)
+        {
+            var sound = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+            sound.id = _inMove ? 1706 : 1707;
+            sound.position = originWorldPosition.position;
+            sound.dontStop = false;
+            sound.returnValue = false;
+
+            var msg = MessagePool.GetMessage();
+            msg.Set(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
+
+            MasterManager.instance.HandleMessage(msg);
+        }
     }
 
     public void SetActive(bool active, bool timer, float disapearTime = 1f)
