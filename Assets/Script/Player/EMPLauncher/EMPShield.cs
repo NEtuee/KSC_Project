@@ -300,9 +300,9 @@ public class EMPShield : Hitable
         }
         else if(soundType == SoundType.Bomb)
         {
-            SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
-            soundData.id = 1700; soundData.position = transform.position; soundData.returnValue = false; soundData.dontStop = false;
-            SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+            //SoundPlayData soundData = MessageDataPooling.GetMessageData<SoundPlayData>();
+            //soundData.id = 1700; soundData.position = transform.position; soundData.returnValue = false; soundData.dontStop = false;
+            //SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
             //GameManager.Instance.soundManager.Play(1700,transform.position);
         }
         

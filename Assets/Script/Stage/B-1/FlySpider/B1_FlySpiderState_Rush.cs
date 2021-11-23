@@ -18,6 +18,13 @@ public class B1_FlySpiderState_Rush : B1_FlySpiderStateBase
     {
         base.StateInitialize(prevState);
 
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1531;
+        soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        target.SendMessageEx(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
+
         target.footPointRotator.enabled = false;
         _lifeTime = 5f;
     }

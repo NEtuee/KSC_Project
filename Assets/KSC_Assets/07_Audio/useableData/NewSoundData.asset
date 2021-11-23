@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
   m_Name: NewSoundData
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 68475ab1aa76ff24da3ce4150ac80b26, type: 3}
+  csvData: {fileID: 4900000, guid: ef91f1e443d4b294a913aefedfbcff68, type: 3}
   soundData:
   - path: global data
     name: 
@@ -52,6 +52,10 @@ MonoBehaviour:
       max: 100
     - name: BGM_State
       id: 8
+      min: 0
+      max: 1
+    - name: Const
+      id: 9
       min: 0
       max: 1
   - path: event:/PlayerCharacter/Movement/PC_Jogging
@@ -169,7 +173,7 @@ MonoBehaviour:
     - name: PC_Charging
       id: 10131
       min: 0
-      max: 300
+      max: 100
   - path: event:/PlayerCharacter/Movement/Hit/PC_Down_Ground
     name: PC_Down_Ground
     id: 1014
@@ -273,6 +277,14 @@ MonoBehaviour:
   - path: event:/PlayerCharacter/Pose/PC_Pos_Dala
     name: PC_Pos_Dala
     id: 1026
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/New/PC_Dash
+    name: PC_Dash
+    id: 1027
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}
@@ -486,6 +498,130 @@ MonoBehaviour:
     overrideDistance: {x: 0, y: 0, z: 0}
     type: SFX
     parameters: []
+  - path: event:/Mob/Season2/Drone/Drone_Beep
+    name: Drone_Beep
+    id: 1522
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters:
+    - name: Distance
+      id: 15221
+      min: 0
+      max: 1
+  - path: event:/Mob/Season2/Drone/Drone_Flying
+    name: Drone_Flying
+    id: 1523
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Drone/Drone_Guard
+    name: Drone_Guard
+    id: 1524
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Drone/Drone_Self_Explosion
+    name: Drone_Self_Explosion
+    id: 1525
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Genie/Genie_Grinding
+    name: Genie_Grinding
+    id: 1526
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Genie/Genie_Smashing
+    name: Genie_Smashing
+    id: 1527
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Spider/Spinder_Beep
+    name: Spinder_Beep
+    id: 1528
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters:
+    - name: Distance
+      id: 15281
+      min: 0
+      max: 1
+  - path: event:/Mob/Season2/Spider/Spider_Laser
+    name: Spider_Laser
+    id: 1529
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Spider/Spider_Movement
+    name: Spider_Movement
+    id: 1530
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Spider/Spider_RushSignal
+    name: Spider_RushSignal
+    id: 1531
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Spider/Spider_Self_Explosion
+    name: Spider_Self_Explosion
+    id: 1532
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Spider/Spider_Sphere
+    name: Spider_Sphere
+    id: 1533
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters:
+    - name: Sphere_Down_Str
+      id: 15331
+      min: 0
+      max: 100
+  - path: event:/Mob/Medusa/Medusa_Crash
+    name: Medusa_Crash
+    id: 1534
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Genie/Genie_Opening
+    name: Genie_Opening
+    id: 1535
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
   - path: event:/SFX/Explosion
     name: Explosion
     id: 1700
@@ -533,6 +669,22 @@ MonoBehaviour:
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}
     type: BGM
+    parameters: []
+  - path: event:/SFX/Piston_UP
+    name: Piston_UP
+    id: 1706
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/SFX/Piston_Down
+    name: Piston_Down
+    id: 1707
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
     parameters: []
   - path: event:/Ambient/Medusa/Vent_Side
     name: Vent_Side
@@ -681,6 +833,126 @@ MonoBehaviour:
   - path: event:/Ambient/Ground/Battery_Fallen
     name: Battery_Fallen
     id: 2017
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/FallPoint_Medusa/FPM_Drone
+    name: FPM_Drone
+    id: 2018
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/FallPoint_Medusa/FallPoint
+    name: FallPoint
+    id: 2019
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/FallPoint_Medusa/FPM_Grinder
+    name: FPM_Grinder
+    id: 2020
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/FallPoint_Medusa/UnderPipe
+    name: UnderPipe
+    id: 2021
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/FallPoint_Pipe/FPP_Drone
+    name: FPP_Drone
+    id: 2022
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/FallPoint_Pipe/FPP_Grinder
+    name: FPP_Grinder
+    id: 2023
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/FallPoint_Pipe/Light
+    name: Light
+    id: 2024
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/FallPoint_Pipe/Plate_Broken
+    name: Plate_Broken
+    id: 2025
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/FallPoint_Pipe/UnderWind
+    name: UnderWind
+    id: 2026
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/Genie/Bronken_Speaker
+    name: Bronken_Speaker
+    id: 2027
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/Genie/Glitch
+    name: Glitch
+    id: 2028
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/Genie/Speaker
+    name: Speaker
+    id: 2029
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/Genie/Under
+    name: Under
+    id: 2030
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/Level_A/Underground
+    name: Underground
+    id: 2031
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
+  - path: event:/Ambient/Season2/Level_A/Wind
+    name: Wind
+    id: 2032
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}

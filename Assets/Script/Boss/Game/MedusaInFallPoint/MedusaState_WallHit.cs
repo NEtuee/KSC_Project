@@ -20,6 +20,14 @@ public class MedusaState_WallHit : MedusaFallPointStateBase
         _timeCounter.InitTimer("MoveTime",0f,moveTime);
 
         target.AnimationChange(3);
+
+
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1534;
+        soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        target.SendMessageEx(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
     }
 
     public override void StateProgress(float deltaTime)
