@@ -171,6 +171,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 2181905274206796127}
   iKFabric: {fileID: 0}
   particlePool: {fileID: 0}
+  legHitSoundPlayer: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 129
@@ -1250,6 +1251,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 2181905274062784015}
   iKFabric: {fileID: 0}
   particlePool: {fileID: 0}
+  legHitSoundPlayer: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 129
@@ -1686,6 +1688,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 2181905273811181101}
   iKFabric: {fileID: 0}
   particlePool: {fileID: 0}
+  legHitSoundPlayer: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 129
@@ -1870,6 +1873,7 @@ MonoBehaviour:
   oppositeLeg: {fileID: 2181905272778955659}
   iKFabric: {fileID: 0}
   particlePool: {fileID: 0}
+  legHitSoundPlayer: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 129
@@ -2263,6 +2267,7 @@ GameObject:
   - component: {fileID: 2181905274603744197}
   - component: {fileID: 2181905274603744196}
   - component: {fileID: 7886570428816660961}
+  - component: {fileID: 6813026128932521200}
   m_Layer: 15
   m_Name: FlySpider
   m_TagString: Untagged
@@ -2367,6 +2372,7 @@ MonoBehaviour:
   pathLoop: 0
   stateProcessor: {fileID: 2181905274603744196}
   footPointRotator: {fileID: 2181905274603744219}
+  damage: 10
   explosionRadius: 3
   explosionPower: 150
   launch: 0
@@ -2547,6 +2553,19 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &6813026128932521200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2181905274603744217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62de72d696da5943ae02e7c936aac58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 1530
 --- !u!1 &2181905274684353203
 GameObject:
   m_ObjectHideFlags: 0
@@ -2694,9 +2713,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3348458174831158313, guid: afe828b51942b42499c53b16102ee6c3,
         type: 3}
+      propertyPath: legHitSoundPlayer
+      value: 
+      objectReference: {fileID: 6813026128932521200}
+    - target: {fileID: 3348458174831158313, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
       propertyPath: groundLayer.m_Bits
       value: 129
       objectReference: {fileID: 0}
+    - target: {fileID: 4682465201774889485, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
+      propertyPath: legHitSoundPlayer
+      value: 
+      objectReference: {fileID: 6813026128932521200}
     - target: {fileID: 4682465201774889485, guid: afe828b51942b42499c53b16102ee6c3,
         type: 3}
       propertyPath: groundLayer.m_Bits
@@ -2704,9 +2733,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5579172306873230556, guid: afe828b51942b42499c53b16102ee6c3,
         type: 3}
+      propertyPath: legHitSoundPlayer
+      value: 
+      objectReference: {fileID: 6813026128932521200}
+    - target: {fileID: 5579172306873230556, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
       propertyPath: groundLayer.m_Bits
       value: 129
       objectReference: {fileID: 0}
+    - target: {fileID: 5774501298449531927, guid: afe828b51942b42499c53b16102ee6c3,
+        type: 3}
+      propertyPath: legHitSoundPlayer
+      value: 
+      objectReference: {fileID: 6813026128932521200}
     - target: {fileID: 5774501298449531927, guid: afe828b51942b42499c53b16102ee6c3,
         type: 3}
       propertyPath: groundLayer.m_Bits

@@ -99,6 +99,16 @@ public class CommonDrone : DroneAIBase
         }
     }
 
+    public void ExplosionSoundPlay()
+    {
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1525;
+        soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+    }
+
     public void HitDamage()
     {
         var data = MessageDataPooling.GetMessageData<MD.FloatData>();

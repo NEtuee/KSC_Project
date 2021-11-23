@@ -106,6 +106,13 @@ public class B1_FlySpider : PathfollowObjectBase
         data.parent = null;
         SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
 
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1532;
+        soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+
         Disable();
     }
 

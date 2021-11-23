@@ -21,6 +21,13 @@ public class PlayerState_Dash : PlayerState
         playerUnit.Drone.ChangeAnimation(4);
         //StartCoroutine(playerUnit.StartDashCoolTime());
         playerUnit.UseDash();
+
+        MD.AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
+        soundData.id = 1027;
+        soundData.localPosition = Vector3.zero;
+        soundData.parent = transform;
+        soundData.returnValue = false;
+        playerUnit.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
     }
 
     public override void Exit(PlayerUnit playerUnit, Animator animator)
