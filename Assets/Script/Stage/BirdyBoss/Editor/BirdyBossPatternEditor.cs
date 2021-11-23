@@ -413,7 +413,7 @@ public class BirdyBossPatternEditor : EditorWindow
         }
         else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.ActiveHPUI)
         {
-            desc = "여기서 안씀";
+            desc = "HP UI 켜기";
             GUI.enabled = false;
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;
@@ -572,6 +572,54 @@ public class BirdyBossPatternEditor : EditorWindow
             EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
             GUI.enabled = true;
         }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.GroundShot)
+        {
+            desc = "n초 후 플레이어 향해 일자로\n땅 내려버림.\n자세한건 BirdyBody로";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+
+            targetEvent.value = EditorGUILayout.FloatField("초", targetEvent.value);
+        }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.ExplosionSpiderAll)
+        {
+            desc = "모든 지상 거미 자폭";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+        }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.ExplosionDroneAll)
+        {
+            desc = "모든 드론 자폭";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+        }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.GroundCutV2Start)
+        {
+            desc = "발판 제한V2\n자세한 패턴은 \nPatternOne 스크립트 맨 밑에";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+        }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.GroundCutV2End)
+        {
+            desc = "발판 제한V2 끝";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+        }
+        else if (targetEvent.type == BirdyBoss_PatternOne.EventEnum.InverseGroundPattern)
+        {
+            desc = "역방향 발판 떨구기\nn초 텀으로 m초 뒤에 발판 떨굼\no초동안 내려갔다 올라옴";
+            GUI.enabled = false;
+            EditorGUILayout.TextArea(desc, GUILayout.Height(descHeight));
+            GUI.enabled = true;
+
+            targetEvent.value = EditorGUILayout.FloatField("텀", targetEvent.value);
+            targetEvent.value2 = EditorGUILayout.FloatField("떨구기 대기", targetEvent.value2);
+            targetEvent.value3 = EditorGUILayout.FloatField("재생성 대기", targetEvent.value3);
+        }
         else
         {
             desc = "몰루??";
@@ -701,6 +749,10 @@ public class BirdyBossPatternEditor : EditorWindow
         else if (item.type == BirdyBoss_PatternOne.EventEnum.TentacleFence)
         {
             return -1f;
+        }
+        else if (item.type == BirdyBoss_PatternOne.EventEnum.InverseGroundPattern)
+        {
+            return item.value2;
         }
 
         return 0f;

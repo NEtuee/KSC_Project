@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class MenuPage : MonoBehaviour
 {
+    [SerializeField] private bool awakeEnable = false;
     public List<GameObject> uiElements = new List<GameObject>();    
     [SerializeField] private Canvas _canvas;
     [SerializeField] private CanvasGroup _canvasGroup;
@@ -58,7 +59,7 @@ public class MenuPage : MonoBehaviour
             ui.Init();
         }
 
-        _canvas.enabled = false;
+        _canvas.enabled = awakeEnable;
         _canvasGroup.interactable = false;
         _canvasGroup.blocksRaycasts = false;
     }

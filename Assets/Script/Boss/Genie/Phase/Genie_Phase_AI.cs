@@ -80,6 +80,20 @@ public class Genie_Phase_AI : PathfollowObjectBase
         animatorController.SetInteger("Code",code);
     }
 
+    public void Explosion(Vector3 start, float force)
+    {
+        var playerDist = Vector3.Distance(_player.transform.position, start);
+        if (playerDist <= 6f)
+        {
+            var dir = transform.forward;//(_player.transform.position - start).normalized;
+            _player.Ragdoll.ExplosionRagdoll(force, dir);
+            _player.TakeDamage(10f);
+        }
+
+        SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse,
+                                        UniqueNumberBase.GetSavedNumberStatic("CameraManager"), null);
+    }
+
     public void Respawn()
     {
         _timeCounter.InitTimer("spawn",0f,5f);
@@ -108,6 +122,16 @@ public class Genie_Phase_AI : PathfollowObjectBase
                     UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
     }
 
+    public void LeftHit()
+    {
+        Explosion(leftHandHitEffect.position, 150f);
+    }
+
+    public void RightHit()
+    {
+        Explosion(rightHandHitEffect.position, 150f);
+    }
+
     public void CreateLeftHit()
     {
         MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
@@ -117,6 +141,8 @@ public class Genie_Phase_AI : PathfollowObjectBase
 
         SendMessageEx(MessageTitles.effectmanager_activeeffect,
                     UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+
+        LeftHit();
     }
 
     public void CreateRightHit()
@@ -128,6 +154,8 @@ public class Genie_Phase_AI : PathfollowObjectBase
 
         SendMessageEx(MessageTitles.effectmanager_activeeffect,
                     UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+
+        RightHit();
     }
 
     public void PlayLeftHandEffect()

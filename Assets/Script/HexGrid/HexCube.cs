@@ -14,6 +14,9 @@ public class HexCube : MonoBehaviour
     public bool special = false;
     public float moveSpeed = 1f;
 
+    public Material alertMaterial;
+
+    public Transform originWorldPosition;
     private Vector3 _targetLocalPosition;
     private Vector3 _originalLocalPosition;
     private float _disapearTime;
@@ -21,15 +24,17 @@ public class HexCube : MonoBehaviour
     private bool _timer = false;
     private bool _isActive = true;
 
-    
+    private bool _moveLock = false;
     private bool _inMove = false;
     private bool _outMove = false;
     private bool _inverseMove = false;
+    private float _alertTimer = 0f;
     private float _inverseMoveTime = 0f;
     private float _moveStartTime = 0f;
     private float _inoutMoveTime = 0f;
     private float _moveSpeed = 1f;
 
+    private Material _originMaterial;
     private Collider _collider;
     private MeshRenderer _renderer;
     private System.Action _whenDisable;
@@ -45,6 +50,11 @@ public class HexCube : MonoBehaviour
             _renderer = GetComponentInChildren<MeshRenderer>();
         }
 
+        _originMaterial = _renderer.material;
+
+        originWorldPosition = (new GameObject("origin")).transform;
+        originWorldPosition.position = transform.position;
+
         _originalLocalPosition = transform.localPosition;
         _moveTime = 1f;
     }
@@ -56,6 +66,9 @@ public class HexCube : MonoBehaviour
 
     public void Progress(float deltaTime)
     {
+        if (_moveLock)
+            return;
+
         if(_moveTime < 1f)
         {
             _moveTime += deltaTime * moveSpeed;
@@ -69,6 +82,15 @@ public class HexCube : MonoBehaviour
             if(_moveStartTime > 0f)
             {
                 _moveStartTime -= deltaTime;
+
+                if(_moveStartTime <= 0f && alertMaterial != null && _outMove)
+                {
+                    _renderer.material = _originMaterial;
+                }
+                else if (_moveStartTime < _alertTimer && alertMaterial != null && _outMove)
+                {
+                    _renderer.material = alertMaterial;
+                }
             }
             else if(_inoutMoveTime < 1f)
             {
@@ -147,6 +169,7 @@ public class HexCube : MonoBehaviour
         _outMove = false;
         _isActive = true;
         _inverseMoveTime = 0f;
+        _moveTime = 1f;
         var pos = transform.localPosition;
         pos.y = inCurve.Evaluate(1f);
         transform.localPosition = pos;
@@ -163,8 +186,21 @@ public class HexCube : MonoBehaviour
         transform.localPosition = pos;
     }
 
+    public void MoveLock(bool value)
+    {
+        _moveLock = value;
+    }
+
+    public void SetAlertTime(float value)
+    {
+        _alertTimer = value;
+    }
+
     public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f, System.Action disable = null, System.Action enable = null)
     {
+        if (_moveLock)
+            return;
+
         _inMove = active;
         _outMove = !active;
         _isActive = false;
@@ -177,6 +213,8 @@ public class HexCube : MonoBehaviour
 
         _whenDisable = disable;
         _whenEnable = enable;
+
+        _alertTimer = 0f;
     }
 
     public void SetActive(bool active, bool timer, float disapearTime = 1f)

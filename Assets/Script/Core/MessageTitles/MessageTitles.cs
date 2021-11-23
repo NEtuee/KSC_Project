@@ -251,6 +251,20 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort uimanager_activePlayUi = 0x0345;
 
+    /// <summary>
+    /// data = FloatData
+    /// </summary>
+    public const ushort uimanager_chargeGageValue = 0x0346;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_ActiveFianlHp = 0x0347;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_damageFianlBossUi = 0x0348;
     #endregion
 
     /// <summary>

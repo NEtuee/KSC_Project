@@ -197,6 +197,11 @@ public class UIManager : ManagerBase
         {
             _crossHair.ChargeComplete();
         });
+        AddAction(MessageTitles.uimanager_chargeGageValue, (msg) =>
+        {
+            var data = MessageDataPooling.CastData<FloatData>(msg.data);
+            _crossHair.SetChargeGageValue(data.value);
+        });
 
         AddAction(MessageTitles.uimanager_setvaluestatebar, SetValueStateBar);
         AddAction(MessageTitles.uimanager_setvisibleallstatebar, SetVisibleAllStateBar);
@@ -488,6 +493,16 @@ public class UIManager : ManagerBase
                  statusUi.SetVisible(false,0.1f);
              }
          });
+
+        AddAction(MessageTitles.uimanager_ActiveFianlHp, (msg) =>
+        {
+            droneStatusUI.InitFinalHpUi();
+        });
+
+        AddAction(MessageTitles.uimanager_damageFianlBossUi, (msg) =>
+        {
+            droneStatusUI.Damage();
+        });
     }
 
     public override void Initialize()
