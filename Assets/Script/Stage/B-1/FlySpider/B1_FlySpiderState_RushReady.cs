@@ -23,7 +23,20 @@ public class B1_FlySpiderState_RushReady : B1_FlySpiderStateBase
         base.Assign();
 
         _timeCounter.CreateSequencer("main");
-        _timeCounter.AddSequence("main",aimTime,Aimming,(x)=>{lineRenderer.enabled = true;});
+        _timeCounter.AddSequence("main",aimTime,Aimming,(x)=>{
+            lineRenderer.enabled = true;
+
+            MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+            soundData.id = 1529;
+            if (Physics.Raycast(transform.position, target.direction, out var hit, 10000f, hitLayer))
+                soundData.position = hit.point;
+            else
+                soundData.position = transform.position;
+            soundData.returnValue = false;
+            soundData.dontStop = false;
+            target.SendMessageEx(MessageTitles.fmod_play,UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
+
+        });
         _timeCounter.AddSequence("main",waitLockTime,null,null);
     }
 
