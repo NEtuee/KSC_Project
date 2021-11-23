@@ -26,6 +26,8 @@ public class NewEmpShield : Scanable
     public delegate void WhenReactive(GameObject scanable);
     private WhenReactive whenReactive;
 
+    private bool _fadeIn = false;
+
     public override void Assign()
     {
         base.Assign();
@@ -43,6 +45,7 @@ public class NewEmpShield : Scanable
         {
             isActive = true;
             isVisible = false;
+            _fadeIn = false;
             _mat.SetFloat("_Fade", 0.0f);
         }
 
@@ -78,12 +81,35 @@ public class NewEmpShield : Scanable
         //SendMessageEx(MessageTitles.uimanager_activeTargetMakerUiAndSetTarget, UniqueNumberBase.GetSavedNumberStatic("UIManager"), this.transform);
     }
 
+    public override void Progress(float deltaTime)
+    {
+        base.Progress(deltaTime);
+
+        if(_fadeIn)
+        {
+            float alpha = _mat.GetFloat("_Fade");
+
+            if(alpha < 1.0f)
+            {
+                alpha = Mathf.MoveTowards(alpha, 1.0f, 1.0f * Time.deltaTime);
+                _mat.SetFloat("_Fade", alpha);
+            }
+            else
+            {
+                _mat.SetFloat("_Fade", 1f);
+                _fadeIn = false;
+            }
+        }
+        
+    }
+
     public void Reactive()
     {
         _coll.enabled = true;
         _renderer.enabled = true;
         isActive = true;
         isVisible = false;
+        _fadeIn = false;
 
         curCount = 0;
     }
@@ -112,7 +138,8 @@ public class NewEmpShield : Scanable
     public void VisibleVisual()
     {
         isVisible = true;
-        StartCoroutine(FadeIn());
+        _fadeIn = true;
+        //StartCoroutine(FadeIn());
     }
 
     public void Hide()
@@ -121,17 +148,17 @@ public class NewEmpShield : Scanable
         gameObject.SetActive(false);
     }
 
-    private IEnumerator FadeIn()
-    {
-        float alpha = _mat.GetFloat("_Fade");
+    //private IEnumerator FadeIn()
+    //{
+    //    float alpha = _mat.GetFloat("_Fade");
 
-        while(alpha < 1.0f)
-        {
-            alpha = Mathf.MoveTowards(alpha, 1.0f, 1.0f * Time.deltaTime);
-            _mat.SetFloat("_Fade",alpha);
-            yield return null;
-        }
-    }
+    //    while(alpha < 1.0f)
+    //    {
+    //        alpha = Mathf.MoveTowards(alpha, 1.0f, 1.0f * Time.deltaTime);
+    //        _mat.SetFloat("_Fade",alpha);
+    //        yield return null;
+    //    }
+    //}
 
     public void Destroy()
     {

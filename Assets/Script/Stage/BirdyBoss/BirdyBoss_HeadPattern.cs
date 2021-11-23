@@ -26,6 +26,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
     public Transform birdyInside;
     public Transform birdyOutside;
 
+    public Animator birdyAnimator;
+
     [Header("Stemp")]
     public float dissolveTime = 1f;
     public float stempHeight = 10f;
@@ -180,7 +182,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
                 _birdyTarget = currentState == State.FogMove ? birdyOutside : birdyInside;
             }
 
-            return;
+            //return;
         }
 
         if(currentState == State.PlayerLook)
@@ -210,7 +212,16 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         {
             //ShieldLookPlayer();
             FollowPathInDirection(deltaTime);
-            Turn(targetDirection, rotationSpeed);
+            var angle = Vector3.SignedAngle(shieldObj.forward, targetDirection, shieldObj.up);
+
+            if (Mathf.Abs(angle) > turnAccuracy)
+            {
+                if (angle > 0)
+                    Turn(true, shieldObj, rotationSpeed, deltaTime);
+                else
+                    Turn(false, shieldObj, rotationSpeed, deltaTime);
+            }
+
         }
         else if(currentState == State.GroundShot)
         {
@@ -236,6 +247,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _birdyTarget = birdyOutside;
 
         SetPath("FogBirdyPath", true);
+        ChangeAnimation(1);
     }
 
     public void Shot()
@@ -248,14 +260,10 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _timeCounterEx.SkipSequencer("InOut", stempWaitTime);
     }
 
-    public void Groggy(float time)
+    public void ShieldActive()
     {
-        _groggy = true;
         shieldTarget.gameObject.SetActive(true);
         shieldTarget.VisibleVisual();
-        _timeCounterEx.InitTimer("groggy", 0f, time);
-
-        _birdyTarget = birdyOutside;
 
         MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
         data.key = "CannonExplosion";
@@ -263,6 +271,17 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         data.rotation = Quaternion.identity;
         data.parent = null;
         SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
+    }
+
+    public void Groggy(float time)
+    {
+        ShieldActive();
+
+        _groggy = true;
+        _timeCounterEx.InitTimer("groggy", 0f, time);
+        _birdyTarget = birdyOutside;
+
+        ChangeAnimation(0);
     }
 
     public void QuickOut()
@@ -313,6 +332,12 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             item.SetMove(false,dist * distanceFactor * distanceTerm,1f,shotDownTime);
             item.SetAlertTime(1f);
         }
+    }
+
+    public void ChangeAnimation(int target)
+    {
+        birdyAnimator.SetTrigger("Change");
+        birdyAnimator.SetInteger("Target",target);
     }
 
     public void Ring()
