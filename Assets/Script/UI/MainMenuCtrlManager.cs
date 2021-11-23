@@ -164,17 +164,20 @@ public class MainMenuCtrlManager : ManagerBase
                 break;
             case MainMenuState.Sound:
                 {
-                    _eventSystem.SetSelectedGameObject(soundMenuButton);
+                    if ((MainMenuState)pageNum == MainMenuState.Option)
+                        _eventSystem.SetSelectedGameObject(soundMenuButton);
                 }
                 break;
             case MainMenuState.Display:
                 {
-                    _eventSystem.SetSelectedGameObject(displayMenuButton);
+                    if ((MainMenuState)pageNum == MainMenuState.Option)
+                        _eventSystem.SetSelectedGameObject(displayMenuButton);
                 }
                 break;
             case MainMenuState.Control:
                 {
-                    _eventSystem.SetSelectedGameObject(controlMenuButton);
+                    if ((MainMenuState)pageNum == MainMenuState.Option)
+                        _eventSystem.SetSelectedGameObject(controlMenuButton);
                 }
                 break;
         }

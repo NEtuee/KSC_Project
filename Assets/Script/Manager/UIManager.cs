@@ -657,17 +657,20 @@ public class UIManager : ManagerBase
                 break;
             case PauseMenuState.Sound:
                 {
-                    _eventSystem.SetSelectedGameObject(soundMenuButton);
+                    if ((PauseMenuState)pageNum == PauseMenuState.Option)
+                        _eventSystem.SetSelectedGameObject(soundMenuButton);
                 }
                 break;
             case PauseMenuState.Display:
                 {
-                    _eventSystem.SetSelectedGameObject(displayMenuButton);
+                    if ((PauseMenuState)pageNum == PauseMenuState.Option)
+                        _eventSystem.SetSelectedGameObject(displayMenuButton);
                 }
                 break;
             case PauseMenuState.Control:
                 {
-                    _eventSystem.SetSelectedGameObject(controlMenuButton);
+                    if ((PauseMenuState)pageNum == PauseMenuState.Option)
+                        _eventSystem.SetSelectedGameObject(controlMenuButton);
                 }
                 break;
         }
