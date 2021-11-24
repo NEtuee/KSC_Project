@@ -157,6 +157,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
         _birdyTarget = birdyInside;
 
+        disapearTarget.SetActive(false);
         shieldTarget.gameObject.SetActive(false);
     }
 
