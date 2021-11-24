@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using MD;
+using UnityEngine.EventSystems;
 
 public class MainMenuCtrlManager : ManagerBase
 {
@@ -23,6 +24,10 @@ public class MainMenuCtrlManager : ManagerBase
     [SerializeField] private MenuPage displayPage;
     [SerializeField] private MenuPage controlPage;
     [SerializeField] private MenuPage keybindingPage;
+    [SerializeField] private GameObject gameStartButton;
+    [SerializeField] private GameObject soundMenuButton;
+    [SerializeField] private GameObject displayMenuButton;
+    [SerializeField] private GameObject controlMenuButton;
 
     [SerializeField] private MainMenuState _current = MainMenuState.Main;
     private MenuPage _currentPage;
@@ -46,6 +51,8 @@ public class MainMenuCtrlManager : ManagerBase
 
     [Header("GameScene")]
     [SerializeField] private string playerScene;
+
+    private EventSystem _eventSystem;
 
     public override void Assign()
     {
@@ -92,6 +99,11 @@ public class MainMenuCtrlManager : ManagerBase
             resolutionDropdown.value = data.value;
         });
 
+
+        if (GameObject.Find("EventSystem").TryGetComponent<EventSystem>(out _eventSystem) == false)
+        {
+            Debug.LogError("Not Exist EventSystem");
+        }
     }
 
     private void Start()
@@ -118,6 +130,7 @@ public class MainMenuCtrlManager : ManagerBase
         if(_current == MainMenuState.Option)
         {
             ActivePage((int)MainMenuState.Main);
+            _eventSystem.SetSelectedGameObject(gameStartButton);
             return;
         }
 
@@ -126,55 +139,76 @@ public class MainMenuCtrlManager : ManagerBase
 
     public void ActivePage(int pageNum)
     {
-        if (_currentPage != null)
-        {
-            switch (_current)
+        MainMenuState prevState = _current;
+
+        switch (_current)
             {
-                case MainMenuState.Control:
+                case MainMenuState.Option:
                     {
                         CameraRotateSpeedData data = MessageDataPooling.GetMessageData<CameraRotateSpeedData>();
                         data.yaw = yawRotateSpeedSlider.value;
                         data.pitch = pitchRotateSpeedSlider.value;
                         SendMessageEx(MessageTitles.setting_savecamerarotatespeed, GetSavedNumber("SettingManager"), data);
-                    }
-                    break;
-                case MainMenuState.Sound:
-                    {
-                        VolumeData data = MessageDataPooling.GetMessageData<VolumeData>();
-                        data.master = masterVolumeSlider.value;
-                        data.sfx = sfxVolumeSlider.value;
-                        data.ambient = ambientVolumeSlider.value;
-                        data.bgm = bgmVolumeSlider.value;
-                        SendMessageEx(MessageTitles.setting_saveVolume, GetSavedNumber("SettingManager"), data);
-                    }
-                    break;
-            }
-            _currentPage.Active(false);
+
+                        VolumeData volumedata = MessageDataPooling.GetMessageData<VolumeData>();
+                        volumedata.master = masterVolumeSlider.value;
+                        volumedata.sfx = sfxVolumeSlider.value;
+                        volumedata.ambient = ambientVolumeSlider.value;
+                        volumedata.bgm = bgmVolumeSlider.value;
+                        SendMessageEx(MessageTitles.setting_saveVolume, GetSavedNumber("SettingManager"), volumedata);
+
+                        if((MainMenuState)pageNum == MainMenuState.Main)
+                            _currentPage.Active(false);
+
+                }
+                break;
+            case MainMenuState.Sound:
+                {
+                    if ((MainMenuState)pageNum == MainMenuState.Option)
+                        _eventSystem.SetSelectedGameObject(soundMenuButton);
+                }
+                break;
+            case MainMenuState.Display:
+                {
+                    if ((MainMenuState)pageNum == MainMenuState.Option)
+                        _eventSystem.SetSelectedGameObject(displayMenuButton);
+                }
+                break;
+            case MainMenuState.Control:
+                {
+                    if ((MainMenuState)pageNum == MainMenuState.Option)
+                        _eventSystem.SetSelectedGameObject(controlMenuButton);
+                }
+                break;
         }
+
 
         _current = (MainMenuState)pageNum;
         switch (_current)
         {
             case MainMenuState.Main:
                 _currentPage = mainPage;
+                _currentPage.Active(true);
                 break;
             case MainMenuState.Option:
                 _currentPage = optionPage;
+                if (prevState == MainMenuState.Main)
+                    _eventSystem.SetSelectedGameObject(soundMenuButton);
+                _currentPage.Active(true);
                 break;
             case MainMenuState.Sound:
-                _currentPage = soundPage;
+                _currentPage = null;
                 break;
             case MainMenuState.Display:
-                _currentPage = displayPage;
+                _currentPage = null;
                 break;
             case MainMenuState.Control:
-                _currentPage = controlPage;
+                _currentPage = null;
                 break;
             case MainMenuState.KeyBinding:
                 _currentPage = keybindingPage;
                 break;
         }
-        _currentPage.Active(true);
     }
 
     private void OnEnable()
