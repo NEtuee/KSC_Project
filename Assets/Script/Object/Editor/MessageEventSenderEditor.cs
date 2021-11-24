@@ -63,5 +63,13 @@ public class MessageEventSenderEditor : Editor
         {
 
         }
+        else if (eventTrigger.message == MessageTitleEnum.ActiveTargetMaker)
+        {
+            eventTrigger.targetTransform = EditorGUILayout.ObjectField("Target", eventTrigger.targetTransform, typeof(Transform), true) as Transform;
+        }
+        else if (eventTrigger.message == MessageTitleEnum.DisableTargetMaker)
+        {
+            eventTrigger.targetTransform = EditorGUILayout.ObjectField("Target", eventTrigger.targetTransform, typeof(Transform), true) as Transform;
+        }
     }
 }

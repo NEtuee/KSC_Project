@@ -18,6 +18,9 @@ public class MessageEventTrigger : ObjectBase
     [HideInInspector] public MissionUiDisspearPack missionUiDisspearPack;
     [HideInInspector] public DialogPack dialogPack;
     [HideInInspector] public DialogSetNamePack dialogSetNamePack;
+
+    [HideInInspector] public Transform targetTransform;
+
     public List<DialogPack> dialogPacks = new List<DialogPack>();
 
     private System.Action _triggerEvent;
@@ -110,6 +113,22 @@ public class MessageEventTrigger : ObjectBase
                     _triggerEvent = () =>
                     {
                         StartCoroutine(MessageLoop());
+                    };
+                }
+                break;
+            case MessageTitleEnum.ActiveTargetMaker:
+                {
+                    _triggerEvent = () =>
+                    {
+                        SendMessageEx((ushort)message, GetSavedNumber("UIManager"), targetTransform);
+                    };
+                }
+                break;
+            case MessageTitleEnum.DisableTargetMaker:
+                {
+                    _triggerEvent = () =>
+                    {
+                        SendMessageEx((ushort)message, GetSavedNumber("UIManager"), null);
                     };
                 }
                 break;
@@ -216,6 +235,8 @@ namespace MessageSender
         PlayerRagdoll = MessageTitles.playermanager_ragdoll,
         Dialog = MessageTitles.playermanager_droneTextAndDurationByKey,
         DialogNameSet = MessageTitles.playermanager_SetDialogName,
-        DialogLoop
+        DialogLoop,
+        ActiveTargetMaker = MessageTitles.uimanager_activeTargetMakerUiAndSetTarget,
+        DisableTargetMaker = MessageTitles.uimanager_DisableTargetMakerUi
     }
 }

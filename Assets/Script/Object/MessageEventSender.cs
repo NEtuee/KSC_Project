@@ -18,6 +18,9 @@ public class MessageEventSender : ObjectBase
     [HideInInspector] public DialogSetNamePack dialogSetNamePack;
     public List<DialogPack> dialogPacks = new List<DialogPack>();
 
+
+    [HideInInspector] public Transform targetTransform;
+
     private System.Action _event;
 
     public override void Assign()
@@ -113,6 +116,22 @@ public class MessageEventSender : ObjectBase
                     _event = () =>
                     {
                         StartCoroutine(MessageLoop());
+                    };
+                }
+                break;
+            case MessageTitleEnum.ActiveTargetMaker:
+                {
+                    _event = () =>
+                    {
+                        SendMessageEx((ushort)message, GetSavedNumber("UIManager"), targetTransform);
+                    };
+                }
+                break;
+            case MessageTitleEnum.DisableTargetMaker:
+                {
+                    _event = () =>
+                    {
+                        SendMessageEx((ushort)message, GetSavedNumber("UIManager"), null);
                     };
                 }
                 break;
