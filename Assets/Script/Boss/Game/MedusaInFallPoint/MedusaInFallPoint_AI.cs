@@ -20,6 +20,8 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
     public bool launch = false;
     public bool startActive = true;
 
+    public int playerHit = 0;
+
     public override void Assign()
     {
         base.Assign();
@@ -58,7 +60,6 @@ public class MedusaInFallPoint_AI : PathfollowObjectBase
 
     public void Launch()
     {
-        Debug.Log("aunch");
         launch = true;
         AnimationChange(7);
     }

@@ -13,6 +13,7 @@ public class GenieState_DroneSwingWave : GenieStateBase
     public Genie_CoreDroneAI coreDroneAI;
     public Transform droneTarget;
     public LevelEdit_ExplosionPhysics explosionPhysics;
+    public LevelEdit_ExplosionPhysics leftExplosionPhysics;
 
     public bool randomPattern = false;
     public bool cutFirst = false;
@@ -174,6 +175,19 @@ public class GenieState_DroneSwingWave : GenieStateBase
         }
     }
 
+    public void LaunchLeftDrones()
+    {
+        if (!leftExplosionPhysics.launched)
+        {
+            explosionPhysics.Launch();
+
+            foreach (var item in explosionPhysics.targets)
+            {
+                Destroy(item, 5f);
+            }
+        }
+    }
+
     public override void StateChanged(StateBase targetState)
     {
         base.StateChanged(targetState);
@@ -189,6 +203,8 @@ public class GenieState_DroneSwingWave : GenieStateBase
         {
             Destroy(item,5f);
         }
+
+        LaunchLeftDrones();
     }
 
 #region GroundCut

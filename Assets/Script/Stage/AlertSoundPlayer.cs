@@ -33,6 +33,8 @@ public class AlertSoundPlayer : ObjectBase
         whenDeactive += () =>
         {
             _soundEmiter.Stop();
+            _soundEmiter = null;
+            _paramInfo = null;
         };
     }
 
@@ -44,21 +46,7 @@ public class AlertSoundPlayer : ObjectBase
 
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
-        var data = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
-        data.id = sound;
-        data.localPosition = Vector3.zero;
-        data.parent = this.transform;
-        data.returnValue = true;
-
-        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), data);
-
-        if(param != -1)
-        {
-            var paramData = MessageDataPooling.GetMessageData<MD.SetParameterData>();
-            paramData.soundId = sound;
-            paramData.paramId = param;
-            SendMessageEx(MessageTitles.fmod_getParamInfo, GetSavedNumber("FMODManager"), paramData);
-        }
+        SoundPlay();
         
     }
 
@@ -72,6 +60,25 @@ public class AlertSoundPlayer : ObjectBase
         UpdateParam();
     }
 
+    public void SoundPlay()
+    {
+        var data = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
+        data.id = sound;
+        data.localPosition = Vector3.zero;
+        data.parent = this.transform;
+        data.returnValue = true;
+
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), data);
+
+        if (param != -1)
+        {
+            var paramData = MessageDataPooling.GetMessageData<MD.SetParameterData>();
+            paramData.soundId = sound;
+            paramData.paramId = param;
+            SendMessageEx(MessageTitles.fmod_getParamInfo, GetSavedNumber("FMODManager"), paramData);
+        }
+    }
+
     public void UpdateParam()
     {
         var dist = Vector3.Distance(_playerTransform.position, transform.position);
@@ -83,9 +90,9 @@ public class AlertSoundPlayer : ObjectBase
     public void OnEnable()
     {
         if (_soundEmiter == null)
-            return;
-
-        _soundEmiter.Play();
+        {
+            SoundPlay();
+        }
 
         if(_paramInfo != null)
             UpdateParam();

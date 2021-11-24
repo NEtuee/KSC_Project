@@ -132,6 +132,7 @@ public class GenieState_DroneWave : GenieStateBase
 
         foreach(var item in _droneLinePool.GetActiveObjects())
         {
+            item.Explosion();
             item.gameObject.SetActive(false);
         }
     }
@@ -180,7 +181,13 @@ public class GenieState_DroneWave : GenieStateBase
         GetGridLine(ref _groundList,dir,6);
         GetGridLine(ref _groundList,inverseDir,6);
 
-        foreach(var item in _groundList)
+        dir = Quaternion.Euler(0f, -10f, 0f) * dir.normalized;
+        inverseDir = Quaternion.Euler(0f, 10f, 0f) * inverseDir.normalized;
+
+        GetGridLine(ref _groundList, dir, 6);
+        GetGridLine(ref _groundList, inverseDir, 6);
+
+        foreach (var item in _groundList)
         {
             item.GetRenderer().material = target.gridControll.curr;
         }

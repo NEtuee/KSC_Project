@@ -9202,6 +9202,7 @@ MonoBehaviour:
     duration: 0
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks:
   - key: Thermite_Medusa01
     duration: 5
@@ -11269,6 +11270,7 @@ MonoBehaviour:
   hitPosition: {fileID: 1630485133}
   launch: 1
   startActive: 0
+  playerHit: 0
 --- !u!114 &1395621134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15562,6 +15564,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: MaterialChanger, Assembly-CSharp
         m_MethodName: SwitchA
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1936670390}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

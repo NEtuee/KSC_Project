@@ -9,9 +9,15 @@ public class LevelEdit_ExplosionPhysics : MonoBehaviour
     public float force = 100f;
     public float torque = 100f;
 
+    public bool launched = false;
+
     public void Launch()
     {
-        foreach(var item in targets)
+        if (launched)
+            return;
+
+        launched = true;
+        foreach (var item in targets)
         {
             // var collider = item.GetComponent<Collider>();
             // if(collider != null)
