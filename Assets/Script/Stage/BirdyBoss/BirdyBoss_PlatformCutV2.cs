@@ -15,7 +15,7 @@ public class BirdyBoss_PlatformCutV2 : MonoBehaviour
 
     public void PatternStart(Transform player)
     {
-        var cube = grid.GetCubePointFromWorld(player.position);
+        var cube = grid.GetCubePointFromWorld(Vector3.zero);
 
         int count = 0;
 
@@ -39,6 +39,7 @@ public class BirdyBoss_PlatformCutV2 : MonoBehaviour
             {
                 _ring[j].SetMove(false, (float)count * cubeTerm, cubeSpeed);
                 _ring[j].SetAlertTime(1f);
+                _ring[j].special = true;
                 _downCubes[count].Add(_ring[j]);
             }
 
@@ -53,6 +54,7 @@ public class BirdyBoss_PlatformCutV2 : MonoBehaviour
             for (int j = 0; j < _downCubes[i].Count; ++j)
             {
                 _downCubes[i][j].SetMove(true, (float)i * cubeTerm, cubeSpeed);
+                _downCubes[i][j].special = false;
             }
         }
     }

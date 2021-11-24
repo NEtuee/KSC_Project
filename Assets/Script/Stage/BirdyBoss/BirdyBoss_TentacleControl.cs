@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BirdyBoss_TentacleControl : MonoBehaviour
 {
@@ -51,7 +52,7 @@ public class BirdyBoss_TentacleControl : MonoBehaviour
             return false;
         }
     }
-
+    public BirdyBoss_HeadPattern head;
     public List<TentacleClass> tentacles;
     public float gagueIncreaseTerm = 1f;
     public float gagueDecreaseTerm = 0.3f;
@@ -79,7 +80,12 @@ public class BirdyBoss_TentacleControl : MonoBehaviour
 
     public void Update()
     {
-        if(_increase)
+        if ((Keyboard.current.lKey.isPressed))
+        {
+            StartRandomTentacle();
+        }
+
+        if (_increase)
         {
             if(_timeCounter.ProcessSequencer("Increase", Time.deltaTime))
             {
@@ -120,7 +126,7 @@ public class BirdyBoss_TentacleControl : MonoBehaviour
 
     public void StartRandomTentacle()
     {
-        if (_currentTentacle != null)
+        if (_currentTentacle != null || head.IsGroggy())
             return;
 
         _increase = true;

@@ -43,6 +43,17 @@ public class DissolveControl : MonoBehaviour
         }
     }
 
+    public void ActiveCurrent(float speed)
+    {
+        _speed = speed;
+
+        _start = targetMaterials[0].GetFloat("Dissvole");
+        _end = 0f;
+        _time = 0f;
+
+        _progress = true;
+    }
+
     public void Active(float speed)
     {
         _speed = speed;

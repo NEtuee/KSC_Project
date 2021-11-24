@@ -31,12 +31,11 @@ public class NewEmpShield : Scanable
     public override void Assign()
     {
         base.Assign();
-
         _renderer = GetComponent<Renderer>();
         _mat = _renderer.material;
         _coll = GetComponent<Collider>();
 
-        if(awakeOnVisible)
+        if (awakeOnVisible)
         {
             isActive = true;
             VisibleVisual();
