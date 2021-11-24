@@ -238,7 +238,7 @@ public class PlayerState_Aiming : PlayerState
             }
 
             SetParameterData setParameterData = MessageDataPooling.GetMessageData<SetParameterData>();
-            setParameterData.soundId = 1013; setParameterData.paramId = 10131; setParameterData.value = (playerUnit.chargeTime.Value) * 100f;
+            setParameterData.soundId = 1013; setParameterData.paramId = 10131; setParameterData.value = (playerUnit.chargeTime.Value) * 200f;
             playerUnit.SendMessageEx(MessageTitles.fmod_setParam, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), setParameterData);
 
             if (_transformingCount < (int)playerUnit.chargeTime.Value)

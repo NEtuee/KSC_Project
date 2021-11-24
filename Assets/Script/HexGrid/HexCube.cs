@@ -23,6 +23,7 @@ public class HexCube : MonoBehaviour
     private float _moveTime;
     private bool _timer = false;
     private bool _isActive = true;
+    private bool _soundPlay = true;
 
     private bool _moveLock = false;
     private bool _inMove = false;
@@ -88,16 +89,19 @@ public class HexCube : MonoBehaviour
 
                 if(_moveStartTime <= 0f)
                 {
-                    var sound = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
-                    sound.id = _inMove ? 1706 : 1707;
-                    sound.position = originWorldPosition.position;
-                    sound.dontStop = false;
-                    sound.returnValue = false;
+                    if(_soundPlay)
+                    {
+                        var sound = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+                        sound.id = _inMove ? 1706 : 1707;
+                        sound.position = originWorldPosition.position;
+                        sound.dontStop = false;
+                        sound.returnValue = false;
 
-                    var msg = MessagePool.GetMessage();
-                    msg.Set(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
+                        var msg = MessagePool.GetMessage();
+                        msg.Set(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
 
-                    MasterManager.instance.HandleMessage(msg);
+                        MasterManager.instance.HandleMessage(msg);
+                    }
                 }
 
                 if(_moveStartTime <= 0f && alertMaterial != null && _outMove)
@@ -218,7 +222,7 @@ public class HexCube : MonoBehaviour
         return _moveStartTime;
     }
 
-    public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f, System.Action disable = null, System.Action enable = null)
+    public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f, System.Action disable = null, System.Action enable = null, bool soundPlay = true)
     {
         if (_moveLock)
             return;
@@ -238,7 +242,9 @@ public class HexCube : MonoBehaviour
 
         _alertTimer = 0f;
 
-        if(startTime == 0f)
+        _soundPlay = soundPlay;
+
+        if(startTime == 0f && _soundPlay)
         {
             var sound = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
             sound.id = _inMove ? 1706 : 1707;

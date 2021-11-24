@@ -67,6 +67,12 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
         _timeCounter.CreateSequencer("Drag");
         _timeCounter.AddSequence("Drag", .8f, null, (x) => {
             target.PlayLeftHandEffect();
+            MD.AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
+            soundData.id = 1526;
+            soundData.localPosition = Vector3.zero;
+            soundData.parent = target.leftHandEffect.transform;
+            soundData.returnValue = false;
+            target.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
         });
         _timeCounter.AddSequence("Drag", 1.2f, null, (x) => {
             target.PauseLeftHandEffect();
@@ -215,11 +221,18 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
 
     public void GroundHit(float t)
     {
+        int count = 4;
         foreach(var item in _areaList)
         {
-            item.SetMove(false,Random.Range(0f,0.2f),1f,groundDisapearTime);
+            item.SetMove(false,Random.Range(0f,0.2f),1f,groundDisapearTime,null,null,--count > 0);
             SetGroundAreaMaterial(target.gridControll.prev);
         }
+
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1527;
+        soundData.position = target.leftHandEffect.transform.position;
+        soundData.returnValue = false;
+        target.SendMessageEx(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
     }
 
     public void GroundHitReady(float t)
