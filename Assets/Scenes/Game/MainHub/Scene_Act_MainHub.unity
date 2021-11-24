@@ -6721,6 +6721,94 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &1066729628
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1066729629}
+  - component: {fileID: 1066729631}
+  - component: {fileID: 1066729630}
+  m_Layer: 0
+  m_Name: BComeBackTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1066729629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066729628}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.54, z: 24.17}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1253244289}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1066729630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066729628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  onDisable: 1
+  triggerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  message: 2339
+  missionUiPack:
+    key: 
+  levelLineActiveBossNamePack:
+    name: 
+  levelLineSetAlphabetPack:
+    alphabet: 0
+  activeInformationUiPack:
+    key: 
+  setTimeInformationUiPack:
+    time: 0
+  missionUiDisspearPack:
+    time: 0
+  dialogPack:
+    key: Birdy_Dash
+    duration: 5
+  dialogSetNamePack:
+    name: 
+  dialogPacks:
+  - key: Birdy_HUB03_Elevator01
+    duration: 4
+  - key: Birdy_HUB03_Elevator02
+    duration: 4
+--- !u!65 &1066729631
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066729628}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 11.003441, y: 8.289844, z: 6.6251955}
+  m_Center: {x: -0.15154743, y: 2.0112987, z: -2.8125978}
 --- !u!1 &1076370786
 GameObject:
   m_ObjectHideFlags: 3
@@ -7307,7 +7395,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: HubDown_0
+            m_StringArgument: Birdy_HUB03_Elevator03
             m_BoolArgument: 0
           m_CallState: 2
     - m_PersistentCalls:
@@ -8127,6 +8215,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1478256942}
+  - {fileID: 1860245166}
+  - {fileID: 1066729629}
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12109,6 +12199,96 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1860245165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1860245166}
+  - component: {fileID: 1860245168}
+  - component: {fileID: 1860245167}
+  m_Layer: 0
+  m_Name: AComeBackTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1860245166
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860245165}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.54, z: -15.44}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1253244289}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1860245167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860245165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  onDisable: 1
+  triggerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  message: 2339
+  missionUiPack:
+    key: 
+  levelLineActiveBossNamePack:
+    name: 
+  levelLineSetAlphabetPack:
+    alphabet: 0
+  activeInformationUiPack:
+    key: 
+  setTimeInformationUiPack:
+    time: 0
+  missionUiDisspearPack:
+    time: 0
+  dialogPack:
+    key: Birdy_Dash
+    duration: 5
+  dialogSetNamePack:
+    name: 
+  dialogPacks:
+  - key: Birdy_HUB02_Story01
+    duration: 4
+  - key: Birdy_HUB02_Story02
+    duration: 4
+  - key: Birdy_HUB02_GateOpen
+    duration: 4
+--- !u!65 &1860245168
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860245165}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 11.003441, y: 8.289844, z: 6.6251955}
+  m_Center: {x: -0.15154743, y: 2.0112987, z: -2.8125978}
 --- !u!1 &1889307097
 GameObject:
   m_ObjectHideFlags: 3
@@ -15909,6 +16089,9 @@ MonoBehaviour:
   debugExceptionTitles: []
   sendedCount: 0
   receivedCount: 0
+  firstHubTrigger: {fileID: 1478256941}
+  aComeBackTrigger: {fileID: 1860245165}
+  bComeBackTrigger: {fileID: 1066729628}
 --- !u!1001 &5308605168093720592
 PrefabInstance:
   m_ObjectHideFlags: 0
