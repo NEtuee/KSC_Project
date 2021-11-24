@@ -62,6 +62,9 @@ public class IKLegMovement : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (ik == null)
+            return;
+
         _downRay.SetDirection(-rayPoint.up);
 
         if(_hold)

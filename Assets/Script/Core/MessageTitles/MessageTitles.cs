@@ -584,6 +584,11 @@ public static partial class MessageTitles
     /// data = String
     /// </summary>
     public const ushort gamepadVibrationManager_vibrationByKey = 0x1202;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort gamepadVibrationManager_stopVibration = 0x1203;
     #endregion
 
     #region Setter

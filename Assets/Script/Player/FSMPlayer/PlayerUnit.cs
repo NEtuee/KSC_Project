@@ -877,7 +877,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void TakeDamage(float damage, bool restoreEnergy = true)
     {
-        if (_currentState == respawnState && _currentState == ragdollState)
+        if (_currentState == respawnState && _currentState == ragdollState && dead == true)
             return;
 
         hp.Value -= damage;
@@ -908,7 +908,7 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
     public void TakeDamage(float damage, float ragdollPower, Vector3 ragdollDir)
     {
-        if (_currentState == ragdollState)
+        if (_currentState == ragdollState&&_currentState == respawnState && dead == true)
             return;
 
         hp.Value -= damage;

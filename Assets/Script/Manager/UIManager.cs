@@ -931,6 +931,8 @@ public class UIManager : ManagerBase
         BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
         timeStop.value = true;
         SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
+
+        SendMessageEx(MessageTitles.gamepadVibrationManager_stopVibration, GetSavedNumber("GamepadVibrationManager"), null);
     }
 
     public void OnRestartButton()
@@ -938,9 +940,9 @@ public class UIManager : ManagerBase
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         gameoverPage.Active(false);
-        BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
-        timeStop.value = false;
-        SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
+        //BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
+        //timeStop.value = false;
+        //SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
         SendMessageEx(MessageTitles.scene_loadRestartLevel, GetSavedNumber("SceneManager"), null);
     }
 
