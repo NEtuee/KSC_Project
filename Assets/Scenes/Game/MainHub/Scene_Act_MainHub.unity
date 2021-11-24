@@ -6903,6 +6903,7 @@ MonoBehaviour:
     duration: 5
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks:
   - key: Birdy_HUB03_Elevator01
     duration: 4
@@ -9587,6 +9588,7 @@ GameObject:
   - component: {fileID: 1478256942}
   - component: {fileID: 1478256944}
   - component: {fileID: 1478256943}
+  - component: {fileID: 1478256945}
   m_Layer: 0
   m_Name: Trigger_Birdy_Dash
   m_TagString: Untagged
@@ -9646,6 +9648,7 @@ MonoBehaviour:
     duration: 5
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks: []
 --- !u!65 &1478256944
 BoxCollider:
@@ -9660,6 +9663,46 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 11.003441, y: 8.289844, z: 6.6251955}
   m_Center: {x: -0.15154743, y: 2.0112987, z: -2.8125978}
+--- !u!114 &1478256945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478256941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  onDisable: 1
+  triggerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  message: 835
+  missionUiPack:
+    key: 
+  levelLineActiveBossNamePack:
+    name: 
+  levelLineSetAlphabetPack:
+    alphabet: 0
+  activeInformationUiPack:
+    key: HUB_Dash01
+  setTimeInformationUiPack:
+    time: 0
+  missionUiDisspearPack:
+    time: 0
+  dialogPack:
+    key: 
+    duration: 0
+  dialogSetNamePack:
+    name: 
+  targetTransform: {fileID: 0}
+  dialogPacks: []
 --- !u!114 &1521739478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12527,6 +12570,7 @@ MonoBehaviour:
     duration: 5
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks:
   - key: Birdy_HUB02_Story01
     duration: 4
