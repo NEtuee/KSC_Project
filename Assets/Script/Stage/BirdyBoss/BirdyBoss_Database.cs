@@ -228,6 +228,7 @@ public class BirdyBoss_Database : MonoBehaviour
     public SpiderPillarPattern SpawnSpiderPillarPattern()
     {
         var obj = spiderPillarCache.GetCachedObject();
+        obj.item.database = this;
         obj.item.Respawn();
 
         return obj.item;

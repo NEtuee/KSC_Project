@@ -156,6 +156,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         dissolveControl.SetDissolve(1f);
 
         _birdyTarget = birdyInside;
+
+        shieldTarget.gameObject.SetActive(false);
     }
 
     public override void FixedProgress(float deltaTime)
@@ -180,9 +182,10 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
 
                 _birdyTarget = currentState == State.FogMove ? birdyOutside : birdyInside;
+                QuickOut();
             }
 
-            //return;
+            return;
         }
 
         if(currentState == State.PlayerLook)
@@ -244,6 +247,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
         shieldTarget.Reactive();
         shieldTarget.gameObject.SetActive(true);
+        shieldTarget.VisibleVisual();
         _birdyTarget = birdyOutside;
 
         SetPath("FogBirdyPath", true);
@@ -262,6 +266,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
     public void ShieldActive()
     {
+        shieldTarget.Reactive();
         shieldTarget.gameObject.SetActive(true);
         shieldTarget.VisibleVisual();
 
@@ -273,6 +278,18 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
     }
 
+    public void Recover()
+    {
+        _groggy = false;
+        _birdyTarget = birdyInside;
+        currentState = State.PlayerLook;
+    }
+
+    public bool IsGroggy()
+    {
+        return _groggy;
+    }
+
     public void Groggy(float time)
     {
         ShieldActive();
@@ -280,6 +297,15 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _groggy = true;
         _timeCounterEx.InitTimer("groggy", 0f, time);
         _birdyTarget = birdyOutside;
+
+        currentState = State.PlayerLook;
+
+        if(!_inout)
+        {
+            dissolveControl.ActiveCurrent(1f);
+            disapearTarget.SetActive(true);
+        }
+        
 
         ChangeAnimation(0);
     }
@@ -349,7 +375,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             grid.GetCubeRing(ref _ringList,stempCube.cubePoint,i);
             foreach(var item in _ringList)
             {
-                item.SetMove(false,(float)(i - 1) * ringTerm,ringSpeed,ringActiveTime);
+                if(item.IsActive())
+                    item.SetMove(false,(float)(i - 1) * ringTerm,ringSpeed,ringActiveTime);
                 //item.SetAlertTime(1f);
             }
         }

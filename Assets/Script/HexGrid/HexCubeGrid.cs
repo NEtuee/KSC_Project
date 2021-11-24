@@ -237,7 +237,8 @@ public class HexCubeGrid : MonoBehaviour
         _cubeSaveList.Clear();
         foreach(var cube in _cubeMap.Values)
         {
-            if(cube.IsActive() && (ignoreSpecial ? !cube.special : true))
+            if(cube.IsActive() && (ignoreSpecial ? !cube.special : true) || 
+                (cube.GetMoveStartTime() > 0f && (ignoreSpecial ? !cube.special : true)))
             {
                 _cubeSaveList.Add(cube.cubePoint);
             }

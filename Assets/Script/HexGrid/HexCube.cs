@@ -213,6 +213,11 @@ public class HexCube : MonoBehaviour
         _alertTimer = value;
     }
 
+    public float GetMoveStartTime()
+    {
+        return _moveStartTime;
+    }
+
     public void SetMove(bool active, float startTime, float speed, float inverseMoveTime = 0f, System.Action disable = null, System.Action enable = null)
     {
         if (_moveLock)
