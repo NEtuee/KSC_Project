@@ -782,6 +782,7 @@ MonoBehaviour:
   receivedCount: 0
   playableDirector: {fileID: 89895630}
   endSignalTime: 688
+  skipTrigger: 
   activeLists:
   - {fileID: 2074775833}
   - {fileID: 2044979102}
@@ -1961,6 +1962,7 @@ MonoBehaviour:
   receivedCount: 0
   playableDirector: {fileID: 340748387}
   endSignalTime: 1261
+  skipTrigger: 
   activeLists:
   - {fileID: 1195431620}
   - {fileID: 140643222}
@@ -10881,6 +10883,7 @@ GameObject:
   - component: {fileID: 1395621139}
   - component: {fileID: 1395621141}
   - component: {fileID: 1395621142}
+  - component: {fileID: 1395621143}
   m_Layer: 0
   m_Name: BrokenMedusa_RealFinal
   m_TagString: Untagged
@@ -11144,6 +11147,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   code: 1512
+--- !u!114 &1395621143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395621129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d27f30dc8ac08f48b383e702a6b1127, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 4856741717388339208}
+  A: {fileID: 2100000, guid: 0d90a5acbd51bc14695afa4a815fd61d, type: 2}
+  B: {fileID: 0}
 --- !u!1001 &1410791147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12080,6 +12098,7 @@ MonoBehaviour:
   receivedCount: 0
   playableDirector: {fileID: 1515497639}
   endSignalTime: 478
+  skipTrigger: 
   activeLists:
   - {fileID: 1216343271}
   endActiveLists: []
@@ -15238,6 +15257,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1395621143}
+        m_TargetAssemblyTypeName: MaterialChanger, Assembly-CSharp
+        m_MethodName: SwitchA
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

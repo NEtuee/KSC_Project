@@ -52,6 +52,7 @@ public class PlayerRagdoll : MonoBehaviour
     private bool isHangShake;
 
     [SerializeField] private Transform hipTransform;
+    private Rigidbody hipRig;
 
     private Vector3 storedHipsPosition;
     private Vector3 storedHipsPositionPrivAnim;
@@ -84,6 +85,7 @@ public class PlayerRagdoll : MonoBehaviour
 
 
         hipTransform = anim.GetBoneTransform(HumanBodyBones.Hips);
+        hipRig = hipTransform.GetComponent<Rigidbody>();
 
         rightHandTransform = anim.GetBoneTransform(HumanBodyBones.RightHand);
         rightHandRigidBody = rightHandTransform.GetComponent<Rigidbody>();
@@ -188,6 +190,12 @@ public class PlayerRagdoll : MonoBehaviour
             //rightHandTransform.SetPositionAndRotation(rightHandPoint.position, rightHandPoint.rotation);
             rightHandRigidBody.MovePosition(rightHandPoint.position);
         }
+
+        if(hipRig.velocity.sqrMagnitude >= 15f * 15f)
+        {
+            hipRig.velocity = hipRig.velocity.normalized * 15f;
+        }
+
     }
 
     void Update()
