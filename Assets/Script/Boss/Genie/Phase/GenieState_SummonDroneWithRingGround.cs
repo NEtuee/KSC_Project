@@ -37,6 +37,7 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
 
     private Genie_BombDroneAI _toPlayerDrone;
 
+
     public override void Assign()
     {
         base.Assign();
@@ -90,6 +91,7 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
         _drag = false;
 
         ((Genie_CoreDroneAI)droneAIs[droneAIs.Count - 1]).mirror = true;
+
     }
 
 

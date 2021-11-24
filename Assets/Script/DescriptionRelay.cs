@@ -26,6 +26,11 @@ public class DescriptionRelay : ObjectBase
     {
         var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
         data.key = key;
-        SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey,GetSavedNumber("PlayerManager"),data);
+        SendMessageEx(MessageTitles.playermanager_droneTextByKey, GetSavedNumber("PlayerManager"),data);
+    }
+
+    public void SetName(string name)
+    {
+        SendMessageEx(MessageTitles.playermanager_SetDialogName, GetSavedNumber("PlayerManager"), name);
     }
 }

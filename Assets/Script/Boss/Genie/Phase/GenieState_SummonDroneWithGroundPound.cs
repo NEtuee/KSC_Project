@@ -37,6 +37,8 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
 
     private Genie_BombDroneAI _toPlayerDrone;
 
+    public MessageEventSender eventSender;
+
     public override void Assign()
     {
         base.Assign();
@@ -71,6 +73,7 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
         _timeCounter.AddSequence("Drag", 1.2f, null, (x) => {
             target.PauseLeftHandEffect();
         });
+
     }
 
     public override void StateInitialize(StateBase prevState)
@@ -89,6 +92,7 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
         _pattern = false;
 
         ((Genie_CoreDroneAI)droneAIs[droneAIs.Count - 1]).mirror = true;
+
     }
 
     public override void StateProgress(float deltaTime)
@@ -253,7 +257,9 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
 
     public void SpawnProgress(float t)
     {
-        for(int i = 0; i < droneAIs.Count - _droneSpawnLimit; ++i)
+        eventSender.Send();
+
+        for (int i = 0; i < droneAIs.Count - _droneSpawnLimit; ++i)
         {
             if(i == 0)
             {

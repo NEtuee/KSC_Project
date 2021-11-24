@@ -36,6 +36,11 @@ public class GenieState_Angry : GenieStateBase
 
         _timeCounter.InitSequencer("Start");
         _timeCounter.InitSequencer("Process");
+
+        var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+        data.key = "Birdy_A2_GenieCoreDrone04";
+        data.duration = 5f;
+        target.SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, UniqueNumberBase.GetSavedNumberStatic("PlayerManager"), data);
     }
 
     public override void StateProgress(float deltaTime)

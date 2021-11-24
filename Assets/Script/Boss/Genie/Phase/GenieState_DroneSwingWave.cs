@@ -65,7 +65,13 @@ public class GenieState_DroneSwingWave : GenieStateBase
         _timeCounter.CreateSequencer("Process");
         _timeCounter.AddSequence("Process",beforeGroundHitTime,LookTarget,BeforeGroundHit);
         _timeCounter.AddSequence("Process",groundHitTime,GroundHit,GroundDisapear);
-        _timeCounter.AddSequence("Process",beforeDroneSummonTime,null,null);
+        _timeCounter.AddSequence("Process",beforeDroneSummonTime,null,(value)=> 
+        {
+            var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+            data.key = "Birdy_A2_GenieCoreDrone02";
+            data.duration = 5f;
+            target.SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, UniqueNumberBase.GetSavedNumberStatic("PlayerManager"), data);
+        });
         _timeCounter.AddSequence("Process",droneSummonTime,DroneApear,SpawnCoreDrone);
         _timeCounter.AddSequence("Process",patternStartTime,null,null);
 
@@ -98,6 +104,8 @@ public class GenieState_DroneSwingWave : GenieStateBase
         _cut = cutFirst;
         _groundCutFreq = groundCutFreq;
         _groundWheelFreq = groundWheelFreq;
+
+       
     }
 
     public override void StateProgress(float deltaTime)

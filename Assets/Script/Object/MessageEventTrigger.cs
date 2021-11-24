@@ -16,12 +16,18 @@ public class MessageEventTrigger : ObjectBase
     [HideInInspector] public ActiveInformationUiPack activeInformationUiPack;
     [HideInInspector] public SetTimeInformationUiPack setTimeInformationUiPack;
     [HideInInspector] public MissionUiDisspearPack missionUiDisspearPack;
+    [HideInInspector] public DialogPack dialogPack;
+    [HideInInspector] public DialogSetNamePack dialogSetNamePack;
+    public List<DialogPack> dialogPacks = new List<DialogPack>();
 
     private System.Action _triggerEvent;
+    private Collider _collider;
 
     public override void Assign()
     {
         base.Assign();
+
+        _collider = GetComponent<Collider>();
 
         switch (message)
         {
@@ -80,6 +86,33 @@ public class MessageEventTrigger : ObjectBase
                     };
                 }
                 break;
+            case MessageTitleEnum.Dialog:
+                {
+                    _triggerEvent = () =>
+                    {
+                        var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+                        data.key = dialogPack.key;
+                        data.duration = dialogPack.duration;
+                        SendMessageEx((ushort)message, GetSavedNumber("PlayerManager"), data);
+                    };
+                }
+                break;
+            case MessageTitleEnum.DialogNameSet:
+                {
+                    _triggerEvent = () =>
+                    {
+                        SendMessageEx((ushort)message, GetSavedNumber("PlayerManager"), dialogSetNamePack.name);
+                    };
+                }
+                break;
+            case MessageTitleEnum.DialogLoop:
+                {
+                    _triggerEvent = () =>
+                    {
+                        StartCoroutine(MessageLoop());
+                    };
+                }
+                break;
         }
     }
 
@@ -95,13 +128,26 @@ public class MessageEventTrigger : ObjectBase
         SendMessageEx(MessageTitles.uimanager_DisappearMissionUi, GetSavedNumber("UIManager"), null);
     }
 
+    public IEnumerator MessageLoop()
+    {
+        for(int i = 0; i < dialogPacks.Count; i++)
+        {
+            var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+            data.key = dialogPacks[i].key;
+            data.duration = dialogPacks[i].duration;
+            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+            yield return new WaitForSeconds(dialogPacks[i].duration);
+        }
+    }
+
+
     private void OnTriggerEnter(Collider other)
     {
         if((triggerLayer.value & (1<<other.gameObject.layer))>0)
         {
             _triggerEvent();
             if (onDisable == true)
-                gameObject.SetActive(false);
+                _collider.enabled = false;
         }
     }
 }
@@ -145,6 +191,20 @@ namespace MessageSender
         public float time;
     }
 
+    [System.Serializable]
+    public class DialogPack
+    {
+        public string key;
+        public float duration;
+    }
+
+    [System.Serializable]
+    public class DialogSetNamePack
+    {
+        public string name;
+    }
+
+
     public enum MessageTitleEnum
     {
         MissionUi = MessageTitles.uimanager_AppearMissionUiAndSetKey,
@@ -153,6 +213,9 @@ namespace MessageSender
         ActiveInformationUi = MessageTitles.uimanager_AppearInformationUi,
         SetTimeInformationUi = MessageTitles.uimanager_SetShowTimeInformationUi,
         DisappearMissionUi = MessageTitles.uimanager_DisappearMissionUi,
-        PlayerRagdoll = MessageTitles.playermanager_ragdoll
+        PlayerRagdoll = MessageTitles.playermanager_ragdoll,
+        Dialog = MessageTitles.playermanager_droneTextAndDurationByKey,
+        DialogNameSet = MessageTitles.playermanager_SetDialogName,
+        DialogLoop
     }
 }

@@ -89,6 +89,7 @@ public class DroneHelperRoot : MonoBehaviour
         descriptText.SetTargetString(descriptDictionary[key].desc);
         droneDiscriptCanvas.enabled = true;
         drone.OrderHelp();
+        hintTime = descriptDictionary[key].duration;
         timer.InitTimer("Help", 0.0f, hintTime);
 
         var audio = descriptDictionary[key].audio;
@@ -115,7 +116,7 @@ public class DroneHelperRoot : MonoBehaviour
         descriptText.SetTargetString(descriptDictionary[key].desc);
         droneDiscriptCanvas.enabled = true;
         drone.OrderHelp();
-        hintTime = descriptDictionary[key].duration;
+        hintTime = durationTime;
         timer.InitTimer("Help",0.0f,hintTime);
 
         var audio = descriptDictionary[key].audio;
@@ -143,10 +144,7 @@ public class DroneHelperRoot : MonoBehaviour
 
     public void ActiveDescriptCanvas(bool active)
     {
-        if(ReferenceEquals(droneDiscriptCanvas,null) == false)
-        {
-            droneDiscriptCanvas.enabled = active;
-        }
+        droneDiscriptCanvas.enabled = active;
     }
 
     public void SetHelper(DroneHelper helper)
