@@ -45,6 +45,14 @@ public class BooleanTrigger : ScriptableObject
 #endif
     }
 
+    public void InitTriggers(bool value)
+    {
+        foreach(var item in booleans)
+        {
+            item.trigger = value;
+        }
+    }
+
     public void RemoveTrigger(string name)
     {
         var trigger = FindTrigger(name);

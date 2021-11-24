@@ -5,6 +5,7 @@ using UnityEngine;
 public class GlobalTriggerManager : ManagerBase
 {
     public BooleanTrigger globalTrigger;
+    public bool triggerClear = false;
 
     public override void Assign()
     {
@@ -25,6 +26,9 @@ public class GlobalTriggerManager : ManagerBase
         }
 
         ScriptableObject.DestroyImmediate(save,true);
+
+        if(triggerClear)
+            globalTrigger.InitTriggers(false);
     }
 
     public void GetGlobalTriggerAsset(Message msg)
