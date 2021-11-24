@@ -13,6 +13,8 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public PlayableDirector playableDirector;
     public float endSignalTime;
 
+    public string skipTrigger = "";
+
     public List<GameObject> activeLists = new List<GameObject>();
     public List<GameObject> endActiveLists = new List<GameObject>();
     public Transform endTransform;
@@ -28,6 +30,8 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     private CinemachineBrain _mainCamBrain;
     private CameraManager _camManager;
 
+    private bool _skip = false;
+
 
     public override void Assign()
     {
@@ -37,6 +41,16 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             _camManager = (CameraManager)x.data;
             _mainCamBrain = _camManager.GetCinemachineBrain();
         });
+
+        AddAction(MessageTitles.boolTrigger_getTrigger, (x) =>
+        {
+            var sendData = MessageDataPooling.CastData<MD.TriggerData>(x.data);
+            if(sendData != null)
+            {
+                _skip = sendData.trigger;
+            }
+        });
+
     }
 
     public override void Initialize()
@@ -45,6 +59,14 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
         RegisterRequest(GetSavedNumber("CutsceneManager"));
         SendMessageQuick(MessageTitles.cameramanager_getCameraManager,GetSavedNumber("CameraManager"),null);
+
+        if(skipTrigger != "")
+        {
+            var data = MessageDataPooling.GetMessageData<MD.StringData>();
+            data.value = skipTrigger;
+            SendMessageEx(MessageTitles.boolTrigger_getTrigger, GetSavedNumber("GlobalTriggerManager"), data);
+        }
+        
     }
 
     public void Play()
@@ -58,19 +80,32 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
         {
             var actionData = MessageDataPooling.GetMessageData<MD.ActionData>();
             actionData.value = ()=>{
-                SetActiveObjects(true);
+                if(!_skip)
+                {
+                    SetActiveObjects(true);
 
-                var data = MessageDataPooling.GetMessageData<MD.BrainUpdateMethodData>();
-                data.update = CinemachineBrain.UpdateMethod.SmartUpdate;
-                data.blend = CinemachineBrain.BrainUpdateMethod.LateUpdate;
-                SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod,GetSavedNumber("CameraManager"),data);
+                    var data = MessageDataPooling.GetMessageData<MD.BrainUpdateMethodData>();
+                    data.update = CinemachineBrain.UpdateMethod.SmartUpdate;
+                    data.blend = CinemachineBrain.BrainUpdateMethod.LateUpdate;
+                    SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod, GetSavedNumber("CameraManager"), data);
 
-                TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
-                TrackAsset track = timelineAsset.GetOutputTrack(1) ;
-                playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
-                playableDirector.SetGenericBinding (track, _mainCamBrain);
-                playableDirector.Play();
+                    TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
+                    TrackAsset track = timelineAsset.GetOutputTrack(1);
+                    playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
+                    playableDirector.SetGenericBinding(track, _mainCamBrain);
+                    playableDirector.Play();
+                }
+                else
+                {
+                    var fadeInData = MessageDataPooling.GetMessageData<MD.ActionData>();
+                    fadeInData.value = () => {
+                        EndSet();
 
+                    };
+
+                    SendMessageEx(MessageTitles.uimanager_fadein, GetSavedNumber("UIManager"), fadeInData);
+                }
+                
                 if (endTransform != null)
                 {
                     var positionData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
@@ -84,25 +119,43 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
                     camData.yaw = endTransform.eulerAngles.y;
                     SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
                 }
+
+                //if(_skip)
+                //{
+                //    End();
+                //}
             };
 
             SendMessageEx(MessageTitles.uimanager_fadeinout,GetSavedNumber("UIManager"),actionData);
         }
         else
         {
-            SetActiveObjects(true);
+            if(!_skip)
+            {
+                SetActiveObjects(true);
 
-            var data = MessageDataPooling.GetMessageData<MD.BrainUpdateMethodData>();
-            data.update = CinemachineBrain.UpdateMethod.SmartUpdate;
-            data.blend = CinemachineBrain.BrainUpdateMethod.LateUpdate;
-            SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod, GetSavedNumber("CameraManager"), data);
+                var data = MessageDataPooling.GetMessageData<MD.BrainUpdateMethodData>();
+                data.update = CinemachineBrain.UpdateMethod.SmartUpdate;
+                data.blend = CinemachineBrain.BrainUpdateMethod.LateUpdate;
+                SendMessageEx(MessageTitles.cameramanager_setBrainUpdateMethod, GetSavedNumber("CameraManager"), data);
 
-            TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
-            TrackAsset track = timelineAsset.GetOutputTrack(1);
-            playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
-            playableDirector.SetGenericBinding(track, _mainCamBrain);
-            playableDirector.Play();
+                TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
+                TrackAsset track = timelineAsset.GetOutputTrack(1);
+                playableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
+                playableDirector.SetGenericBinding(track, _mainCamBrain);
+                playableDirector.Play();
+            }
+            else
+            {
+                var fadeInData = MessageDataPooling.GetMessageData<MD.ActionData>();
+                fadeInData.value = () => {
+                    EndSet();
 
+                };
+
+                SendMessageEx(MessageTitles.uimanager_fadein, GetSavedNumber("UIManager"), fadeInData);
+            }
+            
             if (endTransform != null)
             {
                 var positionData = MessageDataPooling.GetMessageData<MD.PositionRotation>();
@@ -116,6 +169,12 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
                 camData.yaw = endTransform.eulerAngles.y;
                 SendMessageEx(MessageTitles.cameramanager_setYawPitchPosition, GetSavedNumber("CameraManager"), camData);
             }
+
+            //if (_skip)
+            //{
+            //    End();
+            //    //playableDirector.time = endSignalTime-1;
+            //}
         }
 
         //GameManager.Instance.optionMenuCtrl.respawnFadeCtrl.FadeInOut(() => {
@@ -261,6 +320,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
         if (playerDisable)
         {
+            Debug.Log("TLqkf");
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
             SendMessageEx(MessageTitles.cameramanager_initCameraPositionAndRotation, GetSavedNumber("CameraManager"), null);
             SendMessageEx(MessageTitles.player_animatiorStateChangeDefault, GetSavedNumber("Player"), null);

@@ -26,6 +26,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
     public Transform birdyInside;
     public Transform birdyOutside;
 
+    public Animator birdyAnimator;
+
     [Header("Stemp")]
     public float dissolveTime = 1f;
     public float stempHeight = 10f;
@@ -154,6 +156,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         dissolveControl.SetDissolve(1f);
 
         _birdyTarget = birdyInside;
+
+        shieldTarget.gameObject.SetActive(false);
     }
 
     public override void FixedProgress(float deltaTime)
@@ -176,7 +180,9 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
                 shieldTarget.Reactive();
                 shieldTarget.gameObject.SetActive(false);
 
-                _birdyTarget = birdyInside;
+
+                _birdyTarget = currentState == State.FogMove ? birdyOutside : birdyInside;
+                QuickOut();
             }
 
             return;
@@ -207,8 +213,18 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         }
         else if(currentState == State.FogMove)
         {
-            ShieldLookPlayer();
+            //ShieldLookPlayer();
             FollowPathInDirection(deltaTime);
+            var angle = Vector3.SignedAngle(shieldObj.forward, targetDirection, shieldObj.up);
+
+            if (Mathf.Abs(angle) > turnAccuracy)
+            {
+                if (angle > 0)
+                    Turn(true, shieldObj, rotationSpeed, deltaTime);
+                else
+                    Turn(false, shieldObj, rotationSpeed, deltaTime);
+            }
+
         }
         else if(currentState == State.GroundShot)
         {
@@ -231,9 +247,11 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
         shieldTarget.Reactive();
         shieldTarget.gameObject.SetActive(true);
+        shieldTarget.VisibleVisual();
         _birdyTarget = birdyOutside;
 
         SetPath("FogBirdyPath", true);
+        ChangeAnimation(1);
     }
 
     public void Shot()
@@ -246,14 +264,11 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _timeCounterEx.SkipSequencer("InOut", stempWaitTime);
     }
 
-    public void Groggy(float time)
+    public void ShieldActive()
     {
-        _groggy = true;
+        shieldTarget.Reactive();
         shieldTarget.gameObject.SetActive(true);
         shieldTarget.VisibleVisual();
-        _timeCounterEx.InitTimer("groggy", 0f, time);
-
-        _birdyTarget = birdyOutside;
 
         MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
         data.key = "CannonExplosion";
@@ -261,6 +276,38 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         data.rotation = Quaternion.identity;
         data.parent = null;
         SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
+    }
+
+    public void Recover()
+    {
+        _groggy = false;
+        _birdyTarget = birdyInside;
+        currentState = State.PlayerLook;
+    }
+
+    public bool IsGroggy()
+    {
+        return _groggy;
+    }
+
+    public void Groggy(float time)
+    {
+        ShieldActive();
+
+        _groggy = true;
+        _timeCounterEx.InitTimer("groggy", 0f, time);
+        _birdyTarget = birdyOutside;
+
+        currentState = State.PlayerLook;
+
+        if(!_inout)
+        {
+            dissolveControl.ActiveCurrent(1f);
+            disapearTarget.SetActive(true);
+        }
+        
+
+        ChangeAnimation(0);
     }
 
     public void QuickOut()
@@ -313,6 +360,12 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         }
     }
 
+    public void ChangeAnimation(int target)
+    {
+        birdyAnimator.SetTrigger("Change");
+        birdyAnimator.SetInteger("Target",target);
+    }
+
     public void Ring()
     {
         stempCube.SetMove(false,0f,ringSpeed,ringActiveTime);
@@ -322,7 +375,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             grid.GetCubeRing(ref _ringList,stempCube.cubePoint,i);
             foreach(var item in _ringList)
             {
-                item.SetMove(false,(float)(i - 1) * ringTerm,ringSpeed,ringActiveTime);
+                if(item.IsActive())
+                    item.SetMove(false,(float)(i - 1) * ringTerm,ringSpeed,ringActiveTime);
                 //item.SetAlertTime(1f);
             }
         }

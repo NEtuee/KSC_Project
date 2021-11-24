@@ -21,7 +21,7 @@ public class FallPillar : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _mat = GetComponent<Renderer>().material;
-        _mat.SetFloat("Dissvole", 1f);
+        _mat.SetFloat("Dissvole", 0f);
         _impulseSource = GetComponent<Cinemachine.CinemachineImpulseSource>();
         _rigidbody.isKinematic = true;
     }
@@ -53,12 +53,12 @@ public class FallPillar : MonoBehaviour
     {
         _falling = false;
         _done = false;
-        StartCoroutine(Fade(time, 0.0f, null));
+        StartCoroutine(Fade(time, 1.0f, null));
     }
 
     public void Disappear(float time)
     {
-        StartCoroutine(Fade(time, 1.0f,()=> { _done = true; }));
+        StartCoroutine(Fade(time, 0.0f,()=> { _done = true; }));
     }
 
     private void OnCollisionEnter(Collision collision)

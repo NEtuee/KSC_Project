@@ -59,7 +59,8 @@ public class PathfollowObjectBase : ObjectBase
             return true;
 
         SetTarget(targetTransform.position);
-        Move(targetDirection, moveSpeed, deltaTime);
+        var dir = (targetTransform.position - transform.position).normalized;
+        Move(dir, moveSpeed, deltaTime);
         if (IsArrivedTarget(distanceAccuracy))
         {
             var target = GetNextPoint(out bool isEnd).transform;

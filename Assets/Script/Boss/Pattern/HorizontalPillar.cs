@@ -17,7 +17,7 @@ public class HorizontalPillar : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _mat = GetComponent<Renderer>().material;
-        _mat.SetFloat("Dissvole", 1f);
+        _mat.SetFloat("Dissvole", 0f);
         _rigidbody.isKinematic = true;
         _collider = GetComponent<Collider>();
         _collider.isTrigger = true;

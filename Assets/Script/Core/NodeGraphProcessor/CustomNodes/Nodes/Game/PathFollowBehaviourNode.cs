@@ -59,7 +59,16 @@ public class FollowPathTranslateNode : LinearConditionalNode
 
 	protected override void Process()
 	{
-	    isArrived = obj.FollowPathTranslate(speed,rotationSpeed,pointRotate,deltaTime);
+        var angle = Vector3.SignedAngle(obj.transform.forward, obj.targetDirection, obj.transform.up);
+
+        if (Mathf.Abs(angle) > obj.turnAccuracy)
+        {
+            if (angle > 0)
+                obj.Turn(true, obj.transform, rotationSpeed, deltaTime);
+            else
+                obj.Turn(false, obj.transform, rotationSpeed, deltaTime);
+        }
+        isArrived = obj.FollowPathTranslate(speed,rotationSpeed,pointRotate,deltaTime);
 	}
 }
 

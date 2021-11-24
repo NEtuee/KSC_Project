@@ -239,6 +239,10 @@ public class BirdyBoss_PatternOne : ObjectBase
             _drone.transform.LookAt(_drone.targetTransform);
             empShield.transform.position = _drone.transform.position;
         }
+        else if(active)
+        {
+            _drone.transform.localPosition = Vector3.zero;//headPattern.transform.position;
+        }
     }
 
     public void GetMainProcessingSequences(ref List<string> targets)
@@ -301,7 +305,9 @@ public class BirdyBoss_PatternOne : ObjectBase
             _drone.canMove = false;
             _drone.gameObject.SetActive(value);
             _drone.transform.SetParent(headPattern.transform);
-            _drone.transform.localPosition = Vector3.zero;
+            _drone.transform.position = headPattern.transform.position;
+
+            headPattern.dissolveControl.Active(0.1f);
         }
     }
 
