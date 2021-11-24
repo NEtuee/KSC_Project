@@ -84,6 +84,7 @@ public class UIManager : ManagerBase
     [Header("ScanMaker")]
     [SerializeField] private Canvas scanMakerCanvas;
     [SerializeField] private ScanMakerPool scanMakerPool;
+    [SerializeField] private ScanMakerPool exScanMakerPool;
 
     //[Header("DroneUI")]
     //[SerializeField] private Canvas droneUiCanvas;
@@ -382,6 +383,17 @@ public class UIManager : ManagerBase
             soundPlay.id = 1303; soundPlay.position = Camera.main.transform.position; soundPlay.returnValue = false; soundPlay.dontStop = false;
             SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
          });
+
+        AddAction(MessageTitles.uimanager_activeEXScanMaker, (msg) =>
+        {
+            var maker = exScanMakerPool.Active();
+            ScanMakerData data = MessageDataPooling.CastData<ScanMakerData>(msg.data);
+            maker.Active(data.collider);//data.center, data.min, data.max);
+
+            SoundPlayData soundPlay = MessageDataPooling.GetMessageData<SoundPlayData>();
+            soundPlay.id = 1303; soundPlay.position = Camera.main.transform.position; soundPlay.returnValue = false; soundPlay.dontStop = false;
+            SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundPlay);
+        });
 
         //AddAction(MessageTitles.uimanager_visibleScanCoolTimeUi, (msg) =>
         // {
@@ -931,6 +943,8 @@ public class UIManager : ManagerBase
         BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
         timeStop.value = true;
         SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
+
+        SendMessageEx(MessageTitles.gamepadVibrationManager_stopVibration, GetSavedNumber("GamepadVibrationManager"), null);
     }
 
     public void OnRestartButton()
@@ -938,9 +952,9 @@ public class UIManager : ManagerBase
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         gameoverPage.Active(false);
-        BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
-        timeStop.value = false;
-        SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
+        //BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
+        //timeStop.value = false;
+        //SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
         SendMessageEx(MessageTitles.scene_loadRestartLevel, GetSavedNumber("SceneManager"), null);
     }
 

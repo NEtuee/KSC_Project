@@ -51,20 +51,30 @@ public class MainHubStageManager : ObjectBase
 
         var data = MessageDataPooling.GetMessageData<MD.StringData>();
         data.value = aClearTrigger;
-        SendMessageEx(MessageTitles.boolTrigger_getTrigger, GetSavedNumber("GlobalTriggerManager"), data);
-
-        if(clear == true)
+        SendMessageQuick(MessageTitles.boolTrigger_getTrigger, GetSavedNumber("GlobalTriggerManager"), data);
+        
+        if (clear == false)
+        {
+            firstHubTrigger.SetActive(true);
+            aComeBackTrigger.SetActive(false);
+            bComeBackTrigger.SetActive(false);
+        }
+        else
         {
             firstHubTrigger.SetActive(false);
+            aComeBackTrigger.SetActive(true);
+            bComeBackTrigger.SetActive(false);
         }
 
         var data2 = MessageDataPooling.GetMessageData<MD.StringData>();
         data2.value = bClearTrigger;
-        SendMessageEx(MessageTitles.boolTrigger_getTrigger, GetSavedNumber("GlobalTriggerManager"), data2);
+        SendMessageQuick(MessageTitles.boolTrigger_getTrigger, GetSavedNumber("GlobalTriggerManager"), data2);
 
         if (clear == true)
         {
+            firstHubTrigger.SetActive(false);
             aComeBackTrigger.SetActive(false);
+            bComeBackTrigger.SetActive(true);
         }
     }
 }

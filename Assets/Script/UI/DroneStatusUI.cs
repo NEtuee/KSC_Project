@@ -67,6 +67,11 @@ public class DroneStatusUI : MonoBehaviour
     {
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = false;
+
+        foreach (var front in frontIcon)
+        {
+            originY.Add(front.rectTransform.anchoredPosition.y);
+        }
     }
 
     public void InitDronHpUi()
@@ -75,12 +80,12 @@ public class DroneStatusUI : MonoBehaviour
         droneLineImage.DOFade(0.0f, 0.0f);
         droneEyeImage.DOFade(0.0f, 0.0f);
 
-        foreach (var front in frontIcon)
+        for (int i = 0; i < frontIcon.Count; i++)
         {
-            front.DOFade(0.0f,0.0f);
-            front.rectTransform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.0f);
-            front.color = Color.white;
-            originY.Add(front.rectTransform.anchoredPosition.y);
+            frontIcon[i].DOFade(0.0f,0.0f);
+            frontIcon[i].rectTransform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.0f);
+            frontIcon[i].color = Color.white;
+            frontIcon[i].rectTransform.anchoredPosition = new Vector2(frontIcon[i].rectTransform.anchoredPosition.x, originY[i]);
         }
 
         foreach(var back in backIcon)
@@ -118,6 +123,7 @@ public class DroneStatusUI : MonoBehaviour
             nineth_center_front.rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.0f);
             nineth_center_front.DOFade(1f, 0.0f);
         }
+        
     }
 
     public void Appear()
@@ -149,6 +155,7 @@ public class DroneStatusUI : MonoBehaviour
         foreach(var front in frontElements)
         {
             front.DOFillAmount(0, 0f);
+            front.DOFade(1.0f, 0f);
             front.rectTransform.DOScale(new Vector3(1, 1, 1), 0f);
         }
 

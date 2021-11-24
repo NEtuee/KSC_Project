@@ -320,7 +320,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
 
         if (playerDisable)
         {
-            Debug.Log("TLqkf");
+            //Debug.Log("TLqkf");
             SendMessageEx(MessageTitles.playermanager_hidePlayer,GetSavedNumber("PlayerManager"),true);
             SendMessageEx(MessageTitles.cameramanager_initCameraPositionAndRotation, GetSavedNumber("CameraManager"), null);
             SendMessageEx(MessageTitles.player_animatiorStateChangeDefault, GetSavedNumber("Player"), null);

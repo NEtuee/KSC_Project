@@ -59,7 +59,7 @@ public class NewEmpShield : Scanable
             MD.ScanMakerData data = MessageDataPooling.GetMessageData<MD.ScanMakerData>();
             data.collider = collider;
 
-            SendMessageEx(MessageTitles.uimanager_activeScanMaker, GetSavedNumber("UIManager"), data);
+            SendMessageEx(MessageTitles.uimanager_activeEXScanMaker, GetSavedNumber("UIManager"), data);
             Scanned();
         });
 
@@ -193,7 +193,7 @@ public class NewEmpShield : Scanable
 
         ScanMakerData data = MessageDataPooling.GetMessageData<ScanMakerData>();
         data.collider = collider;
-        SendMessageEx(MessageTitles.uimanager_activeScanMaker, GetSavedNumber("UIManager"), data);
+        SendMessageEx(MessageTitles.uimanager_activeEXScanMaker, GetSavedNumber("UIManager"), data);
 
         whenScanned?.Invoke();
     }
