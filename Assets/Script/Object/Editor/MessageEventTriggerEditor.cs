@@ -50,5 +50,18 @@ public class MessageEventTriggerEditor : Editor
         {
 
         }
+        else if(eventTrigger.message == MessageTitleEnum.Dialog)
+        {
+            eventTrigger.dialogPack.key = EditorGUILayout.TextField("Key", eventTrigger.dialogPack.key);
+            eventTrigger.dialogPack.duration = EditorGUILayout.FloatField("Duration", eventTrigger.dialogPack.duration);
+        }
+        else if (eventTrigger.message == MessageTitleEnum.DialogNameSet)
+        {
+            eventTrigger.dialogSetNamePack.name = EditorGUILayout.TextField("Name", eventTrigger.dialogSetNamePack.name);
+        }
+        else if (eventTrigger.message == MessageTitleEnum.DialogLoop)
+        {
+
+        }
     }
 }

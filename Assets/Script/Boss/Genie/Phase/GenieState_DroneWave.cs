@@ -77,7 +77,13 @@ public class GenieState_DroneWave : GenieStateBase
         _timeCounter.CreateSequencer("Start");
         _timeCounter.AddSequence("Start",beforeGroundHitTime,LookTarget,(x)=>{target.ChangeAnimation(10);target.CreateEyeLight();});
         _timeCounter.AddSequence("Start",groundHitStartTime,BeforeGroundCut,GroundDisapear);
-        _timeCounter.AddSequence("Start",patternStartTime,null,null);
+        _timeCounter.AddSequence("Start",patternStartTime,null,(x)=>
+        {
+            var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+            data.key = "Birdy_A2_GenieCoreDrone03";
+            data.duration = 5f;
+            target.SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, UniqueNumberBase.GetSavedNumberStatic("PlayerManager"), data);
+        });
         
         _timeCounter.CreateSequencer("Pattern");
         for(int i = 0; i < patternEvents.Count; ++i)

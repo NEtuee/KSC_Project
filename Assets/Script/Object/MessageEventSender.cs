@@ -14,6 +14,9 @@ public class MessageEventSender : ObjectBase
     [HideInInspector] public ActiveInformationUiPack activeInformationUiPack;
     [HideInInspector] public SetTimeInformationUiPack setTimeInformationUiPack;
     [HideInInspector] public MissionUiDisspearPack missionUiDisspearPack;
+    [HideInInspector] public DialogPack dialogPack;
+    [HideInInspector] public DialogSetNamePack dialogSetNamePack;
+    public List<DialogPack> dialogPacks = new List<DialogPack>();
 
     private System.Action _event;
 
@@ -86,6 +89,45 @@ public class MessageEventSender : ObjectBase
                     };
                 }
                 break;
+            case MessageTitleEnum.Dialog:
+                {
+                    _event = () =>
+                    {
+                        var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+                        data.key = dialogPack.key;
+                        data.duration = dialogPack.duration;
+                        SendMessageEx((ushort)message, GetSavedNumber("PlayerManager"), data);
+                    };
+                }
+                break;
+            case MessageTitleEnum.DialogNameSet:
+                {
+                    _event = () =>
+                    {
+                        SendMessageEx((ushort)message, GetSavedNumber("PlayerManager"), dialogSetNamePack.name);
+                    };
+                }
+                break;
+            case MessageTitleEnum.DialogLoop:
+                {
+                    _event = () =>
+                    {
+                        StartCoroutine(MessageLoop());
+                    };
+                }
+                break;
+        }
+    }
+
+    public IEnumerator MessageLoop()
+    {
+        for (int i = 0; i < dialogPacks.Count; i++)
+        {
+            var data = MessageDataPooling.GetMessageData<DroneTextKeyAndDurationData>();
+            data.key = dialogPacks[i].key;
+            data.duration = dialogPacks[i].duration;
+            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+            yield return new WaitForSeconds(dialogPacks[i].duration);
         }
     }
 
