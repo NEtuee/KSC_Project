@@ -255,6 +255,17 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         ChangeAnimation(1);
     }
 
+    public void PathFollow(string path)
+    {
+        if (currentState == State.FogMove)
+            return;
+
+        currentState = State.FogMove;
+
+        SetPath(path, true);
+        ChangeAnimation(1);
+    }
+
     public void Shot()
     {
         currentState = State.GroundShot;
@@ -284,6 +295,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _groggy = false;
         _birdyTarget = birdyInside;
         currentState = State.PlayerLook;
+        ChangeAnimation(3);
     }
 
     public bool IsGroggy()

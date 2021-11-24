@@ -41,6 +41,8 @@ public class BirdyBoss_PatternOne : ObjectBase
         GroundCutV2Start,
         GroundCutV2End,
         InverseGroundPattern,
+        StartHeadMove,
+        HeadOut,
 
 
         PatternEND,
@@ -809,6 +811,20 @@ public class BirdyBoss_PatternOne : ObjectBase
                     var centerCube = cubeGrid.GetCube(Vector3Int.zero);
                     centerCube.SetMove(false, (float)(cubeGrid.mapSize / 2 + 1) * item.value, 1f, item.value3);
                    // centerCube.SetAlertTime(1f);
+                });
+            }
+            else if (item.type == EventEnum.StartHeadMove)
+            {
+                _timeCounter.AddSequence(name, (0f), null, (x) =>
+                {
+                    headPattern.PathFollow("FogBirdyPath");
+                });
+            }
+            else if (item.type == EventEnum.HeadOut)
+            {
+                _timeCounter.AddSequence(name, (0f), null, (x) =>
+                {
+                    headPattern.QuickOut();
                 });
             }
 
