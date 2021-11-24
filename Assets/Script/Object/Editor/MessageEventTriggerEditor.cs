@@ -23,16 +23,16 @@ public class MessageEventTriggerEditor : Editor
 
         if (eventTrigger.message == MessageTitleEnum.MissionUi)
         {
-            eventTrigger.missionUiPack.key = EditorGUILayout.TextField("Key",eventTrigger.missionUiPack.key);
+            eventTrigger.missionUiPack.key = EditorGUILayout.TextField("Key", eventTrigger.missionUiPack.key);
         }
-        else if(eventTrigger.message == MessageTitleEnum.LevelLineActiveBossName)
+        else if (eventTrigger.message == MessageTitleEnum.LevelLineActiveBossName)
         {
-            eventTrigger.levelLineActiveBossNamePack.name = EditorGUILayout.TextField("BossName",eventTrigger.levelLineActiveBossNamePack.name);
+            eventTrigger.levelLineActiveBossNamePack.name = EditorGUILayout.TextField("BossName", eventTrigger.levelLineActiveBossNamePack.name);
         }
         else if (eventTrigger.message == MessageTitleEnum.LevelLineSetAlphabet)
         {
             alphabet = eventTrigger.levelLineSetAlphabetPack.alphabet;
-            eventTrigger.levelLineSetAlphabetPack.alphabet = (LevelLineUI.Alphabet)EditorGUILayout.EnumPopup("Alphabet",alphabet);
+            eventTrigger.levelLineSetAlphabetPack.alphabet = (LevelLineUI.Alphabet)EditorGUILayout.EnumPopup("Alphabet", alphabet);
         }
         else if (eventTrigger.message == MessageTitleEnum.ActiveInformationUi)
         {
@@ -50,7 +50,7 @@ public class MessageEventTriggerEditor : Editor
         {
 
         }
-        else if(eventTrigger.message == MessageTitleEnum.Dialog)
+        else if (eventTrigger.message == MessageTitleEnum.Dialog)
         {
             eventTrigger.dialogPack.key = EditorGUILayout.TextField("Key", eventTrigger.dialogPack.key);
             eventTrigger.dialogPack.duration = EditorGUILayout.FloatField("Duration", eventTrigger.dialogPack.duration);
@@ -62,6 +62,14 @@ public class MessageEventTriggerEditor : Editor
         else if (eventTrigger.message == MessageTitleEnum.DialogLoop)
         {
 
+        }
+        else if (eventTrigger.message == MessageTitleEnum.ActiveTargetMaker)
+        {
+            eventTrigger.targetTransform = EditorGUILayout.ObjectField("Target", eventTrigger.targetTransform, typeof(Transform), true) as Transform;
+        }
+        else if (eventTrigger.message == MessageTitleEnum.DisableTargetMaker)
+        {
+            eventTrigger.targetTransform = EditorGUILayout.ObjectField("Target", eventTrigger.targetTransform, typeof(Transform), true) as Transform;
         }
     }
 }

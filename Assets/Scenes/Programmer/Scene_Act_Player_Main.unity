@@ -379,6 +379,7 @@ MonoBehaviour:
   guideText: {fileID: 1106095746}
   scanMakerCanvas: {fileID: 2034111789}
   scanMakerPool: {fileID: 2034111786}
+  exScanMakerPool: {fileID: 2034111791}
   keyGuideImage: {fileID: 1615155947}
   keyboardSprite: {fileID: 21300000, guid: e8d3e3094eb5d16488561de1d28aaa01, type: 3}
   gamepadSprite: {fileID: 21300000, guid: 73f7f06f99df5504ab0b7504ecfc572a, type: 3}
@@ -4127,7 +4128,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 48
+  field of view: 55
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -4153,7 +4154,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69449274}
   m_LocalRotation: {x: 0, y: 0.008726558, z: 0, w: 0.999962}
-  m_LocalPosition: {x: 4.4149346, y: 3.7800002, z: -24.462175}
+  m_LocalPosition: {x: 3.651464, y: 4.23, z: -27.519316}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1690922439}
@@ -100281,6 +100282,7 @@ GameObject:
   - component: {fileID: 2034111788}
   - component: {fileID: 2034111787}
   - component: {fileID: 2034111786}
+  - component: {fileID: 2034111791}
   m_Layer: 13
   m_Name: MakerCanvas
   m_TagString: Untagged
@@ -100383,6 +100385,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2034111791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034111785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec7b7c949eafeaf41a6bf781cdf98e3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseObject: {fileID: 5973223150315326809, guid: 325f1c6955f46674d88749e31a9a6dab,
+    type: 3}
 --- !u!1 &2041086339
 GameObject:
   m_ObjectHideFlags: 0
