@@ -222,7 +222,11 @@ public class UIManager : ManagerBase
             var fadeInData = MessageDataPooling.CastData<MD.ActionData>(msg.data);
             FadeIn(fadeInData.value);
         });
-        AddAction(MessageTitles.uimanager_fadeout, (msg) => FadeOut());
+        AddAction(MessageTitles.uimanager_fadeout, (msg) =>
+        {
+            var fadeInData = MessageDataPooling.CastData<MD.ActionData>(msg.data);
+            FadeOut(fadeInData.value);
+        });
 
         AddAction(MessageTitles.uimanager_activeloadingui, (msg) => 
         {
