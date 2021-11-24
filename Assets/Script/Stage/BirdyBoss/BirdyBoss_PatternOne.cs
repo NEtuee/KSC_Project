@@ -111,6 +111,8 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     public int recentlyLoop;
 
+    public MessageEventSender truthSender;
+
     //[Header("GiroPattern")]
     //public GiroPattern giroPattern;
 
@@ -554,6 +556,13 @@ public class BirdyBoss_PatternOne : ObjectBase
                     data.value = true;
                     SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
                     SendMessageEx(MessageTitles.uimanager_ActiveFianlHp, GetSavedNumber("UIManager"), null);
+
+                    //var dialogData = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+                    //dialogData.key = "Birdy_BossBirdy_Truth02";
+                    //dialogData.duration = 5f;
+                    //SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+
+                    truthSender.Send();
                 });
             }
             else if (item.type == EventEnum.DeactiveHPUI)
