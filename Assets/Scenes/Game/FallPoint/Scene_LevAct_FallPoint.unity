@@ -570,6 +570,7 @@ GameObject:
   - component: {fileID: 59009342}
   - component: {fileID: 59009341}
   - component: {fileID: 59009340}
+  - component: {fileID: 59009339}
   m_Layer: 0
   m_Name: Trigger_Thermite_Climb
   m_TagString: Untagged
@@ -577,6 +578,46 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &59009339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59009338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  onDisable: 1
+  triggerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  message: 835
+  missionUiPack:
+    key: FallPoint
+  levelLineActiveBossNamePack:
+    name: 
+  levelLineSetAlphabetPack:
+    alphabet: 0
+  activeInformationUiPack:
+    key: FallPoint_Climb
+  setTimeInformationUiPack:
+    time: 0
+  missionUiDisspearPack:
+    time: 0
+  dialogPack:
+    key: Thermite_Climb
+    duration: 4
+  dialogSetNamePack:
+    name: 
+  targetTransform: {fileID: 0}
+  dialogPacks: []
 --- !u!114 &59009340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,6 +656,7 @@ MonoBehaviour:
     duration: 4
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks: []
 --- !u!65 &59009341
 BoxCollider:
@@ -3489,6 +3531,7 @@ MonoBehaviour:
     duration: 4
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks: []
 --- !u!65 &229298824
 BoxCollider:
@@ -4014,6 +4057,7 @@ MonoBehaviour:
     duration: 0
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks: []
 --- !u!65 &339680304
 BoxCollider:
@@ -6020,6 +6064,7 @@ MonoBehaviour:
     duration: 0
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks:
   - key: Thermite_Call01
     duration: 2
@@ -6069,6 +6114,7 @@ MonoBehaviour:
     duration: 0
   dialogSetNamePack:
     name: "\uD14C\uB974\uBC0B"
+  targetTransform: {fileID: 0}
   dialogPacks: []
 --- !u!1 &587206025
 GameObject:
@@ -7595,6 +7641,7 @@ MonoBehaviour:
     duration: 0
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks: []
 --- !u!65 &741653772
 BoxCollider:
@@ -7647,6 +7694,7 @@ MonoBehaviour:
     duration: 0
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks: []
 --- !u!4 &741653774
 Transform:
@@ -10321,7 +10369,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1413877862}
   m_Father: {fileID: 0}
   m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12927,12 +12976,27 @@ MonoBehaviour:
   m_Events:
     m_Signals:
     - {fileID: 11400000, guid: 7e998c099b9fcf94eab5685aa00ce2c1, type: 2}
+    - {fileID: 11400000, guid: ba8fa734581f31240b94e0222f19f87d, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1252179788}
           m_TargetAssemblyTypeName: LevelEdit_TimelinePlayer, Assembly-CSharp
           m_MethodName: EndSet
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1413877863}
+          m_TargetAssemblyTypeName: MessageEventSender, Assembly-CSharp
+          m_MethodName: Send
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -14481,6 +14545,73 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1409313550}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1413877861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1413877862}
+  - component: {fileID: 1413877863}
+  m_Layer: 0
+  m_Name: FallPoint_Move Sender
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1413877862
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1413877861}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 991879285}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1413877863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1413877861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2f62da6d34d45d44972b9b443d0f39b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  message: 835
+  missionUiPack:
+    key: 
+  levelLineActiveBossNamePack:
+    name: 
+  levelLineSetAlphabetPack:
+    alphabet: 0
+  activeInformationUiPack:
+    key: FallPoint_Move
+  setTimeInformationUiPack:
+    time: 0
+  missionUiDisspearPack:
+    time: 0
+  dialogPack:
+    key: 
+    duration: 0
+  dialogSetNamePack:
+    name: 
+  dialogPacks: []
+  targetTransform: {fileID: 0}
 --- !u!1 &1418314192
 GameObject:
   m_ObjectHideFlags: 0
@@ -16297,6 +16428,7 @@ GameObject:
   - component: {fileID: 1645049122}
   - component: {fileID: 1645049124}
   - component: {fileID: 1645049123}
+  - component: {fileID: 1645049125}
   m_Layer: 0
   m_Name: Trigger_Thermite_Jump
   m_TagString: Untagged
@@ -16356,6 +16488,7 @@ MonoBehaviour:
     duration: 4
   dialogSetNamePack:
     name: 
+  targetTransform: {fileID: 0}
   dialogPacks: []
 --- !u!65 &1645049124
 BoxCollider:
@@ -16370,6 +16503,46 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 6.333007, y: 7.443034, z: 3.7668629}
   m_Center: {x: 2.3051312, y: -0.15412283, z: -1.3834312}
+--- !u!114 &1645049125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645049121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  onDisable: 1
+  triggerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  message: 835
+  missionUiPack:
+    key: 
+  levelLineActiveBossNamePack:
+    name: 
+  levelLineSetAlphabetPack:
+    alphabet: 0
+  activeInformationUiPack:
+    key: FallPoint_Jump
+  setTimeInformationUiPack:
+    time: 0
+  missionUiDisspearPack:
+    time: 0
+  dialogPack:
+    key: 
+    duration: 0
+  dialogSetNamePack:
+    name: 
+  targetTransform: {fileID: 0}
+  dialogPacks: []
 --- !u!1001 &1654354870
 PrefabInstance:
   m_ObjectHideFlags: 0
