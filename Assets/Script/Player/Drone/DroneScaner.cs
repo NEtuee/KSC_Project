@@ -81,8 +81,8 @@ public class DroneScaner : UnTransfromObjectBase
 
     void Update()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
+        //if (GameManager.Instance.PAUSE == true)
+        //    return;
 
         // if (Input.GetKeyDown(KeyCode.V))
         // {
@@ -101,8 +101,8 @@ public class DroneScaner : UnTransfromObjectBase
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.PAUSE == true)
-            return;
+        //if (GameManager.Instance.PAUSE == true)
+        //    return;
 
         if (scaning == true)
         {
