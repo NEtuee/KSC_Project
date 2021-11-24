@@ -59,6 +59,9 @@ public class B11_StageSequencer : ObjectBase
 
     private PlayerUnit _player;
 
+    private bool firstBombSpawn = true;
+    private bool firstMedusaSpawn = true;
+
     public override void Assign()
     {
         base.Assign();
@@ -66,6 +69,14 @@ public class B11_StageSequencer : ObjectBase
         FindGrids(4,7);
         CreateSequencer("process",ref sequences);
         CreateSequencer("loop",ref loopSequences);
+
+        _timeCounter.AddSequence("process", 0f, null, (x) =>
+        {
+            var desc = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+            desc.key = "Birdy_B_Clear";
+            desc.duration = 5f;
+            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), desc);
+        });
 
 
         _timeCounter.AddSequence("process", 0f, null, (x) =>
@@ -145,9 +156,21 @@ public class B11_StageSequencer : ObjectBase
             if(item.type == SequenceItem.EventEnum.SpawnDrone)
             {
                 _timeCounter.AddSequence(name,0f,null,(x)=>{
-                    var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
-                    data.key = "B1_5";
-                    SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+                    if (firstBombSpawn == true)
+                    {
+                        var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+                        data.key = "Birdy_B_DefensStart";
+                        data.duration = 5f;
+                        SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+                        firstBombSpawn = false;
+                    }
+                    else
+                    {
+                        var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+                        data.key = "Birdy_B_BombDroneSpawn";
+                        data.duration = 5f;
+                        SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+                    }
                 });
 
                 if(item.value == 0)
@@ -179,7 +202,14 @@ public class B11_StageSequencer : ObjectBase
             }
             else if(item.type == SequenceItem.EventEnum.SpawnFlySpider)
             {
-                if(item.value == 0)
+                _timeCounter.AddSequence(name, 0f, null, (x) => {
+                     var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+                     data.key = "Birdy_B_Circus";
+                     data.duration = 5f;
+                     SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+                });
+
+                if (item.value == 0)
                 {
                     for(int i = 0; i < item.code; ++i)
                     {
@@ -231,7 +261,7 @@ public class B11_StageSequencer : ObjectBase
             }
             else if(item.type == SequenceItem.EventEnum.SpawnSpiderRandomGrid)
             {
-                if(item.value == 0)
+                if (item.value == 0)
                 {
                     for(int i = 0; i < item.code; ++i)
                     {
@@ -266,7 +296,18 @@ public class B11_StageSequencer : ObjectBase
             }
             else if(item.type == SequenceItem.EventEnum.SpawnMedusa)
             {
-                if(item.value == 0)
+                _timeCounter.AddSequence(name, 0f, null, (x) => {
+                    if (firstMedusaSpawn == true)
+                    {
+                        var data = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+                        data.key = "Birdy_B_Half";
+                        data.duration = 5f;
+                        SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+                        firstMedusaSpawn = false;
+                    }
+                });
+
+                if (item.value == 0)
                 {
                     for(int i = 0; i < item.code; ++i)
                     {
@@ -361,13 +402,6 @@ public class B11_StageSequencer : ObjectBase
                 });
             }
         }
-
-        _timeCounter.AddSequence(name, 0f, null, (x) =>
-        {
-            var desc = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
-            desc.key = "B1_7";
-            SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), desc);
-        });
         
     }
 
@@ -375,7 +409,8 @@ public class B11_StageSequencer : ObjectBase
     {
 
         var desc = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
-        desc.key = "B1_6";
+        desc.key = "Birdy_B_Damage";
+        desc.duration = 5;
         SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), desc);
 
         _hp -= factor;
