@@ -90,7 +90,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             transform.position = pos;
         });
         _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => { DissolveIn(x); ShieldLookPlayer(); }, (x)=>{
-            
+            ChangeAnimation(4);
         });
         _timeCounterEx.AddSequence("Stemp",stempStartTime,(x)=> {
             var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
@@ -137,6 +137,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
             _lookDown = false;
             _stemp = false;
+
+            ChangeAnimation(0);
         });
         _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveIn, (x)=>{
             
