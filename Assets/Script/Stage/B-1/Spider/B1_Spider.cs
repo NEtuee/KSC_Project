@@ -89,6 +89,16 @@ public class B1_Spider : PathfollowObjectBase
         //Respawn();
     }
 
+    public void ExplosionParticle()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+        data.key = "SpiderParts";
+        data.position = transform.position;
+        data.rotation = Quaternion.identity;
+        data.parent = null;
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
+    }
+
     public void Respawn()
     {
         if(shell == null)
@@ -189,6 +199,7 @@ public class B1_Spider : PathfollowObjectBase
         data.parent = null;
         SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
 
+        ExplosionParticle();
         //MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
         //soundData.id = 1532;
         //soundData.position = transform.position;
@@ -212,6 +223,8 @@ public class B1_Spider : PathfollowObjectBase
         data.rotation = Quaternion.identity;
         data.parent = null;
         SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
+
+        ExplosionParticle();
 
         //MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
         //soundData.id = 1532;

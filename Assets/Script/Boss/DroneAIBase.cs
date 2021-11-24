@@ -95,6 +95,16 @@ public class DroneAIBase : ObjectBase
         ChangeDirection((dir).normalized);
     }
 
+    public void ExplosionParticle()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+        data.key = "DroneParts";
+        data.position = transform.position;
+        data.rotation = Quaternion.identity;
+        data.parent = null;
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
+    }
+
 
     public Vector3 GetTargetPosition()
     {

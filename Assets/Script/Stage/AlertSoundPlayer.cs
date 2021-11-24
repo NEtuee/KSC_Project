@@ -47,7 +47,7 @@ public class AlertSoundPlayer : ObjectBase
 
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
 
-        SoundPlay();
+        //SoundPlay();
         
     }
 
@@ -63,6 +63,11 @@ public class AlertSoundPlayer : ObjectBase
 
     public void SoundPlay()
     {
+        if (_soundEmiter != null)
+            _soundEmiter.Stop();
+        _soundEmiter = null;
+        _paramInfo = null;
+
         var data = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
         data.id = sound;
         data.localPosition = Vector3.zero;
