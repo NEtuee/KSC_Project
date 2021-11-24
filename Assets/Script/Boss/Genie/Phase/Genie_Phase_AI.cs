@@ -132,6 +132,33 @@ public class Genie_Phase_AI : PathfollowObjectBase
         Explosion(rightHandHitEffect.position, 150f);
     }
 
+    public void ChestOpenSound()
+    {
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1535;
+        soundData.position = explosionTarget.position;
+        soundData.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
+    }
+
+    public void LeftHitSound()
+    {
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1536;
+        soundData.position = leftHandHitEffect.position;
+        soundData.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
+    }
+
+    public void RightHitSound()
+    {
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1536;
+        soundData.position = rightHandHitEffect.position;
+        soundData.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
+    }
+
     public void CreateLeftHit()
     {
         MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();

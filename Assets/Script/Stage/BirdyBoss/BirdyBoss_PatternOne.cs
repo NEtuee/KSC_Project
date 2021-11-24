@@ -298,6 +298,7 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     public void SetActive(bool value)
     {
+        Debug.Log("Active");
         active = value;
 
         if (active)
@@ -308,6 +309,7 @@ public class BirdyBoss_PatternOne : ObjectBase
             _drone.transform.position = headPattern.transform.position;
 
             headPattern.dissolveControl.Active(0.1f);
+            headPattern.disapearTarget.SetActive(true);
         }
     }
 

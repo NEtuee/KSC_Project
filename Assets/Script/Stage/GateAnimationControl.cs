@@ -12,6 +12,9 @@ public class GateAnimationControl : MonoBehaviour
     public Material lightOnMat;
     public Material lightOffMat;
 
+    public SoundPlayer openSound;
+    public SoundPlayer closeSound;
+
     public bool autoProc = false;
 
     private bool _move = false;
@@ -78,6 +81,7 @@ public class GateAnimationControl : MonoBehaviour
         _move = true;
         _current = true;
 
+        openSound?.Play();
         ChangeAnimation(0);
     }
 
@@ -86,6 +90,7 @@ public class GateAnimationControl : MonoBehaviour
         _move = true;
         _current = false;
 
+        closeSound?.Play();
         ChangeAnimation(1);
     }
 }

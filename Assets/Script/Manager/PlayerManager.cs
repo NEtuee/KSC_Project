@@ -172,8 +172,9 @@ public class PlayerManager : ManagerBase
         });
 
         AddAction(MessageTitles.playermanager_droneTextByKey, (msg) =>
-         {
-             _drone.DroneHelpCall((string)msg.data);
+        {
+            var data = MessageDataPooling.CastData<DroneTextKeyAndDurationData>(msg.data);
+            _drone.DroneHelpCall(data.key);
          });
 
         AddAction(MessageTitles.playermanager_droneTextAndDurationByKey, (msg) =>

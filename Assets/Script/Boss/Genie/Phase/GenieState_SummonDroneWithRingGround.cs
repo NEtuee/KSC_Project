@@ -37,6 +37,7 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
 
     private Genie_BombDroneAI _toPlayerDrone;
 
+
     public override void Assign()
     {
         base.Assign();
@@ -67,6 +68,12 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
         _timeCounter.CreateSequencer("Drag");
         _timeCounter.AddSequence("Drag", .8f, null, (x) => {
             target.PlayLeftHandEffect();
+            MD.AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
+            soundData.id = 1526;
+            soundData.localPosition = Vector3.zero;
+            soundData.parent = target.leftHandEffect.transform;
+            soundData.returnValue = false;
+            target.SendMessageEx(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
         });
         _timeCounter.AddSequence("Drag", 1.2f, null, (x)=> {
             target.PauseLeftHandEffect();
@@ -90,6 +97,7 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
         _drag = false;
 
         ((Genie_CoreDroneAI)droneAIs[droneAIs.Count - 1]).mirror = true;
+
     }
 
 
@@ -188,16 +196,23 @@ public class GenieState_SummonDroneWithRingGround : GenieStateBase
 
     public void GroundHit(float t)
     {
+        int count = 4;
         for(int i = 2; i <= (target.gridControll.cubeGrid.mapSize - 1) / 2 + 1; ++i)
         {
             _areaList.Clear();
             target.gridControll.cubeGrid.GetCubeRing(ref _areaList, target.gridControll.centerCube.cubePoint,i);
             foreach(var item in _areaList)
             {
-                item.SetMove(false,(float)(i - 2) * groundDisapearTime + Random.Range(0f,0.2f),1f,groundReturnTime);
+                item.SetMove(false,(float)(i - 2) * groundDisapearTime + Random.Range(0f,0.2f),1f,groundReturnTime,null,null, --count > 0);
             }
         }
-        
+
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1527;
+        soundData.position = target.leftHandEffect.transform.position;
+        soundData.returnValue = false;
+        target.SendMessageEx(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
+
         // foreach(var item in _areaList)
         // {
         //     item.SetMove(false,Random.Range(0f,0.2f),1f,groundDisapearTime);
