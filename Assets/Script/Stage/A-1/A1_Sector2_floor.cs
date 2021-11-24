@@ -44,12 +44,14 @@ public class A1_Sector2_floor : MonoBehaviour
                 cube = grid.GetCube(key);
             }
 
+            bool sound = true;
             while(cube != null)
             {
-                cube.SetMove(false,0f,floorMoveSpeed,floorDisapearTime);
+                cube.SetMove(false,0f,floorMoveSpeed,floorDisapearTime,null,null,sound);
                 key -= (46 + count % 2);
                 count += 1;
 
+                sound = false;
                 cube = grid.GetCube(key);
                 
             }

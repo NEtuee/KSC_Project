@@ -41,6 +41,8 @@ public class BirdyBoss_PatternOne : ObjectBase
         GroundCutV2Start,
         GroundCutV2End,
         InverseGroundPattern,
+        StartHeadMove,
+        HeadOut,
 
 
         PatternEND,
@@ -110,6 +112,8 @@ public class BirdyBoss_PatternOne : ObjectBase
     public BirdyBoss_TentacleControl tentacleControl;
 
     public int recentlyLoop;
+
+    public MessageEventSender truthSender;
 
     //[Header("GiroPattern")]
     //public GiroPattern giroPattern;
@@ -554,6 +558,13 @@ public class BirdyBoss_PatternOne : ObjectBase
                     data.value = true;
                     SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
                     SendMessageEx(MessageTitles.uimanager_ActiveFianlHp, GetSavedNumber("UIManager"), null);
+
+                    //var dialogData = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
+                    //dialogData.key = "Birdy_BossBirdy_Truth02";
+                    //dialogData.duration = 5f;
+                    //SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
+
+                    truthSender.Send();
                 });
             }
             else if (item.type == EventEnum.DeactiveHPUI)
@@ -800,6 +811,20 @@ public class BirdyBoss_PatternOne : ObjectBase
                     var centerCube = cubeGrid.GetCube(Vector3Int.zero);
                     centerCube.SetMove(false, (float)(cubeGrid.mapSize / 2 + 1) * item.value, 1f, item.value3);
                    // centerCube.SetAlertTime(1f);
+                });
+            }
+            else if (item.type == EventEnum.StartHeadMove)
+            {
+                _timeCounter.AddSequence(name, (0f), null, (x) =>
+                {
+                    headPattern.PathFollow("FogBirdyPath");
+                });
+            }
+            else if (item.type == EventEnum.HeadOut)
+            {
+                _timeCounter.AddSequence(name, (0f), null, (x) =>
+                {
+                    headPattern.QuickOut();
                 });
             }
 

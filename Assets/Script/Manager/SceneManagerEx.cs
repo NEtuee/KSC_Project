@@ -168,6 +168,10 @@ public class SceneManagerEx : ManagerBase
 
         yield return CoroutineUtilities.WaitForRealTime(2f);
 
+        BoolData timeStop = MessageDataPooling.GetMessageData<BoolData>();
+        timeStop.value = false;
+        SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
+
         StartCoroutine(LoadNullScene());
 
         _loadedScenes = _unloadScenes.Count;

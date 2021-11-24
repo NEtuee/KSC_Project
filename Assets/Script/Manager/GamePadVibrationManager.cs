@@ -30,7 +30,7 @@ public class GamePadVibrationManager : ManagerBase
 
         AddAction(MessageTitles.gamepadVibrationManager_vibrationByKey, (msg) =>
         {
-            if (PlayerUnit.GamepadMode == false)
+            if (PlayerUnit.GamepadMode == false || Gamepad.current == null)
                 return;
 
             _vibrating = true;
@@ -46,6 +46,16 @@ public class GamePadVibrationManager : ManagerBase
         AddAction(MessageTitles.set_setplayer, (x) => {
             _playerUnit = (PlayerUnit)x.data;
         });
+
+        AddAction(MessageTitles.gamepadVibrationManager_stopVibration, (msg) =>
+        {
+            if (PlayerUnit.GamepadMode == false || Gamepad.current == null)
+                return;
+
+            _vibrating = false;
+            Gamepad.current.SetMotorSpeeds(0f, 0f);
+        });
+
 
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
     }
