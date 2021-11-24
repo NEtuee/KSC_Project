@@ -9173,46 +9173,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 1117942452}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8565ab475c4f7674b963f2ed061a2f1f, type: 3}
+  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   allowDebugMode: 0
   debugExceptionTitles: []
   sendedCount: 0
   receivedCount: 0
-  keep: 0
-  triggerType: 0
-  triggerEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1078722547}
-        m_TargetAssemblyTypeName: DescriptionRelay, Assembly-CSharp
-        m_MethodName: ShowDescByKey
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: FallMedusa_0
-          m_BoolArgument: 0
-        m_CallState: 2
-  triggerStayEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  triggerExitEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  afterTriggerEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  targetLayer:
+  onDisable: 1
+  triggerLayer:
     serializedVersion: 2
-    m_Bits: 0
-  isTriggered: 0
-  collisionTrigger: 1
-  reloadTime: 0
-  afterTriggerTime: 0
+    m_Bits: 512
+  message: 2339
+  missionUiPack:
+    key: 
+  levelLineActiveBossNamePack:
+    name: 
+  levelLineSetAlphabetPack:
+    alphabet: 0
+  activeInformationUiPack:
+    key: 
+  setTimeInformationUiPack:
+    time: 0
+  missionUiDisspearPack:
+    time: 0
+  dialogPack:
+    key: 
+    duration: 0
+  dialogSetNamePack:
+    name: 
+  dialogPacks:
+  - key: Thermite_Medusa01
+    duration: 5
+  - key: Thermite_Medusa02
+    duration: 5
 --- !u!65 &1117942455
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12426,6 +12420,7 @@ MonoBehaviour:
   m_Events:
     m_Signals:
     - {fileID: 11400000, guid: 7e998c099b9fcf94eab5685aa00ce2c1, type: 2}
+    - {fileID: 11400000, guid: 1060483a9660d214ab3155e27f4b39a5, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -12452,6 +12447,20 @@ MonoBehaviour:
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 1
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1078722547}
+          m_TargetAssemblyTypeName: DescriptionRelay, Assembly-CSharp
+          m_MethodName: ShowDescByKey
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Thermite_GoHUB
+            m_BoolArgument: 0
           m_CallState: 2
 --- !u!1 &1518710677
 GameObject:
