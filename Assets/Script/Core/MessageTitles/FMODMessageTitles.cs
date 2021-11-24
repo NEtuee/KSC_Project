@@ -34,4 +34,9 @@ public static partial class MessageTitles
     /// data = int
     /// </summary>
     public const ushort fmod_stopAll = 0x0506;
+
+    /// <summary>
+    /// data = SetParameterData
+    /// </summary>
+    public const ushort fmod_getParamInfo = 0x0507;
 }

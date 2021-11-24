@@ -90,7 +90,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             transform.position = pos;
         });
         _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => { DissolveIn(x); ShieldLookPlayer(); }, (x)=>{
-            
+            ChangeAnimation(4);
         });
         _timeCounterEx.AddSequence("Stemp",stempStartTime,(x)=> {
             var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
@@ -137,6 +137,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
             _lookDown = false;
             _stemp = false;
+
+            ChangeAnimation(0);
         });
         _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveIn, (x)=>{
             
@@ -215,16 +217,34 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         else if(currentState == State.FogMove)
         {
             //ShieldLookPlayer();
-            FollowPathInDirection(deltaTime);
-            var angle = Vector3.SignedAngle(shieldObj.forward, targetDirection, shieldObj.up);
+            //FollowPathInDirection(deltaTime);
+            if (pathArrived || targetTransform == null)
+                return;
 
-            if (Mathf.Abs(angle) > turnAccuracy)
+            targetDirection = (targetTransform.position - shieldObj.position).normalized;
+            Move(shieldObj.forward, moveSpeed, deltaTime);
+            if (IsArrivedTarget(distanceAccuracy))
             {
-                if (angle > 0)
-                    Turn(true, shieldObj, rotationSpeed, deltaTime);
-                else
-                    Turn(false, shieldObj, rotationSpeed, deltaTime);
+                var target = GetNextPoint(out bool isEnd).transform;
+
+                targetTransform = target;
+                if (isEnd && !pathLoop)
+                {
+                    pathArrived = true;
+                }
             }
+
+            shieldObj.rotation = Quaternion.Lerp(shieldObj.rotation, 
+                (Quaternion.LookRotation(targetDirection, Vector3.up)),rotationSpeed * deltaTime);
+            //var angle = Vector3.SignedAngle(shieldObj.forward, targetDirection, shieldObj.up);
+
+            //if (Mathf.Abs(angle) > turnAccuracy)
+            //{
+            //    if (angle > 0)
+            //        Turn(true, shieldObj, rotationSpeed, deltaTime);
+            //    else
+            //        Turn(false, shieldObj, rotationSpeed, deltaTime);
+            //}
 
         }
         else if(currentState == State.GroundShot)
@@ -252,6 +272,17 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _birdyTarget = birdyOutside;
 
         SetPath("FogBirdyPath", true);
+        ChangeAnimation(1);
+    }
+
+    public void PathFollow(string path)
+    {
+        if (currentState == State.FogMove)
+            return;
+
+        currentState = State.FogMove;
+
+        SetPath(path, true);
         ChangeAnimation(1);
     }
 
@@ -284,6 +315,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _groggy = false;
         _birdyTarget = birdyInside;
         currentState = State.PlayerLook;
+        ChangeAnimation(3);
     }
 
     public bool IsGroggy()

@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 3542139589399207937}
   - component: {fileID: 1485937410223242906}
   - component: {fileID: 326671723888027426}
+  - component: {fileID: 8675379782061692593}
   m_Layer: 15
   m_Name: ExplosionSpider
   m_TagString: Untagged
@@ -598,6 +599,8 @@ MonoBehaviour:
   targets: []
   force: 100
   torque: 100
+  launched: 0
+  delete: 0
 --- !u!114 &122978149002345461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -674,6 +677,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   code: 1530
+--- !u!114 &8675379782061692593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4337455491926781663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3844ef2ff2388ed4eb253999a9754cf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  sound: 1528
+  param: 15281
+  maxDistance: 30
 --- !u!1 &4337455491966575167
 GameObject:
   m_ObjectHideFlags: 0

@@ -44,12 +44,14 @@ public class A1_Sector2_floor : MonoBehaviour
                 cube = grid.GetCube(key);
             }
 
+            bool sound = true;
             while(cube != null)
             {
-                cube.SetMove(false,0f,floorMoveSpeed,floorDisapearTime);
+                cube.SetMove(false,0f,floorMoveSpeed,floorDisapearTime,null,null,sound);
                 key -= (46 + count % 2);
                 count += 1;
 
+                sound = false;
                 cube = grid.GetCube(key);
                 
             }
@@ -68,6 +70,8 @@ public class A1_Sector2_floor : MonoBehaviour
     public int loopCount;
     public float loopTerm;
     public HexCubeGrid grid;
+
+    public bool active = false;
 
     private List<LineItem> _lines = new List<LineItem>();
     private List<TimeCounterEx.SequenceProcessor> _sequencers = new List<TimeCounterEx.SequenceProcessor>();
@@ -94,10 +98,16 @@ public class A1_Sector2_floor : MonoBehaviour
         _timeCounter.InitTimer("term",0f,loopTerm);
     }
 
-
+    public void SetActive(bool value)
+    {
+        active = value;
+    }
 
     public void FixedUpdate()
     {
+        if (!active)
+            return;
+
         if(_loopCount < loopCount)
         {
             _timeCounter.IncreaseTimerSelf("term",out var limit,Time.fixedDeltaTime);

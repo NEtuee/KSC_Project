@@ -70,6 +70,16 @@ public class B1_FlySpider : PathfollowObjectBase
         stateProcessor.StateProcess(deltaTime);
     }
 
+    public void ExplosionParticle()
+    {
+        MD.EffectActiveData data = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+        data.key = "SpiderParts";
+        data.position = transform.position;
+        data.rotation = Quaternion.identity;
+        data.parent = null;
+        SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
+    }
+
     public void Respawn()
     {
         transform.localPosition = _localPosition;
@@ -114,6 +124,8 @@ public class B1_FlySpider : PathfollowObjectBase
         SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
 
         Disable();
+
+        ExplosionParticle();
     }
 
     public void Disable()

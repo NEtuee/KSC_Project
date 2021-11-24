@@ -101,6 +101,7 @@ public class FMODManager : ManagerBase
         AddAction(MessageTitles.fmod_setParam,SetParam);
         AddAction(MessageTitles.fmod_setGlobalParam,SetGlobalParam);
         AddAction(MessageTitles.fmod_stopAll,StopAllSound);
+        AddAction(MessageTitles.fmod_getParamInfo, GetParameterInfo);
 
         AddAction(MessageTitles.scene_beforeSceneChange,BeforeSceneLoad);
     }
@@ -200,6 +201,16 @@ public class FMODManager : ManagerBase
     {
         var data = MessageDataPooling.CastData<StopAllSoundData>(msg.data);
         StopAllSound(data.id,data.fade);
+    }
+
+    private void GetParameterInfo(Message msg)
+    {
+        var data = MessageDataPooling.CastData<SetParameterData>(msg.data);
+        var info = FindSoundInfo(data.soundId).FindParameter(data.paramId);
+
+        var send = MessagePack(MessageTitles.fmod_getParamInfo, ((MessageReceiver)msg.sender).uniqueNumber, info);
+        SendMessageQuick(send);
+
     }
 
     private void BeforeSceneLoad(Message msg)

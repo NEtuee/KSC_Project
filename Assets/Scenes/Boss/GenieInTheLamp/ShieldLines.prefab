@@ -41703,6 +41703,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8927428052091638554}
   - component: {fileID: 296547256385688669}
+  - component: {fileID: 2914534524790817609}
   m_Layer: 0
   m_Name: ShieldDrone
   m_TagString: EmpShield
@@ -41745,6 +41746,19 @@ MonoBehaviour:
   floatingFactor: 0.2
   direction: {x: 0.8, y: 0, z: 0}
   target: {fileID: 2549753458988907270}
+--- !u!65 &2914534524790817609
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8927428052091638553}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.28, y: 2.95, z: 0.68}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8927428052124995415
 GameObject:
   m_ObjectHideFlags: 0
@@ -42209,6 +42223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8927428052281625647}
   - component: {fileID: 8430710530322984006}
+  - component: {fileID: 5999949237039236989}
   m_Layer: 0
   m_Name: ShieldDrone (1)
   m_TagString: EmpShield
@@ -42251,6 +42266,19 @@ MonoBehaviour:
   floatingFactor: 0.2
   direction: {x: 0.8, y: 0, z: 0}
   target: {fileID: 6417719998728938239}
+--- !u!65 &5999949237039236989
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8927428052281625646}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.28, y: 2.95, z: 0.68}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8927428052301748087
 GameObject:
   m_ObjectHideFlags: 0
@@ -42425,6 +42453,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8927428052344973897}
   - component: {fileID: 3346424072773452450}
+  - component: {fileID: 8223095546818076293}
   m_Layer: 0
   m_Name: ShieldDrone (3)
   m_TagString: EmpShield
@@ -42467,6 +42496,19 @@ MonoBehaviour:
   floatingFactor: 0.2
   direction: {x: 0.8, y: 0, z: 0}
   target: {fileID: 6412458539062964057}
+--- !u!65 &8223095546818076293
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8927428052344973896}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.28, y: 2.95, z: 0.68}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8927428052365877924
 GameObject:
   m_ObjectHideFlags: 0
@@ -42477,6 +42519,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8927428052365877925}
   - component: {fileID: 8927428052365877926}
+  - component: {fileID: 8058761596158161130}
+  - component: {fileID: 1313012210736491112}
   m_Layer: 0
   m_Name: ShieldLines
   m_TagString: Untagged
@@ -42574,6 +42618,47 @@ MonoBehaviour:
   positionDrone: {fileID: 8927428053369438924}
   coreDrone: {fileID: 1336411193267846049}
   empShield: {fileID: 9024697725051584027}
+  explosion: {fileID: 8058761596158161130}
+--- !u!114 &8058761596158161130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8927428052365877924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac827f71fda47a94e8765df356b7a95d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targets:
+  - {fileID: 8927428052091638553}
+  - {fileID: 8927428052281625646}
+  - {fileID: 8927428053369438924}
+  - {fileID: 8927428052344973896}
+  - {fileID: 8927428052394326300}
+  force: 120
+  torque: 70
+  launched: 0
+  delete: 1
+--- !u!114 &1313012210736491112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8927428052365877924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d6082508b9504743a9dde9ccdc87181, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetComponents:
+  - {fileID: 296547256385688669}
+  - {fileID: 8430710530322984006}
+  - {fileID: 6061663829969908545}
+  - {fileID: 3346424072773452450}
+  - {fileID: 7139012922341639157}
 --- !u!1 &8927428052394326300
 GameObject:
   m_ObjectHideFlags: 0
@@ -42584,6 +42669,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8927428052394326301}
   - component: {fileID: 7139012922341639157}
+  - component: {fileID: 6057285941694228617}
   m_Layer: 0
   m_Name: ShieldDrone (4)
   m_TagString: EmpShield
@@ -42626,6 +42712,19 @@ MonoBehaviour:
   floatingFactor: 0.2
   direction: {x: 0.8, y: 0, z: 0}
   target: {fileID: 678433361510216841}
+--- !u!65 &6057285941694228617
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8927428052394326300}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.28, y: 2.95, z: 0.68}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8927428052667898065
 GameObject:
   m_ObjectHideFlags: 0
@@ -43139,6 +43238,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8927428053369438925}
   - component: {fileID: 6061663829969908545}
+  - component: {fileID: 8960696383287428011}
   m_Layer: 0
   m_Name: ShieldDrone (2)
   m_TagString: EmpShield
@@ -43181,6 +43281,19 @@ MonoBehaviour:
   floatingFactor: 0.2
   direction: {x: 0.8, y: 0, z: 0}
   target: {fileID: 5685286144795481836}
+--- !u!65 &8960696383287428011
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8927428053369438924}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.28, y: 2.95, z: 0.68}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8927428053550547752
 GameObject:
   m_ObjectHideFlags: 0
@@ -44451,9 +44564,9 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 1869557057407369221, guid: 0da2ec31c8fbb694eaf2a439ed229f6d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0da2ec31c8fbb694eaf2a439ed229f6d, type: 3}
---- !u!199 &5061003038875348752 stripped
-ParticleSystemRenderer:
-  m_CorrespondingSourceObject: {fileID: 4456544861605567706, guid: 0da2ec31c8fbb694eaf2a439ed229f6d,
+--- !u!1 &5061003038875348767 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4456544861605567701, guid: 0da2ec31c8fbb694eaf2a439ed229f6d,
     type: 3}
   m_PrefabInstance: {fileID: 8927428052091270090}
   m_PrefabAsset: {fileID: 0}
@@ -44463,9 +44576,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8927428052091270090}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5061003038875348767 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4456544861605567701, guid: 0da2ec31c8fbb694eaf2a439ed229f6d,
+--- !u!199 &5061003038875348752 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 4456544861605567706, guid: 0da2ec31c8fbb694eaf2a439ed229f6d,
     type: 3}
   m_PrefabInstance: {fileID: 8927428052091270090}
   m_PrefabAsset: {fileID: 0}

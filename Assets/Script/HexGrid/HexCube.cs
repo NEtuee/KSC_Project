@@ -143,7 +143,7 @@ public class HexCube : MonoBehaviour
             }
             else if(_inverseMoveTime != 0f)
             {
-                SetMove(!_inMove,_inverseMoveTime,_moveSpeed);
+                SetMove(!_inMove,_inverseMoveTime,_moveSpeed,0f,null,null,_soundPlay);
             }
         }
 

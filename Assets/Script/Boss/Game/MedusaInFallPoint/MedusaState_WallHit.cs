@@ -16,11 +16,17 @@ public class MedusaState_WallHit : MedusaFallPointStateBase
     {
         base.StateInitialize(prevState);
 
-        _timeCounter.InitTimer("WaitTime",0f,waitTime);
+        float waitTimeDouble = 0f;
+        if(++target.playerHit >= 3)
+        {
+            target.playerHit = 0;
+            waitTimeDouble = waitTime * 0.5f;
+        }
+
+        _timeCounter.InitTimer("WaitTime",0f,waitTime + waitTimeDouble);
         _timeCounter.InitTimer("MoveTime",0f,moveTime);
 
         target.AnimationChange(3);
-
 
         MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
         soundData.id = 1534;

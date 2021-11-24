@@ -12,6 +12,9 @@ public class Genie_DroneLine : ObjectBase
     public Genie_CoreDroneAI coreDrone;
     public NewEmpShield empShield;
 
+    public LevelEdit_ExplosionPhysics explosion;
+    public LevelEdit_ComponentActivator activator;
+
     private Quaternion _targetQuaternion;
     private float _targetHeight;
     private float _spinTime;
@@ -92,6 +95,16 @@ public class Genie_DroneLine : ObjectBase
     {
         coreDrone.gameObject.SetActive(isCore);
         positionDrone.SetActive(!isCore);
+    }
+
+    public void Explosion()
+    {
+        explosion.Launch();
+        activator.SetActive(false);
+        foreach (var item in explosion.targets)
+        {
+            Destroy(item.gameObject, 5f);
+        }
     }
 
     public void Spin(float time)

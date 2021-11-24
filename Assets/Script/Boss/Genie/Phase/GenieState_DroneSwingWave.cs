@@ -13,6 +13,7 @@ public class GenieState_DroneSwingWave : GenieStateBase
     public Genie_CoreDroneAI coreDroneAI;
     public Transform droneTarget;
     public LevelEdit_ExplosionPhysics explosionPhysics;
+    public LevelEdit_ExplosionPhysics leftExplosionPhysics;
 
     public bool randomPattern = false;
     public bool cutFirst = false;
@@ -71,8 +72,10 @@ public class GenieState_DroneSwingWave : GenieStateBase
             data.key = "Birdy_A2_GenieCoreDrone02";
             data.duration = 5f;
             target.SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, UniqueNumberBase.GetSavedNumberStatic("PlayerManager"), data);
+
+            SpawnCoreDrone(1f);
         });
-        _timeCounter.AddSequence("Process",droneSummonTime,DroneApear,SpawnCoreDrone);
+        _timeCounter.AddSequence("Process",droneSummonTime,DroneApear,null);
         _timeCounter.AddSequence("Process",patternStartTime,null,null);
 
         _timeCounter.CreateSequencer("GroundWheel");
@@ -174,6 +177,19 @@ public class GenieState_DroneSwingWave : GenieStateBase
         }
     }
 
+    public void LaunchLeftDrones()
+    {
+        if (!leftExplosionPhysics.launched)
+        {
+            explosionPhysics.Launch();
+
+            foreach (var item in explosionPhysics.targets)
+            {
+                Destroy(item, 5f);
+            }
+        }
+    }
+
     public override void StateChanged(StateBase targetState)
     {
         base.StateChanged(targetState);
@@ -189,6 +205,8 @@ public class GenieState_DroneSwingWave : GenieStateBase
         {
             Destroy(item,5f);
         }
+
+        LaunchLeftDrones();
     }
 
 #region GroundCut
@@ -299,6 +317,11 @@ public class GenieState_DroneSwingWave : GenieStateBase
     {
         coreDroneAI.SetTarget(droneTarget);
         coreDroneAI.Respawn(droneTarget.position - Vector3.up,false);
+        coreDroneAI.enabled = false;
+
+        coreDroneAI.transform.position = droneTarget.position;
+        coreDroneAI.transform.rotation = droneTarget.rotation;
+        coreDroneAI.transform.SetParent(droneTarget);
 
         _timeCounter.SkipSequencer("GroundWheel",groundWheelPatternTime - 1f);
     }
