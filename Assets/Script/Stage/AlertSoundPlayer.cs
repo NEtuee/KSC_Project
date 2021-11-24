@@ -12,8 +12,8 @@ public class AlertSoundPlayer : ObjectBase
     public float maxDistance = 30f;
 
     private Transform _playerTransform;
-    private FMODUnity.StudioEventEmitter _soundEmiter;
-    private SoundInfoItem.SoundParameter _paramInfo;
+    private FMODUnity.StudioEventEmitter _soundEmiter = null;
+    private SoundInfoItem.SoundParameter _paramInfo = null;
 
     public override void Assign()
     {
@@ -66,7 +66,7 @@ public class AlertSoundPlayer : ObjectBase
     {
         base.Progress(deltaTime);
 
-        if (_soundEmiter == null || param == -1)
+        if (_soundEmiter == null || _paramInfo == null)
             return;
 
         UpdateParam();
@@ -86,6 +86,8 @@ public class AlertSoundPlayer : ObjectBase
             return;
 
         _soundEmiter.Play();
-        UpdateParam();
+
+        if(_paramInfo != null)
+            UpdateParam();
     }
 }
