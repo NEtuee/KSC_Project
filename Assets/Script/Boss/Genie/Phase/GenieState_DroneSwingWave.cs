@@ -72,8 +72,10 @@ public class GenieState_DroneSwingWave : GenieStateBase
             data.key = "Birdy_A2_GenieCoreDrone02";
             data.duration = 5f;
             target.SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, UniqueNumberBase.GetSavedNumberStatic("PlayerManager"), data);
+
+            SpawnCoreDrone(1f);
         });
-        _timeCounter.AddSequence("Process",droneSummonTime,DroneApear,SpawnCoreDrone);
+        _timeCounter.AddSequence("Process",droneSummonTime,DroneApear,null);
         _timeCounter.AddSequence("Process",patternStartTime,null,null);
 
         _timeCounter.CreateSequencer("GroundWheel");

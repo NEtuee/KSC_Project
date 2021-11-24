@@ -13,6 +13,7 @@ public class Genie_DroneLine : ObjectBase
     public NewEmpShield empShield;
 
     public LevelEdit_ExplosionPhysics explosion;
+    public LevelEdit_ComponentActivator activator;
 
     private Quaternion _targetQuaternion;
     private float _targetHeight;
@@ -99,7 +100,8 @@ public class Genie_DroneLine : ObjectBase
     public void Explosion()
     {
         explosion.Launch();
-        foreach(var item in explosion.targets)
+        activator.SetActive(false);
+        foreach (var item in explosion.targets)
         {
             Destroy(item.gameObject, 5f);
         }
