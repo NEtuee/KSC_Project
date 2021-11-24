@@ -43,6 +43,16 @@ public class B1_FlySpiderState_RushReadyQuick : B1_FlySpiderStateBase
         {
             lineRenderer.SetPosition(1, transform.position + target.direction * 1000f);
         }
+
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1529;
+        if (Physics.Raycast(transform.position, target.direction, out var hit2, 10000f, hitLayer))
+            soundData.position = hit2.point;
+        else
+            soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        target.SendMessageEx(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
     }
 
     public override void StateProgress(float deltaTime)
