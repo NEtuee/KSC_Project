@@ -265,6 +265,11 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort uimanager_damageFianlBossUi = 0x0348;
+
+    /// <summary>
+    /// data = ScanMakerData
+    /// </summary>
+    public const ushort uimanager_activeEXScanMaker = 0x0349;
     #endregion
 
     /// <summary>
