@@ -32,7 +32,8 @@ public class AlertSoundPlayer : ObjectBase
 
         whenDeactive += () =>
         {
-            _soundEmiter.Stop();
+            if(_soundEmiter != null)
+                _soundEmiter.Stop();
             _soundEmiter = null;
             _paramInfo = null;
         };

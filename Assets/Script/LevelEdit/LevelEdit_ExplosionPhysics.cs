@@ -10,6 +10,7 @@ public class LevelEdit_ExplosionPhysics : MonoBehaviour
     public float torque = 100f;
 
     public bool launched = false;
+    public bool delete = false;
 
     public void Launch()
     {
@@ -36,6 +37,11 @@ public class LevelEdit_ExplosionPhysics : MonoBehaviour
             rig.AddTorque(MathEx.RandomCircle(1f).normalized * torque);
 
             item.transform.SetParent(null);
+
+            if(delete)
+            {
+                Destroy(item.gameObject, 5f);
+            }
             //item.layer = 1 << changeLayer.value;
         }
     }

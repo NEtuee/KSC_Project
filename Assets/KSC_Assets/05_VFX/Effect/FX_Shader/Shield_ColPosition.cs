@@ -34,7 +34,6 @@ public class Shield_ColPosition : MonoBehaviour
         foreach (ContactPoint contact in coll.contacts)
         {
             Vector3 HitLocalPoint = fxObject.transform.InverseTransformPoint(contact.point);
-            Debug.Log("Hit LocalPoint" + HitLocalPoint);
 
             ColHit(HitLocalPoint);
         }

@@ -315,6 +315,11 @@ public class GenieState_DroneSwingWave : GenieStateBase
     {
         coreDroneAI.SetTarget(droneTarget);
         coreDroneAI.Respawn(droneTarget.position - Vector3.up,false);
+        coreDroneAI.enabled = false;
+
+        coreDroneAI.transform.position = droneTarget.position;
+        coreDroneAI.transform.rotation = droneTarget.rotation;
+        coreDroneAI.transform.SetParent(droneTarget);
 
         _timeCounter.SkipSequencer("GroundWheel",groundWheelPatternTime - 1f);
     }
