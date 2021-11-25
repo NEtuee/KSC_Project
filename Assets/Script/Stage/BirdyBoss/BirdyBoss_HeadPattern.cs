@@ -97,8 +97,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             //ChangeAnimation(4);
         });
         _timeCounterEx.AddSequence("Stemp",stempStartTime,(x)=> {
-            var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
-            shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
+            //var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
+            //shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
         },(x)=> {
             //_lookDown = true;
         });
