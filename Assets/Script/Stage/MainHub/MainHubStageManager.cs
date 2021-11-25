@@ -14,7 +14,7 @@ public class MainHubStageManager : ObjectBase
     public GameObject aComeBackTrigger;
     public GameObject bComeBackTrigger;
 
-    public ElevatorObject elevatorObject;
+    public Collider elevatorObject;
     public Transform aWayPoint;
     public Transform bWayPoint;
 
