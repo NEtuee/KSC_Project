@@ -128,6 +128,10 @@ public class UIManager : ManagerBase
 
     [Header("InformationUI")]
     [SerializeField] private InformationUI informationUi;
+
+    [Header("InteractionKey Guide")]
+    [SerializeField] private GameObject interactionKeyGuideCanvas;
+    [SerializeField] private TextMeshProUGUI interactionKeyText;
     
 
     private EventSystem _eventSystem;
@@ -348,6 +352,7 @@ public class UIManager : ManagerBase
          {
              ActiveLoadingUI(true);
              droneStatusUI.Enable(false);
+             targetMakerUi.gameObject.SetActive(false);
          });
 
         AddAction(MessageTitles.scene_sceneChanged, (msg) =>
@@ -526,6 +531,21 @@ public class UIManager : ManagerBase
         AddAction(MessageTitles.uimanager_damageFianlBossUi, (msg) =>
         {
             droneStatusUI.Damage();
+        });
+
+        AddAction(MessageTitles.uimanager_activeInteractionKeyGuide, (msg) =>
+        {
+            if(PlayerUnit.GamepadMode == true)
+                interactionKeyText.text = "X";
+            else
+                interactionKeyText.text = "F";
+
+            interactionKeyGuideCanvas.SetActive(true);
+        });
+
+        AddAction(MessageTitles.uimanager_deactiveInteractionKeyGuide, (msg) =>
+        {
+            interactionKeyGuideCanvas.SetActive(false);
         });
     }
 

@@ -14,6 +14,10 @@ public class MainHubStageManager : ObjectBase
     public GameObject aComeBackTrigger;
     public GameObject bComeBackTrigger;
 
+    public ElevatorObject elevatorObject;
+    public Transform aWayPoint;
+    public Transform bWayPoint;
+
     public override void Assign()
     {
         base.Assign();
@@ -58,12 +62,14 @@ public class MainHubStageManager : ObjectBase
             firstHubTrigger.SetActive(true);
             aComeBackTrigger.SetActive(false);
             bComeBackTrigger.SetActive(false);
+            SendMessageEx(MessageTitles.uimanager_activeTargetMakerUiAndSetTarget, GetSavedNumber("UIManager"), aWayPoint);
         }
         else
         {
             firstHubTrigger.SetActive(false);
             aComeBackTrigger.SetActive(true);
             bComeBackTrigger.SetActive(false);
+            SendMessageEx(MessageTitles.uimanager_activeTargetMakerUiAndSetTarget, GetSavedNumber("UIManager"), bWayPoint);
         }
 
         var data2 = MessageDataPooling.GetMessageData<MD.StringData>();
@@ -75,6 +81,8 @@ public class MainHubStageManager : ObjectBase
             firstHubTrigger.SetActive(false);
             aComeBackTrigger.SetActive(false);
             bComeBackTrigger.SetActive(true);
+            elevatorObject.enabled = true;
+            SendMessageEx(MessageTitles.uimanager_activeTargetMakerUiAndSetTarget, GetSavedNumber("UIManager"), elevatorObject.transform);
         }
     }
 }

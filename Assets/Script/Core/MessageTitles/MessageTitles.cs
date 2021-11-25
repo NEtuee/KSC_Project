@@ -270,6 +270,16 @@ public static partial class MessageTitles
     /// data = ScanMakerData
     /// </summary>
     public const ushort uimanager_activeEXScanMaker = 0x0349;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_activeInteractionKeyGuide = 0x0350;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_deactiveInteractionKeyGuide = 0x0351;
     #endregion
 
     /// <summary>

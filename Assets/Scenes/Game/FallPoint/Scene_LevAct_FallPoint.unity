@@ -5484,7 +5484,7 @@ Transform:
   - {fileID: 59009342}
   - {fileID: 229298822}
   m_Father: {fileID: 0}
-  m_RootOrder: 30
+  m_RootOrder: 31
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &559650487
 GameObject:
@@ -5991,6 +5991,7 @@ GameObject:
   - component: {fileID: 577564571}
   - component: {fileID: 577564574}
   - component: {fileID: 577564573}
+  - component: {fileID: 577564575}
   - component: {fileID: 577564572}
   m_Layer: 0
   m_Name: ThermiteCall Trigger
@@ -6067,15 +6068,15 @@ MonoBehaviour:
   targetTransform: {fileID: 0}
   dialogPacks:
   - key: Thermite_Call01
-    duration: 2
+    duration: 3
   - key: Thermite_Call02
-    duration: 2
+    duration: 3
   - key: Thermite_Call03
-    duration: 2
+    duration: 3
   - key: Thermite_Path01
-    duration: 2
+    duration: 3
   - key: Thermite_Path02
-    duration: 2
+    duration: 3
 --- !u!114 &577564574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6115,6 +6116,46 @@ MonoBehaviour:
   dialogSetNamePack:
     name: "\uD14C\uB974\uBC0B"
   targetTransform: {fileID: 0}
+  dialogPacks: []
+--- !u!114 &577564575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 577564570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowDebugMode: 0
+  debugExceptionTitles: []
+  sendedCount: 0
+  receivedCount: 0
+  onDisable: 1
+  triggerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  message: 823
+  missionUiPack:
+    key: FallPoint
+  levelLineActiveBossNamePack:
+    name: 
+  levelLineSetAlphabetPack:
+    alphabet: 0
+  activeInformationUiPack:
+    key: 
+  setTimeInformationUiPack:
+    time: 0
+  missionUiDisspearPack:
+    time: 0
+  dialogPack:
+    key: 
+    duration: 0
+  dialogSetNamePack:
+    name: "\uD14C\uB974\uBC0B"
+  targetTransform: {fileID: 780479077}
   dialogPacks: []
 --- !u!1 &587206025
 GameObject:
@@ -8146,6 +8187,36 @@ Transform:
   m_Father: {fileID: 196266747}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -15, y: -180, z: 0}
+--- !u!1 &780479076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 780479077}
+  m_Layer: 0
+  m_Name: WayTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &780479077
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780479076}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 116.75, y: 16.11, z: 88.13}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 30
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &782109515
 GameObject:
   m_ObjectHideFlags: 3
@@ -11769,7 +11840,7 @@ PrefabInstance:
     - target: {fileID: 1220201333969587945, guid: 6205deeb846bfac44add7a756f23c150,
         type: 3}
       propertyPath: m_RootOrder
-      value: 31
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 1220201333969587945, guid: 6205deeb846bfac44add7a756f23c150,
         type: 3}
@@ -13945,6 +14016,8 @@ MonoBehaviour:
   - {fileID: 210510986}
   force: 70
   torque: 70
+  launched: 0
+  delete: 0
 --- !u!1001 &1315179701
 PrefabInstance:
   m_ObjectHideFlags: 0
