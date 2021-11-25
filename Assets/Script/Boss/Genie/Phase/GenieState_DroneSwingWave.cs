@@ -294,6 +294,7 @@ public class GenieState_DroneSwingWave : GenieStateBase
                     continue;
                 }
                 item.SetMove(false,((float)i) * groundWheelTimingTime + Random.Range(0f,0.2f),groundWheelMoveSpeed,groundWheelTime);
+                item.SetAlertTime(1f);
             }
 
 

@@ -23,6 +23,10 @@ public class AlertSoundPlayer : ObjectBase
         });
         AddAction(MessageTitles.fmod_soundEmitter, (x) =>
         {
+            if(_soundEmiter != null)
+            {
+                _soundEmiter.Stop();
+            }
             _soundEmiter = (FMODUnity.StudioEventEmitter)x.data;
         });
         AddAction(MessageTitles.fmod_getParamInfo, (x) =>

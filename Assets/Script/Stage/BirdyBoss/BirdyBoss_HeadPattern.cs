@@ -93,12 +93,19 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             //shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
             ChangeAnimation(4);
         });
-        _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => { DissolveIn(x); ShieldLookDown();/*ShieldLookPlayer();*/ }, (x)=>{
+        _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => 
+        {
+            DissolveIn(x);
+            //ShieldLookDown();/*ShieldLookPlayer();*/
+            var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
+            shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
+        }, (x)=>{
             //ChangeAnimation(4);
         });
         _timeCounterEx.AddSequence("Stemp",stempStartTime,(x)=> {
             //var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
             //shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
+            //ShieldLookDown();
         },(x)=> {
             //_lookDown = true;
         });
