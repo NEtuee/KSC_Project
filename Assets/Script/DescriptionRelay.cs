@@ -29,8 +29,18 @@ public class DescriptionRelay : ObjectBase
         SendMessageEx(MessageTitles.playermanager_droneTextByKey, GetSavedNumber("PlayerManager"),data);
     }
 
+    public void DeactiveDialog()
+    {
+        SendMessageEx(MessageTitles.playermanager_DeactiveDialog, GetSavedNumber("PlayerManager"), null);
+    }
+
     public void SetName(string name)
     {
         SendMessageEx(MessageTitles.playermanager_SetDialogName, GetSavedNumber("PlayerManager"), name);
+    }
+
+    public void ActiveBossName(string name)
+    {
+        SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"),name);
     }
 }

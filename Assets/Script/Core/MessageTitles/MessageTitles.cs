@@ -574,6 +574,11 @@ public static partial class MessageTitles
     /// </summary>
     public const ushort playermanager_DeactivateInput = 0x0924;
 
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort playermanager_DeactiveDialog = 0x0925;
+
     #endregion
 
     #region ClimbingLineManager

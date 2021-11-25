@@ -709,6 +709,11 @@ public class Drone : PathfollowObjectBase
         }
     }
 
+    public void DeactiveDialog()
+    {
+        droneHelperRoot.DeactiveDialog();
+    }
+
     public void SetDialogName(string name)
     {
         droneHelperRoot.NameText = name;

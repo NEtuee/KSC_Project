@@ -38,6 +38,7 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
     private Genie_BombDroneAI _toPlayerDrone;
 
     public MessageEventSender eventSender;
+    public bool droneSpawnFirst = false;
     public MessageEventSender quickStandSender;
 
     public override void Assign()
@@ -271,8 +272,12 @@ public class GenieState_SummonDroneWithGroundPound : GenieStateBase
 
     public void SpawnProgress(float t)
     {
-        eventSender.Send();
-        Invoke("SendQuickStandInfo", 4f);
+        if (droneSpawnFirst == false)
+        {
+            eventSender.Send();
+            Invoke("SendQuickStandInfo", 4f);
+            droneSpawnFirst = true;
+        }
 
         for (int i = 0; i < droneAIs.Count - _droneSpawnLimit; ++i)
         {

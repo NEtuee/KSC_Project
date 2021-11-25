@@ -69,6 +69,7 @@ public class PlayerManager : ManagerBase
         AddAction(MessageTitles.scene_beforeSceneChangeNotAsync, (msg) =>
          {
              SceneManager.MoveGameObjectToScene(_player.gameObject, SceneManager.GetActiveScene());
+             _drone.transform.SetParent(null);
              SceneManager.MoveGameObjectToScene(_drone.gameObject, SceneManager.GetActiveScene());
              SceneManager.MoveGameObjectToScene(_player.LineTracker.gameObject, SceneManager.GetActiveScene());
          });
@@ -181,6 +182,11 @@ public class PlayerManager : ManagerBase
         {
             var data = MessageDataPooling.CastData<DroneTextKeyAndDurationData>(msg.data);
             _drone.DroneHelpCall(data.key,data.duration);
+        });
+
+        AddAction(MessageTitles.playermanager_DeactiveDialog, (msg) =>
+        {
+            _drone.DeactiveDialog();
         });
 
         AddAction(MessageTitles.playermanager_SetDialogName, (msg) =>

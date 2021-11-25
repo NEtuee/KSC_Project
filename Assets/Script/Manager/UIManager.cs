@@ -496,12 +496,6 @@ public class UIManager : ManagerBase
             missionUi.Dissapear();
         });
 
-        AddAction(MessageTitles.uimanager_SetLevelLineAlphabet, (msg) =>
-        {
-            var data = MessageDataPooling.CastData<LevelLineAlphabetData>(msg.data);
-            levelLineUi.SetAlphabet(data.value);
-        });
-
         AddAction(MessageTitles.uimanager_AppearInformationUi, (msg) =>
         {
             informationUi.Appear((string)msg.data);

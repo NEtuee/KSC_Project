@@ -254,7 +254,7 @@ public class DroneStatusUI : MonoBehaviour
         }
         else if (damageCount == 9)
         {
-
+            ten_center.DOFade(0.0f, 0.5f);
         }
         else if (damageCount == 10)
         {

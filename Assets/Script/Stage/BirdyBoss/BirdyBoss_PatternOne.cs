@@ -559,6 +559,8 @@ public class BirdyBoss_PatternOne : ObjectBase
                     SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
                     SendMessageEx(MessageTitles.uimanager_ActiveFianlHp, GetSavedNumber("UIManager"), null);
 
+                    SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"), "지식인 버디");
+
                     //var dialogData = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
                     //dialogData.key = "Birdy_BossBirdy_Truth02";
                     //dialogData.duration = 5f;

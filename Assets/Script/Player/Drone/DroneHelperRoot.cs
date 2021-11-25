@@ -130,6 +130,11 @@ public class DroneHelperRoot : MonoBehaviour
         return true;
     }
 
+    public void DeactiveDialog()
+    {
+        droneDiscriptCanvas.enabled = false;
+    }
+
 
     public bool ShowText(string text)
     {

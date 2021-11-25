@@ -21,12 +21,7 @@ public class LevelLineUI : MonoBehaviour
 
     [SerializeField] private State state = State.Done;
     [SerializeField] private FadeAppearImage backGround;
-    [SerializeField] private FadeAppearImage alphabet;
-    [SerializeField] private Sprite aLineSprite;
-    [SerializeField] private Sprite bLineSprite;
-    [SerializeField] private Sprite cLineSprite;
-    [SerializeField] private EnumerateText levelLineText;
-    [SerializeField] private string levelLineTargetText;
+    [SerializeField] private FadeAppearImage detail;
     [SerializeField] private EnumerateText bossNameText;
     [SerializeField] private string bossNameTargetText;
     [SerializeField] private float waitDisappearTime = 4f;
@@ -40,7 +35,6 @@ public class LevelLineUI : MonoBehaviour
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = false;
 
-        levelLineText.Init();
         bossNameText.Init();
 
         _timeCounter.CreateSequencer("Appear");
@@ -48,16 +42,11 @@ public class LevelLineUI : MonoBehaviour
         {
             _canvas.enabled = true;
             backGround.Appear();
+            detail.Appear();
         });
         _timeCounter.AddSequence("Appear", backGround.AppearDuration, null, (value) =>
         {
-            alphabet.Appear();
-
-            levelLineText.SetTargetString(levelLineTargetText);
             bossNameText.SetTargetString(bossNameTargetText);
-        });
-        _timeCounter.AddSequence("Appear", alphabet.AppearDuration, null, (value) =>
-        {
         });
         _timeCounter.AddSequence("Appear", waitDisappearTime, null, (value) =>
         {
@@ -67,10 +56,9 @@ public class LevelLineUI : MonoBehaviour
         _timeCounter.CreateSequencer("Dissapear");
         _timeCounter.AddSequence("Dissapear", 0.0f, null, (value) =>
         {
-            levelLineText.TextFade(backGround.DisappearDuration);
             bossNameText.TextFade(backGround.DisappearDuration);
             backGround.Disappear();
-            alphabet.Disappear();
+            detail.Disappear();
         });
 
         _timeCounter.AddSequence("Dissapear", backGround.DisappearDuration, null, (value) =>
@@ -84,7 +72,6 @@ public class LevelLineUI : MonoBehaviour
     public void Appear()
     {
         state = State.Appear;
-        levelLineText.Init();
         bossNameText.Init();
         _timeCounter.InitSequencer("Appear");
     }
@@ -122,21 +109,6 @@ public class LevelLineUI : MonoBehaviour
         bossNameTargetText = name;
     }
 
-    public void SetAlphabet(Alphabet alphabet)
-    {
-        switch(alphabet)
-        {
-            case Alphabet.A:
-                this.alphabet.Image.sprite = aLineSprite;
-                break;
-            case Alphabet.B:
-                this.alphabet.Image.sprite = bLineSprite;
-                break;
-            case Alphabet.C:
-                this.alphabet.Image.sprite = cLineSprite;
-                break;
-        }
-    }
 }
 
 namespace MD
