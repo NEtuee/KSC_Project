@@ -314,7 +314,6 @@ public class Drone : PathfollowObjectBase
 
     public void StartDissolveEffect()
     {
-        Debug.Log("Start");
         dissolveMat.SetFloat("Dissvole",1f);
         _timeCounter.InitSequencer("DissolvProcess");
         _dissolve = true;

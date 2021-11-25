@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using MD;
+
 public class FallPillar : MonoBehaviour
 {
     private Rigidbody _rigidbody;
@@ -72,6 +74,15 @@ public class FallPillar : MonoBehaviour
             _impulseSource.GenerateImpulse();
 
             Collider[] playerColl = Physics.OverlapSphere(impactPoint.position, impactRadius, targetLayer);
+
+            var effectData = MessageDataPooling.GetMessageData<EffectActiveData>();
+            effectData.position = impactPoint.position;
+            effectData.rotation = Quaternion.identity;
+            effectData.key = "PillarEffect";
+
+            var msg = MessagePool.GetMessage();
+            msg.Set(MessageTitles.effectmanager_activeeffect, UniqueNumberBase.GetSavedNumberStatic("EffectManager"), effectData, null);
+            MasterManager.instance.HandleMessage(msg);
 
             if (playerColl.Length != 0)
             {

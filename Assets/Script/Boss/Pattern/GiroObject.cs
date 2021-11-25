@@ -75,6 +75,16 @@ public class GiroObject : MonoBehaviour
 
             Collider[] playerColl = Physics.OverlapSphere(transform.position, 3f, targetLayer);
 
+            var effectData = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+            effectData.position = transform.position;
+            effectData.rotation = Quaternion.identity;
+            effectData.key = "HeavyHit";
+
+            var msg = MessagePool.GetMessage();
+            msg.Set(MessageTitles.effectmanager_activeeffect, UniqueNumberBase.GetSavedNumberStatic("EffectManager"), effectData, null);
+
+            MasterManager.instance.HandleMessage(msg);
+
             if (playerColl.Length != 0)
             {
                 foreach (Collider curr in playerColl)

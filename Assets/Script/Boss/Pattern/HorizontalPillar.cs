@@ -116,6 +116,16 @@ public class HorizontalPillar : MonoBehaviour
 
                 player.TakeDamage(damage);
                 player.Ragdoll.ExplosionRagdoll(force, transform.forward);
+              
+                var effectData = MessageDataPooling.GetMessageData<MD.EffectActiveData>();
+                effectData.position = collision.GetContact(0).point; 
+                effectData.rotation = Quaternion.identity;
+                effectData.key = "MedusaHit";
+
+                var msg = MessagePool.GetMessage();
+                msg.Set(MessageTitles.effectmanager_activeeffect, UniqueNumberBase.GetSavedNumberStatic("EffectManager"), effectData, null);
+
+                MasterManager.instance.HandleMessage(msg);
             }
         }
         else if(_rush == true)
