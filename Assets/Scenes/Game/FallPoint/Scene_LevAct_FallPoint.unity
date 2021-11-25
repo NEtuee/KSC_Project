@@ -13729,6 +13729,7 @@ GameObject:
   - component: {fileID: 1305561242}
   - component: {fileID: 1305561241}
   - component: {fileID: 1305561244}
+  - component: {fileID: 1305561245}
   m_Layer: 0
   m_Name: FakePlatform
   m_TagString: Untagged
@@ -13841,6 +13842,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1305561245}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   triggerStayEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -13919,6 +13932,19 @@ MonoBehaviour:
   torque: 70
   launched: 0
   delete: 0
+--- !u!114 &1305561245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305561239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62de72d696da5943ae02e7c936aac58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 2025
 --- !u!1001 &1315179701
 PrefabInstance:
   m_ObjectHideFlags: 0
