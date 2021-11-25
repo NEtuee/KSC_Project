@@ -95,10 +95,7 @@ public class AlertSoundPlayer : ObjectBase
 
     public void OnEnable()
     {
-        if (_soundEmiter == null)
-        {
-            SoundPlay();
-        }
+        SoundPlay();
 
         if(_paramInfo != null)
             UpdateParam();

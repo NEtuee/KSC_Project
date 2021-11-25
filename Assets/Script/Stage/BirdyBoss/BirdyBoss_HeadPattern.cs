@@ -172,7 +172,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             _inout = !_timeCounterEx.ProcessSequencer("InOut", deltaTime);
         }
 
-        birdyRoot.position = Vector3.Lerp(birdyRoot.position, _birdyTarget.position, 0.1f);
+        birdyRoot.position = Vector3.Lerp(birdyRoot.position, _birdyTarget.position, deltaTime);
 
         if (_groggy)
         {
@@ -271,7 +271,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         shieldTarget.VisibleVisual();
         _birdyTarget = birdyOutside;
 
-        SetPath("FogBirdyPath", true);
+        SetPath("FogBirdyPath", true,true);
         ChangeAnimation(1);
     }
 

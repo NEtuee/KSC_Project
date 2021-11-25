@@ -104,6 +104,8 @@ public class B1_Spider : PathfollowObjectBase
         if(shell == null)
             shell = shellCollider.GetComponent<Rigidbody>();
 
+        _spawn = false;
+
         shell.isKinematic = true;
         shell.transform.SetParent(body.transform);
         shell.transform.localPosition = _shellPosition;

@@ -27,6 +27,7 @@ public class BirdyBoss_Platform : ObjectBase
     public float fogDensity = 0.09f;
     public float fogOutDensity = 0.01f;
 
+    public Material floorFog;
     public GameObject platformTriggerPrefab;
     public bool showPath = false;
 
@@ -77,11 +78,13 @@ public class BirdyBoss_Platform : ObjectBase
             var time = x / fogTime;
             var factor = fogDisapearCurve.Evaluate(time);
             RenderSettings.fogDensity = Mathf.Lerp(fogDensity,fogOutDensity,factor);
+            floorFog.SetFloat("FogDensity", Mathf.Lerp(0f, 5f, factor));
         },null);
 
 
         RenderSettings.fogDensity = fogDensity;
-        
+        floorFog.SetFloat("FogDensity", 0f);
+
         StartPattern();
     }
 

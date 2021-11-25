@@ -124,12 +124,12 @@ public class Genie_Phase_AI : PathfollowObjectBase
 
     public void LeftHit()
     {
-        Explosion(leftHandHitEffect.position, 150f);
+        Explosion(transform.position, 150f);
     }
 
     public void RightHit()
     {
-        Explosion(rightHandHitEffect.position, 150f);
+        Explosion(transform.position, 150f);
     }
 
     public void ChestOpenSound()

@@ -95,6 +95,7 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     [Header("Fog")]
     public Genie_CoreDroneAI fogDrone;
+    public Material floorFog;
     public float fogDensity = 0.09f;
     public float fogOutDensity = 0.01f;
 
@@ -185,6 +186,7 @@ public class BirdyBoss_PatternOne : ObjectBase
 
             var factor = x / 3f;
             RenderSettings.fogDensity = Mathf.Lerp(fogDensity, fogOutDensity, factor);
+            floorFog.SetFloat("FogDensity", Mathf.Lerp(5, 0, factor));
         }, (x) => { _fogIn = false; });
     }
 
@@ -314,6 +316,9 @@ public class BirdyBoss_PatternOne : ObjectBase
 
             headPattern.dissolveControl.Active(0.1f);
             headPattern.disapearTarget.SetActive(true);
+
+            RenderSettings.fogDensity = fogOutDensity;
+            floorFog.SetFloat("FogDensity", 5f);
         }
     }
 
@@ -626,6 +631,7 @@ public class BirdyBoss_PatternOne : ObjectBase
 
                     var factor = x / item.value;
                     RenderSettings.fogDensity = Mathf.Lerp(fogOutDensity, fogDensity, factor);
+                    floorFog.SetFloat("FogDensity", Mathf.Lerp(5, 0, factor));
                 }, (x) =>
                 {
                     if (_fogIn)
@@ -651,6 +657,7 @@ public class BirdyBoss_PatternOne : ObjectBase
 
                     var factor = x / item.value;
                     RenderSettings.fogDensity = Mathf.Lerp(fogDensity, fogOutDensity, factor);
+                    floorFog.SetFloat("FogDensity", Mathf.Lerp(0, 5, factor));
                 }, (x) =>
                 {
                     _fogIn = false;
