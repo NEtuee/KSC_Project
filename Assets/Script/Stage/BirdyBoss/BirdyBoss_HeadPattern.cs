@@ -88,9 +88,13 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             var pos = stempCube.transform.position;
             pos.y = stempHeight;
             transform.position = pos;
-        });
-        _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => { DissolveIn(x); ShieldLookPlayer(); }, (x)=>{
+
+            //var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
+            //shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
             ChangeAnimation(4);
+        });
+        _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => { DissolveIn(x); ShieldLookDown();/*ShieldLookPlayer();*/ }, (x)=>{
+            //ChangeAnimation(4);
         });
         _timeCounterEx.AddSequence("Stemp",stempStartTime,(x)=> {
             var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
@@ -172,7 +176,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             _inout = !_timeCounterEx.ProcessSequencer("InOut", deltaTime);
         }
 
-        birdyRoot.position = Vector3.Lerp(birdyRoot.position, _birdyTarget.position, 0.1f);
+        birdyRoot.position = Vector3.Lerp(birdyRoot.position, _birdyTarget.position, deltaTime);
 
         if (_groggy)
         {
@@ -271,7 +275,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         shieldTarget.VisibleVisual();
         _birdyTarget = birdyOutside;
 
-        SetPath("FogBirdyPath", true);
+        SetPath("FogBirdyPath", true,true);
         ChangeAnimation(1);
     }
 
