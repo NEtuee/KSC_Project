@@ -175,7 +175,9 @@ public class CameraManager : ManagerBase
 
         AddAction(MessageTitles.scene_beforeSceneChangeNotAsync, (msg) =>
          {
+             Camera.main.transform.SetParent(null);
              SceneManager.MoveGameObjectToScene(Camera.main.gameObject, SceneManager.GetActiveScene());
+             followTarget.transform.SetParent(null);
              SceneManager.MoveGameObjectToScene(followTarget.gameObject, SceneManager.GetActiveScene());
          });
 
