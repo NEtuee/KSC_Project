@@ -38,6 +38,10 @@ public class MedusaState_CenterMove : MedusaFallPointStateBase
 
             target.SendMessageEx(MessageTitles.effectmanager_activeeffectsetparent,
                         UniqueNumberBase.GetSavedNumberStatic("EffectManager"), data);
+
+            MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+            soundData.id = 1513; soundData.position = target.transform.position; soundData.returnValue = false;
+            target.SendMessageEx(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData);
         });
         _timeCounter.AddSequence("ready",1f,null,(x)=>{StateChange("RushToTarget");});
     }
