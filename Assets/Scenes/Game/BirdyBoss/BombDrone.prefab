@@ -2207,7 +2207,6 @@ GameObject:
   - component: {fileID: 3664220246796509029}
   - component: {fileID: 2095816616185630224}
   - component: {fileID: 5316507104632577632}
-  - component: {fileID: 5145005828147919087}
   m_Layer: 0
   m_Name: BombDrone
   m_TagString: Untagged
@@ -2344,25 +2343,6 @@ MonoBehaviour:
   receivedCount: 0
   sound: 1522
   param: 15221
-  maxDistance: 30
---- !u!114 &5145005828147919087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3962257641979599223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3844ef2ff2388ed4eb253999a9754cf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allowDebugMode: 0
-  debugExceptionTitles: []
-  sendedCount: 0
-  receivedCount: 0
-  sound: 1523
-  param: -1
   maxDistance: 30
 --- !u!1 &4226865375517501768
 GameObject:
@@ -7036,6 +7016,7 @@ GameObject:
   - component: {fileID: 4590983207927984060}
   - component: {fileID: 6822884059254878799}
   - component: {fileID: 3953083889818515487}
+  - component: {fileID: 8183263546648352844}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: EmpShield
@@ -7197,6 +7178,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8183263546648352844}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   whenHit:
     m_PersistentCalls:
       m_Calls: []
@@ -7241,6 +7234,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.31
   m_Center: {x: 0, y: 0, z: 0.37}
+--- !u!114 &8183263546648352844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9163808198202886588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62de72d696da5943ae02e7c936aac58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  code: 1525
 --- !u!1001 &4417803919526508136
 PrefabInstance:
   m_ObjectHideFlags: 0

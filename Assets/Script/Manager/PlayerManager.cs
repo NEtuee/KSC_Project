@@ -115,7 +115,8 @@ public class PlayerManager : ManagerBase
         AddAction(MessageTitles.playermanager_hidePlayer, (msg) =>
         {
             bool visible = (bool)msg.data;
-            _drone.gameObject.SetActive(visible);
+            if(_drone.enabled)
+                _drone.gameObject.SetActive(visible);
             _player.gameObject.SetActive(visible);
 
             //Debug.Log("Tlqkf :" + visible + "," + ((MessageReceiver)msg.sender).name);

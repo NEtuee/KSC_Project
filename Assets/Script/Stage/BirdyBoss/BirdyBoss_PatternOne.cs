@@ -842,6 +842,7 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     public void DroneDeactive()
     {
+        _drone.enabled = false;
         _drone.gameObject.SetActive(false);
     }
 

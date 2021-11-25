@@ -24,9 +24,21 @@ public class ObjectPoolBase<T> : MonoBehaviour
     {
         for(int i = 0; i < _progressList.Count;)
         {
+            if(_progressList[i] == null)
+            {
+                _progressList.RemoveAt(i);
+                continue;
+            }
+
             _progressDelegate(_progressList[i]);
-            
-            if(_deleteCondition(_progressList[i]))
+
+            if (_progressList[i] == null)
+            {
+                _progressList.RemoveAt(i);
+                continue;
+            }
+
+            if (_deleteCondition(_progressList[i]))
             {
                 _deleteProgressDelegate(_progressList[i]);
                 
@@ -43,6 +55,11 @@ public class ObjectPoolBase<T> : MonoBehaviour
     public T Active(Vector3 position, Quaternion rotation)
     {
         var t = GetCachedItem();
+        while (t == null)
+        {
+            t = GetCachedItem();
+        }
+
         _activeDelegate(t,position,rotation);
 
         _progressList.Add(t);
@@ -58,6 +75,11 @@ public class ObjectPoolBase<T> : MonoBehaviour
     public T Active()
     {
         var t = GetCachedItem();
+        while(t == null)
+        {
+            t = GetCachedItem();
+        }
+
         _activeDelegate(t, new Vector3(), new Quaternion());
 
         _progressList.Add(t);

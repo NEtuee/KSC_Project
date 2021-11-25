@@ -46,7 +46,9 @@ public class CameraManager : ManagerBase
     [SerializeField] private AnimationCurve blurCurve;
     [SerializeField] private FollowTargetCtrl followTarget;
     [SerializeField] private Vector3 cameraInitOffset;
-    
+
+    public Transform cutsceneSoundTarget;
+
     private bool isBlendCameraDistance;
     private bool cameraSideLock = false;
     private float targetDistance;
@@ -283,6 +285,9 @@ public class CameraManager : ManagerBase
            playerFollowCam3rdPersonComponent.CameraSide = Mathf.Lerp(currSide, 0.5f - (side * 0.5f),4f * Time.deltaTime);
 
         RadialBlurLerpZero(Time.deltaTime);
+
+        cutsceneSoundTarget.gameObject.SetActive(LevelEdit_TimelinePlayer.CUTSCENEPLAY);
+        followTarget.gameObject.SetActive(!LevelEdit_TimelinePlayer.CUTSCENEPLAY);
     }
 
     private void FixedUpdate()

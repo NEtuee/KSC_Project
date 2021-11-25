@@ -202,12 +202,12 @@ public class B1_Spider : PathfollowObjectBase
         SendMessageEx(MessageTitles.effectmanager_activeeffect, GetSavedNumber("EffectManager"), data);
 
         ExplosionParticle();
-        //MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
-        //soundData.id = 1532;
-        //soundData.position = transform.position;
-        //soundData.returnValue = false;
-        //soundData.dontStop = false;
-        //SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1532;
+        soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
 
     public void Explosion(Vector3 dir,float force)
@@ -228,12 +228,12 @@ public class B1_Spider : PathfollowObjectBase
 
         ExplosionParticle();
 
-        //MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
-        //soundData.id = 1532;
-        //soundData.position = transform.position;
-        //soundData.returnValue = false;
-        //soundData.dontStop = false;
-        //SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1532;
+        soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
     }
 
     public void Launch()

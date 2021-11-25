@@ -108,6 +108,8 @@ public class DroneAIBase : ObjectBase
 
     public Vector3 GetTargetPosition()
     {
+        if (_target == null)
+            return Vector3.zero;
         return _target.position + _targetOffset;
     }
 

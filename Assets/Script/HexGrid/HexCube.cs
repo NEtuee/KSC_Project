@@ -91,14 +91,16 @@ public class HexCube : MonoBehaviour
                 {
                     if(_soundPlay)
                     {
-                        var sound = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+                        var sound = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
                         sound.id = _inMove ? 1706 : 1707;
-                        sound.position = originWorldPosition.position;
-                        sound.dontStop = false;
+                        sound.parent = transform;
+                        sound.localPosition = Vector3.zero;// originWorldPosition.position;
+                                                           //sound.dontStop = false;
                         sound.returnValue = false;
 
+
                         var msg = MessagePool.GetMessage();
-                        msg.Set(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
+                        msg.Set(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
 
                         MasterManager.instance.HandleMessage(msg);
                     }
@@ -246,14 +248,15 @@ public class HexCube : MonoBehaviour
 
         if(startTime == 0f && _soundPlay)
         {
-            var sound = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+            var sound = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
             sound.id = _inMove ? 1706 : 1707;
-            sound.position = originWorldPosition.position;
-            sound.dontStop = false;
+            sound.parent = transform;
+            sound.localPosition = Vector3.zero;// originWorldPosition.position;
+            //sound.dontStop = false;
             sound.returnValue = false;
 
             var msg = MessagePool.GetMessage();
-            msg.Set(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
+            msg.Set(MessageTitles.fmod_attachPlay, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
 
             MasterManager.instance.HandleMessage(msg);
         }
