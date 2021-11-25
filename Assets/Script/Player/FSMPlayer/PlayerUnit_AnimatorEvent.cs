@@ -77,6 +77,15 @@ public partial class PlayerUnit
         SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
     }
 
+    private void ClimbingStartSound()
+    {
+        SendMessageEx(MessageTitles.gamepadVibrationManager_vibrationByKey, GetSavedNumber("GamepadVibrationManager"), "LeftHand");
+
+        AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<AttachSoundPlayData>();
+        soundData.id = 1006; soundData.localPosition = Vector3.up; soundData.parent = transform; soundData.returnValue = false;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
+    }
+
     private void StartLedgeUp()
     {
         //handIk.DisableLeftHandIk();

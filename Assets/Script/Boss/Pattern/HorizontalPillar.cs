@@ -11,6 +11,7 @@ public class HorizontalPillar : MonoBehaviour
     [SerializeField] private float force = 300.0f;
     private bool _rush = false;
     private bool _visible = false;
+    private bool _done = false;
     private Transform lookAtTarget;
     public bool Visible => _visible;
     private void Awake()
@@ -51,7 +52,7 @@ public class HorizontalPillar : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if(_visible == true && _rush == false)
+        if (_visible == true && _rush == false && _done == false)
         {
             Vector3 dir = (lookAtTarget.position - transform.position);
             dir.y = 0.0f;
@@ -63,6 +64,7 @@ public class HorizontalPillar : MonoBehaviour
     {
         _visible = true;
         _collider.isTrigger = false;
+        _done = false;
         StartCoroutine(Fade(time, 1.0f, null));
     }
 
@@ -101,7 +103,10 @@ public class HorizontalPillar : MonoBehaviour
     {
         if (_rush == true && collision.gameObject.CompareTag("Player"))
         {
+            //Debug.Log(collision.gameObject.name);
+
             _rush = false;
+            _done = true;
             _rigidbody.isKinematic = true;
             _rigidbody.velocity = Vector3.zero;
             _collider.isTrigger = true;
@@ -130,7 +135,11 @@ public class HorizontalPillar : MonoBehaviour
         }
         else if(_rush == true)
         {
+            //Debug.Log(collision.gameObject.name);
+
             _rush = false;
+            _done = true;
+
             _rigidbody.isKinematic = true;
             _rigidbody.velocity = Vector3.zero;
             _collider.isTrigger = true;
