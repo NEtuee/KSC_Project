@@ -193,7 +193,6 @@ public class GraphObjectBase : UnTransfromObjectBase
 
     public void SceneLoadedMessage(Message msg)
     {
-        Debug.Log("Check");
         var node = FindNode("SceneChanged");
         if (node != null)
         {

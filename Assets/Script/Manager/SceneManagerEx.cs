@@ -312,7 +312,7 @@ public class SceneManagerEx : ManagerBase
     {
         SendBroadcastMessage(MessageTitles.scene_beforeSceneChangeNotAsync, null, false);
 
-        yield return null;
+        yield return new WaitForSeconds(1f);
 
         SceneManager.LoadScene(sceneName);
     }
