@@ -19,6 +19,22 @@ public class LoadSceneFade : ObjectBase
         RegisterRequest(GetSavedNumber("StageManager"));
     }
 
+    public void JustFade()
+    {
+        var action = MessageDataPooling.GetMessageData<MD.ActionData>();
+        action.value = () =>{};
+
+        SendMessageEx(MessageTitles.uimanager_fadeout, GetSavedNumber("UIManager"), action);
+    }
+
+    public void JustSceneLoad()
+    {
+        MD.StringData data = MessageDataPooling.GetMessageData<MD.StringData>();
+        data.value = "OutScene";
+        SendMessageEx(MessageTitles.scene_loadSceneNotAsync, GetSavedNumber("SceneManager"), data);
+        //SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
+    }
+
     public void FadeStart()
     {
         var action = MessageDataPooling.GetMessageData<MD.ActionData>();
