@@ -12,6 +12,11 @@ public class VolumeChanger : MonoBehaviour
         VolumeSync();
     }
 
+    public void Update()
+    {
+        VolumeSync();
+    }
+
     public void VolumeSync()
     {
         SoundSettingData soundSettingData = SaveDataHelper.LoadSetting<SoundSettingData>();
