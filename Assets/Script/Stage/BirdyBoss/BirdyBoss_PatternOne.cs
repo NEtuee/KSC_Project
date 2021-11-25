@@ -831,6 +831,11 @@ public class BirdyBoss_PatternOne : ObjectBase
         }
     }
 
+    public void DroneDeactive()
+    {
+        _drone.gameObject.SetActive(false);
+    }
+
     public void MoveUpAll()
     {
         cubeGrid.MoveUpALL();

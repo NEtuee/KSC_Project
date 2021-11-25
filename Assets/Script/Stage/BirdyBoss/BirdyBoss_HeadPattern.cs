@@ -286,6 +286,11 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         ChangeAnimation(1);
     }
 
+    public void DisapearTarget()
+    {
+        disapearTarget.SetActive(false);
+    }
+
     public void Shot()
     {
         currentState = State.GroundShot;

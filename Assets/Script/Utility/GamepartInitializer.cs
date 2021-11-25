@@ -19,6 +19,7 @@ public class GamepartInitializer : ManagerBase
     }
 
     public MaterialProperty[] targetMaterials;
+    public Drone droneTarget;
 
     protected override void Awake()
     {
@@ -35,6 +36,11 @@ public class GamepartInitializer : ManagerBase
             foreach(var item in targetMaterials)
             {
                 item.Process();
+            }
+
+            foreach(var item in droneTarget.disapearTargets)
+            {
+                item.SetActive(true);
             }
         });
     }
