@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
+
 
 public class Endroll : MonoBehaviour
 {
@@ -22,17 +24,11 @@ public class Endroll : MonoBehaviour
         {
             skip = true;
             fade.DOFade(1.0f, 3f).OnComplete(()=>
-            { 
+            {
+                LoadTitleScene();
             });
         });
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-     
-    }
-
     private void OnSkip()
     {
         if (skip == true)
@@ -40,7 +36,8 @@ public class Endroll : MonoBehaviour
 
         skip = true;
         fade.DOFade(1.0f, 3f).OnComplete(()=>
-        { 
+        {
+            LoadTitleScene();
         });
     }
 
@@ -52,5 +49,11 @@ public class Endroll : MonoBehaviour
     private void OnDisable()
     {
         skipKey.Disable();
+    }
+
+
+    public void LoadTitleScene()
+    {
+        SceneManager.LoadScene("MainTitle_NewStucture_latest");
     }
 }

@@ -30,7 +30,7 @@ public class LoadSceneFade : ObjectBase
     public void JustSceneLoad()
     {
         MD.StringData data = MessageDataPooling.GetMessageData<MD.StringData>();
-        data.value = "OutScene";
+        data.value = targetScene;
         SendMessageEx(MessageTitles.scene_loadSceneNotAsync, GetSavedNumber("SceneManager"), data);
         //SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
     }

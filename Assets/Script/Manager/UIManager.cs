@@ -988,7 +988,7 @@ public class UIManager : ManagerBase
         timeStop.value = false;
         SendMessageEx(MessageTitles.timemanager_timestop, GetSavedNumber("TimeManager"), timeStop);
         MD.StringData data = MessageDataPooling.GetMessageData<MD.StringData>();
-        data.value = "MainTitle_NewStucture";
+        data.value = "MainTitle_NewStucture_latest";
         SendMessageEx(MessageTitles.scene_loadSceneNotAsync, GetSavedNumber("SceneManager"), data);
     }
 

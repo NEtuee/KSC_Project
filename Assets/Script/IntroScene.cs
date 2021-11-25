@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class IntroScene : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class IntroScene : MonoBehaviour
         skip = true;
         fade.DOFade(1f, 2f).OnComplete(() =>
         {
+            LoadPlayerScene();
         });
     }
 
@@ -35,5 +37,10 @@ public class IntroScene : MonoBehaviour
     private void OnDisable()
     {
         skipAction.Disable();
+    }
+
+    public void LoadPlayerScene()
+    {
+        SceneManager.LoadScene("Scene_Act_Player_Main");
     }
 }
