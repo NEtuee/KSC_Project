@@ -135,6 +135,15 @@ public class BirdyBoss_Database : MonoBehaviour
         }
     }
 
+    public void DeactiveFallPillar()
+    {
+        var targets = fallPillarCache.GetActiveTargets();
+        foreach (var item in targets.Values)
+        {
+            item.gameObject.SetActive(false);
+        }
+    }
+
     public void ExplosionDrones()
     {
         var targets = droneCache.GetActiveTargets();

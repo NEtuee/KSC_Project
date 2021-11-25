@@ -683,7 +683,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 557610766}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &72207966
 PrefabInstance:
@@ -3491,7 +3491,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 557610766}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &229298823
 MonoBehaviour:
@@ -4001,91 +4001,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c70bf115c97bc7240b0665f92be81b2f, type: 3}
---- !u!1 &339680302
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 339680305}
-  - component: {fileID: 339680304}
-  - component: {fileID: 339680303}
-  m_Layer: 0
-  m_Name: ClimbingMove
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &339680303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 339680302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allowDebugMode: 0
-  debugExceptionTitles: []
-  sendedCount: 0
-  receivedCount: 0
-  onDisable: 1
-  triggerLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  message: 835
-  missionUiPack:
-    key: FallPoint
-  levelLineActiveBossNamePack:
-    name: 
-  levelLineSetAlphabetPack:
-    alphabet: 0
-  activeInformationUiPack:
-    key: ClimbingMove
-  setTimeInformationUiPack:
-    time: 0
-  missionUiDisspearPack:
-    time: 0
-  dialogPack:
-    key: 
-    duration: 0
-  dialogSetNamePack:
-    name: 
-  targetTransform: {fileID: 0}
-  dialogPacks: []
---- !u!65 &339680304
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 339680302}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 5.267661, y: 9.053052, z: 7.8522415}
-  m_Center: {x: 2.83781, y: 0.65088606, z: 0.1116066}
---- !u!4 &339680305
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 339680302}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 125.23, y: 16.95, z: 39.76}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 557610766}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &360765101
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5477,8 +5392,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 741653774}
-  - {fileID: 339680305}
   - {fileID: 577564571}
   - {fileID: 1645049122}
   - {fileID: 59009342}
@@ -6012,7 +5925,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 557610766}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &577564572
 BoxCollider:
@@ -7624,132 +7537,6 @@ Transform:
   - {fileID: 1618655048}
   m_Father: {fileID: 1366736570}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &741653770
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 741653774}
-  - component: {fileID: 741653773}
-  - component: {fileID: 741653772}
-  - component: {fileID: 741653771}
-  m_Layer: 0
-  m_Name: MissionTrigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &741653771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741653770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allowDebugMode: 0
-  debugExceptionTitles: []
-  sendedCount: 0
-  receivedCount: 0
-  onDisable: 1
-  triggerLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  message: 833
-  missionUiPack:
-    key: FallPoint
-  levelLineActiveBossNamePack:
-    name: 
-  levelLineSetAlphabetPack:
-    alphabet: 0
-  activeInformationUiPack:
-    key: 
-  setTimeInformationUiPack:
-    time: 0
-  missionUiDisspearPack:
-    time: 10
-  dialogPack:
-    key: 
-    duration: 0
-  dialogSetNamePack:
-    name: 
-  targetTransform: {fileID: 0}
-  dialogPacks: []
---- !u!65 &741653772
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741653770}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 10.329124, y: 7.443034, z: 1}
-  m_Center: {x: 0.30707836, y: -0.15412271, z: 0}
---- !u!114 &741653773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741653770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7ed3f9c562a3914ca27d097a165fd9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allowDebugMode: 0
-  debugExceptionTitles: []
-  sendedCount: 0
-  receivedCount: 0
-  onDisable: 1
-  triggerLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  message: 832
-  missionUiPack:
-    key: FallPoint
-  levelLineActiveBossNamePack:
-    name: 
-  levelLineSetAlphabetPack:
-    alphabet: 0
-  activeInformationUiPack:
-    key: 
-  setTimeInformationUiPack:
-    time: 0
-  missionUiDisspearPack:
-    time: 0
-  dialogPack:
-    key: 
-    duration: 0
-  dialogSetNamePack:
-    name: 
-  targetTransform: {fileID: 0}
-  dialogPacks: []
---- !u!4 &741653774
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741653770}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.63, y: 3.47, z: -12.11}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 557610766}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &744139936
 PrefabInstance:
@@ -16590,7 +16377,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 557610766}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 87.638, z: 0}
 --- !u!114 &1645049123
 MonoBehaviour:

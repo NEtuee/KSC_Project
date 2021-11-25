@@ -295,6 +295,7 @@ public class Drone : PathfollowObjectBase
 
     public void UpdateDissolve(float t)
     {
+        //Debug.Log(t);
         dissolveMat.SetFloat("Dissvole", 1f - (t / dissolveTime));
     }
 
@@ -313,6 +314,7 @@ public class Drone : PathfollowObjectBase
 
     public void StartDissolveEffect()
     {
+        Debug.Log("Start");
         dissolveMat.SetFloat("Dissvole",1f);
         _timeCounter.InitSequencer("DissolvProcess");
         _dissolve = true;

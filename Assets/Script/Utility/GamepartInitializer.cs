@@ -14,7 +14,10 @@ public class GamepartInitializer : ManagerBase
         public void Process()
         {
             foreach(var item in targetMaterials)
+            {
                 item.SetFloat(targetProperty, factor);
+            }
+                
         }
     }
 
@@ -42,6 +45,21 @@ public class GamepartInitializer : ManagerBase
             {
                 item.SetActive(true);
             }
+
+            droneTarget.UpdateDissolve(droneTarget.dissolveTime);
         });
+    }
+
+    public override void Progress(float deltaTime)
+    {
+        base.Progress(deltaTime);
+
+        if (LevelEdit_TimelinePlayer.CUTSCENEPLAY)
+        {
+            foreach (var item in targetMaterials)
+            {
+                item.Process();
+            }
+        }
     }
 }
