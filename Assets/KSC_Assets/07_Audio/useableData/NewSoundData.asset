@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589831222c4694d47a8b0d8615576508, type: 3}
   m_Name: NewSoundData
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 0db058da3dcdd494ba581c35b6886001, type: 3}
+  csvData: {fileID: 4900000, guid: 4f722db9c6449854fad1252b49a488bf, type: 3}
   soundData:
   - path: global data
     name: 
@@ -56,6 +56,10 @@ MonoBehaviour:
       max: 1
     - name: Const
       id: 9
+      min: 0
+      max: 1
+    - name: Pistion_Control
+      id: 10
       min: 0
       max: 1
   - path: event:/PlayerCharacter/Movement/PC_Jogging
@@ -285,6 +289,14 @@ MonoBehaviour:
   - path: event:/PlayerCharacter/Movement/New/PC_Dash
     name: PC_Dash
     id: 1027
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/PlayerCharacter/Movement/Hit/PC_Hit
+    name: PC_Hit
+    id: 1028
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}
@@ -630,6 +642,54 @@ MonoBehaviour:
     overrideDistance: {x: 0, y: 0, z: 0}
     type: SFX
     parameters: []
+  - path: event:/Mob/Season2/Boss/Boss_Column
+    name: Boss_Column
+    id: 1537
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Boss/Boss_Smash
+    name: Boss_Smash
+    id: 1538
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Boss/Boss_Teleport
+    name: Boss_Teleport
+    id: 1539
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Boss/Boss_Voice
+    name: Boss_Voice
+    id: 1540
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Boss/Boss_Stone
+    name: Boss_Stone
+    id: 1541
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/Mob/Season2/Boss/Boss_Drone
+    name: Boss_Drone
+    id: 1542
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
   - path: event:/SFX/Explosion
     name: Explosion
     id: 1700
@@ -705,6 +765,22 @@ MonoBehaviour:
   - path: event:/SFX/Tartaros_Explosion
     name: Tartaros_Explosion
     id: 1709
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    parameters: []
+  - path: event:/BGM/Genie_BGM
+    name: Genie_BGM
+    id: 1710
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: BGM
+    parameters: []
+  - path: event:/SFX/Gate_Close
+    name: Gate_Close
+    id: 1711
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}
@@ -1030,6 +1106,14 @@ MonoBehaviour:
     overrideDistance: {x: 0, y: 0, z: 0}
     type: AMB
     parameters: []
+  - path: event:/Ambient/Season2/Genie/Genie_Roomtone
+    name: Genie_Roomtone
+    id: 2039
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: AMB
+    parameters: []
   - path: event:/UI/Button
     name: Button
     id: 3000
@@ -1093,6 +1177,38 @@ MonoBehaviour:
   - path: snapshot:/Local_Setting/MiningLevelReverb
     name: MiningLevelReverb
     id: 4006
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/Local_Setting/MainHubReverb
+    name: MainHubReverb
+    id: 4007
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/Local_Setting/GenieReverb
+    name: GenieReverb
+    id: 4008
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/Local_Setting/LevelAReverb
+    name: LevelAReverb
+    id: 4009
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    parameters: []
+  - path: snapshot:/Local_Setting/BossReverb
+    name: BossReverb
+    id: 4010
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}

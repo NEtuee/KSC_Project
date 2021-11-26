@@ -26,6 +26,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
     public bool playerDisable = false;
     public bool birdyCanMove = true;
     public bool ragdoll = false;
+    public bool noCamStack = false;
 
     private CinemachineBrain _mainCamBrain;
     private CameraManager _camManager;
@@ -308,7 +309,7 @@ public class LevelEdit_TimelinePlayer : UnTransfromObjectBase
             canvasEnable.value = false;
             SendMessageEx(MessageTitles.uimanager_activePlayUi, GetSavedNumber("UIManager"), canvasEnable);
         }
-        CUTSCENEPLAY = true;
+        CUTSCENEPLAY = !noCamStack;
     }
 
     public void EndTrigger()

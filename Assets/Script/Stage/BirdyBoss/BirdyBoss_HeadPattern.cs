@@ -84,6 +84,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _localPosition = transform.localPosition;
         
         _timeCounterEx.CreateSequencer("Stemp");
+        _timeCounterEx.AddSequence("Stemp", 0f, null, (x) => { Teleport(); });
         _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => { DissolveOut(x); ShieldLookPlayer(); }, (x)=>{
             var pos = stempCube.transform.position;
             pos.y = stempHeight;
@@ -92,6 +93,8 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             //var dir = MathEx.DeleteYPos(_player.transform.position - shieldObj.position).normalized;
             //shieldObj.rotation = Quaternion.Slerp(shieldObj.rotation, Quaternion.LookRotation(dir, Vector3.up), 0.1f);
             ChangeAnimation(4);
+
+            Teleport();
         });
         _timeCounterEx.AddSequence("Stemp",dissolveTime, (x) => 
         {
@@ -112,6 +115,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _timeCounterEx.AddSequence("Stemp",stempTime,Stemp,(x)=>{
             Ring();
             Explosion();
+            HeadHit();
 
             SendMessageEx(MessageTitles.cameramanager_generaterecoilimpluse, GetSavedNumber("CameraManager"), null);
 
@@ -139,7 +143,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         
 
         _timeCounterEx.CreateSequencer("InOut");
-        _timeCounterEx.AddSequence("InOut", stempWaitTime,null,null);
+        _timeCounterEx.AddSequence("InOut", stempWaitTime,null,(x)=> { Teleport(); });
         _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveOut, (x)=>{
             transform.localPosition = _localPosition;
 
@@ -150,6 +154,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
             _stemp = false;
 
             ChangeAnimation(0);
+            Teleport();
         });
         _timeCounterEx.AddSequence("InOut", dissolveTime,DissolveIn, (x)=>{
             
@@ -266,6 +271,46 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         
     }
 
+    public void HeadHit()
+    {
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1538;
+        soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+    }
+
+    public void DroneSound()
+    {
+        MD.AttachSoundPlayData soundData = MessageDataPooling.GetMessageData<MD.AttachSoundPlayData>();
+        soundData.id = 1542;
+        soundData.localPosition = Vector3.zero;
+        soundData.returnValue = false;
+        soundData.parent = transform;
+        SendMessageEx(MessageTitles.fmod_attachPlay, GetSavedNumber("FMODManager"), soundData);
+    }
+
+    public void Teleport()
+    {
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1539;
+        soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+    }
+
+    public void Hit()
+    {
+        MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+        soundData.id = 1540;
+        soundData.position = transform.position;
+        soundData.returnValue = false;
+        soundData.dontStop = false;
+        SendMessageEx(MessageTitles.fmod_play, GetSavedNumber("FMODManager"), soundData);
+    }
+
     public void DisableShield()
     {
         shieldTarget.Reactive();
@@ -332,6 +377,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
         _birdyTarget = birdyInside;
         currentState = State.PlayerLook;
         ChangeAnimation(3);
+        Hit();
     }
 
     public bool IsGroggy()
@@ -351,6 +397,7 @@ public class BirdyBoss_HeadPattern : PathfollowObjectBase
 
         if(!_inout)
         {
+            Teleport();
             dissolveControl.ActiveCurrent(1f);
             disapearTarget.SetActive(true);
         }

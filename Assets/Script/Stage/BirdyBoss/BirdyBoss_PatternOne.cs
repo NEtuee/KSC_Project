@@ -315,6 +315,8 @@ public class BirdyBoss_PatternOne : ObjectBase
             _drone.transform.position = headPattern.transform.position;
 
             headPattern.dissolveControl.Active(0.1f);
+            headPattern.Teleport();
+            headPattern.DroneSound();
             headPattern.disapearTarget.SetActive(true);
 
             RenderSettings.fogDensity = fogOutDensity;

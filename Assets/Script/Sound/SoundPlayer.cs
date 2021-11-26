@@ -19,4 +19,16 @@ public class SoundPlayer : MonoBehaviour
 
         MasterManager.instance.HandleMessage(msg);
     }
+
+    public void ForceStopAll()
+    {
+        var sound = MessageDataPooling.GetMessageData<MD.StopAllSoundData>();
+        sound.id = code;
+        sound.fade = true;
+
+        var msg = MessagePool.GetMessage();
+        msg.Set(MessageTitles.fmod_stopAll, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
+
+        MasterManager.instance.HandleMessage(msg);
+    }
 }

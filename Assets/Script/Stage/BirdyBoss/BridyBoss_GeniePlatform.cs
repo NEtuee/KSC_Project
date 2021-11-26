@@ -44,7 +44,6 @@ public class BridyBoss_GeniePlatform : MonoBehaviour
                            if (item.IsActive())
                            {
                                item.SetMove(false, 0f, cubeSpeed, 0.1f);
-                               item.SetAlertTime(1f);
                            }
                        }
                    }

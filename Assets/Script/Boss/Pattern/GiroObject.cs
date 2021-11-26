@@ -85,6 +85,15 @@ public class GiroObject : MonoBehaviour
 
             MasterManager.instance.HandleMessage(msg);
 
+            MD.SoundPlayData soundData = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+            soundData.id = 1541;
+            soundData.position = transform.position;
+            soundData.returnValue = false;
+            soundData.dontStop = false;
+            var soundmsg = MessagePool.GetMessage();
+            soundmsg.Set(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), soundData, null);
+            MasterManager.instance.HandleMessage(soundmsg);
+
             if (playerColl.Length != 0)
             {
                 foreach (Collider curr in playerColl)
