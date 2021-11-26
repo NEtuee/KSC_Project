@@ -269,10 +269,10 @@ MonoBehaviour:
   m_Name: FMODStudioSettings
   m_EditorClassIdentifier: 
   SwitchSettingsMigration: 1
-  HasSourceProject: 1
-  HasPlatforms: 1
+  HasSourceProject: 0
+  HasPlatforms: 0
   sourceProjectPath: 
-  sourceBankPath: 
+  sourceBankPath: Assets/KSC_Assets/07_Audio/Bank
   SourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
@@ -293,8 +293,21 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks: []
-  Banks: []
+  MasterBanks:
+  - FmodBank_Master
+  Banks:
+  - FmodBank_Ambient
+  - FmodBank_Arachne
+  - FmodBank_BGM
+  - FmodBank_Daddy
+  - FmodBank_Drone
+  - FmodBank_JirungE
+  - FmodBank_Medusa
+  - FmodBank_Mob
+  - FmodBank_PlayerCharacter
+  - FmodBank_SFX
+  - FmodBank_UI
+  - Test
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
@@ -305,7 +318,7 @@ MonoBehaviour:
   EnableErrorCallback: 0
   SharedLibraryUpdateStage: 0
   SharedLibraryTimeSinceStart: 0
-  HideSetupWizard: 0
+  HideSetupWizard: 1
   Platforms:
   - {fileID: -7788200244729469214}
   - {fileID: 5558466000485539012}
@@ -739,8 +752,8 @@ MonoBehaviour:
       Value: 
       HasValue: 0
     SpeakerMode:
-      Value: 0
-      HasValue: 0
+      Value: 3
+      HasValue: 1
     VirtualChannelCount:
       Value: 0
       HasValue: 0
@@ -754,7 +767,9 @@ MonoBehaviour:
       Value: 0
       HasValue: 0
     Plugins:
-      Value: []
+      Value:
+      - phonon_fmod
+      - resonanceaudio
       HasValue: 1
     StaticPlugins:
       Value: []

@@ -115,6 +115,7 @@ public class BirdyBoss_PatternOne : ObjectBase
     public int recentlyLoop;
 
     public MessageEventSender truthSender;
+    public SoundPlayer bgmPlayer;
 
     //[Header("GiroPattern")]
     //public GiroPattern giroPattern;
@@ -304,7 +305,6 @@ public class BirdyBoss_PatternOne : ObjectBase
 
     public void SetActive(bool value)
     {
-        Debug.Log("Active");
         active = value;
 
         if (active)
@@ -321,6 +321,8 @@ public class BirdyBoss_PatternOne : ObjectBase
 
             RenderSettings.fogDensity = fogOutDensity;
             floorFog.SetFloat("FogDensity", 5f);
+
+            bgmPlayer.Play();
         }
     }
 
