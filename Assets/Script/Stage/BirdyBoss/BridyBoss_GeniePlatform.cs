@@ -25,7 +25,24 @@ public class BridyBoss_GeniePlatform : MonoBehaviour
     public void Awake()
     {
         _timeCounter.CreateSequencer("main");
-        _timeCounter.AddSequence("main", startTime, null, (x)=> { _ground = true; });
+        _timeCounter.AddSequence("main", startTime, null, (x)=> {
+            for(int i = 0; i < edge.Length; ++i)
+            {
+                var sound = MessageDataPooling.GetMessageData<MD.SoundPlayData>();
+                sound.id = 1536;
+                sound.position = edge[i].transform.position;
+                sound.dontStop = false;
+                sound.returnValue = false;
+
+                var msg = MessagePool.GetMessage();
+                msg.Set(MessageTitles.fmod_play, UniqueNumberBase.GetSavedNumberStatic("FMODManager"), sound, null);
+
+                MasterManager.instance.HandleMessage(msg);
+            }
+            
+
+            _ground = true;
+        });
         _timeCounter.AddSequence("main", endTime, null, End);
 
         _timeCounter.CreateSequencer("grid");
