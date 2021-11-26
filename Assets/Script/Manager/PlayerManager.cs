@@ -310,9 +310,12 @@ public class PlayerManager : ManagerBase
                 SendMessageEx(MessageTitles.uimanager_setChargeComplete, GetSavedNumber("UIManager"), null);
             }
 
-            var chargeData = MessageDataPooling.GetMessageData<FloatData>();
-            chargeData.value = value / _player.ChargeConsumeTime;
-            SendMessageEx(MessageTitles.uimanager_chargeGageValue, GetSavedNumber("UIManager"), chargeData);
+            if (_player.ChargeShotBlock == false)
+            {
+                var chargeData = MessageDataPooling.GetMessageData<FloatData>();
+                chargeData.value = value / _player.ChargeConsumeTime;
+                SendMessageEx(MessageTitles.uimanager_chargeGageValue, GetSavedNumber("UIManager"), chargeData);
+            }
         });
 
         _player.loadCount.Subscribe(value =>
