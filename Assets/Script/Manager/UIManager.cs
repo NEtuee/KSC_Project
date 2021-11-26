@@ -637,27 +637,6 @@ public class UIManager : ManagerBase
     public override void Progress(float deltaTime)
     {
         base.Progress(deltaTime);
-
-        if (Keyboard.current.digit3Key.wasPressedThisFrame)
-        {
-            SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"), "이우민");
-        }
-
-        if (Keyboard.current.nKey.wasPressedThisFrame)
-        {
-            SendMessageEx(MessageTitles.uimanager_AppearMissionUiAndSetKey, GetSavedNumber("UIManager"), "Test");
-        }
-        if (Keyboard.current.mKey.wasPressedThisFrame)
-        {
-            SendMessageEx(MessageTitles.uimanager_DisappearMissionUi, GetSavedNumber("UIManager"), null);
-        }
-        if (Keyboard.current.lKey.wasPressedThisFrame)
-        {
-            FloatData data = MessageDataPooling.GetMessageData<FloatData>();
-            data.value = 6f;
-            SendMessageEx(MessageTitles.uimanager_SetShowTimeInformationUi, GetSavedNumber("UIManager"), data);
-            SendMessageEx(MessageTitles.uimanager_AppearInformationUi, GetSavedNumber("UIManager"), "Test");
-        }
     }
 
     public void ActivePage(int pageNum)

@@ -34,18 +34,7 @@ public class CutsceneManager : ManagerBase
     public override void Progress(float deltaTime)
     {
         base.Progress(deltaTime);
-        if(isPlaying && (Mouse.current.rightButton.wasPressedThisFrame && Keyboard.current.leftCtrlKey.isPressed))
-        {
-            if(_currentTimeline?.playableDirector.state == UnityEngine.Playables.PlayState.Playing)
-            {
-                SkipCutscene();
-                Debug.Log("?");
-            }
-        }
-        else
-        {
-
-        }
+      
     }
 
     public void SkipCutscene()

@@ -9,9 +9,9 @@ public class BirdyBossSkip : MonoBehaviour
 
     void Update()
     {
-        if ((Mouse.current.rightButton.wasPressedThisFrame && Keyboard.current.leftAltKey.isPressed))
-        {
-            skipEvent?.Invoke();
-        }
+        //if ((Mouse.current.rightButton.wasPressedThisFrame && Keyboard.current.leftAltKey.isPressed))
+        //{
+        //    skipEvent?.Invoke();
+        //}
     }
 }

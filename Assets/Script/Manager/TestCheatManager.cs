@@ -20,20 +20,6 @@ public class TestCheatManager : ManagerBase
     {
         base.Progress(deltaTime);
 
-        if(Keyboard.current.digit1Key.wasPressedThisFrame)
-        {
-            PositionRotation data = MessageDataPooling.GetMessageData<PositionRotation>();
-            data.position = spawnPoint.position;
-            data.rotation = spawnPoint.rotation;
-            SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
-        }
-
-        if(Keyboard.current.digit2Key.wasPressedThisFrame && spawnPoint2 != null)
-        {
-            PositionRotation data = MessageDataPooling.GetMessageData<PositionRotation>();
-            data.position = spawnPoint2.position;
-            data.rotation = spawnPoint2.rotation;
-            SendMessageEx(MessageTitles.playermanager_setPlayerTransform, GetSavedNumber("PlayerManager"), data);
-        }
+       
     }
 }

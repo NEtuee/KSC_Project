@@ -80,10 +80,7 @@ public class BirdyBoss_TentacleControl : MonoBehaviour
 
     public void Update()
     {
-        if ((Keyboard.current.lKey.isPressed))
-        {
-            StartRandomTentacle();
-        }
+  
 
         if (_increase)
         {

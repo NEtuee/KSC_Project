@@ -395,10 +395,10 @@ public class PlayerManager : ManagerBase
             SendMessageEx(MessageTitles.scene_loadCurrentLevel, GetSavedNumber("SceneManager"), null);
         }
 
-        if(Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.nKey.wasPressedThisFrame)
-        {
-            SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
-        }
+        //if(Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.nKey.wasPressedThisFrame)
+        //{
+        //    SendMessageEx(MessageTitles.scene_loadNextLevel, GetSavedNumber("SceneManager"), null);
+        //}
 
         //if (Keyboard.current.zKey.wasPressedThisFrame)
         //{
