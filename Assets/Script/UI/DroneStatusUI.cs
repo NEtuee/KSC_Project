@@ -121,7 +121,7 @@ public class DroneStatusUI : MonoBehaviour
             InitDronHpUi();
             Appear();
 
-            nineth_center_front.rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.0f);
+            nineth_center_front.rectTransform.DOScale(new Vector3(0.9f, 0.9f, 0.9f), 0.0f);
             nineth_center_front.DOFade(1f, 0.0f);
         }
         
