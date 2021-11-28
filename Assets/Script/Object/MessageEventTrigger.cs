@@ -138,7 +138,7 @@ public class MessageEventTrigger : ObjectBase
                 {
                     _triggerEvent = () =>
                     {
-                        StartCoroutine(DelayMissionUi(delay));
+                        Invoke("DelayMissionUi", delay);
                     };
                 }
                 break;
@@ -169,13 +169,11 @@ public class MessageEventTrigger : ObjectBase
         }
     }
 
-    public IEnumerator DelayMissionUi(float time)
+    public void DelayMissionUi()
     {
-        yield return new WaitForSeconds(time);
-        string data = missionUiPack.key;
-        SendMessageEx((ushort)message, GetSavedNumber("UIManager"), data);
+        string data = activeInformationUiPack.key;
+        SendMessageEx(MessageTitles.uimanager_AppearInformationUi, GetSavedNumber("UIManager"), data);
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
