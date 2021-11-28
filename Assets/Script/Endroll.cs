@@ -20,7 +20,7 @@ public class Endroll : MonoBehaviour
     {
         skipKey.performed += _ => OnSkip();
 
-        root.DOAnchorPosY(555f, 60f).OnComplete(() =>
+        root.DOAnchorPosY(555f, 60f).SetDelay(3f).OnComplete(() =>
         {
             skip = true;
             fade.DOFade(1.0f, 3f).OnComplete(()=>
