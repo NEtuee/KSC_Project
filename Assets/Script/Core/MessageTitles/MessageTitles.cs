@@ -280,6 +280,11 @@ public static partial class MessageTitles
     /// data = null
     /// </summary>
     public const ushort uimanager_deactiveInteractionKeyGuide = 0x0351;
+
+    /// <summary>
+    /// data = null
+    /// </summary>
+    public const ushort uimanager_activeBirdyBossNameAndHp = 0x0352;
     #endregion
 
     /// <summary>
@@ -381,6 +386,7 @@ public static partial class MessageTitles
     /// data = BoolData
     /// </summary>
     public const ushort cameramanager_cameraRotateLock = 0x0420;
+
 
     #region EffectManager
 
