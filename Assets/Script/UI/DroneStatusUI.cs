@@ -63,6 +63,7 @@ public class DroneStatusUI : MonoBehaviour
     [SerializeField] private List<Image> frontElements = new List<Image>();
     [SerializeField] private List<Image> backElements = new List<Image>();
 
+    private Color damagedColor = new Color(0.65f, 0.13f, 0.13f, 1.0f);
     private void Awake()
     {
         _canvas = GetComponent<Canvas>();
@@ -194,63 +195,63 @@ public class DroneStatusUI : MonoBehaviour
             first_underLeft_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
             first_underLeft_front.DOFade(0.0f, 0.5f);
             first_underLeft_back.DOFade(1f, 0f);
-            first_underLeft_back.color = Color.red;
+            first_underLeft_back.color = damagedColor;
         }
         else if(damageCount == 1)
         {
             second_underRight_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
             second_underRight_front.DOFade(0.0f, 0.5f);
             second_underRight_back.DOFade(1f, 0f);
-            second_underRight_back.color = Color.red;
+            second_underRight_back.color = damagedColor;
         }
         else if (damageCount == 2)
         {
             third_upLeft_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
             third_upLeft_front.DOFade(0.0f, 0.5f);
             third_upLeft_back.DOFade(1f, 0f);
-            third_upLeft_back.color = Color.red;
+            third_upLeft_back.color = damagedColor;
         }
         else if (damageCount == 3)
         {
             fourth_upRight_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
             fourth_upRight_front.DOFade(0.0f, 0.5f);
             fourth_upRight_back.DOFade(1f, 0f);
-            fourth_upRight_back.color = Color.red;
+            fourth_upRight_back.color = damagedColor;
         }
         else if (damageCount == 4)
         {
             fifth_upLeft_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
             fifth_upLeft_front.DOFade(0.0f, 0.5f);
             fifth_upLeft_back.DOFade(1f, 0f);
-            fifth_upLeft_back.color = Color.red;
+            fifth_upLeft_back.color = damagedColor;
         }
         else if (damageCount == 5)
         {
             sixth_upRight_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
             sixth_upRight_front.DOFade(0.0f, 0.5f);
             sixth_upRight_back.DOFade(1f, 0f);
-            sixth_upRight_back.color = Color.red;
+            sixth_upRight_back.color = damagedColor;
         }
         else if (damageCount == 6)
         {
             seventh_upLeft_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
             seventh_upLeft_front.DOFade(0.0f, 0.5f);
             seventh_upLeft_back.DOFade(1f, 0f);
-            seventh_upLeft_back.color = Color.red;
+            seventh_upLeft_back.color = damagedColor;
         }
         else if (damageCount == 7)
         {
             eighth_upRight_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
             eighth_upRight_front.DOFade(0.0f, 0.5f);
             eighth_upRight_back.DOFade(1f, 0f);
-            eighth_upRight_back.color = Color.red;
+            eighth_upRight_back.color = damagedColor;
         }
         else if (damageCount == 8)
         {
             //nineth_center_front.rectTransform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
             nineth_center_front.DOFade(0.0f, 0.5f);
             nineth_center_back.DOFade(1f, 0f);
-            nineth_center_back.color = Color.red;
+            nineth_center_back.color = damagedColor;
         }
         else if (damageCount == 9)
         {

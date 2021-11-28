@@ -563,12 +563,14 @@ public class BirdyBoss_PatternOne : ObjectBase
             {
                 _timeCounter.AddSequence(name, 0f, null, (x) =>
                 {
-                    var data = MessageDataPooling.GetMessageData<MD.BoolData>();
-                    data.value = true;
-                    SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
-                    SendMessageEx(MessageTitles.uimanager_ActiveFianlHp, GetSavedNumber("UIManager"), null);
+                    //var data = MessageDataPooling.GetMessageData<MD.BoolData>();
+                    //data.value = true;
+                    //SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
+                    //SendMessageEx(MessageTitles.uimanager_ActiveFianlHp, GetSavedNumber("UIManager"), null);
 
-                    SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"), "지식인 버디");
+                    //SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"), "지식인 버디");
+
+                    SendMessageEx(MessageTitles.uimanager_activeBirdyBossNameAndHp, GetSavedNumber("UIManager"), "지식인 버디");
 
                     //var dialogData = MessageDataPooling.GetMessageData<MD.DroneTextKeyAndDurationData>();
                     //dialogData.key = "Birdy_BossBirdy_Truth02";

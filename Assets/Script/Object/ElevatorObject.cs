@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using TMPro;
 
 public class ElevatorObject : ObjectBase
@@ -11,7 +12,9 @@ public class ElevatorObject : ObjectBase
     public bool interaction = false;
     public bool complete = false;
     public GameObject canvas;
-    public TextMeshProUGUI text;
+    public Image image;
+    public Sprite keyboardMouseSprite;
+    public Sprite gamepadSprite;
 
     public override void Assign()
     {
@@ -52,9 +55,9 @@ public class ElevatorObject : ObjectBase
             interaction = true;
             canvas.SetActive(true);
             if (PlayerUnit.GamepadMode == true)
-                text.text = "X";
+                image.sprite = gamepadSprite;
             else
-                text.text = "F";
+                image.sprite = keyboardMouseSprite;
         }
     }
 

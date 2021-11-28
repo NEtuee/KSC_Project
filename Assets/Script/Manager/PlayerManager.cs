@@ -89,6 +89,8 @@ public class PlayerManager : ManagerBase
 
              _drone.InitFollowPosition();
              _player.hp.Value = 100f;
+
+             _drone.DeactiveDialog();
          });
 
         AddAction(MessageTitles.scene_restarted, (msg) =>

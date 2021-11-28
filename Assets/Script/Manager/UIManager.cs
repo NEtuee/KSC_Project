@@ -358,6 +358,7 @@ public class UIManager : ManagerBase
         AddAction(MessageTitles.scene_sceneChanged, (msg) =>
         {
             ActiveLoadingUI(false);
+
         });
 
         AddAction(MessageTitles.uimanager_activeInGameTutorial, (msg) =>
@@ -541,6 +542,21 @@ public class UIManager : ManagerBase
         {
             interactionKeyGuideCanvas.SetActive(false);
         });
+
+        AddAction(MessageTitles.uimanager_activeBirdyBossNameAndHp, (msg) =>
+        {
+            SendMessageEx(MessageTitles.uimanager_ActiveLeveLineUIAndSetBossName, GetSavedNumber("UIManager"), "지식인 버디");
+
+            Invoke("ShowBirdyHpDelay", 6f);
+        });
+    }
+
+    private void ShowBirdyHpDelay()
+    {
+        var data = MessageDataPooling.GetMessageData<MD.BoolData>();
+        data.value = true;
+        SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
+        SendMessageEx(MessageTitles.uimanager_ActiveFianlHp, GetSavedNumber("UIManager"), null);
     }
 
     public override void Initialize()
