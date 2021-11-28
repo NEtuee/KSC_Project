@@ -23,6 +23,8 @@ public class MessageEventTrigger : ObjectBase
 
     public List<DialogPack> dialogPacks = new List<DialogPack>();
 
+    public float delay;
+
     private System.Action _triggerEvent;
     private Collider _collider;
 
@@ -132,6 +134,14 @@ public class MessageEventTrigger : ObjectBase
                     };
                 }
                 break;
+            case MessageTitleEnum.DelayInformationMissionUi:
+                {
+                    _triggerEvent = () =>
+                    {
+                        StartCoroutine(DelayMissionUi(delay));
+                    };
+                }
+                break;
         }
     }
 
@@ -157,6 +167,13 @@ public class MessageEventTrigger : ObjectBase
             SendMessageEx(MessageTitles.playermanager_droneTextAndDurationByKey, GetSavedNumber("PlayerManager"), data);
             yield return new WaitForSeconds(dialogPacks[i].duration);
         }
+    }
+
+    public IEnumerator DelayMissionUi(float time)
+    {
+        yield return new WaitForSeconds(time);
+        string data = missionUiPack.key;
+        SendMessageEx((ushort)message, GetSavedNumber("UIManager"), data);
     }
 
 
@@ -237,6 +254,7 @@ namespace MessageSender
         DialogNameSet = MessageTitles.playermanager_SetDialogName,
         DialogLoop,
         ActiveTargetMaker = MessageTitles.uimanager_activeTargetMakerUiAndSetTarget,
-        DisableTargetMaker = MessageTitles.uimanager_DisableTargetMakerUi
+        DisableTargetMaker = MessageTitles.uimanager_DisableTargetMakerUi,
+        DelayInformationMissionUi = 888
     }
 }
