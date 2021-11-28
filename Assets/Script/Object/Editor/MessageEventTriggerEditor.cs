@@ -71,5 +71,9 @@ public class MessageEventTriggerEditor : Editor
         {
             eventTrigger.targetTransform = EditorGUILayout.ObjectField("Target", eventTrigger.targetTransform, typeof(Transform), true) as Transform;
         }
+        else if(eventTrigger.message == MessageTitleEnum.DelayInformationMissionUi)
+        {
+            eventTrigger.activeInformationUiPack.key = EditorGUILayout.TextField("Key", eventTrigger.activeInformationUiPack.key);
+        }
     }
 }
