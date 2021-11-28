@@ -35,6 +35,7 @@ public class MenuPage : MonoBehaviour
             Debug.LogWarning("Not Exist CanvasGroup");
             return;
         }
+
     }
 
     private void Start()

@@ -120,6 +120,9 @@ public class MainMenuCtrlManager : ManagerBase
         });
         //_currentPage = mainPage;
         //_currentPage.Active(true);
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void Prev()
