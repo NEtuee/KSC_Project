@@ -119,13 +119,13 @@ public class EMPGun : UnTransfromObjectBase
     {
         Vector3 rayPosition = aimTransform.position;
         var ray = Camera.main.ScreenPointToRay(rayPosition);
-        if (Physics.Raycast(ray, out hit, 100f, hitLayer))
+        if (Physics.Raycast(ray, out hit, 800f, hitLayer))
         {
             targetPos = hit.point;
         }
         else
         {
-            targetPos = mainCam.position + mainCam.forward * 100.0f;
+            targetPos = mainCam.position + mainCam.forward * 800.0f;
         }
 
         launchPos.rotation = Quaternion.LookRotation(targetPos - launchPos.position);

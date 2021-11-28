@@ -332,10 +332,10 @@ public partial class PlayerUnit : UnTransfromObjectBase
 
         _currentState.UpdateState(this, _animator);
 
-        if (Keyboard.current.qKey.wasPressedThisFrame)
-        {
-            energy.Value = 100.0f;
-        }
+        //if (Keyboard.current.qKey.wasPressedThisFrame)
+        //{
+        //    energy.Value = 100.0f;
+        //}
     }
 
     private void FixedUpdate()
