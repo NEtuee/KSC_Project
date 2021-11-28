@@ -15,6 +15,7 @@ public class B11_Database : MonoBehaviour
         public int updateCount{get{return _allCounter - _freeQueue.Count;}}
 
         private Queue<CacheItem<T>> _freeQueue = new Queue<CacheItem<T>>();
+        private Dictionary<int, T> _updateDic = new Dictionary<int, T>();
         private int _allCounter = 0;
 
         public void CreateStartCache()
@@ -32,6 +33,8 @@ public class B11_Database : MonoBehaviour
                 ++_allCounter;
             }
         }
+
+        public Dictionary<int,T> GetUpdateDicionary() {return _updateDic;}
 
         public CacheItem<T> GetCachedObject(bool deactiveEvent = true)
         {
@@ -54,6 +57,7 @@ public class B11_Database : MonoBehaviour
             }
 
             cache.item.gameObject.SetActive(true);
+            _updateDic[cache.item.uniqueNumber] = cache.item;
 
             return cache;
         }
@@ -62,6 +66,7 @@ public class B11_Database : MonoBehaviour
         {
             cache.item.gameObject.SetActive(false);
             _freeQueue.Enqueue(cache);
+            _updateDic.Remove(cache.item.uniqueNumber);
 
         }
     }
@@ -76,6 +81,21 @@ public class B11_Database : MonoBehaviour
     public ItemClass<B1_FlySpider> flySpiderCache = new ItemClass<B1_FlySpider>();
     public ItemClass<CommonDrone> droneCache = new ItemClass<CommonDrone>();
     public ItemClass<MedusaInFallPoint_AI> medusaCache = new ItemClass<MedusaInFallPoint_AI>();
+
+    public int medusaUpdateCount{
+        get
+        {
+            int medusaCount = 0;
+            foreach(var item in _medusaList)
+            {
+                if(item == null)
+                    return -1;
+                medusaCount += item.enabled ? 1 : 0;
+            }
+
+            return medusaCount;
+        }
+    }
 
     public int updateCount{
         get

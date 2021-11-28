@@ -21,6 +21,8 @@ public class B11_StageSequencer : ObjectBase
             DroneAnnihilationFence,
             ActiveHPUI,
             DeactiveHPUI,
+            MedusaFence,
+            ExplosionSpiderAll,
         };
         
         public string identifier;
@@ -399,6 +401,30 @@ public class B11_StageSequencer : ObjectBase
                     var data = MessageDataPooling.GetMessageData<MD.BoolData>();
                     data.value = false;
                     SendMessageEx(MessageTitles.uimanager_enableDroneStatusUi, GetSavedNumber("UIManager"), data);
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.MedusaFence)
+            {
+               _timeCounter.AddFence(name, () => {
+                    return database.medusaUpdateCount == 0;
+                });
+            }
+            else if (item.type == SequenceItem.EventEnum.ExplosionSpiderAll)
+            {
+               _timeCounter.AddSequence(name, 0f, null, (x) =>
+                {
+                    var dic = (database.spiderCache.GetUpdateDicionary());
+                    List<B1_Spider> spiderList = new List<B1_Spider>();
+                    foreach(var item in dic.Values)
+                    {
+                        spiderList.Add(item);
+                    }
+
+                    foreach(var item in spiderList)
+                    {
+                        item.Explosion();
+                        item.gameObject.SetActive(false);
+                    }
                 });
             }
         }
