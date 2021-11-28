@@ -198,6 +198,8 @@ public class BirdyBoss_PatternOne : ObjectBase
 
         RegisterRequest(GetSavedNumber("StageManager"));
         SendMessageQuick(MessageTitles.playermanager_sendplayerctrl, GetSavedNumber("PlayerManager"), null);
+
+        bgmPlayer.ForceStopAll();
     }
 
     public override void Progress(float deltaTime)
